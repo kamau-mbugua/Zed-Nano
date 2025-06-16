@@ -110,3 +110,4 @@ app.*.map.json
 !.idea/codeStyles/
 !.idea/dictionaries/
 !.idea/runConfigurations/
+/macos/Runner/Assets.xcassets/AppIcon.appiconset/16.png
