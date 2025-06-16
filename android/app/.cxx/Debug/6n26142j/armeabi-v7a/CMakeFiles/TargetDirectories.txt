@@ -1,0 +1,2 @@
+/home/kelvin/StudioProjects/RBS/zed_nano/android/app/.cxx/Debug/6n26142j/armeabi-v7a/CMakeFiles/edit_cache.dir
+/home/kelvin/StudioProjects/RBS/zed_nano/android/app/.cxx/Debug/6n26142j/armeabi-v7a/CMakeFiles/rebuild_cache.dir

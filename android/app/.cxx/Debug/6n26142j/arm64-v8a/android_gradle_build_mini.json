@@ -1,0 +1,20 @@
+{
+  "buildFiles": [
+    "/home/kelvin/fvm/versions/stable/packages/flutter_tools/gradle/src/main/groovy/CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "/home/kelvin/Android/Sdk/cmake/3.22.1/bin/ninja",
+      "-C",
+      "/home/kelvin/StudioProjects/RBS/zed_nano/android/app/.cxx/Debug/6n26142j/arm64-v8a",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "/home/kelvin/Android/Sdk/cmake/3.22.1/bin/ninja",
+    "-C",
+    "/home/kelvin/StudioProjects/RBS/zed_nano/android/app/.cxx/Debug/6n26142j/arm64-v8a",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {}
+}

@@ -1,0 +1,33 @@
+enum Flavor { production, staging, development }
+
+class AppConfig {
+  static late Flavor _flavor;
+
+  static void setFlavor(Flavor flavor) {
+    _flavor = flavor;
+  }
+
+  static Flavor get flavor => _flavor;
+
+  static String get baseUrl {
+    switch (_flavor) {
+      case Flavor.production:
+        return 'https://api.portal.zed.business/';
+      case Flavor.staging:
+        return 'https://zed.api.swerri.io/';
+      case Flavor.development:
+        return 'https://api.dev.zed.business/';
+    }
+  }
+
+  static String get appName {
+    switch (_flavor) {
+      case Flavor.production:
+        return 'Zed Nano';
+      case Flavor.staging:
+        return 'Zed Nano UAT';
+      case Flavor.development:
+        return 'Zed Nano Dev';
+    }
+  }
+}
