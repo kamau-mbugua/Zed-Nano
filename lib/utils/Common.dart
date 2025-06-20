@@ -105,7 +105,7 @@ Widget appButton({required String text, required Function onTap, double? width, 
   return AppButton(
     shapeBorder: RoundedRectangleBorder(borderRadius: radius(AppCommonRadius)),
     text: text,
-    textStyle: boldTextStyle(color: Colors.white),
+    textStyle: boldTextStyle(color: Colors.white, fontFamily: "Poppins"),
     onTap: onTap,
     elevation: 0,
     color: appThemePrimary,

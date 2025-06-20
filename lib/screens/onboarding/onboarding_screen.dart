@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/Images.dart';
-import 'package:zed_nano/widgets/highlighted_rich_text.dart';
+import 'package:zed_nano/screens/widget/common/highlighted_rich_text.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({Key? key}) : super(key: key);

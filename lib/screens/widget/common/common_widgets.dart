@@ -68,13 +68,20 @@ InputDecoration rfInputDecoration({Widget? suffixIcon, String? hintText, Widget?
 }
 
 
-PreferredSizeWidget commonAppBarWidget(BuildContext context, {String? title, double? appBarHeight, bool? showLeadingIcon, bool? bottomSheet, bool? roundCornerShape}) {
+PreferredSizeWidget commonAppBarWidget(BuildContext context, {String? title,
+  double? appBarHeight,
+  bool? showLeadingIcon,
+  bool? bottomSheet,
+  bool? roundCornerShape,
+  Color? backgroundColor,
+  Color? iconColor,
+}) {
   return PreferredSize(
     preferredSize: Size.fromHeight(appBarHeight ?? 100.0),
     child: AppBar(
       title: Text(title!, style: boldTextStyle(color: whiteColor, size: 20)),
       systemOverlayStyle: SystemUiOverlayStyle(statusBarIconBrightness: Brightness.light),
-      backgroundColor: appThemePrimary,
+      backgroundColor: backgroundColor ?? appThemePrimary,
       centerTitle: true,
       leading: showLeadingIcon.validate()
           ? SizedBox()
@@ -83,7 +90,7 @@ PreferredSizeWidget commonAppBarWidget(BuildContext context, {String? title, dou
           finish(context);
         },
         icon: Icon(Icons.arrow_back_ios_new, color: whiteColor, size: 18),
-        color: appThemePrimary,
+        color: iconColor ?? appThemePrimary,
       ),
       elevation: 0,
       shape: roundCornerShape.validate()

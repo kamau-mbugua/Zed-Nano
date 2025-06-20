@@ -16,6 +16,12 @@ import 'package:flutter/material.dart';
    const Color warning = Color(0xFFFFC107);
    const Color error = Color(0xFFED3241); 
    const Color info = Color(0xFF2196F3);
+
+  // Social login colors
+   const Color googleRed = Color(0xFFED3241);
+   const Color emailBlue = Color(0xFF032541);
+   const Color facebookBlue = Color(0xFF4676ED);
+   const Color twitterBlue = Color(0xFF009CDC);
   
   // Neutral colors
    const Color grey100 = Color(0xFFF5F5F5);
@@ -47,7 +53,3 @@ import 'package:flutter/material.dart';
 const AppLayoutBackground = Color(0xFFF4F7F6);
 const BodyWhite = Color(0xFF6F7F92);
 const AppBorderColor = Color(0xFFD9DFEB);
-
-
-
-

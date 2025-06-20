@@ -1,0 +1,8 @@
+<svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <mask id="phone_mask" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="12" height="12">
+        <path d="M11.5 8.5v2a1 1 0 0 1-1 1H9c-4.97 0-9-4.03-9-9v-1.5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v.5a1 1 0 0 1-.13.5L3 3.5A7.94 7.94 0 0 0 5.5 8a7.94 7.94 0 0 0 4.5 2.5l1.5-.87a1 1 0 0 1 .5-.13h.5a1 1 0 0 1 1 1z" fill="#FFFFFF"/>
+    </mask>
+    <g mask="url(#phone_mask)">
+        <path fill="#FFFFFF" d="M0 0h12v12H0z"/>
+    </g>
+</svg>
