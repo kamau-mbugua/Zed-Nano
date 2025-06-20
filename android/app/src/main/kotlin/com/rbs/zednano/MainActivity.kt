@@ -1,4 +1,4 @@
-package com.example.verygoodcore.zed_nano
+package com.rbs.zednano
 
 import io.flutter.embedding.android.FlutterActivity
 

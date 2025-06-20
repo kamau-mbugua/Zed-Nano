@@ -1,0 +1,50 @@
+import 'package:fluro/fluro.dart';
+import 'package:flutter/material.dart';
+import 'package:zed_nano/routes/routes.dart';
+import 'package:zed_nano/screens/onboarding/onboarding_screen.dart';
+import 'package:zed_nano/screens/onboarding/splash_page.dart';
+
+class RouterHelper {
+  static final FluroRouter router = FluroRouter();
+
+  static final Handler _splashHandler = Handler(
+    handlerFunc: (BuildContext? context, Map<String, List<String>> params) =>
+    const SplashPage(),
+  );
+  static final Handler _onboardingHandler = Handler(
+    handlerFunc: (BuildContext? context, Map<String, List<String>> params) =>
+    const OnboardingScreen(),
+  );
+
+  static void setupRouter() {
+    router.define(
+      AppRoutes.splashRoute,
+      handler: _splashHandler,
+      transitionType: TransitionType.fadeIn,
+    );
+    
+    router.define(
+      AppRoutes.onboardingRoute,
+      handler: _onboardingHandler,
+      transitionType: TransitionType.fadeIn,
+    );
+    
+    // Define a not found handler
+    router.notFoundHandler = Handler(
+      handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
+        return Scaffold(
+          body: Center(
+            child: Text('Route not found'),
+          ),
+        );
+      },
+    );
+  }
+
+  // Navigate to a route
+  static Future navigateTo(BuildContext context, String routeName,
+      {Object? arguments}) {
+    return router.navigateTo(context, routeName,
+        routeSettings: RouteSettings(arguments: arguments));
+  }
+}
