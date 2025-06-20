@@ -2,6 +2,7 @@ import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:zed_nano/routes/routes.dart';
 import 'package:zed_nano/screens/auth/login_page.dart';
+import 'package:zed_nano/screens/auth/registration_page.dart';
 import 'package:zed_nano/screens/onboarding/onboarding_screen.dart';
 import 'package:zed_nano/screens/onboarding/splash_page.dart';
 
@@ -20,6 +21,10 @@ class RouterHelper {
     handlerFunc: (BuildContext? context, Map<String, List<String>> params) =>
     const LoginPage(),
   );
+  static final Handler _userRegistrationHandler = Handler(
+    handlerFunc: (BuildContext? context, Map<String, List<String>> params) =>
+    const RegistrationPage(),
+  );
 
   static void setupRouter() {
     router.define(
@@ -37,6 +42,11 @@ class RouterHelper {
     router.define(
       AppRoutes.loggingRoute,
       handler: _loggingHandler,
+      transitionType: TransitionType.fadeIn,
+    );
+    router.define(
+      AppRoutes.userRegistrationRoute,
+      handler: _userRegistrationHandler,
       transitionType: TransitionType.fadeIn,
     );
     

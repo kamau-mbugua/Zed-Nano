@@ -88,8 +88,8 @@ class _SplashPageState extends State<SplashPage> {
           // } else {
           //
           // }
-          Navigator.pushNamedAndRemoveUntil(
-              context, AppRoutes.getLoggingPageRoute(), (route) => false);
+          await Navigator.pushNamedAndRemoveUntil(
+              context, AppRoutes.getOnBoardingPageRoute(), (route) => false);
         }
       },
     );

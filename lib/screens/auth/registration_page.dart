@@ -3,43 +3,42 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/routes/routes.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
+import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/Images.dart';
 import 'package:country_code_picker/country_code_picker.dart';
+import 'package:flutter/gestures.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+class RegistrationPage extends StatefulWidget {
+  const RegistrationPage({Key? key}) : super(key: key);
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegistrationPage> createState() => _RegistrationPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegistrationPageState extends State<RegistrationPage> {
   CountryCode? selectedCountry = CountryCode(
     code: 'KE',
     dialCode: '+254',
     name: 'Kenya',
   );
-  
-  // State to track which login method is active
-  bool isEmailLoginActive = false;
+  bool termsAccepted = false;
   
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: colorWhite,
       appBar: AppBar(
-        title: Text('Sign In', style: boldTextStyle(size: 20)),
+        title: Text('Get Started', style: boldTextStyle(size: 20)),
         centerTitle: false,
         backgroundColor: colorWhite,
         elevation: 5,
-        titleSpacing: 0,
         iconTheme: IconThemeData(color: getBodyColor()),
+        titleSpacing: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_new, color: getBodyColor()),
           onPressed: () {
-            // Navigate back to the previous screen
             Navigator.pop(context);
           },
         ),
@@ -51,105 +50,74 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Hi, Welcome', style: boldTextStyle(size: 24,
+              Text('Create Your Account', style: boldTextStyle(size: 24,
                 fontFamily: "Poppins",
               )).paddingSymmetric(horizontal: 16),
               8.height,
-              Text("Let's get you going with your business.",
+              Text("Create your account to get started.",
                   style: secondaryTextStyle(size: 12, weight: FontWeight.w500, color: getBodyColor(), fontFamily: "Poppins")
               ).paddingSymmetric(horizontal: 16),
               24.height,
               Text('Continue With',
                   style: secondaryTextStyle(size: 12,
-                    weight: FontWeight.w500,
+                    weight: FontWeight.w600,
                     color: getBodyColor(),
                     fontFamily: "Poppins")
               ).paddingSymmetric(horizontal: 16),
               16.height,
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      // Google Button
-                      _buildSocialButton(
-                        icon: googleIcon,
-                        label: 'Google',
-                        backgroundColor: googleRed,
-                        onTap: () {
-                          // Handle Google login
-                        },
-                      ),
-                      
-                      // Email/Phone Toggle Buttons
-                      if (isEmailLoginActive)
-                        _buildSocialButton(
-                          icon: phoneIcon,
-                          label: 'Phone',
-                          backgroundColor: emailBlue,
-                          onTap: () {
-                            setState(() {
-                              isEmailLoginActive = false;
-                            });
-                          },
-                        ).paddingSymmetric(horizontal: 8)
-                      else
-                        _buildSocialButton(
-                          icon: emailIcon,
-                          label: 'Email',
-                          backgroundColor: emailBlue,
-                          onTap: () {
-                            setState(() {
-                              isEmailLoginActive = true;
-                            });
-                          },
-                        ).paddingSymmetric(horizontal: 8),
-                      
-                      _buildCircularSocialButton(
-                        icon: facebookIcon,
-                        backgroundColor: facebookBlue,
-                        onTap: () {
-                        },
-                      ).paddingSymmetric(horizontal: 8),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  // Google Button
+                  _buildSocialButton(
+                    icon: googleIcon,
+                    label: 'Google',
+                    backgroundColor: googleRed,
+                    onTap: () {
+                      // Handle Google login
+                    },
+                  ).paddingSymmetric(horizontal: 0),
+                  
+                  _buildCircularSocialButton(
+                    icon: facebookIcon,
+                    backgroundColor: facebookBlue,
+                    onTap: () {
+                    },
+                  ).paddingSymmetric(horizontal: 8),
 
-                      _buildCircularSocialButton(
-                        icon: twitterIcon,
-                        backgroundColor: twitterBlue,
-                        onTap: () {
-                          // Handle Twitter login
-                          toast('Twitter login tapped');
-                        },
-                      ).paddingSymmetric(horizontal: 8),
+                  _buildCircularSocialButton(
+                    icon: twitterIcon,
+                    backgroundColor: twitterBlue,
+                    onTap: () {
+                      // Handle Twitter login
+                    },
+                  ).paddingSymmetric(horizontal: 0),
 
-                    ],
-                  ),
-                ),
-              ),
+                ],
+              ).paddingSymmetric(horizontal: 16),
               24.height,
-              Text(isEmailLoginActive ? 'Or Email' : 'Or Phone Number',
+              Text("Or Personal Details",
                   style: secondaryTextStyle(size: 12,
                       weight: FontWeight.w500,
                       color: getBodyColor(),
                       fontFamily: "Poppins")
               ).paddingSymmetric(horizontal: 16),
               10.height,
-              // Show either email or phone input based on active state
-              isEmailLoginActive ? _buildEmailPasswordInput() : _buildPhoneNumberPasswordInput(),
+              _buildPersonalDetailsInput(),
               24.height,
-              Text('Forgot Pin?',
-                  style: secondaryTextStyle(size: 12,
-                      weight: FontWeight.w500,
-                      color: textPrimary,
-                      fontFamily: "Poppins")
-              ).paddingSymmetric(horizontal: 16),
+              _buildTermsCheckbox(),
               24.height,
-              appButton(text: "Sign In",
-                  onTap: (){},
+              appButton(text: "Create Account",
+                  onTap: (){
+                    if (termsAccepted) {
+                      Navigator.pop(context);
+                    } else {
+                      showCustomSnackBar('Please accept the terms and conditions');
+                    }
+                  },
                   context: context).paddingSymmetric(horizontal: 16),
               10.height,
-              _buildSignUpOption(),
+              _buildLoginOption(),
             ],
           ),
         ),
@@ -157,9 +125,87 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _buildEmailPasswordInput() {
+  Widget _buildPersonalDetailsInput() {
     return Column(
       children: [
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16),
+          child: Row(
+            children: [
+              Expanded(
+                child: Container(
+                  height: 48, // Fixed height for consistency
+                  decoration: BoxDecoration(
+                    border: Border.all(color: BodyWhite),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: AppTextField(
+                    textFieldType: TextFieldType.NAME,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: "First Name",
+                      hintStyle: TextStyle(
+                        color: Color(0xff8f9098),
+                        fontWeight: FontWeight.w400,
+                        fontFamily: "Poppins",
+                        fontSize: 14.0,
+                      ),
+                      contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                    ),
+                  ),
+                ),
+              ),
+              16.width, // Space between fields
+              Expanded(
+                child: Container(
+                  height: 48, // Fixed height for consistency
+                  decoration: BoxDecoration(
+                    border: Border.all(color: BodyWhite),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: AppTextField(
+                    textFieldType: TextFieldType.NAME,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: "Last Name",
+                      hintStyle: TextStyle(
+                        color: Color(0xff8f9098),
+                        fontWeight: FontWeight.w400,
+                        fontFamily: "Poppins",
+                        fontSize: 14.0,
+                      ),
+                      contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        16.height,
+        Container(
+          height: 48, // Fixed height for consistency
+          margin: EdgeInsets.symmetric(horizontal: 16),
+          decoration: BoxDecoration(
+            border: Border.all(color: BodyWhite),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: AppTextField(
+            textFieldType: TextFieldType.NAME,
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              hintText: "User Name",
+              hintStyle: TextStyle(
+                color: Color(0xff8f9098),
+                fontWeight: FontWeight.w400,
+                fontFamily: "Poppins",
+                fontSize: 14.0,
+              ),
+              contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+            ),
+          ),
+        ),
+        16.height,
         Container(
           height: 48, // Fixed height for consistency
           margin: EdgeInsets.symmetric(horizontal: 16),
@@ -183,34 +229,6 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
         16.height,
-        Container(
-          height: 48, // Fixed height for consistency
-          margin: EdgeInsets.symmetric(horizontal: 16),
-          decoration: BoxDecoration(
-            border: Border.all(color: BodyWhite),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: AppTextField(
-            textFieldType: TextFieldType.PASSWORD,
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              hintText: "Pin",
-              hintStyle: TextStyle(
-                color: Color(0xff8f9098),
-                fontWeight: FontWeight.w400,
-                fontFamily: "Poppins",
-                fontSize: 14.0,
-              ),
-              contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-  Widget _buildPhoneNumberPasswordInput() {
-    return Column(
-      children: [
         Container(
           height: 48, // Fixed height for consistency
           margin: EdgeInsets.symmetric(horizontal: 16),
@@ -270,28 +288,6 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
         16.height,
-        Container(
-          height: 48, // Fixed height for consistency
-          margin: EdgeInsets.symmetric(horizontal: 16),
-          decoration: BoxDecoration(
-            border: Border.all(color: BodyWhite),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: AppTextField(
-            textFieldType: TextFieldType.PASSWORD,
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              hintText: "Pin",
-              hintStyle: TextStyle(
-                color: Color(0xff8f9098),
-                fontWeight: FontWeight.w400,
-                fontFamily: "Poppins",
-                fontSize: 14.0,
-              ),
-              contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-            ),
-          ),
-        ),
       ],
     );
   }
@@ -375,51 +371,12 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
   
-  Widget _buildEmailLoginButton() {
-    return Container(
-      width: context.width() - 32,
-      padding: EdgeInsets.symmetric(vertical: 14),
-      decoration: BoxDecoration(
-        color: emailBlue,
-        borderRadius: BorderRadius.circular(8),
-        boxShadow: [
-          BoxShadow(
-            color: emailBlue.withOpacity(0.3),
-            spreadRadius: 1,
-            blurRadius: 4,
-            offset: Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SvgPicture.asset(
-            'assets/images/email_icon.svg',
-            height: 18,
-            width: 18,
-            color: colorWhite,
-          ),
-          8.width,
-          Text(
-            'Continue with Email',
-            style: boldTextStyle(
-              size: 16,
-              color: colorWhite,
-              fontFamily: "Poppins",
-            ),
-          ),
-        ],
-      ),
-    ).center();
-  }
-  
-  Widget _buildSignUpOption() {
+  Widget _buildLoginOption() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          'Don\'t have an account? ',
+          'Already have an account? ',
           style: secondaryTextStyle(
             size: 14,
             color: getBodyColor(),
@@ -429,11 +386,11 @@ class _LoginPageState extends State<LoginPage> {
         TextButton(
           onPressed: () {
             // Navigate to login page
-            Navigator.pushNamed(
-              context, AppRoutes.getUserRegistrationPageRoute());
+            Navigator.pushNamedAndRemoveUntil(
+              context, AppRoutes.getLoggingPageRoute(), (route) => false);
           },
           child: Text(
-            'Create Account',
+            'Sign In',
             style: boldTextStyle(
               size: 14,
               color: appThemePrimary,
@@ -442,6 +399,102 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildTermsCheckbox() {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: 24,
+            height: 24,
+            child: Checkbox(
+              value: termsAccepted, 
+              onChanged: (bool? value) {
+                setState(() {
+                  termsAccepted = value ?? false;
+                });
+              },
+              activeColor: appThemePrimary,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(4),
+              ),
+            ),
+          ),
+          12.width,
+          Expanded(
+            child: RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    style: const TextStyle(
+                      color: Color(0xff71727a),
+                      fontWeight: FontWeight.w400,
+                      fontFamily: "Poppins",
+                      fontStyle: FontStyle.normal,
+                      fontSize: 12.0
+                    ),
+                    text: "I've read and agree with the "
+                  ),
+                  TextSpan(
+                    style: const TextStyle(
+                      color: Color(0xff032541),
+                      fontWeight: FontWeight.w600,
+                      fontFamily: "Poppins",
+                      fontStyle: FontStyle.normal,
+                      fontSize: 12.0
+                    ),
+                    text: "Terms and Conditions",
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        // Handle Terms and Conditions tap
+                        toast('Terms and Conditions tapped');
+                      }
+                  ),
+                  TextSpan(
+                    style: const TextStyle(
+                      color: Color(0xff71727a),
+                      fontWeight: FontWeight.w400,
+                      fontFamily: "Poppins",
+                      fontStyle: FontStyle.normal,
+                      fontSize: 12.0
+                    ),
+                    text: " and the "
+                  ),
+                  TextSpan(
+                    style: const TextStyle(
+                      color: Color(0xff032541),
+                      fontWeight: FontWeight.w600,
+                      fontFamily: "Poppins",
+                      fontStyle: FontStyle.normal,
+                      fontSize: 12.0
+                    ),
+                    text: "Privacy Policy",
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        // Handle Privacy Policy tap
+                        toast('Privacy Policy tapped');
+                      }
+                  ),
+                  TextSpan(
+                    style: const TextStyle(
+                      color: Color(0xff71727a),
+                      fontWeight: FontWeight.w400,
+                      fontFamily: "Poppins",
+                      fontStyle: FontStyle.normal,
+                      fontSize: 12.0
+                    ),
+                    text: "."
+                  )
+                ]
+              )
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

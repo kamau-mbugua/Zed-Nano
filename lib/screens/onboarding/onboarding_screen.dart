@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:zed_nano/routes/routes.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/Images.dart';
 import 'package:zed_nano/screens/widget/common/highlighted_rich_text.dart';
@@ -62,13 +63,19 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       outlineButton(
                         context: context,
                         text: 'Sign In',
-                        onTap: () async {},
+                        onTap: () async {
+                          await Navigator.pushNamed(
+                              context, AppRoutes.getLoggingPageRoute());
+                        },
                       ),
                       18.height,
                       appButton(
                         context: context,
                         text: 'Get Started',
-                        onTap: () async {},
+                        onTap: () async {
+                          await Navigator.pushNamed(
+                              context, AppRoutes.getUserRegistrationPageRoute());
+                          },
                       ),
                       16.height, // Bottom padding
                     ],
