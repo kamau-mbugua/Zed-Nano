@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/routes/routes.dart';
+import 'package:zed_nano/screens/auth/forget_password_screen.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/auth/input_fields.dart';
 import 'package:zed_nano/screens/widget/auth/social_buttons.dart';
@@ -119,7 +120,6 @@ class _LoginPageState extends State<LoginPage> {
             16.height,
             appButton(text: "Sign In",
                 onTap: (){
-                  toast('Login tapped');
                 },
                 context: context).paddingSymmetric(horizontal: 16),
             16.height,
@@ -172,7 +172,7 @@ class _LoginPageState extends State<LoginPage> {
           padding: EdgeInsets.symmetric(horizontal: 16),
           child: StyledTextField(
             textFieldType: TextFieldType.PASSWORD,
-            hintText: "Password",
+            hintText: "Pin",
           ),
         ),
         8.height,
@@ -180,10 +180,10 @@ class _LoginPageState extends State<LoginPage> {
           alignment: Alignment.centerRight,
           child: TextButton(
             onPressed: () {
-              toast('Forgot password tapped');
+              ResetPinScreen().launch(context);
             },
             child: Text(
-              'Forgot Password?',
+              'Forgot Pin?',
               style: secondaryTextStyle(
                 size: 12,
                 color: appThemePrimary,
@@ -208,7 +208,7 @@ class _LoginPageState extends State<LoginPage> {
           padding: EdgeInsets.symmetric(horizontal: 16),
           child: StyledTextField(
             textFieldType: TextFieldType.PASSWORD,
-            hintText: "Password",
+            hintText: "Pin",
           ),
         ),
         8.height,
@@ -216,10 +216,10 @@ class _LoginPageState extends State<LoginPage> {
           alignment: Alignment.centerRight,
           child: TextButton(
             onPressed: () {
-              toast('Forgot password tapped');
+              ResetPinScreen().launch(context);
             },
             child: Text(
-              'Forgot Password?',
+              'Forgot Pin?',
               style: secondaryTextStyle(
                 size: 12,
                 color: appThemePrimary,
