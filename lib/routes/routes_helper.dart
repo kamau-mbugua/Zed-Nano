@@ -1,8 +1,11 @@
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:zed_nano/routes/routes.dart';
+import 'package:zed_nano/screens/auth/forget_password_screen.dart';
 import 'package:zed_nano/screens/auth/login_page.dart';
 import 'package:zed_nano/screens/auth/registration_page.dart';
+import 'package:zed_nano/screens/auth/set_new_pin_page.dart';
+import 'package:zed_nano/screens/main/home_main_page.dart';
 import 'package:zed_nano/screens/onboarding/onboarding_screen.dart';
 import 'package:zed_nano/screens/onboarding/splash_page.dart';
 
@@ -24,6 +27,19 @@ class RouterHelper {
   static final Handler _userRegistrationHandler = Handler(
     handlerFunc: (BuildContext? context, Map<String, List<String>> params) =>
     const RegistrationPage(),
+  );
+  static final Handler _forgetPinHandler = Handler(
+    handlerFunc: (BuildContext? context, Map<String, List<String>> params) =>
+    ResetPinScreen(),
+  );
+  static final Handler _setPinHandler = Handler(
+    handlerFunc: (BuildContext? context, Map<String, List<String>> params) =>
+    SetNewPinPage(),
+  );
+
+  static final Handler _homeMainHandler = Handler(
+    handlerFunc: (BuildContext? context, Map<String, List<String>> params) =>
+        HomeMainPage(),
   );
 
   static void setupRouter() {
@@ -47,6 +63,21 @@ class RouterHelper {
     router.define(
       AppRoutes.userRegistrationRoute,
       handler: _userRegistrationHandler,
+      transitionType: TransitionType.fadeIn,
+    );
+    router.define(
+      AppRoutes.forgetPinRoute,
+      handler: _forgetPinHandler,
+      transitionType: TransitionType.fadeIn,
+    );
+    router.define(
+      AppRoutes.setPinRoute,
+      handler: _setPinHandler,
+      transitionType: TransitionType.fadeIn,
+    );
+    router.define(
+      AppRoutes.homeMainRoute,
+      handler: _homeMainHandler,
       transitionType: TransitionType.fadeIn,
     );
     

@@ -21,7 +21,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   bool isEmailLoginActive = false;
-  
+
   // Colors for social buttons
   final Color googleRed = Color(0xFFED3241);
   final Color emailBlue = Color(0xFF032541);
@@ -39,16 +39,19 @@ class _LoginPageState extends State<LoginPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Welcome Back', style: boldTextStyle(size: 24,
-              fontFamily: "Poppins",
-            )).paddingSymmetric(horizontal: 16),
+            Text('Welcome Back',
+                style: boldTextStyle(
+                  size: 24,
+                  fontFamily: "Poppins",
+                )).paddingSymmetric(horizontal: 16),
             8.height,
             Text("Sign in to continue to your account.",
-                style: secondaryTextStyle(size: 12,
-                  weight: FontWeight.w500,
-                  color: getBodyColor(),
-                  fontFamily: "Poppins")
-            ).paddingSymmetric(horizontal: 16),
+                    style: secondaryTextStyle(
+                        size: 12,
+                        weight: FontWeight.w500,
+                        color: getBodyColor(),
+                        fontFamily: "Poppins"))
+                .paddingSymmetric(horizontal: 16),
             16.height,
             SocialButtonsRow(
               buttons: [
@@ -60,7 +63,7 @@ class _LoginPageState extends State<LoginPage> {
                     // Handle Google login
                   },
                 ),
-                
+
                 // Email/Phone Toggle Buttons
                 if (isEmailLoginActive)
                   SocialButton(
@@ -84,12 +87,11 @@ class _LoginPageState extends State<LoginPage> {
                       });
                     },
                   ),
-                
+
                 CircularSocialButton(
                   icon: facebookIcon,
                   backgroundColor: facebookBlue,
-                  onTap: () {
-                  },
+                  onTap: () {},
                 ),
 
                 CircularSocialButton(
@@ -104,24 +106,29 @@ class _LoginPageState extends State<LoginPage> {
             ),
             24.height,
             Text(isEmailLoginActive ? 'Or Email' : 'Or Phone Number',
-                style: secondaryTextStyle(size: 12,
-                  weight: FontWeight.w500,
-                  color: getBodyColor(),
-                  fontFamily: "Poppins")
-            ).paddingSymmetric(horizontal: 16),
+                    style: secondaryTextStyle(
+                        size: 12,
+                        weight: FontWeight.w500,
+                        color: getBodyColor(),
+                        fontFamily: "Poppins"))
+                .paddingSymmetric(horizontal: 16),
             16.height,
-            
+
             // Show different input fields based on login method
             if (isEmailLoginActive)
               _buildEmailLoginForm()
             else
               _buildPhoneLoginForm(),
-            
+
             16.height,
-            appButton(text: "Sign In",
-                onTap: (){
-                },
-                context: context).paddingSymmetric(horizontal: 16),
+            appButton(
+                    text: "Sign In",
+                    onTap: () {
+                      Navigator.pushNamedAndRemoveUntil(context,
+                          AppRoutes.getHomeMainPageRoute(), (route) => false);
+                    },
+                    context: context)
+                .paddingSymmetric(horizontal: 16),
             16.height,
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -138,7 +145,7 @@ class _LoginPageState extends State<LoginPage> {
                   onPressed: () {
                     // Navigate to login page
                     Navigator.pushNamed(
-                      context, AppRoutes.getUserRegistrationPageRoute());
+                        context, AppRoutes.getUserRegistrationPageRoute());
                   },
                   child: Text(
                     'Create Account',
@@ -180,7 +187,8 @@ class _LoginPageState extends State<LoginPage> {
           alignment: Alignment.centerRight,
           child: TextButton(
             onPressed: () {
-              ResetPinScreen().launch(context);
+              Navigator.pushNamed(
+                  context, AppRoutes.getForgetPinRoutePageRoute());
             },
             child: Text(
               'Forgot Pin?',
@@ -216,7 +224,8 @@ class _LoginPageState extends State<LoginPage> {
           alignment: Alignment.centerRight,
           child: TextButton(
             onPressed: () {
-              ResetPinScreen().launch(context);
+              Navigator.pushNamed(
+                  context, AppRoutes.getForgetPinRoutePageRoute());
             },
             child: Text(
               'Forgot Pin?',
