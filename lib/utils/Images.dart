@@ -10,3 +10,7 @@ const salesIcon = "assets/images/sales_icon.svg";
 const reportsIcon = "assets/images/reports_icon.svg";
 const menuIcon = "assets/images/menu_icon.svg";
 const userIcon = "assets/images/user_icon.svg";
+const productIcon = "assets/images/products.svg";
+const totalSalesIcon = "assets/images/total_sales_icon.svg";
+const pendingPaymentsIcon = "assets/images/pending_payments.svg";
+const customerCreatedIcon = "assets/images/customers_created.svg";

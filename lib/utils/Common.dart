@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/utils/Constants.dart';
@@ -8,7 +9,13 @@ import 'Colors.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 InputDecoration inputDecoration(BuildContext context,
-    {String? hint, String? label, TextStyle? hintStyle, TextStyle? labelStyle, Widget? prefix, EdgeInsetsGeometry? contentPadding, Widget? prefixIcon}) {
+    {String? hint,
+    String? label,
+    TextStyle? hintStyle,
+    TextStyle? labelStyle,
+    Widget? prefix,
+    EdgeInsetsGeometry? contentPadding,
+    Widget? prefixIcon}) {
   return InputDecoration(
     contentPadding: contentPadding,
     labelText: label,
@@ -19,18 +26,28 @@ InputDecoration inputDecoration(BuildContext context,
     prefixIcon: prefixIcon,
     errorMaxLines: 2,
     errorStyle: primaryTextStyle(color: Colors.red, size: 12),
-    enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: AppBorderColor)),
-    focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: appThemePrimary)),
-    border: UnderlineInputBorder(borderSide: BorderSide(color: appThemePrimary)),
-    focusedErrorBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.red, width: 1.0)),
-    errorBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.red, width: 1.0)),
+    enabledBorder:
+        UnderlineInputBorder(borderSide: BorderSide(color: AppBorderColor)),
+    focusedBorder:
+        UnderlineInputBorder(borderSide: BorderSide(color: appThemePrimary)),
+    border:
+        UnderlineInputBorder(borderSide: BorderSide(color: appThemePrimary)),
+    focusedErrorBorder: UnderlineInputBorder(
+        borderSide: BorderSide(color: Colors.red, width: 1.0)),
+    errorBorder: UnderlineInputBorder(
+        borderSide: BorderSide(color: Colors.red, width: 1.0)),
     alignLabelWithHint: true,
   );
 }
 
 InputDecoration inputDecorationBorder(BuildContext context,
-    {String? hint, String? label, TextStyle? hintStyle, TextStyle? labelStyle, Widget? prefix, EdgeInsetsGeometry? contentPadding, Widget? prefixIcon}) {
-
+    {String? hint,
+    String? label,
+    TextStyle? hintStyle,
+    TextStyle? labelStyle,
+    Widget? prefix,
+    EdgeInsetsGeometry? contentPadding,
+    Widget? prefixIcon}) {
   OutlineInputBorder outlineInputBorder(Color color) {
     return OutlineInputBorder(
       borderRadius: BorderRadius.circular(8), // <- nice rounded corners
@@ -57,7 +74,12 @@ InputDecoration inputDecorationBorder(BuildContext context,
   );
 }
 
-Widget robotoText({required String text, Color? color, FontStyle? fontStyle, Function? onTap, TextAlign? textAlign}) {
+Widget robotoText(
+    {required String text,
+    Color? color,
+    FontStyle? fontStyle,
+    Function? onTap,
+    TextAlign? textAlign}) {
   return Text(
     text,
     style: secondaryTextStyle(
@@ -66,21 +88,22 @@ Widget robotoText({required String text, Color? color, FontStyle? fontStyle, Fun
       fontStyle: fontStyle ?? FontStyle.normal,
     ),
     textAlign: textAlign ?? TextAlign.center,
-  ).onTap(onTap, splashColor: Colors.transparent, highlightColor: Colors.transparent);
+  ).onTap(onTap,
+      splashColor: Colors.transparent, highlightColor: Colors.transparent);
 }
 
 Color getBodyColor() {
   // if (appStore.isDarkModeOn)
   //   return SVBodyDark;
   // else
-    return BodyWhite;
+  return BodyWhite;
 }
 
 Color getScaffoldColor() {
   // if (appStore.isDarkModeOn)
   //   return appBackgroundColorDark;
   // else
-    return AppLayoutBackground;
+  return AppLayoutBackground;
 }
 
 Widget headerContainer({required Widget child, required BuildContext context}) {
@@ -89,19 +112,29 @@ Widget headerContainer({required Widget child, required BuildContext context}) {
     children: [
       Container(
         width: context.width(),
-        decoration: BoxDecoration(color: appThemePrimary, borderRadius: radiusOnly(topLeft: AppContainerRadius, topRight: AppContainerRadius)),
+        decoration: BoxDecoration(
+            color: appThemePrimary,
+            borderRadius: radiusOnly(
+                topLeft: AppContainerRadius, topRight: AppContainerRadius)),
         padding: const EdgeInsets.all(24),
         child: child,
       ),
       Container(
         height: 20,
-        decoration: BoxDecoration(color: context.cardColor, borderRadius: radiusOnly(topLeft: AppContainerRadius, topRight: AppContainerRadius)),
+        decoration: BoxDecoration(
+            color: context.cardColor,
+            borderRadius: radiusOnly(
+                topLeft: AppContainerRadius, topRight: AppContainerRadius)),
       )
     ],
   );
 }
 
-Widget appButton({required String text, required Function onTap, double? width, required BuildContext context}) {
+Widget appButton(
+    {required String text,
+    required Function onTap,
+    double? width,
+    required BuildContext context}) {
   return AppButton(
     shapeBorder: RoundedRectangleBorder(borderRadius: radius(AppCommonRadius)),
     text: text,
@@ -114,7 +147,13 @@ Widget appButton({required String text, required Function onTap, double? width, 
   );
 }
 
-Widget outlineButton({required String text, required Function onTap, double? width, required BuildContext context, Color? borderColor, Color? textColor}) {
+Widget outlineButton(
+    {required String text,
+    required Function onTap,
+    double? width,
+    required BuildContext context,
+    Color? borderColor,
+    Color? textColor}) {
   return AppButton(
     shapeBorder: RoundedRectangleBorder(
       borderRadius: radius(AppCommonRadius),
@@ -161,7 +200,12 @@ Widget commonCachedNetworkImage(
   Color? color,
 }) {
   if (url!.validate().isEmpty) {
-    return placeHolderWidget(height: height, width: width, fit: fit, alignment: alignment, radius: radius);
+    return placeHolderWidget(
+        height: height,
+        width: width,
+        fit: fit,
+        alignment: alignment,
+        radius: radius);
   } else if (url.validate().startsWith('http')) {
     return CachedNetworkImage(
       imageUrl: url,
@@ -171,18 +215,102 @@ Widget commonCachedNetworkImage(
       color: color,
       alignment: alignment as Alignment? ?? Alignment.center,
       errorWidget: (_, s, d) {
-        return placeHolderWidget(height: height, width: width, fit: fit, alignment: alignment, radius: radius);
+        return placeHolderWidget(
+            height: height,
+            width: width,
+            fit: fit,
+            alignment: alignment,
+            radius: radius);
       },
       placeholder: (_, s) {
         if (!usePlaceholderIfUrlEmpty) return SizedBox();
-        return placeHolderWidget(height: height, width: width, fit: fit, alignment: alignment, radius: radius);
+        return placeHolderWidget(
+            height: height,
+            width: width,
+            fit: fit,
+            alignment: alignment,
+            radius: radius);
       },
     );
   } else {
-    return Image.asset(url, height: height, width: width, fit: fit, color: color, alignment: alignment ?? Alignment.center).cornerRadiusWithClipRRect(radius ?? defaultRadius);
+    return Image.asset(url,
+            height: height,
+            width: width,
+            fit: fit,
+            color: color,
+            alignment: alignment ?? Alignment.center)
+        .cornerRadiusWithClipRRect(radius ?? defaultRadius);
   }
 }
 
-Widget placeHolderWidget({double? height, double? width, BoxFit? fit, AlignmentGeometry? alignment, double? radius}) {
-  return Image.asset('images/app/placeholder.jpg', height: height, width: width, fit: fit ?? BoxFit.cover, alignment: alignment ?? Alignment.center).cornerRadiusWithClipRRect(radius ?? defaultRadius);
+Widget placeHolderWidget(
+    {double? height,
+    double? width,
+    BoxFit? fit,
+    AlignmentGeometry? alignment,
+    double? radius}) {
+  return Image.asset('images/app/placeholder.jpg',
+          height: height,
+          width: width,
+          fit: fit ?? BoxFit.cover,
+          alignment: alignment ?? Alignment.center)
+      .cornerRadiusWithClipRRect(radius ?? defaultRadius);
+}
+
+Widget buildEmptyCard(String title, String subtitle) {
+  return Container(
+    width: double.infinity,
+    padding: EdgeInsets.all(20),
+    decoration: BoxDecoration(
+      color: Color(0xfff9f9fc),
+      borderRadius: BorderRadius.circular(12),
+    ),
+    child: Column(
+      children: [
+        Text(title,
+            style: TextStyle(
+                color: Color(0xff032541),
+                fontWeight: FontWeight.w600,
+                fontSize: 12)),
+        SizedBox(height: 6),
+        Text(subtitle,
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Color(0xff71727a), fontSize: 12)),
+      ],
+    ),
+  );
+}
+
+Widget buildOverviewCard(
+  String title,
+  String value,
+  String userIcon,
+  Color iconColor,
+) {
+  return Container(
+    width: 180,
+    height: 120,
+    padding: EdgeInsets.all(16),
+    decoration: BoxDecoration(
+      color: iconColor,
+      borderRadius: BorderRadius.circular(12),
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SvgPicture.asset(
+          userIcon,
+          width: 30,
+          height: 30,
+        ),
+        SizedBox(height: 16),
+        Text(title, style: TextStyle(color: Color(0xff71727a), fontSize: 14)),
+        Text(value,
+            style: TextStyle(
+                color: Color(0xff333333),
+                fontWeight: FontWeight.w600,
+                fontSize: 14)),
+      ],
+    ),
+  );
 }
