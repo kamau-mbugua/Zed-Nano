@@ -14,3 +14,4 @@ const productIcon = "assets/images/products.svg";
 const totalSalesIcon = "assets/images/total_sales_icon.svg";
 const pendingPaymentsIcon = "assets/images/pending_payments.svg";
 const customerCreatedIcon = "assets/images/customers_created.svg";
+const zedColoredIcon = "assets/images/zed_colored_icon.svg";

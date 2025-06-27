@@ -285,11 +285,12 @@ Widget buildOverviewCard(
   String title,
   String value,
   String userIcon,
-  Color iconColor,
-) {
+  Color iconColor, {
+  double? width,
+}) {
   return Container(
-    width: 180,
-    height: 120,
+    width: width ?? 160,
+    height: 122,
     padding: EdgeInsets.all(16),
     decoration: BoxDecoration(
       color: iconColor,
@@ -297,18 +298,25 @@ Widget buildOverviewCard(
     ),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
       children: [
         SvgPicture.asset(
           userIcon,
           width: 30,
           height: 30,
         ),
-        SizedBox(height: 16),
-        Text(title, style: TextStyle(color: Color(0xff71727a), fontSize: 14)),
+        SizedBox(height: 14),
+        Text(title, 
+            style: TextStyle(
+              color: Color(0xff71727a), 
+              fontSize: 14,
+              fontFamily: 'Poppins',
+            )),
         Text(value,
             style: TextStyle(
                 color: Color(0xff333333),
                 fontWeight: FontWeight.w600,
+                fontFamily: 'Poppins',
                 fontSize: 14)),
       ],
     ),

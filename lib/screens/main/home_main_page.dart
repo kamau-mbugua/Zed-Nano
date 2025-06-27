@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:zed_nano/screens/main/pages/admin/admin_dashboard_page.dart';
 import 'package:zed_nano/screens/main/pages/common/p_o_s_pages.dart';
 import 'package:zed_nano/screens/main/pages/common/report_page.dart';
+import 'package:zed_nano/screens/reports/reports_list_page.dart';
 import 'package:zed_nano/screens/widgets/nav_bar_item.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
@@ -49,7 +50,7 @@ class _HomeMainPageState extends State<HomeMainPage> {
     pages = [
       const AdminDashboardPage(),
       const POSPages(),
-      const ReportPage(),
+      const ReportsListPage(),
     ];
     navItems = adminNavItems;
 

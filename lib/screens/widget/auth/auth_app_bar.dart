@@ -21,7 +21,7 @@ class AuthAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Text(title, style: boldTextStyle(size: 20)),
+      title: Text(title, style: boldTextStyle(size: 14)),
       centerTitle: false,
       backgroundColor: colorWhite,
       elevation: elevation,

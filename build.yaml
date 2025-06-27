@@ -1,0 +1,8 @@
+targets:
+  $default:
+    builders:
+      flutter_gen_runner|flutter_gen:
+        enabled: true
+        options:
+          # Set synthetic-package to false to address the deprecation warning
+          synthetic-package: false

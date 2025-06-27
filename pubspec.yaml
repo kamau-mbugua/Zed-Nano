@@ -17,6 +17,7 @@ dependencies:
   connectivity_plus: ^6.1.4
   country_code_picker: ^3.3.0
   csc_picker_plus: ^0.0.3
+  currency_country_picker: ^1.2.3
   dio: ^5.8.0+1
   fl_chart: ^1.0.0
   fluro: ^2.0.5
@@ -54,6 +55,8 @@ dependencies:
 
 dev_dependencies:
   bloc_test: ^9.1.7
+  build_runner: ^2.4.8
+  flutter_gen_runner: ^5.10.0
   flutter_test:
     sdk: flutter
   mocktail: ^1.0.4
@@ -67,3 +70,11 @@ flutter:
     - assets/images/
     - assets/fonts/
     - assets/icons/
+
+flutter_gen:
+  output: lib/gen/
+  line_length: 80
+  
+  # Configure integrations
+  integrations:
+    flutter_svg: true
