@@ -5,6 +5,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/auth/input_fields.dart';
+import 'package:zed_nano/screens/widget/common/location_picker_field.dart';
+import 'package:zed_nano/screens/widget/common/sub_category_picker.dart';
 import 'package:zed_nano/screens/widget/country_currency_picker.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
@@ -22,8 +24,24 @@ class CreateBusinessPage extends StatefulWidget {
 class _CreateBusinessPageState extends State<CreateBusinessPage> {
   String? selectedCountry;
   String? selectedCurrency;
+  String? selectedCategory;
+  String? _selectedLocation;
   File? _logoImage;
   final ImagePicker _picker = ImagePicker();
+
+  //FUCUS NODES
+  final FocusNode _businessNameFocusNode = FocusNode();
+  final FocusNode _phoneNumberFocusNode = FocusNode();
+  final FocusNode _emailFocusNode = FocusNode();
+  final FocusNode _locationFocusNode = FocusNode();
+
+  //CONTROLLERS
+  final TextEditingController businessNameController = TextEditingController();
+  final TextEditingController businessCategoriesController =
+      TextEditingController();
+  final TextEditingController phoneNumberController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController locationController = TextEditingController();
 
   Future<void> _pickImage() async {
     try {
@@ -33,7 +51,7 @@ class _CreateBusinessPageState extends State<CreateBusinessPage> {
         maxHeight: 800,
         imageQuality: 80,
       );
-      
+
       if (pickedFile != null) {
         setState(() {
           _logoImage = File(pickedFile.path);
@@ -42,6 +60,19 @@ class _CreateBusinessPageState extends State<CreateBusinessPage> {
     } catch (e) {
       toast('Error picking image: $e');
     }
+  }
+
+  @override
+  void dispose() {
+    _businessNameFocusNode.dispose();
+    _phoneNumberFocusNode.dispose();
+    _emailFocusNode.dispose();
+    _locationFocusNode.dispose();
+    businessNameController.dispose();
+    phoneNumberController.dispose();
+    emailController.dispose();
+    locationController.dispose();
+    super.dispose();
   }
 
   @override
@@ -83,65 +114,111 @@ class _CreateBusinessPageState extends State<CreateBusinessPage> {
                         fontFamily: "Poppins"))
                 .paddingSymmetric(horizontal: 16),
             16.height,
-            Text(
-                "Business Name",
-                style: const TextStyle(
-                    color:  const Color(0xff2f3036),
-                    fontWeight: FontWeight.w600,
-                    fontFamily: "Poppins",
-                    fontStyle:  FontStyle.normal,
-                    fontSize: 12.0
-                ),
-                textAlign: TextAlign.left
-            ).paddingSymmetric(horizontal: 16),
-            5.height,
-            StyledTextField(
-              textFieldType: TextFieldType.EMAIL,
-              hintText: "Business Name",
-            ).paddingSymmetric(horizontal: 16),
-            10.height,
-            Text(
-                "Phone Number",
-                style: const TextStyle(
-                    color:  const Color(0xff2f3036),
-                    fontWeight: FontWeight.w600,
-                    fontFamily: "Poppins",
-                    fontStyle:  FontStyle.normal,
-                    fontSize: 12.0
-                ),
-                textAlign: TextAlign.left
-            ).paddingSymmetric(horizontal: 16),
-            5.height,
-            PhoneInputField().paddingSymmetric(horizontal: 16),
-            10.height,
-            Text(
-                "Email Address",
-                style: const TextStyle(
-                    color:  const Color(0xff2f3036),
-                    fontWeight: FontWeight.w600,
-                    fontFamily: "Poppins",
-                    fontStyle:  FontStyle.normal,
-                    fontSize: 12.0
-                ),
-                textAlign: TextAlign.left
-            ).paddingSymmetric(horizontal: 16),
+            const Text("Business Name",
+                    style: const TextStyle(
+                        color: const Color(0xff2f3036),
+                        fontWeight: FontWeight.w600,
+                        fontFamily: "Poppins",
+                        fontStyle: FontStyle.normal,
+                        fontSize: 12.0),
+                    textAlign: TextAlign.left)
+                .paddingSymmetric(horizontal: 16),
             5.height,
             StyledTextField(
               textFieldType: TextFieldType.NAME,
-              hintText: "Email Address",
+              hintText: "Business Name",
+              controller: businessNameController,
+              focusNode: _businessNameFocusNode,
+              nextFocus: _phoneNumberFocusNode,
             ).paddingSymmetric(horizontal: 16),
             10.height,
-            Text(
-                "Country & Currency",
-                style: const TextStyle(
-                    color:  const Color(0xff2f3036),
-                    fontWeight: FontWeight.w600,
-                    fontFamily: "Poppins",
-                    fontStyle:  FontStyle.normal,
-                    fontSize: 12.0
-                ),
-                textAlign: TextAlign.left
+            Text("Business Category",
+                    style: const TextStyle(
+                        color: const Color(0xff2f3036),
+                        fontWeight: FontWeight.w600,
+                        fontFamily: "Poppins",
+                        fontStyle: FontStyle.normal,
+                        fontSize: 12.0),
+                    textAlign: TextAlign.left)
+                .paddingSymmetric(horizontal: 16),
+            5.height,
+            SubCategoryPicker(
+              label: 'Select Category',
+              options: List.empty(),
+              selectedValue: selectedCategory,
+              onChanged: (value) {
+                final selectedCat = "";
+                setState(() {
+                  selectedCategory = selectedCat;
+                });
+              },
             ).paddingSymmetric(horizontal: 16),
+            10.height,
+            Text("Phone Number",
+                    style: const TextStyle(
+                        color: const Color(0xff2f3036),
+                        fontWeight: FontWeight.w600,
+                        fontFamily: "Poppins",
+                        fontStyle: FontStyle.normal,
+                        fontSize: 12.0),
+                    textAlign: TextAlign.left)
+                .paddingSymmetric(horizontal: 16),
+            5.height,
+            PhoneInputField(
+              controller: phoneNumberController,
+              focusNode: _phoneNumberFocusNode,
+              nextFocus: _emailFocusNode,
+            ).paddingSymmetric(horizontal: 16),
+            10.height,
+            Text("Email Address",
+                    style: const TextStyle(
+                        color: const Color(0xff2f3036),
+                        fontWeight: FontWeight.w600,
+                        fontFamily: "Poppins",
+                        fontStyle: FontStyle.normal,
+                        fontSize: 12.0),
+                    textAlign: TextAlign.left)
+                .paddingSymmetric(horizontal: 16),
+            5.height,
+            StyledTextField(
+              textFieldType: TextFieldType.EMAIL,
+              hintText: "Email Address",
+              controller: emailController,
+              focusNode: _emailFocusNode,
+              nextFocus: _locationFocusNode,
+            ).paddingSymmetric(horizontal: 16),
+            10.height,
+            Text("Location",
+                    style: const TextStyle(
+                        color: const Color(0xff2f3036),
+                        fontWeight: FontWeight.w600,
+                        fontFamily: "Poppins",
+                        fontStyle: FontStyle.normal,
+                        fontSize: 12.0),
+                    textAlign: TextAlign.left)
+                .paddingSymmetric(horizontal: 16),
+            5.height,
+            LocationPickerField(
+              controller: locationController,
+              focusNode: _locationFocusNode,
+              apiKey: '',
+              label: 'Location',
+              onLocationSelected: (location) {
+                setState(() {
+                  _selectedLocation = location;
+                });
+              },
+            ),
+            10.height,
+            Text("Country & Currency",
+                    style: const TextStyle(
+                        color: const Color(0xff2f3036),
+                        fontWeight: FontWeight.w600,
+                        fontFamily: "Poppins",
+                        fontStyle: FontStyle.normal,
+                        fontSize: 12.0),
+                    textAlign: TextAlign.left)
+                .paddingSymmetric(horizontal: 16),
             5.height,
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -223,7 +300,8 @@ class _CreateBusinessPageState extends State<CreateBusinessPage> {
                                       fit: BoxFit.cover,
                                     ),
                                   )
-                                : SvgPicture.asset(zedColoredIcon, fit: BoxFit.cover),
+                                : SvgPicture.asset(zedColoredIcon,
+                                    fit: BoxFit.cover),
                           ),
                           Positioned(
                             right: 4,
@@ -232,7 +310,9 @@ class _CreateBusinessPageState extends State<CreateBusinessPage> {
                               radius: 12,
                               backgroundColor: appThemePrimary.withOpacity(0.7),
                               child: Icon(
-                                _logoImage != null ? Icons.edit : Icons.add_photo_alternate,
+                                _logoImage != null
+                                    ? Icons.edit
+                                    : Icons.add_photo_alternate,
                                 color: Colors.white.withOpacity(0.7),
                                 size: 14,
                               ),
@@ -249,10 +329,16 @@ class _CreateBusinessPageState extends State<CreateBusinessPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Business Logo", style: TextStyle(fontWeight: FontWeight.bold, fontFamily: "Poppins")),
+                      Text("Business Logo",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontFamily: "Poppins")),
                       Text(
                         "Format: .png or .jpg\nMin. size: 350px by 180px\nMax. file size: 1MB",
-                        style: TextStyle(fontSize: 12, color: Colors.grey, fontFamily: "Poppins"),
+                        style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey,
+                            fontFamily: "Poppins"),
                       ),
                     ],
                   ),
@@ -261,16 +347,16 @@ class _CreateBusinessPageState extends State<CreateBusinessPage> {
             ).paddingSymmetric(horizontal: 16),
             25.height,
             appButton(
-              text: "Next", 
-              onTap: () {
-                if (selectedCountry != null && selectedCurrency != null) {
-                  widget.onNext();
-                } else {
-                  toast("Please select a country");
-                }
-              }, 
-              context: context
-            ).paddingSymmetric(horizontal: 16),
+                    text: "Next",
+                    onTap: () {
+                      if (selectedCountry != null && selectedCurrency != null) {
+                        widget.onNext();
+                      } else {
+                        toast("Please select a country");
+                      }
+                    },
+                    context: context)
+                .paddingSymmetric(horizontal: 16),
             16.height,
           ],
         ),

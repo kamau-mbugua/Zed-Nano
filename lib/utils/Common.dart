@@ -322,3 +322,15 @@ Widget buildOverviewCard(
     ),
   );
 }
+
+/// Returns a BoxDecoration that matches the styling of StyledTextField
+BoxDecoration getStyledDropdownDecoration({bool disabled = false}) {
+  return BoxDecoration(
+    borderRadius: BorderRadius.circular(13), // Matching StyledTextField border radius
+    color: disabled ? Colors.grey.shade100 : Colors.white,
+    border: Border.all(
+      color: BodyWhite, // Matching StyledTextField border color
+      width: 1,
+    ),
+  );
+}

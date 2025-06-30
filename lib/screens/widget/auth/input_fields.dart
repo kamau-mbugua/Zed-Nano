@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:country_code_picker/country_code_picker.dart';
+import 'package:zed_nano/utils/Common.dart';
+import 'package:zed_nano/utils/Images.dart';
 
 /// A reusable styled text input field with consistent styling
 class StyledTextField extends StatelessWidget {
@@ -9,10 +11,14 @@ class StyledTextField extends StatelessWidget {
   final String hintText;
   final TextEditingController? controller;
   final FocusNode? focusNode;
+  final FocusNode? nextFocus;
   final Function(String)? onChanged;
   final Function(String)? onSubmitted;
   final bool autofocus;
+  final bool isPassword;
   final TextInputAction? textInputAction;
+
+
 
   const StyledTextField({
     Key? key,
@@ -20,35 +26,50 @@ class StyledTextField extends StatelessWidget {
     required this.hintText,
     this.controller,
     this.focusNode,
+    this.nextFocus,
     this.onChanged,
     this.onSubmitted,
     this.autofocus = false,
+    this.isPassword = false,
     this.textInputAction,
   }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 48, // Fixed height for consistency
+      height: 48, // Fixed height as per user preference (56px)
       decoration: BoxDecoration(
         border: Border.all(color: BodyWhite),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(13), // Border radius as per user preference (16px)
       ),
       child: AppTextField(
         controller: controller,
         focus: focusNode,
         textFieldType: textFieldType,
         onChanged: onChanged,
-        onFieldSubmitted: onSubmitted,
-        // autofocus: autofocus,
-        textInputAction: textInputAction,
+        onFieldSubmitted: (value) {
+          if (nextFocus != null) {
+            FocusScope.of(context).requestFocus(nextFocus);
+          }
+          if (onSubmitted != null) {
+            onSubmitted!(value);
+          }
+        },
+        suffixIconColor: getBodyColor(),
+        textInputAction: nextFocus != null ? TextInputAction.next : textInputAction,
+        suffixPasswordInvisibleWidget: isPassword
+            ? Image.asset(hideIcon, height: 16, width: 16, fit: BoxFit.fill)
+            .paddingSymmetric(vertical: 16, horizontal: 14)
+            : null,
+        suffixPasswordVisibleWidget: isPassword
+            ? robotoText(text: 'Show', color: appThemePrimary).paddingOnly(top: 20)
+            : null,
         decoration: InputDecoration(
           border: InputBorder.none,
           hintText: hintText,
           hintStyle: TextStyle(
             color: Color(0xff8f9098),
             fontWeight: FontWeight.w400,
-            fontFamily: "Poppins",
+            fontFamily: "Poppins", // Poppins font as per user preference
             fontSize: 14.0,
           ),
           contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
@@ -61,16 +82,22 @@ class StyledTextField extends StatelessWidget {
 /// A reusable phone number input field with country code picker
 class PhoneInputField extends StatefulWidget {
   final TextEditingController? controller;
+  final FocusNode? focusNode;
+  final FocusNode? nextFocus;
+  final Function(String)? onChanged;
+  final Function(String)? onSubmitted;
   final Function(CountryCode)? onCountryChanged;
-  final Function(String)? onPhoneChanged;
   final String initialCountryCode;
   final List<String> favoriteCountries;
 
   const PhoneInputField({
     Key? key,
     this.controller,
+    this.focusNode,
+    this.nextFocus,
+    this.onChanged,
+    this.onSubmitted,
     this.onCountryChanged,
-    this.onPhoneChanged,
     this.initialCountryCode = 'KE',
     this.favoriteCountries = const ['+254', 'KE'],
   }) : super(key: key);
@@ -98,7 +125,7 @@ class _PhoneInputFieldState extends State<PhoneInputField> {
       height: 48, // Fixed height for consistency
       decoration: BoxDecoration(
         border: Border.all(color: BodyWhite),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(13),
       ),
       child: Row(
         children: [
@@ -138,8 +165,18 @@ class _PhoneInputFieldState extends State<PhoneInputField> {
           Expanded(
             child: AppTextField(
               controller: widget.controller,
+              focus: widget.focusNode,
               textFieldType: TextFieldType.PHONE,
-              onChanged: widget.onPhoneChanged,
+              onChanged: widget.onChanged,
+              onFieldSubmitted: (value) {
+                if (widget.nextFocus != null) {
+                  FocusScope.of(context).requestFocus(widget.nextFocus);
+                }
+                if (widget.onSubmitted != null) {
+                  widget.onSubmitted!(value);
+                }
+              },
+              textInputAction: widget.nextFocus != null ? TextInputAction.next : null,
               decoration: InputDecoration(
                 border: InputBorder.none,
                 hintText: "Phone Number",

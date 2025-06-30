@@ -175,11 +175,13 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
         16.height,
-        Padding(
+        Container(
+          width: double.infinity,
           padding: EdgeInsets.symmetric(horizontal: 16),
           child: StyledTextField(
             textFieldType: TextFieldType.PASSWORD,
             hintText: "Pin",
+            isPassword: true,
           ),
         ),
         8.height,
@@ -212,11 +214,13 @@ class _LoginPageState extends State<LoginPage> {
           child: PhoneInputField(),
         ),
         16.height,
-        Padding(
+        Container(
+          width: double.infinity,
           padding: EdgeInsets.symmetric(horizontal: 16),
           child: StyledTextField(
             textFieldType: TextFieldType.PASSWORD,
             hintText: "Pin",
+            isPassword: true,
           ),
         ),
         8.height,
