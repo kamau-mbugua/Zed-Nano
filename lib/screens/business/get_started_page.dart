@@ -26,8 +26,9 @@ class _GetStartedPageState extends State<GetStartedPage> {
   }
 
   void goSkip(){
-    Navigator.pushNamedAndRemoveUntil(context,
-        AppRoutes.getActivatingTrialRoute(), (route) => false);
+    Navigator.pop(context);
+    Navigator.pushNamed(context,
+        AppRoutes.getActivatingTrialRoute());
 
   }
 
