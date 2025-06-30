@@ -134,6 +134,7 @@ Widget appButton(
     {required String text,
     required Function onTap,
     double? width,
+      bool isEnable = true,
     required BuildContext context}) {
   return AppButton(
     shapeBorder: RoundedRectangleBorder(borderRadius: radius(AppCommonRadius)),
@@ -141,7 +142,7 @@ Widget appButton(
     textStyle: boldTextStyle(color: Colors.white, fontFamily: "Poppins"),
     onTap: onTap,
     elevation: 0,
-    color: appThemePrimary,
+    color: isEnable ? appThemePrimary : textSecondary,
     width: width ?? context.width() - 32,
     height: 50,
   );

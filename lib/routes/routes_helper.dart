@@ -5,6 +5,7 @@ import 'package:zed_nano/screens/auth/forget_password_screen.dart';
 import 'package:zed_nano/screens/auth/login_page.dart';
 import 'package:zed_nano/screens/auth/registration_page.dart';
 import 'package:zed_nano/screens/auth/set_new_pin_page.dart';
+import 'package:zed_nano/screens/business/subscription/activating_trial_screen.dart';
 import 'package:zed_nano/screens/main/home_main_page.dart';
 import 'package:zed_nano/screens/onboarding/onboarding_screen.dart';
 import 'package:zed_nano/screens/onboarding/splash_page.dart';
@@ -40,6 +41,10 @@ class RouterHelper {
   static final Handler _homeMainHandler = Handler(
     handlerFunc: (BuildContext? context, Map<String, List<String>> params) =>
         HomeMainPage(),
+  );
+  static final Handler _activatingTrialHandler = Handler(
+    handlerFunc: (BuildContext? context, Map<String, List<String>> params) =>
+        ActivatingTrialScreen(),
   );
 
   static void setupRouter() {
@@ -80,7 +85,13 @@ class RouterHelper {
       handler: _homeMainHandler,
       transitionType: TransitionType.fadeIn,
     );
-    
+
+    router.define(
+      AppRoutes.activatingTrialRoute,
+      handler: _activatingTrialHandler,
+      transitionType: TransitionType.fadeIn,
+    );
+
     // Define a not found handler
     router.notFoundHandler = Handler(
       handlerFunc: (BuildContext? context, Map<String, List<String>> params) {

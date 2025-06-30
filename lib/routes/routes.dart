@@ -6,6 +6,7 @@ class AppRoutes {
   static const String userRegistrationRoute = '/userRegistrationRoute';
   static const String forgetPinRoute = '/forgetPinRoute';
   static const String setPinRoute = '/setPinRoute';
+  static const String activatingTrialRoute = '/activatingTrialRoute';
 
   static String getHomeMainPageRoute() => homeMainRoute;
   static String getSplashPageRoute() => splashRoute;
@@ -14,5 +15,6 @@ class AppRoutes {
   static String getUserRegistrationPageRoute() => userRegistrationRoute;
   static String getForgetPinRoutePageRoute() => forgetPinRoute;
   static String getSetPinRoutePageRoute() => setPinRoute;
+  static String getActivatingTrialRoute() => activatingTrialRoute;
 
 }

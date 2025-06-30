@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:country_code_picker/country_code_picker.dart';
@@ -17,7 +18,8 @@ class StyledTextField extends StatelessWidget {
   final bool autofocus;
   final bool isPassword;
   final TextInputAction? textInputAction;
-
+  final int? maxLength;
+  final bool showCounter;
 
 
   const StyledTextField({
@@ -32,6 +34,8 @@ class StyledTextField extends StatelessWidget {
     this.autofocus = false,
     this.isPassword = false,
     this.textInputAction,
+    this.maxLength,
+    this.showCounter = false,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -63,6 +67,9 @@ class StyledTextField extends StatelessWidget {
         suffixPasswordVisibleWidget: isPassword
             ? robotoText(text: 'Show', color: appThemePrimary).paddingOnly(top: 20)
             : null,
+        inputFormatters: maxLength != null 
+            ? [LengthLimitingTextInputFormatter(maxLength)]
+            : null,
         decoration: InputDecoration(
           border: InputBorder.none,
           hintText: hintText,
@@ -73,6 +80,7 @@ class StyledTextField extends StatelessWidget {
             fontSize: 14.0,
           ),
           contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+          counterText: showCounter ? null : '',
         ),
       ),
     );

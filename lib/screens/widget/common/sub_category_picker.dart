@@ -22,39 +22,58 @@ class SubCategoryPicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DropdownWithSearch<String>(
-      title: label,
-      placeHolder: "Search $label",
-      items: options,
-      selected: selectedValue ?? label,
-      label: label,
-      disabled: disabled,
-      decoration: getStyledDropdownDecoration(disabled: disabled),
-      disabledDecoration: getStyledDropdownDecoration(disabled: true),
-      selectedItemStyle: const TextStyle(
-        fontFamily: 'Poppins',
-        fontSize: 14.0,
-        color: Color(0xff2f3036),
+    return Container(
+      height: 48, // Fixed height to match StyledTextField
+      child: DropdownWithSearch<String>(
+        title: label,
+        placeHolder: "Search $label",
+        items: options,
+        selected: selectedValue == null || selectedValue!.isEmpty ? label : selectedValue!, // Show label when nothing selected
+        label: label,
+        disabled: disabled,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(13),
+          color: Colors.white,
+          border: Border.all(
+            color: BodyWhite,
+            width: 1,
+          ),
+        ),
+        disabledDecoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(13),
+          color: Colors.grey.shade100,
+          border: Border.all(
+            color: BodyWhite,
+            width: 1,
+          ),
+        ),
+        selectedItemStyle: TextStyle(
+          fontFamily: 'Poppins',
+          fontSize: 14.0,
+          color: selectedValue == null || selectedValue!.isEmpty 
+              ? Color(0xff8f9098) // Hint text color
+              : Color(0xff2f3036), // Selected text color
+        ),
+        dropdownHeadingStyle: const TextStyle(
+          fontFamily: 'Poppins',
+          fontSize: 16.0,
+          fontWeight: FontWeight.w500,
+          color: Color(0xff2f3036),
+        ),
+        itemStyle: const TextStyle(
+          fontFamily: 'Poppins',
+          fontSize: 14.0,
+          color: Color(0xff2f3036),
+        ),
+        selectedItemPadding: const EdgeInsets.symmetric(vertical: 13, horizontal: 16),
+        searchBarRadius: 13.0,
+        dialogRadius: 12.0,
+        onChanged: (value) {
+          if (value != null && value is String && value != label) { // Don't trigger onChanged when selecting the label
+            onChanged(value);
+          }
+        },
       ),
-      dropdownHeadingStyle: const TextStyle(
-        fontFamily: 'Poppins',
-        fontSize: 16.0,
-        fontWeight: FontWeight.w500,
-        color: Color(0xff2f3036),
-      ),
-      itemStyle: const TextStyle(
-        fontFamily: 'Poppins',
-        fontSize: 14.0,
-        color: Color(0xff2f3036),
-      ),
-      selectedItemPadding: const EdgeInsets.symmetric(vertical: 13, horizontal: 16),
-      searchBarRadius: 13.0,
-      dialogRadius: 16.0,
-      onChanged: (value) {
-        if (value != null && value is String) {
-          onChanged(value);
-        }
-      },
     );
   }
 }

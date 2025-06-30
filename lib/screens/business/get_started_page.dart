@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zed_nano/routes/routes.dart';
 import 'package:zed_nano/screens/business/create_business/business_created_preview_page.dart';
 import 'package:zed_nano/screens/business/create_business/create_business_page.dart';
 import 'package:zed_nano/screens/business/subscription/choose_subscription_page.dart';
@@ -24,13 +25,19 @@ class _GetStartedPageState extends State<GetStartedPage> {
     }
   }
 
+  void goSkip(){
+    Navigator.pushNamedAndRemoveUntil(context,
+        AppRoutes.getActivatingTrialRoute(), (route) => false);
+
+  }
+
   @override
   Widget build(BuildContext context) {
     final pages = [
       CreateBusinessPage(onNext: goToNextStep),
       BusinessCreatedPreviewPage(onNext: goToNextStep),
-      ChooseSubscriptionPage(onNext: goToNextStep),
-      SubscriptionPaymentPage(onNext: goToNextStep),
+      SubscriptionScreen(onNext: goToNextStep, onSkip: goSkip),
+      CompleteSubscriptionScreen(onSkip: goSkip),
     ];
 
     return Scaffold(

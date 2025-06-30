@@ -151,6 +151,7 @@ class _BusinessCreatedPreviewPageState extends State<BusinessCreatedPreviewPage>
                   appButton(
                       text: "Next",
                       onTap: () {
+                        widget.onNext();
 
                       },
                       context: context
