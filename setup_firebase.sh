@@ -1,31 +1,35 @@
 #!/bin/bash
 
-# Add Flutter and Dart to PATH
-export PATH="$HOME/.pub-cache/bin:$PATH"
+echo "Starting manual Firebase setup..."
 
-# Find the location of dart executable from fvm
-DART_PATH=$(which dart || echo "")
-
-if [ -z "$DART_PATH" ]; then
-  # Try to find dart in common FVM locations
-  if [ -f "$HOME/fvm/default/bin/dart" ]; then
-    DART_PATH="$HOME/fvm/default/bin/dart"
-  elif [ -f "$HOME/.fvm/default/bin/dart" ]; then
-    DART_PATH="$HOME/.fvm/default/bin/dart"
-  else
-    echo "Error: Could not find dart executable. Please make sure Flutter/Dart is installed."
-    exit 1
-  fi
-fi
-
-echo "Using Dart at: $DART_PATH"
-
-# Run FlutterFire configuration
-$DART_PATH pub global run flutterfire_cli:flutterfire configure --project=zed-app-444bf
-
-# Check if the configuration was successful
-if [ $? -eq 0 ]; then
-  echo "Firebase configuration completed successfully!"
+# Check if Google services JSON exists
+if [ ! -f "android/app/google-services.json" ]; then
+  echo "⚠️ Warning: google-services.json not found!"
+  echo "Please download it from Firebase console and place it in android/app/ directory"
 else
-  echo "Firebase configuration failed. Please check the error messages above."
+  echo "✅ Found google-services.json"
 fi
+
+# Check if GoogleService-Info.plist exists
+if [ ! -f "ios/Runner/GoogleService-Info.plist" ]; then
+  echo "⚠️ Warning: GoogleService-Info.plist not found!"
+  echo "Please download it from Firebase console and place it in ios/Runner/ directory"
+else
+  echo "✅ Found GoogleService-Info.plist"
+fi
+
+# Run flutter pub get to update dependencies
+echo "Updating Flutter dependencies..."
+flutter pub get
+
+# Install pods for iOS
+if [ -d "ios" ]; then
+  echo "Installing iOS pods..."
+  cd ios && pod install && cd ..
+  echo "iOS pods installed"
+fi
+
+echo "Firebase setup completed!"
+echo "Note: Make sure you have added the actual configuration files from Firebase console"
+echo "For Android: google-services.json in android/app/"
+echo "For iOS: GoogleService-Info.plist in ios/Runner/"

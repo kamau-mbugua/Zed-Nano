@@ -1,4 +1,3 @@
-
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -8,20 +7,25 @@ import 'package:zed_nano/networking/datasource/remote/dio/logging_interceptor.da
 import 'package:zed_nano/providers/SplashProvider.dart';
 import 'package:zed_nano/providers/theme_provider.dart';
 import 'package:zed_nano/repositories/SplashRepo.dart';
+import 'package:zed_nano/services/firebase_service.dart';
+
 final sl = GetIt.instance;
 
 Future<void> init() async {
+  // Firebase Service
+  sl..registerLazySingleton(FirebaseService.new)
+
   // Core
-  sl.registerLazySingleton(() => DioClient(AppConstants.baseUrl, sl(), loggingInterceptor: sl(), sharedPreferences: sl()));
+  ..registerLazySingleton(() => DioClient(AppConstants.baseUrl, sl(), loggingInterceptor: sl(), sharedPreferences: sl()))
   //
   // // Repository
-  sl.registerLazySingleton(() => SplashRepo(sharedPreferences: sl()));
+  ..registerLazySingleton(() => SplashRepo(sharedPreferences: sl()))
   // sl.registerLazySingleton(() => AuthenticatedRepo(dioClient: sl(), sharedPreferences: sl()));
   // sl.registerLazySingleton(() => AuthenticatedRepo(dioClient: sl()));
   //
   //
   // // Provider
-  sl.registerFactory(() => SplashProvider(splashRepo: sl()));
+  ..registerFactory(() => SplashProvider(splashRepo: sl()));
   // sl.registerFactory(() => ThemeProvider(sharedPreferences: sl()));
   // sl.registerFactory(() => AuthProvider(authRepo: sl()));
   // sl.registerFactory(() => AuthenticatedAppProviders(authenticatedRepo: sl()));
@@ -31,9 +35,9 @@ Future<void> init() async {
   //
   // // External
   final sharedPreferences = await SharedPreferences.getInstance();
-  sl.registerLazySingleton(() => sharedPreferences);
-  sl.registerLazySingleton(() => Dio());
-  sl.registerLazySingleton(() => LoggingInterceptor());
+  sl..registerLazySingleton(() => sharedPreferences)
+  ..registerLazySingleton(Dio.new)
+  ..registerLazySingleton(LoggingInterceptor.new);
   //
   //
   // //ViewModel
