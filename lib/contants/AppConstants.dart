@@ -1,12 +1,14 @@
+import 'package:zed_nano/app/app_config.dart';
+
 class AppConstants{
 //App Constants
   static const String appVersion = '';
   static const String appDescription = '';
 
-  static const String appName = '';
+  static String appName = AppConfig.appName;
 
 //API Constants
-  static const String baseUrl = '';
+  static String baseUrl = AppConfig.baseUrl;
 
 
   //shared preferences

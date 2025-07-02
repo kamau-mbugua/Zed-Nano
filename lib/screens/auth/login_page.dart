@@ -3,17 +3,22 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/providers/authenticated_app_providers.dart';
+import 'package:zed_nano/providers/providers_helpers.dart';
 import 'package:zed_nano/routes/routes.dart';
 import 'package:zed_nano/screens/auth/forget_password_screen.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/auth/input_fields.dart';
 import 'package:zed_nano/screens/widget/auth/social_buttons.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
+import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
+import 'package:zed_nano/services/firebase_service.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/Images.dart';
 import 'package:country_code_picker/country_code_picker.dart';
+import 'package:zed_nano/utils/extensions.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -36,6 +41,7 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController phonePasswordController = TextEditingController();
 
   final TextEditingController phoneController = TextEditingController();
+  final TextEditingController codeController = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   final FocusNode emailFocus = FocusNode();
@@ -68,6 +74,7 @@ class _LoginPageState extends State<LoginPage> {
     emailController.dispose();
     passwordController.dispose();
     phoneController.dispose();
+    codeController.dispose();
     phonePasswordController.dispose();
     super.dispose();
   }
@@ -278,8 +285,10 @@ class _LoginPageState extends State<LoginPage> {
           padding: EdgeInsets.symmetric(horizontal: 16),
           child: PhoneInputField(
             controller: phoneController,
+            codeController:codeController,
             focusNode: phoneFocus,
             nextFocus: phonePasswordFocus,
+            maxLength: 10,
           ),
         ),
         16.height,
@@ -292,6 +301,7 @@ class _LoginPageState extends State<LoginPage> {
             textFieldType: TextFieldType.PASSWORD,
             hintText: "Pin",
             isPassword: true,
+            maxLength: 4,
           ),
         ),
         8.height,
@@ -333,100 +343,70 @@ class _LoginPageState extends State<LoginPage> {
 
   // Login with email and password
   Future<void> _handleEmailLogin(BuildContext context) async {
-    if (!formKey.currentState!.validate()) return;
-
-    // Get the provider
-    final authProvider = Provider.of<AuthenticatedAppProviders>(context, listen: false);
-
-    // Prepare request data
-    final Map<String, dynamic> loginData = {
-      'email': emailController.text.trim(),
-      'password': passwordController.text,
-    };
-
-    // Call login method
-    final response = await authProvider.login(requestData: loginData);
-
-    if (response.isSuccess) {
-      // Get user name for welcome message
-      final userName = authProvider.userDetails?.name ??
-          authProvider.loginResponse?.username ??
-          "User";
-
-      // Show welcome toast
-      Fluttertoast.showToast(
-        msg: "Welcome back $userName!",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.green,
-        textColor: Colors.white,
-        fontSize: 16.0,
-      );
-
-      // Navigate to home screen
-      Navigator.of(context).pushReplacementNamed(AppRoutes.getHomeMainPageRoute());
-    } else {
-      // Show error message
-      Fluttertoast.showToast(
-        msg: response.message ?? "Login failed",
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+    var email = emailController.text.trim();
+    var pass = passwordController.text.trim();
+    if ( !email.isValidEmail) {
+      showCustomToast('Please enter phone number');
+      return;
     }
+    if (!pass.isValidPin) {
+      showCustomToast('Please enter valid pin');
+      return;
+    }
+    final Map<String, dynamic> loginData = {
+      'email': email,
+      'userPin': pass,
+    };
+    logger.d(loginData);
+
+    _doUserLogin(loginData, context);
+
   }
 
   // Login with phone number and password
   Future<void> _handlePhoneLogin(BuildContext context) async {
-    if (!formKey.currentState!.validate()) return;
 
-    // Get the provider
-    final authProvider = Provider.of<AuthenticatedAppProviders>(context, listen: false);
-
+    var phone = phoneController.text.trim();
+    var phoneCode = codeController.text.trim();
+    var pass = phonePasswordController.text.trim();
     // Extract phone number (remove formatting)
-    String phoneNumber = phoneController.text.trim();
-    // Remove any non-digit characters if needed
-    phoneNumber = phoneNumber.replaceAll(RegExp(r'[^\d+]'), '');
-
-    // Prepare request data
+    String phoneNumber = "$phoneCode$phone";
+    if (phone.isEmpty || !phoneNumber.isValidPhoneNumber) {
+      showCustomToast('Please enter phone number');
+      return;
+    }
+    if (!pass.isValidPin) {
+      showCustomToast('Please enter valid pin');
+      return;
+    }
     final Map<String, dynamic> loginData = {
-      'phoneNumber': phoneNumber,
-      'password': phonePasswordController.text,
+      'userPhone': phoneNumber,
+      'userPin': pass,
     };
+    logger.d(loginData);
 
-    // Call login method
-    final response = await authProvider.login(requestData: loginData);
+    _doUserLogin(loginData, context);
+  }
 
+  Future<void> _doUserLogin(Map<String, dynamic> loginData, BuildContext context) async {
+    final firebaseService = FirebaseService();
+    final fcmToken = await firebaseService.getFcmToken();
+    final deviceId = await firebaseService.getDeviceId();
+
+    loginData['fcmToken'] = fcmToken;
+    loginData['deviceId'] = deviceId;
+
+    final authProvider = getAuthProvider(context);
+    final response = await authProvider.login(requestData: loginData, context: context);
     if (response.isSuccess) {
-      // Get user name for welcome message
       final userName = authProvider.userDetails?.name ??
           authProvider.loginResponse?.username ??
           "User";
-
-      // Show welcome toast
-      Fluttertoast.showToast(
-        msg: "Welcome back $userName!",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.green,
-        textColor: Colors.white,
-        fontSize: 16.0,
-      );
-
-      // Navigate to home screen
+      showCustomToast('Welcome back $userName!', isError: false);
       Navigator.of(context).pushReplacementNamed(AppRoutes.getHomeMainPageRoute());
     } else {
-      // Show error message
-      Fluttertoast.showToast(
-        msg: response.message ?? "Login failed",
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+      logger.d(response.message);
+      showCustomToast('${response.message}!');
     }
   }
 }

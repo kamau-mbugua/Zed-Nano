@@ -241,7 +241,7 @@ class _CompleteSubscriptionScreenState extends State<CompleteSubscriptionScreen>
               )
             ]else if (selected && method == 'MPESA') ...[
               10.height,
-              const PhoneInputField().paddingSymmetric(horizontal: 2),
+              PhoneInputField().paddingSymmetric(horizontal: 2),
             ]
           ],
         ),

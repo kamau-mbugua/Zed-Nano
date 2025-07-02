@@ -118,4 +118,29 @@ class FirebaseService {
 
   /// Stream of auth state changes
   Stream<User?> get authStateChanges => auth.authStateChanges();
+
+  /// Get FCM token
+  Future<String?> getFcmToken() async {
+    try {
+      return await messaging.getToken();
+    } catch (e) {
+      logger.e('Failed to get FCM token: $e');
+      return null;
+    }
+  }
+
+  /// Get device ID
+  Future<String?> getDeviceId() async {
+    try {
+      final token = await messaging.getToken();
+      if (token == null) return null;
+      
+      // For Android, we can get the device ID from the token
+      // For iOS, you might want to use a different method
+      return token.substring(0, 64); // First 64 characters of the token
+    } catch (e) {
+      logger.e('Failed to get device ID: $e');
+      return null;
+    }
+  }
 }

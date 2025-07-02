@@ -13,6 +13,11 @@ extension StringValidationExtensions on String {
     return phoneRegex.hasMatch(this);
   }
 
+  bool get isValidPin {
+    final pinRegex = RegExp(r'^\d{4}$');
+    return pinRegex.hasMatch(this);
+  }
+
   bool get isValidInput {
     return this.trim().isNotEmpty;
   }

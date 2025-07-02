@@ -37,12 +37,12 @@ class AuthenticatedAppProviders extends BaseProvider {
   }
 
   // Helper method to perform API calls with automatic loading management
-  Future<ResponseModel> _performApiCall(Future<ApiResponse> Function() apiFunction) async {
+  Future<ResponseModel> _performApiCall(Future<ApiResponse> Function() apiFunction, BuildContext context) async {
     final result = await performApiCall(() async {
       ApiResponse apiResponse = await apiFunction();
       ResponseModel responseModel = await handleApiResponse(apiResponse);
       return responseModel;
-    });
+    }, context);
     
     // Handle case where performApiCall returns null (an error occurred)
     return result ?? ResponseModel(
@@ -51,16 +51,16 @@ class AuthenticatedAppProviders extends BaseProvider {
     );
   }
 
-  Future<ResponseModel> callEndpoint({
-    required Future<ApiResponse> Function() apiCall
-  }) async {
-    return await _performApiCall(apiCall);
-  }
+  // Future<ResponseModel> callEndpoint({
+  //   required Future<ApiResponse> Function() apiCall
+  // }) async {
+  //   return await _performApiCall(apiCall);
+  // }
 
   /// Login with provided credentials
-  Future<ResponseModel<LoginResponse>> login({required Map<String, dynamic> requestData}) async {
+  Future<ResponseModel<LoginResponse>> login({required Map<String, dynamic> requestData, required BuildContext context}) async {
     ResponseModel responseModel = await _performApiCall(() => 
-      authenticatedRepo.login(requestData: requestData)
+      authenticatedRepo.login(requestData: requestData), context
     );
     
     ResponseModel<LoginResponse> finalResponseModel;
@@ -95,7 +95,7 @@ class AuthenticatedAppProviders extends BaseProvider {
   }
 
   /// Log out the current user
-  Future<ResponseModel> logout() async {
+  Future<ResponseModel> logout(BuildContext context) async {
     return await _performApiCall(() async {
       final result = await authenticatedRepo.clearSharedData();
       
@@ -118,24 +118,24 @@ class AuthenticatedAppProviders extends BaseProvider {
         // Return error response
         return ApiResponse.withError('Failed to clear user data');
       }
-    });
+    },context);
   }
   
   /// Generic method for API calls where you just need success/failure
 
-  Future<ResponseModel> register({required Map<String, dynamic> requestData}) async {
+  Future<ResponseModel> register({required Map<String, dynamic> requestData, required BuildContext context}) async {
     return await _performApiCall(() => 
-      authenticatedRepo.register(requestData: requestData)
+      authenticatedRepo.register(requestData: requestData), context
     );
   }
-  Future<ResponseModel> resetPinVersion({required Map<String, dynamic> requestData}) async {
+  Future<ResponseModel> resetPinVersion({required Map<String, dynamic> requestData, required BuildContext context}) async {
     return await _performApiCall(() =>
-      authenticatedRepo.resetPinVersion(requestData: requestData)
+      authenticatedRepo.resetPinVersion(requestData: requestData),context
     );
   }
-  Future<ResponseModel> forgotPin({required Map<String, dynamic> requestData}) async {
+  Future<ResponseModel> forgotPin({required Map<String, dynamic> requestData,required BuildContext context}) async {
     return await _performApiCall(() =>
-      authenticatedRepo.forgotPin(requestData: requestData)
+      authenticatedRepo.forgotPin(requestData: requestData),context
     );
   }
 }

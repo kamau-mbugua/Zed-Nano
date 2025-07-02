@@ -46,17 +46,17 @@ class AppLoading {
           child: Container(
             width: 120,
             height: 120,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  blurRadius: 10,
-                  spreadRadius: 2,
-                ),
-              ],
-            ),
+            // decoration: BoxDecoration(
+            //   color: Colors.transparent,
+            //   borderRadius: BorderRadius.circular(12),
+            //   boxShadow: [
+            //     BoxShadow(
+            //       color: Colors.black.withOpacity(0.1),
+            //       blurRadius: 10,
+            //       spreadRadius: 2,
+            //     ),
+            //   ],
+            // ),
             child: Center(
               child: FadingCircularProgress(
                 width: _loaderSize ?? 60,

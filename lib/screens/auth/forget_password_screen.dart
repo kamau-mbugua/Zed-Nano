@@ -13,6 +13,7 @@ class ResetPinScreen extends StatefulWidget {
 class _ResetPinScreenState extends State<ResetPinScreen> {
   bool usePhone = true;
   final phoneController = TextEditingController();
+  final codeController = TextEditingController();
   final emailController = TextEditingController();
 
   @override
@@ -116,9 +117,12 @@ class _ResetPinScreenState extends State<ResetPinScreen> {
               ),
             ).paddingSymmetric(horizontal: 10),
             8.height,
-            const   Padding(
+             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10),
-              child: PhoneInputField(),
+              child: PhoneInputField(
+                controller: phoneController,
+                codeController:codeController
+              ),
             ),
           ] else ...[
             const Text(

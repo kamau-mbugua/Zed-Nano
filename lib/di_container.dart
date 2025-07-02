@@ -5,7 +5,9 @@ import 'package:zed_nano/contants/AppConstants.dart';
 import 'package:zed_nano/networking/datasource/remote/dio/dio_client.dart';
 import 'package:zed_nano/networking/datasource/remote/dio/logging_interceptor.dart';
 import 'package:zed_nano/providers/SplashProvider.dart';
+import 'package:zed_nano/providers/authenticated_app_providers.dart';
 import 'package:zed_nano/providers/theme_provider.dart';
+import 'package:zed_nano/repositories/AuthenticatedRepo.dart';
 import 'package:zed_nano/repositories/SplashRepo.dart';
 import 'package:zed_nano/services/firebase_service.dart';
 
@@ -20,15 +22,15 @@ Future<void> init() async {
   //
   // // Repository
   ..registerLazySingleton(() => SplashRepo(sharedPreferences: sl()))
-  // sl.registerLazySingleton(() => AuthenticatedRepo(dioClient: sl(), sharedPreferences: sl()));
+  ..registerLazySingleton(() => AuthenticatedRepo(dioClient: sl(), sharedPreferences: sl()))
   // sl.registerLazySingleton(() => AuthenticatedRepo(dioClient: sl()));
   //
   //
   // // Provider
-  ..registerFactory(() => SplashProvider(splashRepo: sl()));
+  ..registerFactory(() => SplashProvider(splashRepo: sl()))
   // sl.registerFactory(() => ThemeProvider(sharedPreferences: sl()));
   // sl.registerFactory(() => AuthProvider(authRepo: sl()));
-  // sl.registerFactory(() => AuthenticatedAppProviders(authenticatedRepo: sl()));
+  ..registerFactory(() => AuthenticatedAppProviders(authenticatedRepo: sl()));
   // sl.registerFactory(() => CategoryProvider());
   //
   //

@@ -40,7 +40,7 @@ class StyledTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 48, // Fixed height as per user preference (56px)
+      height: 56, // Fixed height as per user preference (56px)
       decoration: BoxDecoration(
         border: Border.all(color: BodyWhite),
         borderRadius: BorderRadius.circular(13), // Border radius as per user preference (16px)
@@ -90,21 +90,25 @@ class StyledTextField extends StatelessWidget {
 /// A reusable phone number input field with country code picker
 class PhoneInputField extends StatefulWidget {
   final TextEditingController? controller;
+  TextEditingController? codeController;
   final FocusNode? focusNode;
   final FocusNode? nextFocus;
+  final int? maxLength;
   final Function(String)? onChanged;
   final Function(String)? onSubmitted;
   final Function(CountryCode)? onCountryChanged;
   final String initialCountryCode;
   final List<String> favoriteCountries;
 
-  const PhoneInputField({
+   PhoneInputField({
     Key? key,
     this.controller,
+    this.codeController,
     this.focusNode,
     this.nextFocus,
     this.onChanged,
     this.onSubmitted,
+    this.maxLength,
     this.onCountryChanged,
     this.initialCountryCode = 'KE',
     this.favoriteCountries = const ['+254', 'KE'],
@@ -125,12 +129,15 @@ class _PhoneInputFieldState extends State<PhoneInputField> {
       dialCode: widget.favoriteCountries.first,
       name: '',
     );
+    
+    // Initialize the country code controller with the default country code
+    widget.codeController?.text = selectedCountry.dialCode ?? '+254';
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 48, // Fixed height for consistency
+      height: 56, // Fixed height for consistency
       decoration: BoxDecoration(
         border: Border.all(color: BodyWhite),
         borderRadius: BorderRadius.circular(13),
@@ -146,6 +153,7 @@ class _PhoneInputFieldState extends State<PhoneInputField> {
               onChanged: (CountryCode code) {
                 setState(() {
                   selectedCountry = code;
+                  widget.codeController?.text = code.dialCode ?? '+254';
                 });
                 if (widget.onCountryChanged != null) {
                   widget.onCountryChanged!(code);
@@ -176,6 +184,7 @@ class _PhoneInputFieldState extends State<PhoneInputField> {
               focus: widget.focusNode,
               textFieldType: TextFieldType.PHONE,
               onChanged: widget.onChanged,
+              maxLength: widget.maxLength,
               onFieldSubmitted: (value) {
                 if (widget.nextFocus != null) {
                   FocusScope.of(context).requestFocus(widget.nextFocus);
@@ -195,6 +204,7 @@ class _PhoneInputFieldState extends State<PhoneInputField> {
                   fontSize: 14.0,
                 ),
                 contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+                counterText: '',
               ),
             ),
           ),

@@ -14,23 +14,27 @@ class BaseProvider extends ChangeNotifier {
   ErrorResponse? get error => _error;
 
   /// Set loading state and show/hide loading overlay
-  void setLoading(bool loading) {
+  void setLoading(bool loading, BuildContext context) {
     _isLoading = loading;
-    
+    logger.w('setLoading ⚠️ ${Get.context}.');
     // Get the context from the navigator key
-    final context = Get.context;
+    // final context = Get.context;
     
     // Only show/dismiss loading if context is available
-    if (context != null) {
-      if (loading) {
-        context.showLoading();
-      } else {
-        context.dismissLoading();
+        try{
+      if (context != null) {
+        if (loading) {
+          context.showLoading();
+        } else {
+          context.dismissLoading();
+        }
+      } else if (loading) {
+        logger.w('setLoading ⚠️ Context not available for loading overlay.');
       }
-    } else if (loading) {
-      debugPrint('⚠️ Context not available for loading overlay.');
+    }catch(e){
+          logger.e('setLoading ⚠️ Exception caught: $e');
     }
-    
+
     notifyListeners();
   }
 
@@ -49,9 +53,9 @@ class BaseProvider extends ChangeNotifier {
   /// Perform an API call with automatic loading state management
   /// 
   /// Shows loading indicator, executes the API call, and handles errors
-  Future<T?> performApiCall<T>(Future<T> Function() apiFunction) async {
+  Future<T?> performApiCall<T>(Future<T> Function() apiFunction, BuildContext context) async {
     try {
-      setLoading(true);
+      setLoading(true, context);
       resetError();
       
       final result = await apiFunction();
@@ -59,9 +63,11 @@ class BaseProvider extends ChangeNotifier {
     } catch (e) {
       // If error is already an ErrorResponse, use it directly
       if (e is ErrorResponse) {
+        logger.e('performApiCall API Error: ${e.statusMessage}');
         setError(e);
       } else {
         // Otherwise wrap it in a generic error response
+        logger.e('performApiCall API Error: $e');
         setError(ErrorResponse(
           statusCode: 0,
           statusMessage: e.toString(),
@@ -70,7 +76,7 @@ class BaseProvider extends ChangeNotifier {
       }
       return null;
     } finally {
-      setLoading(false);
+      setLoading(false, context);
     }
   }
 }

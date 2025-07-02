@@ -36,8 +36,17 @@ class MyHttpOverrides extends HttpOverrides {
 }
 
 // Global navigation helper
+// Global navigation helper
 class Get {
-  static BuildContext? get context => navigatorKey.currentContext;
+  static BuildContext? get context {
+    final context = navigatorKey.currentContext;
+    if (context == null) {
+      logger.w('⚠️ GetClass Get.context is null');
+      return null;
+    }
+    return context;
+  }
+
   static NavigatorState? get navigator => navigatorKey.currentState;
 }
 
@@ -70,14 +79,6 @@ Future<void> initializeApp(Flavor flavor) async {
     logLevel: LogLevel.None, // Use LogLevel.Verbose for debugging
   );
 
-  // Initialize loading animation
-  AppLoading.initialize(
-    backgroundColor: Colors.black.withOpacity(0.7),
-    loaderColor: const Color(0xff032541), // Primary app color
-    loaderSize: 60,
-    strokeWidth: 5,
-  );
-
   // Request necessary permissions
   await PermissionService().requestPermissions();
   
@@ -88,6 +89,7 @@ Future<void> initializeApp(Flavor flavor) async {
   runApp(ClarityWidget(
     app: MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (context) => di.sl<AuthenticatedAppProviders>()),
         ChangeNotifierProvider(create: (context) => di.sl<SplashProvider>()),
         ChangeNotifierProvider(create: (context) => di.sl<ThemeProvider>()),
       ],
@@ -95,4 +97,15 @@ Future<void> initializeApp(Flavor flavor) async {
     ),
     clarityConfig: config,
   ));
+
+  // Initialize loading AFTER MaterialApp is running
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    AppLoading.initialize(
+      backgroundColor: Colors.black.withOpacity(0.7),
+      loaderColor: const Color(0xff032541),
+      loaderSize: 60,
+      strokeWidth: 5,
+    );
+  });
+
 }
