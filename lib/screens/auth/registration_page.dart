@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:zed_nano/app/app_initializer.dart';
+import 'package:zed_nano/providers/providers_helpers.dart';
 import 'package:zed_nano/routes/routes.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/auth/input_fields.dart';
@@ -12,6 +14,7 @@ import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/Images.dart';
 import 'package:country_code_picker/country_code_picker.dart';
+import 'package:zed_nano/utils/extensions.dart';
 
 class RegistrationPage extends StatefulWidget {
   const RegistrationPage({Key? key}) : super(key: key);
@@ -28,6 +31,33 @@ class _RegistrationPageState extends State<RegistrationPage> {
   final Color emailBlue = Color(0xFF032541);
   final Color facebookBlue = Color(0xFF4676ED);
   final Color twitterBlue = Color(0xFF009CDC);
+
+  final TextEditingController firstNameController = TextEditingController();
+  final TextEditingController lastNameController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController phoneNumberController = TextEditingController();
+  final TextEditingController countryCodeController = TextEditingController();
+
+
+  final FocusNode firstNameFocus = FocusNode();
+  final FocusNode lastNameFocus = FocusNode();
+  final FocusNode nameFocus = FocusNode();
+  final FocusNode emailFocus = FocusNode();
+  final FocusNode phoneNumberFocus = FocusNode();
+
+
+  Future<void> _doUserSignup(Map<String, dynamic> loginData, BuildContext context) async {
+    final authProvider = getAuthProvider(context);
+    final response = await authProvider.register(requestData: loginData, context: context);
+    if (response.isSuccess) {
+      showCustomToast(response.message, isError: false);
+      Navigator.of(context).pop();
+    } else {
+      logger.d(response.message);
+      showCustomToast('${response.message}!');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -104,9 +134,53 @@ class _RegistrationPageState extends State<RegistrationPage> {
             appButton(text: "Create Account",
                 onTap: (){
                   if (termsAccepted) {
-                    Navigator.pop(context);
+                    // Navigator.pop(context);
+                    var firstName = firstNameController.text;
+                    var lastName = lastNameController.text;
+                    var name = nameController.text;
+                    var email = emailController.text;
+                    var phoneNumber = phoneNumberController.text;
+                    var countryCode = countryCodeController.text;
+
+                    if (!firstName.isValidInput) {
+                      showCustomToast('Please enter first name');
+                      return;
+                    }
+
+                    if (!lastName.isValidInput) {
+                      showCustomToast('Please enter last name');
+                      return;
+                    }
+
+                    if (!name.isValidInput) {
+                      showCustomToast('Please enter name');
+                      return;
+                    }
+
+                    if (!email.isValidEmail) {
+                      showCustomToast('Please enter valid email');
+                      return;
+                    }
+
+                    if (!phoneNumber.isValidPhoneNumber) {
+                      showCustomToast('Please enter valid phone number');
+                      return;
+                    }
+
+                    var phoneNumberWithCode = "$countryCode$phoneNumber";
+
+                    Map<String, dynamic> data = {
+                      'firstName': firstName,
+                      'secondName': lastName,
+                      'userName': name,
+                      'userEmail': email,
+                      'userPhone': phoneNumberWithCode,
+                    };
+
+                    _doUserSignup(data, context);
+
                   } else {
-                    showCustomSnackBar('Please accept the terms and conditions');
+                    showCustomToast('Please accept the terms and conditions');
                   }
                 },
                 context: context).paddingSymmetric(horizontal: 16),
@@ -146,11 +220,20 @@ class _RegistrationPageState extends State<RegistrationPage> {
   Widget _buildRegistrationForm() {
     return Column(
       children: [
-        NameFieldsRow(),
+        NameFieldsRow(
+          firstNameController: firstNameController,
+          lastNameController: lastNameController,
+          firstNameFocusNode: firstNameFocus,
+          lastNameFocusNode: lastNameFocus,
+          focusNodeComplete: nameFocus,
+        ),
         16.height,
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 16),
           child: StyledTextField(
+            controller: nameController,
+            focusNode: nameFocus,
+            nextFocus: emailFocus,
             textFieldType: TextFieldType.NAME,
             hintText: "User Name",
           ),
@@ -159,6 +242,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 16),
           child: StyledTextField(
+            controller: emailController,
+            focusNode: emailFocus,
+            nextFocus: phoneNumberFocus,
             textFieldType: TextFieldType.EMAIL,
             hintText: "Email Address",
           ),
@@ -166,7 +252,12 @@ class _RegistrationPageState extends State<RegistrationPage> {
         16.height,
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 16),
-          child: PhoneInputField(),
+          child: PhoneInputField(
+            controller: phoneNumberController,
+            focusNode: phoneNumberFocus,
+            codeController: countryCodeController,
+            maxLength: 10,
+          ),
         ),
       ],
     );

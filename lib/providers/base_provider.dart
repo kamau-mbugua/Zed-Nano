@@ -16,7 +16,6 @@ class BaseProvider extends ChangeNotifier {
   /// Set loading state and show/hide loading overlay
   void setLoading(bool loading, BuildContext context) {
     _isLoading = loading;
-    logger.w('setLoading ⚠️ ${Get.context}.');
     // Get the context from the navigator key
     // final context = Get.context;
     

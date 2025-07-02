@@ -218,6 +218,10 @@ class _PhoneInputFieldState extends State<PhoneInputField> {
 class NameFieldsRow extends StatelessWidget {
   final TextEditingController? firstNameController;
   final TextEditingController? lastNameController;
+
+  final FocusNode? firstNameFocusNode;
+  final FocusNode? lastNameFocusNode;
+  final FocusNode? focusNodeComplete;
   final Function(String)? onFirstNameChanged;
   final Function(String)? onLastNameChanged;
 
@@ -227,6 +231,12 @@ class NameFieldsRow extends StatelessWidget {
     this.lastNameController,
     this.onFirstNameChanged,
     this.onLastNameChanged,
+    this.firstNameFocusNode,
+    this.lastNameFocusNode,
+    this.focusNodeComplete,
+
+    //FocusNode? focusNode,
+
   }) : super(key: key);
 
   @override
@@ -237,7 +247,7 @@ class NameFieldsRow extends StatelessWidget {
         children: [
           Expanded(
             child: Container(
-              height: 48, // Fixed height for consistency
+              height: 56, // Fixed height for consistency
               decoration: BoxDecoration(
                 border: Border.all(color: BodyWhite),
                 borderRadius: BorderRadius.circular(12),
@@ -246,6 +256,8 @@ class NameFieldsRow extends StatelessWidget {
                 controller: firstNameController,
                 textFieldType: TextFieldType.NAME,
                 onChanged: onFirstNameChanged,
+                focus: firstNameFocusNode,
+                nextFocus: lastNameFocusNode,
                 decoration: InputDecoration(
                   border: InputBorder.none,
                   hintText: "First Name",
@@ -263,7 +275,7 @@ class NameFieldsRow extends StatelessWidget {
           16.width, // Space between fields
           Expanded(
             child: Container(
-              height: 48, // Fixed height for consistency
+              height: 56, // Fixed height for consistency
               decoration: BoxDecoration(
                 border: Border.all(color: BodyWhite),
                 borderRadius: BorderRadius.circular(12),
@@ -272,6 +284,8 @@ class NameFieldsRow extends StatelessWidget {
                 controller: lastNameController,
                 textFieldType: TextFieldType.NAME,
                 onChanged: onLastNameChanged,
+                focus: lastNameFocusNode,
+                nextFocus: focusNodeComplete,
                 decoration: InputDecoration(
                   border: InputBorder.none,
                   hintText: "Last Name",

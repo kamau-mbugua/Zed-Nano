@@ -9,9 +9,11 @@ Future<ResponseModel> handleApiResponse(ApiResponse apiResponse) async {
     try {
       // Get data from improved ApiResponse
       final responseData = apiResponse.data;
+      Map<String, dynamic> data = castMap(responseData);
+      final dataMessage = data['message'] ?? 'Success';
       
       // Handle success response
-      return ResponseModel(true, apiResponse.response?.statusMessage ?? 'Success', responseData);
+      return ResponseModel(true, dataMessage.toString() ?? 'Success', responseData);
     } catch (e) {
       return ResponseModel(false, 'Failed to process response: $e');
     }

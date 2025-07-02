@@ -6,7 +6,7 @@ import 'package:zed_nano/contants/AppConstants.dart';
 import 'package:zed_nano/networking/base/api_response.dart';
 import 'package:zed_nano/networking/datasource/remote/dio/dio_client.dart';
 import 'package:zed_nano/networking/datasource/remote/exception/api_error_handler.dart';
-import 'package:zed_nano/networking/models/login_response.dart';
+import 'package:zed_nano/networking/models/posLoginVersion2/login_response.dart';
 
 class AuthenticatedRepo {
   final DioClient? dioClient;
@@ -177,7 +177,7 @@ class AuthenticatedRepo {
   Future<ApiResponse> resetPinVersion({required Map<String, dynamic> requestData}) async {
     try {
       final response =
-          await dioClient!.post('${AppConstants.resetPinVersion}', data: requestData);
+          await dioClient!.put('${AppConstants.resetPinVersion}', data: requestData);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {

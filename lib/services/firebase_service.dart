@@ -9,6 +9,8 @@ import 'package:flutter/foundation.dart';
 import 'package:logger/logger.dart';
 import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/firebase_options.dart';
+import 'package:device_info_plus/device_info_plus.dart';
+import 'dart:io';
 
 /// A service class that handles Firebase initialization and provides
 /// access to Firebase services throughout the app.
@@ -94,7 +96,6 @@ class FirebaseService {
     // Listen for token refreshes
     messaging.onTokenRefresh.listen((newToken) {
       logger.i('FCM Token refreshed: $newToken');
-      // TODO: Send the token to your server
     });
   }
 
@@ -131,16 +132,56 @@ class FirebaseService {
 
   /// Get device ID
   Future<String?> getDeviceId() async {
+    final deviceInfoPlugin = DeviceInfoPlugin();
+    String? deviceId;
     try {
-      final token = await messaging.getToken();
-      if (token == null) return null;
-      
-      // For Android, we can get the device ID from the token
-      // For iOS, you might want to use a different method
-      return token.substring(0, 64); // First 64 characters of the token
+      if (Platform.isAndroid) {
+        final androidInfo = await deviceInfoPlugin.androidInfo;
+        deviceId = androidInfo.id; // OR use androidInfo.androidId (deprecated on newer Androids)
+      } else if (Platform.isIOS) {
+        final iosInfo = await deviceInfoPlugin.iosInfo;
+        deviceId = iosInfo.identifierForVendor;
+      } else {
+        deviceId = 'Unsupported Platform';
+      }
+      return deviceId;
     } catch (e) {
       logger.e('Failed to get device ID: $e');
       return null;
     }
   }
+
+  Future<Map<String, String?>> getDeviceInfo() async {
+    final deviceInfoPlugin = DeviceInfoPlugin();
+    String? deviceId;
+    String? fcmToken;
+
+    try {
+      // Get FCM token
+      fcmToken = await messaging.getToken();
+
+      if (Platform.isAndroid) {
+        final androidInfo = await deviceInfoPlugin.androidInfo;
+        deviceId = androidInfo.id; // OR use androidInfo.androidId (deprecated on newer Androids)
+      } else if (Platform.isIOS) {
+        final iosInfo = await deviceInfoPlugin.iosInfo;
+        deviceId = iosInfo.identifierForVendor;
+      } else {
+        deviceId = 'Unsupported Platform';
+      }
+
+      return {
+        'deviceId': deviceId,
+        'fcmToken': fcmToken,
+      };
+    } catch (e) {
+      print('Failed to get device info: $e');
+      return {
+        'deviceId': null,
+        'fcmToken': null,
+      };
+    }
+  }
+
+
 }

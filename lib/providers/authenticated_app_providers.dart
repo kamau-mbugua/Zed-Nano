@@ -1,15 +1,20 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:nb_utils/nb_utils.dart' as AppInitializer;
+import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/networking/base/api_helpers.dart';
 import 'package:zed_nano/networking/base/api_response.dart';
-import 'package:zed_nano/networking/models/login_response.dart';
+import 'package:zed_nano/networking/models/common/CommonResponse.dart';
+import 'package:zed_nano/networking/models/posLoginVersion2/login_response.dart';
 import 'package:zed_nano/networking/models/response_model.dart';
 import 'package:zed_nano/providers/base_provider.dart';
 import 'package:zed_nano/repositories/AuthenticatedRepo.dart';
+import 'package:zed_nano/routes/routes.dart';
+import 'package:zed_nano/routes/routes_helper.dart';
 
 class AuthenticatedAppProviders extends BaseProvider {
   final AuthenticatedRepo authenticatedRepo;
-  
+
   // User state
   String _token = '';
   LoginResponse? _loginResponse;
@@ -36,61 +41,80 @@ class AuthenticatedAppProviders extends BaseProvider {
     notifyListeners();
   }
 
-  // Helper method to perform API calls with automatic loading management
-  Future<ResponseModel> _performApiCall(Future<ApiResponse> Function() apiFunction, BuildContext context) async {
-    final result = await performApiCall(() async {
-      ApiResponse apiResponse = await apiFunction();
-      ResponseModel responseModel = await handleApiResponse(apiResponse);
-      return responseModel;
-    }, context);
-    
-    // Handle case where performApiCall returns null (an error occurred)
-    return result ?? ResponseModel(
-      false, 
-      error?.userMessage ?? 'An unknown error occurred'
-    );
-  }
+  Future<ResponseModel<LoginResponse>> _processLoginResponse(
+      LoginResponse? loginResponse, BuildContext context,
+      String responseMessage, String? userPin)
+  async {
 
-  // Future<ResponseModel> callEndpoint({
-  //   required Future<ApiResponse> Function() apiCall
-  // }) async {
-  //   return await _performApiCall(apiCall);
-  // }
-
-  /// Login with provided credentials
-  Future<ResponseModel<LoginResponse>> login({required Map<String, dynamic> requestData, required BuildContext context}) async {
-    ResponseModel responseModel = await _performApiCall(() => 
-      authenticatedRepo.login(requestData: requestData), context
-    );
-    
-    ResponseModel<LoginResponse> finalResponseModel;
-
-    if (responseModel.isSuccess) {
-      Map<String, dynamic> map = castMap(responseModel.data);
-      _loginResponse = LoginResponse.fromJson(map);
-      finalResponseModel = ResponseModel<LoginResponse>(true, responseModel.message!, _loginResponse);
-      
-      // Save token from the updated response structure
-      final token = _loginResponse?.token ?? '';
+    if (loginResponse?.state?.toLowerCase() != 'new') {
+      final token = loginResponse?.token ?? '';
       if (token.isNotEmpty) {
         _token = token;
         await authenticatedRepo.saveUserToken(token);
-        
+
         // Save full login response
-        await authenticatedRepo.saveLoginResponse(_loginResponse!);
-        
+        await authenticatedRepo.saveLoginResponse(loginResponse!);
+
         // Extract and save user details
-        _userDetails = _loginResponse?.data?.userDetails;
+        _userDetails = loginResponse?.data?.userDetails;
         if (_userDetails != null) {
           await authenticatedRepo.saveUserData(_userDetails);
         }
-        
         notifyListeners();
       }
+      return ResponseModel<LoginResponse>(true, responseMessage, loginResponse);
     } else {
-      finalResponseModel = ResponseModel<LoginResponse>(false, responseModel.message!);
+      // await Navigator.pushNamed(context, AppRoutes.getSetPinRoutePageRoute(), arguments: {
+      //   'oldPin': userPin ?? '',
+      //   'userEmail': loginResponse?.email ?? ''
+      // });
+
+      await RouterHelper.navigateTo(
+        context,
+        AppRoutes.setPinRoute,                 //  <-- note: use the actual route string
+        arguments: {
+          'oldPin': userPin ?? '',
+          'userEmail': loginResponse?.email ?? '',
+        },
+      );
+      return ResponseModel<LoginResponse>(false, "New Pin, Please Change your Pin!");
     }
-    
+  }
+
+  // Helper method to perform API calls with automatic loading management
+  Future<ResponseModel> _performApiCall(
+      Future<ApiResponse> Function() apiFunction, BuildContext context) async {
+    final result = await performApiCall(() async {
+      final apiResponse = await apiFunction();
+      logger.d(
+          '_performApiCall API Response: ${apiResponse.data} and error: ${apiResponse.isSuccess}');
+      final responseModel = await handleApiResponse(apiResponse);
+      return responseModel;
+    }, context);
+
+    // Handle case where performApiCall returns null (an error occurred)
+    return result ??
+        ResponseModel(false, error?.userMessage ?? 'An unknown error occurred');
+  }
+
+  Future<ResponseModel<LoginResponse>> login(
+      {required Map<String, dynamic> requestData,
+      required BuildContext context}) async {
+    final responseModel = await _performApiCall(
+        () => authenticatedRepo.login(requestData: requestData), context);
+
+    ResponseModel<LoginResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      _loginResponse = LoginResponse.fromJson(map);
+      return await _processLoginResponse(_loginResponse,
+          context, responseModel.message!,requestData['userPin'].toString());
+    } else {
+      finalResponseModel =
+          ResponseModel<LoginResponse>(false, responseModel.message!);
+    }
+
     return finalResponseModel;
   }
 
@@ -98,44 +122,86 @@ class AuthenticatedAppProviders extends BaseProvider {
   Future<ResponseModel> logout(BuildContext context) async {
     return await _performApiCall(() async {
       final result = await authenticatedRepo.clearSharedData();
-      
+
       if (result) {
         // Clear local state
         _token = '';
         _loginResponse = null;
         _userDetails = null;
         notifyListeners();
-        
+
         // Return success response
-        return ApiResponse.withSuccess(
-          Response(
+        return ApiResponse.withSuccess(Response(
             requestOptions: RequestOptions(path: ''),
             statusCode: 200,
-            data: {'message': 'Logged out successfully'}
-          )
-        );
+            data: {'message': 'Logged out successfully'}));
       } else {
         // Return error response
         return ApiResponse.withError('Failed to clear user data');
       }
-    },context);
+    }, context);
   }
-  
+
   /// Generic method for API calls where you just need success/failure
 
-  Future<ResponseModel> register({required Map<String, dynamic> requestData, required BuildContext context}) async {
-    return await _performApiCall(() => 
-      authenticatedRepo.register(requestData: requestData), context
-    );
+  Future<ResponseModel<CommonResponse>> register(
+      {required Map<String, dynamic> requestData,
+      required BuildContext context}) async {
+    final responseModel = await _performApiCall(
+        () => authenticatedRepo.register(requestData: requestData), context);
+
+    ResponseModel<CommonResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<CommonResponse>(
+          true, responseModel.message!, CommonResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<CommonResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
   }
-  Future<ResponseModel> resetPinVersion({required Map<String, dynamic> requestData, required BuildContext context}) async {
-    return await _performApiCall(() =>
-      authenticatedRepo.resetPinVersion(requestData: requestData),context
-    );
+
+  Future<ResponseModel<CommonResponse>> resetPinVersion(
+      {required Map<String, dynamic> requestData,
+      required BuildContext context}) async {
+    final responseModel = await _performApiCall(
+        () => authenticatedRepo.resetPinVersion(requestData: requestData),
+        context);
+
+    ResponseModel<CommonResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<CommonResponse>(
+          true, responseModel.message!, CommonResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<CommonResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
   }
-  Future<ResponseModel> forgotPin({required Map<String, dynamic> requestData,required BuildContext context}) async {
-    return await _performApiCall(() =>
-      authenticatedRepo.forgotPin(requestData: requestData),context
-    );
+
+  Future<ResponseModel<CommonResponse>> forgotPin(
+      {required Map<String, dynamic> requestData,
+      required BuildContext context}) async {
+    final responseModel = await _performApiCall(
+        () => authenticatedRepo.forgotPin(requestData: requestData), context);
+
+    ResponseModel<CommonResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<CommonResponse>(
+          true, responseModel.message!, CommonResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<CommonResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
   }
 }

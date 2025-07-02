@@ -31,11 +31,18 @@ class RouterHelper {
   );
   static final Handler _forgetPinHandler = Handler(
     handlerFunc: (BuildContext? context, Map<String, List<String>> params) =>
-    ResetPinScreen(),
+        ResetPinScreen(),
   );
   static final Handler _setPinHandler = Handler(
-    handlerFunc: (BuildContext? context, Map<String, List<String>> params) =>
-    SetNewPinPage(),
+    handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
+      final settings = ModalRoute.of(context!)!.settings;
+      final args = settings.arguments as Map<String, dynamic>?;
+
+      return SetNewPinPage(
+        oldPin: args?['oldPin'] as String?,
+        userEmail: args?['userEmail'] as String?,
+      );
+    },
   );
 
   static final Handler _homeMainHandler = Handler(
@@ -53,7 +60,7 @@ class RouterHelper {
       handler: _splashHandler,
       transitionType: TransitionType.fadeIn,
     );
-    
+
     router.define(
       AppRoutes.onboardingRoute,
       handler: _onboardingHandler,

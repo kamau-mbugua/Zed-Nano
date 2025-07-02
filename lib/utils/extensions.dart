@@ -3,7 +3,7 @@ import 'package:nb_utils/nb_utils.dart';
 extension StringValidationExtensions on String {
   /// Check if the string is a valid email
   bool get isValidEmail {
-    final emailRegex = RegExp(r"^[\w\.\-\+]+@[\w\.-]+\.\w+$");
+    final emailRegex = RegExp(r"^[\w\.\-]+(\+[\w]+)?@[\w\.-]+\.\w+$");
     return emailRegex.hasMatch(this);
   }
 

@@ -23,7 +23,7 @@ class ApiResponse {
   
   /// Returns true if this response represents a successful API call
   bool get isSuccess => response != null && error == null && 
-      (response!.statusCode == 200 || response!.statusCode == 201);
+      (response!.statusCode! >= 200 && response!.statusCode! < 300);
   
   /// Get response data as Map<String, dynamic> for easy JSON parsing
   Map<String, dynamic>? get data {
