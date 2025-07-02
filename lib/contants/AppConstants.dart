@@ -17,6 +17,14 @@ class AppConstants{
   static const String loginResponse = 'loginResponse';
   static const String userDataResponse = 'userDataResponse';
 
+  //ENDPOINTS
+  /// ******AUTHENTICATION ENDPOINTS*******
+  static const String login = 'posLoginVersion2';
+  static const String register = 'api/addNewUser';
+  static const String resetPinVersion = 'api/resetPinVersion2';
+  static const String forgotPin = 'posForgotPinVersion2';
+
+
 
 
 }

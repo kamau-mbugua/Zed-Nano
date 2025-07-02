@@ -1,64 +1,371 @@
 {
   "project_info": {
-    "project_number": "YOUR_PROJECT_NUMBER",
+    "project_number": "251853629051",
     "project_id": "zed-app-444bf",
-    "storage_bucket": "zed-app-444bf.appspot.com"
+    "storage_bucket": "zed-app-444bf.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "YOUR_ANDROID_APP_ID",
-        "android_client_info": {
-          "package_name": "com.rbs.zednano"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "YOUR_ANDROID_API_KEY"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "YOUR_ANDROID_APP_ID_UAT",
-        "android_client_info": {
-          "package_name": "com.rbs.zednano.uat"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "YOUR_ANDROID_API_KEY"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "YOUR_ANDROID_APP_ID_DEV",
+        "mobilesdk_app_id": "1:251853629051:android:87de3f71fae1f865a364de",
         "android_client_info": {
           "package_name": "com.rbs.zednano.dev"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "251853629051-4v7vu75n1dgl5ki71q3im59mgtj034ta.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "YOUR_ANDROID_API_KEY"
+          "current_key": "AIzaSyBJNKCAeWTN-h7hJq9ohuGzkEudPiP3CkA"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "251853629051-4v7vu75n1dgl5ki71q3im59mgtj034ta.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "251853629051-diii87arv8vr5t0ec0n5enatg28cbcbd.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.riverbank.zed-payments"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:251853629051:android:39b80461a32d4b15a364de",
+        "android_client_info": {
+          "package_name": "io.swerri.zed"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "251853629051-17hmera4nma3ns38clc10tgfhbjumtd5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.swerri.zed",
+            "certificate_hash": "64cc04be6b4e69991128755229324356cef2d9fd"
+          }
+        },
+        {
+          "client_id": "251853629051-3bu751i391t0od84kc5ppato2qg8bhs3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.swerri.zed",
+            "certificate_hash": "fb86f81a84fe96d647c265cf187d23c9faaba049"
+          }
+        },
+        {
+          "client_id": "251853629051-4v7vu75n1dgl5ki71q3im59mgtj034ta.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJNKCAeWTN-h7hJq9ohuGzkEudPiP3CkA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "251853629051-4v7vu75n1dgl5ki71q3im59mgtj034ta.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "251853629051-diii87arv8vr5t0ec0n5enatg28cbcbd.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.riverbank.zed-payments"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:251853629051:android:de573e1d316f68b5a364de",
+        "android_client_info": {
+          "package_name": "io.swerri.zed.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "251853629051-gkvtnni33iijd1bkf1854qdr6a57i1bk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.swerri.zed.debug",
+            "certificate_hash": "64cc04be6b4e69991128755229324356cef2d9fd"
+          }
+        },
+        {
+          "client_id": "251853629051-4v7vu75n1dgl5ki71q3im59mgtj034ta.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJNKCAeWTN-h7hJq9ohuGzkEudPiP3CkA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "251853629051-4v7vu75n1dgl5ki71q3im59mgtj034ta.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "251853629051-diii87arv8vr5t0ec0n5enatg28cbcbd.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.riverbank.zed-payments"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:251853629051:android:595fb2eeb6785eb9a364de",
+        "android_client_info": {
+          "package_name": "io.swerri.zed.uat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "251853629051-qqgv5j6f5ildrp99aoijm7hir1ssvbgb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.swerri.zed.uat",
+            "certificate_hash": "64cc04be6b4e69991128755229324356cef2d9fd"
+          }
+        },
+        {
+          "client_id": "251853629051-4v7vu75n1dgl5ki71q3im59mgtj034ta.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJNKCAeWTN-h7hJq9ohuGzkEudPiP3CkA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "251853629051-4v7vu75n1dgl5ki71q3im59mgtj034ta.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "251853629051-diii87arv8vr5t0ec0n5enatg28cbcbd.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.riverbank.zed-payments"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:251853629051:android:0b09dce161c0b6c3a364de",
+        "android_client_info": {
+          "package_name": "io.zed.business.zedticketing"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "251853629051-pug99sao7tvd4dp5rj48v7v9ukb9nvel.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.zed.business.zedticketing",
+            "certificate_hash": "5e8428210ef34ff31db2cb6d16d42b7694891a3b"
+          }
+        },
+        {
+          "client_id": "251853629051-4v7vu75n1dgl5ki71q3im59mgtj034ta.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJNKCAeWTN-h7hJq9ohuGzkEudPiP3CkA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "251853629051-4v7vu75n1dgl5ki71q3im59mgtj034ta.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "251853629051-diii87arv8vr5t0ec0n5enatg28cbcbd.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.riverbank.zed-payments"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:251853629051:android:185ebd0a9771bf68a364de",
+        "android_client_info": {
+          "package_name": "io.zed.business.zedticketing.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "251853629051-4v7vu75n1dgl5ki71q3im59mgtj034ta.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJNKCAeWTN-h7hJq9ohuGzkEudPiP3CkA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "251853629051-4v7vu75n1dgl5ki71q3im59mgtj034ta.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "251853629051-diii87arv8vr5t0ec0n5enatg28cbcbd.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.riverbank.zed-payments"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:251853629051:android:cb27f19977c75955a364de",
+        "android_client_info": {
+          "package_name": "io.zed.business.zedticketing.prod"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "251853629051-4v7vu75n1dgl5ki71q3im59mgtj034ta.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJNKCAeWTN-h7hJq9ohuGzkEudPiP3CkA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "251853629051-4v7vu75n1dgl5ki71q3im59mgtj034ta.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "251853629051-diii87arv8vr5t0ec0n5enatg28cbcbd.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.riverbank.zed-payments"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:251853629051:android:4df13c2d04918825a364de",
+        "android_client_info": {
+          "package_name": "zed.payit.business"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "251853629051-4v7vu75n1dgl5ki71q3im59mgtj034ta.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJNKCAeWTN-h7hJq9ohuGzkEudPiP3CkA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "251853629051-4v7vu75n1dgl5ki71q3im59mgtj034ta.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "251853629051-diii87arv8vr5t0ec0n5enatg28cbcbd.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.riverbank.zed-payments"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:251853629051:android:a5a187d5c7f657bea364de",
+        "android_client_info": {
+          "package_name": "zed.payit.business.test"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "251853629051-4v7vu75n1dgl5ki71q3im59mgtj034ta.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJNKCAeWTN-h7hJq9ohuGzkEudPiP3CkA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "251853629051-4v7vu75n1dgl5ki71q3im59mgtj034ta.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "251853629051-diii87arv8vr5t0ec0n5enatg28cbcbd.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.riverbank.zed-payments"
+              }
+            }
+          ]
         }
       }
     }

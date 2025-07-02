@@ -72,8 +72,10 @@ Future<void> initializeApp(Flavor flavor) async {
 
   // Initialize loading animation
   AppLoading.initialize(
-    lottieAssetName: 'assets/loader/loader.json',
     backgroundColor: Colors.black.withOpacity(0.7),
+    loaderColor: const Color(0xff032541), // Primary app color
+    loaderSize: 60,
+    strokeWidth: 5,
   );
 
   // Request necessary permissions

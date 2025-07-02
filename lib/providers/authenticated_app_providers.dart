@@ -1,42 +1,141 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:zed_nano/networking/base/api_helpers.dart';
+import 'package:zed_nano/networking/base/api_response.dart';
+import 'package:zed_nano/networking/models/login_response.dart';
+import 'package:zed_nano/networking/models/response_model.dart';
+import 'package:zed_nano/providers/base_provider.dart';
+import 'package:zed_nano/repositories/AuthenticatedRepo.dart';
 
-/// Provider to manage authenticated app state
-class AuthenticatedAppProviders extends ChangeNotifier {
-  // User authentication state
-  bool _isAuthenticated = false;
+class AuthenticatedAppProviders extends BaseProvider {
+  final AuthenticatedRepo authenticatedRepo;
   
-  // User profile data
-  Map<String, dynamic>? _userData;
-  
+  // User state
+  String _token = '';
+  LoginResponse? _loginResponse;
+  LoginUserDetails? _userDetails;
+
   // Getters
-  bool get isAuthenticated => _isAuthenticated;
-  Map<String, dynamic>? get userData => _userData;
-  
-  // Set authentication state
-  void setAuthenticated(bool value, {Map<String, dynamic>? userData}) {
-    _isAuthenticated = value;
-    if (userData != null) {
-      _userData = userData;
+  String get token => _token;
+  LoginResponse? get loginResponse => _loginResponse;
+  LoginUserDetails? get userDetails => _userDetails;
+  bool get isLoggedIn => _token.isNotEmpty;
+
+  AuthenticatedAppProviders({
+    required this.authenticatedRepo,
+  }) {
+    // Load saved user data on initialization
+    _loadSavedData();
+  }
+
+  // Load data from persistent storage
+  Future<void> _loadSavedData() async {
+    _token = authenticatedRepo.getUserToken();
+    _loginResponse = authenticatedRepo.getLoginResponse();
+    _userDetails = authenticatedRepo.getUserData();
+    notifyListeners();
+  }
+
+  // Helper method to perform API calls with automatic loading management
+  Future<ResponseModel> _performApiCall(Future<ApiResponse> Function() apiFunction) async {
+    final result = await performApiCall(() async {
+      ApiResponse apiResponse = await apiFunction();
+      ResponseModel responseModel = await handleApiResponse(apiResponse);
+      return responseModel;
+    });
+    
+    // Handle case where performApiCall returns null (an error occurred)
+    return result ?? ResponseModel(
+      false, 
+      error?.userMessage ?? 'An unknown error occurred'
+    );
+  }
+
+  Future<ResponseModel> callEndpoint({
+    required Future<ApiResponse> Function() apiCall
+  }) async {
+    return await _performApiCall(apiCall);
+  }
+
+  /// Login with provided credentials
+  Future<ResponseModel<LoginResponse>> login({required Map<String, dynamic> requestData}) async {
+    ResponseModel responseModel = await _performApiCall(() => 
+      authenticatedRepo.login(requestData: requestData)
+    );
+    
+    ResponseModel<LoginResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      Map<String, dynamic> map = castMap(responseModel.data);
+      _loginResponse = LoginResponse.fromJson(map);
+      finalResponseModel = ResponseModel<LoginResponse>(true, responseModel.message!, _loginResponse);
+      
+      // Save token from the updated response structure
+      final token = _loginResponse?.token ?? '';
+      if (token.isNotEmpty) {
+        _token = token;
+        await authenticatedRepo.saveUserToken(token);
+        
+        // Save full login response
+        await authenticatedRepo.saveLoginResponse(_loginResponse!);
+        
+        // Extract and save user details
+        _userDetails = _loginResponse?.data?.userDetails;
+        if (_userDetails != null) {
+          await authenticatedRepo.saveUserData(_userDetails);
+        }
+        
+        notifyListeners();
+      }
+    } else {
+      finalResponseModel = ResponseModel<LoginResponse>(false, responseModel.message!);
     }
-    notifyListeners();
+    
+    return finalResponseModel;
+  }
+
+  /// Log out the current user
+  Future<ResponseModel> logout() async {
+    return await _performApiCall(() async {
+      final result = await authenticatedRepo.clearSharedData();
+      
+      if (result) {
+        // Clear local state
+        _token = '';
+        _loginResponse = null;
+        _userDetails = null;
+        notifyListeners();
+        
+        // Return success response
+        return ApiResponse.withSuccess(
+          Response(
+            requestOptions: RequestOptions(path: ''),
+            statusCode: 200,
+            data: {'message': 'Logged out successfully'}
+          )
+        );
+      } else {
+        // Return error response
+        return ApiResponse.withError('Failed to clear user data');
+      }
+    });
   }
   
-  // Update user profile data
-  void updateUserData(Map<String, dynamic> newData) {
-    _userData = {...?_userData, ...newData};
-    notifyListeners();
+  /// Generic method for API calls where you just need success/failure
+
+  Future<ResponseModel> register({required Map<String, dynamic> requestData}) async {
+    return await _performApiCall(() => 
+      authenticatedRepo.register(requestData: requestData)
+    );
   }
-  
-  // Clear user data on logout
-  void clearUserData() {
-    _isAuthenticated = false;
-    _userData = null;
-    notifyListeners();
+  Future<ResponseModel> resetPinVersion({required Map<String, dynamic> requestData}) async {
+    return await _performApiCall(() =>
+      authenticatedRepo.resetPinVersion(requestData: requestData)
+    );
   }
-  
-  // Check if user has specific permission
-  bool hasPermission(String permission) {
-    final permissions = _userData?['permissions'] as List<String>?;
-    return permissions?.contains(permission) ?? false;
+  Future<ResponseModel> forgotPin({required Map<String, dynamic> requestData}) async {
+    return await _performApiCall(() =>
+      authenticatedRepo.forgotPin(requestData: requestData)
+    );
   }
 }

@@ -34,33 +34,33 @@ class DefaultFirebaseOptions {
     }
   }
 
-  // Replace these values with your actual Firebase project configuration
-  // You can find these values in your Firebase console
+  // Web configuration
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'YOUR_WEB_API_KEY',
-    appId: 'YOUR_WEB_APP_ID',
-    messagingSenderId: 'YOUR_MESSAGING_SENDER_ID',
+    apiKey: 'AIzaSyBJNKCAeWTN-h7hJq9ohuGzkEudPiP3CkA',
+    appId: '1:251853629051:web:placeholder', // Placeholder for web as it's not in the json
+    messagingSenderId: '251853629051',
     projectId: 'zed-app-444bf',
     authDomain: 'zed-app-444bf.firebaseapp.com',
-    storageBucket: 'zed-app-444bf.appspot.com',
-    measurementId: 'YOUR_MEASUREMENT_ID',
+    storageBucket: 'zed-app-444bf.firebasestorage.app',
   );
 
+  // Android configuration for com.rbs.zednano.dev
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'YOUR_ANDROID_API_KEY',
-    appId: 'YOUR_ANDROID_APP_ID',
-    messagingSenderId: 'YOUR_MESSAGING_SENDER_ID',
+    apiKey: 'AIzaSyBJNKCAeWTN-h7hJq9ohuGzkEudPiP3CkA',
+    appId: '1:251853629051:android:87de3f71fae1f865a364de',
+    messagingSenderId: '251853629051',
     projectId: 'zed-app-444bf',
-    storageBucket: 'zed-app-444bf.appspot.com',
+    storageBucket: 'zed-app-444bf.firebasestorage.app',
   );
 
+  // iOS configuration - placeholder until GoogleService-Info.plist values are available
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'YOUR_IOS_API_KEY',
-    appId: 'YOUR_IOS_APP_ID',
-    messagingSenderId: 'YOUR_MESSAGING_SENDER_ID',
+    apiKey: 'AIzaSyBJNKCAeWTN-h7hJq9ohuGzkEudPiP3CkA', // Using same API key as Android
+    appId: '1:251853629051:ios:placeholder', // Will need to be updated
+    messagingSenderId: '251853629051',
     projectId: 'zed-app-444bf',
-    storageBucket: 'zed-app-444bf.appspot.com',
-    iosClientId: 'YOUR_IOS_CLIENT_ID',
-    iosBundleId: 'YOUR_IOS_BUNDLE_ID',
+    storageBucket: 'zed-app-444bf.firebasestorage.app',
+    iosClientId: 'ios-client-id-needs-to-be-updated', // Will need to be updated
+    iosBundleId: 'com.rbs.zednano',
   );
 }
