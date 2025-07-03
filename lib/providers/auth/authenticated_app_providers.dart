@@ -5,11 +5,12 @@ import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/networking/base/api_helpers.dart';
 import 'package:zed_nano/networking/base/api_response.dart';
 import 'package:zed_nano/networking/models/common/CommonResponse.dart';
+import 'package:zed_nano/networking/models/get_token_after_invite/GetTokenAfterInviteResponse.dart';
 import 'package:zed_nano/networking/models/posLoginVersion2/login_response.dart';
 import 'package:zed_nano/networking/models/response_model.dart';
 import 'package:zed_nano/providers/base/base_provider.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
-import 'package:zed_nano/repositories/AuthenticatedRepo.dart';
+import 'package:zed_nano/repositories/auth/AuthenticatedRepo.dart';
 import 'package:zed_nano/routes/routes.dart';
 import 'package:zed_nano/routes/routes_helper.dart';
 
@@ -186,6 +187,38 @@ class AuthenticatedAppProviders extends BaseProvider {
     } else {
       finalResponseModel =
           ResponseModel<CommonResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
+  Future<ResponseModel<GetTokenAfterInviteResponse>> getTokenAfterInvite(
+      {required Map<String, dynamic> requestData,
+      required BuildContext context}) async {
+    final responseModel = await performApiCallWithHandling(
+        () => authenticatedRepo.getTokenAfterInvite(requestData: requestData), context);
+
+    ResponseModel<GetTokenAfterInviteResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+
+      final getTokenAfterInviteResponse = GetTokenAfterInviteResponse.fromJson(map);
+
+      finalResponseModel = ResponseModel<GetTokenAfterInviteResponse>(
+          true, responseModel.message!, getTokenAfterInviteResponse);
+
+      final newToken = getTokenAfterInviteResponse.data?.token ?? '';
+      if (newToken.isNotEmpty) {
+        _token = newToken;
+        await authenticatedRepo.saveUserToken(newToken);
+        notifyListeners();
+      }
+
+
+    } else {
+      finalResponseModel =
+          ResponseModel<GetTokenAfterInviteResponse>(false, responseModel.message!);
     }
 
     return finalResponseModel;

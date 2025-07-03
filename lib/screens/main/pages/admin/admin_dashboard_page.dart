@@ -4,6 +4,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:nb_utils/nb_utils.dart' as nb_utils hide Color;
 import 'package:zed_nano/routes/routes.dart';
 import 'package:zed_nano/screens/business/get_started_page.dart';
+import 'package:zed_nano/screens/widget/common/custom_app_bar.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/Images.dart';
@@ -23,39 +24,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
     return Scaffold(
       backgroundColor: colorWhite,
       drawer: const DrawerWidget(),
-      appBar: AppBar(
-        titleSpacing: 0,
-        backgroundColor: colorBackground,
-        leading: Builder(builder: (context) {
-          return IconButton(
-            onPressed: () {
-              Scaffold.of(context).openDrawer();
-            },
-            icon: SvgPicture.asset(
-              menuIcon,
-              width: 25,
-              height: 25,
-              colorFilter: const ColorFilter.mode(darkGreyColor, BlendMode.srcIn),
-            ),
-          );
-        }),
-        title: Text(
-          'Business Dashboard',
-          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: darkGreyColor),
-        ),
-        actions: [
-          IconButton(
-            onPressed: () {
-              // Navigator.pushNamed(context, AppRoutes.getNotificationsPageRoute());
-            },
-            icon: SvgPicture.asset(
-              userIcon,
-              width: 30,
-              height: 30,
-            ),
-          ),
-        ],
-      ),
+      appBar: const CustomDashboardAppBar(),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: EdgeInsets.all(16),
@@ -173,7 +142,6 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          GetStartedPage().launch(context);
         },
         label: Text('Sell', style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white)),
         icon: Icon(Icons.lock, color: Colors.white),

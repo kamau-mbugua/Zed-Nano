@@ -38,7 +38,9 @@ class DioClient {
       ..options.headers = {
 
         'Content-Type': 'application/json; charset=UTF-8',
-        // 'Authorization': 'Bearer ${getToken ?? token}',
+        // Use API-Key style authentication header as required by backend
+        if ((getToken ?? token).toString().isNotEmpty)
+          'X-Authorization': (getToken ?? token)!,
 
       };
 

@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 import 'package:zed_nano/app/app.dart';
 import 'package:zed_nano/app/app_config.dart';
 import 'package:zed_nano/di_container.dart' as di;
+import 'package:zed_nano/providers/business/BusinessProviders.dart';
 import 'package:zed_nano/providers/common/SplashProvider.dart';
 import 'package:zed_nano/providers/auth/authenticated_app_providers.dart';
 import 'package:zed_nano/providers/common/theme_provider.dart';
@@ -91,6 +92,7 @@ Future<void> initializeApp(Flavor flavor) async {
         ChangeNotifierProvider(create: (context) => di.sl<AuthenticatedAppProviders>()),
         ChangeNotifierProvider(create: (context) => di.sl<SplashProvider>()),
         ChangeNotifierProvider(create: (context) => di.sl<ThemeProvider>()),
+        ChangeNotifierProvider(create: (context) => di.sl<BusinessProviders>()),
       ],
       child: App(navigatorKey: navigatorKey),
     ),

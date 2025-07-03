@@ -8,6 +8,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:zed_nano/contants/AppConstants.dart';
 import 'package:zed_nano/providers/common/SplashProvider.dart';
+import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/routes/routes.dart';
 import 'package:zed_nano/screens/onboarding/onboarding_screen.dart';
 import 'package:zed_nano/utils/Colors.dart';
@@ -75,21 +76,16 @@ class _SplashPageState extends State<SplashPage> {
       const Duration(seconds: 3),
           () async {
         if (mounted) {
-          // final authProvider =
-          // Provider.of<AuthenticatedAppProviders>(context, listen: false);
-          //
-          // if (Provider.of<SplashProvider>(context, listen: false)
-          //     .getOnBoardingSkip()) {
-          //   if (authProvider.isLoggedIn()) {
-          //
-          //   } else {
-          //
-          //   }
-          // } else {
-          //
-          // }
-          await Navigator.pushNamedAndRemoveUntil(
-              context, AppRoutes.getOnBoardingPageRoute(), (route) => false);
+          final authProvider = getAuthProvider(context);
+
+          if (authProvider.isLoggedIn) {
+            await Navigator.pushNamedAndRemoveUntil(
+                context, AppRoutes.getHomeMainPageRoute(), (route) => false);
+          } else {
+            await Navigator.pushNamedAndRemoveUntil(
+                context, AppRoutes.getOnBoardingPageRoute(), (route) => false);
+          }
+
         }
       },
     );

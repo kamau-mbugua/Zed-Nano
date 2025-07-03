@@ -139,7 +139,9 @@ Widget appButton(
   return AppButton(
     shapeBorder: RoundedRectangleBorder(borderRadius: radius(AppCommonRadius)),
     text: text,
-    textStyle: boldTextStyle(color: Colors.white, fontFamily: "Poppins"),
+    textStyle: boldTextStyle(color: Colors.white, fontFamily: "Poppins",
+        size: 14,
+        weight: FontWeight.w500),
     onTap: onTap,
     elevation: 0,
     color: isEnable ? appThemePrimary : textSecondary,
@@ -161,7 +163,12 @@ Widget outlineButton(
       side: BorderSide(color: borderColor ?? appThemePrimary, width: 1.5),
     ),
     text: text,
-    textStyle: boldTextStyle(color: textColor ?? appThemePrimary),
+    textStyle: boldTextStyle(
+        color: textColor ?? appThemePrimary,
+        fontFamily: "Poppins",
+        size: 14,
+      weight: FontWeight.w500
+    ),
     onTap: onTap,
     elevation: 0,
     color: Colors.transparent,

@@ -65,7 +65,8 @@ class StyledTextField extends StatelessWidget {
             .paddingSymmetric(vertical: 16, horizontal: 14)
             : null,
         suffixPasswordVisibleWidget: isPassword
-            ? robotoText(text: 'Show', color: appThemePrimary).paddingOnly(top: 20)
+            ? Image.asset(showIcon, height: 16, width: 16, fit: BoxFit.fill)
+            .paddingSymmetric(vertical: 16, horizontal: 14)
             : null,
         inputFormatters: maxLength != null 
             ? [LengthLimitingTextInputFormatter(maxLength)]

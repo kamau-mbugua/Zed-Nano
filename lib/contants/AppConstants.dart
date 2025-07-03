@@ -25,6 +25,12 @@ class AppConstants{
   static const String register = 'api/addNewUser';
   static const String resetPinVersion = 'api/resetPinVersion2';
   static const String forgotPin = 'posForgotPinVersion2';
+  static const String getTokenAfterInvite = 'api/get_token_after_invite';
+
+
+ /// ******BUSINESS ENDPOINTS*******
+  static const String getBusinessInfo = 'api/getBusinessInfo';
+  static const String getSetupStatus = 'api/get_setup_status';
 
 
 

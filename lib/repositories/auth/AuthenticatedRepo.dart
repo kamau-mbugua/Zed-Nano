@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/contants/AppConstants.dart';
 import 'package:zed_nano/networking/base/api_response.dart';
 import 'package:zed_nano/networking/datasource/remote/dio/dio_client.dart';
@@ -19,14 +20,11 @@ class AuthenticatedRepo {
   /// Updates the DioClient header and saves to SharedPreferences
   Future<void> saveUserToken(String token) async {
     try {
-      // Update Dio client header with the new token
-      dioClient!.updateHeader(getToken: token);
-      
-      // Save token to shared preferences
+      await dioClient!.updateHeader(getToken: token);
       await sharedPreferences!.setString(AppConstants.token, token);
     } catch (e) {
       if (kDebugMode) {
-        print('Failed to save user token: $e');
+        logger.e('Failed to save user token: $e');
       }
       rethrow;
     }
@@ -188,6 +186,16 @@ class AuthenticatedRepo {
     try {
       final response =
           await dioClient!.post('${AppConstants.forgotPin}', data: requestData);
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
+  Future<ApiResponse> getTokenAfterInvite({required Map<String, dynamic> requestData}) async {
+    try {
+      final response =
+          await dioClient!.post('${AppConstants.getTokenAfterInvite}', data: requestData);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
