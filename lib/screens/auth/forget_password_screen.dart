@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/app/app_initializer.dart';
-import 'package:zed_nano/providers/providers_helpers.dart';
+import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/routes/routes.dart';
 import 'package:zed_nano/screens/auth/set_new_pin_page.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';

@@ -7,7 +7,7 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:zed_nano/contants/AppConstants.dart';
-import 'package:zed_nano/providers/SplashProvider.dart';
+import 'package:zed_nano/providers/common/SplashProvider.dart';
 import 'package:zed_nano/routes/routes.dart';
 import 'package:zed_nano/screens/onboarding/onboarding_screen.dart';
 import 'package:zed_nano/utils/Colors.dart';

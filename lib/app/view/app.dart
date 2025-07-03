@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:zed_nano/counter/counter.dart';
 import 'package:zed_nano/l10n/l10n.dart';
 import 'package:zed_nano/routes/routes.dart';
 import 'package:zed_nano/routes/routes_helper.dart';

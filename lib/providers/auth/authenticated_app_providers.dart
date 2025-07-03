@@ -7,7 +7,8 @@ import 'package:zed_nano/networking/base/api_response.dart';
 import 'package:zed_nano/networking/models/common/CommonResponse.dart';
 import 'package:zed_nano/networking/models/posLoginVersion2/login_response.dart';
 import 'package:zed_nano/networking/models/response_model.dart';
-import 'package:zed_nano/providers/base_provider.dart';
+import 'package:zed_nano/providers/base/base_provider.dart';
+import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/repositories/AuthenticatedRepo.dart';
 import 'package:zed_nano/routes/routes.dart';
 import 'package:zed_nano/routes/routes_helper.dart';
@@ -81,26 +82,11 @@ class AuthenticatedAppProviders extends BaseProvider {
     }
   }
 
-  // Helper method to perform API calls with automatic loading management
-  Future<ResponseModel> _performApiCall(
-      Future<ApiResponse> Function() apiFunction, BuildContext context) async {
-    final result = await performApiCall(() async {
-      final apiResponse = await apiFunction();
-      logger.d(
-          '_performApiCall API Response: ${apiResponse.data} and error: ${apiResponse.isSuccess}');
-      final responseModel = await handleApiResponse(apiResponse);
-      return responseModel;
-    }, context);
-
-    // Handle case where performApiCall returns null (an error occurred)
-    return result ??
-        ResponseModel(false, error?.userMessage ?? 'An unknown error occurred');
-  }
 
   Future<ResponseModel<LoginResponse>> login(
       {required Map<String, dynamic> requestData,
       required BuildContext context}) async {
-    final responseModel = await _performApiCall(
+    final responseModel = await performApiCallWithHandling(
         () => authenticatedRepo.login(requestData: requestData), context);
 
     ResponseModel<LoginResponse> finalResponseModel;
@@ -120,7 +106,7 @@ class AuthenticatedAppProviders extends BaseProvider {
 
   /// Log out the current user
   Future<ResponseModel> logout(BuildContext context) async {
-    return await _performApiCall(() async {
+    return await performApiCallWithHandling(() async {
       final result = await authenticatedRepo.clearSharedData();
 
       if (result) {
@@ -147,7 +133,7 @@ class AuthenticatedAppProviders extends BaseProvider {
   Future<ResponseModel<CommonResponse>> register(
       {required Map<String, dynamic> requestData,
       required BuildContext context}) async {
-    final responseModel = await _performApiCall(
+    final responseModel = await performApiCallWithHandling(
         () => authenticatedRepo.register(requestData: requestData), context);
 
     ResponseModel<CommonResponse> finalResponseModel;
@@ -167,7 +153,7 @@ class AuthenticatedAppProviders extends BaseProvider {
   Future<ResponseModel<CommonResponse>> resetPinVersion(
       {required Map<String, dynamic> requestData,
       required BuildContext context}) async {
-    final responseModel = await _performApiCall(
+    final responseModel = await performApiCallWithHandling(
         () => authenticatedRepo.resetPinVersion(requestData: requestData),
         context);
 
@@ -188,7 +174,7 @@ class AuthenticatedAppProviders extends BaseProvider {
   Future<ResponseModel<CommonResponse>> forgotPin(
       {required Map<String, dynamic> requestData,
       required BuildContext context}) async {
-    final responseModel = await _performApiCall(
+    final responseModel = await performApiCallWithHandling(
         () => authenticatedRepo.forgotPin(requestData: requestData), context);
 
     ResponseModel<CommonResponse> finalResponseModel;
