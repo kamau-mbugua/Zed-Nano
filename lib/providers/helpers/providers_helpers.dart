@@ -8,11 +8,11 @@ import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/providers/base/base_provider.dart';
 import 'package:zed_nano/providers/business/BusinessProviders.dart';
 
-AuthenticatedAppProviders getAuthProvider(BuildContext context ,{bool listen = true}) {
+AuthenticatedAppProviders getAuthProvider(BuildContext context ,{bool listen = false}) {
   return Provider.of<AuthenticatedAppProviders>(context, listen: listen);
 }
 
-BusinessProviders getBusinessProvider(BuildContext context,{bool listen = true}) {
+BusinessProviders getBusinessProvider(BuildContext context,{bool listen = false}) {
   return Provider.of<BusinessProviders>(context, listen: listen);
 }
 

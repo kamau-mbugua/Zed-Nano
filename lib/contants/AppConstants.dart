@@ -30,7 +30,10 @@ class AppConstants{
 
  /// ******BUSINESS ENDPOINTS*******
   static const String getBusinessInfo = 'api/getBusinessInfo';
+  static const String uploadBusinessLogo = 'api/edit_business_logo';
+  static const String createBusiness = 'postBusiness';
   static const String getSetupStatus = 'api/get_setup_status';
+  static const String listBusinessCategory = 'api/listBusinessCategory?state=Active';
 
 
 

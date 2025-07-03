@@ -7,6 +7,7 @@ import 'package:zed_nano/networking/base/api_response.dart';
 import 'package:zed_nano/networking/models/common/CommonResponse.dart';
 import 'package:zed_nano/networking/models/get_token_after_invite/GetTokenAfterInviteResponse.dart';
 import 'package:zed_nano/networking/models/posLoginVersion2/login_response.dart';
+import 'package:zed_nano/networking/models/postBusiness/PostBusinessResponse.dart';
 import 'package:zed_nano/networking/models/response_model.dart';
 import 'package:zed_nano/providers/base/base_provider.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
@@ -223,4 +224,33 @@ class AuthenticatedAppProviders extends BaseProvider {
 
     return finalResponseModel;
   }
+
+
+  Future<ResponseModel<PostBusinessResponse>> createBusiness(
+      {required Map<String, dynamic> requestData,required BuildContext context}) async {
+    final responseModel = await performApiCallWithHandling(
+            () => authenticatedRepo.createBusiness(requestData:requestData), context);
+
+    ResponseModel<PostBusinessResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      var response = PostBusinessResponse.fromJson(map);
+      finalResponseModel = ResponseModel<PostBusinessResponse>(
+          true, responseModel.message!,response);
+
+      final newToken = response.data?.token ?? '';
+      if (newToken.isNotEmpty) {
+        _token = newToken;
+        await authenticatedRepo.saveUserToken(newToken);
+        notifyListeners();
+      }
+    } else {
+      finalResponseModel =
+          ResponseModel<PostBusinessResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
 }

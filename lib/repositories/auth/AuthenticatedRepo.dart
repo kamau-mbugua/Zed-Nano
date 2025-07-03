@@ -203,6 +203,17 @@ class AuthenticatedRepo {
     }
   }
 
+  Future<ApiResponse> createBusiness({required Map<String, dynamic> requestData}) async {
+    try {
+      final response =
+      await dioClient!.post('${AppConstants.createBusiness}', data: requestData);
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
+
   /// Refresh authentication token
   Future<ApiResponse> refreshToken({required String refreshToken}) async {
     try {
