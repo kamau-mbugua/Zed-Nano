@@ -86,12 +86,12 @@ android {
         staging {
             dimension "default"
             applicationIdSuffix ".uat"
-            manifestPlaceholders = [appName: "[UAT] Zed Nano"]
+            manifestPlaceholders = [appName: "Zed Nano"]
         }
         development {
             dimension "default"
             applicationIdSuffix ".dev"
-            manifestPlaceholders = [appName: "[DEV] Zed Nano"]
+            manifestPlaceholders = [appName: "Zed Nano"]
         }
     }
 
