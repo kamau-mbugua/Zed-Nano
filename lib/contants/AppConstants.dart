@@ -31,6 +31,8 @@ class AppConstants{
 
  /// ******BUSINESS ENDPOINTS*******
   static const String getBusinessInfo = 'api/get_business_info';
+  static const String activateFreeTrialPlan = 'api/v1/billing/activate_freetrialplan';
+  static const String createBillingInvoice = 'api/v1/billing/businesss/createbilling-invoice';
   static const String uploadBusinessLogo = 'api/edit_business_logo';
   static const String createBusiness = 'postBusiness';
   static const String getSetupStatus = 'api/get_setup_status';

@@ -47,6 +47,45 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
       }
     });
   }
+  Future<void> activateFreeTrialPlan() async {
+
+    final businessData = <String, dynamic>{};
+
+    await context
+        .read<BusinessProviders>()
+        .activateFreeTrialPlan(requestData:businessData,context: context)
+        .then((value) async {
+      if (value.isSuccess) {
+        showCustomToast(value.message.toString(), isError: false);
+        widget.onSkip();
+      } else {
+        showCustomToast(
+            value.message ?? 'Something went wrong');
+      }
+    });
+  }
+
+
+  Future<void> createBillingInvoice() async {
+
+    final businessData = <String, dynamic>{
+      'billingPlanPaymentPlanId':'${plans?[selectedIndex]?.plans?[0]?.billingPlanPaymentPlanId}',
+      'packageId':'${plans?[selectedIndex].plans?[0].packageId}',
+    };
+
+    await context
+        .read<BusinessProviders>()
+        .createBillingInvoice(requestData:businessData,context: context)
+        .then((value) async {
+      if (value.isSuccess) {
+        showCustomToast(value.message.toString(), isError: false);
+        widget.onNext();
+      } else {
+        showCustomToast(
+            value.message ?? 'Something went wrong');
+      }
+    });
+  }
 
 
   @override
@@ -65,7 +104,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
           style: TextStyle(
             color: Color(0xff1f2024),
             fontWeight: FontWeight.w500,
-            fontFamily: "Poppins",
+            fontFamily: 'Poppins',
             fontSize: 16.0,
           ),
         ),
@@ -84,7 +123,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                     style: TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.w600,
-                      fontFamily: "Poppins",
+                      fontFamily: 'Poppins',
                       color: Color(0xff1f2024),
                     ),
                   ),
@@ -94,15 +133,15 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w400,
-                      fontFamily: "Poppins",
+                      fontFamily: 'Poppins',
                       color: Color(0xff71727a),
                     ),
                   ),
                   const SizedBox(height: 32),
                   // Subscription List
                   if (plans != null) ...plans!.asMap().entries.map((entry) {
-                    int index = entry.key;
-                    BillingPlanPackageGroup plan = entry.value;
+                    var index = entry.key;
+                    var plan = entry.value;
 
                     return GestureDetector(
                       onTap: () => setState(() => selectedIndex = index),
@@ -141,18 +180,18 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                                         style: const TextStyle(
                                           fontSize: 14,
                                           fontWeight: FontWeight.w600,
-                                          fontFamily: "Poppins",
+                                          fontFamily: 'Poppins',
                                           color: Color(0xff1f2024),
                                         ),
                                       ),
                                         Visibility(
                                           visible: false,
                                           child: Text(
-                                            "0",
+                                            '0',
                                             style: const TextStyle(
                                               fontSize: 10,
                                               fontWeight: FontWeight.w400,
-                                              fontFamily: "Poppins",
+                                              fontFamily: 'Poppins',
                                               color: Color(0xff032541),
                                             ),
                                           ),
@@ -168,7 +207,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                                       style: const TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w600,
-                                        fontFamily: "Poppins",
+                                        fontFamily: 'Poppins',
                                         color: Color(0xff1f2024),
                                       ),
                                     ),
@@ -177,7 +216,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                                       style: const TextStyle(
                                         fontSize: 10,
                                         fontWeight: FontWeight.w400,
-                                        fontFamily: "Poppins",
+                                        fontFamily: 'Poppins',
                                         color: Color(0xff1f2024),
                                       ),
                                     ),
@@ -211,7 +250,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                                         color: Colors.white,
                                         fontSize: 10,
                                         fontWeight: FontWeight.w500,
-                                        fontFamily: "Poppins",
+                                        fontFamily: 'Poppins',
                                       ),
                                     ),
                                   ],
@@ -227,7 +266,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                       height: 200,
                       child: Center(
                         child: Text(
-                          "No plans found",),
+                          'No plans found',),
                       ),
                     )
                   ]
@@ -244,17 +283,21 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     outlineButton(
-                            text: "Start ${noOfFreeTrialDays ?? 0} Free Trial",
+                            text: 'Start ${noOfFreeTrialDays ?? 0} Free Trial',
                             onTap: () {
-                              widget.onSkip();
+                              activateFreeTrialPlan();
                             },
                             context: context)
                         .paddingSymmetric(horizontal: 12),
                     10.height,
                     appButton(
-                            text: "Subscribe",
+                            text: 'Subscribe',
                             onTap: () {
-                              widget.onNext();
+                              if (selectedIndex == -1) {
+                                showCustomToast("Please select a plan");
+                                return;
+                              }
+                              createBillingInvoice();
                             },
                         isEnable: selectedIndex != -1,
                             context: context)
