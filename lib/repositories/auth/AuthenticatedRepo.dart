@@ -4,10 +4,11 @@ import 'package:flutter/foundation.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/contants/AppConstants.dart';
+import 'package:zed_nano/models/business/BusinessDetails.dart';
 import 'package:zed_nano/networking/base/api_response.dart';
 import 'package:zed_nano/networking/datasource/remote/dio/dio_client.dart';
 import 'package:zed_nano/networking/datasource/remote/exception/api_error_handler.dart';
-import 'package:zed_nano/networking/models/posLoginVersion2/login_response.dart';
+import 'package:zed_nano/models/posLoginVersion2/login_response.dart';
 
 class AuthenticatedRepo {
   final DioClient? dioClient;
@@ -29,6 +30,30 @@ class AuthenticatedRepo {
       rethrow;
     }
   }
+
+  Future<void> saveBusinessDetails(BusinessDetails details) async {
+    try {
+      await BusinessDetails.saveToSharedPreferences(details);
+    } catch (e) {
+      if (kDebugMode) {
+        logger.e('Failed to save business details: $e');
+      }
+      rethrow;
+    }
+  }
+
+  Future<BusinessDetails?> getBusinessDetails() async {
+    try {
+      return await BusinessDetails.loadFromSharedPreferences();
+    } catch (e) {
+      if (kDebugMode) {
+        logger.e('Failed to load business details: $e');
+      }
+      return null;
+    }
+  }
+
+
 
   /// Save full login response for later use
   Future<void> saveLoginResponse(LoginResponse loginResponse) async {

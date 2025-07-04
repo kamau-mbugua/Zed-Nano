@@ -1,22 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:provider/provider.dart';
+import 'package:zed_nano/models/listbillingplan_packages/BillingPlanPackagesResponse.dart';
+import 'package:zed_nano/providers/business/BusinessProviders.dart';
+import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/utils/Common.dart';
-
-class SubscriptionPlan {
-  final String title;
-  final String price;
-  final String frequency;
-  final String discount;
-  final bool isRecommended;
-
-  SubscriptionPlan({
-    required this.title,
-    required this.price,
-    required this.frequency,
-    required this.discount,
-    this.isRecommended = false,
-  });
-}
 
 class SubscriptionScreen extends StatefulWidget {
   final VoidCallback onNext, onSkip;
@@ -30,27 +18,34 @@ class SubscriptionScreen extends StatefulWidget {
 class _SubscriptionScreenState extends State<SubscriptionScreen> {
   int selectedIndex = -1;
 
-  final List<SubscriptionPlan> plans = [
-    SubscriptionPlan(
-      title: 'Yearly',
-      price: 'KES 10,000.00',
-      frequency: 'every year',
-      discount: '~36% discount',
-    ),
-    SubscriptionPlan(
-      title: 'Quarterly',
-      price: 'KES 1000.00',
-      frequency: 'every 3 months',
-      discount: '~23% discount',
-      isRecommended: true,
-    ),
-    SubscriptionPlan(
-      title: 'Monthly',
-      price: 'KES 300.00',
-      frequency: 'every week',
-      discount: '',
-    ),
-  ];
+  List<BillingPlanPackageGroup>? plans;
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      getBusinessPlanPackages();
+    });
+    super.initState();
+  }
+
+  Future<void> getBusinessPlanPackages() async {
+    await context
+        .read<BusinessProviders>()
+        .getBusinessPlanPackages(context: context)
+        .then((value) async {
+      if (value.isSuccess) {
+        var businessPlans = value.data?.response;
+        setState(() {
+          plans = businessPlans;
+        });
+
+      } else {
+        showCustomToast(
+            value.message ?? 'Something went wrong');
+      }
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -103,9 +98,9 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                   ),
                   const SizedBox(height: 32),
                   // Subscription List
-                  ...plans.asMap().entries.map((entry) {
+                  if (plans != null) ...plans!.asMap().entries.map((entry) {
                     int index = entry.key;
-                    SubscriptionPlan plan = entry.value;
+                    BillingPlanPackageGroup plan = entry.value;
 
                     return GestureDetector(
                       onTap: () => setState(() => selectedIndex = index),
@@ -140,7 +135,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        plan.title,
+                                        plan?.id ?? '',
                                         style: const TextStyle(
                                           fontSize: 14,
                                           fontWeight: FontWeight.w600,
@@ -148,14 +143,16 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                                           color: Color(0xff1f2024),
                                         ),
                                       ),
-                                      if (plan.discount.isNotEmpty)
-                                        Text(
-                                          plan.discount,
-                                          style: const TextStyle(
-                                            fontSize: 10,
-                                            fontWeight: FontWeight.w400,
-                                            fontFamily: "Poppins",
-                                            color: Color(0xff032541),
+                                        Visibility(
+                                          visible: false,
+                                          child: Text(
+                                            "0",
+                                            style: const TextStyle(
+                                              fontSize: 10,
+                                              fontWeight: FontWeight.w400,
+                                              fontFamily: "Poppins",
+                                              color: Color(0xff032541),
+                                            ),
                                           ),
                                         ),
                                     ],
@@ -165,7 +162,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
                                     Text(
-                                      plan.price,
+                                      "${plan?.plans?[0]?.billingPeriodAmount ?? ''}",
                                       style: const TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w600,
@@ -174,7 +171,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                                       ),
                                     ),
                                     Text(
-                                      plan.frequency,
+                                      "every ${plan?.id ?? ''}",
                                       style: const TextStyle(
                                         fontSize: 10,
                                         fontWeight: FontWeight.w400,
@@ -187,7 +184,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                               ],
                             ).paddingSymmetric(horizontal: 1),
                           ),
-                          if (plan.isRecommended)
+                          if (plan.isRecommended == true)
                             Positioned(
                               top: -1,
                               right: 0,
@@ -222,7 +219,16 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                         ],
                       ),
                     );
-                  }).toList(),
+                  }).toList()
+                  else ...[
+                    Container(
+                      height: 200,
+                      child: Center(
+                        child: Text(
+                          "No plans found",),
+                      ),
+                    )
+                  ]
                 ],
               ),
             ),

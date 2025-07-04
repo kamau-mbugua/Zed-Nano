@@ -1,39 +1,41 @@
 import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:http_parser/http_parser.dart';
+import 'package:path/path.dart' as p;
+import 'package:zed_nano/models/get_business_info/BusinessInfoResponse.dart';
+import 'package:zed_nano/models/listbillingplan_packages/BillingPlanPackagesResponse.dart';
 import 'package:zed_nano/networking/base/api_helpers.dart';
-import 'package:zed_nano/networking/models/common/CommonResponse.dart';
-import 'package:zed_nano/networking/models/get_setup_status/SetupStatusResponse.dart';
-import 'package:zed_nano/networking/models/listBusinessCategory/ListBusinessCategoryResponse.dart';
-import 'package:zed_nano/networking/models/postBusiness/PostBusinessResponse.dart';
+import 'package:zed_nano/models/common/CommonResponse.dart';
+import 'package:zed_nano/models/get_setup_status/SetupStatusResponse.dart';
+import 'package:zed_nano/models/listBusinessCategory/ListBusinessCategoryResponse.dart';
 import 'package:zed_nano/networking/models/response_model.dart';
 import 'package:zed_nano/providers/base/base_provider.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/repositories/business/BusinessRepo.dart';
-import 'package:path/path.dart' as p;
-import 'package:http_parser/http_parser.dart';
 
 class BusinessProviders extends BaseProvider {
   final BusinessRepo businessRepo;
 
   BusinessProviders({required this.businessRepo});
 
-  Future<ResponseModel<CommonResponse>> getBusinessInfo(
+  Future<ResponseModel<BusinessInfoResponse>> getBusinessInfo(
       {required Map<String, dynamic> requestData,
       required BuildContext context}) async {
     final responseModel = await performApiCallWithHandling(
         () => businessRepo.getBusinessInfo(requestData: requestData), context);
 
-    ResponseModel<CommonResponse> finalResponseModel;
+    ResponseModel<BusinessInfoResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
-      finalResponseModel = ResponseModel<CommonResponse>(
-          true, responseModel.message!, CommonResponse.fromJson(map));
+      finalResponseModel = ResponseModel<BusinessInfoResponse>(
+          true, responseModel.message!, BusinessInfoResponse.fromJson(map));
     } else {
       finalResponseModel =
-          ResponseModel<CommonResponse>(false, responseModel.message!);
+          ResponseModel<BusinessInfoResponse>(false, responseModel.message!);
     }
 
     return finalResponseModel;
@@ -72,6 +74,25 @@ class BusinessProviders extends BaseProvider {
     } else {
       finalResponseModel =
           ResponseModel<ListBusinessCategoryResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
+  Future<ResponseModel<BillingPlanPackagesResponse>> getBusinessPlanPackages(
+      {required BuildContext context}) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.getBusinessPlanPackages(), context);
+
+    ResponseModel<BillingPlanPackagesResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<BillingPlanPackagesResponse>(
+          true, responseModel.message!, BillingPlanPackagesResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<BillingPlanPackagesResponse>(false, responseModel.message!);
     }
 
     return finalResponseModel;

@@ -19,6 +19,7 @@ class AppConstants{
   static const String loginResponse = 'loginResponse';
   static const String userDataResponse = 'userDataResponse';
 
+
   //ENDPOINTS
   /// ******AUTHENTICATION ENDPOINTS*******
   static const String login = 'posLoginVersion2';
@@ -29,11 +30,14 @@ class AppConstants{
 
 
  /// ******BUSINESS ENDPOINTS*******
-  static const String getBusinessInfo = 'api/getBusinessInfo';
+  static const String getBusinessInfo = 'api/get_business_info';
   static const String uploadBusinessLogo = 'api/edit_business_logo';
   static const String createBusiness = 'postBusiness';
   static const String getSetupStatus = 'api/get_setup_status';
   static const String listBusinessCategory = 'api/listBusinessCategory?state=Active';
+  static const String getBusinessPlanPackages = 'api/v1/billing/listbillingplan_packages';
+
+
 
 
 

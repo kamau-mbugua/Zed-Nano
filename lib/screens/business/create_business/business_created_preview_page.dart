@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:provider/provider.dart';
+import 'package:zed_nano/contants/AppConstants.dart';
+import 'package:zed_nano/models/get_business_info/BusinessInfoResponse.dart';
+import 'package:zed_nano/providers/business/BusinessProviders.dart';
+import 'package:zed_nano/providers/helpers/providers_helpers.dart';
+import 'package:zed_nano/screens/widget/common/common_widgets.dart';
+import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/Images.dart';
@@ -14,6 +21,40 @@ class BusinessCreatedPreviewPage extends StatefulWidget {
 }
 
 class _BusinessCreatedPreviewPageState extends State<BusinessCreatedPreviewPage> {
+
+  BusinessInfoData? businessInfoData;
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      getBusinessInformation();
+    });
+    super.initState();
+  }
+
+  Future<void> getBusinessInformation() async {
+
+    var businessId = getAuthProvider(context).businessDetails?.businessId;
+
+    Map<String, dynamic> businessData = {
+      'businessId':businessId
+    };
+    await context
+        .read<BusinessProviders>()
+        .getBusinessInfo(requestData:businessData,context: context)
+        .then((value) async {
+      if (value.isSuccess) {
+        var businessInfo = value.data?.data;
+        setState(() {
+          businessInfoData = businessInfo;
+        });
+
+      } else {
+        showCustomToast(
+            value.message ?? 'Something went wrong');
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,7 +71,7 @@ class _BusinessCreatedPreviewPageState extends State<BusinessCreatedPreviewPage>
           style: TextStyle(
             color: Color(0xff1f2024),
             fontWeight: FontWeight.w500,
-            fontFamily: "Poppins",
+            fontFamily: 'Poppins',
             fontSize: 16.0,
           ),
         ),
@@ -46,21 +87,21 @@ class _BusinessCreatedPreviewPageState extends State<BusinessCreatedPreviewPage>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
-                    "Business Summary",
+                    'Business Summary',
                     style: TextStyle(
                       color: Color(0xff1f2024),
                       fontWeight: FontWeight.w600,
-                      fontFamily: "Poppins",
+                      fontFamily: 'Poppins',
                       fontSize: 28.0,
                     ),
                   ),
                   const SizedBox(height: 4),
                   const Text(
-                    "A summary of your business information",
+                    'A summary of your business information',
                     style: TextStyle(
                       color: Color(0xff71727a),
                       fontWeight: FontWeight.w400,
-                      fontFamily: "Poppins",
+                      fontFamily: 'Poppins',
                       fontSize: 12.0,
                     ),
                   ),
@@ -72,20 +113,12 @@ class _BusinessCreatedPreviewPageState extends State<BusinessCreatedPreviewPage>
             Positioned(
               top: 88,
               left: 16,
-              child: Container(
-              height: 90,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: Colors.grey.shade300),
+              child: rfCommonCachedNetworkImage(
+                '${AppConstants.baseUrl}staticimages/logos/${businessInfoData?.businessLogo}',
+                fit: BoxFit.cover,
+                width: context.width(),
+                height: 380,
               ),
-              child: Stack(
-                children: [
-                  Center(
-                    child : SvgPicture.asset(zedColoredIcon, fit: BoxFit.cover),
-                  ),
-                ],
-              ),
-            ),
             ),
 
             // Form section
@@ -97,34 +130,34 @@ class _BusinessCreatedPreviewPageState extends State<BusinessCreatedPreviewPage>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Business Name
-                  _buildInfoItem("Business Name", "Mama Koech Shop"),
+                  _buildInfoItem('Business Name', businessInfoData?.businessName ?? ''),
                   _buildDivider(),
 
                   // Phone Number
-                  _buildInfoItem("Phone Number", "+254 712 345 678"),
+                  _buildInfoItem('Phone Number', businessInfoData?.businessOwnerPhone ?? ''),
                   _buildDivider(),
 
                   // Email Address
-                  _buildInfoItem("Email Address", "mamakoechshop@mail.com"),
+                  _buildInfoItem('Email Address', businessInfoData?.businessOwnerEmail ?? ''),
                   _buildDivider(),
 
                   // Location
-                  _buildInfoItem("Location", "Ukunda Road, Business Mall"),
+                  _buildInfoItem('Location', businessInfoData?.businessOwnerAddress ?? ''),
                   _buildDivider(),
 
                   // Directors/Owners
-                  _buildInfoItem("Directors/Owners", "Mary Kamau, John Kipkoech"),
+                  _buildInfoItem('Directors/Owners', businessInfoData?.businessOwnerName ?? ''),
                   _buildDivider(),
 
                   // Country and Currency (2-column layout)
                   Row(
                     children: [
                       Expanded(
-                        child: _buildInfoItem("Country", "Kenya"),
+                        child: _buildInfoItem('Country', businessInfoData?.country ?? ''),
                       ),
                       const SizedBox(width: 16),
                       Expanded(
-                        child: _buildInfoItem("Currency", "KES"),
+                        child: _buildInfoItem('Currency', businessInfoData?.localCurrency ?? ''),
                       ),
                     ],
                   ),
@@ -141,7 +174,7 @@ class _BusinessCreatedPreviewPageState extends State<BusinessCreatedPreviewPage>
               child: Column(
                 children: [
                   outlineButton(
-                      text: "Edit",
+                      text: 'Edit',
                       onTap: () {
 
                       },
@@ -149,10 +182,9 @@ class _BusinessCreatedPreviewPageState extends State<BusinessCreatedPreviewPage>
                   ).paddingSymmetric(horizontal: 12),
                   10.height,
                   appButton(
-                      text: "Next",
+                      text: 'Next',
                       onTap: () {
                         widget.onNext();
-
                       },
                       context: context
                   ).paddingSymmetric(horizontal: 12),
@@ -176,7 +208,7 @@ class _BusinessCreatedPreviewPageState extends State<BusinessCreatedPreviewPage>
             style: const TextStyle(
               color: Color(0xff1f2024),
               fontWeight: FontWeight.w400,
-              fontFamily: "Poppins",
+              fontFamily: 'Poppins',
               fontSize: 14.0,
             ),
           ),
@@ -186,7 +218,7 @@ class _BusinessCreatedPreviewPageState extends State<BusinessCreatedPreviewPage>
             style: const TextStyle(
               color: Color(0xff71727a),
               fontWeight: FontWeight.w400,
-              fontFamily: "Poppins",
+              fontFamily: 'Poppins',
               fontSize: 12.0,
             ),
           ),

@@ -51,5 +51,15 @@ class BusinessRepo{
       return ApiResponse.withError(ApiErrorHandler.handleError(e));
     }
   }
+  Future<ApiResponse> getBusinessPlanPackages() async {
+    try {
+      final response =
+      await dioClient!.get('${AppConstants.getBusinessPlanPackages}');
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
 
 }

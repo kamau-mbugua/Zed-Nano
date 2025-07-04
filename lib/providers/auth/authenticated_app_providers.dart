@@ -2,12 +2,13 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart' as AppInitializer;
 import 'package:zed_nano/app/app_initializer.dart';
+import 'package:zed_nano/models/business/BusinessDetails.dart';
 import 'package:zed_nano/networking/base/api_helpers.dart';
 import 'package:zed_nano/networking/base/api_response.dart';
-import 'package:zed_nano/networking/models/common/CommonResponse.dart';
-import 'package:zed_nano/networking/models/get_token_after_invite/GetTokenAfterInviteResponse.dart';
-import 'package:zed_nano/networking/models/posLoginVersion2/login_response.dart';
-import 'package:zed_nano/networking/models/postBusiness/PostBusinessResponse.dart';
+import 'package:zed_nano/models/common/CommonResponse.dart';
+import 'package:zed_nano/models/get_token_after_invite/GetTokenAfterInviteResponse.dart';
+import 'package:zed_nano/models/posLoginVersion2/login_response.dart';
+import 'package:zed_nano/models/postBusiness/PostBusinessResponse.dart';
 import 'package:zed_nano/networking/models/response_model.dart';
 import 'package:zed_nano/providers/base/base_provider.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
@@ -20,11 +21,13 @@ class AuthenticatedAppProviders extends BaseProvider {
 
   // User state
   String _token = '';
+  BusinessDetails? _businessDetails;
   LoginResponse? _loginResponse;
   LoginUserDetails? _userDetails;
 
   // Getters
   String get token => _token;
+  BusinessDetails? get businessDetails => _businessDetails;
   LoginResponse? get loginResponse => _loginResponse;
   LoginUserDetails? get userDetails => _userDetails;
   bool get isLoggedIn => _token.isNotEmpty;
@@ -41,6 +44,7 @@ class AuthenticatedAppProviders extends BaseProvider {
     _token = authenticatedRepo.getUserToken();
     _loginResponse = authenticatedRepo.getLoginResponse();
     _userDetails = authenticatedRepo.getUserData();
+    _businessDetails = (await authenticatedRepo.getBusinessDetails())!;
     notifyListeners();
   }
 
@@ -55,10 +59,19 @@ class AuthenticatedAppProviders extends BaseProvider {
         _token = token;
         await authenticatedRepo.saveUserToken(token);
 
-        // Save full login response
-        await authenticatedRepo.saveLoginResponse(loginResponse!);
+        final details = BusinessDetails(
+            businessId: loginResponse?.defaultBusinessId ?? '',
+            businessNumber: loginResponse?.businessNumber ?? '',
+            group: loginResponse?.group ?? '',
+            branchId: loginResponse?.branchId ?? '',
+            localCurrency: loginResponse?.localCurrency ?? '',
+            businessCategory: loginResponse?.businessCategory ?? ''
+        );
 
-        // Extract and save user details
+        _businessDetails = details;
+        await authenticatedRepo.saveBusinessDetails(details);
+
+        await authenticatedRepo.saveLoginResponse(loginResponse!);
         _userDetails = loginResponse?.data?.userDetails;
         if (_userDetails != null) {
           await authenticatedRepo.saveUserData(_userDetails);
@@ -239,9 +252,23 @@ class AuthenticatedAppProviders extends BaseProvider {
       finalResponseModel = ResponseModel<PostBusinessResponse>(
           true, responseModel.message!,response);
 
-      final newToken = response.data?.token ?? '';
+      final postBusinessData = response.data;
+      final newToken = postBusinessData?.token ?? '';
       if (newToken.isNotEmpty) {
         _token = newToken;
+
+        final details = BusinessDetails(
+            businessId: postBusinessData?.defaultBusinessId ?? '',
+            businessNumber: postBusinessData?.businessNumber ?? '',
+            group: postBusinessData?.group ?? '',
+            branchId: postBusinessData?.branchId ?? '',
+            localCurrency: postBusinessData?.localCurrency ?? '',
+            businessCategory: postBusinessData?.businessCategory ?? ''
+        );
+
+        _businessDetails = details;
+        await authenticatedRepo.saveBusinessDetails(details);
+
         await authenticatedRepo.saveUserToken(newToken);
         notifyListeners();
       }

@@ -5,7 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 import 'package:zed_nano/app/app_initializer.dart';
-import 'package:zed_nano/networking/models/listBusinessCategory/ListBusinessCategoryResponse.dart';
+import 'package:zed_nano/models/listBusinessCategory/ListBusinessCategoryResponse.dart';
 import 'package:zed_nano/providers/auth/authenticated_app_providers.dart';
 import 'package:zed_nano/providers/business/BusinessProviders.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
@@ -97,36 +97,53 @@ class _CreateBusinessPageState extends State<CreateBusinessPage> {
   }
 
   Future<void> _handleCreateBusiness(Map<String, dynamic> businessData, BuildContext context) async {
-    context
+    await context
         .read<AuthenticatedAppProviders>()
         .createBusiness(
         requestData: businessData, context: context)
-        .then((value) {
+        .then((value) async {
       if (value.isSuccess) {
         showCustomToast(
             value.message ?? 'Business created successfully',
-            isError: false);
+            isError: false,);
 
         if (_logoImage != null) {
-          final businessProviders = getBusinessProvider(
-              context)
-            ..uploadBusinessLogo(
-                context: context, logo: _logoImage!)
-                .then((value) {
-              if (value.isSuccess) {
-                widget.onNext();
-                showCustomToast(
-                    value.message ??
-                        'Business logo uploaded successfully',
-                    isError: false);
-              } else {
-                showCustomToast(
-                    value.message ?? 'Something went wrong');
-              }
-            });
+          await _uploadBusinessLogo();
         } else {
           widget.onNext();
         }
+      } else {
+        showCustomToast(
+            value.message ?? 'Something went wrong');
+      }
+    });
+  }
+
+  Future<void> _uploadBusinessLogo() async {
+    await context
+        .read<BusinessProviders>()
+        .uploadBusinessLogo(context: context, logo: _logoImage!)
+        .then((value) async {
+      if (value.isSuccess) {
+        showCustomToast(
+            value.message ?? 'Business logo uploaded successfully',
+            isError: false);
+        await _fetchGetTokenAfterInvite();
+      } else {
+        showCustomToast(
+            value.message ?? 'Something went wrong');
+      }
+    });
+  }
+
+  Future<void> _fetchGetTokenAfterInvite() async {
+    final requestData = <String, dynamic>{};
+    await context
+        .read<AuthenticatedAppProviders>()
+        .getTokenAfterInvite(requestData: requestData, context: context)
+        .then((value) {
+      if (value.isSuccess) {
+        widget.onNext();
       } else {
         showCustomToast(
             value.message ?? 'Something went wrong');

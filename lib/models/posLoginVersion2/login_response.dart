@@ -12,8 +12,12 @@ class LoginResponse {
   final String? state;
   final String? businessName;
   final String? userId;
-  final dynamic branchId;
+  final String? branchId;
   final String? customerClassification;
+  final String? defaultBusinessId;
+  final String? businessNumber;
+  final String? localCurrency;
+  final String? businessCategory;
   final LoginResponseData? data;
 
   LoginResponse({
@@ -31,6 +35,10 @@ class LoginResponse {
     this.userId,
     this.branchId,
     this.customerClassification,
+    this.defaultBusinessId,
+    this.businessCategory,
+    this.businessNumber,
+    this.localCurrency,
     this.data,
   });
 
@@ -48,9 +56,13 @@ class LoginResponse {
       state: json['state'] as String?,
       businessName: json['businessName'] as String?,
       userId: json['userId'] as String?,
-      branchId: json['branchId'],
+      branchId: json['branchId'] as String?,
       customerClassification: json['customerClassification'] as String?,
-      data: json['data'] != null 
+      defaultBusinessId: json['defaultBusinessId'] as String?,
+      localCurrency: json['localCurrency'] as String?,
+      businessNumber: json['businessNumber'] as String?,
+      businessCategory: json['businessCategory'] as String?,
+      data: json['data'] != null
           ? LoginResponseData.fromJson(json['data'] as Map<String, dynamic>) 
           : null,
     );
@@ -72,6 +84,10 @@ class LoginResponse {
       'userId': userId,
       'branchId': branchId,
       'customerClassification': customerClassification,
+      'defaultBusinessId': defaultBusinessId,
+      'localCurrency': localCurrency,
+      'businessNumber': businessNumber,
+      'businessCategory': businessCategory,
       'data': data?.toJson(),
     };
   }
