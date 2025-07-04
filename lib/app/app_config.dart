@@ -31,6 +31,17 @@ class AppConfig {
     }
   }
 
+  static String get domainName {
+    switch (_flavor) {
+      case Flavor.production:
+        return 'api.portal.zed.business';
+      case Flavor.staging:
+        return 'zed.api.swerri.io';
+      case Flavor.development:
+        return 'api.dev.zed.business';
+    }
+  }
+
   static String get appName {
     switch (_flavor) {
       case Flavor.production:

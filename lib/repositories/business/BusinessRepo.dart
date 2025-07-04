@@ -31,6 +31,16 @@ class BusinessRepo{
       return ApiResponse.withError(ApiErrorHandler.handleError(e));
     }
   }
+  Future<ApiResponse> doInitiateKcbStkPush({required Map<String, dynamic> requestData}) async {
+    try {
+      final response =
+      await dioClient!.post('${AppConstants.initiateKcbStkPush}', data: requestData);
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
 
   Future<ApiResponse> activateFreeTrialPlan({required Map<String, dynamic> requestData}) async {
     try {

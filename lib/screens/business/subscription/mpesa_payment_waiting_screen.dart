@@ -1,0 +1,379 @@
+import 'dart:async';
+import 'package:flutter/material.dart';
+import 'package:nb_utils/nb_utils.dart';
+import 'package:zed_nano/app/app_initializer.dart';
+import 'package:zed_nano/screens/widget/common/fading_circular_progress.dart';
+import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
+import 'package:zed_nano/services/websocket_service.dart';
+import 'package:zed_nano/utils/Common.dart';
+import 'package:zed_nano/providers/helpers/providers_helpers.dart';
+
+typedef PaymentCallback = void Function();
+typedef PaymentErrorCallback = void Function(String errorMessage);
+
+class MpesaPaymentWaitingScreen extends StatefulWidget {
+  final String invoiceNumber;
+  final String referenceNumber;
+  final Map<String, dynamic> paymentData;
+  final PaymentCallback? onPaymentSuccess;
+  final PaymentErrorCallback? onPaymentError;
+  final VoidCallback? onCancel;
+
+  const MpesaPaymentWaitingScreen({
+    super.key,
+    required this.invoiceNumber,
+    required this.referenceNumber,
+    required this.paymentData,
+    this.onPaymentSuccess,
+    this.onPaymentError,
+    this.onCancel,
+  });
+
+  @override
+  State<MpesaPaymentWaitingScreen> createState() => _MpesaPaymentWaitingScreenState();
+}
+
+class _MpesaPaymentWaitingScreenState extends State<MpesaPaymentWaitingScreen> {
+  WebSocketService? _webSocketService;
+  Timer? _countdownTimer;
+  int _resendCountdown = 60;
+  bool _canResend = false;
+  bool _isLoading = false;
+  String _userToken = '';
+
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeWebSocket();
+    _startResendCountdown();
+    _userToken = getAuthProvider(context).token;
+  }
+
+  void _initializeWebSocket() {
+    _webSocketService = WebSocketService();
+    
+    // Listen to connection status
+    _webSocketService!.connectionStream.listen((isConnected) {
+      logger.d('WebSocket connection status: $isConnected');
+      if (!isConnected && mounted) {
+        // Handle disconnection if needed
+      }
+    });
+
+    // Listen to messages
+    _webSocketService!.messageStream.listen((wsResponse) {
+      _handleWebSocketMessage(wsResponse);
+    });
+
+    // Connect to WebSocket
+    _webSocketService!.connect(widget.referenceNumber,userToken:_userToken);
+  }
+
+  void _handleWebSocketMessage(WsResponse wsResponse) {
+    if (!mounted) return;
+
+    logger.d('WebSocket message: ${wsResponse.status} - ${wsResponse.statusMessage}');
+
+    switch (wsResponse.status?.toLowerCase()) {
+      case 'initial':
+        // Initial state, do nothing
+        break;
+        
+      case 'cancelled':
+        _handlePaymentResult(
+          isSuccess: false,
+          message: wsResponse.statusMessage ?? 'Payment was cancelled',
+        );
+        break;
+        
+      case 'success':
+        _handlePaymentResult(
+          isSuccess: true,
+          message: 'Payment completed successfully!',
+        );
+        break;
+        
+      case 'timeout':
+        _handlePaymentResult(
+          isSuccess: false,
+          message: wsResponse.statusMessage ?? 'Payment timed out',
+        );
+        break;
+        
+      case 'insufficient':
+        _handlePaymentResult(
+          isSuccess: false,
+          message: wsResponse.statusMessage ?? 'Insufficient funds',
+        );
+        break;
+        
+      case 'wrongpin':
+        _handlePaymentResult(
+          isSuccess: false,
+          message: wsResponse.statusMessage ?? 'Wrong PIN entered',
+        );
+        break;
+        
+      default:
+        logger.d('Unknown payment status: ${wsResponse.status}');
+        break;
+    }
+  }
+
+  void _handlePaymentResult({required bool isSuccess, required String message}) {
+    if (!mounted) return;
+
+    if (isSuccess) {
+      showCustomToast(message, isError: false);
+      widget.onPaymentSuccess?.call();
+    } else {
+      showCustomToast(message, isError: true);
+      widget.onPaymentError?.call(message);
+    }
+
+    // Close the screen after a short delay
+    Future.delayed(const Duration(seconds: 2), () {
+      if (mounted) {
+        Navigator.of(context).pop();
+      }
+    });
+  }
+
+  void _startResendCountdown() {
+    _canResend = false;
+    _resendCountdown = 60;
+    
+    _countdownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (mounted) {
+        setState(() {
+          if (_resendCountdown > 0) {
+            _resendCountdown--;
+          } else {
+            _canResend = true;
+            timer.cancel();
+          }
+        });
+      } else {
+        timer.cancel();
+      }
+    });
+  }
+
+  Future<void> _resendSTKPush() async {
+    if (_isLoading) return;
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      final response = await getBusinessProvider(context).doInitiateKcbStkPush(
+        requestData: widget.paymentData,
+        context: context,
+      );
+
+      if (response.isSuccess) {
+        showCustomToast('You will receive a prompt on your phone', isError: false);
+        _startResendCountdown();
+      } else {
+        showCustomToast(response.message ?? 'Failed to send payment prompt', isError: true);
+      }
+    } catch (e) {
+      showCustomToast('Failed to resend payment prompt', isError: true);
+      logger.e('Error resending STK push: $e');
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _countdownTimer?.cancel();
+    _webSocketService?.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black),
+          onPressed: () {
+            widget.onCancel?.call();
+            Navigator.of(context).pop();
+          },
+        ),
+        title: const Text(
+          'Payment Processing',
+          style: TextStyle(
+            color: Color(0xff1f2024),
+            fontWeight: FontWeight.w500,
+            fontFamily: 'Poppins',
+            fontSize: 16.0,
+          ),
+        ),
+      ),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Circular Loader
+              const FadingCircularProgress(
+                width: 120,
+                height: 120,
+                color: Color(0xff032541),
+                backgroundColor: Color(0xffe8edf1),
+                strokeWidth: 8,
+                duration: Duration(seconds: 2),
+              ),
+              
+              const SizedBox(height: 40),
+              
+              // Title
+              const Text(
+                'Processing Payment',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'Poppins',
+                  color: Color(0xff1f2024),
+                ),
+              ),
+              
+              const SizedBox(height: 16),
+              
+              // Description
+              const Text(
+                'Please complete the payment on your phone.\nYou should receive an M-Pesa prompt shortly.',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: 'Poppins',
+                  color: Color(0xff71727a),
+                ),
+              ),
+              
+              const SizedBox(height: 40),
+              
+              // Connection Status
+              StreamBuilder<bool>(
+                stream: _webSocketService?.connectionStream,
+                builder: (context, snapshot) {
+                  final isConnected = snapshot.data ?? false;
+                  return Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: isConnected ? Colors.green.withOpacity(0.1) : Colors.red.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          width: 8,
+                          height: 8,
+                          decoration: BoxDecoration(
+                            color: isConnected ? Colors.green : Colors.red,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          isConnected ? 'Connected' : 'Connecting...',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontFamily: 'Poppins',
+                            color: isConnected ? Colors.green : Colors.red,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+              
+              const SizedBox(height: 40),
+              
+              // Resend Button or Countdown
+              if (_canResend)
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: _isLoading ? null : _resendSTKPush,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xff032541),
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: _isLoading
+                        ? const SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                            ),
+                          )
+                        : const Text(
+                            'Resend Payment Prompt',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              fontFamily: 'Poppins',
+                            ),
+                          ),
+                  ),
+                )
+              else
+                Text(
+                  'Resend Prompt: $_resendCountdown seconds',
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Poppins',
+                    color: Color(0xff71727a),
+                  ),
+                ),
+              
+              const SizedBox(height: 24),
+              
+              // Cancel Button
+              TextButton(
+                onPressed: () {
+                  widget.onCancel?.call();
+                  Navigator.of(context).pop();
+                },
+                child: const Text(
+                  'Cancel Payment',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Poppins',
+                    color: Color(0xff71727a),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

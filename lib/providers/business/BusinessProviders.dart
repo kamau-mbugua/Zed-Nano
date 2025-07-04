@@ -63,6 +63,26 @@ class BusinessProviders extends BaseProvider {
     return finalResponseModel;
   }
 
+  Future<ResponseModel<PushStkResponse>> doInitiateKcbStkPush(
+      {required Map<String, dynamic> requestData,
+      required BuildContext context}) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.doInitiateKcbStkPush(requestData: requestData), context);
+
+    ResponseModel<PushStkResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<PushStkResponse>(
+          true, responseModel.message!, PushStkResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<PushStkResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
   Future<ResponseModel<CommonResponse>> activateFreeTrialPlan(
       {required Map<String, dynamic> requestData,
       required BuildContext context}) async {

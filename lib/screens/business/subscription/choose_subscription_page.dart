@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
+import 'package:zed_nano/models/business/BusinessDetails.dart';
 import 'package:zed_nano/models/listbillingplan_packages/BillingPlanPackagesResponse.dart';
 import 'package:zed_nano/models/createbillingInvoice/CreateBillingInvoiceResponse.dart';
 import 'package:zed_nano/providers/business/BusinessProviders.dart';
+import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/utils/Common.dart';
 
 class SubscriptionScreen extends StatefulWidget {
   final VoidCallback onNext, onSkip;
   final Function(CreateBillingInvoiceResponse) onInvoiceCreated;
+
+
 
   const SubscriptionScreen({
     Key? key, 
@@ -27,9 +31,12 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
 
   List<BillingPlanPackageGroup>? plans;
   String? noOfFreeTrialDays;
+  BusinessDetails? businessDetails;
+
 
   @override
   void initState() {
+    businessDetails = getAuthProvider(context).businessDetails;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       getBusinessPlanPackages();
     });
@@ -44,7 +51,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
       if (value.isSuccess) {
         var businessPlans = value.data?.response;
         setState(() {
-          noOfFreeTrialDays = value.data?.noOfFreeTrialDays;
+          noOfFreeTrialDays = value.data?.noOfFreeTrialDays.toString();
           plans = businessPlans;
         });
 
@@ -211,7 +218,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
                                     Text(
-                                      "${plan?.plans?[0]?.billingPeriodAmount ?? ''}",
+                                      "${businessDetails?.localCurrency ?? 'KSH'} ${plan?.plans?[0]?.billingPeriodAmount ?? ''}",
                                       style: const TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w600,
@@ -291,7 +298,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     outlineButton(
-                            text: 'Start ${noOfFreeTrialDays ?? 0} Free Trial',
+                            text: 'Start ${noOfFreeTrialDays ?? 0} Day Free Trial',
                             onTap: () {
                               activateFreeTrialPlan();
                             },

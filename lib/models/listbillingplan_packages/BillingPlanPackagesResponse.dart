@@ -3,7 +3,7 @@ class BillingPlanPackagesResponse {
   final String? message;
   final List<BillingPlanPackageGroup>? response;
   final String? businessCategory;
-  final String? noOfFreeTrialDays;
+  final int? noOfFreeTrialDays;
 
   BillingPlanPackagesResponse({
     this.status,
@@ -21,7 +21,7 @@ class BillingPlanPackagesResponse {
           ?.map((e) => BillingPlanPackageGroup.fromJson(e as Map<String, dynamic>))
           .toList(),
       businessCategory: json['businessCategory'] as String?,
-      noOfFreeTrialDays: json['noOfFreeTrialDays'] as String?,
+      noOfFreeTrialDays: json['noOfFreeTrialDays'] as int?,
     );
   }
 
