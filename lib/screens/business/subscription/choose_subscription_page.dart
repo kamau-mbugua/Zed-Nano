@@ -19,6 +19,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
   int selectedIndex = -1;
 
   List<BillingPlanPackageGroup>? plans;
+  String? noOfFreeTrialDays;
 
   @override
   void initState() {
@@ -36,6 +37,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
       if (value.isSuccess) {
         var businessPlans = value.data?.response;
         setState(() {
+          noOfFreeTrialDays = value.data?.noOfFreeTrialDays;
           plans = businessPlans;
         });
 
@@ -87,8 +89,8 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  const Text(
-                    'Enjoy a free 7-day trial period.',
+                  Text(
+                    'Enjoy a free ${noOfFreeTrialDays ?? 0} trial period.',
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w400,
@@ -242,7 +244,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     outlineButton(
-                            text: "Start 14-Day Free Trial",
+                            text: "Start ${noOfFreeTrialDays ?? 0} Free Trial",
                             onTap: () {
                               widget.onSkip();
                             },
