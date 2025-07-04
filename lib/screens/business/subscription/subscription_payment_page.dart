@@ -1,16 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:zed_nano/models/business/BusinessDetails.dart';
+import 'package:zed_nano/models/posLoginVersion2/login_response.dart';
+import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/widget/auth/input_fields.dart';
+import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/screens/widget/common/sub_category_picker.dart';
 import 'package:zed_nano/screens/widget/payment/card_number_field.dart';
 import 'package:zed_nano/utils/Common.dart';
+import 'package:zed_nano/models/createbillingInvoice/CreateBillingInvoiceResponse.dart';
+import 'package:zed_nano/screens/business/subscription/webview_payment_page.dart';
+import 'package:zed_nano/utils/extensions.dart';
 
 
 
 class CompleteSubscriptionScreen extends StatefulWidget {
   final VoidCallback onSkip;
+  final CreateBillingInvoiceResponse? invoiceData;
 
-  const CompleteSubscriptionScreen({super.key, required this.onSkip});
+  const CompleteSubscriptionScreen({
+    super.key, 
+    required this.onSkip,
+    this.invoiceData,
+  });
 
   @override
   State<CompleteSubscriptionScreen> createState() => _CompleteSubscriptionScreenState();
@@ -18,10 +30,67 @@ class CompleteSubscriptionScreen extends StatefulWidget {
 
 class _CompleteSubscriptionScreenState extends State<CompleteSubscriptionScreen> {
   String selectedPayment = 'Credit Card';
-  String selectedYear = '';
-  String selectedMonth = '';
 
   final List<String> paymentMethods = ['Credit Card', 'MPESA'];
+
+  LoginResponse? loginUserDetails;
+  BusinessDetails? businessDetails;
+  final TextEditingController countryCodeController = TextEditingController();
+  final TextEditingController phoneNumberController = TextEditingController();
+
+
+  @override
+  Future<void> initState() async {
+    loginUserDetails = getAuthProvider(context).loginResponse;
+    businessDetails = getAuthProvider(context).businessDetails;
+    super.initState();
+  }
+
+  void _launchWebViewPayment() {
+    if (widget.invoiceData == null) {
+      showCustomToast('Something went wrong');
+      return;
+    }
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => WebViewPaymentPage(
+          invoiceData: widget.invoiceData!,
+          userEmail: loginUserDetails?.email ?? '',
+          firstName: loginUserDetails?.username ?? '',
+          lastName: loginUserDetails?.username ?? '',
+          onPaymentComplete: () {
+            showCustomToast('Payment completed successfully!', isError: false);
+          },
+          onPaymentCancelled: () {
+            Navigator.pop(context);
+            showCustomToast('Payment was cancelled');
+          },
+        ),
+      ),
+    );
+  }
+
+
+  Future<void> _doMpesaStkPayment(String? phoneNumber) async {
+
+    Map<String, dynamic> data = {
+      'phone': phoneNumber,
+      'amount': widget.invoiceData?.amount,
+      'orderID': widget.invoiceData?.invoiceNumber
+    };
+
+    await getBusinessProvider(context).doPushStk(requestData:data, context: context)
+        .then((value) {
+      if (value.isSuccess) {
+
+      } else {
+        showCustomToast(value.message ?? 'Something went wrong');
+      }
+    });
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +108,7 @@ class _CompleteSubscriptionScreenState extends State<CompleteSubscriptionScreen>
           style: TextStyle(
             color: Color(0xff1f2024),
             fontWeight: FontWeight.w500,
-            fontFamily: "Poppins",
+            fontFamily: 'Poppins',
             fontSize: 16.0,
           ),
         ),
@@ -55,31 +124,31 @@ class _CompleteSubscriptionScreenState extends State<CompleteSubscriptionScreen>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      "Complete Your Subscription",
+                    const Text(
+                      'Complete Your Subscription',
                       style: TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.w600,
-                        fontFamily: "Poppins",
+                        fontFamily: 'Poppins',
                         color: Color(0xff1f2024),
                       ),
                     ),
                     const SizedBox(height: 12),
                     Text(
-                      "Enjoy a free 7-day trial period.",
+                      "Enjoy a free ${widget.invoiceData?.freeTrialDays ?? "0"} trial period.",
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w400,
-                        fontFamily: "Poppins",
+                        fontFamily: 'Poppins',
                         color: Color(0xff71727a),
                       ),
                     ),
                     const SizedBox(height: 24),
                     // Plan Box
                     Container(
-                      padding: EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: Color(0xfff5f7f8),
+                        color: const Color(0xfff5f7f8),
                         borderRadius: BorderRadius.circular(16),
                       ),
                       child: Row(
@@ -89,25 +158,25 @@ class _CompleteSubscriptionScreenState extends State<CompleteSubscriptionScreen>
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "Monthly Plan",
-                                  style: TextStyle(
+                                  widget.invoiceData?.billingPlanName ?? 'Monthly Plan',
+                                  style: const TextStyle(
                                       fontSize: 14,
                                       fontFamily: 'Poppins',
                                       fontWeight: FontWeight.w400,
                                       color: Color(0xff1f2024)),
                                 ),
-                                SizedBox(height: 4),
+                                const SizedBox(height: 4),
                                 Text(
-                                  "Next Billing: 20 July 2025",
-                                  style: TextStyle(
+                                  "Invoice: ${widget.invoiceData?.invoiceNumber ?? 'N/A'}",
+                                  style: const TextStyle(
                                       fontSize: 12,
                                       fontFamily: 'Poppins',
                                       color: Color(0xff71727a)),
                                 )
                               ]),
                           Text(
-                            "KES 1000.00",
-                            style: TextStyle(
+                            "KES ${widget.invoiceData?.amount?.toString() ?? '1000.00'}",
+                            style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
                               fontFamily: 'Poppins',
@@ -126,9 +195,25 @@ class _CompleteSubscriptionScreenState extends State<CompleteSubscriptionScreen>
 
                     // Subscribe Button
                     appButton(
-                        text: "Subscribe",
-                        onTap: () {
-                          widget.onSkip();
+                        text: 'Subscribe',
+                        onTap:()async{
+                          final phone = phoneNumberController.text;
+                          final selectedCountry = countryCodeController.text;
+
+                          if(selectedPayment == 'Credit Card'){
+                            _launchWebViewPayment();
+                          }else if(selectedPayment == 'MPESA'){
+                            if(!phone.isValidPhoneNumber){
+                              showCustomToast('Please enter a valid phone number');
+                              return;
+                            }
+                            final phoneNumber = '$selectedCountry$phone';
+
+                            await _doMpesaStkPayment(phoneNumber);
+
+                          }else{
+                            showCustomToast('Please select a payment method');
+                          }
                         },
                         context: context)
                         .paddingSymmetric(horizontal: 1),
@@ -144,7 +229,7 @@ class _CompleteSubscriptionScreenState extends State<CompleteSubscriptionScreen>
   }
 
   Widget _buildPaymentOption(String method) {
-    bool selected = selectedPayment == method;
+    final bool selected = selectedPayment == method;
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -152,12 +237,12 @@ class _CompleteSubscriptionScreenState extends State<CompleteSubscriptionScreen>
         });
       },
       child: AnimatedContainer(
-        duration: Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 300),
         margin: const EdgeInsets.symmetric(vertical: 8),
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           border: Border.all(
-            color: selected ? Color(0xffdcdcdc) : Color(0xffdcdcdc),
+            color: selected ? const Color(0xffdcdcdc) : const Color(0xffdcdcdc),
           ),
           borderRadius: BorderRadius.circular(5),
         ),
@@ -169,79 +254,33 @@ class _CompleteSubscriptionScreenState extends State<CompleteSubscriptionScreen>
                 Icon(
                   selected ? Icons.radio_button_checked : Icons.radio_button_off,
                   size: 20,
-                  color: selected ? Color(0xff032541) : Colors.grey,
+                  color: selected ? const Color(0xff032541) : Colors.grey,
                 ),
-                SizedBox(width: 12),
+                const SizedBox(width: 12),
                 Text(
                   method,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w600,
                     fontSize: 14,
-                    color: selected ? Color(0xff1f2024) : Color(0xff71727a),
+                    color: selected ? const Color(0xff1f2024) : const Color(0xff71727a),
                   ),
                 ),
               ],
             ),
             if (selected && method == 'Credit Card') ...[
-              const SizedBox(height: 16),
-              CardNumberField().paddingSymmetric(horizontal: 1),
-              const SizedBox(height: 12),
-              Row(
-                children: [
-                  Expanded(
-                    child:  SubCategoryPicker(
-                      label: 'Month',
-                      options: List.generate(
-                        12,
-                            (index) {
-                          final month = index + 1;
-                          return month.toString();
-                            }
-                      ),
-                      selectedValue: selectedMonth,
-                      onChanged: (value) {
-                        final selectedCat = value;
-                        setState(() {
-                          selectedMonth = selectedCat;
-                        });
-                      },
-                    ).paddingSymmetric(horizontal: 1),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child:  SubCategoryPicker(
-                      label: 'Year',
-                      options: List.generate(
-                        10,
-                            (index) {
-                          final year = DateTime.now().year + index;
-                          return year.toString();
-                            }
-                      ),
-                      selectedValue: selectedYear,
-                      onChanged: (value) {
-                        final selectedCat = value;
-                        setState(() {
-                          selectedYear = selectedCat;
-                        });
-                      },
-                    ).paddingSymmetric(horizontal: 1),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: const StyledTextField(
-                      textFieldType: TextFieldType.EMAIL,
-                      hintText: "CVV",
-                      maxLength: 3,  // Limits input to 50 characters
-                      showCounter: true,
-                    ).paddingSymmetric(horizontal: 1),
-                  )
-                ],
-              )
-            ]else if (selected && method == 'MPESA') ...[
+              // const SizedBox(height: 16),
+              // appButton(
+              //   text: "Pay with Credit Card",
+              //   onTap: _launchWebViewPayment,
+              //   context: context,
+              // ).paddingSymmetric(horizontal: 1),
+            ] else if (selected && method == 'MPESA') ...[
               10.height,
-              PhoneInputField().paddingSymmetric(horizontal: 2),
+              PhoneInputField(
+                controller: countryCodeController,
+                  codeController: countryCodeController,
+              ).paddingSymmetric(horizontal: 2),
             ]
           ],
         ),
@@ -256,7 +295,7 @@ class _CompleteSubscriptionScreenState extends State<CompleteSubscriptionScreen>
         height: 8,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
-          color: filled ? Color(0xff17ae7b) : Color(0xffe7e8ec),
+          color: filled ? const Color(0xff17ae7b) : const Color(0xffe7e8ec),
         ),
       ),
     );

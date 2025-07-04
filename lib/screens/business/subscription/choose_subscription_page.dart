@@ -2,14 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 import 'package:zed_nano/models/listbillingplan_packages/BillingPlanPackagesResponse.dart';
+import 'package:zed_nano/models/createbillingInvoice/CreateBillingInvoiceResponse.dart';
 import 'package:zed_nano/providers/business/BusinessProviders.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/utils/Common.dart';
 
 class SubscriptionScreen extends StatefulWidget {
   final VoidCallback onNext, onSkip;
+  final Function(CreateBillingInvoiceResponse) onInvoiceCreated;
 
-  const SubscriptionScreen({Key? key, required this.onNext, required this.onSkip}) : super(key: key);
+  const SubscriptionScreen({
+    Key? key, 
+    required this.onNext, 
+    required this.onSkip,
+    required this.onInvoiceCreated,
+  }) : super(key: key);
 
   @override
   State<SubscriptionScreen> createState() => _SubscriptionScreenState();
@@ -79,6 +86,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
         .then((value) async {
       if (value.isSuccess) {
         showCustomToast(value.message.toString(), isError: false);
+        widget.onInvoiceCreated(value.data!);
         widget.onNext();
       } else {
         showCustomToast(

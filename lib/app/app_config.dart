@@ -20,6 +20,17 @@ class AppConfig {
     }
   }
 
+  static String get webUrl {
+    switch (_flavor) {
+      case Flavor.production:
+        return 'https://portal.zed.business';
+      case Flavor.staging:
+        return 'https://zed.swerri.io';
+      case Flavor.development:
+        return 'https://dev.zed.business';
+    }
+  }
+
   static String get appName {
     switch (_flavor) {
       case Flavor.production:

@@ -8,6 +8,7 @@ class CreateBillingInvoiceResponse {
   final String? invoiceStatus;
   final String? billingPeriod;
   final String? billingPlanName;
+  final int? freeTrialDays;
 
   CreateBillingInvoiceResponse({
     this.status,
@@ -19,6 +20,7 @@ class CreateBillingInvoiceResponse {
     this.invoiceStatus,
     this.billingPeriod,
     this.billingPlanName,
+    this.freeTrialDays,
   });
 
   factory CreateBillingInvoiceResponse.fromJson(Map<String, dynamic> json) {
@@ -32,6 +34,7 @@ class CreateBillingInvoiceResponse {
       invoiceStatus: json['invoiceStatus'] as String?,
       billingPeriod: json['billingPeriod'] as String?,
       billingPlanName: json['billingPlanName'] as String?,
+      freeTrialDays: json['freeTrialDays'] as int?,
     );
   }
 
@@ -46,6 +49,7 @@ class CreateBillingInvoiceResponse {
       'invoiceStatus': invoiceStatus,
       'billingPeriod': billingPeriod,
       'billingPlanName': billingPlanName,
+      'freeTrialDays': freeTrialDays,
     };
   }
 }

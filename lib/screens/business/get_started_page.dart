@@ -6,6 +6,7 @@ import 'package:zed_nano/screens/business/subscription/choose_subscription_page.
 import 'package:zed_nano/screens/business/subscription/subscription_payment_page.dart';
 import 'package:zed_nano/screens/business/wifget/stepper_indicator.dart';
 import 'package:zed_nano/utils/Colors.dart';
+import 'package:zed_nano/models/createbillingInvoice/CreateBillingInvoiceResponse.dart';
 
 class GetStartedPage extends StatefulWidget {
   const GetStartedPage({super.key});
@@ -16,6 +17,7 @@ class GetStartedPage extends StatefulWidget {
 
 class _GetStartedPageState extends State<GetStartedPage> {
   int stepNumber = 0;
+  CreateBillingInvoiceResponse? invoiceData;
 
   void goToNextStep() {
     if (stepNumber < 3) {
@@ -23,6 +25,12 @@ class _GetStartedPageState extends State<GetStartedPage> {
         stepNumber += 1;
       });
     }
+  }
+
+  void handleInvoiceCreated(CreateBillingInvoiceResponse invoice) {
+    setState(() {
+      invoiceData = invoice;
+    });
   }
 
   void goSkip(){
@@ -37,8 +45,15 @@ class _GetStartedPageState extends State<GetStartedPage> {
     final pages = [
       CreateBusinessPage(onNext: goToNextStep),
       BusinessCreatedPreviewPage(onNext: goToNextStep),
-      SubscriptionScreen(onNext: goToNextStep, onSkip: goSkip),
-      CompleteSubscriptionScreen(onSkip: goSkip),
+      SubscriptionScreen(
+        onNext: goToNextStep, 
+        onSkip: goSkip,
+        onInvoiceCreated: handleInvoiceCreated,
+      ),
+      CompleteSubscriptionScreen(
+        onSkip: goSkip,
+        invoiceData: invoiceData,
+      ),
     ];
 
     return Scaffold(

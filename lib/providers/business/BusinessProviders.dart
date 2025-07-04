@@ -8,6 +8,7 @@ import 'package:path/path.dart' as p;
 import 'package:zed_nano/models/createbillingInvoice/CreateBillingInvoiceResponse.dart';
 import 'package:zed_nano/models/get_business_info/BusinessInfoResponse.dart';
 import 'package:zed_nano/models/listbillingplan_packages/BillingPlanPackagesResponse.dart';
+import 'package:zed_nano/models/pushstk/PushStkResponse.dart';
 import 'package:zed_nano/networking/base/api_helpers.dart';
 import 'package:zed_nano/models/common/CommonResponse.dart';
 import 'package:zed_nano/models/get_setup_status/SetupStatusResponse.dart';
@@ -37,6 +38,26 @@ class BusinessProviders extends BaseProvider {
     } else {
       finalResponseModel =
           ResponseModel<BusinessInfoResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
+  Future<ResponseModel<PushStkResponse>> doPushStk(
+      {required Map<String, dynamic> requestData,
+      required BuildContext context}) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.doPushStk(requestData: requestData), context);
+
+    ResponseModel<PushStkResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<PushStkResponse>(
+          true, responseModel.message!, PushStkResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<PushStkResponse>(false, responseModel.message!);
     }
 
     return finalResponseModel;
