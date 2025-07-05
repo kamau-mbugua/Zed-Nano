@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:zed_nano/app/app_initializer.dart';
+import 'package:zed_nano/screens/widget/common/common_widgets.dart';
 
-class SetupBottomSheet extends StatelessWidget {
-  final String step;
+class SetupStepBottomSheet extends StatelessWidget {
+  final String currentStep;
 
-  SetupBottomSheet({required this.step});
+  SetupStepBottomSheet({required this.currentStep});
 
   final List<String> steps = [
     "Create a Business",
@@ -13,162 +16,168 @@ class SetupBottomSheet extends StatelessWidget {
     "Setup Payment Methods",
   ];
 
-  int get activeStepIndex {
-    switch (step) {
-      case "Basic":
+  int get activeIndex {
+    switch (currentStep) {
+      case "basic":
         return 1;
-      case "Billing":
+      case "billing":
         return 2;
-      case "Category":
+      case "category":
         return 3;
-      case "Products":
+      case "products":
         return 4;
       default:
         return 0;
     }
   }
 
-  Color getIconColor(int index) {
-    if (index < activeStepIndex) return const Color(0xff17ae7b); // Completed (green)
-    if (index == activeStepIndex) return const Color(0xff032541); // Active (dark blue)
-    return const Color(0xffc5c6cc); // Inactive (gray)
+
+
+  double get getValue {
+    switch (currentStep) {
+      case "basic":
+        return 0.2;
+      case "billing":
+        return 0.4;
+      case "category":
+        return 0.6;
+      case "products":
+        return 0.8;
+      default:
+        return 1.0;
+    }
   }
 
-  Color getTextColor(int index) {
-    if (index < activeStepIndex || index == activeStepIndex) {
-      return const Color(0xff1f2024);
-    }
-    return const Color(0xffc5c6cc);
-  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(top: 72, bottom: 24),
-      child: Stack(
-        children: [
-          // Title Section
-          Positioned(
-            top: 0,
-            left: 16,
-            right: 16,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Complete Setup',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    fontFamily: 'Poppins',
-                    color: Color(0xff1f2024),
-                  ),
-                ),
-                Container(
-                  width: 24,
-                  height: 24,
-                  child: Stack(
-                    children: [
-                      Transform.rotate(
-                        angle: 1.57,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: Color(0xffffb37c),
-                              width: 5,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Transform.rotate(
-                        angle: 1.57,
-                        child: Container(
-                          margin: const EdgeInsets.only(left: 12),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: Color(0xffe86339),
-                              width: 5,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
+    return DraggableScrollableSheet(
+      initialChildSize: 0.9,
+      minChildSize: 0.9,
+      maxChildSize: 1.0,
+      builder: (context, scrollController) {
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
           ),
-
-          // Step Count and Description
-          Positioned(
-            top: 40,
-            left: 16,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                Text(
-                  '3 Steps Away',
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.w600,
-                    fontFamily: 'Poppins',
-                    color: Color(0xff1f2024),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Container(
+                  margin: const EdgeInsets.only(top: 16),
+                  width: 40,
+                  height: 5,
+                  decoration: BoxDecoration(
+                    color: const Color(0xffe0e0e0),
+                    borderRadius: BorderRadius.circular(2.5),
                   ),
                 ),
-                SizedBox(height: 4),
-                Text(
-                  'Select a step to begin.',
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: 'Poppins',
-                    color: Color(0xff71727a),
+              ), // Rest of the content
+               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Complete Setup',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      fontFamily: 'Poppins',
+                      color: Color(0xff1f2024),
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ),
-
-          // Step List
-          Positioned(
-            top: 96,
-            left: 0,
-            right: 0,
-            child: Column(
-              children: List.generate(steps.length, (index) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: Row(
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Icon(
+                        Icons.close,
+                        color: Color(0xff032541),
+                        size: 20),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(width: 16),
-                      Container(
-                        width: 18,
-                        height: 18,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: getIconColor(index),
-                        ),
-                      ),
-                      const SizedBox(width: 18),
                       Text(
-                        steps[index],
+                        '3 Steps Away',
                         style: TextStyle(
-                          fontSize: 14,
+                          fontSize: 28,
+                          fontWeight: FontWeight.w600,
+                          fontFamily: 'Poppins',
+                          color: Color(0xff1f2024),
+                        ),
+                      ),
+                      Text(
+                        'Select a step to begin.',
+                        style: TextStyle(
+                          fontSize: 12,
                           fontWeight: FontWeight.w400,
                           fontFamily: 'Poppins',
-                          color: getTextColor(index),
+                          color: Color(0xff71727a),
                         ),
-                      )
+                      ),
                     ],
                   ),
-                );
-              }),
-            ),
+                  CircularProgressIndicator(
+                    value: getValue,
+                    strokeWidth: 5,
+                    valueColor: const AlwaysStoppedAnimation(Color(0xffe86339)),
+                    backgroundColor: const Color(0xffffb37c),
+                  )
+                ],
+              ),
+
+
+              const SizedBox(height: 10),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.35,
+                child: ListView.builder(
+                  itemCount: steps.length,
+                  itemBuilder: (context, index) {
+                    return borderWidget(
+                      index: index,
+                      activeIndex: activeIndex,
+                      steps: steps,
+                      onTab: (index) {
+                        //get the step name
+                        String stepName = steps[index as int];
+                        switch (stepName) {
+                          case "Create a Business":
+                            logger.d("Create a Business" );
+                            break;
+                          case "Settup Billing":
+                            logger.d("Settup Billing" );
+                            break;
+                          case "Add Categories":
+                            logger.d("Add Categories" );
+                            break;
+                          case "Add Products and Services":
+                            logger.d("Add Products and Services" );
+                            break;
+                          case "Setup Payment Methods":
+                            logger.d("Setup Payment Methods" );
+                            break;
+                          default:
+                            break;
+                        }
+                      },
+                    );
+                  },
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

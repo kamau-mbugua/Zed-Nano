@@ -40,7 +40,7 @@ const Color grey900 = Color(0xFF212121);
 const Color inactiveButton = Color(0xFFE8E9F1);
 const Color lightBlue = Color(0xFFE7F1FF);
 const Color lightOrange = Color(0xFFFFF3E6);
-const Color lightGreen = Color(0xFFE8F7F2);
+const Color lightGreenColor = Color(0xFFE8F7F2);
 const Color orange = Color(0xFFE86339);
 const Color lightOrange2 = Color(0xFFFFB37C);
 const Color lightRed = Color(0xFFED9AA2);
@@ -48,6 +48,8 @@ const Color lightGrey = Color(0xFFF2F4F5);
 const Color lightBackground = Color(0xFFF8F9FE);
 const Color mint = Color(0xFF8BD7BD);
 const Color darkGreyColor = Color(0xFF1F2024);
+const Color darkBlueColor = Color(0xff032541);
+const Color innactiveBorder = Color(0xffc5c6cc);
 
 // Transparent
 const Color transparent = Color(0x00000000);

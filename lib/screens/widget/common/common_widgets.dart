@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -135,6 +136,93 @@ Widget rfCommonCachedNetworkImage(
   } else {
     return Image.asset(url, height: height, width: width, fit: fit, color: color, alignment: alignment ?? Alignment.center).cornerRadiusWithClipRRect(radius ?? defaultRadius);
   }
+}
+
+
+
+
+Widget borderWidget({
+  int? activeIndex,
+  int? index,
+  List<String>? steps,
+  Function(dynamic index)? onTab
+}) {
+
+  String getIconAsset(int index) {
+    if (index < activeIndex!) {
+      return 'assets/icons/check_completed.svg'; // green
+    } else if (index == activeIndex) {
+      return 'assets/icons/check_current.svg'; // navy blue
+    } else {
+      return 'assets/icons/check_future.svg'; // grey
+    }
+  }
+
+  Color getTextColor(int index) {
+    if (index < activeIndex!) {
+      return const Color(0xff1f2024);
+    } else if (index == activeIndex) {
+      return const Color(0xff1f2024);
+    } else {
+      return const Color(0xffc5c6cc);
+    }
+  }
+
+  Color getBorderColor(int index) {
+    if (index < activeIndex!) {
+      return mint;
+    } else if (index == activeIndex) {
+      return darkBlueColor;
+    } else {
+      return innactiveBorder;
+    }
+  }
+  Color getBackgroundColor(int index) {
+    if (index < activeIndex!) {
+      return lightGreenColor;
+    } else if (index == activeIndex) {
+      return colorWhite;
+    } else {
+      return whiteColor;
+    }
+  }
+
+  return Padding(
+    padding: const EdgeInsets.only(bottom: 20),
+    child: GestureDetector(
+      onTap: () {
+        onTab!(index);
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+            horizontal: 12, vertical: 12),
+        decoration: BoxDecoration(
+            color: getBackgroundColor(index!),
+          border: Border.all(color: getBorderColor(index!)),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Row(
+          children: [
+            SvgPicture.asset(
+              getIconAsset(index!),
+              width: 20,
+              height: 20,
+            ),
+            const SizedBox(width: 16),
+            Text(
+              steps![index],
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
+                fontFamily: 'Poppins',
+                color: getTextColor(index),
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
 }
 
 Widget placeHolderWidget({double? height, double? width, BoxFit? fit, AlignmentGeometry? alignment, double? radius}) {
