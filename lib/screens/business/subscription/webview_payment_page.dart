@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/models/createbillingInvoice/CreateBillingInvoiceResponse.dart';
 import 'package:zed_nano/contants/AppConstants.dart';
 
@@ -8,6 +9,7 @@ class WebViewPaymentPage extends StatefulWidget {
   final String userEmail;
   final String firstName;
   final String lastName;
+  final String businessNumber;
   final VoidCallback onPaymentComplete;
   final VoidCallback onPaymentCancelled;
 
@@ -17,6 +19,7 @@ class WebViewPaymentPage extends StatefulWidget {
     required this.userEmail,
     required this.firstName,
     required this.lastName,
+    required this.businessNumber,
     required this.onPaymentComplete,
     required this.onPaymentCancelled,
   });
@@ -36,6 +39,35 @@ class _WebViewPaymentPageState extends State<WebViewPaymentPage> {
     _initializeWebView();
   }
 
+
+  bool _isPaymentCompleteUrl(String url) {
+    // Define patterns that indicate successful payment
+    // Check for specific success URLs from the payment gateway
+    return url.contains('success') ||
+        url.contains('completed') ||
+        url.contains('payment-success') ||
+        url.contains('payment-complete') ||
+        url.contains('thank-you') ||
+        url.contains('complete-payment');
+  }
+
+  bool _isPaymentCancelledUrl(String url) {
+    // Define patterns that indicate cancelled/failed payment
+    return url.contains('cancelled') ||
+        url.contains('failed') ||
+        url.contains('payment-cancelled') ||
+        url.contains('payment-failed') ||
+        url.contains('error') ||
+        url.contains('payment-error');
+  }
+
+  bool _isRedirectUrl(String url) {
+    // Check if this is a redirect URL that we should prevent
+    return url.contains('redirect') ||
+        url.contains('return') ||
+        url.contains('callback') ||
+        url.contains('payment-status');
+  }
   void _initializeWebView() {
     controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
@@ -59,16 +91,28 @@ class _WebViewPaymentPageState extends State<WebViewPaymentPage> {
             });
           },
           onNavigationRequest: (NavigationRequest request) {
-            // Listen for redirect URLs that indicate payment completion
-            if (_isPaymentCompleteUrl(request.url)) {
-              _handlePaymentComplete();
-              return NavigationDecision.prevent;
-            }
-            if (_isPaymentCancelledUrl(request.url)) {
-              _handlePaymentCancelled();
-              return NavigationDecision.prevent;
-            }
-            return NavigationDecision.navigate;
+            // // Prevent navigation to redirect URLs that might cause loops
+            // if (_isRedirectUrl(request.url)) {
+            //   return NavigationDecision.prevent;
+            // }
+            //
+            // // Listen for payment completion URLs
+            // if (_isPaymentCompleteUrl(request.url)) {
+            //   _handlePaymentComplete();
+            //   return NavigationDecision.prevent;
+            // }
+            //
+            // // Listen for payment cancelled/failed URLs
+            // if (_isPaymentCancelledUrl(request.url)) {
+            //   _handlePaymentCancelled();
+            //   return NavigationDecision.prevent;
+            // }
+            //
+            // // Allow navigation to other URLs
+            // return NavigationDecision.navigate;
+
+            _handlePaymentComplete();
+            return NavigationDecision.prevent;
           },
         ),
       )
@@ -79,39 +123,29 @@ class _WebViewPaymentPageState extends State<WebViewPaymentPage> {
     // Build the payment URL similar to your Kotlin implementation
     final baseUrl = AppConstants.webUrl; // Updated to use webUrl
     final amount = widget.invoiceData.amount?.toString() ?? '0';
-    final invoiceId = widget.invoiceData.invoiceId ?? '';
+    final invoiceId = widget.invoiceData.invoiceId ?? '';  // Use '0' as fallback for invalid invoice IDs
     final invoiceNumber = widget.invoiceData.invoiceNumber ?? '';
+    final businessNumber = widget.invoiceData.businessNumber ?? '';
+    logger.d('Invoice Number: $invoiceNumber');
     
     // URL encode the email
     final encodedEmail = Uri.encodeComponent(widget.userEmail);
     
     // Build the URL similar to your Kotlin pattern
-    final paymentUrl = '$baseUrl/cardpay/${widget.firstName}/${widget.lastName}/$amount/invoice/$encodedEmail/$invoiceId/$invoiceNumber';
+    // Include invoiceId only if it's not empty
+    // final invoiceIdSegment = invoiceId.isNotEmpty ? '/$invoiceId' : '';
+    final paymentUrl = '$baseUrl/cardpay/${widget.firstName}/${widget.lastName}/$amount/invoice/$encodedEmail/$invoiceNumber/${businessNumber}';
     
-    print('Payment URL: $paymentUrl'); // For debugging
+    logger.d('Payment URL: $paymentUrl'); // For debugging
     return paymentUrl;
-  }
-
-  bool _isPaymentCompleteUrl(String url) {
-    // Define patterns that indicate successful payment
-    // Adjust these patterns based on your payment gateway's redirect URLs
-    return url.contains('payment-success') || 
-           url.contains('payment-complete') ||
-           url.contains('success') ||
-           url.contains('completed');
-  }
-
-  bool _isPaymentCancelledUrl(String url) {
-    // Define patterns that indicate cancelled/failed payment
-    return url.contains('payment-cancelled') ||
-           url.contains('payment-failed') ||
-           url.contains('cancelled') ||
-           url.contains('failed');
   }
 
   void _handlePaymentComplete() {
     // Payment completed successfully
     widget.onPaymentComplete();
+    if (mounted) {
+      Navigator.of(context).pop();
+    }
   }
 
   void _handlePaymentCancelled() {

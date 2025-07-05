@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:nb_utils/nb_utils.dart' as nb_utils hide Color;
+import 'package:zed_nano/models/posLoginVersion2/login_response.dart';
+import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/routes/routes.dart';
 import 'package:zed_nano/screens/business/get_started_page.dart';
+import 'package:zed_nano/screens/business/setup_bottom_sheet.dart';
 import 'package:zed_nano/screens/widget/common/custom_app_bar.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
@@ -19,6 +22,15 @@ class AdminDashboardPage extends StatefulWidget {
 }
 
 class _AdminDashboardPageState extends State<AdminDashboardPage> {
+
+  LoginResponse? loginResponse;
+
+  @override
+  void initState() {
+    loginResponse = getAuthProvider(context).loginResponse;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,7 +49,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                   Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Hello Mary", style: TextStyle(fontSize: 28, fontWeight: FontWeight.w600, color: darkGreyColor)),
+                        Text("Hello ${loginResponse?.username ?? ''}", style: TextStyle(fontSize: 28, fontWeight: FontWeight.w600, color: darkGreyColor)),
                         SizedBox(height: 4),
                         Text("We are glad to have you with us.", style: TextStyle(fontSize: 12, color: textSecondary)),
                       ]),
@@ -57,23 +69,35 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                 ],
               ),
               10.height,
-              Container(
-                padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                    border: Border.all(color: Color(0xffffb37c)),
-                    borderRadius: BorderRadius.circular(10)),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text("Complete setting up your business",
-                        style: TextStyle(fontSize: 14, color: darkGreyColor)),
-                    CircularProgressIndicator(
-                      value: 0.5,
-                      strokeWidth: 5,
-                      valueColor: AlwaysStoppedAnimation(Color(0xffe86339)),
-                      backgroundColor: Color(0xffffb37c),
-                    )
-                  ],
+              GestureDetector(
+                onTap: () {
+                  showModalBottomSheet(
+                    context: context,
+                    backgroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+                    ),
+                    builder: (context) => SetupBottomSheet(step: "Billing"),
+                  );
+                },
+                child: Container(
+                  padding: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                      border: Border.all(color: Color(0xffffb37c)),
+                      borderRadius: BorderRadius.circular(10)),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("Complete setting up your business",
+                          style: TextStyle(fontSize: 14, color: darkGreyColor)),
+                      CircularProgressIndicator(
+                        value: 0.5,
+                        strokeWidth: 5,
+                        valueColor: AlwaysStoppedAnimation(Color(0xffe86339)),
+                        backgroundColor: Color(0xffffb37c),
+                      )
+                    ],
+                  ),
                 ),
               ),
               10.height,

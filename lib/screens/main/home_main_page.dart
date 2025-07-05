@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:zed_nano/providers/helpers/providers_helpers.dart';
-import 'package:zed_nano/screens/business/subscription/activating_trial_screen.dart';
+import 'package:provider/provider.dart';
 import 'package:zed_nano/screens/main/pages/admin/admin_dashboard_page.dart';
 import 'package:zed_nano/screens/main/pages/common/p_o_s_pages.dart';
 import 'package:zed_nano/screens/main/welcome_setup_screen.dart';
@@ -9,9 +8,10 @@ import 'package:zed_nano/screens/widgets/nav_bar_item.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/Images.dart';
+import 'package:zed_nano/viewmodels/WorkflowViewModel.dart';
 
 class HomeMainPage extends StatefulWidget {
-  const HomeMainPage({Key? key}) : super(key: key);
+  const HomeMainPage({super.key});
 
   @override
   _HomeMainPageState createState() => _HomeMainPageState();
@@ -19,7 +19,16 @@ class HomeMainPage extends StatefulWidget {
 
 class _HomeMainPageState extends State<HomeMainPage> {
   int selectedIndex = 0;
-  bool _showBusinessSetup = false; // flag to decide which UI to display
+
+  @override
+  void initState() {
+    super.initState();
+    // Run API calls after first frame to ensure context is available
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<WorkflowViewModel>(context, listen: false)
+      .skipSetup(context);
+    });
+  }
 
   void onItemTapped(int index) {
     setState(() {
@@ -27,44 +36,15 @@ class _HomeMainPageState extends State<HomeMainPage> {
     });
   }
 
-  @override
-  void initState() {
-    super.initState();
-    // Run API calls after first frame to ensure context is available
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      getTokenAfterInvite();
-    });
+  List<Widget> _buildScreens() {
+    return [
+      const AdminDashboardPage(),
+      const POSPages(),
+      const ReportsListPage(),
+    ];
   }
 
-  Future<void> getTokenAfterInvite() async {
-    final authProvider = getAuthProvider(context);
-    if (authProvider.isLoggedIn) {
-      final businessProvider = getBusinessProvider(context);
-      final requestData = <String, dynamic>{};
-      await authProvider.getTokenAfterInvite(requestData: requestData, context: context);
-
-      await businessProvider.getSetupStatus(context: context).then((value) {
-        if (value.isSuccess) {
-          final response = value.data!;
-
-          setState(() {
-            _showBusinessSetup = response.data?.workflowState == null;
-          });
-        }
-      });
-    }
-
-
-
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // If business setup is required show the setup page directly
-    if (_showBusinessSetup) {
-      return const WelcomeSetupScreen();
-    }
-
+  Widget _buildBottomNavigationBar() {
     final adminNavItems = <BottomNavigationBarItem>[
       NavBarItem.create(
         label: 'Home',
@@ -80,31 +60,37 @@ class _HomeMainPageState extends State<HomeMainPage> {
       ),
     ];
 
-    List<Widget> pages;
-    List<BottomNavigationBarItem> navItems;
+    return BottomNavigationBar(
+      type: BottomNavigationBarType.fixed,
+      elevation: 4,
+      backgroundColor: colorBackground,
+      selectedItemColor: const Color(0xFF1F2024),
+      unselectedItemColor: const Color(0xFF71727A),
+      currentIndex: selectedIndex,
+      selectedFontSize: 12,
+      unselectedFontSize: 13,
+      onTap: onItemTapped,
+      items: adminNavItems,
+    );
+  }
 
-    pages = [
-      const AdminDashboardPage(),
-      const POSPages(),
-      const ReportsListPage(),
-    ];
-    navItems = adminNavItems;
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<WorkflowViewModel>(
+      builder: (context, viewModel, _) {
+        if (viewModel.showBusinessSetup) {
+          return const WelcomeSetupScreen();
+        }
 
-    return Scaffold(
-      backgroundColor: getScaffoldColor(),
-      body: pages[selectedIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        elevation: 4,
-        backgroundColor: colorBackground,
-        selectedItemColor: const Color(0xFF1F2024),
-        unselectedItemColor: const Color(0xFF71727A),
-        currentIndex: selectedIndex,
-        selectedFontSize: 12,
-        unselectedFontSize: 13,
-        onTap: onItemTapped,
-        items: navItems,
-      ),
+        return Scaffold(
+          backgroundColor: getScaffoldColor(),
+          body: IndexedStack(
+            index: selectedIndex,
+            children: _buildScreens(),
+          ),
+          bottomNavigationBar: _buildBottomNavigationBar(),
+        );
+      },
     );
   }
 }

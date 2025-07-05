@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:zed_nano/models/posLoginVersion2/login_response.dart';
+import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/business/get_started_page.dart';
 import 'package:zed_nano/screens/widget/common/custom_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/feature_card.dart';
@@ -7,8 +9,22 @@ import 'package:zed_nano/screens/widgets/drawer_widget.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/Images.dart';
 
-class WelcomeSetupScreen extends StatelessWidget {
+class WelcomeSetupScreen extends StatefulWidget {
   const WelcomeSetupScreen({super.key});
+
+  @override
+  State<WelcomeSetupScreen> createState() => _WelcomeSetupScreenState();
+}
+
+class _WelcomeSetupScreenState extends State<WelcomeSetupScreen> {
+
+  LoginResponse? loginResponse;
+
+  @override
+  void initState() {
+    loginResponse = getAuthProvider(context).loginResponse;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,8 +39,8 @@ class WelcomeSetupScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Header Greeting
-              const Text(
-                'Hello Mary',
+              Text(
+                'Hello ${loginResponse?.username ?? ''}',
                 style: TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.w600,

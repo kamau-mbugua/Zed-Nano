@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:zed_nano/app/app_initializer.dart';
+import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/routes/routes.dart';
 import 'package:zed_nano/screens/business/create_business/business_created_preview_page.dart';
 import 'package:zed_nano/screens/business/create_business/create_business_page.dart';
@@ -7,6 +10,7 @@ import 'package:zed_nano/screens/business/subscription/subscription_payment_page
 import 'package:zed_nano/screens/business/wifget/stepper_indicator.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/models/createbillingInvoice/CreateBillingInvoiceResponse.dart';
+import 'package:zed_nano/viewmodels/WorkflowViewModel.dart';
 
 class GetStartedPage extends StatefulWidget {
   const GetStartedPage({super.key});
@@ -33,11 +37,17 @@ class _GetStartedPageState extends State<GetStartedPage> {
     });
   }
 
-  void goSkip(){
-    Navigator.pop(context);
-    Navigator.pushNamed(context,
-        AppRoutes.getActivatingTrialRoute());
-
+  void goSkip() async {
+    try {
+      // Pop the current screen
+      Navigator.pop(context);
+      
+      // Get the ViewModel and handle the skip operation
+      final viewModel = Provider.of<WorkflowViewModel>(context, listen: false);
+      await viewModel.skipSetup(context);
+    } catch (e) {
+      logger.e('Error in goSkip: $e');
+    }
   }
 
   @override

@@ -54,6 +54,9 @@ class _CompleteSubscriptionScreenState extends State<CompleteSubscriptionScreen>
       return;
     }
 
+    logger.d('InvoiceData: ${widget.invoiceData?.toJson()}');
+    logger.d('businessDetails: ${businessDetails?.toJson()}');
+
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -62,6 +65,7 @@ class _CompleteSubscriptionScreenState extends State<CompleteSubscriptionScreen>
           userEmail: loginUserDetails?.email ?? '',
           firstName: loginUserDetails?.username ?? '',
           lastName: loginUserDetails?.username ?? '',
+          businessNumber: businessDetails?.businessNumber ?? '',
           onPaymentComplete: () {
             showCustomToast('Payment completed successfully!', isError: false);
           },
