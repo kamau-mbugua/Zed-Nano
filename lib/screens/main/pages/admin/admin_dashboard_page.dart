@@ -39,7 +39,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
       appBar: const CustomDashboardAppBar(),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -49,16 +49,16 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                   Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Hello ${loginResponse?.username ?? ''}", style: TextStyle(fontSize: 28, fontWeight: FontWeight.w600, color: darkGreyColor)),
-                        SizedBox(height: 4),
-                        Text("We are glad to have you with us.", style: TextStyle(fontSize: 12, color: textSecondary)),
+                        Text("Hello ${loginResponse?.username ?? ''}", style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w600, color: darkGreyColor)),
+                        const SizedBox(height: 4),
+                        const Text("We are glad to have you with us.", style: TextStyle(fontSize: 12, color: textSecondary)),
                       ]),
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                     decoration: BoxDecoration(
                         border: Border.all(color: accentRed), borderRadius: BorderRadius.circular(6)),
                     child: RichText(
-                      text: TextSpan(
+                      text: const TextSpan(
                         children: [
                           TextSpan(text: "14 ", style: TextStyle(color: accentRed, fontWeight: FontWeight.w600, fontSize: 16)),
                           TextSpan(text: "Days Trial Left", style: TextStyle(color: accentRed, fontSize: 10)),
@@ -74,18 +74,18 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                   showModalBottomSheet(
                     context: context,
                     backgroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
+                    shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
                     ),
                     builder: (context) => SetupBottomSheet(step: "Billing"),
                   );
                 },
                 child: Container(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                      border: Border.all(color: Color(0xffffb37c)),
+                      border: Border.all(color: const Color(0xffffb37c)),
                       borderRadius: BorderRadius.circular(10)),
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text("Complete setting up your business",
@@ -104,22 +104,22 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("Overview", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
+                  const Text("Overview", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                     decoration: BoxDecoration(
                       border: Border.all(color: Colors.grey.shade300),
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: DropdownButton<String>(
                       value: 'Today',
-                      underline: SizedBox(),
-                      icon: Icon(Icons.keyboard_arrow_down, size: 20),
+                      underline: const SizedBox(),
+                      icon: const Icon(Icons.keyboard_arrow_down, size: 20),
                       isDense: true,
                       items: ['Today', 'This Week', 'This Month']
                           .map((val) => DropdownMenuItem<String>(
                         value: val,
-                        child: Text(val, style: TextStyle(fontSize: 12, fontFamily: 'Poppins')),
+                        child: Text(val, style: const TextStyle(fontSize: 12, fontFamily: 'Poppins')),
                       ))
                           .toList(),
                       onChanged: (_) {},
@@ -137,7 +137,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                   return GridView.count(
                     crossAxisCount: 2,
                     shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     mainAxisSpacing: 16,
                     crossAxisSpacing: 16,
                     childAspectRatio: cardWidth / 120, // Maintain the height of 120
@@ -151,11 +151,11 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                 },
               ),
               10.height,
-              Text("Payment Summary", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
+              const Text("Payment Summary", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
               10.height,
               buildEmptyCard("Nothing here. For Now!", "Total sales for each payment method will be displayed here."),
               10.height,
-              Text("Recent Sales", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
+              const Text("Recent Sales", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
               buildEmptyCard("Nothing here. For Now!", "Recent sales will be displayed here."),
               10.height
 
@@ -167,8 +167,8 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
         },
-        label: Text('Sell', style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white)),
-        icon: Icon(Icons.lock, color: Colors.white),
+        label: const Text('Sell', style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white)),
+        icon: const Icon(Icons.lock, color: Colors.white),
         backgroundColor: appThemePrimary,
       ),
     );
