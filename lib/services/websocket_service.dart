@@ -115,7 +115,7 @@ class WebSocketService {
           final wsResponse = WsResponse.fromJson(jsonData as Map<String, dynamic>);
           _messageController!.add(wsResponse);
         } catch (e) {
-          // If not JSON, treat as plain text status message
+          // If message is not JSON, check if it's a simple status message
           final wsResponse = WsResponse(
             status: message.toLowerCase(),
             statusMessage: message,
@@ -132,6 +132,12 @@ class WebSocketService {
     _isConnected = false;
     _connectionController!.add(false);
     _heartbeatTimer?.cancel();
+    _channel?.sink.close();
+    _channel = null;
+  }
+
+  void close() {
+    _handleDisconnection();
   }
 
   void _startHeartbeat() {

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/app/app_initializer.dart';
+import 'package:zed_nano/routes/routes.dart';
+import 'package:zed_nano/screens/business/get_started_page.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
 
 class SetupStepBottomSheet extends StatelessWidget {
@@ -9,22 +12,22 @@ class SetupStepBottomSheet extends StatelessWidget {
   SetupStepBottomSheet({required this.currentStep});
 
   final List<String> steps = [
-    "Create a Business",
-    "Settup Billing",
-    "Add Categories",
-    "Add Products and Services",
-    "Setup Payment Methods",
+    'Create a Business',
+    'Setup Billing',
+    'Add Categories',
+    'Add Products and Services',
+    'Setup Payment Methods',
   ];
 
   int get activeIndex {
     switch (currentStep) {
-      case "basic":
+      case 'basic':
         return 1;
-      case "billing":
+      case 'billing':
         return 2;
-      case "category":
+      case 'category':
         return 3;
-      case "products":
+      case 'products':
         return 4;
       default:
         return 0;
@@ -35,13 +38,13 @@ class SetupStepBottomSheet extends StatelessWidget {
 
   double get getValue {
     switch (currentStep) {
-      case "basic":
+      case 'basic':
         return 0.2;
-      case "billing":
+      case 'billing':
         return 0.4;
-      case "category":
+      case 'category':
         return 0.6;
-      case "products":
+      case 'products':
         return 0.8;
       default:
         return 1.0;
@@ -151,20 +154,25 @@ class SetupStepBottomSheet extends StatelessWidget {
                         //get the step name
                         String stepName = steps[index as int];
                         switch (stepName) {
-                          case "Create a Business":
-                            logger.d("Create a Business" );
+                          case 'Create a Business':
+                            logger.d('Create a Business' );
                             break;
-                          case "Settup Billing":
-                            logger.d("Settup Billing" );
+                          case 'Setup Billing':
+                            const GetStartedPage(initialStep:2).launch(context);
+                            logger.d('Setup Billing' );
                             break;
-                          case "Add Categories":
-                            logger.d("Add Categories" );
+                          case 'Add Categories':
+                            logger.d('Add Categories' );
+                            Navigator.pushNamed(
+                                context, AppRoutes.getListCategoriesRoute());
                             break;
-                          case "Add Products and Services":
-                            logger.d("Add Products and Services" );
+                          case 'Add Products and Services':
+                            Navigator.pushNamed(
+                                context, AppRoutes.getListProductsAndServicesRoute());
+                            logger.d('Add Products and Services' );
                             break;
-                          case "Setup Payment Methods":
-                            logger.d("Setup Payment Methods" );
+                          case 'Setup Payment Methods':
+                            logger.d('Setup Payment Methods' );
                             break;
                           default:
                             break;

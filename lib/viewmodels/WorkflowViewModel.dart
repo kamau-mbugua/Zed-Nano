@@ -27,17 +27,20 @@ class WorkflowViewModel with ChangeNotifier {
       // Get token after invite
       if (authProvider.isLoggedIn) {
         await authProvider.getTokenAfterInvite(requestData: {}, context: context);
+        // Update workflow state
+        await businessProvider.getSetupStatus(context: context).then((value) {
+          if (value.isSuccess) {
+            final response = value.data!;
+            _showBusinessSetup = response.data?.workflowState == null;
+            setWorkflowState( response.data?.workflowState);
+            notifyListeners();
+          }
+        });
+      }else{
+        logger.i("User is not logged in");
       }
       
-      // Update workflow state
-      await businessProvider.getSetupStatus(context: context).then((value) {
-        if (value.isSuccess) {
-          final response = value.data!;
-          _showBusinessSetup = response.data?.workflowState == null;
-          setWorkflowState( response.data?.workflowState);
-          notifyListeners();
-        }
-      });
+     
     } catch (e) {
       logger.e('Error in skipSetup: $e');
     }

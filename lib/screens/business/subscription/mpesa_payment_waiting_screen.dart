@@ -30,7 +30,8 @@ class MpesaPaymentWaitingScreen extends StatefulWidget {
   });
 
   @override
-  State<MpesaPaymentWaitingScreen> createState() => _MpesaPaymentWaitingScreenState();
+  State<MpesaPaymentWaitingScreen> createState() =>
+      _MpesaPaymentWaitingScreenState();
 }
 
 class _MpesaPaymentWaitingScreenState extends State<MpesaPaymentWaitingScreen> {
@@ -40,7 +41,6 @@ class _MpesaPaymentWaitingScreenState extends State<MpesaPaymentWaitingScreen> {
   bool _canResend = false;
   bool _isLoading = false;
   String _userToken = '';
-
 
   @override
   void initState() {
@@ -52,7 +52,7 @@ class _MpesaPaymentWaitingScreenState extends State<MpesaPaymentWaitingScreen> {
 
   void _initializeWebSocket() {
     _webSocketService = WebSocketService();
-    
+
     // Listen to connection status
     _webSocketService!.connectionStream.listen((isConnected) {
       logger.d('WebSocket connection status: $isConnected');
@@ -67,61 +67,85 @@ class _MpesaPaymentWaitingScreenState extends State<MpesaPaymentWaitingScreen> {
     });
 
     // Connect to WebSocket
-    _webSocketService!.connect(widget.referenceNumber,userToken:_userToken);
+    _webSocketService!.connect(widget.referenceNumber, userToken: _userToken);
   }
 
   void _handleWebSocketMessage(WsResponse wsResponse) {
     if (!mounted) return;
 
-    logger.d('WebSocket message: ${wsResponse.status} - ${wsResponse.statusMessage}');
+    logger.d(
+        'WebSocket message: ${wsResponse.status} - ${wsResponse.statusMessage}');
 
     switch (wsResponse.status?.toLowerCase()) {
       case 'initial':
         // Initial state, do nothing
         break;
-        
+
       case 'cancelled':
         _handlePaymentResult(
           isSuccess: false,
           message: wsResponse.statusMessage ?? 'Payment was cancelled',
         );
         break;
-        
+
       case 'success':
         _handlePaymentResult(
           isSuccess: true,
           message: 'Payment completed successfully!',
         );
         break;
-        
+
       case 'timeout':
         _handlePaymentResult(
           isSuccess: false,
           message: wsResponse.statusMessage ?? 'Payment timed out',
         );
         break;
-        
+
       case 'insufficient':
         _handlePaymentResult(
           isSuccess: false,
           message: wsResponse.statusMessage ?? 'Insufficient funds',
         );
         break;
-        
+
       case 'wrongpin':
         _handlePaymentResult(
           isSuccess: false,
           message: wsResponse.statusMessage ?? 'Wrong PIN entered',
         );
         break;
-        
+
+      case 'failed':
+        // Stop WebSocket but keep screen open for specific error messages
+        _webSocketService?.close();
+
+        if (wsResponse.statusMessage?.toLowerCase() ==
+            'no response from user') {
+          // Don't close screen, just show resend button
+          setState(() {
+            _canResend = true;
+            _resendCountdown = 0; // Reset countdown
+          });
+          showCustomToast('No response from user. You can try again.',
+              isError: true);
+        } else {
+          // For other failed cases, close the screen
+          _handlePaymentResult(
+            isSuccess: false,
+            message: wsResponse.statusMessage ??
+                'Payment failed: Invalid initiator information',
+          );
+        }
+        break;
       default:
         logger.d('Unknown payment status: ${wsResponse.status}');
         break;
     }
   }
 
-  void _handlePaymentResult({required bool isSuccess, required String message}) {
+  void _handlePaymentResult(
+      {required bool isSuccess, required String message}) {
     if (!mounted) return;
 
     if (isSuccess) {
@@ -143,7 +167,7 @@ class _MpesaPaymentWaitingScreenState extends State<MpesaPaymentWaitingScreen> {
   void _startResendCountdown() {
     _canResend = false;
     _resendCountdown = 60;
-    
+
     _countdownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (mounted) {
         setState(() {
@@ -174,10 +198,12 @@ class _MpesaPaymentWaitingScreenState extends State<MpesaPaymentWaitingScreen> {
       );
 
       if (response.isSuccess) {
-        showCustomToast('You will receive a prompt on your phone', isError: false);
+        showCustomToast('You will receive a prompt on your phone',
+            isError: false);
         _startResendCountdown();
       } else {
-        showCustomToast(response.message ?? 'Failed to send payment prompt', isError: true);
+        showCustomToast(response.message ?? 'Failed to send payment prompt',
+            isError: true);
       }
     } catch (e) {
       showCustomToast('Failed to resend payment prompt', isError: true);
@@ -237,9 +263,9 @@ class _MpesaPaymentWaitingScreenState extends State<MpesaPaymentWaitingScreen> {
                 strokeWidth: 8,
                 duration: Duration(seconds: 2),
               ),
-              
+
               const SizedBox(height: 40),
-              
+
               // Title
               const Text(
                 'Processing Payment',
@@ -251,9 +277,9 @@ class _MpesaPaymentWaitingScreenState extends State<MpesaPaymentWaitingScreen> {
                   color: Color(0xff1f2024),
                 ),
               ),
-              
+
               const SizedBox(height: 16),
-              
+
               // Description
               const Text(
                 'Please complete the payment on your phone.\nYou should receive an M-Pesa prompt shortly.',
@@ -265,82 +291,31 @@ class _MpesaPaymentWaitingScreenState extends State<MpesaPaymentWaitingScreen> {
                   color: Color(0xff71727a),
                 ),
               ),
-              
-              const SizedBox(height: 40),
-              
-              // Connection Status
-              StreamBuilder<bool>(
-                stream: _webSocketService?.connectionStream,
-                builder: (context, snapshot) {
-                  final isConnected = snapshot.data ?? false;
-                  return Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: isConnected ? Colors.green.withOpacity(0.1) : Colors.red.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Container(
-                          width: 8,
-                          height: 8,
-                          decoration: BoxDecoration(
-                            color: isConnected ? Colors.green : Colors.red,
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          isConnected ? 'Connected' : 'Connecting...',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontFamily: 'Poppins',
-                            color: isConnected ? Colors.green : Colors.red,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-              
-              const SizedBox(height: 40),
-              
+              const SizedBox(height: 20),
               // Resend Button or Countdown
               if (_canResend)
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: _isLoading ? null : _resendSTKPush,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xff032541),
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    child: _isLoading
-                        ? const SizedBox(
-                            height: 20,
-                            width: 20,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                            ),
-                          )
-                        : const Text(
-                            'Resend Payment Prompt',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              fontFamily: 'Poppins',
-                            ),
-                          ),
-                  ),
-                )
+                appButton(
+                    text: "Resend Payment Prompt",
+                    onTap: () async {
+                      if (_isLoading) return;
+
+                      // Close existing WebSocket connection
+                      _webSocketService?.close();
+
+                      // Reset state
+                      setState(() {
+                        _isLoading = true;
+                        _canResend = false;
+                        _resendCountdown = 60;
+                      });
+
+                      // Reinitialize WebSocket
+                      _initializeWebSocket();
+
+                      // Resend STK push
+                      await _resendSTKPush();
+                    },
+                    context: context)
               else
                 Text(
                   'Resend Prompt: $_resendCountdown seconds',
@@ -351,25 +326,21 @@ class _MpesaPaymentWaitingScreenState extends State<MpesaPaymentWaitingScreen> {
                     color: Color(0xff71727a),
                   ),
                 ),
-              
+
               const SizedBox(height: 24),
-              
-              // Cancel Button
-              TextButton(
-                onPressed: () {
-                  widget.onCancel?.call();
-                  Navigator.of(context).pop();
-                },
-                child: const Text(
-                  'Cancel Payment',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    fontFamily: 'Poppins',
-                    color: Color(0xff71727a),
-                  ),
-                ),
-              ),
+
+              outlineButton(
+                  text: "Cancel Payment",
+                  onTap: () {
+                    // Stop WebSocket but keep screen open
+                    setState(() {
+                      _canResend = true;
+                      _resendCountdown = 0; // Reset countdown
+                    });
+                    _webSocketService?.close();
+                    widget.onCancel?.call();
+                  },
+                  context: context)
             ],
           ),
         ),

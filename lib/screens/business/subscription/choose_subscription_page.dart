@@ -145,7 +145,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                   const SizedBox(height: 8),
                   Text(
                     'Enjoy a free ${noOfFreeTrialDays ?? 0} trial period.',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w400,
                       fontFamily: 'Poppins',
@@ -199,11 +199,11 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                                           color: Color(0xff1f2024),
                                         ),
                                       ),
-                                        Visibility(
+                                        const Visibility(
                                           visible: false,
                                           child: Text(
                                             '0',
-                                            style: const TextStyle(
+                                            style: TextStyle(
                                               fontSize: 10,
                                               fontWeight: FontWeight.w400,
                                               fontFamily: 'Poppins',
@@ -245,12 +245,12 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                               top: -1,
                               right: 0,
                               child: Container(
-                                padding: EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+                                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
                                 decoration: BoxDecoration(
                                   color: Colors.green,
                                   borderRadius: BorderRadius.circular(12),
                                 ),
-                                child: Row(
+                                child: const Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Icon(
@@ -279,7 +279,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                   else ...[
                     Container(
                       height: 200,
-                      child: Center(
+                      child: const Center(
                         child: Text(
                           'No plans found',),
                       ),

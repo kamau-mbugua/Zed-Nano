@@ -5,10 +5,13 @@ import 'package:zed_nano/screens/auth/forget_password_screen.dart';
 import 'package:zed_nano/screens/auth/login_page.dart';
 import 'package:zed_nano/screens/auth/registration_page.dart';
 import 'package:zed_nano/screens/auth/set_new_pin_page.dart';
+import 'package:zed_nano/screens/business/get_started_page.dart';
 import 'package:zed_nano/screens/business/subscription/activating_trial_screen.dart';
+import 'package:zed_nano/screens/categories/list_categories_page.dart';
 import 'package:zed_nano/screens/main/home_main_page.dart';
 import 'package:zed_nano/screens/onboarding/onboarding_screen.dart';
 import 'package:zed_nano/screens/onboarding/splash_page.dart';
+import 'package:zed_nano/screens/products/list_categories_page.dart';
 
 class RouterHelper {
   static final FluroRouter router = FluroRouter();
@@ -45,6 +48,15 @@ class RouterHelper {
     },
   );
 
+  static final Handler _getStartedHandler = Handler(
+    handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
+      // Get the initial step from parameters if provided
+      final initialStepStr = params['initialStep']?.first;
+      final initialStep = initialStepStr != null ? int.tryParse(initialStepStr) : 0;
+      return GetStartedPage(initialStep: initialStep ?? 0);
+    },
+  );
+
   static final Handler _homeMainHandler = Handler(
     handlerFunc: (BuildContext? context, Map<String, List<String>> params) =>
         HomeMainPage(),
@@ -52,6 +64,14 @@ class RouterHelper {
   static final Handler _activatingTrialHandler = Handler(
     handlerFunc: (BuildContext? context, Map<String, List<String>> params) =>
         ActivatingTrialScreen(),
+  );
+  static final Handler _listCategoriesHandler = Handler(
+    handlerFunc: (BuildContext? context, Map<String, List<String>> params) =>
+        ListCategoriesPage(),
+  );
+  static final Handler _listProductsAndServicesHandler = Handler(
+    handlerFunc: (BuildContext? context, Map<String, List<String>> params) =>
+        ListProductsAndServicesPage(),
   );
 
   static void setupRouter() {
@@ -87,6 +107,16 @@ class RouterHelper {
       handler: _setPinHandler,
       transitionType: TransitionType.fadeIn,
     );
+    // router.define(
+    //   '${AppRoutes.getStartedRoute}/:initialStep',
+    //   handler: _getStartedHandler,
+    //   transitionType: TransitionType.fadeIn,
+    // );
+    // router.define(
+    //   AppRoutes.getStartedRoute,
+    //   handler: _getStartedHandler,
+    //   transitionType: TransitionType.fadeIn,
+    // );
     router.define(
       AppRoutes.homeMainRoute,
       handler: _homeMainHandler,
@@ -96,6 +126,17 @@ class RouterHelper {
     router.define(
       AppRoutes.activatingTrialRoute,
       handler: _activatingTrialHandler,
+      transitionType: TransitionType.fadeIn,
+    );
+
+    router.define(
+      AppRoutes.listCategoriesRoute,
+      handler: _listCategoriesHandler,
+      transitionType: TransitionType.fadeIn,
+    );
+    router.define(
+      AppRoutes.listProductsAndServicesRoute,
+      handler: _listProductsAndServicesHandler,
       transitionType: TransitionType.fadeIn,
     );
 

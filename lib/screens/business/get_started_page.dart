@@ -13,13 +13,24 @@ import 'package:zed_nano/models/createbillingInvoice/CreateBillingInvoiceRespons
 import 'package:zed_nano/viewmodels/WorkflowViewModel.dart';
 
 class GetStartedPage extends StatefulWidget {
-  const GetStartedPage({super.key});
+  final int initialStep;
+
+  const GetStartedPage({
+    super.key,
+    this.initialStep = 0,
+  });
 
   @override
   State<GetStartedPage> createState() => _GetStartedPageState();
 }
 
 class _GetStartedPageState extends State<GetStartedPage> {
+  @override
+  void initState() {
+    super.initState();
+    stepNumber = widget.initialStep;
+  }
+
   int stepNumber = 0;
   CreateBillingInvoiceResponse? invoiceData;
 

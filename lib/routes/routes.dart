@@ -7,6 +7,8 @@ class AppRoutes {
   static const String forgetPinRoute = '/forgetPinRoute';
   static const String setPinRoute = '/setPinRoute';
   static const String activatingTrialRoute = '/activatingTrialRoute';
+  static const String listCategoriesRoute = '/listCategoriesRoute';
+  static const String listProductsAndServicesRoute = '/listProductsAndServicesRoute';
 
   static String getHomeMainPageRoute() => homeMainRoute;
   static String getSplashPageRoute() => splashRoute;
@@ -16,5 +18,7 @@ class AppRoutes {
   static String getForgetPinRoutePageRoute() => forgetPinRoute;
   static String getSetPinRoutePageRoute() => setPinRoute;
   static String getActivatingTrialRoute() => activatingTrialRoute;
+  static String getListCategoriesRoute() => listCategoriesRoute;
+  static String getListProductsAndServicesRoute() => listProductsAndServicesRoute;
 
 }
