@@ -21,3 +21,4 @@ const acceptPayment = "assets/icons/acceptPayment.svg";
 const addProduct = "assets/icons/addProduct.svg";
 const sellQuicker = "assets/icons/sellQuicker.svg";
 const trackStockIcon= "assets/icons/trackStockIcon.svg";
+const arrowItem= "assets/icons/arrowItem.svg";

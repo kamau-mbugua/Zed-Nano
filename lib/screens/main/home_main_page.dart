@@ -8,6 +8,7 @@ import 'package:zed_nano/screens/widgets/nav_bar_item.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/Images.dart';
+import 'package:zed_nano/viewmodels/RefreshViewModel.dart';
 import 'package:zed_nano/viewmodels/WorkflowViewModel.dart';
 
 class HomeMainPage extends StatefulWidget {
@@ -19,6 +20,8 @@ class HomeMainPage extends StatefulWidget {
 
 class _HomeMainPageState extends State<HomeMainPage> {
   int selectedIndex = 0;
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -30,18 +33,75 @@ class _HomeMainPageState extends State<HomeMainPage> {
     });
   }
 
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
   void onItemTapped(int index) {
     setState(() {
       selectedIndex = index;
     });
   }
 
+  /// Handle the refresh action
+  Future<void> _handleRefresh() async {
+    final refreshViewModel = Provider.of<RefreshViewModel>(context, listen: false);
+    final workflowViewModel = Provider.of<WorkflowViewModel>(context, listen: false);
+    
+    // Start the refresh process
+    refreshViewModel.startRefresh();
+    
+    try {
+      // Refresh workflow state
+      await workflowViewModel.skipSetup(context);
+      // Mark specific pages as refreshed
+      refreshViewModel.refreshPage('dashboard');
+      refreshViewModel.refreshPage('pos');
+      refreshViewModel.refreshPage('reports');
+      
+    } catch (e) {
+      // Handle any errors
+    } finally {
+      // Complete the refresh process
+      refreshViewModel.completeRefresh();
+    }
+  }
+
+  /// Trigger refresh programmatically
+  void triggerRefresh() {
+    _refreshIndicatorKey.currentState?.show();
+  }
+
   List<Widget> _buildScreens() {
+    // Wrap each screen in a ScrollView to make RefreshIndicator work
     return [
-      const AdminDashboardPage(),
-      const POSPages(),
-      const ReportsListPage(),
+      _buildScrollableScreen(const AdminDashboardPage()),
+      _buildScrollableScreen(const POSPages()),
+      _buildScrollableScreen(const ReportsListPage()),
     ];
+  }
+
+  Widget _buildScrollableScreen(Widget screen) {
+    return NotificationListener<ScrollNotification>(
+      onNotification: (ScrollNotification scrollInfo) {
+        // Prevent nested scroll conflicts
+        return false;
+      },
+      child: SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        controller: _scrollController,
+        child: SizedBox(
+          // Make sure the content is at least as tall as the viewport
+          // to allow pulling even when content is small
+          height: MediaQuery.of(context).size.height - 
+                 kBottomNavigationBarHeight - 
+                 MediaQuery.of(context).padding.top,
+          child: screen,
+        ),
+      ),
+    );
   }
 
   Widget _buildBottomNavigationBar() {
@@ -76,17 +136,23 @@ class _HomeMainPageState extends State<HomeMainPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<WorkflowViewModel>(
-      builder: (context, viewModel, _) {
-        if (viewModel.showBusinessSetup) {
+    return Consumer2<WorkflowViewModel, RefreshViewModel>(
+      builder: (context, workflowViewModel, refreshViewModel, _) {
+        if (workflowViewModel.showBusinessSetup) {
           return const WelcomeSetupScreen();
         }
 
         return Scaffold(
           backgroundColor: getScaffoldColor(),
-          body: IndexedStack(
-            index: selectedIndex,
-            children: _buildScreens(),
+          body: RefreshIndicator(
+            key: _refreshIndicatorKey,
+            onRefresh: _handleRefresh,
+            color: const Color(0xffe86339),
+            backgroundColor: Colors.white,
+            child: IndexedStack(
+              index: selectedIndex,
+              children: _buildScreens(),
+            ),
           ),
           bottomNavigationBar: _buildBottomNavigationBar(),
         );

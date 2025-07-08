@@ -15,6 +15,7 @@ import 'package:zed_nano/providers/business/BusinessProviders.dart';
 import 'package:zed_nano/providers/common/SplashProvider.dart';
 import 'package:zed_nano/providers/auth/authenticated_app_providers.dart';
 import 'package:zed_nano/providers/common/theme_provider.dart';
+import 'package:zed_nano/viewmodels/RefreshViewModel.dart';
 import 'package:zed_nano/viewmodels/WorkflowViewModel.dart';
 import 'package:zed_nano/services/firebase_service.dart';
 import 'package:zed_nano/utils/app_loading.dart';
@@ -95,6 +96,7 @@ Future<void> initializeApp(Flavor flavor) async {
         ChangeNotifierProvider(create: (context) => di.sl<ThemeProvider>()),
         ChangeNotifierProvider(create: (context) => di.sl<BusinessProviders>()),
         ChangeNotifierProvider(create: (_) => WorkflowViewModel()),
+        ChangeNotifierProvider(create: (_) => RefreshViewModel()),
       ],
       child: App(navigatorKey: navigatorKey),
     ),

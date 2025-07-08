@@ -7,7 +7,8 @@ import 'package:zed_nano/models/posLoginVersion2/login_response.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/routes/routes.dart';
 import 'package:zed_nano/screens/business/get_started_page.dart';
-import 'package:zed_nano/screens/business/setup_bottom_sheet.dart';
+import 'package:zed_nano/screens/business/bottomsheets/setup_bottom_sheet.dart';
+import 'package:zed_nano/screens/widget/common/bottom_sheet_helper.dart';
 import 'package:zed_nano/screens/widget/common/custom_app_bar.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
@@ -92,15 +93,24 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                   ),
                   10.height,
                   GestureDetector(
-                    onTap: () {
-                      showModalBottomSheet(
-                        context: context,
-                        backgroundColor: Colors.white,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-                        ),
-                        builder: (context) => SetupStepBottomSheet(currentStep: viewModel.workflowState!.toLowerCase()),
+                    onTap: () async {
+
+                      if (viewModel.workflowState == null) {
+                        await viewModel.skipSetup(context);
+                        return;
+                      }
+                      BottomSheetHelper.showSetupStepBottomSheet(
+                          context,
+                        currentStep: viewModel.workflowState!.toLowerCase(),
                       );
+                      // showModalBottomSheet(
+                      //   context: context,
+                      //   backgroundColor: Colors.white,
+                      //   shape: const RoundedRectangleBorder(
+                      //     borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+                      //   ),
+                      //   builder: (context) => SetupStepBottomSheet(currentStep: viewModel.workflowState!.toLowerCase()),
+                      // );
                     },
                     child: Container(
                       padding: const EdgeInsets.all(10),

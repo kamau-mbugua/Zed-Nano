@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
+import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 
 class WorkflowViewModel with ChangeNotifier {
   bool _showBusinessSetup = false;
@@ -34,6 +35,9 @@ class WorkflowViewModel with ChangeNotifier {
             _showBusinessSetup = response.data?.workflowState == null;
             setWorkflowState( response.data?.workflowState);
             notifyListeners();
+          }else{
+            showCustomToast(value.message);
+            logger.e("Failed to get setup status: ${value.message}");
           }
         });
       }else{

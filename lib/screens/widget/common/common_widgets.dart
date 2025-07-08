@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:zed_nano/utils/Images.dart';
 
 import '../../../utils/Colors.dart';
 import '../../../utils/Constants.dart';
@@ -33,7 +34,7 @@ Decoration shadowWidget(BuildContext context) {
   return boxDecorationWithRoundedCorners(
     backgroundColor: context.cardColor,
     boxShadow: [
-      BoxShadow(spreadRadius: 0.4, blurRadius: 3, color: gray.withOpacity(0.1), offset: Offset(1, 6)),
+      BoxShadow(spreadRadius: 0.4, blurRadius: 3, color: gray.withOpacity(0.1), offset: const Offset(1, 6)),
     ],
   );
 }
@@ -45,14 +46,14 @@ InputDecoration rfInputDecoration({Widget? suffixIcon, String? hintText, Widget?
         borderRadius: BorderRadius.circular(8.0),
         borderSide: BorderSide(color: gray.withOpacity(0.4)),
       ),
-      contentPadding: EdgeInsets.symmetric(vertical: 6, horizontal: 16),
+      contentPadding: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
       hintText: hintText,
       hintStyle: secondaryTextStyle(),
       labelStyle: secondaryTextStyle(),
       labelText: showLableText.validate() ? lableText! : null,
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8.0),
-        borderSide: BorderSide(color: appThemePrimary),
+        borderSide: const BorderSide(color: appThemePrimary),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8.0),
@@ -81,22 +82,22 @@ PreferredSizeWidget commonAppBarWidget(BuildContext context, {String? title,
     preferredSize: Size.fromHeight(appBarHeight ?? 100.0),
     child: AppBar(
       title: Text(title!, style: boldTextStyle(color: whiteColor, size: 20)),
-      systemOverlayStyle: SystemUiOverlayStyle(statusBarIconBrightness: Brightness.light),
+      systemOverlayStyle: const SystemUiOverlayStyle(statusBarIconBrightness: Brightness.light),
       backgroundColor: backgroundColor ?? appThemePrimary,
       centerTitle: true,
       leading: showLeadingIcon.validate()
-          ? SizedBox()
+          ? const SizedBox()
           : IconButton(
         onPressed: () {
           finish(context);
         },
-        icon: Icon(Icons.arrow_back_ios_new, color: whiteColor, size: 18),
+        icon: const Icon(Icons.arrow_back_ios_new, color: whiteColor, size: 18),
         color: iconColor ?? appThemePrimary,
       ),
       elevation: 0,
       shape: roundCornerShape.validate()
-          ? RoundedRectangleBorder(borderRadius: BorderRadius.vertical(bottom: Radius.circular(12)))
-          : RoundedRectangleBorder(
+          ? const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(bottom: Radius.circular(12)))
+          : const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.zero),
       ),
     ),
@@ -129,7 +130,7 @@ Widget rfCommonCachedNetworkImage(
         return placeHolderWidget(height: height, width: width, fit: fit, alignment: alignment, radius: radius);
       },
       placeholder: (_, s) {
-        if (!usePlaceholderIfUrlEmpty) return SizedBox();
+        if (!usePlaceholderIfUrlEmpty) return const SizedBox();
         return placeHolderWidget(height: height, width: width, fit: fit, alignment: alignment, radius: radius);
       },
     );
@@ -217,6 +218,53 @@ Widget borderWidget({
                 fontFamily: 'Poppins',
                 color: getTextColor(index),
               ),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
+}
+
+
+Widget arrowListItem({
+  int? activeIndex,
+  int? index,
+  List<String>? steps,
+  Function(dynamic index)? onTab
+}) {
+
+  return Padding(
+    padding: const EdgeInsets.only(bottom: 20),
+    child: GestureDetector(
+      onTap: () {
+        onTab!(index);
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+            horizontal: 12, vertical: 12),
+        decoration: BoxDecoration(
+            color: whiteColor,
+          border: Border.all(color: innactiveBorder),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              steps![index!],
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
+                fontFamily: 'Poppins',
+                color: darkGreyColor,
+              ),
+            ),
+            SvgPicture.asset(
+              arrowItem,
+              width: 20,
+              height: 20,
+              color: darkGreyColor
             ),
           ],
         ),
