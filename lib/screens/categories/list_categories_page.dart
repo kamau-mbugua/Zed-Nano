@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:zed_nano/utils/GifsImages.dart';
+import 'tabs/product_categories_tab.dart';
+import 'tabs/service_categories_tab.dart';
 
 class ListCategoriesPage extends StatefulWidget {
   const ListCategoriesPage({super.key});
@@ -8,7 +11,7 @@ class ListCategoriesPage extends StatefulWidget {
 }
 
 class _ListCategoriesPageState extends State<ListCategoriesPage> {
-  int selectedTab = 1; // 0 = Product, 1 = Service
+  int selectedTab = 0; // 0 = Product, 1 = Service
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +20,7 @@ class _ListCategoriesPageState extends State<ListCategoriesPage> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.white,
-        leading: BackButton(color: const Color(0xFF1F2024)),
+        leading: const BackButton(color: Color(0xFF1F2024)),
         title: const Text(
           'Categories',
           style: TextStyle(
@@ -42,67 +45,34 @@ class _ListCategoriesPageState extends State<ListCategoriesPage> {
               ),
               child: Row(
                 children: [
-                  _buildTab("Product Categories", 0),
-                  _buildTab("Service Categories", 1),
+                  _buildTab('Product Categories', 0),
+                  _buildTab('Service Categories', 1),
                 ],
               ),
             ),
           ),
-          const SizedBox(height: 80),
-          // Empty State
-          Center(
-            child: Column(
-              children: [
-                Image.asset(
-                  'assets/images/empty_categories.png', // replace with your actual asset
-                  width: 135,
-                  height: 135,
-                ),
-                const SizedBox(height: 16),
-                const Text(
-                  "It’s empty, over here.",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                    fontFamily: 'Poppins',
-                    color: Color(0xFF1F2024),
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 8),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 32),
-                  child: Text(
-                    "No service categories in your business, yet! Add to view them here.",
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w400,
-                      fontFamily: 'Poppins',
-                      color: Color(0xFF71727A),
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ],
-            ),
+          const SizedBox(height: 16),
+          // Tab Content
+          Expanded(
+            child: selectedTab == 0 
+                ? const ProductCategoriesTab()
+                : const ServiceCategoriesTab(),
           ),
         ],
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          // Handle add
-        },
+      )
+    );
+  }
+
+  void _handleAddCategory() {
+    // Navigate to add category page based on selected tab
+    final categoryType = selectedTab == 0 ? 'product' : 'service';
+    // Navigator.pushNamed(context, '/add-category', arguments: categoryType);
+    
+    // For now, show a snackbar
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Add ${categoryType} category'),
         backgroundColor: const Color(0xFF032541),
-        icon: const Icon(Icons.add, size: 20),
-        label: const Text(
-          "Add",
-          style: TextStyle(
-            fontFamily: 'Poppins',
-            fontWeight: FontWeight.w600,
-            fontSize: 12,
-            color: Colors.white,
-          ),
-        ),
       ),
     );
   }
