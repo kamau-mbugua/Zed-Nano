@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 Widget buildSearchBar({
   required TextEditingController controller,
   required Function(String) onChanged,
+  String hint = 'Search category',
 }) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -30,7 +31,7 @@ Widget buildSearchBar({
           decoration: InputDecoration(
             isDense: true, // Makes the input field more compact
             contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            hintText: 'Search category',
+            hintText: hint,
             hintStyle: const TextStyle(
               color: Colors.grey,
               fontFamily: 'Poppins',

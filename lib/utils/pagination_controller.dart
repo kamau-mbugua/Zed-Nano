@@ -9,11 +9,14 @@ class PaginationController<T> extends ChangeNotifier {
   bool _isLoading = false;
   final List<T> _items = [];
   final PagingController<int, T> pagingController;
-
+  bool _isDisposed = false; // Track disposed state
+  
   PaginationController({required this.fetchItems, this.pageSize = 100})
       : pagingController = PagingController(firstPageKey: 0) {
     pagingController.addPageRequestListener((pageKey) {
-      fetchNextPage(pageKey);
+      if (!_isDisposed) {
+        fetchNextPage(pageKey);
+      }
     });
     // We don't auto-fetch anymore - the caller will explicitly call fetchFirstPage()
   }
@@ -23,19 +26,30 @@ class PaginationController<T> extends ChangeNotifier {
 
   // Call this method explicitly after the build is complete
   void fetchFirstPage() {
+    if (_isDisposed) return;
+    
     if (pagingController.nextPageKey == 0) {
       pagingController.notifyPageRequestListeners(pagingController.nextPageKey!);
     }
   }
 
   Future<void> fetchNextPage(int pageKey) async {
-    if (_isLoading) return;
+    if (_isLoading || _isDisposed) return;
 
     _isLoading = true;
-    Future.microtask(() => notifyListeners()); // Notify after the current frame
+    if (!_isDisposed) {
+      Future.microtask(() => notifyListeners()); // Notify after the current frame
+    }
 
     try {
+      // Check again before starting the network request
+      if (_isDisposed) return;
+      
       List<T> newItems = await fetchItems(_currentPage, pageSize);
+      
+      // Check again after the network request completes
+      if (_isDisposed) return;
+      
       final isLastPage = newItems.length < pageSize;
       if (isLastPage) {
         pagingController.appendLastPage(newItems);
@@ -45,22 +59,35 @@ class PaginationController<T> extends ChangeNotifier {
       }
       _currentPage++;
     } catch (error) {
+      if (_isDisposed) return;
+      
       logger.e('PaginationController Error fetching next page: $error');
       pagingController.error = error;
     }
 
     _isLoading = false;
-    Future.microtask(() => notifyListeners()); // Notify after the current frame
+    if (!_isDisposed) {
+      Future.microtask(() => notifyListeners()); // Notify after the current frame
+    }
   }
 
   Future<void> refresh() async {
+    if (_isDisposed) return;
+    
     _currentPage = 0;
     _items.clear();
     pagingController.refresh();
   }
+
+  // Method to manually pause/resume operations
+  void pauseOperations() {
+    _isLoading = false;
+  }
   
   @override
   void dispose() {
+    _isDisposed = true; // Mark as disposed first
+    _isLoading = false; // Stop any loading state
     pagingController.dispose();
     super.dispose();
   }

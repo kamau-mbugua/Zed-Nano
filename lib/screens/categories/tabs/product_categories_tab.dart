@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'dart:async';
 import 'package:zed_nano/models/listCategories/ListCategoriesResponse.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/widget/common/categories_widget.dart';
@@ -21,6 +22,7 @@ class _ProductCategoriesTabState extends State<ProductCategoriesTab> {
   final TextEditingController _searchController = TextEditingController();
   String _searchTerm = "";
   bool _isInitialized = false;
+  Timer? _debounceTimer;
 
   @override
   void initState() {
@@ -57,7 +59,18 @@ class _ProductCategoriesTabState extends State<ProductCategoriesTab> {
   void dispose() {
     _paginationController.dispose();
     _searchController.dispose();
+    _debounceTimer?.cancel();
     super.dispose();
+  }
+
+  void _debounceSearch(String value) {
+    if (_debounceTimer?.isActive ?? false) _debounceTimer!.cancel();
+    _debounceTimer = Timer(const Duration(milliseconds: 500), () {
+      setState(() {
+        _searchTerm = value;
+      });
+      _paginationController.refresh();
+    });
   }
 
   @override
@@ -79,7 +92,7 @@ class _ProductCategoriesTabState extends State<ProductCategoriesTab> {
         ),
       ),
       body: !_isInitialized
-          ? const Center(child: Text("Initializing..."))
+          ? const Center(child: CircularProgressIndicator())
           : RefreshIndicator(
               onRefresh: () async {
                 await _paginationController.refresh();
@@ -89,12 +102,8 @@ class _ProductCategoriesTabState extends State<ProductCategoriesTab> {
                 children: [
                   buildSearchBar(
                     controller: _searchController,
-                    onChanged: (value) {
-                      setState(() {
-                        _searchTerm = value;
-                      });
-                      _paginationController?.refresh(); // This re-fetches based on new search term
-                    },
+                    onChanged: _debounceSearch,
+                    hint: 'Search categories',
                   ),
                   Expanded(
                     child: PagedListView<int, ProductCategoryData>(

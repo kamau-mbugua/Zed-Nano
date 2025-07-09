@@ -1,9 +1,10 @@
-
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'dart:async';
 import 'package:zed_nano/models/listCategories/ListCategoriesResponse.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/widget/common/categories_widget.dart';
+import 'package:zed_nano/screens/widget/common/searchview.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
 import 'package:zed_nano/utils/pagination_controller.dart';
 
@@ -21,6 +22,7 @@ class _ServiceCategoriesTabState extends State<ServiceCategoriesTab> {
   final TextEditingController _searchController = TextEditingController();
   String _searchTerm = "";
   bool _isInitialized = false;
+  Timer? _debounceTimer;
 
   @override
   void initState() {
@@ -57,7 +59,18 @@ class _ServiceCategoriesTabState extends State<ServiceCategoriesTab> {
   void dispose() {
     _paginationController.dispose();
     _searchController.dispose();
+    _debounceTimer?.cancel();
     super.dispose();
+  }
+  
+  void _debounceSearch(String value) {
+    if (_debounceTimer?.isActive ?? false) _debounceTimer!.cancel();
+    _debounceTimer = Timer(const Duration(milliseconds: 500), () {
+      setState(() {
+        _searchTerm = value;
+      });
+      _paginationController.refresh();
+    });
   }
 
   @override
@@ -79,31 +92,41 @@ class _ServiceCategoriesTabState extends State<ServiceCategoriesTab> {
         ),
       ),
       body: !_isInitialized
-          ? const Center(child: Text("Initializing..."))
+          ? const Center(child: CircularProgressIndicator())
           : RefreshIndicator(
         onRefresh: () async {
           await _paginationController.refresh();
         },
-        child: PagedListView<int, ProductCategoryData>(
-          pagingController: _paginationController.pagingController,
-          padding: const EdgeInsets.all(16),
-          builderDelegate: PagedChildBuilderDelegate<ProductCategoryData>(
-            itemBuilder: (context, item, index) {
-              return buildCategoryCard(item);
-            },
-            firstPageProgressIndicatorBuilder: (_) => const SizedBox.shrink(),
-            newPageProgressIndicatorBuilder: (_) => const SizedBox.shrink(),
-            noItemsFoundIndicatorBuilder: (context) => const Center(
-              child: CompactGifDisplayWidget(
-                gifPath: emptyListGif,
-                title: "It's empty, over here.",
-                subtitle: "No product categories in your business, yet! Add to view them here.",
+        child: Column(
+          children: [
+            buildSearchBar(
+              controller: _searchController,
+              onChanged: _debounceSearch,
+              hint: 'Search categories',
+            ),
+            Expanded(
+              child: PagedListView<int, ProductCategoryData>(
+                pagingController: _paginationController.pagingController,
+                padding: const EdgeInsets.all(16),
+                builderDelegate: PagedChildBuilderDelegate<ProductCategoryData>(
+                  itemBuilder: (context, item, index) {
+                    return buildCategoryCard(item);
+                  },
+                  firstPageProgressIndicatorBuilder: (_) => const SizedBox.shrink(),
+                  newPageProgressIndicatorBuilder: (_) => const SizedBox.shrink(),
+                  noItemsFoundIndicatorBuilder: (context) => const Center(
+                    child: CompactGifDisplayWidget(
+                      gifPath: emptyListGif,
+                      title: "It's empty, over here.",
+                      subtitle: "No product categories in your business, yet! Add to view them here.",
+                    ),
+                  ),
+                ),
               ),
             ),
-          ),
+          ],
         ),
       ),
     );
   }
 }
-
