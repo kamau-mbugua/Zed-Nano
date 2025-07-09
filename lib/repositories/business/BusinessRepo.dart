@@ -52,6 +52,17 @@ class BusinessRepo{
       return ApiResponse.withError(ApiErrorHandler.handleError(e));
     }
   }
+
+  Future<ApiResponse> createCategory({required Map<String, dynamic> requestData}) async {
+    try {
+      final response =
+      await dioClient!.post('${AppConstants.createCategory}', data: requestData);
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
   Future<ApiResponse> createBillingInvoice({required Map<String, dynamic> requestData}) async {
     try {
       final response =
@@ -62,10 +73,26 @@ class BusinessRepo{
       return ApiResponse.withError(ApiErrorHandler.handleError(e));
     }
   }
-  Future<ApiResponse> uploadBusinessLogo({required FormData requestData}) async {
+  Future<ApiResponse> uploadBusinessLogo({
+    required FormData requestData,
+  }) async {
     try {
       final response =
       await dioClient!.post('${AppConstants.uploadBusinessLogo}', data: requestData);
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
+
+  Future<ApiResponse> uploadImage({
+    required FormData requestData,
+    required String urlPart,
+  }) async {
+    try {
+      final response =
+      await dioClient!.post('${AppConstants.uploadImage}$urlPart', data: requestData);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {

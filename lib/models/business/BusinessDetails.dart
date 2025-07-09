@@ -26,7 +26,7 @@ class BusinessDetails {
       'group': group,
       'branchId': branchId,
       'localCurrency': localCurrency,
-      'localCurrency': businessCategory,
+      'businessCategory': businessCategory,
     };
   }
 

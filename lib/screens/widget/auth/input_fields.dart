@@ -40,7 +40,8 @@ class StyledTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 56, // Fixed height as per user preference (56px)
+      // Only apply fixed height for single-line text fields
+      height: textFieldType == TextFieldType.MULTILINE ? null : 50, // Fixed height as per user preference (56px)
       decoration: BoxDecoration(
         border: Border.all(color: BodyWhite),
         borderRadius: BorderRadius.circular(13), // Border radius as per user preference (16px)
@@ -50,6 +51,7 @@ class StyledTextField extends StatelessWidget {
         focus: focusNode,
         textFieldType: textFieldType,
         onChanged: onChanged,
+        maxLines: textFieldType == TextFieldType.MULTILINE ? null : 1, // Use null for multiline to allow unlimited lines
         onFieldSubmitted: (value) {
           if (nextFocus != null) {
             FocusScope.of(context).requestFocus(nextFocus);
@@ -59,7 +61,9 @@ class StyledTextField extends StatelessWidget {
           }
         },
         suffixIconColor: getBodyColor(),
-        textInputAction: nextFocus != null ? TextInputAction.next : textInputAction,
+        textInputAction: textFieldType == TextFieldType.MULTILINE 
+            ? TextInputAction.newline 
+            : (nextFocus != null ? TextInputAction.next : textInputAction),
         suffixPasswordInvisibleWidget: isPassword
             ? Image.asset(hideIcon, height: 16, width: 16, fit: BoxFit.fill)
             .paddingSymmetric(vertical: 16, horizontal: 14)

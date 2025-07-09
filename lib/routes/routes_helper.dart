@@ -7,6 +7,7 @@ import 'package:zed_nano/screens/auth/registration_page.dart';
 import 'package:zed_nano/screens/auth/set_new_pin_page.dart';
 import 'package:zed_nano/screens/business/get_started_page.dart';
 import 'package:zed_nano/screens/business/subscription/activating_trial_screen.dart';
+import 'package:zed_nano/screens/categories/add_category_page.dart';
 import 'package:zed_nano/screens/categories/list_categories_page.dart';
 import 'package:zed_nano/screens/main/home_main_page.dart';
 import 'package:zed_nano/screens/onboarding/onboarding_screen.dart';
@@ -73,6 +74,10 @@ class RouterHelper {
     handlerFunc: (BuildContext? context, Map<String, List<String>> params) =>
         ListProductsAndServicesPage(),
   );
+  static final Handler _newCategoryHandler = Handler(
+    handlerFunc: (BuildContext? context, Map<String, List<String>> params) =>
+        NewCategoryPage(),
+  );
 
   static void setupRouter() {
     router.define(
@@ -137,6 +142,11 @@ class RouterHelper {
     router.define(
       AppRoutes.listProductsAndServicesRoute,
       handler: _listProductsAndServicesHandler,
+      transitionType: TransitionType.fadeIn,
+    );
+    router.define(
+      AppRoutes.getNewCategoryRoute,
+      handler: _newCategoryHandler,
       transitionType: TransitionType.fadeIn,
     );
 

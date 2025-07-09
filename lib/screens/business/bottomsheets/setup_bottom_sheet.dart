@@ -107,9 +107,11 @@ class SetupStepBottomSheet extends StatelessWidget {
               steps: steps,
               onTab: (index) {
                 //get the step name
+                Navigator.pop(context);
                 String stepName = steps[index as int];
                 switch (stepName) {
                   case 'Create a Business':
+                    const GetStartedPage(initialStep:1).launch(context);
                     logger.d('Create a Business' );
                     break;
                   case 'Setup Billing':
@@ -118,8 +120,8 @@ class SetupStepBottomSheet extends StatelessWidget {
                     break;
                   case 'Add Categories':
                     logger.d('Add Categories' );
-                    Navigator.pop(context);
-                    BottomSheetHelper.showProductServiceCategoryBottomSheet(context);
+                    Navigator.pushNamed(context, AppRoutes.getNewCategoryRoutes());
+                    // BottomSheetHelper.showProductServiceCategoryBottomSheet(context);
                     break;
                   case 'Add Products and Services':
                     Navigator.pushNamed(

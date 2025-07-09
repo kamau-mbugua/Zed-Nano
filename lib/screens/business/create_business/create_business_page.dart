@@ -19,6 +19,7 @@ import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/Images.dart';
 import 'package:zed_nano/utils/extensions.dart';
+import 'package:zed_nano/utils/image_picker_util.dart';
 
 class CreateBusinessPage extends StatefulWidget {
   final VoidCallback onNext;
@@ -55,21 +56,17 @@ class _CreateBusinessPageState extends State<CreateBusinessPage> {
   final TextEditingController locationController = TextEditingController();
 
   Future<void> _pickImage() async {
-    try {
-      final XFile? pickedFile = await _picker.pickImage(
-        source: ImageSource.gallery,
-        maxWidth: 800,
-        maxHeight: 800,
-        imageQuality: 80,
-      );
+    final pickedImage = await ImagePickerUtil.pickImage(
+      context: context,
+      maxWidth: 800,
+      maxHeight: 800,
+      imageQuality: 80,
+    );
 
-      if (pickedFile != null) {
-        setState(() {
-          _logoImage = File(pickedFile.path);
-        });
-      }
-    } catch (e) {
-      toast('Error picking image: $e');
+    if (pickedImage != null) {
+      setState(() {
+        _logoImage = pickedImage;
+      });
     }
   }
 

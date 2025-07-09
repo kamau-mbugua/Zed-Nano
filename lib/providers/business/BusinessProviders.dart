@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:path/path.dart' as p;
+import 'package:zed_nano/models/createCategory/CreateCategoryResponse.dart';
 import 'package:zed_nano/models/createbillingInvoice/CreateBillingInvoiceResponse.dart';
 import 'package:zed_nano/models/get_business_info/BusinessInfoResponse.dart';
 import 'package:zed_nano/models/listbillingplan_packages/BillingPlanPackagesResponse.dart';
@@ -102,6 +103,25 @@ class BusinessProviders extends BaseProvider {
 
     return finalResponseModel;
   }
+  Future<ResponseModel<CreateCategoryResponse>> createCategory(
+      {required Map<String, dynamic> requestData,
+      required BuildContext context}) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.createCategory(requestData: requestData), context);
+
+    ResponseModel<CreateCategoryResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<CreateCategoryResponse>(
+          true, responseModel.message!, CreateCategoryResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<CreateCategoryResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
   Future<ResponseModel<CreateBillingInvoiceResponse>> createBillingInvoice(
       {required Map<String, dynamic> requestData,
       required BuildContext context}) async {
@@ -193,6 +213,30 @@ class BusinessProviders extends BaseProvider {
 
     final responseModel = await performApiCallWithHandling(
         () => businessRepo.uploadBusinessLogo(requestData: formData), context);
+
+    ResponseModel<CommonResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<CommonResponse>(
+          true, responseModel.message!, CommonResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<CommonResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
+  Future<ResponseModel<CommonResponse>> uploadProductCategoryImage(
+      {
+        required FormData formData ,
+        required BuildContext context,
+        required String urlPart,
+      }) async {
+
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.uploadImage(requestData: formData, urlPart:urlPart), context);
 
     ResponseModel<CommonResponse> finalResponseModel;
 

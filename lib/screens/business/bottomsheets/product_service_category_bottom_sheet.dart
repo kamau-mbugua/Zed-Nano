@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/app/app_initializer.dart';
+import 'package:zed_nano/routes/routes.dart';
 import 'package:zed_nano/screens/widget/common/base_bottom_sheet.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
 
@@ -58,9 +59,11 @@ class ProductServiceCategoryBottomSheet extends StatelessWidget {
                 switch (stepName) {
                   case 'Add Products Categories':
                     logger.d('Add Products Categories' );
+                    Navigator.pushNamed(context, AppRoutes.getNewCategoryRoutes());
                     break;
                   case 'Add Services Categories':
                     logger.d('Add Services Categories' );
+                    Navigator.pushNamed(context, AppRoutes.getNewCategoryRoutes());
                     break;
                   default:
                     break;

@@ -9,6 +9,7 @@ class AppRoutes {
   static const String activatingTrialRoute = '/activatingTrialRoute';
   static const String listCategoriesRoute = '/listCategoriesRoute';
   static const String listProductsAndServicesRoute = '/listProductsAndServicesRoute';
+  static const String getNewCategoryRoute = '/getNewCategoryRoute';
 
   static String getHomeMainPageRoute() => homeMainRoute;
   static String getSplashPageRoute() => splashRoute;
@@ -20,5 +21,6 @@ class AppRoutes {
   static String getActivatingTrialRoute() => activatingTrialRoute;
   static String getListCategoriesRoute() => listCategoriesRoute;
   static String getListProductsAndServicesRoute() => listProductsAndServicesRoute;
+  static String getNewCategoryRoutes() => getNewCategoryRoute;
 
 }

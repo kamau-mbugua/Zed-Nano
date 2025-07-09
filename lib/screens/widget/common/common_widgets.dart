@@ -263,7 +263,7 @@ Widget arrowListItem({
             SvgPicture.asset(
               arrowItem,
               width: 20,
-              height: 20,
+              height: 14,
               color: darkGreyColor
             ),
           ],
@@ -273,8 +273,19 @@ Widget arrowListItem({
   );
 }
 
+// Widget placeHolderWidget({double? height, double? width, BoxFit? fit, AlignmentGeometry? alignment, double? radius}) {
+//   return Image.asset(imagePlaceholder, height: height, width: width, fit: fit ?? BoxFit.cover, alignment: alignment ?? Alignment.center).cornerRadiusWithClipRRect(radius ?? defaultRadius);
+// }
+
 Widget placeHolderWidget({double? height, double? width, BoxFit? fit, AlignmentGeometry? alignment, double? radius}) {
-  return Image.asset('assets/images/placeholder.jpg', height: height, width: width, fit: fit ?? BoxFit.cover, alignment: alignment ?? Alignment.center).cornerRadiusWithClipRRect(radius ?? defaultRadius);
+  return      SvgPicture.asset(
+    imagePlaceholder,
+    width: width,
+    height: height,
+    fit: fit ?? BoxFit.cover, alignment: alignment ?? Alignment.center
+  ).cornerRadiusWithClipRRect(radius ?? defaultRadius);
+
+    // Image.asset(imagePlaceholder, height: height, width: width, fit: fit ?? BoxFit.cover, alignment: alignment ?? Alignment.center).cornerRadiusWithClipRRect(radius ?? defaultRadius);
 }
 
 Future<void> commonLaunchUrl(String address, {LaunchMode launchMode = LaunchMode.inAppWebView}) async {
