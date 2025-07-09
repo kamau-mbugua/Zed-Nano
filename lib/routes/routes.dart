@@ -10,6 +10,7 @@ class AppRoutes {
   static const String listCategoriesRoute = '/listCategoriesRoute';
   static const String listProductsAndServicesRoute = '/listProductsAndServicesRoute';
   static const String getNewCategoryRoute = '/getNewCategoryRoute';
+  static const String getNewCategoryWithParamRoute = '/getNewCategoryRoute/:doNotUpdate';
 
   static String getHomeMainPageRoute() => homeMainRoute;
   static String getSplashPageRoute() => splashRoute;
@@ -22,5 +23,5 @@ class AppRoutes {
   static String getListCategoriesRoute() => listCategoriesRoute;
   static String getListProductsAndServicesRoute() => listProductsAndServicesRoute;
   static String getNewCategoryRoutes() => getNewCategoryRoute;
-
+  static String getNewCategoryWithParamRoutes(String doNotUpdate) => '$getNewCategoryRoute/$doNotUpdate';
 }

@@ -39,6 +39,7 @@ class AppConstants{
   static const String createBillingInvoice = 'api/v1/billing/businesss/createbilling-invoice';
   static const String uploadBusinessLogo = 'api/edit_business_logo';
   static const String uploadImage = 'api/v1/ecommerce/generate_file_system_url';
+  static const String getListCategories = 'api/listCategories/Active';
   static const String createBusiness = 'postBusiness';
   static const String getSetupStatus = 'api/get_setup_status';
   static const String listBusinessCategory = 'api/listBusinessCategory?state=Active';

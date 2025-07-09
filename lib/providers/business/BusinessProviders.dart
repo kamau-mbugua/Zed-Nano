@@ -8,6 +8,7 @@ import 'package:path/path.dart' as p;
 import 'package:zed_nano/models/createCategory/CreateCategoryResponse.dart';
 import 'package:zed_nano/models/createbillingInvoice/CreateBillingInvoiceResponse.dart';
 import 'package:zed_nano/models/get_business_info/BusinessInfoResponse.dart';
+import 'package:zed_nano/models/listCategories/ListCategoriesResponse.dart';
 import 'package:zed_nano/models/listbillingplan_packages/BillingPlanPackagesResponse.dart';
 import 'package:zed_nano/models/pushstk/PushStkResponse.dart';
 import 'package:zed_nano/networking/base/api_helpers.dart';
@@ -247,6 +248,35 @@ class BusinessProviders extends BaseProvider {
     } else {
       finalResponseModel =
           ResponseModel<CommonResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
+  Future<ResponseModel<ListCategoriesResponse>> getListCategories(
+      {
+        required int page ,
+        required int limit ,
+        required String searchValue ,
+        required BuildContext context,
+      }) async {
+
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.getListCategories(
+          page: page,
+          limit: limit,
+          searchValue: searchValue
+        ), context);
+
+    ResponseModel<ListCategoriesResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<ListCategoriesResponse>(
+          true, responseModel.message!, ListCategoriesResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<ListCategoriesResponse>(false, responseModel.message!);
     }
 
     return finalResponseModel;

@@ -100,6 +100,21 @@ class BusinessRepo{
     }
   }
 
+  Future<ApiResponse> getListCategories({
+    required int page ,
+    required int limit ,
+    required String searchValue ,
+  }) async {
+    try {
+      final response =
+      await dioClient!.get('${AppConstants.getListCategories}?page=$page&limit=$limit&searchValue=$searchValue');
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
+
   Future<ApiResponse> getSetupStatus() async {
     try {
       final response =

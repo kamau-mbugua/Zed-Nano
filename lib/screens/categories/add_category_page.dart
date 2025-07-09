@@ -10,6 +10,7 @@ import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/models/business/BusinessDetails.dart';
 import 'package:zed_nano/providers/business/BusinessProviders.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
+import 'package:zed_nano/routes/routes.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/auth/input_fields.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
@@ -23,7 +24,8 @@ import 'package:path/path.dart' as p;
 import 'package:http_parser/http_parser.dart';
 
 class NewCategoryPage extends StatefulWidget {
-  const NewCategoryPage({super.key});
+  final bool doNotUpdate;
+  NewCategoryPage({super.key, required this.doNotUpdate});
 
   @override
   State<NewCategoryPage> createState() => _NewCategoryPageState();
@@ -53,16 +55,19 @@ class _NewCategoryPageState extends State<NewCategoryPage> {
     super.dispose();
   }
 
-  void refresh() async {
+  Future<void> refresh() async {
     try {
-      // Pop the current screen
-      Navigator.pop(context);
-
-      // Get the ViewModel and handle the skip operation
       final viewModel = Provider.of<WorkflowViewModel>(context, listen: false);
       await viewModel.skipSetup(context);
+
+      if (mounted) {
+        Navigator.pop(context); // Pop current screen
+        await Navigator.pushNamed(context, AppRoutes.getListCategoriesRoute());
+      }
+
     } catch (e) {
-      logger.e('Error in goSkip: $e');
+      logger.e('Error in refresh: $e');
+      // Don't navigate on error - user stays on current screen
     }
   }
 
@@ -74,6 +79,7 @@ class _NewCategoryPageState extends State<NewCategoryPage> {
     requestData['categoryDescription'] = descriptionController.text;
     requestData['productService'] = isProduct ? 'Product' : 'Service';
     requestData['categoryState'] = 'Active';
+    requestData['doNotUpdate'] = widget.doNotUpdate;
     await context
         .read<BusinessProviders>()
         .createCategory(requestData: requestData, context: context)

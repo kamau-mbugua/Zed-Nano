@@ -74,9 +74,26 @@ class RouterHelper {
     handlerFunc: (BuildContext? context, Map<String, List<String>> params) =>
         ListProductsAndServicesPage(),
   );
+
   static final Handler _newCategoryHandler = Handler(
-    handlerFunc: (BuildContext? context, Map<String, List<String>> params) =>
-        NewCategoryPage(),
+    handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
+      // Default route without parameters
+      return NewCategoryPage(
+        doNotUpdate: true,
+      );
+    },
+  );
+
+  static final Handler _newCategoryWithParamHandler = Handler(
+    handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
+      // Extract the doNotUpdate parameter from the URL
+      final doNotUpdateParam = params['doNotUpdate']?.first ?? 'true';
+      final doNotUpdate = doNotUpdateParam.toLowerCase() == 'true';
+      
+      return NewCategoryPage(
+        doNotUpdate: doNotUpdate,
+      );
+    },
   );
 
   static void setupRouter() {
@@ -147,6 +164,11 @@ class RouterHelper {
     router.define(
       AppRoutes.getNewCategoryRoute,
       handler: _newCategoryHandler,
+      transitionType: TransitionType.fadeIn,
+    );
+    router.define(
+      '${AppRoutes.getNewCategoryRoute}/:doNotUpdate',
+      handler: _newCategoryWithParamHandler,
       transitionType: TransitionType.fadeIn,
     );
 

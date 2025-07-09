@@ -105,7 +105,7 @@ class SetupStepBottomSheet extends StatelessWidget {
               index: index,
               activeIndex: activeIndex,
               steps: steps,
-              onTab: (index) {
+              onTab: (index) async {
                 //get the step name
                 Navigator.pop(context);
                 String stepName = steps[index as int];
@@ -120,7 +120,15 @@ class SetupStepBottomSheet extends StatelessWidget {
                     break;
                   case 'Add Categories':
                     logger.d('Add Categories' );
-                    Navigator.pushNamed(context, AppRoutes.getNewCategoryRoutes());
+
+                    //if its active
+                    if(index == activeIndex) {
+                      // Show the bottom sheet
+                      await Navigator.pushNamed(context, AppRoutes.getNewCategoryWithParamRoutes('true'));
+                    }else{
+                      await Navigator.pushNamed(context, AppRoutes.getListCategoriesRoute());
+                    }
+
                     // BottomSheetHelper.showProductServiceCategoryBottomSheet(context);
                     break;
                   case 'Add Products and Services':

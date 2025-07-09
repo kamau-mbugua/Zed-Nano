@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:zed_nano/models/listCategories/ListCategoriesResponse.dart';
+import 'package:zed_nano/providers/helpers/providers_helpers.dart';
+import 'package:zed_nano/screens/widget/common/categories_widget.dart';
+import 'package:zed_nano/screens/widget/common/searchview.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
+import 'package:zed_nano/utils/pagination_controller.dart';
 
 class ProductCategoriesTab extends StatefulWidget {
   const ProductCategoriesTab({super.key});
@@ -9,29 +15,49 @@ class ProductCategoriesTab extends StatefulWidget {
 }
 
 class _ProductCategoriesTabState extends State<ProductCategoriesTab> {
-  // Mock data - replace with actual data source
-  List<ProductCategory> categories = [];
-  bool isLoading = false;
+
+  // Initialize with default value to avoid LateInitializationError
+  late PaginationController<ProductCategoryData> _paginationController;
+  final TextEditingController _searchController = TextEditingController();
+  String _searchTerm = "";
+  bool _isInitialized = false;
 
   @override
   void initState() {
     super.initState();
-    _loadCategories();
+    
+    // Initialize the controller but don't start fetching yet
+    _paginationController = PaginationController<ProductCategoryData>(
+      fetchItems: (page, pageSize) async {
+        return getListCategories(page: page, limit: pageSize);
+      },
+    );
+    
+    // Defer the first data fetch until after the build is complete
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setState(() {
+        _isInitialized = true;
+      });
+      // Start the first page fetch after the UI is fully built
+      _paginationController.fetchFirstPage();
+    });
   }
 
-  void _loadCategories() {
-    setState(() {
-      isLoading = true;
-    });
-    
-    // Simulate API call
-    Future.delayed(const Duration(seconds: 1), () {
-      setState(() {
-        isLoading = false;
-        // Add mock data here when you have categories
-        // categories = mockProductCategories;
-      });
-    });
+  Future<List<ProductCategoryData>> getListCategories({required int page, required int limit}) async {
+    final response = await getBusinessProvider(context).getListCategories(
+      page: page,
+      limit: limit,
+      searchValue: _searchTerm,
+      context: context,
+    );
+    return response.data?.data ?? [];
+  }
+  
+  @override
+  void dispose() {
+    _paginationController.dispose();
+    _searchController.dispose();
+    super.dispose();
   }
 
   @override
@@ -52,199 +78,47 @@ class _ProductCategoriesTabState extends State<ProductCategoriesTab> {
           ),
         ),
       ),
-      body: Builder(
-        builder: (context) {
-          if (isLoading) {
-            return const Center(
-              child: CircularProgressIndicator(
-                color: Color(0xFF032541),
-              ),
-            );
-          }
-
-          if (categories.isEmpty) {
-            return const Center(
-              child: CompactGifDisplayWidget(
-                gifPath: emptyListGif,
-                title: "It's empty, over here.",
-                subtitle: "No product categories in your business, yet! Add to view them here.",
-              ),
-            );
-          }
-
-          return RefreshIndicator(
-            onRefresh: () async {
-              _loadCategories();
-            },
-            color: const Color(0xFF032541),
-            child: ListView.builder(
-              padding: const EdgeInsets.all(16),
-              itemCount: categories.length,
-              itemBuilder: (context, index) {
-                final category = categories[index];
-                return _buildCategoryCard(category);
+      body: !_isInitialized
+          ? const Center(child: Text("Initializing..."))
+          : RefreshIndicator(
+              onRefresh: () async {
+                await _paginationController.refresh();
               },
-            ),
-          );
-        },
-      ),
-    );
-  }
-  }
-
-  Widget _buildCategoryCard(ProductCategory category) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFFE8E8E8)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.04),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          // Category Icon/Image
-          Container(
-            width: 48,
-            height: 48,
-            decoration: BoxDecoration(
-              color: const Color(0xFF032541).withOpacity(0.1),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: const Icon(
-              Icons.category,
-              color: Color(0xFF032541),
-              size: 24,
-            ),
-          ),
-          const SizedBox(width: 16),
-          
-          // Category Details
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  category.name,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    fontFamily: 'Poppins',
-                    color: Color(0xFF1F2024),
+              child:
+              Column(
+                children: [
+                  buildSearchBar(
+                    controller: _searchController,
+                    onChanged: (value) {
+                      setState(() {
+                        _searchTerm = value;
+                      });
+                      _paginationController?.refresh(); // This re-fetches based on new search term
+                    },
                   ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  category.description ?? 'No description',
-                  style: const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: 'Poppins',
-                    color: Color(0xFF71727A),
+                  Expanded(
+                    child: PagedListView<int, ProductCategoryData>(
+                      pagingController: _paginationController.pagingController,
+                      padding: const EdgeInsets.all(16),
+                      builderDelegate: PagedChildBuilderDelegate<ProductCategoryData>(
+                        itemBuilder: (context, item, index) {
+                          return buildCategoryCard(item);
+                        },
+                        firstPageProgressIndicatorBuilder: (_) => const SizedBox.shrink(),
+                        newPageProgressIndicatorBuilder: (_) => const SizedBox.shrink(),
+                        noItemsFoundIndicatorBuilder: (context) => const Center(
+                          child: CompactGifDisplayWidget(
+                            gifPath: emptyListGif,
+                            title: "It's empty, over here.",
+                            subtitle: "No product categories in your business, yet! Add to view them here.",
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  '${category.productCount} products',
-                  style: const TextStyle(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w500,
-                    fontFamily: 'Poppins',
-                    color: Color(0xFF032541),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          
-          // Actions
-          PopupMenuButton<String>(
-            onSelected: (value) {
-              switch (value) {
-                case 'edit':
-                  // _editCategory(category);
-                  break;
-                case 'delete':
-                  // _deleteCategory(category);
-                  break;
-              }
-            },
-            itemBuilder: (context) => [
-              const PopupMenuItem(
-                value: 'edit',
-                child: Row(
-                  children: [
-                    Icon(Icons.edit, size: 16, color: Color(0xFF71727A)),
-                    SizedBox(width: 8),
-                    Text('Edit'),
-                  ],
-                ),
+                ],
               ),
-              const PopupMenuItem(
-                value: 'delete',
-                child: Row(
-                  children: [
-                    Icon(Icons.delete, size: 16, color: Color(0xFFED3241)),
-                    SizedBox(width: 8),
-                    Text('Delete', style: TextStyle(color: Color(0xFFED3241))),
-                  ],
-                ),
-              ),
-            ],
-            child: const Icon(
-              Icons.more_vert,
-              color: Color(0xFF71727A),
             ),
-          ),
-        ],
-      ),
     );
   }
-
-// Model class for Product Category
-class ProductCategory {
-  final String id;
-  final String name;
-  final String? description;
-  final int productCount;
-  final String? imageUrl;
-
-  ProductCategory({
-    required this.id,
-    required this.name,
-    this.description,
-    required this.productCount,
-    this.imageUrl,
-  });
-
-  // Factory constructor for JSON deserialization
-  factory ProductCategory.fromJson(Map<String, dynamic> json) {
-    return ProductCategory(
-      id: json['id'] as String,
-      name: json['name']as String,
-      description: json['description']as String,
-      productCount: json['productCount']as int,
-      imageUrl: json['imageUrl']as String,
-    );
-  }
-
-  // To JSON method for serialization
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-      'description': description,
-      'productCount': productCount,
-      'imageUrl': imageUrl,
-    };
-  }
-
-
 }
