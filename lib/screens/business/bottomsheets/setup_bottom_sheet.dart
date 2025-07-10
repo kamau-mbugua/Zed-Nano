@@ -30,7 +30,7 @@ class SetupStepBottomSheet extends StatelessWidget {
         return 2;
       case 'category':
         return 3;
-      case 'products':
+      case 'product':
         return 4;
       default:
         return 0;

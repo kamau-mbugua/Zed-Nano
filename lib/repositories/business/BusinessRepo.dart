@@ -133,7 +133,7 @@ class BusinessRepo{
   }) async {
     try {
       final response =
-      await dioClient!.get('${AppConstants.getListProducts}?page=$page&limit=$limit&search=$searchValue');
+      await dioClient!.get('${AppConstants.getListProducts}?page=$page&limit=$limit&search=$searchValue&productService=$productService');
 
       return ApiResponse.withSuccess(response);
     } catch (e) {

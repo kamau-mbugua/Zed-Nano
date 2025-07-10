@@ -360,7 +360,7 @@ class BusinessProviders extends BaseProvider {
           page: page,
           limit: limit,
           searchValue: searchValue,
-            productService: productService
+          productService: productService
         ), context);
 
     ResponseModel<ListProductsResponse> finalResponseModel;

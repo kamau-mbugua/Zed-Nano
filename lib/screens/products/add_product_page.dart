@@ -6,6 +6,7 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/models/business/BusinessDetails.dart';
+import 'package:zed_nano/models/getVariablePriceStatus/GetVariablePriceStatusResponse.dart';
 import 'package:zed_nano/models/listCategories/ListCategoriesResponse.dart';
 import 'package:zed_nano/models/unitofmeasure/UnitOfMeasureResponse.dart';
 import 'package:zed_nano/providers/business/BusinessProviders.dart';
@@ -37,13 +38,18 @@ class _AddProductScreenState extends State<AddProductScreen> {
   FocusNode productAmountFocusNode = FocusNode();
   FocusNode productRestockFocusNode = FocusNode();
   FocusNode productDescriptionFocusNode = FocusNode();
+  FocusNode buyingPriceFocusNode = FocusNode();
 
   TextEditingController productNameController = TextEditingController();
+  TextEditingController buyingPriceController = TextEditingController();
   TextEditingController productAmountController = TextEditingController();
   TextEditingController productRestockController = TextEditingController();
   TextEditingController productDescriptionController = TextEditingController();
 
   String? selectedCategory;
+  String? selectedUnitOfMeasure;
+  String? selectedPriceStatus;
+  bool isWeightedProduct = false;
   List<ProductCategoryData>? productCategoryDataList;
   List<String>? unitOfMeasureResponse;
   List<VariablePriceStatus>? variablePriceStatus;
@@ -77,7 +83,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
       if (mounted) {
         Navigator.pop(context); // Pop current screen
-        await Navigator.pushNamed(context, AppRoutes.getListCategoriesRoute());
+        await Navigator.pushNamed(context, AppRoutes.getListProductsAndServicesRoute());
       }
 
     } catch (e) {
@@ -135,8 +141,10 @@ class _AddProductScreenState extends State<AddProductScreen> {
   @override
   void initState() {
     businessDetails = getAuthProvider(context).businessDetails;
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      listBusinessCategory();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await listBusinessCategory();
+      await getUnitOfMeasure();
+      await getVariablePriceStatus();
     });
     super.initState();
   }
@@ -145,11 +153,12 @@ class _AddProductScreenState extends State<AddProductScreen> {
     await context
         .read<BusinessProviders>()
         .getListCategories(context: context, page: 1, limit: 10000, searchValue: '', productService: '')
-        .then((value) {
+        .then((value) async {
       if (value.isSuccess) {
         setState(() {
           productCategoryDataList = value.data!.data;
         });
+
       } else {
         showCustomToast(value.message ?? 'Something went wrong');
       }
@@ -226,7 +235,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 var productRestock = productRestockController.text;
                 var productDescription = productDescriptionController.text;
                 var productService =  productCategoryDataList?.firstWhere((element) => element.categoryName == selectedCategory).productService;
-
+                var unitOfMeasure =  selectedUnitOfMeasure;
+                var priceStatus =  selectedPriceStatus;
+                var buyingPrice =  buyingPriceController.text;
 
                 if(categoryId == null){
                   showCustomToast('Please select category', isError: true);
@@ -241,7 +252,19 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   return;
                 }
                 if(!productAmount.isValidInput){
-                  showCustomToast('Please enter product amount', isError: true);
+                  showCustomToast('Please enter product selling price amount', isError: true);
+                  return;
+                }
+                if(!buyingPrice.isValidInput){
+                  showCustomToast('Please enter product buying price amount', isError: true);
+                  return;
+                }
+                if(unitOfMeasure == null){
+                  showCustomToast('Select unit of measure', isError: true);
+                  return;
+                }
+                if(priceStatus == null){
+                  showCustomToast('Select price status', isError: true);
                   return;
                 }
 
@@ -252,6 +275,11 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 requestData['productRestock'] = productRestock;
                 requestData['productDescription'] = productDescription;
                 requestData['productService'] = productService;
+                requestData['buyingPrice'] = buyingPrice;
+                requestData['priceStatus'] = priceStatus;
+                requestData['unitOfMeasure'] = unitOfMeasure;
+                requestData['isWeightedProduct'] = isWeightedProduct;
+                requestData['consumable'] = false;
 
                 _createCategory(requestData);
 
@@ -305,13 +333,127 @@ class _AddProductScreenState extends State<AddProductScreen> {
           textFieldType: TextFieldType.NAME,
           hintText: 'Product Name',
           focusNode: productNameFocusNode,
-          nextFocus: productAmountFocusNode,
+          nextFocus: productDescriptionFocusNode,
           controller: productNameController,
         ),
         16.height,
-        // Product Description
+
+        // Description
+        const Row(
+          children: [
+            Text(
+              'Description',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                fontFamily: 'Poppins',
+                color: Color(0xFF1F2024),
+              ),
+            ),
+            SizedBox(width: 8),
+            Text(
+              '(Optional)',
+              style: TextStyle(
+                fontSize: 10,
+                color: Color(0xFF8F90A6),
+                fontFamily: 'Poppins',
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+          StyledTextField(
+          textFieldType: TextFieldType.MULTILINE,
+          hintText: 'Description',
+          focusNode: productDescriptionFocusNode,
+          controller: productDescriptionController,
+            nextFocus: productAmountFocusNode,
+        ),
+        16.height,
         const Text(
-          'Product Amount',
+          'Product Price Type',
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
+            fontFamily: 'Poppins',
+            color: Color(0xFF484848),
+          ),
+        ),
+        const SizedBox(height: 8),
+        SubCategoryPicker(
+          label: 'Select Price Type',
+          options:variablePriceStatus?.map((e) => e.priceStatusName ?? '').toList() ??
+              [],
+          selectedValue: selectedPriceStatus,
+          onChanged: (value) {
+            final selectedCat = value;
+            setState(() {
+              selectedPriceStatus = selectedCat;
+            });
+          },
+        ),
+        // Show weighted product controls only when price type contains 'variable'
+        if ((selectedPriceStatus?.toLowerCase().contains('variable') ?? false)) ...[
+          16.height,
+          const Text(
+            'Weighted product',
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+              fontFamily: 'Poppins',
+              color: Color(0xFF484848),
+            ),
+          ),
+          Row(
+            children: [
+              Checkbox(
+                value: isWeightedProduct,
+                onChanged: (checked) {
+                  setState(() {
+                    isWeightedProduct = checked ?? false;
+                  });
+                },
+              ),
+              const Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("This is weighted product."),
+                    Text(
+                      "Product price will adjust based on weight when sold.",
+                      style: TextStyle(fontSize: 10, color: Colors.grey),
+                    )
+                  ],
+                ),
+              )
+            ],
+          ),
+        ],
+        16.height,
+        const Text(
+          'Unit of Measure',
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
+            fontFamily: 'Poppins',
+            color: Color(0xFF484848),
+          ),
+        ),
+        const SizedBox(height: 8),
+        SubCategoryPicker(
+          label: 'Select Unit of Measure',
+          options:unitOfMeasureResponse?.map((e) => e ?? '').toList() ?? [],
+          selectedValue: selectedUnitOfMeasure,
+          onChanged: (value) {
+            final selectedCat = value;
+            setState(() {
+              selectedUnitOfMeasure = selectedCat;
+            });
+          },
+        ),
+
+        const Text(
+          'Selling Price',
           style: TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.w600,
@@ -322,13 +464,31 @@ class _AddProductScreenState extends State<AddProductScreen> {
         const SizedBox(height: 8),
         StyledTextField(
           textFieldType: TextFieldType.NAME,
-          hintText: 'Product Amount',
+          hintText: 'Selling Price',
           focusNode: productAmountFocusNode,
-          nextFocus: productRestockFocusNode,
+          nextFocus: buyingPriceFocusNode,
           controller: productAmountController,
         ),
         16.height,
-        // Product Description
+
+        const Text(
+          'Buying Price',
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
+            fontFamily: 'Poppins',
+            color: Color(0xFF484848),
+          ),
+        ),
+        const SizedBox(height: 8),
+        StyledTextField(
+          textFieldType: TextFieldType.NAME,
+          hintText: 'Buying Price',
+          focusNode: buyingPriceFocusNode,
+          nextFocus: productRestockFocusNode,
+          controller: buyingPriceController,
+        ),
+        16.height,
         const Row(
           children: [
             Text(
@@ -368,36 +528,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
             color: Color(0xFFB5B7C0),
           ),
         ),
-        // Description
-        const Row(
-          children: [
-            Text(
-              'Description',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                fontFamily: 'Poppins',
-                color: Color(0xFF1F2024),
-              ),
-            ),
-            SizedBox(width: 8),
-            Text(
-              '(Optional)',
-              style: TextStyle(
-                fontSize: 10,
-                color: Color(0xFF8F90A6),
-                fontFamily: 'Poppins',
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 8),
-          StyledTextField(
-          textFieldType: TextFieldType.MULTILINE,
-          hintText: 'Description',
-          focusNode: productDescriptionFocusNode,
-          controller: productDescriptionController,
-        ),
+
         const SizedBox(height: 24),
       ]);
   }
@@ -413,7 +544,15 @@ class _AddProductScreenState extends State<AddProductScreen> {
               border: Border.all(color: const Color(0xFFE0E0E0)),
               borderRadius: BorderRadius.circular(16),
             ),
-            child: const Icon(Icons.image,
+            child:_logoImage != null ? ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Image.file(
+                _logoImage!,
+                height: 80,
+                width: double.infinity,
+                fit: BoxFit.cover,
+              ),
+            ) :  const Icon(Icons.image,
                 size: 28, color: Color(0xFF8A8D9F)),
           ),
           const SizedBox(width: 16),

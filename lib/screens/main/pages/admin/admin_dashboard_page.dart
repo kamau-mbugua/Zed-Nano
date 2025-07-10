@@ -45,7 +45,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
         return 0.4;
       case "category":
         return 0.6;
-      case "products":
+      case "product":
         return 0.8;
       default:
         return 1.0;

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:zed_nano/screens/products/tab/products_list_page.dart';
 import 'package:zed_nano/screens/products/tab/service_list_page.dart';
+import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 
 class ListProductsAndServicesPage extends StatefulWidget {
   const ListProductsAndServicesPage({Key? key}) : super(key: key);
@@ -10,26 +11,13 @@ class ListProductsAndServicesPage extends StatefulWidget {
 }
 
 class _ListProductsAndServicesPageState extends State<ListProductsAndServicesPage> {
-  int selectedTab = 1; // 0 = Product, 1 = Service
+  int selectedTab = 0; // 0 = Product, 1 = Service
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.white,
-        leading: BackButton(color: const Color(0xFF1F2024)),
-        title: const Text(
-          'Products & Services',
-          style: TextStyle(
-            fontSize: 28,
-            fontWeight: FontWeight.w600,
-            color: Color(0xFF1F2024),
-            fontFamily: 'Poppins',
-          ),
-        ),
-      ),
+      appBar: AuthAppBar(title: "Products & Services"),
       body: Column(
         children: [
           const SizedBox(height: 24),
