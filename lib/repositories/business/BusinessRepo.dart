@@ -171,5 +171,25 @@ class BusinessRepo{
       return ApiResponse.withError(ApiErrorHandler.handleError(e));
     }
   }
+  Future<ApiResponse> getUnitOfMeasure() async {
+    try {
+      final response =
+      await dioClient!.get('${AppConstants.getUnitOfMeasure}');
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
+  Future<ApiResponse> getVariablePriceStatus() async {
+    try {
+      final response =
+      await dioClient!.get('${AppConstants.getVariablePriceStatus}');
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
 
 }

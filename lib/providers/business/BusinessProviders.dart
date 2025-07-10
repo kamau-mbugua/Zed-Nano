@@ -8,11 +8,13 @@ import 'package:path/path.dart' as p;
 import 'package:zed_nano/models/createCategory/CreateCategoryResponse.dart';
 import 'package:zed_nano/models/createProduct/CreateProductResponse.dart';
 import 'package:zed_nano/models/createbillingInvoice/CreateBillingInvoiceResponse.dart';
+import 'package:zed_nano/models/getVariablePriceStatus/GetVariablePriceStatusResponse.dart';
 import 'package:zed_nano/models/get_business_info/BusinessInfoResponse.dart';
 import 'package:zed_nano/models/listCategories/ListCategoriesResponse.dart';
 import 'package:zed_nano/models/listProducts/ListProductsResponse.dart';
 import 'package:zed_nano/models/listbillingplan_packages/BillingPlanPackagesResponse.dart';
 import 'package:zed_nano/models/pushstk/PushStkResponse.dart';
+import 'package:zed_nano/models/unitofmeasure/UnitOfMeasureResponse.dart';
 import 'package:zed_nano/networking/base/api_helpers.dart';
 import 'package:zed_nano/models/common/CommonResponse.dart';
 import 'package:zed_nano/models/get_setup_status/SetupStatusResponse.dart';
@@ -216,6 +218,45 @@ class BusinessProviders extends BaseProvider {
     } else {
       finalResponseModel =
           ResponseModel<BillingPlanPackagesResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
+
+  Future<ResponseModel<UnitOfMeasureResponse>> getUnitOfMeasure(
+      {required BuildContext context}) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.getUnitOfMeasure(), context);
+
+    ResponseModel<UnitOfMeasureResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<UnitOfMeasureResponse>(
+          true, responseModel.message!, UnitOfMeasureResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<UnitOfMeasureResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
+  Future<ResponseModel<GetVariablePriceStatusResponse>> getVariablePriceStatus(
+      {required BuildContext context}) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.getVariablePriceStatus(), context);
+
+    ResponseModel<GetVariablePriceStatusResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<GetVariablePriceStatusResponse>(
+          true, responseModel.message!, GetVariablePriceStatusResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<GetVariablePriceStatusResponse>(false, responseModel.message!);
     }
 
     return finalResponseModel;

@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/models/business/BusinessDetails.dart';
 import 'package:zed_nano/models/listCategories/ListCategoriesResponse.dart';
+import 'package:zed_nano/models/unitofmeasure/UnitOfMeasureResponse.dart';
 import 'package:zed_nano/providers/business/BusinessProviders.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/routes/routes.dart';
@@ -44,6 +45,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
   String? selectedCategory;
   List<ProductCategoryData>? productCategoryDataList;
+  List<String>? unitOfMeasureResponse;
+  List<VariablePriceStatus>? variablePriceStatus;
 
   File? _logoImage;
 
@@ -146,6 +149,36 @@ class _AddProductScreenState extends State<AddProductScreen> {
       if (value.isSuccess) {
         setState(() {
           productCategoryDataList = value.data!.data;
+        });
+      } else {
+        showCustomToast(value.message ?? 'Something went wrong');
+      }
+    });
+  }
+
+  Future<void> getUnitOfMeasure() async {
+    await context
+        .read<BusinessProviders>()
+        .getUnitOfMeasure(context: context)
+        .then((value) {
+      if (value.isSuccess) {
+        setState(() {
+          unitOfMeasureResponse = value.data!.data;
+        });
+      } else {
+        showCustomToast(value.message ?? 'Something went wrong');
+      }
+    });
+  }
+
+  Future<void> getVariablePriceStatus() async {
+    await context
+        .read<BusinessProviders>()
+        .getVariablePriceStatus(context: context)
+        .then((value) {
+      if (value.isSuccess) {
+        setState(() {
+          variablePriceStatus = value.data!.data;
         });
       } else {
         showCustomToast(value.message ?? 'Something went wrong');

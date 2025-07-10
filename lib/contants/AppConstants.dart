@@ -46,6 +46,8 @@ class AppConstants{
   static const String getSetupStatus = 'api/get_setup_status';
   static const String listBusinessCategory = 'api/listBusinessCategory?state=Active';
   static const String getBusinessPlanPackages = 'api/v1/billing/listbillingplan_packages';
+  static const String getUnitOfMeasure = 'api/v1/products/unitofmeasure/get';
+  static const String getVariablePriceStatus = 'api/getVariablePriceStatus';
 
 
 
