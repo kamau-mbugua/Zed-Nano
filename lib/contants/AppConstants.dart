@@ -36,10 +36,12 @@ class AppConstants{
   static const String initiateKcbStkPush = 'api/v1/payments/initiate_kcb_stk_push';
   static const String activateFreeTrialPlan = 'api/v1/billing/activate_freetrialplan';
   static const String createCategory = 'api/createCategory';
+  static const String createProduct = 'api/createProduct';
   static const String createBillingInvoice = 'api/v1/billing/businesss/createbilling-invoice';
   static const String uploadBusinessLogo = 'api/edit_business_logo';
   static const String uploadImage = 'api/v1/ecommerce/generate_file_system_url';
   static const String getListCategories = 'api/listCategories/Active';
+  static const String getListProducts = 'api/listProducts/Active';
   static const String createBusiness = 'postBusiness';
   static const String getSetupStatus = 'api/get_setup_status';
   static const String listBusinessCategory = 'api/listBusinessCategory?state=Active';

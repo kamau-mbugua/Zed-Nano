@@ -12,6 +12,7 @@ import 'package:zed_nano/screens/categories/list_categories_page.dart';
 import 'package:zed_nano/screens/main/home_main_page.dart';
 import 'package:zed_nano/screens/onboarding/onboarding_screen.dart';
 import 'package:zed_nano/screens/onboarding/splash_page.dart';
+import 'package:zed_nano/screens/products/add_product_page.dart';
 import 'package:zed_nano/screens/products/list_categories_page.dart';
 
 class RouterHelper {
@@ -96,6 +97,18 @@ class RouterHelper {
     },
   );
 
+  static final Handler _newProductsWithParamHandler = Handler(
+    handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
+      // Extract the doNotUpdate parameter from the URL
+      final doNotUpdateParam = params['doNotUpdate']?.first ?? 'true';
+      final doNotUpdate = doNotUpdateParam.toLowerCase() == 'true';
+
+      return AddProductScreen(
+        doNotUpdate: doNotUpdate,
+      );
+    },
+  );
+
   static void setupRouter() {
     router.define(
       AppRoutes.splashRoute,
@@ -169,6 +182,11 @@ class RouterHelper {
     router.define(
       '${AppRoutes.getNewCategoryRoute}/:doNotUpdate',
       handler: _newCategoryWithParamHandler,
+      transitionType: TransitionType.fadeIn,
+    );
+    router.define(
+      '${AppRoutes.getNewProductWithParamRoute}/:doNotUpdate',
+      handler: _newProductsWithParamHandler,
       transitionType: TransitionType.fadeIn,
     );
 

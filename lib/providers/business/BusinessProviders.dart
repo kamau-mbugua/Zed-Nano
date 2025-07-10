@@ -6,9 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:path/path.dart' as p;
 import 'package:zed_nano/models/createCategory/CreateCategoryResponse.dart';
+import 'package:zed_nano/models/createProduct/CreateProductResponse.dart';
 import 'package:zed_nano/models/createbillingInvoice/CreateBillingInvoiceResponse.dart';
 import 'package:zed_nano/models/get_business_info/BusinessInfoResponse.dart';
 import 'package:zed_nano/models/listCategories/ListCategoriesResponse.dart';
+import 'package:zed_nano/models/listProducts/ListProductsResponse.dart';
 import 'package:zed_nano/models/listbillingplan_packages/BillingPlanPackagesResponse.dart';
 import 'package:zed_nano/models/pushstk/PushStkResponse.dart';
 import 'package:zed_nano/networking/base/api_helpers.dart';
@@ -119,6 +121,25 @@ class BusinessProviders extends BaseProvider {
     } else {
       finalResponseModel =
           ResponseModel<CreateCategoryResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+  Future<ResponseModel<CreateProductResponse>> createProduct(
+      {required Map<String, dynamic> requestData,
+      required BuildContext context}) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.createProduct(requestData: requestData), context);
+
+    ResponseModel<CreateProductResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<CreateProductResponse>(
+          true, responseModel.message!, CreateProductResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<CreateProductResponse>(false, responseModel.message!);
     }
 
     return finalResponseModel;
@@ -279,6 +300,37 @@ class BusinessProviders extends BaseProvider {
     } else {
       finalResponseModel =
           ResponseModel<ListCategoriesResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
+  Future<ResponseModel<ListProductsResponse>> getListProducts(
+      {
+        required int page ,
+        required int limit ,
+        required String productService ,
+        required String searchValue ,
+        required BuildContext context,
+      }) async {
+
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.getListProducts(
+          page: page,
+          limit: limit,
+          searchValue: searchValue,
+            productService: productService
+        ), context);
+
+    ResponseModel<ListProductsResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<ListProductsResponse>(
+          true, responseModel.message!, ListProductsResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<ListProductsResponse>(false, responseModel.message!);
     }
 
     return finalResponseModel;

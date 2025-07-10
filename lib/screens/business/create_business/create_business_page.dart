@@ -12,6 +12,7 @@ import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/auth/input_fields.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
+import 'package:zed_nano/screens/widget/common/heading.dart';
 import 'package:zed_nano/screens/widget/common/location_picker_field.dart';
 import 'package:zed_nano/screens/widget/common/sub_category_picker.dart';
 import 'package:zed_nano/screens/widget/country_currency_picker.dart';
@@ -187,20 +188,10 @@ class _CreateBusinessPageState extends State<CreateBusinessPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Business Details',
-                style: boldTextStyle(
-                  size: 24,
-                  fontFamily: 'Poppins',
-                )).paddingSymmetric(horizontal: 16),
-            8.height,
-            Text('Enter your business details to continue.',
-                    style: secondaryTextStyle(
-                        size: 12,
-                        weight: FontWeight.w500,
-                        color: getBodyColor(),
-                        fontFamily: 'Poppins'))
-                .paddingSymmetric(horizontal: 16),
-            16.height,
+            headings(
+              label: 'Business Details',
+              subLabel: 'Enter your business details to continue.',
+            ),
             const Text('Business Name',
                     style: const TextStyle(
                         color: const Color(0xff2f3036),

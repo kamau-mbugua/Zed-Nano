@@ -63,6 +63,16 @@ class BusinessRepo{
       return ApiResponse.withError(ApiErrorHandler.handleError(e));
     }
   }
+  Future<ApiResponse> createProduct({required Map<String, dynamic> requestData}) async {
+    try {
+      final response =
+      await dioClient!.post('${AppConstants.createProduct}', data: requestData);
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
   Future<ApiResponse> createBillingInvoice({required Map<String, dynamic> requestData}) async {
     try {
       final response =
@@ -109,6 +119,21 @@ class BusinessRepo{
     try {
       final response =
       await dioClient!.get('${AppConstants.getListCategories}?page=$page&limit=$limit&searchValue=$searchValue&productService=$productService');
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
+  Future<ApiResponse> getListProducts({
+    required int page ,
+    required int limit ,
+    required String searchValue ,
+    required String productService ,
+  }) async {
+    try {
+      final response =
+      await dioClient!.get('${AppConstants.getListProducts}?page=$page&limit=$limit&search=$searchValue');
 
       return ApiResponse.withSuccess(response);
     } catch (e) {

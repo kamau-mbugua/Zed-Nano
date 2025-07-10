@@ -31,7 +31,6 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_app_loading_indicator: ^0.0.3
-  flutter_bloc: ^8.1.6
   flutter_localizations:
     sdk: flutter
   flutter_slidable: ^4.0.0
@@ -62,7 +61,6 @@ dependencies:
   webview_flutter: ^4.4.2
 
 dev_dependencies:
-  bloc_test: ^9.1.7
   build_runner: ^2.4.8
   flutter_gen_runner: ^5.10.0
   flutter_test:

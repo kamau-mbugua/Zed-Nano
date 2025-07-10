@@ -51,20 +51,6 @@ class _ListCategoriesPageState extends State<ListCategoriesPage> {
     );
   }
 
-  void _handleAddCategory() {
-    // Navigate to add category page based on selected tab
-    final categoryType = selectedTab == 0 ? 'product' : 'service';
-    // Navigator.pushNamed(context, '/add-category', arguments: categoryType);
-    
-    // For now, show a snackbar
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Add ${categoryType} category'),
-        backgroundColor: const Color(0xFF032541),
-      ),
-    );
-  }
-
   Expanded _buildTab(String title, int index) {
     final isSelected = selectedTab == index;
     return Expanded(

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:zed_nano/screens/products/tab/products_list_page.dart';
+import 'package:zed_nano/screens/products/tab/service_list_page.dart';
 
 class ListProductsAndServicesPage extends StatefulWidget {
   const ListProductsAndServicesPage({Key? key}) : super(key: key);
@@ -48,62 +50,14 @@ class _ListProductsAndServicesPageState extends State<ListProductsAndServicesPag
               ),
             ),
           ),
-          const SizedBox(height: 80),
-          // Empty State
-          Center(
-            child: Column(
-              children: [
-                Image.asset(
-                  'assets/images/empty_categories.png', // replace with your actual asset
-                  width: 135,
-                  height: 135,
-                ),
-                const SizedBox(height: 16),
-                const Text(
-                  "It’s empty, over here.",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                    fontFamily: 'Poppins',
-                    color: Color(0xFF1F2024),
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 8),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 32),
-                  child: Text(
-                    "No service categories in your business, yet! Add to view them here.",
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w400,
-                      fontFamily: 'Poppins',
-                      color: Color(0xFF71727A),
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ],
-            ),
+          const SizedBox(height: 16),
+          Expanded(
+            child: selectedTab == 0
+                ? const ProductsListPage()
+                : const ServiceListPage(),
           ),
         ],
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          // Handle add
-        },
-        backgroundColor: const Color(0xFF032541),
-        icon: const Icon(Icons.add, size: 20),
-        label: const Text(
-          "Add",
-          style: TextStyle(
-            fontFamily: 'Poppins',
-            fontWeight: FontWeight.w600,
-            fontSize: 12,
-            color: Colors.white,
-          ),
-        ),
-      ),
+      )
     );
   }
 

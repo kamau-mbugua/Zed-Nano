@@ -132,8 +132,14 @@ class SetupStepBottomSheet extends StatelessWidget {
                     // BottomSheetHelper.showProductServiceCategoryBottomSheet(context);
                     break;
                   case 'Add Products and Services':
-                    Navigator.pushNamed(
-                        context, AppRoutes.getListProductsAndServicesRoute());
+                    if(index == activeIndex) {
+                      // Show the bottom sheet
+                      await Navigator.pushNamed(context, AppRoutes.getNewProductWithParamRoutes('false'));
+                    }else{
+                      Navigator.pushNamed(
+                          context, AppRoutes.getListProductsAndServicesRoute());
+                    }
+
                     logger.d('Add Products and Services' );
                     break;
                   case 'Setup Payment Methods':

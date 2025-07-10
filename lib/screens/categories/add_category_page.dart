@@ -14,6 +14,7 @@ import 'package:zed_nano/routes/routes.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/auth/input_fields.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
+import 'package:zed_nano/screens/widget/common/heading.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/Images.dart';
@@ -62,7 +63,7 @@ class _NewCategoryPageState extends State<NewCategoryPage> {
 
       if (mounted) {
         Navigator.pop(context); // Pop current screen
-        await Navigator.pushNamed(context, AppRoutes.getListCategoriesRoute());
+        await Navigator.pushNamed(context, AppRoutes.getListProductsAndServicesRoute());
       }
 
     } catch (e) {
@@ -150,25 +151,10 @@ class _NewCategoryPageState extends State<NewCategoryPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'New Category',
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: 'Poppins',
-                  color: Color(0xFF1F2024),
-                ),
+              headings(
+                label: 'New Category',
+                subLabel: 'Enter category details.',
               ),
-              const SizedBox(height: 4),
-              const Text(
-                'Enter category details.',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Color(0xFF8F90A6),
-                  fontFamily: 'Poppins',
-                ),
-              ),
-              const SizedBox(height: 24),
 
               // Category Name
               const Text(
