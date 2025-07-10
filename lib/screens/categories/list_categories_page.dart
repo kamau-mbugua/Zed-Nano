@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
 import 'tabs/product_categories_tab.dart';
 import 'tabs/service_categories_tab.dart';
@@ -17,20 +18,7 @@ class _ListCategoriesPageState extends State<ListCategoriesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.white,
-        leading: const BackButton(color: Color(0xFF1F2024)),
-        title: const Text(
-          'Categories',
-          style: TextStyle(
-            fontSize: 28,
-            fontWeight: FontWeight.w600,
-            color: Color(0xFF1F2024),
-            fontFamily: 'Poppins',
-          ),
-        ),
-      ),
+      appBar: const AuthAppBar(title: 'Categories'),
       body: Column(
         children: [
           const SizedBox(height: 24),

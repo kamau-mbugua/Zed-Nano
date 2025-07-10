@@ -124,7 +124,7 @@ class SetupStepBottomSheet extends StatelessWidget {
                     //if its active
                     if(index == activeIndex) {
                       // Show the bottom sheet
-                      await Navigator.pushNamed(context, AppRoutes.getNewCategoryWithParamRoutes('true'));
+                      await Navigator.pushNamed(context, AppRoutes.getNewCategoryWithParamRoutes('false'));
                     }else{
                       await Navigator.pushNamed(context, AppRoutes.getListCategoriesRoute());
                     }

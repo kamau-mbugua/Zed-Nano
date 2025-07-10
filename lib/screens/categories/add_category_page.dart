@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:nb_utils/nb_utils.dart';
+import 'package:nb_utils/nb_utils.dart' hide lightGrey;
 import 'package:provider/provider.dart';
 import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/models/business/BusinessDetails.dart';
@@ -216,7 +216,7 @@ class _NewCategoryPageState extends State<NewCategoryPage> {
                               : const Color(0xFFE0E0E0),
                         ),
                         borderRadius: BorderRadius.circular(12),
-                        color: Colors.white,
+                        color: !isProduct ?Colors.white : lightGrey,
                       ),
                       alignment: Alignment.center,
                       child: Text(
@@ -245,7 +245,7 @@ class _NewCategoryPageState extends State<NewCategoryPage> {
                               : const Color(0xFFE0E0E0),
                         ),
                         borderRadius: BorderRadius.circular(12),
-                        color: Colors.white,
+                        color: isProduct ?Colors.white : lightGrey,
                       ),
                       alignment: Alignment.center,
                       child: Text(

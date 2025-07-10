@@ -104,10 +104,11 @@ class BusinessRepo{
     required int page ,
     required int limit ,
     required String searchValue ,
+    required String productService ,
   }) async {
     try {
       final response =
-      await dioClient!.get('${AppConstants.getListCategories}?page=$page&limit=$limit&searchValue=$searchValue');
+      await dioClient!.get('${AppConstants.getListCategories}?page=$page&limit=$limit&searchValue=$searchValue&productService=$productService');
 
       return ApiResponse.withSuccess(response);
     } catch (e) {

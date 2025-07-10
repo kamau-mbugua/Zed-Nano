@@ -1,10 +1,9 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:zed_nano/l10n/l10n.dart';
 import 'package:zed_nano/routes/routes.dart';
 import 'package:zed_nano/routes/routes_helper.dart';
-import 'package:zed_nano/screens/onboarding/splash_page.dart';
+import 'package:zed_nano/utils/Colors.dart';
 import '../app_config.dart';
 
 class App extends StatefulWidget {
@@ -32,9 +31,13 @@ class _AppState extends State<App> {
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         ),
         useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: appThemePrimary,
+          surfaceTint: Colors.transparent,   // disables tint everywhere
+        ),
       ),
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
+      // localizationsDelegates: AppLocalizations.localizationsDelegates,
+      // supportedLocales: AppLocalizations.supportedLocales,
       initialRoute: AppRoutes.splashRoute,
       debugShowCheckedModeBanner: false,
       onGenerateRoute: RouterHelper.router.generator,

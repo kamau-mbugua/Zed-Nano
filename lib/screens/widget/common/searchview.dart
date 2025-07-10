@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zed_nano/utils/Colors.dart' show lightGrey;
 
 Widget buildSearchBar({
   required TextEditingController controller,
@@ -10,7 +11,7 @@ Widget buildSearchBar({
     child: Container(
       height: 48, // Fixed height for better control
       decoration: BoxDecoration(
-        color: const Color(0xFFF6F6F6), // light grey background
+        color: lightGrey, // light grey background
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(

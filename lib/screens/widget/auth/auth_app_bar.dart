@@ -26,6 +26,7 @@ class AuthAppBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: colorWhite,
       elevation: elevation,
       titleSpacing: 0,
+      surfaceTintColor: Colors.transparent,
       iconTheme: IconThemeData(color: getBodyColor()),
       leading: IconButton(
         icon: Icon(Icons.arrow_back_ios_new, color: getBodyColor()),

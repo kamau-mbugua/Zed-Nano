@@ -257,6 +257,7 @@ class BusinessProviders extends BaseProvider {
       {
         required int page ,
         required int limit ,
+        required String productService ,
         required String searchValue ,
         required BuildContext context,
       }) async {
@@ -265,7 +266,8 @@ class BusinessProviders extends BaseProvider {
         () => businessRepo.getListCategories(
           page: page,
           limit: limit,
-          searchValue: searchValue
+          searchValue: searchValue,
+            productService: productService
         ), context);
 
     ResponseModel<ListCategoriesResponse> finalResponseModel;

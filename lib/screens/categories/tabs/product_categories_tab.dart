@@ -3,6 +3,7 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'dart:async';
 import 'package:zed_nano/models/listCategories/ListCategoriesResponse.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
+import 'package:zed_nano/routes/routes.dart';
 import 'package:zed_nano/screens/widget/common/categories_widget.dart';
 import 'package:zed_nano/screens/widget/common/searchview.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
@@ -51,6 +52,7 @@ class _ProductCategoriesTabState extends State<ProductCategoriesTab> {
       limit: limit,
       searchValue: _searchTerm,
       context: context,
+      productService: 'Product'
     );
     return response.data?.data ?? [];
   }
@@ -78,7 +80,10 @@ class _ProductCategoriesTabState extends State<ProductCategoriesTab> {
     return Scaffold(
       backgroundColor: Colors.white,
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: (){},
+        onPressed: () async {
+          await Navigator.pushNamed(context, AppRoutes.getNewCategoryWithParamRoutes('true'));
+
+        },
         backgroundColor: const Color(0xFF032541),
         icon: const Icon(Icons.add, size: 20, color: Colors.white),
         label: const Text(
