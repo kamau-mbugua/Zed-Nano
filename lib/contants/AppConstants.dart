@@ -38,8 +38,14 @@ class AppConstants{
   static const String createCategory = 'api/createCategory';
   static const String createProduct = 'api/createProduct';
   static const String createBillingInvoice = 'api/v1/billing/businesss/createbilling-invoice';
+  static const String enableCashPayment = 'api/activate_cash_payment';
+  static const String enableSettleInvoiceStatus = 'api/v1/business/enablesetttleinvoicetstatus';
+  static const String addKCBPayment = 'api/v1/payments/activate_kcb_mpesa?status=true';
+  static const String addMPESAPayment = 'api/activate_daraja_for_business';
+  static const String updateBusinessSetupStatus = 'api/update_business_setup_status';
   static const String uploadBusinessLogo = 'api/edit_business_logo';
   static const String uploadImage = 'api/v1/ecommerce/generate_file_system_url';
+  static const String getPaymentMethodsWithStatus = 'api/get_payment_methods_with_status';
   static const String getListCategories = 'api/listCategories/Active';
   static const String getListProducts = 'api/listProducts/Active';
   static const String createBusiness = 'postBusiness';

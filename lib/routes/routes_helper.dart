@@ -12,6 +12,9 @@ import 'package:zed_nano/screens/categories/list_categories_page.dart';
 import 'package:zed_nano/screens/main/home_main_page.dart';
 import 'package:zed_nano/screens/onboarding/onboarding_screen.dart';
 import 'package:zed_nano/screens/onboarding/splash_page.dart';
+import 'package:zed_nano/screens/payments/kcb/add_k_c_b_payment_page.dart';
+import 'package:zed_nano/screens/payments/list_payments_page.dart';
+import 'package:zed_nano/screens/payments/mpesa/add_mpesa_payment_page.dart';
 import 'package:zed_nano/screens/products/add_product_page.dart';
 import 'package:zed_nano/screens/products/list_categories_page.dart';
 
@@ -75,6 +78,10 @@ class RouterHelper {
     handlerFunc: (BuildContext? context, Map<String, List<String>> params) =>
         ListProductsAndServicesPage(),
   );
+  static final Handler _addPaymentMethodHandler = Handler(
+    handlerFunc: (BuildContext? context, Map<String, List<String>> params) =>
+        AddPaymentMethodScreen(),
+  );
 
   static final Handler _newCategoryHandler = Handler(
     handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
@@ -105,6 +112,24 @@ class RouterHelper {
 
       return AddProductScreen(
         doNotUpdate: doNotUpdate,
+      );
+    },
+  );
+
+  static final Handler _newAddKCBPaymenHandler = Handler(
+    handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
+      final kcbAccountType = params['kcbAccountType']?.first ?? 'KCBACCOUNT';
+      return AddKCBPaymentPage(
+        kcbAccountType: kcbAccountType,
+      );
+    },
+  );
+
+  static final Handler _newAddMPESAPaymenHandler = Handler(
+    handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
+      final mpesaAccountType = params['mpesaAccountType']?.first ?? 'MPESATILL';
+      return AddMpesaPaymentPage(
+        mpesaAccountType: mpesaAccountType,
       );
     },
   );
@@ -180,6 +205,11 @@ class RouterHelper {
       transitionType: TransitionType.fadeIn,
     );
     router.define(
+      AppRoutes.addPaymentMethodRoute,
+      handler: _addPaymentMethodHandler,
+      transitionType: TransitionType.fadeIn,
+    );
+    router.define(
       '${AppRoutes.getNewCategoryRoute}/:doNotUpdate',
       handler: _newCategoryWithParamHandler,
       transitionType: TransitionType.fadeIn,
@@ -187,6 +217,18 @@ class RouterHelper {
     router.define(
       '${AppRoutes.getNewProductWithParamRoute}/:doNotUpdate',
       handler: _newProductsWithParamHandler,
+      transitionType: TransitionType.fadeIn,
+    );
+
+    router.define(
+      '${AppRoutes.getNewAddKCBPaymenParamRoute}/:kcbAccountType',
+      handler: _newAddKCBPaymenHandler,
+      transitionType: TransitionType.fadeIn,
+    );
+
+    router.define(
+      '${AppRoutes.getNewAddMPESAPaymenParamRoute}/:mpesaAccountType',
+      handler: _newAddMPESAPaymenHandler,
       transitionType: TransitionType.fadeIn,
     );
 

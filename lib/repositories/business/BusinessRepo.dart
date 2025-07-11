@@ -83,6 +83,56 @@ class BusinessRepo{
       return ApiResponse.withError(ApiErrorHandler.handleError(e));
     }
   }
+  Future<ApiResponse> enableCashPayment({required Map<String, dynamic> requestData, required String status}) async {
+    try {
+      final response =
+      await dioClient!.post('${AppConstants.enableCashPayment}?status=$status', data: requestData);
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
+  Future<ApiResponse> enableSettleInvoiceStatus({required Map<String, dynamic> requestData}) async {
+    try {
+      final response =
+      await dioClient!.post('${AppConstants.enableSettleInvoiceStatus}', data: requestData);
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
+  Future<ApiResponse> addKCBPayment({required Map<String, dynamic> requestData}) async {
+    try {
+      final response =
+      await dioClient!.post('${AppConstants.addKCBPayment}', data: requestData);
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
+  Future<ApiResponse> addMPESAPayment({required Map<String, dynamic> requestData}) async {
+    try {
+      final response =
+      await dioClient!.post('${AppConstants.addMPESAPayment}', data: requestData);
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
+  Future<ApiResponse> updateBusinessSetupStatus({required Map<String, dynamic> requestData}) async {
+    try {
+      final response =
+      await dioClient!.post('${AppConstants.updateBusinessSetupStatus}', data: requestData);
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
   Future<ApiResponse> uploadBusinessLogo({
     required FormData requestData,
   }) async {
@@ -103,6 +153,16 @@ class BusinessRepo{
     try {
       final response =
       await dioClient!.post('${AppConstants.uploadImage}$urlPart', data: requestData);
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
+  Future<ApiResponse> getPaymentMethodsWithStatus() async {
+    try {
+      final response =
+      await dioClient!.get('${AppConstants.getPaymentMethodsWithStatus}');
 
       return ApiResponse.withSuccess(response);
     } catch (e) {

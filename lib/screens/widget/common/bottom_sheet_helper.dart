@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:zed_nano/screens/business/bottomsheets/product_service_category_bottom_sheet.dart';
 import 'package:zed_nano/screens/business/bottomsheets/setup_bottom_sheet.dart';
+import 'package:zed_nano/screens/payments/bottomsheets/add_kcb_options_bottomsheet.dart';
+import 'package:zed_nano/screens/payments/bottomsheets/add_mpesa_options_bottomsheet.dart';
 import 'package:zed_nano/screens/widget/common/base_bottom_sheet.dart';
 import 'package:zed_nano/screens/widget/common/confirmation_bottom_sheet.dart';
 import 'package:zed_nano/screens/widget/common/form_bottom_sheet.dart';
@@ -27,6 +29,24 @@ class BottomSheetHelper {
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (context) => ProductServiceCategoryBottomSheet(),
+    );
+  }
+  static Future<void> showAddKcbOptionsBottomsheet(
+    BuildContext context) {
+    return showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => AddKcbOptionsBottomsheet(),
+    );
+  }
+  static Future<void> showAddMpesaOptionsBottomsheet(
+    BuildContext context) {
+    return showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => AddMpesaOptionsBottomsheet(),
     );
   }
 

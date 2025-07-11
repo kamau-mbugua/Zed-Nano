@@ -23,3 +23,7 @@ const sellQuicker = 'assets/icons/sellQuicker.svg';
 const trackStockIcon= 'assets/icons/trackStockIcon.svg';
 const arrowItem= 'assets/icons/arrowItem.svg';
 const imagePlaceholder= 'assets/images/imagePlaceholder.svg';
+const settleInvoiceIcon= 'assets/icons/document.svg';
+const kcbIcon= 'assets/icons/kcb_icon.svg';
+const mpesaIcon= 'assets/icons/mpesa_icon.svg';
+const cashIcon= 'assets/icons/payment.svg';

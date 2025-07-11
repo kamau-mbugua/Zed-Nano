@@ -144,6 +144,7 @@ class SetupStepBottomSheet extends StatelessWidget {
                     break;
                   case 'Setup Payment Methods':
                     logger.d('Setup Payment Methods' );
+                    Navigator.pushNamed(context, AppRoutes.getAddPaymentMethodRoute());
                     break;
                   default:
                     break;
