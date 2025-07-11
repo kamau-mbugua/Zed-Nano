@@ -112,23 +112,26 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                       //   builder: (context) => SetupStepBottomSheet(currentStep: viewModel.workflowState!.toLowerCase()),
                       // );
                     },
-                    child: Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                          border: Border.all(color: const Color(0xffffb37c)),
-                          borderRadius: BorderRadius.circular(10)),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text("Complete setting up your business",
-                              style: TextStyle(fontSize: 14, color: darkGreyColor)),
-                          CircularProgressIndicator(
-                            value: getValue(viewModel),
-                            strokeWidth: 5,
-                            valueColor: const AlwaysStoppedAnimation(Color(0xffe86339)),
-                            backgroundColor: const Color(0xffffb37c),
-                          )
-                        ],
+                    child: Visibility(
+                      visible: viewModel.workflowState != "COMPLETE",
+                      child: Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                            border: Border.all(color: const Color(0xffffb37c)),
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text("Complete setting up your business",
+                                style: TextStyle(fontSize: 14, color: darkGreyColor)),
+                            CircularProgressIndicator(
+                              value: getValue(viewModel),
+                              strokeWidth: 5,
+                              valueColor: const AlwaysStoppedAnimation(Color(0xffe86339)),
+                              backgroundColor: const Color(0xffffb37c),
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   ),
