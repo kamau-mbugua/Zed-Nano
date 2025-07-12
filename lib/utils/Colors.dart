@@ -57,3 +57,4 @@ const Color transparent = Color(0x00000000);
 const AppLayoutBackground = Color(0xFFF4F7F6);
 const BodyWhite = Color(0xFF6F7F92);
 const AppBorderColor = Color(0xFFD9DFEB);
+const neutralDarkLight = Color(0xFFD9DFEB);

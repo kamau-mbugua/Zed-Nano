@@ -24,6 +24,7 @@ import 'package:zed_nano/utils/extensions.dart';
 import 'package:zed_nano/viewmodels/RefreshViewModel.dart';
 import 'package:zed_nano/viewmodels/WorkflowViewModel.dart';
 import 'package:zed_nano/utils/date_range_util.dart';
+import 'package:zed_nano/widgets/custom_drawer.dart';
 
 class AdminDashboardPage extends StatefulWidget {
   const AdminDashboardPage({Key? key}) : super(key: key);
@@ -189,7 +190,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: colorWhite,
-      drawer: const DrawerWidget(),
+      drawer: CustomDrawer(),
       appBar: CustomDashboardAppBar(title: businessName ?? '',),
       body: Consumer2<WorkflowViewModel, RefreshViewModel>(
         builder: (context, viewModel,refreshViewModel, _) {

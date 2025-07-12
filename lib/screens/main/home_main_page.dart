@@ -122,7 +122,7 @@ class _HomeMainPageState extends State<HomeMainPage> {
 
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
-      elevation: 4,
+      elevation: 3,
       backgroundColor: colorBackground,
       selectedItemColor: const Color(0xFF1F2024),
       unselectedItemColor: const Color(0xFF71727A),
@@ -131,6 +131,8 @@ class _HomeMainPageState extends State<HomeMainPage> {
       unselectedFontSize: 13,
       onTap: onItemTapped,
       items: adminNavItems,
+      useLegacyColorScheme: false,
+      landscapeLayout: BottomNavigationBarLandscapeLayout.linear,
     );
   }
 
