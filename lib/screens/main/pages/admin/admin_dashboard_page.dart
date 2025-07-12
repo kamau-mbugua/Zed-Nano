@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:nb_utils/nb_utils.dart' as nb_utils hide Color;
 import 'package:provider/provider.dart';
+import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/models/branch-store-summary/BranchStoreSummaryResponse.dart';
 import 'package:zed_nano/models/get_branch_transaction_by_date/BranchTransactionByDateResponse.dart';
 import 'package:zed_nano/models/posLoginVersion2/login_response.dart';
@@ -62,6 +63,9 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
 
   // Track last refresh time to detect changes
   DateTime? _lastRefreshTime;
+  
+  // Add a debounce flag to prevent multiple rapid fetches
+  bool _isFetching = false;
 
   @override
   void initState() {
@@ -79,22 +83,55 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     
-    // Get refresh view model
-    final refreshViewModel = Provider.of<RefreshViewModel>(context, listen: false);
+    // Don't proceed if we're already fetching data
+    if (_isFetching) return;
+    
+    // Get refresh view model - LISTEN to changes
+    final refreshViewModel = Provider.of<RefreshViewModel>(context);
+    
+    bool shouldRefresh = false;
     
     // Check if there's been a refresh since we last checked
     if (_lastRefreshTime != refreshViewModel.lastRefreshed && 
         refreshViewModel.lastRefreshed != null) {
       _lastRefreshTime = refreshViewModel.lastRefreshed;
-      fetchBranchStoreSummary();
+      logger.w("AdminDashboardPage detected global timestamp change");
+      shouldRefresh = true;
     }
     
     // Check if this specific page was refreshed
     if (refreshViewModel.isPageRefreshed('admin_dashboard')) {
-      fetchBranchStoreSummary();
-      // Reset the page refresh status to avoid repeated refreshes
-      refreshViewModel.resetPageRefreshStatus('admin_dashboard');
+      logger.w("AdminDashboardPage detected specific page refresh");
+      shouldRefresh = true;
+      
+      // Schedule the reset for after build completes to avoid setState during build
+      Future.microtask(() {
+        refreshViewModel.resetPageRefreshStatus('admin_dashboard');
+      });
     }
+    
+    // Only fetch data once if either condition is true
+    if (shouldRefresh) {
+      _fetchDataWithDebounce();
+    }
+  }
+  
+  // New method to fetch data with debouncing
+  void _fetchDataWithDebounce() {
+    if (_isFetching) return;
+    
+    _isFetching = true;
+    logger.w("AdminDashboardPage starting data fetch");
+    
+    fetchBranchStoreSummary().then((_) {
+      // Reset the fetching flag after a short delay
+      Future.delayed(Duration(milliseconds: 500), () {
+        _isFetching = false;
+      });
+    }).catchError((error) {
+      logger.e("Error fetching branch store summary: $error");
+      _isFetching = false;
+    });
   }
 
   Future<void> fetchBranchStoreSummary() async {

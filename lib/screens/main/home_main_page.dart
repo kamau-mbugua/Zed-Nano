@@ -60,7 +60,9 @@ class _HomeMainPageState extends State<HomeMainPage> {
       refreshViewModel.refreshPage('dashboard');
       refreshViewModel.refreshPage('pos');
       refreshViewModel.refreshPage('reports');
-      
+      refreshViewModel.refreshPage('admin_dashboard');  // Make sure this matches
+
+
     } catch (e) {
       // Handle any errors
     } finally {
