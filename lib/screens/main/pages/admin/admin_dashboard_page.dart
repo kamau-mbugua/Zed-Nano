@@ -147,8 +147,8 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
         page:1,
         limit:10,
         searchValue: '',
-        startDate:'' /*_dateRange.values.first*/,
-        endDate: '' /*_dateRange.values.last*/
+        startDate:_dateRange.values.first.removeTimezoneOffset,
+        endDate: _dateRange.values.last.removeTimezoneOffset
     )
         .then((value) async {
       if (value.isSuccess) {

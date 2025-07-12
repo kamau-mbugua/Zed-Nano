@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
@@ -58,15 +60,15 @@ class DioClient {
     ProgressCallback? onReceiveProgress,
   }) async {
     try {
-      logger.i('baseUrlGet=> $baseUrl');
-      logger.i('apiCall ==> url=> $uri \nparams---> $queryParameters\nheader=> ${dio!.options.headers}');
+      // await   _logRequest(uri, queryParameters: queryParameters);
+
       var response = await dio!.get(
         uri,
         queryParameters: queryParameters,
         cancelToken: cancelToken,
         onReceiveProgress: onReceiveProgress,
       );
-      logger.i('apiCall ==> url=> $uri\nparams---> $queryParameters\nheader=> ${dio!.options.headers}\nresponse=> ${response.data}');
+      // await _logResponse(uri, queryParameters: queryParameters, data: null, response: response.data);
       return response;
     } on SocketException catch (e) {
       throw SocketException(e.toString());
@@ -77,6 +79,35 @@ class DioClient {
     }
   }
 
+  Future<void> _logRequest(String uri, {Map<String, dynamic>? queryParameters}) async {
+    logger.i('REQUEST baseUrlGet=> $baseUrl');
+    logger.i('REQUEST uri=> $uri');
+    logger.i('REQUEST complete uri=> ${baseUrl + uri}');
+    logger.i('REQUEST params---> $queryParameters');
+    final authHeader = dio!.options.headers['X-Authorization'];
+    logLong('REQUEST X-Authorization: $authHeader',);
+  }
+
+  Future<void> _logResponse(String uri, {Map<String, dynamic>? queryParameters, data, response}) async {
+    logger.i('REQUEST baseUrlGet=> $baseUrl');
+    logger.i('REQUEST uri=> $uri');
+    logger.i('REQUEST complete uri=> ${baseUrl + uri}');
+    logger.i('REQUEST params---> $queryParameters');
+    final authHeader = dio!.options.headers['X-Authorization'];
+    logLong('REQUEST X-Authorization: $authHeader',);
+    logLong('REQUEST DATA: $jsonDecode($data)');
+    logLong('RESPONSE RESPONSE: $jsonDecode($response)');
+  }
+
+  void logLong(String message, {String tag = "💡"}) {
+    const int chunkSize = 1000;
+    int len = message.length;
+    for (int i = 0; i < len; i += chunkSize) {
+      print('$tag ${message.substring(i, i + chunkSize > len ? len : i + chunkSize)}');
+    }
+  }
+
+
   Future<Response> post(String uri, {
     data,
     Map<String, dynamic>? queryParameters,
@@ -85,8 +116,8 @@ class DioClient {
     ProgressCallback? onReceiveProgress,
   }) async {
     try {
-      logger.i('baseUrlPost=> $baseUrl');
-      logger.i('apiCall ==> url=> $uri \nparams---> $queryParameters\nheader=> ${dio!.options.headers} \ndata=> $data');
+      //await _logRequest(uri, queryParameters: queryParameters);
+
       var response = await dio!.post(
         uri,
         data: data,
@@ -96,7 +127,7 @@ class DioClient {
         onReceiveProgress: onReceiveProgress,
       );
 
-      loggerNoStack.i('apiCall ==> url=> $uri \nparams---> $queryParameters\nheader=> ${dio!.options.headers} \ndata=> $data \nresponse=> ${response.data}');
+      //await _logResponse(uri, queryParameters: queryParameters, data: data, response: response.data);
       return response;
     } on FormatException catch (_) {
       throw const FormatException("Unable to process the data");
@@ -113,7 +144,8 @@ class DioClient {
     ProgressCallback? onSendProgress,
     ProgressCallback? onReceiveProgress,
   }) async {
-    logger.i('apiCall ==> url=> $uri \nparams---> $queryParameters\nheader=> ${dio!.options.headers}');
+    //await _logRequest(uri, queryParameters: queryParameters);
+
     try {
       var response = await dio!.put(
         uri,
@@ -123,7 +155,11 @@ class DioClient {
         onSendProgress: onSendProgress,
         onReceiveProgress: onReceiveProgress,
       );
+
+      //await _logResponse(uri, queryParameters: queryParameters, data: data, response: response.data);
+
       return response;
+
     } on FormatException catch (_) {
       throw const FormatException("Unable to process the data");
     } catch (e) {
@@ -136,7 +172,7 @@ class DioClient {
     Map<String, dynamic>? queryParameters,
     CancelToken? cancelToken,
   }) async {
-    logger.i('apiCall ==> url=> $uri \nparams---> $queryParameters\nheader=> ${dio!.options.headers}');
+    //await _logRequest(uri, queryParameters: queryParameters);
     try {
       var response = await dio!.delete(
         uri,
@@ -144,6 +180,8 @@ class DioClient {
         queryParameters: queryParameters,
         cancelToken: cancelToken,
       );
+      //await _logResponse(uri, queryParameters: queryParameters, data: data, response: response.data);
+
       return response;
     } on FormatException catch (_) {
       throw const FormatException("Unable to process the data");

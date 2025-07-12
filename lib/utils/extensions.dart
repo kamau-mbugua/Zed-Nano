@@ -75,6 +75,36 @@ extension StringValidationExtensions on String {
       return this;
     }
   }
+  
+  /// Removes timezone offset from ISO 8601 date string
+  /// Example: 2025-07-12T15:14:50+03:00 -> 2025-07-12T15:14:50
+  String get removeTimezoneOffset {
+    try {
+      if (this.contains('+') || this.contains('-', this.indexOf('T'))) {
+        // Find the last occurrence of + or - after the T
+        int tIndex = this.indexOf('T');
+        int plusIndex = this.indexOf('+', tIndex);
+        int minusIndex = this.indexOf('-', tIndex);
+        
+        // Use the earlier of the two that exists
+        int offsetIndex = -1;
+        if (plusIndex != -1 && minusIndex != -1) {
+          offsetIndex = plusIndex < minusIndex ? plusIndex : minusIndex;
+        } else if (plusIndex != -1) {
+          offsetIndex = plusIndex;
+        } else if (minusIndex != -1) {
+          offsetIndex = minusIndex;
+        }
+        
+        if (offsetIndex != -1) {
+          return this.substring(0, offsetIndex);
+        }
+      }
+      return this;
+    } catch (e) {
+      return this;
+    }
+  }
 }
 
 

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 
 import '../../../../utils/logger.dart';
@@ -5,39 +7,81 @@ import '../../../../utils/logger.dart';
 class LoggingInterceptor extends InterceptorsWrapper {
   int maxCharactersPerLine = 200;
 
+  void logLong(String message) {
+    const int chunkSize = 1000;
+    int len = message.length;
+    for (int i = 0; i < len; i += chunkSize) {
+      print('${message.substring(i, i + chunkSize > len ? len : i + chunkSize)}');
+    }
+  }
+
+  Future<void> _logRequest({required RequestOptions options, required RequestInterceptorHandler handler}) async {
+    logLong('💡 <----- START HTTP REQUEST -----> 💡\n'
+        '💡 REQUEST Method: ${options.method} 💡 \n'
+        '💡 REQUEST PATH: ${options.path} 💡\n'
+        '💡 REQUEST URL: ${options.uri} 💡\n'
+        '💡 REQUEST QUERY PARAMETERS: ${_safeMapToString(options.queryParameters)} 💡\n'
+        '💡 REQUEST DATA: ${
+        options.data == null
+          ? 'No Data'
+          : options.data is Map || options.data is List
+          ? _safeMapToString(options.data)
+          : options.data} 💡\n'
+        '💡 REQUEST X-Authorization: ${options.headers['X-Authorization']} 💡\n'
+        '💡<----- END HTTP REQUEST ----->💡');
+  }
+
+  Future<void> _logResponse({required Response response, required ResponseInterceptorHandler handler}) async {
+
+    logLong('💡 <----- START HTTP RESPONSE -----> 💡\n'
+        '💡 RESPONSE Status Code: ${response.statusCode} 💡\n'
+        '💡 RESPONSE Method: ${response.requestOptions.method} 💡\n'
+        '💡 RESPONSE PATH: ${response.requestOptions.path} 💡\n'
+        '💡 RESPONSE URL: ${response.requestOptions.uri} 💡\n'
+        '💡 RESPONSE DATA: ${
+        response.data == null
+            ? 'null'
+            : response.data is Map || response.data is List
+            ? _safeMapToString(response.data)
+            : response.data} 💡\n'
+        '💡 RESPONSE X-Authorization: ${response.requestOptions.headers['X-Authorization']} 💡\n'
+        '💡 <----- END HTTP RESPONSE -----> 💡 ');
+  }
+  
+  // Helper method to safely convert maps to string
+  String _safeMapToString(dynamic object) {
+    try {
+      if (object == null) return 'null';
+      return jsonEncode(object);
+    } catch (e) {
+      // If we can't encode the whole object, try to extract safe properties
+      if (object is Map) {
+        final safeMap = <String, dynamic>{};
+        object.forEach((key, value) {
+          try {
+            // Test if this entry can be encoded
+            jsonEncode({key.toString(): value});
+            safeMap[key.toString()] = value;
+          } catch (_) {
+            safeMap[key.toString()] = value.toString();
+          }
+        });
+        return jsonEncode(safeMap);
+      }
+      return object.toString();
+    }
+  }
+
   @override
   Future onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
-    loggerNoStack.i("--> ${options.method} ${options.path}");
-    loggerNoStack.i("Headers: ${options.headers.toString()}");
-    loggerNoStack.i("<-- END HTTP");
+    await _logRequest(options: options, handler: handler);
     return super.onRequest(options, handler);
   }
 
   @override
   Future onResponse(Response response, ResponseInterceptorHandler handler) async {
-    String responseAsString = response.data.toString();
-    loggerNoStack.i(
-        "<----onResponse---->\n"
-            "===> Status Code ${response.statusCode} \n"
-            "===> Request ${response.requestOptions.method} \n "
-            "===> path: ${response.requestOptions.path} \n "
-            "===> respose: ${responseAsString}"
-    );
-    if (responseAsString.length > maxCharactersPerLine) {
-      int iterations = (responseAsString.length / maxCharactersPerLine).floor();
-      for (int i = 0; i <= iterations; i++) {
-        int endingIndex = i * maxCharactersPerLine + maxCharactersPerLine;
-        if (endingIndex > responseAsString.length) {
-          endingIndex = responseAsString.length;
-        }
-        // loggerNoStack.i(responseAsString.substring(i * maxCharactersPerLine, endingIndex));
-      }
-    } else {
-      // logger.i(response.data);
-    }
-
+    await _logResponse(response: response, handler: handler);
     logger.i("<-- END HTTP");
-
     return super.onResponse(response, handler);
   }
 
