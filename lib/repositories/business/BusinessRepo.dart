@@ -133,6 +133,26 @@ class BusinessRepo{
       return ApiResponse.withError(ApiErrorHandler.handleError(e));
     }
   }
+  Future<ApiResponse> branchStoreSummary({required Map<String, dynamic> requestData}) async {
+    try {
+      final response =
+      await dioClient!.post('${AppConstants.branchStoreSummary}', data: requestData);
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
+  Future<ApiResponse> getBranchTransactionByDate({required Map<String, dynamic> requestData}) async {
+    try {
+      final response =
+      await dioClient!.post('${AppConstants.getBranchTransactionByDate}', data: requestData);
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
   Future<ApiResponse> uploadBusinessLogo({
     required FormData requestData,
   }) async {
@@ -205,6 +225,16 @@ class BusinessRepo{
     try {
       final response =
       await dioClient!.get('${AppConstants.getSetupStatus}');
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
+  Future<ApiResponse> listSubscribedBillingPlans() async {
+    try {
+      final response =
+      await dioClient!.get('${AppConstants.listSubscribedBillingPlans}');
 
       return ApiResponse.withSuccess(response);
     } catch (e) {

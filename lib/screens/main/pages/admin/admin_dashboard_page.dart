@@ -3,19 +3,24 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:nb_utils/nb_utils.dart' as nb_utils hide Color;
 import 'package:provider/provider.dart';
+import 'package:zed_nano/models/branch-store-summary/BranchStoreSummaryResponse.dart';
+import 'package:zed_nano/models/get_branch_transaction_by_date/BranchTransactionByDateResponse.dart';
 import 'package:zed_nano/models/posLoginVersion2/login_response.dart';
+import 'package:zed_nano/providers/business/BusinessProviders.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/routes/routes.dart';
 import 'package:zed_nano/screens/business/get_started_page.dart';
 import 'package:zed_nano/screens/business/bottomsheets/setup_bottom_sheet.dart';
 import 'package:zed_nano/screens/widget/common/bottom_sheet_helper.dart';
 import 'package:zed_nano/screens/widget/common/custom_app_bar.dart';
+import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/Images.dart';
 import 'package:zed_nano/routes/routes_helper.dart';
 import 'package:zed_nano/screens/widgets/drawer_widget.dart';
 import 'package:zed_nano/viewmodels/WorkflowViewModel.dart';
+import 'package:zed_nano/utils/date_range_util.dart';
 
 class AdminDashboardPage extends StatefulWidget {
   const AdminDashboardPage({Key? key}) : super(key: key);
@@ -27,14 +32,76 @@ class AdminDashboardPage extends StatefulWidget {
 class _AdminDashboardPageState extends State<AdminDashboardPage> {
 
   LoginResponse? loginResponse;
+  BranchStoreSummaryResponse? branchStoreSummaryResponse;
+  BranchTransactionByDateResponse? branchTransactionByDateResponse;
   String? workflowState;
+  String? businessName;
+
+  // Default selected range label
+  String _selectedRangeLabel = 'this_month';
+  late Map<String, String> _dateRange;
+
+  final _dateRangeOptions = [
+    'today',
+    'this_week',
+    'this_month',
+    'this_year',
+  ];
 
   @override
   void initState() {
-    loginResponse = getAuthProvider(context).loginResponse;
     super.initState();
+    loginResponse = getAuthProvider(context).loginResponse;
+    businessName = getAuthProvider(context).businessDetails?.businessName;
+    WorkflowViewModel viewModel = Provider.of<WorkflowViewModel>(context, listen: false);
+
+    _dateRange = DateRangeUtil.getDateRange(_selectedRangeLabel);
+
+    fetchBranchStoreSummary();
+
   }
 
+  Future<void> fetchBranchStoreSummary() async {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      var requestData = {
+        'branchId': getAuthProvider(context).businessDetails?.branchId,
+        'endDate':_dateRange.values.last,
+        'startDate':_dateRange.values.first,
+      };
+      await branchStoreSummary(requestData:requestData);
+      await getBranchTransactionByDate(requestData:requestData);
+    });
+  }
+  Future<void> branchStoreSummary({required Map<String, dynamic> requestData}) async {
+
+    await context
+        .read<BusinessProviders>()
+        .branchStoreSummary(context: context, requestData:requestData)
+        .then((value) async {
+      if (value.isSuccess) {
+        setState(() {
+          branchStoreSummaryResponse = value.data;
+        });
+      } else {
+        showCustomToast(value.message ?? 'Something went wrong');
+      }
+    });
+  }
+  Future<void> getBranchTransactionByDate({required Map<String, dynamic> requestData}) async {
+    requestData['type'] = "ALL";
+    await context
+        .read<BusinessProviders>()
+        .getBranchTransactionByDate(context: context, requestData:requestData)
+        .then((value) async {
+      if (value.isSuccess) {
+        setState(() {
+          branchTransactionByDateResponse = value.data;
+        });
+      } else {
+        showCustomToast(value.message ?? 'Something went wrong');
+      }
+    });
+  }
 
   double getValue(WorkflowViewModel viewModel) {
     final state = viewModel.workflowState?.toLowerCase() ?? '';
@@ -52,12 +119,21 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
     }
   }
 
+  void _onRangeChanged(String? newLabel) {
+    if (newLabel == null) return;
+    setState(() {
+      _selectedRangeLabel = newLabel;
+      _dateRange = DateRangeUtil.getDateRange(_selectedRangeLabel);
+    });
+    fetchBranchStoreSummary();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: colorWhite,
       drawer: const DrawerWidget(),
-      appBar: const CustomDashboardAppBar(),
+      appBar: CustomDashboardAppBar(title: businessName ?? '',),
       body: Consumer<WorkflowViewModel>(
         builder: (context, viewModel, _) {
           return SafeArea(
@@ -76,16 +152,19 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                             const SizedBox(height: 4),
                             const Text("We are glad to have you with us.", style: TextStyle(fontSize: 12, color: textSecondary)),
                           ]),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                        decoration: BoxDecoration(
-                            border: Border.all(color: accentRed), borderRadius: BorderRadius.circular(6)),
-                        child: RichText(
-                          text: const TextSpan(
-                            children: [
-                              TextSpan(text: "14 ", style: TextStyle(color: accentRed, fontWeight: FontWeight.w600, fontSize: 16)),
-                              TextSpan(text: "Days Trial Left", style: TextStyle(color: accentRed, fontSize: 10)),
-                            ],
+                      Visibility(
+                        visible: viewModel.billingPlan?.freeTrialStatus != "InActive",
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                          decoration: BoxDecoration(
+                              border: Border.all(color: accentRed), borderRadius: BorderRadius.circular(6)),
+                          child: RichText(
+                            text: TextSpan(
+                              children: [
+                                TextSpan(text: "${viewModel.billingPlan?.freeTrialPeriodRemainingdays ?? 0} ", style: TextStyle(color: accentRed, fontWeight: FontWeight.w600, fontSize: 16)),
+                                TextSpan(text: "Days Trial Left", style: TextStyle(color: accentRed, fontSize: 10)),
+                              ],
+                            ),
                           ),
                         ),
                       )
@@ -146,19 +225,14 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                           border: Border.all(color: Colors.grey.shade300),
                           borderRadius: BorderRadius.circular(16),
                         ),
-                        child: DropdownButton<String>(
-                          value: 'Today',
-                          underline: const SizedBox(),
-                          icon: const Icon(Icons.keyboard_arrow_down, size: 20),
-                          isDense: true,
-                          items: ['Today', 'This Week', 'This Month']
-                              .map((val) => DropdownMenuItem<String>(
+                        child:DropdownButton<String>(
+                          value: _selectedRangeLabel,
+                          items: _dateRangeOptions.map((val) => DropdownMenuItem(
                             value: val,
-                            child: Text(val, style: const TextStyle(fontSize: 12, fontFamily: 'Poppins')),
-                          ))
-                              .toList(),
-                          onChanged: (_) {},
-                        ),
+                            child: Text(val), // You can use a user-friendly label here if needed
+                          )).toList(),
+                          onChanged: _onRangeChanged,
+                        )
                       )
                     ],
                   ),
@@ -177,10 +251,10 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                         crossAxisSpacing: 16,
                         childAspectRatio: cardWidth / 120, // Maintain the height of 120
                         children: [
-                          buildOverviewCard('Total Sales', 'KES 0.00', totalSalesIcon, lightGreenColor, width: cardWidth),
-                          buildOverviewCard('Products Sold', '0', productIcon, lightGrey, width: cardWidth),
-                          buildOverviewCard('Pending Payment', 'KES 0.00', pendingPaymentsIcon, lightOrange, width: cardWidth),
-                          buildOverviewCard('Customers', '0', customerCreatedIcon, lightBlue, width: cardWidth),
+                          buildOverviewCard('Total Sales', 'KES ${branchStoreSummaryResponse?.data?.totalSales?.amount?? '0.00'}', totalSalesIcon, lightGreenColor, width: cardWidth),
+                          buildOverviewCard('Products Sold', '${branchStoreSummaryResponse?.data?.soldStock?.businessSoldStockQuantity?? '0.00'}', productIcon, lightGrey, width: cardWidth),
+                          buildOverviewCard('Pending Payment', 'KES ${branchStoreSummaryResponse?.data?.unpaidTotals?.totalUnpaid ?? '0.00'}', pendingPaymentsIcon, lightOrange, width: cardWidth),
+                          buildOverviewCard('Customers', '${branchStoreSummaryResponse?.data?.customerCount?.totalCustomers ?? '0.00'}', customerCreatedIcon, lightBlue, width: cardWidth),
                         ],
                       );
                     },
@@ -188,7 +262,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                   10.height,
                   const Text("Payment Summary", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
                   10.height,
-                  buildEmptyCard("Nothing here. For Now!", "Total sales for each payment method will be displayed here."),
+                  buildSalesSummaryList(),
                   10.height,
                   const Text("Recent Sales", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
                   buildEmptyCard("Nothing here. For Now!", "Recent sales will be displayed here."),
@@ -210,4 +284,35 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
       ),
     );
   }
+  Widget buildSalesSummaryList() {
+    final summaryList = branchTransactionByDateResponse?.data ?? [];
+
+    if (summaryList.isEmpty) {
+      return buildEmptyCard("Nothing here. For Now!", "Total sales for each payment method will be displayed here.");
+    }
+
+    // Optionally define color per payment type
+    Color getBarColor(String type) {
+      switch (type.toUpperCase()) {
+        case "MPESA": return Colors.green;
+        case "CASH": return Colors.blue;
+        case "Kcb Mpesa": return Colors.orange;
+        default: return Colors.teal;
+      }
+    }
+
+    return Column(
+      children: summaryList.map<Widget>((item) {
+        return buildSalesSummaryRow(
+          name: item?.transationType ?? "",
+          currency: item?.currency ?? "",
+          amount: item?.amount ?? 0,
+          percentage: item?.percentageOfTotal?.toDouble() ?? 0,
+          color: getBarColor(item?.transationType ?? ""),
+        );
+      }).toList(),
+    );
+  }
 }
+
+

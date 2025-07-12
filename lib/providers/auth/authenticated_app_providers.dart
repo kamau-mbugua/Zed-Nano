@@ -65,7 +65,8 @@ class AuthenticatedAppProviders extends BaseProvider {
             group: loginResponse?.group ?? '',
             branchId: loginResponse?.branchId ?? '',
             localCurrency: loginResponse?.localCurrency ?? '',
-            businessCategory: loginResponse?.businessCategory ?? ''
+            businessCategory: loginResponse?.businessCategory ?? '',
+            businessName: loginResponse?.businessName ?? '',
         );
 
         _businessDetails = details;
@@ -263,7 +264,8 @@ class AuthenticatedAppProviders extends BaseProvider {
             group: postBusinessData?.group ?? '',
             branchId: postBusinessData?.branchId ?? '',
             localCurrency: postBusinessData?.localCurrency ?? '',
-            businessCategory: postBusinessData?.businessCategory ?? ''
+            businessCategory: postBusinessData?.businessCategory ?? '',
+            businessName: postBusinessData?.businessName ?? '',
         );
 
         _businessDetails = details;

@@ -43,6 +43,8 @@ class AppConstants{
   static const String addKCBPayment = 'api/v1/payments/activate_kcb_mpesa?status=true';
   static const String addMPESAPayment = 'api/activate_daraja_for_business';
   static const String updateBusinessSetupStatus = 'api/update_business_setup_status';
+  static const String branchStoreSummary   = 'api/v1/business/branch-store-summary';
+  static const String getBranchTransactionByDate   = 'api/get_branch_transaction_by_date';
   static const String uploadBusinessLogo = 'api/edit_business_logo';
   static const String uploadImage = 'api/v1/ecommerce/generate_file_system_url';
   static const String getPaymentMethodsWithStatus = 'api/get_payment_methods_with_status';
@@ -50,6 +52,7 @@ class AppConstants{
   static const String getListProducts = 'api/listProducts/Active';
   static const String createBusiness = 'postBusiness';
   static const String getSetupStatus = 'api/get_setup_status';
+  static const String listSubscribedBillingPlans = 'api/v1/billing/listsubscribed_billing_plans';
   static const String listBusinessCategory = 'api/listBusinessCategory?state=Active';
   static const String getBusinessPlanPackages = 'api/v1/billing/listbillingplan_packages';
   static const String getUnitOfMeasure = 'api/v1/products/unitofmeasure/get';

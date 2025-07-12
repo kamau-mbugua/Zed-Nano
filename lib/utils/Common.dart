@@ -5,8 +5,10 @@ import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/utils/Constants.dart';
+import 'package:zed_nano/utils/extensions.dart';
 import 'Colors.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:nb_utils/nb_utils.dart' as nb_utils;
 
 InputDecoration inputDecoration(BuildContext context,
     {String? hint,
@@ -339,6 +341,37 @@ BoxDecoration getStyledDropdownDecoration({bool disabled = false}) {
     border: Border.all(
       color: BodyWhite, // Matching StyledTextField border color
       width: 1,
+    ),
+  );
+}
+
+Widget buildSalesSummaryRow({
+  required String name,
+  required String currency,
+  required num amount,
+  required double percentage,
+  Color color = Colors.green,
+}) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 6.0),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(name, style: const TextStyle(fontWeight: FontWeight.w500)),
+            Text('$currency ${amount.formatCurrency()}', style: const TextStyle(fontWeight: FontWeight.w600)),
+          ],
+        ),
+        const SizedBox(height: 6),
+        LinearProgressIndicator(
+          value: percentage / 100,
+          minHeight: 6,
+          backgroundColor: Colors.grey.shade200,
+          valueColor: AlwaysStoppedAnimation<Color>(color),
+        ),
+      ],
     ),
   );
 }

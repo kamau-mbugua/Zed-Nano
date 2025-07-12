@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 extension StringValidationExtensions on String {
@@ -96,5 +97,12 @@ extension DateTimeFormatExtension on String {
     } catch (e) {
       return this; // fallback to original if parsing fails
     }
+  }
+}
+
+extension CurrencyFormatter on num {
+  String formatCurrency({String locale = 'en_KE'}) {
+    final formatter = NumberFormat("#,##0", locale);
+    return formatter.format(this);
   }
 }

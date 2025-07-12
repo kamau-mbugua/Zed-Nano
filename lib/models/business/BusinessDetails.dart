@@ -9,6 +9,7 @@ class BusinessDetails {
   final String branchId;
   final String localCurrency;
   final String businessCategory;
+  final String businessName;
 
   BusinessDetails({
     required this.businessId,
@@ -17,6 +18,7 @@ class BusinessDetails {
     required this.branchId,
     required this.localCurrency,
     required this.businessCategory,
+    required this.businessName,
   });
 
   Map<String, dynamic> toJson() {
@@ -27,6 +29,7 @@ class BusinessDetails {
       'branchId': branchId,
       'localCurrency': localCurrency,
       'businessCategory': businessCategory,
+      'businessName': businessName,
     };
   }
 
@@ -38,6 +41,7 @@ class BusinessDetails {
       branchId: json['branchId'] as String,
       localCurrency: json['localCurrency'] as String,
       businessCategory: json['businessCategory'] as String,
+      businessName: json['businessName'] as String,
     );
   }
 

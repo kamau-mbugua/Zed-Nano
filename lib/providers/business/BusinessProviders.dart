@@ -5,15 +5,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:path/path.dart' as p;
+import 'package:zed_nano/models/branch-store-summary/BranchStoreSummaryResponse.dart';
 import 'package:zed_nano/models/createCategory/CreateCategoryResponse.dart';
 import 'package:zed_nano/models/createProduct/CreateProductResponse.dart';
 import 'package:zed_nano/models/createbillingInvoice/CreateBillingInvoiceResponse.dart';
 import 'package:zed_nano/models/getVariablePriceStatus/GetVariablePriceStatusResponse.dart';
+import 'package:zed_nano/models/get_branch_transaction_by_date/BranchTransactionByDateResponse.dart';
 import 'package:zed_nano/models/get_business_info/BusinessInfoResponse.dart';
 import 'package:zed_nano/models/get_payment_methods_with_status/PaymentMethodsResponse.dart';
 import 'package:zed_nano/models/listCategories/ListCategoriesResponse.dart';
 import 'package:zed_nano/models/listProducts/ListProductsResponse.dart';
 import 'package:zed_nano/models/listbillingplan_packages/BillingPlanPackagesResponse.dart';
+import 'package:zed_nano/models/listsubscribed_billing_plans/SubscribedBillingPlansResponse.dart';
 import 'package:zed_nano/models/pushstk/PushStkResponse.dart';
 import 'package:zed_nano/models/unitofmeasure/UnitOfMeasureResponse.dart';
 import 'package:zed_nano/networking/base/api_helpers.dart';
@@ -273,6 +276,48 @@ class BusinessProviders extends BaseProvider {
     return finalResponseModel;
   }
 
+  Future<ResponseModel<BranchStoreSummaryResponse>> branchStoreSummary(
+      {
+        required Map<String, dynamic> requestData,
+      required BuildContext context}) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.branchStoreSummary(requestData: requestData), context);
+
+    ResponseModel<BranchStoreSummaryResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<BranchStoreSummaryResponse>(
+          true, responseModel.message!, BranchStoreSummaryResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<BranchStoreSummaryResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
+  Future<ResponseModel<BranchTransactionByDateResponse>> getBranchTransactionByDate(
+      {
+        required Map<String, dynamic> requestData,
+      required BuildContext context}) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.getBranchTransactionByDate(requestData: requestData), context);
+
+    ResponseModel<BranchTransactionByDateResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<BranchTransactionByDateResponse>(
+          true, responseModel.message!, BranchTransactionByDateResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<BranchTransactionByDateResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
 
   Future<ResponseModel<SetupStatusResponse>> getSetupStatus(
       {required BuildContext context}) async {
@@ -288,6 +333,25 @@ class BusinessProviders extends BaseProvider {
     } else {
       finalResponseModel =
           ResponseModel<SetupStatusResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
+  Future<ResponseModel<SubscribedBillingPlansResponse>> listSubscribedBillingPlans(
+      {required BuildContext context}) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.listSubscribedBillingPlans(), context);
+
+    ResponseModel<SubscribedBillingPlansResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<SubscribedBillingPlansResponse>(
+          true, responseModel.message!, SubscribedBillingPlansResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<SubscribedBillingPlansResponse>(false, responseModel.message!);
     }
 
     return finalResponseModel;
