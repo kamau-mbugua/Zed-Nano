@@ -66,6 +66,15 @@ extension StringValidationExtensions on String {
     );
     return spaced[0].toUpperCase() + spaced.substring(1);
   }
+
+  String get toShortDateTime {
+    try {
+      final dt = DateTime.parse(this).toLocal();
+      return DateFormat('yyyy-MM-dd HH:mm').format(dt);
+    } catch (e) {
+      return this;
+    }
+  }
 }
 
 

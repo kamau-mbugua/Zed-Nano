@@ -19,6 +19,7 @@ import 'package:zed_nano/models/listbillingplan_packages/BillingPlanPackagesResp
 import 'package:zed_nano/models/listsubscribed_billing_plans/SubscribedBillingPlansResponse.dart';
 import 'package:zed_nano/models/pushstk/PushStkResponse.dart';
 import 'package:zed_nano/models/unitofmeasure/UnitOfMeasureResponse.dart';
+import 'package:zed_nano/models/viewAllTransactions/TransactionListResponse.dart';
 import 'package:zed_nano/networking/base/api_helpers.dart';
 import 'package:zed_nano/models/common/CommonResponse.dart';
 import 'package:zed_nano/models/get_setup_status/SetupStatusResponse.dart';
@@ -534,6 +535,39 @@ class BusinessProviders extends BaseProvider {
     } else {
       finalResponseModel =
           ResponseModel<ListCategoriesResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
+  Future<ResponseModel<TransactionListResponse>> viewAllTransactions(
+      {
+        required int page ,
+        required int limit ,
+        required String startDate ,
+        required String searchValue ,
+        required String endDate ,
+        required BuildContext context,
+      }) async {
+
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.viewAllTransactions(
+          page: page,
+          limit: limit,
+          searchValue: searchValue,
+          startDate: startDate,
+          endDate: endDate
+        ), context);
+
+    ResponseModel<TransactionListResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<TransactionListResponse>(
+          true, responseModel.message!, TransactionListResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<TransactionListResponse>(false, responseModel.message!);
     }
 
     return finalResponseModel;

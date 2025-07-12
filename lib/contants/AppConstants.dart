@@ -49,6 +49,7 @@ class AppConstants{
   static const String uploadImage = 'api/v1/ecommerce/generate_file_system_url';
   static const String getPaymentMethodsWithStatus = 'api/get_payment_methods_with_status';
   static const String getListCategories = 'api/listCategories/Active';
+  static const String viewAllTransactions = 'viewAllTransactions';
   static const String getListProducts = 'api/listProducts/Active';
   static const String createBusiness = 'postBusiness';
   static const String getSetupStatus = 'api/get_setup_status';

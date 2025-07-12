@@ -205,6 +205,23 @@ class BusinessRepo{
       return ApiResponse.withError(ApiErrorHandler.handleError(e));
     }
   }
+
+  Future<ApiResponse> viewAllTransactions({
+    required int page ,
+    required int limit ,
+    required String searchValue ,
+    required String startDate ,
+    required String endDate ,
+  }) async {
+    try {
+      final response =
+      await dioClient!.get('${AppConstants.viewAllTransactions}?page=$page&limit=$limit&search=$searchValue&startDate=$startDate&endDate=$endDate');
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
   Future<ApiResponse> getListProducts({
     required int page ,
     required int limit ,
