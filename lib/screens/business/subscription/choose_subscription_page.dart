@@ -7,10 +7,12 @@ import 'package:zed_nano/models/createbillingInvoice/CreateBillingInvoiceRespons
 import 'package:zed_nano/providers/business/BusinessProviders.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
+import 'package:zed_nano/screens/widget/common/custom_dialog.dart';
 import 'package:zed_nano/utils/Common.dart';
 
 class SubscriptionScreen extends StatefulWidget {
   final VoidCallback onNext, onSkip;
+  final bool isExistingPlan;
   final Function(CreateBillingInvoiceResponse) onInvoiceCreated;
 
 
@@ -20,6 +22,7 @@ class SubscriptionScreen extends StatefulWidget {
     required this.onNext, 
     required this.onSkip,
     required this.onInvoiceCreated,
+    this.isExistingPlan = false,
   }) : super(key: key);
 
   @override
@@ -107,7 +110,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
+      appBar:AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
@@ -123,6 +126,40 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
             fontSize: 16.0,
           ),
         ),
+        actions: widget.isExistingPlan ? [
+          TextButton(
+            onPressed: () {
+              showCustomDialog(
+                context: context,
+                title: 'Cancel Current Plan?',
+                subtitle: "We're sad to see you leave! Your current plan will remain active until the due date, so you can continue enjoying our services until then.",
+                negativeButtonText: 'Cancel',
+                positiveButtonText: 'Cancel Plan',
+                onNegativePressed: () => Navigator.pop(context),
+                onPositivePressed: () {
+                  // Add subscription cancellation logic here
+                  Navigator.pop(context); // Close dialog
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Subscription cancelled successfully'),
+                      backgroundColor: Colors.green,
+                    ),
+                  );
+                  Navigator.pop(context); // Return to previous screen
+                },
+              );
+            },
+            child: Text(
+              'Cancel Plan',
+              style: TextStyle(
+                color: Colors.red[700],  // Using your accentRed color
+                fontWeight: FontWeight.w500,
+                fontFamily: 'Poppins',
+                fontSize: 14.0,
+              ),
+            ),
+          ),
+        ] : null,
       ),
       body: SafeArea(
         child: Stack(

@@ -14,11 +14,13 @@ import 'package:zed_nano/viewmodels/WorkflowViewModel.dart';
 
 class GetStartedPage extends StatefulWidget {
   final int initialStep;
+  final bool isExistingPlan;
 
   const GetStartedPage({
-    super.key,
+    Key? key,
     this.initialStep = 0,
-  });
+    this.isExistingPlan = false,
+  }) : super(key: key);
 
   @override
   State<GetStartedPage> createState() => _GetStartedPageState();
@@ -70,6 +72,7 @@ class _GetStartedPageState extends State<GetStartedPage> {
         onNext: goToNextStep, 
         onSkip: goSkip,
         onInvoiceCreated: handleInvoiceCreated,
+          isExistingPlan: widget.isExistingPlan,
       ),
       CompleteSubscriptionScreen(
         onSkip: goSkip,

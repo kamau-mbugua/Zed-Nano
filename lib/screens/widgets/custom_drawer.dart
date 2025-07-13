@@ -4,6 +4,7 @@ import 'package:nb_utils/nb_utils.dart' hide lightGrey;
 import 'package:provider/provider.dart';
 import 'package:zed_nano/providers/auth/authenticated_app_providers.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
+import 'package:zed_nano/routes/routes.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/Images.dart';
@@ -157,15 +158,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     children: [
                       _buildSubMenuItem(
                         title: 'My Businesses',
-                        onTap: () => _navigateTo(context, '/my-businesses'),
-                      ),
-                      _buildSubMenuItem(
-                        title: 'Create a Business',
-                        onTap: () => _navigateTo(context, '/create-business'),
-                      ),
-                      _buildSubMenuItem(
-                        title: 'Join a Business',
-                        onTap: () => _navigateTo(context, '/join-business'),
+                        onTap: () => _navigateTo(context, AppRoutes.getBusinessProfileScreenRoute()),
                       ),
                     ],
                   ),
@@ -176,13 +169,14 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     iconPath: inventoryIcon,
                     children: [
                       _buildSubMenuItem(
-                        title: 'Products',
-                        onTap: () => _navigateTo(context, '/products'),
+                        title: 'Categories',
+                        onTap: () => _navigateTo(context, AppRoutes.getListCategoriesRoute()),
                       ),
                       _buildSubMenuItem(
-                        title: 'Categories',
-                        onTap: () => _navigateTo(context, '/categories'),
+                        title: 'Products and Services',
+                        onTap: () => _navigateTo(context, AppRoutes.getListProductsAndServicesRoute()),
                       ),
+
                     ],
                   ),
                   
@@ -192,11 +186,15 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     iconPath: stockManagementIcon,
                     children: [
                       _buildSubMenuItem(
-                        title: 'Stock Levels',
+                        title: 'View Stock',
                         onTap: () => _navigateTo(context, '/stock-levels'),
                       ),
                       _buildSubMenuItem(
-                        title: 'Adjustments',
+                        title: 'Add Stock',
+                        onTap: () => _navigateTo(context, '/stock-adjustments'),
+                      ),
+                      _buildSubMenuItem(
+                        title: 'Stock Take',
                         onTap: () => _navigateTo(context, '/stock-adjustments'),
                       ),
                     ],
@@ -208,11 +206,23 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     iconPath: salesSideMenuIcon,
                     children: [
                       _buildSubMenuItem(
-                        title: 'Transactions',
+                        title: 'Customers',
                         onTap: () => _navigateTo(context, '/transactions'),
                       ),
                       _buildSubMenuItem(
-                        title: 'Point of Sale',
+                        title: 'Invoices',
+                        onTap: () => _navigateTo(context, '/pos'),
+                      ),
+                      _buildSubMenuItem(
+                        title: 'Orders',
+                        onTap: () => _navigateTo(context, '/pos'),
+                      ),
+                      _buildSubMenuItem(
+                        title: 'Receipts',
+                        onTap: () => _navigateTo(context, '/pos'),
+                      ),
+                      _buildSubMenuItem(
+                        title: 'Transactions',
                         onTap: () => _navigateTo(context, '/pos'),
                       ),
                     ],
@@ -278,12 +288,12 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 //       TextButton(
                 //         onPressed: () {
                 //           Navigator.pop(context); // Close dialog
-                //           Provider.of<AuthenticatedAppProviders>(context, listen: false).logout(context);
-                //           Navigator.pushNamedAndRemoveUntil(
-                //             context,
-                //             '/login',
-                //             (route) => false,
-                //           );
+                          Provider.of<AuthenticatedAppProviders>(context, listen: false).logout(context);
+                          Navigator.pushNamedAndRemoveUntil(
+                            context,
+                            AppRoutes.getSplashPageRoute(),
+                            (route) => false,
+                          );
                 //         },
                 //         child: const Text('LOGOUT', style: TextStyle(color: Colors.red)),
                 //       ),

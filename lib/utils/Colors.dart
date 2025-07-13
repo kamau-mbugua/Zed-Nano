@@ -45,6 +45,7 @@ const Color orange = Color(0xFFE86339);
 const Color lightOrange2 = Color(0xFFFFB37C);
 const Color lightRed = Color(0xFFED9AA2);
 const Color lightGrey = Color(0xFFF2F4F5);
+const Color lightGreyColor = Color(0xFFF2F4F5);
 const Color lightBackground = Color(0xFFF8F9FE);
 const Color mint = Color(0xFF8BD7BD);
 const Color darkGreyColor = Color(0xFF1F2024);

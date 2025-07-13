@@ -25,7 +25,7 @@ import 'package:zed_nano/utils/extensions.dart';
 import 'package:zed_nano/viewmodels/RefreshViewModel.dart';
 import 'package:zed_nano/viewmodels/WorkflowViewModel.dart';
 import 'package:zed_nano/utils/date_range_util.dart';
-import 'package:zed_nano/widgets/custom_drawer.dart';
+import 'package:zed_nano/screens/widgets/custom_drawer.dart';
 
 class AdminDashboardPage extends StatefulWidget {
   const AdminDashboardPage({Key? key}) : super(key: key);

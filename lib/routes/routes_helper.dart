@@ -5,6 +5,7 @@ import 'package:zed_nano/screens/auth/forget_password_screen.dart';
 import 'package:zed_nano/screens/auth/login_page.dart';
 import 'package:zed_nano/screens/auth/registration_page.dart';
 import 'package:zed_nano/screens/auth/set_new_pin_page.dart';
+import 'package:zed_nano/screens/business/business_profile_screen.dart';
 import 'package:zed_nano/screens/business/get_started_page.dart';
 import 'package:zed_nano/screens/business/subscription/activating_trial_screen.dart';
 import 'package:zed_nano/screens/categories/add_category_page.dart';
@@ -81,6 +82,11 @@ class RouterHelper {
   static final Handler _addPaymentMethodHandler = Handler(
     handlerFunc: (BuildContext? context, Map<String, List<String>> params) =>
         AddPaymentMethodScreen(),
+  );
+
+  static final Handler _businessProfileScreenHandler = Handler(
+    handlerFunc: (BuildContext? context, Map<String, List<String>> params) =>
+        BusinessProfileScreen(),
   );
 
   static final Handler _newCategoryHandler = Handler(
@@ -207,6 +213,11 @@ class RouterHelper {
     router.define(
       AppRoutes.addPaymentMethodRoute,
       handler: _addPaymentMethodHandler,
+      transitionType: TransitionType.fadeIn,
+    );
+    router.define(
+      AppRoutes.businessProfileScreenRoute,
+      handler: _businessProfileScreenHandler,
       transitionType: TransitionType.fadeIn,
     );
     router.define(

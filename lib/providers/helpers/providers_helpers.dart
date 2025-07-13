@@ -7,6 +7,7 @@ import 'package:zed_nano/providers/auth/authenticated_app_providers.dart';
 import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/providers/base/base_provider.dart';
 import 'package:zed_nano/providers/business/BusinessProviders.dart';
+import 'package:zed_nano/viewmodels/WorkflowViewModel.dart';
 
 AuthenticatedAppProviders getAuthProvider(BuildContext context ,{bool listen = false}) {
   return Provider.of<AuthenticatedAppProviders>(context, listen: listen);
@@ -14,6 +15,10 @@ AuthenticatedAppProviders getAuthProvider(BuildContext context ,{bool listen = f
 
 BusinessProviders getBusinessProvider(BuildContext context,{bool listen = false}) {
   return Provider.of<BusinessProviders>(context, listen: listen);
+}
+
+WorkflowViewModel getWorkflowViewModel(BuildContext context,{bool listen = false}) {
+  return Provider.of<WorkflowViewModel>(context, listen: listen);;
 }
 
 extension ProviderApiHelpers on BaseProvider {
