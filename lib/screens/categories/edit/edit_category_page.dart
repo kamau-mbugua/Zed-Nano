@@ -47,7 +47,7 @@ class _EditCategoryPageState extends State<EditCategoryPage> {
 
   @override
   void initState() {
-    businessDetails = getAuthProvider(context).businessDetails;
+    businessDetails = getBusinessDetails(context);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _fetchCategoryDetails();
     });

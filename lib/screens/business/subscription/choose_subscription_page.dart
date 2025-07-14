@@ -42,7 +42,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
 
   @override
   void initState() {
-    businessDetails = getAuthProvider(context).businessDetails;
+    businessDetails = getBusinessDetails(context);
 
     if (widget.isExistingPlan) {
       logger.i(

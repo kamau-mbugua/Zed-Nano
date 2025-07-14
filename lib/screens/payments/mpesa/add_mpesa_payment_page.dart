@@ -65,7 +65,7 @@ class _AddMpesaPaymentPageState extends State<AddMpesaPaymentPage> {
 
   @override
   void initState() {
-    businessDetails = getAuthProvider(context).businessDetails;
+    businessDetails = getBusinessDetails(context);
     super.initState();
   }
 

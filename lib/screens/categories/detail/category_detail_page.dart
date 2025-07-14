@@ -115,7 +115,7 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
       positiveButtonColor: accentRed,
       onPositivePressed: () async {
         Navigator.pop(context); // Close dialog
-        final businessId = getAuthProvider(context).businessDetails?.businessId;
+        final businessId = getBusinessDetails(context)?.businessId;
         if (widget.categoryId.isNotEmpty) {
           final Map<String, dynamic> requestData = {
             'categoryState': 'Inactive',

@@ -38,6 +38,7 @@ class AppConstants{
   static const String createCategory = 'api/createCategory';
   static const String getCategoryById = 'api/getCategoryById';
   static const String updateCategory = 'api/updateCategory';
+  static const String updateProduct = 'api/updateProduct';
   static const String updateBusinessInfo = 'api/updateBusiness';
   static const String createProduct = 'api/createProduct';
   static const String createBillingInvoice = 'api/v1/billing/businesss/createbilling-invoice';
@@ -54,6 +55,7 @@ class AppConstants{
   static const String getListCategories = 'api/listCategories/Active';
   static const String viewAllTransactions = 'viewAllTransactions';
   static const String getListProducts = 'api/listProducts/Active';
+  static const String findProduct = 'api/findProduct';
   static const String getListByProducts = 'api/listByProducts';
   static const String createBusiness = 'postBusiness';
   static const String getSetupStatus = 'api/get_setup_status';

@@ -75,7 +75,7 @@ class _EditBusinessPageState extends State<EditBusinessPage> {
   BusinessInfoData? businessInfoData;
 
   Future<void> _fetchBusinessProfile() async {
-    final businessId = getAuthProvider(context).businessDetails?.businessId;
+    final businessId = getBusinessDetails(context)?.businessId;
 
     final Map<String, dynamic> businessData = {
       'businessId': businessId

@@ -15,6 +15,8 @@ class AppRoutes {
   static const String editBusinessScreenRoute = '/editBusinessScreenRoute';
   static const String categoryDetailRoute = '/categoryDetailRoute/:categoryId';
   static const String editCategoryHRoute = '/editCategoryHRoute/:categoryId';
+  static const String productDetailRoute = '/productDetailRoute/:productId';
+  static const String editProductRoute = '/editProductRoute/:productId';
   static const String getNewCategoryWithParamRoute = '/getNewCategoryRoute/:doNotUpdate';
   static const String getNewProductWithParamRoute = '/getNewProductWithParamRoute/:doNotUpdate';
   static const String getNewAddKCBPaymenParamRoute = '/getNewAddKCBPaymenParamRoute/:kcbAccountType';
@@ -36,6 +38,8 @@ class AppRoutes {
   static String getEditBusinessScreenRoute() => editBusinessScreenRoute;
   static String getCategoryDetailRoute(String categoryId) => '$categoryDetailRoute/$categoryId';
   static String getEditCategoryHRoute(String categoryId) => '$editCategoryHRoute/$categoryId';
+  static String getProductDetailRoute(String productId) => '$productDetailRoute/$productId';
+  static String getEditProductRoute(String productId) => '$editProductRoute/$productId';
   static String getNewCategoryWithParamRoutes(String doNotUpdate) => '$getNewCategoryRoute/$doNotUpdate';
   static String getNewProductWithParamRoutes(String doNotUpdate) => '$getNewProductWithParamRoute/$doNotUpdate';
   static String getNewAddKCBPaymentParamRoute(String kcbAccountType) => '$getNewAddKCBPaymenParamRoute/$kcbAccountType';

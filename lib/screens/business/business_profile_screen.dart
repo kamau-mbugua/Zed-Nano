@@ -28,7 +28,7 @@ class _BusinessProfileScreenState extends State<BusinessProfileScreen> {
   }
   
   Future<void> _fetchBusinessProfile() async {
-    var businessId = getAuthProvider(context).businessDetails?.businessId;
+    var businessId = getBusinessDetails(context)?.businessId;
 
     Map<String, dynamic> businessData = {
       'businessId':businessId

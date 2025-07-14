@@ -71,7 +71,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
   void initState() {
     super.initState();
     loginResponse = getAuthProvider(context).loginResponse;
-    businessName = getAuthProvider(context).businessDetails?.businessName;
+    businessName = getBusinessDetails(context)?.businessName;
     WorkflowViewModel viewModel = Provider.of<WorkflowViewModel>(context, listen: false);
 
     _dateRange = DateRangeUtil.getDateRange(_selectedRangeLabel);
@@ -137,7 +137,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
   Future<void> fetchBranchStoreSummary() async {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       var requestData = {
-        'branchId': getAuthProvider(context).businessDetails?.branchId,
+        'branchId': getBusinessDetails(context)?.branchId,
         'endDate':_dateRange.values.last,
         'startDate':_dateRange.values.first,
       };

@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
+import 'package:zed_nano/models/business/BusinessDetails.dart';
+import 'package:zed_nano/models/posLoginVersion2/login_response.dart';
 import 'package:zed_nano/networking/base/api_helpers.dart';
 import 'package:zed_nano/networking/base/api_response.dart';
 import 'package:zed_nano/networking/models/response_model.dart';
@@ -11,6 +13,13 @@ import 'package:zed_nano/viewmodels/WorkflowViewModel.dart';
 
 AuthenticatedAppProviders getAuthProvider(BuildContext context ,{bool listen = false}) {
   return Provider.of<AuthenticatedAppProviders>(context, listen: listen);
+}
+
+BusinessDetails? getBusinessDetails(BuildContext context) {
+  return getAuthProvider(context).businessDetails;
+}
+LoginUserDetails? getUserDetails(BuildContext context) {
+  return getAuthProvider(context).userDetails;
 }
 
 BusinessProviders getBusinessProvider(BuildContext context,{bool listen = false}) {
@@ -31,8 +40,8 @@ extension ProviderApiHelpers on BaseProvider {
   ) async {
     final result = await performApiCall(() async {
       final apiResponse = await apiFunction();
-      logger.d(
-          'performApiCallWithHandling API Response: \\n              \\u{1F4AC} data: \\${apiResponse.data} | success: \\${apiResponse.isSuccess}');
+     /* logger.d(
+          'performApiCallWithHandling API Response: \\n              \\u{1F4AC} data: \\${apiResponse.data} | success: \\${apiResponse.isSuccess}');*/
       final responseModel = await handleApiResponse(apiResponse);
       return responseModel;
     }, context);

@@ -353,4 +353,31 @@ class BusinessRepo{
       return ApiResponse.withError(ApiErrorHandler.handleError(e));
     }
   }
+  Future<ApiResponse> updateProduct({required Map<String, dynamic> requestData}) async {
+    try {
+      final productId = requestData['productId'];
+
+      //remove categoryId from requestData
+      requestData.remove('productId');
+
+      final response =
+      await dioClient!.put('${AppConstants.updateProduct}/$productId', data: requestData);
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
+
+  Future<ApiResponse> getProductById({required Map<String, dynamic> requestData}) async {
+    try {
+      final productId = requestData['productId'];
+      final response =
+      await dioClient!.get('${AppConstants.findProduct}/$productId');
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
 }

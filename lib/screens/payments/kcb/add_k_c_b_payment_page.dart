@@ -59,7 +59,7 @@ class _AddKCBPaymentPageState extends State<AddKCBPaymentPage> {
 
   @override
   void initState() {
-    businessDetails = getAuthProvider(context).businessDetails;
+    businessDetails = getBusinessDetails(context);
     super.initState();
   }
 

@@ -45,7 +45,7 @@ class _NewCategoryPageState extends State<NewCategoryPage> {
 
   @override
   void initState() {
-    businessDetails = getAuthProvider(context).businessDetails;
+    businessDetails = getBusinessDetails(context);
     super.initState();
   }
 

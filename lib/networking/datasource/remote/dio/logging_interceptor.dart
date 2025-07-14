@@ -81,7 +81,6 @@ class LoggingInterceptor extends InterceptorsWrapper {
   @override
   Future onResponse(Response response, ResponseInterceptorHandler handler) async {
     await _logResponse(response: response, handler: handler);
-    logger.i("<-- END HTTP");
     return super.onResponse(response, handler);
   }
 

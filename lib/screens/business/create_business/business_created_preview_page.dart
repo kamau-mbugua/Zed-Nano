@@ -33,7 +33,7 @@ class _BusinessCreatedPreviewPageState extends State<BusinessCreatedPreviewPage>
 
   Future<void> getBusinessInformation() async {
 
-    var businessId = getAuthProvider(context).businessDetails?.businessId;
+    var businessId = getBusinessDetails(context)?.businessId;
 
     Map<String, dynamic> businessData = {
       'businessId':businessId

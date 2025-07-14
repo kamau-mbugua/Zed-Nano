@@ -9,6 +9,7 @@ import 'package:zed_nano/models/branch-store-summary/BranchStoreSummaryResponse.
 import 'package:zed_nano/models/createCategory/CreateCategoryResponse.dart';
 import 'package:zed_nano/models/createProduct/CreateProductResponse.dart';
 import 'package:zed_nano/models/createbillingInvoice/CreateBillingInvoiceResponse.dart';
+import 'package:zed_nano/models/findProduct/FindProductResponse.dart';
 import 'package:zed_nano/models/getVariablePriceStatus/GetVariablePriceStatusResponse.dart';
 import 'package:zed_nano/models/get_branch_transaction_by_date/BranchTransactionByDateResponse.dart';
 import 'package:zed_nano/models/get_business_info/BusinessInfoResponse.dart';
@@ -157,6 +158,25 @@ class BusinessProviders extends BaseProvider {
       required BuildContext context}) async {
     final responseModel = await performApiCallWithHandling(
         () => businessRepo.updateCategory(requestData: requestData), context);
+
+    ResponseModel<CommonResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<CommonResponse>(
+          true, responseModel.message!, CommonResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<CommonResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+  Future<ResponseModel<CommonResponse>> updateProduct(
+      {required Map<String, dynamic> requestData,
+      required BuildContext context}) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.updateProduct(requestData: requestData), context);
 
     ResponseModel<CommonResponse> finalResponseModel;
 
@@ -693,5 +713,26 @@ class BusinessProviders extends BaseProvider {
     return finalResponseModel;
   }
 
+  Future<ResponseModel<FindProductsResponse>> getProductById(
+      {
+        required Map<String, dynamic> requestData,
+        required BuildContext context,
+      }) async {
 
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.getProductById(requestData: requestData), context);
+
+    ResponseModel<FindProductsResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<FindProductsResponse>(
+          true, responseModel.message!, FindProductsResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<FindProductsResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
 }

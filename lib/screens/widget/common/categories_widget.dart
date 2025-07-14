@@ -94,78 +94,88 @@ Widget buildCategoryCard(ProductCategoryData category) {
 }
 
 Widget buildProductCard(ProductData category) {
-  return Container(
-    margin: const EdgeInsets.only(bottom: 10),
-    padding: const EdgeInsets.all(12),
-    decoration: BoxDecoration(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(12),
-      border: Border.all(color: const Color(0xFFE8E8E8)),
-      boxShadow: [
-        BoxShadow(
-          color: Colors.black.withOpacity(0.04),
-          blurRadius: 8,
-          offset: const Offset(0, 2),
-        ),
-      ],
-    ),
-    child: Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Container(
-          width: 55,
-          height: 55,
+  return Builder(
+    builder: (context) {
+      return GestureDetector(
+        onTap: () {
+          // Navigate to category detail page using context
+          Navigator.pushNamed(context, AppRoutes.getProductDetailRoute(category.id ?? ''));
+        },
+        child: Container(
+          margin: const EdgeInsets.only(bottom: 10),
+          padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: Colors.grey[100],
-            borderRadius: BorderRadius.circular(8),
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: const Color(0xFFE8E8E8)),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.04),
+                blurRadius: 8,
+                offset: const Offset(0, 2),
+              ),
+            ],
           ),
-          child:   rfCommonCachedNetworkImage(
-            '${category.imagePath}',
-            fit: BoxFit.fitHeight,
-            height: 55,
-            width: 55,
-              radius: 8
-          ),
-        ),
-
-        const SizedBox(width: 16),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(
-                category.productName ?? '',
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: 'Poppins',
-                  color: darkGreyColor,
+              Container(
+                width: 55,
+                height: 55,
+                decoration: BoxDecoration(
+                  color: Colors.grey[100],
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child:   rfCommonCachedNetworkImage(
+                  '${category.imagePath}',
+                  fit: BoxFit.fitHeight,
+                  height: 55,
+                  width: 55,
+                    radius: 8
                 ),
               ),
-              const SizedBox(height: 4),
+
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      category.productName ?? '',
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: 'Poppins',
+                        color: darkGreyColor,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      category.productDescription ?? 'No description',
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: 'Poppins',
+                        color: textSecondary,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 8),
               Text(
-                category.productDescription ?? 'No description',
+                '${category.currency} ${category.productPrice}',
                 style: const TextStyle(
                   fontSize: 12,
-                  fontWeight: FontWeight.w400,
+                  fontWeight: FontWeight.w600,
                   fontFamily: 'Poppins',
-                  color: textSecondary,
+                  color: darkBlueColor,
                 ),
               ),
             ],
           ),
         ),
-        const SizedBox(width: 8),
-        Text(
-          '${category.currency} ${category.productPrice}',
-          style: const TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w600,
-            fontFamily: 'Poppins',
-            color: darkBlueColor,
-          ),
-        ),
-      ],
-    ),
+      );
+    },
   );
 }

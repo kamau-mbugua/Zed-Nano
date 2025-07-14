@@ -59,3 +59,7 @@ const AppLayoutBackground = Color(0xFFF4F7F6);
 const BodyWhite = Color(0xFF6F7F92);
 const AppBorderColor = Color(0xFFD9DFEB);
 const neutralDarkLight = Color(0xFFD9DFEB);
+
+//add color #f7f7f7
+const Color cardBackgroundColor = Color(0xFFf7f7f7);
+

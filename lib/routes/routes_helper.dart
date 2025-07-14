@@ -19,7 +19,9 @@ import 'package:zed_nano/screens/onboarding/splash_page.dart';
 import 'package:zed_nano/screens/payments/kcb/add_k_c_b_payment_page.dart';
 import 'package:zed_nano/screens/payments/list_payments_page.dart';
 import 'package:zed_nano/screens/payments/mpesa/add_mpesa_payment_page.dart';
-import 'package:zed_nano/screens/products/add_product_page.dart';
+import 'package:zed_nano/screens/products/add/add_product_page.dart';
+import 'package:zed_nano/screens/products/detail/product_detail_page.dart';
+import 'package:zed_nano/screens/products/edit/edit_product_page.dart';
 import 'package:zed_nano/screens/products/list_categories_page.dart';
 
 class RouterHelper {
@@ -166,6 +168,28 @@ class RouterHelper {
     },
   );
 
+  static final Handler _productDetailHandler = Handler(
+    handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
+      final productId = params['productId']?.first ?? '';
+
+      return ProductDetailPage(
+        productId: productId,
+      );
+
+    },
+  );
+
+  static final Handler _editProductPageHandler = Handler(
+    handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
+      final productId = params['productId']?.first ?? '';
+
+      return EditProductPage(
+        productId: productId,
+      );
+
+    },
+  );
+
   static final Handler _newAddKCBPaymenHandler = Handler(
     handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
       final kcbAccountType = params['kcbAccountType']?.first ?? 'KCBACCOUNT';
@@ -287,6 +311,16 @@ class RouterHelper {
     router.define(
       '${AppRoutes.getNewProductWithParamRoute}/:doNotUpdate',
       handler: _newProductHandler,
+      transitionType: TransitionType.fadeIn,
+    );
+    router.define(
+      '${AppRoutes.productDetailRoute}/:productId',
+      handler: _productDetailHandler,
+      transitionType: TransitionType.fadeIn,
+    );
+    router.define(
+      '${AppRoutes.editProductRoute}/:productId',
+      handler: _editProductPageHandler,
       transitionType: TransitionType.fadeIn,
     );
 

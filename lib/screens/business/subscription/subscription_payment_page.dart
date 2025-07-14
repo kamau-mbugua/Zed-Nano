@@ -46,7 +46,7 @@ class _CompleteSubscriptionScreenState extends State<CompleteSubscriptionScreen>
   void initState() {
     super.initState();
     loginUserDetails = getAuthProvider(context).loginResponse;
-    businessDetails = getAuthProvider(context).businessDetails;
+    businessDetails = getBusinessDetails(context);
   }
 
   void _launchWebViewPayment() {

@@ -163,7 +163,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
   @override
   void initState() {
-    businessDetails = getAuthProvider(context).businessDetails;
+    businessDetails = getBusinessDetails(context);
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await listBusinessCategory();
       await getUnitOfMeasure();
