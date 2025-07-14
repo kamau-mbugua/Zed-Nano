@@ -13,6 +13,7 @@ import 'package:zed_nano/models/getVariablePriceStatus/GetVariablePriceStatusRes
 import 'package:zed_nano/models/get_branch_transaction_by_date/BranchTransactionByDateResponse.dart';
 import 'package:zed_nano/models/get_business_info/BusinessInfoResponse.dart';
 import 'package:zed_nano/models/get_payment_methods_with_status/PaymentMethodsResponse.dart';
+import 'package:zed_nano/models/listByProducts/ListByProductsResponse.dart';
 import 'package:zed_nano/models/listCategories/ListCategoriesResponse.dart';
 import 'package:zed_nano/models/listProducts/ListProductsResponse.dart';
 import 'package:zed_nano/models/listbillingplan_packages/BillingPlanPackagesResponse.dart';
@@ -128,6 +129,64 @@ class BusinessProviders extends BaseProvider {
     } else {
       finalResponseModel =
           ResponseModel<CreateCategoryResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+  Future<ResponseModel<CreateCategoryResponse>> getCategoryById(
+      {required Map<String, dynamic> requestData,
+      required BuildContext context}) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.getCategoryById(requestData: requestData), context);
+
+    ResponseModel<CreateCategoryResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<CreateCategoryResponse>(
+          true, responseModel.message!, CreateCategoryResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<CreateCategoryResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+  Future<ResponseModel<CommonResponse>> updateCategory(
+      {required Map<String, dynamic> requestData,
+      required BuildContext context}) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.updateCategory(requestData: requestData), context);
+
+    ResponseModel<CommonResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<CommonResponse>(
+          true, responseModel.message!, CommonResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<CommonResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+  Future<ResponseModel<CommonResponse>> updateBusinessInfo(
+      {required Map<String, dynamic> requestData,
+        required String businessNumber,
+      required BuildContext context}) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.updateBusinessInfo(requestData: requestData,businessNumber:businessNumber), context);
+
+    ResponseModel<CommonResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<CommonResponse>(
+          true, responseModel.message!, CommonResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<CommonResponse>(false, responseModel.message!);
     }
 
     return finalResponseModel;
@@ -599,6 +658,36 @@ class BusinessProviders extends BaseProvider {
     } else {
       finalResponseModel =
           ResponseModel<ListProductsResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+  Future<ResponseModel<ListByProductsResponse>> getListByProducts(
+      {
+        required int page ,
+        required int limit ,
+        required String categoryId ,
+        required String searchValue ,
+        required BuildContext context,
+      }) async {
+
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.getListByProducts(
+          page: page,
+          limit: limit,
+          searchValue: searchValue,
+            categoryId: categoryId
+        ), context);
+
+    ResponseModel<ListByProductsResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<ListByProductsResponse>(
+          true, responseModel.message!, ListByProductsResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<ListByProductsResponse>(false, responseModel.message!);
     }
 
     return finalResponseModel;

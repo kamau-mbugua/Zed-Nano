@@ -6,9 +6,12 @@ import 'package:zed_nano/screens/auth/login_page.dart';
 import 'package:zed_nano/screens/auth/registration_page.dart';
 import 'package:zed_nano/screens/auth/set_new_pin_page.dart';
 import 'package:zed_nano/screens/business/business_profile_screen.dart';
+import 'package:zed_nano/screens/business/edit/edit_business_page.dart';
 import 'package:zed_nano/screens/business/get_started_page.dart';
 import 'package:zed_nano/screens/business/subscription/activating_trial_screen.dart';
-import 'package:zed_nano/screens/categories/add_category_page.dart';
+import 'package:zed_nano/screens/categories/add/add_category_page.dart';
+import 'package:zed_nano/screens/categories/detail/category_detail_page.dart';
+import 'package:zed_nano/screens/categories/edit/edit_category_page.dart';
 import 'package:zed_nano/screens/categories/list_categories_page.dart';
 import 'package:zed_nano/screens/main/home_main_page.dart';
 import 'package:zed_nano/screens/onboarding/onboarding_screen.dart';
@@ -89,6 +92,32 @@ class RouterHelper {
         BusinessProfileScreen(),
   );
 
+  static final Handler _editBusinessPageHandler = Handler(
+    handlerFunc: (BuildContext? context, Map<String, List<String>> params) =>
+        EditBusinessPage(),
+  );
+
+  static final Handler _categoryDetailHandler = Handler(
+    handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
+      final categoryId = params['categoryId']?.first ?? '';
+
+      return CategoryDetailPage(
+        categoryId: categoryId,
+      );
+
+    },
+  );
+  static final Handler _editCategoryHandler = Handler(
+    handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
+      final categoryId = params['categoryId']?.first ?? '';
+
+      return EditCategoryPage(
+        categoryId: categoryId,
+      );
+
+    },
+  );
+
   static final Handler _newCategoryHandler = Handler(
     handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
       // Default route without parameters
@@ -110,14 +139,29 @@ class RouterHelper {
     },
   );
 
-  static final Handler _newProductsWithParamHandler = Handler(
+  static final Handler _newProductHandler = Handler(
     handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
-      // Extract the doNotUpdate parameter from the URL
-      final doNotUpdateParam = params['doNotUpdate']?.first ?? 'true';
+      final doNotUpdateParam = params['doNotUpdate']?.first ?? 'false';
       final doNotUpdate = doNotUpdateParam.toLowerCase() == 'true';
+      
+      // Extract arguments from route if available
+      Map<String, dynamic>? arguments;
+      if (context != null && ModalRoute.of(context)?.settings.arguments != null) {
+        arguments = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+      }
+      
+      String? selectedCategory;
+      String? productService;
+      
+      if (arguments != null) {
+        selectedCategory = arguments['selectedCategory'] as String?;
+        productService = arguments['productService'] as String?;
+      }
 
       return AddProductScreen(
         doNotUpdate: doNotUpdate,
+        selectedCategory: selectedCategory,
+        productService: productService,
       );
     },
   );
@@ -221,13 +265,28 @@ class RouterHelper {
       transitionType: TransitionType.fadeIn,
     );
     router.define(
+      AppRoutes.editBusinessScreenRoute,
+      handler: _editBusinessPageHandler,
+      transitionType: TransitionType.fadeIn,
+    );
+    router.define(
+      '${AppRoutes.categoryDetailRoute}/:categoryId',
+      handler: _categoryDetailHandler,
+      transitionType: TransitionType.fadeIn,
+    );
+    router.define(
+      '${AppRoutes.editCategoryHRoute}/:categoryId',
+      handler: _editCategoryHandler,
+      transitionType: TransitionType.fadeIn,
+    );
+    router.define(
       '${AppRoutes.getNewCategoryRoute}/:doNotUpdate',
       handler: _newCategoryWithParamHandler,
       transitionType: TransitionType.fadeIn,
     );
     router.define(
       '${AppRoutes.getNewProductWithParamRoute}/:doNotUpdate',
-      handler: _newProductsWithParamHandler,
+      handler: _newProductHandler,
       transitionType: TransitionType.fadeIn,
     );
 

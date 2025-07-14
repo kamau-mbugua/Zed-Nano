@@ -93,7 +93,7 @@ class CustomDialog extends StatelessWidget {
 
   Widget _buildDialogContent(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(24), // Increased padding to match Zeplin (16px outer + 8px inner)
       decoration: BoxDecoration(
         color: Colors.white,
         shape: BoxShape.rectangle,
@@ -101,24 +101,30 @@ class CustomDialog extends StatelessWidget {
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center, // Center content
         children: [
           // Optional Icon
           if (icon != null) ...[
             icon!,
             const SizedBox(height: 16),
           ],
-          Text(title,
-              style: const TextStyle(
-                fontFamily: 'Poppins',
-                color: darkGreyColor,
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                fontStyle: FontStyle.normal,
-                letterSpacing: 0.08,
-              )),
+          Text(
+            title,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontFamily: 'Poppins',
+              color: darkGreyColor,
+              fontWeight: FontWeight.w600,
+              fontStyle: FontStyle.normal,
+              fontSize: 16.0
+            )
+          ),
 
-          const SizedBox(height: 12),
-          Text(subtitle,
+          const SizedBox(height: 16), // Match the spacing in Zeplin
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0), // Add horizontal padding for text
+            child: Text(
+              subtitle,
               textAlign: TextAlign.center,
               style: const TextStyle(
                 fontFamily: 'Poppins',
@@ -126,9 +132,10 @@ class CustomDialog extends StatelessWidget {
                 fontSize: 12,
                 fontWeight: FontWeight.w400,
                 fontStyle: FontStyle.normal,
-                letterSpacing: 0.12,
-              )),
-          const SizedBox(height: 24),
+              )
+            ),
+          ),
+          const SizedBox(height: 32), // Match the spacing to buttons in Zeplin
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -136,24 +143,24 @@ class CustomDialog extends StatelessWidget {
               if (negativeButtonText != null)
                 Expanded(
                   child: outlineButton(
-                      text: negativeButtonText ?? 'Cancel',
-                      onTap: onNegativePressed ??
-                          () => Navigator.of(context).pop(),
-                      context: context),
+                    text: negativeButtonText ?? 'Cancel',
+                    onTap: onNegativePressed ?? () => Navigator.of(context).pop(),
+                    context: context
+                  ),
                 ),
 
               // Spacing between buttons
               if (negativeButtonText != null && positiveButtonText != null)
-                const SizedBox(width: 12),
+                const SizedBox(width: 16), // Increased to match Zeplin
 
               // Positive Button (if provided)
               if (positiveButtonText != null)
                 Expanded(
                   child: appButton(
-                      text: positiveButtonText ?? 'Confirm',
-                      onTap: onPositivePressed ??
-                          () => Navigator.of(context).pop(true),
-                      context: context),
+                    text: positiveButtonText ?? 'Confirm',
+                    onTap: onPositivePressed ?? () => Navigator.of(context).pop(true),
+                    context: context
+                  ),
                 ),
             ],
           ),

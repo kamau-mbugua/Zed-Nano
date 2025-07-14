@@ -52,6 +52,10 @@ class _BusinessProfileScreenState extends State<BusinessProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BusinessProfilePage(businessData: businessInfoData ?? BusinessInfoData());
+    return RefreshIndicator(
+        onRefresh: () async {
+          await _fetchBusinessProfile();
+        },
+        child: BusinessProfilePage(businessData: businessInfoData ?? BusinessInfoData()));
   }
 }

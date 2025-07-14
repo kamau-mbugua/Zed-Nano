@@ -5,14 +5,14 @@ import 'package:zed_nano/app/app_initializer.dart';
 class PaginationController<T> extends ChangeNotifier {
   final Future<List<T>> Function(int page, int pageSize) fetchItems;
   final int pageSize;
-  int _currentPage = 0;
+  int _currentPage = 1;
   bool _isLoading = false;
   final List<T> _items = [];
   final PagingController<int, T> pagingController;
   bool _isDisposed = false; // Track disposed state
   
   PaginationController({required this.fetchItems, this.pageSize = 100})
-      : pagingController = PagingController(firstPageKey: 0) {
+      : pagingController = PagingController(firstPageKey: 1) {
     pagingController.addPageRequestListener((pageKey) {
       if (!_isDisposed) {
         fetchNextPage(pageKey);
@@ -28,7 +28,7 @@ class PaginationController<T> extends ChangeNotifier {
   void fetchFirstPage() {
     if (_isDisposed) return;
     
-    if (pagingController.nextPageKey == 0) {
+    if (pagingController.nextPageKey == 1) {
       pagingController.notifyPageRequestListeners(pagingController.nextPageKey!);
     }
   }
@@ -74,7 +74,7 @@ class PaginationController<T> extends ChangeNotifier {
   Future<void> refresh() async {
     if (_isDisposed) return;
     
-    _currentPage = 0;
+    _currentPage = 1;
     _items.clear();
     pagingController.refresh();
   }

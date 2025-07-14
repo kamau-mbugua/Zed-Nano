@@ -36,6 +36,9 @@ class AppConstants{
   static const String initiateKcbStkPush = 'api/v1/payments/initiate_kcb_stk_push';
   static const String activateFreeTrialPlan = 'api/v1/billing/activate_freetrialplan';
   static const String createCategory = 'api/createCategory';
+  static const String getCategoryById = 'api/getCategoryById';
+  static const String updateCategory = 'api/updateCategory';
+  static const String updateBusinessInfo = 'api/updateBusiness';
   static const String createProduct = 'api/createProduct';
   static const String createBillingInvoice = 'api/v1/billing/businesss/createbilling-invoice';
   static const String enableCashPayment = 'api/activate_cash_payment';
@@ -51,6 +54,7 @@ class AppConstants{
   static const String getListCategories = 'api/listCategories/Active';
   static const String viewAllTransactions = 'viewAllTransactions';
   static const String getListProducts = 'api/listProducts/Active';
+  static const String getListByProducts = 'api/listByProducts';
   static const String createBusiness = 'postBusiness';
   static const String getSetupStatus = 'api/get_setup_status';
   static const String listSubscribedBillingPlans = 'api/v1/billing/listsubscribed_billing_plans';

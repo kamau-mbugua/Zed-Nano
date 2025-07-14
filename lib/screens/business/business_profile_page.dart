@@ -6,6 +6,8 @@ import 'package:zed_nano/contants/AppConstants.dart';
 import 'package:zed_nano/models/get_business_info/BusinessInfoResponse.dart';
 import 'package:zed_nano/models/listsubscribed_billing_plans/SubscribedBillingPlansResponse.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
+import 'package:zed_nano/routes/routes.dart';
+import 'package:zed_nano/screens/business/edit/edit_business_page.dart';
 import 'package:zed_nano/screens/business/get_started_page.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
@@ -49,7 +51,7 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const AuthAppBar(
+      appBar: AuthAppBar(
         title:'Business Profile',
       ),
       body: SingleChildScrollView(
@@ -300,13 +302,18 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
                 ),
               ),
             ),
-            Text(
-              'Edit',
-              style: TextStyle(
-                color: accentRed, // highlightHighlightDarkest
-                fontWeight: FontWeight.w600,
-                fontFamily: 'Poppins',
-                fontSize: 12.0,
+            GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(context, AppRoutes.getEditBusinessScreenRoute());
+              },
+              child: Text(
+                'Edit',
+                style: TextStyle(
+                  color: accentRed, // highlightHighlightDarkest
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'Poppins',
+                  fontSize: 12.0,
+                ),
               ),
             ),
           ],

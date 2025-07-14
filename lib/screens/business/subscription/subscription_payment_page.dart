@@ -6,6 +6,7 @@ import 'package:zed_nano/models/posLoginVersion2/login_response.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/widget/auth/input_fields.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
+import 'package:zed_nano/screens/widget/common/heading.dart';
 import 'package:zed_nano/screens/widget/common/sub_category_picker.dart';
 import 'package:zed_nano/screens/widget/payment/card_number_field.dart';
 import 'package:zed_nano/utils/Common.dart';
@@ -153,24 +154,9 @@ class _CompleteSubscriptionScreenState extends State<CompleteSubscriptionScreen>
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 16),
-            const Text(
-              'Complete Your Subscription',
-              style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.w600,
-                fontFamily: 'Poppins',
-                color: Color(0xff1f2024),
-              ),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              "Enjoy a free ${widget.invoiceData?.freeTrialDays ?? "0"} Day trial period.",
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w400,
-                fontFamily: 'Poppins',
-                color: Color(0xff71727a),
-              ),
+            headings(
+              label: 'Complete Your Subscription',
+              subLabel: 'Enjoy a free ${widget.invoiceData?.freeTrialDays ?? "0"} Day trial period.',
             ),
             const SizedBox(height: 24),
             // Plan Box

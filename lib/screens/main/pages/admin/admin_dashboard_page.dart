@@ -227,7 +227,9 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: colorWhite,
-      drawer: CustomDrawer(),
+      drawer: CustomDrawer(
+        onClose: () => Navigator.pop(context),
+      ),
       appBar: CustomDashboardAppBar(title: businessName ?? '',),
       body: Consumer2<WorkflowViewModel, RefreshViewModel>(
         builder: (context, viewModel,refreshViewModel, _) {
@@ -317,7 +319,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                     children: [
                       const Text('Overview', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
                         decoration: BoxDecoration(
                           border: Border.all(color: Colors.grey.shade300),
                           borderRadius: BorderRadius.circular(16),

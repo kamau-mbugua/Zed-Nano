@@ -27,7 +27,15 @@ import 'package:http_parser/http_parser.dart';
 
 class AddProductScreen extends StatefulWidget {
   final bool doNotUpdate;
-  const AddProductScreen({super.key, required this.doNotUpdate});
+  final String? selectedCategory;
+  final String? productService;
+  
+  const AddProductScreen({
+    super.key, 
+    required this.doNotUpdate,
+    this.selectedCategory,
+    this.productService,
+  });
 
   @override
   State<AddProductScreen> createState() => _AddProductScreenState();
@@ -98,12 +106,19 @@ class _AddProductScreenState extends State<AddProductScreen> {
         .createProduct(requestData: requestData, context: context)
         .then((value) {
       if (value.isSuccess) {
-        showCustomToast(value.message ?? 'Category created successfully',
+        showCustomToast(value.message ?? 'Product created successfully',
             isError: false);
         if (_logoImage != null) {
           _uploadBusinessLogo(value.data?.productId);
         } else {
-          refresh();
+          // Check if we were called from CategoryDetailPage (if selectedCategory is set)
+          if (widget.selectedCategory != null) {
+            // Just pop back to the category detail page
+            Navigator.pop(context, true); // Pass true to indicate successful creation
+          } else {
+            // Otherwise do full refresh
+            refresh();
+          }
         }
       } else {
         showCustomToast(value.message ?? 'Something went wrong');
@@ -128,9 +143,17 @@ class _AddProductScreenState extends State<AddProductScreen> {
         .uploadProductCategoryImage(context: context, formData: formData!, urlPart:urlPart)
         .then((value) async {
       if (value.isSuccess) {
-        showCustomToast(value.message ?? 'Business logo uploaded successfully',
+        showCustomToast(value.message ?? 'Image uploaded successfully',
             isError: false);
-        refresh();
+            
+        // Check if we were called from CategoryDetailPage (if selectedCategory is set)
+        if (widget.selectedCategory != null) {
+          // Just pop back to the category detail page
+          Navigator.pop(context, true); // Pass true to indicate successful creation
+        } else {
+          // Otherwise do full refresh
+          refresh();
+        }
       } else {
         showCustomToast(value.message ?? 'Something went wrong');
       }
@@ -145,20 +168,43 @@ class _AddProductScreenState extends State<AddProductScreen> {
       await listBusinessCategory();
       await getUnitOfMeasure();
       await getVariablePriceStatus();
+      
+      // Set initial category if provided from navigation
+      if (widget.selectedCategory != null && mounted) {
+        setState(() {
+          selectedCategory = widget.selectedCategory;
+        });
+      }
     });
     super.initState();
   }
 
   Future<void> listBusinessCategory() async {
+    final productService = widget.productService; // Use passed productService if available
+    
     await context
         .read<BusinessProviders>()
-        .getListCategories(context: context, page: 1, limit: 10000, searchValue: '', productService: '')
+        .getListCategories(
+            context: context, 
+            page: 1, 
+            limit: 10000, 
+            searchValue: '', 
+            productService: productService ?? '')
         .then((value) async {
       if (value.isSuccess) {
         setState(() {
           productCategoryDataList = value.data!.data;
+          
+          // If we have a selectedCategory from the arguments, validate it exists in the loaded categories
+          if (widget.selectedCategory != null) {
+            final categoryExists = productCategoryDataList?.any(
+                (category) => category.categoryName == widget.selectedCategory) ?? false;
+                
+            if (categoryExists) {
+              selectedCategory = widget.selectedCategory;
+            }
+          }
         });
-
       } else {
         showCustomToast(value.message ?? 'Something went wrong');
       }
@@ -307,8 +353,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
         const SizedBox(height: 8),
         SubCategoryPicker(
           label: 'Select Category',
-          options:productCategoryDataList?.map((e) => e.categoryName ?? '').toList() ??
-              [],
+          options: productCategoryDataList?.map((e) => e.categoryName ?? '').toList() ?? [],
           selectedValue: selectedCategory,
           onChanged: (value) {
             final selectedCat = value;

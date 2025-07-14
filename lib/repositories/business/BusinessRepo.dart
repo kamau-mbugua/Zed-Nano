@@ -63,6 +63,17 @@ class BusinessRepo{
       return ApiResponse.withError(ApiErrorHandler.handleError(e));
     }
   }
+
+  Future<ApiResponse> updateBusinessInfo({required Map<String, dynamic> requestData, required String businessNumber}) async {
+    try {
+      final response =
+      await dioClient!.put('${AppConstants.updateBusinessInfo}?businessId=$businessNumber', data: requestData);
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
   Future<ApiResponse> createProduct({required Map<String, dynamic> requestData}) async {
     try {
       final response =
@@ -237,6 +248,21 @@ class BusinessRepo{
       return ApiResponse.withError(ApiErrorHandler.handleError(e));
     }
   }
+  Future<ApiResponse> getListByProducts({
+    required int page ,
+    required int limit ,
+    required String searchValue ,
+    required String categoryId ,
+  }) async {
+    try {
+      final response =
+      await dioClient!.get('${AppConstants.getListByProducts}?page=$page&limit=$limit&search=$searchValue&categoryId=$categoryId');
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
 
   Future<ApiResponse> getSetupStatus() async {
     try {
@@ -299,4 +325,32 @@ class BusinessRepo{
     }
   }
 
+  Future<ApiResponse> getCategoryById({required Map<String, dynamic> requestData}) async {
+    try {
+      final businessId = requestData['businessId'];
+      final categoryId = requestData['categoryId'];
+      final response =
+      await dioClient!.get('${AppConstants.getCategoryById}?businessId=$businessId&categoryId=$categoryId');
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
+  
+  Future<ApiResponse> updateCategory({required Map<String, dynamic> requestData}) async {
+    try {
+      final categoryId = requestData['categoryId'];
+
+      //remove categoryId from requestData
+      requestData.remove('categoryId');
+
+      final response =
+      await dioClient!.put('${AppConstants.updateCategory}/$categoryId', data: requestData);
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
 }

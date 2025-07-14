@@ -35,7 +35,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
     final phoneNumber = user?.phoneNumber ?? '';
     
     return Container(
-      width: context.width() * 0.7, // 85% of screen width
+      width: context.width() /** 0.7*/, // 85% of screen width
       decoration: const BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.only(
