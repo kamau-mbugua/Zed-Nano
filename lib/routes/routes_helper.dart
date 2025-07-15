@@ -23,6 +23,7 @@ import 'package:zed_nano/screens/products/add/add_product_page.dart';
 import 'package:zed_nano/screens/products/detail/product_detail_page.dart';
 import 'package:zed_nano/screens/products/edit/edit_product_page.dart';
 import 'package:zed_nano/screens/products/list_categories_page.dart';
+import 'package:zed_nano/screens/sell/sell_page.dart';
 
 class RouterHelper {
   static final FluroRouter router = FluroRouter();
@@ -46,6 +47,10 @@ class RouterHelper {
   static final Handler _forgetPinHandler = Handler(
     handlerFunc: (BuildContext? context, Map<String, List<String>> params) =>
         ResetPinScreen(),
+  );
+  static final Handler _sellPageHandler = Handler(
+    handlerFunc: (BuildContext? context, Map<String, List<String>> params) =>
+        SellPage(),
   );
   static final Handler _setPinHandler = Handler(
     handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
@@ -260,6 +265,12 @@ class RouterHelper {
     router.define(
       AppRoutes.activatingTrialRoute,
       handler: _activatingTrialHandler,
+      transitionType: TransitionType.fadeIn,
+    );
+
+    router.define(
+      AppRoutes.sellPageRoute,
+      handler: _sellPageHandler,
       transitionType: TransitionType.fadeIn,
     );
 

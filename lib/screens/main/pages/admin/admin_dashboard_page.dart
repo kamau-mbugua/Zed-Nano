@@ -377,6 +377,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
+          Navigator.of(context).pushNamed(AppRoutes.getSellPageRoute());
         },
         label: const Text('Sell', style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white)),
         icon: const Icon(Icons.lock, color: Colors.white),

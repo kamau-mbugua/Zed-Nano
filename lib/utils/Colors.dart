@@ -63,3 +63,6 @@ const neutralDarkLight = Color(0xFFD9DFEB);
 //add color #f7f7f7
 const Color cardBackgroundColor = Color(0xFFf7f7f7);
 
+//add color #2f3036
+
+const Color highlightMainDark = Color(0xFF2f3036);

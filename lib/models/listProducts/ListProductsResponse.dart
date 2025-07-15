@@ -61,7 +61,7 @@ class ProductData {
   final String? productName;
   final String? productState;
   final num? buyingPrice;
-  final num? productPrice;
+  final int? productPrice;
   final num? discountedPrice;
   final String? variationKey;
   final String? variantCode;
@@ -147,7 +147,7 @@ class ProductData {
       productName: json['productName'] as String?,
       productState: json['productState'] as String?,
       buyingPrice: json['buyingPrice'] as num?,
-      productPrice: json['productPrice'] as num?,
+      productPrice: json['productPrice'] != null ? (json['productPrice'] as num).toInt() : null,
       discountedPrice: json['discountedPrice'] as num?,
       variationKey: json['variationKey'] as String?,
       variantCode: json['variantCode'] as String?,

@@ -10,6 +10,11 @@ class CartViewModel with ChangeNotifier {
   double get totalAmount => _items.values.fold(0, (sum, item) => sum + (item.price * item.quantity));
   bool get isEmpty => _items.isEmpty;
   
+  // Find a specific item by ID (returns null if not found)
+  CartItem? findItem(String productId) {
+    return _items.containsKey(productId) ? _items[productId] : null;
+  }
+  
   // Add item to cart (or update if exists)
   void addItem(String productId, String name, double price, {int quantity = 1}) {
     if (_items.containsKey(productId)) {
