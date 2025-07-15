@@ -66,3 +66,7 @@ const Color cardBackgroundColor = Color(0xFFf7f7f7);
 //add color #2f3036
 
 const Color highlightMainDark = Color(0xFF2f3036);
+
+//ADD #d4d6dd
+
+const Color innactiveBorderCart = Color(0xFFd4d6dd);

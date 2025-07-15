@@ -16,7 +16,7 @@ class CartViewModel with ChangeNotifier {
   }
   
   // Add item to cart (or update if exists)
-  void addItem(String productId, String name, double price, {int quantity = 1}) {
+  void addItem(String productId, String name, double price, String imagePath, String currency,String category, {int quantity = 1}) {
     if (_items.containsKey(productId)) {
       // Update existing item quantity
       _items.update(
@@ -24,8 +24,11 @@ class CartViewModel with ChangeNotifier {
         (existingItem) => CartItem(
           id: existingItem.id,
           name: existingItem.name,
+          category: existingItem.category,
           price: existingItem.price,
           quantity: existingItem.quantity + quantity,
+          imagePath: existingItem.imagePath,
+          currency: existingItem.currency,
         ),
       );
     } else {
@@ -37,6 +40,9 @@ class CartViewModel with ChangeNotifier {
           name: name,
           price: price,
           quantity: quantity,
+          imagePath: imagePath,
+          currency: currency,
+          category: category,
         ),
       );
     }
@@ -54,6 +60,9 @@ class CartViewModel with ChangeNotifier {
         name: existingItem.name,
         price: existingItem.price,
         quantity: quantity,
+        imagePath: existingItem.imagePath,
+        currency: existingItem.currency,
+        category: existingItem.category,
       ),
     );
     notifyListeners();
@@ -76,15 +85,22 @@ class CartViewModel with ChangeNotifier {
 class CartItem {
   final String id;
   final String name;
+  final String category;
   final double price;
+  final String imagePath;
+
+  final String currency;
   final int quantity;
-  
+
   CartItem({
     required this.id,
     required this.name,
+    required this.category,
     required this.price,
     required this.quantity,
+    required this.imagePath,
+    required this.currency,
   });
-  
+
   double get total => price * quantity;
 }

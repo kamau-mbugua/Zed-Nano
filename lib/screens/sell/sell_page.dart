@@ -9,6 +9,7 @@ import 'package:zed_nano/models/listProducts/ListProductsResponse.dart';
 import 'package:zed_nano/models/product_model.dart';
 import 'package:zed_nano/providers/cart/CartViewModel.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
+import 'package:zed_nano/screens/sell/cart_preview_page.dart';
 import 'package:zed_nano/screens/sell/select_category_page.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
@@ -139,7 +140,7 @@ class _SellPageState extends State<SellPage> {
           Expanded(
             child: RefreshIndicator(
               onRefresh: () async {
-                _paginationController.refresh();
+                await _paginationController.refresh();
               },
               child: PagedListView<int, ProductData>(
                 pagingController: _paginationController.pagingController,
@@ -168,6 +169,9 @@ class _SellPageState extends State<SellPage> {
                             product.id ?? '',
                             product.productName ?? '',
                             product.productPrice?.toDouble() ?? 0.0,
+                            product.imagePath ?? '',
+                            product.currency ?? '',
+                            product.productCategory ?? '',
                           );
                         } else {
                           cartViewModel.updateQuantity(
@@ -222,7 +226,12 @@ class _SellPageState extends State<SellPage> {
                 flex: 4,
                 child: appButton(
                   text: 'Preview: $selectedItems',
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const CartPreviewPage()),
+                    );
+                  },
                   context: context,
                   width: 120, // Fixed width instead of full width
                 ),
@@ -331,7 +340,7 @@ class _SellPageState extends State<SellPage> {
 
     return Container(
       margin: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
