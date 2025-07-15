@@ -117,7 +117,7 @@ class _SellPageState extends State<SellPage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                _buildFilterButton(
+                _buildFilterDynamicButton(
                   'All Categories',
                   selectedCategory == 'All Categories',
                   _openCategorySelection,
@@ -234,6 +234,45 @@ class _SellPageState extends State<SellPage> {
     );
   }
 
+  Widget _buildFilterDynamicButton(String text, bool isActive, VoidCallback onTap) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        height: 40,
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: innactiveBorder,
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                  Icon(
+                    Icons.tune,
+                    size: 16,
+                    color: Colors.grey.shade600,
+                  ),
+                Text(
+                  selectedCategory,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontFamily: 'Poppins',
+                    color: Colors.grey.shade800,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
   Widget _buildFilterButton(String text, bool isActive, VoidCallback onTap) {
     return InkWell(
       onTap: onTap,

@@ -29,6 +29,7 @@ class _SelectCategoryPageState extends State<SelectCategoryPage> {
   String _searchTerm = "";
   bool _isInitialized = false;
   Timer? _debounceTimer;
+  String? selectedCategoryId;
 
   @override
   void initState() {
@@ -142,63 +143,104 @@ class _SelectCategoryPageState extends State<SelectCategoryPage> {
               ),
             ),
           ),
+          
+          // Select button at bottom
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(16),
+            child: ElevatedButton(
+              onPressed: () {
+                if (selectedCategoryId != null) {
+                  // Find the selected category from pagination controller
+                  final selectedCategory = _paginationController.pagingController.itemList?.firstWhere(
+                    (category) => category.id == selectedCategoryId,
+                    orElse: () => ProductCategoryData(
+                      id: '',
+                      categoryName: 'All Categories',
+                      imagePath: '',
+                    ),
+                  );
+                  
+                  if (selectedCategory != null) {
+                    Navigator.pop(context, selectedCategory);
+                  }
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: darkBlueColor,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+              ),
+              child: const Text(
+                'Select',
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
   }
 
   Widget _buildCategoryItem(ProductCategoryData category) {
+    // Track if this category is selected
+    bool isSelected = selectedCategoryId == category.id;
+    
     return InkWell(
       onTap: () {
-        // Return selected category to previous page
-        Navigator.pop(context, category);
+        setState(() {
+          selectedCategoryId = category.id;
+        });
       },
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+        margin: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
         decoration: BoxDecoration(
-          border: Border(
-            bottom: BorderSide(
-              color: lightGreyColor,
-              width: 0.5,
-            ),
+          color: isSelected ? const Color(0xFFF2F4F5) : Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: isSelected ? highlightMainDark : innactiveBorder,
+            width: isSelected ? 1.5 : 1.0,
           ),
         ),
         child: Row(
           children: [
-            if (category.id != '' && category.imagePath != null && category.imagePath!.isNotEmpty)
-              Container(
-                margin: const EdgeInsets.only(right: 12),
-                child: rfCommonCachedNetworkImage(
-                  category.imagePath!,
-                  fit: BoxFit.cover,
-                  height: 32,
-                  width: 32,
-                  radius: 16,
-                ),
-              ),
-            if (category.id == '')
-              Container(
-                margin: const EdgeInsets.only(right: 12),
-                height: 32,
-                width: 32,
-                decoration: BoxDecoration(
-                  color: lightGreyColor,
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  Icons.category_outlined,
-                  size: 16,
-                  color: neutralDarkLight,
-                ),
-              ),
             Text(
               category.categoryName ?? '',
               style: const TextStyle(
-                color: textPrimary,
+                color: darkGreyColor, // #1f2024
                 fontWeight: FontWeight.w400,
                 fontFamily: "Poppins",
                 fontSize: 14.0,
               ),
+            ),
+            const Spacer(),
+            // Checkbox
+            Container(
+              height: 20,
+              width: 20,
+              decoration: BoxDecoration(
+                color: isSelected ? darkBlueColor : Colors.white, // #032541 when selected
+                border: Border.all(
+                  color: isSelected ? darkBlueColor : innactiveBorder, // #c5c6cc when unselected
+                  width: 1.5,
+                ),
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: isSelected 
+                ? const Icon(
+                    Icons.check,
+                    size: 14,
+                    color: Colors.white,
+                  )
+                : null,
             ),
           ],
         ),

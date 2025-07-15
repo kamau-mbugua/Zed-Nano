@@ -117,6 +117,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
       'billingPlanPaymentPlanId':
           '${plans?[selectedIndex]?.plans?[0]?.billingPlanPaymentPlanId}',
       'packageId': '${plans?[selectedIndex].plans?[0].packageId}',
+      'isChangePlan':widget.isExistingPlan
     };
 
     await context
