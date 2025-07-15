@@ -29,14 +29,14 @@ InputDecoration inputDecoration(BuildContext context,
     errorMaxLines: 2,
     errorStyle: primaryTextStyle(color: Colors.red, size: 12),
     enabledBorder:
-        UnderlineInputBorder(borderSide: BorderSide(color: AppBorderColor)),
+        const UnderlineInputBorder(borderSide: BorderSide(color: AppBorderColor)),
     focusedBorder:
-        UnderlineInputBorder(borderSide: BorderSide(color: appThemePrimary)),
+        const UnderlineInputBorder(borderSide: BorderSide(color: appThemePrimary)),
     border:
-        UnderlineInputBorder(borderSide: BorderSide(color: appThemePrimary)),
-    focusedErrorBorder: UnderlineInputBorder(
+        const UnderlineInputBorder(borderSide: BorderSide(color: appThemePrimary)),
+    focusedErrorBorder: const UnderlineInputBorder(
         borderSide: BorderSide(color: Colors.red, width: 1.0)),
-    errorBorder: UnderlineInputBorder(
+    errorBorder: const UnderlineInputBorder(
         borderSide: BorderSide(color: Colors.red, width: 1.0)),
     alignLabelWithHint: true,
   );
@@ -233,7 +233,7 @@ Widget commonCachedNetworkImage(
             radius: radius);
       },
       placeholder: (_, s) {
-        if (!usePlaceholderIfUrlEmpty) return SizedBox();
+        if (!usePlaceholderIfUrlEmpty) return const SizedBox();
         return placeHolderWidget(
             height: height,
             width: width,
@@ -270,22 +270,22 @@ Widget placeHolderWidget(
 Widget buildEmptyCard(String title, String subtitle) {
   return Container(
     width: double.infinity,
-    padding: EdgeInsets.all(20),
+    padding: const EdgeInsets.all(20),
     decoration: BoxDecoration(
-      color: Color(0xfff9f9fc),
+      color: const Color(0xfff9f9fc),
       borderRadius: BorderRadius.circular(12),
     ),
     child: Column(
       children: [
         Text(title,
-            style: TextStyle(
+            style: const TextStyle(
                 color: Color(0xff032541),
                 fontWeight: FontWeight.w600,
                 fontSize: 12)),
-        SizedBox(height: 6),
+        const SizedBox(height: 6),
         Text(subtitle,
             textAlign: TextAlign.center,
-            style: TextStyle(color: Color(0xff71727a), fontSize: 12)),
+            style: const TextStyle(color: Color(0xff71727a), fontSize: 12)),
       ],
     ),
   );
@@ -301,7 +301,7 @@ Widget buildOverviewCard(
   return Container(
     width: width ?? 160,
     height: 122,
-    padding: EdgeInsets.all(16),
+    padding: const EdgeInsets.all(16),
     decoration: BoxDecoration(
       color: iconColor,
       borderRadius: BorderRadius.circular(12),
@@ -315,15 +315,15 @@ Widget buildOverviewCard(
           width: 30,
           height: 30,
         ),
-        SizedBox(height: 14),
+        const SizedBox(height: 14),
         Text(title, 
-            style: TextStyle(
+            style: const TextStyle(
               color: Color(0xff71727a), 
               fontSize: 14,
               fontFamily: 'Poppins',
             )),
         Text(value,
-            style: TextStyle(
+            style: const TextStyle(
                 color: Color(0xff333333),
                 fontWeight: FontWeight.w600,
                 fontFamily: 'Poppins',
