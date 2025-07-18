@@ -13,12 +13,20 @@ class PaginationController<T> extends ChangeNotifier {
   
   PaginationController({required this.fetchItems, this.pageSize = 100})
       : pagingController = PagingController(firstPageKey: 1) {
+    // Don't immediately add the listener that triggers fetches
+    // We'll do this in a separate method called after widget initialization
+  }
+
+  // Call this after widget is fully initialized (e.g., in a post-frame callback)
+  void initialize() {
+    if (_isDisposed) return;
+    
+    // Now it's safe to add the listener
     pagingController.addPageRequestListener((pageKey) {
       if (!_isDisposed) {
         fetchNextPage(pageKey);
       }
     });
-    // We don't auto-fetch anymore - the caller will explicitly call fetchFirstPage()
   }
 
   List<T> get items => _items;
@@ -28,8 +36,16 @@ class PaginationController<T> extends ChangeNotifier {
   void fetchFirstPage() {
     if (_isDisposed) return;
     
+    // Initialize the controller first if not already done
+    initialize();
+    
     if (pagingController.nextPageKey == 1) {
-      pagingController.notifyPageRequestListeners(pagingController.nextPageKey!);
+      // Use microtask to ensure this happens after the current build phase
+      Future.microtask(() {
+        if (!_isDisposed) {
+          pagingController.notifyPageRequestListeners(pagingController.nextPageKey!);
+        }
+      });
     }
   }
 
@@ -76,7 +92,13 @@ class PaginationController<T> extends ChangeNotifier {
     
     _currentPage = 1;
     _items.clear();
-    pagingController.refresh();
+    
+    // Use microtask to ensure this happens after the current build phase
+    Future.microtask(() {
+      if (!_isDisposed) {
+        pagingController.refresh();
+      }
+    });
   }
 
   // Method to manually pause/resume operations

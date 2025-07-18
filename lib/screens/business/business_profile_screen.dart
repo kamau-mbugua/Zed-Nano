@@ -50,12 +50,11 @@ class _BusinessProfileScreenState extends State<BusinessProfileScreen> {
     });
   }
 
+  Future<void> onRefreshRequest() async {
+    await _fetchBusinessProfile();
+  }
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-        onRefresh: () async {
-          await _fetchBusinessProfile();
-        },
-        child: BusinessProfilePage(businessData: businessInfoData ?? BusinessInfoData()));
+    return BusinessProfilePage(businessData: businessInfoData ?? BusinessInfoData(), onRefreshRequest:onRefreshRequest);
   }
 }

@@ -57,6 +57,7 @@ class AppConstants{
   static const String getListProducts = 'api/listProducts/Active';
   static const String findProduct = 'api/findProduct';
   static const String getListByProducts = 'api/listByProducts';
+  static const String getAllActiveStock = 'api/get_all_activeStock';
   static const String createBusiness = 'postBusiness';
   static const String getSetupStatus = 'api/get_setup_status';
   static const String listSubscribedBillingPlans = 'api/v1/billing/listsubscribed_billing_plans';

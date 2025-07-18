@@ -483,16 +483,33 @@ class _EditBusinessPageState extends State<EditBusinessPage> {
 
   @override
   void dispose() {
+    // First dispose controllers
     businessNameController.dispose();
     businessCategoriesController.dispose();
     phoneNumberController.dispose();
     codeNumberController.dispose();
     emailController.dispose();
     locationController.dispose();
+    
+    // Then dispose focus nodes with null checks
+    if (_businessNameFocusNode.hasFocus) {
+      _businessNameFocusNode.unfocus();
+    }
+    if (_phoneNumberFocusNode.hasFocus) {
+      _phoneNumberFocusNode.unfocus();
+    }
+    if (_emailFocusNode.hasFocus) {
+      _emailFocusNode.unfocus();
+    }
+    if (_locationFocusNode.hasFocus) {
+      _locationFocusNode.unfocus();
+    }
+    
     _businessNameFocusNode.dispose();
     _phoneNumberFocusNode.dispose();
     _emailFocusNode.dispose();
     _locationFocusNode.dispose();
+    
     super.dispose();
   }
 }

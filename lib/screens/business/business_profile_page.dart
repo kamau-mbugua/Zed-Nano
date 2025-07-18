@@ -17,10 +17,12 @@ import 'package:zed_nano/viewmodels/WorkflowViewModel.dart';
 
 class BusinessProfilePage extends StatefulWidget {
   final BusinessInfoData businessData;
+  final Future<void> Function()? onRefreshRequest;
 
-  const BusinessProfilePage({
+  BusinessProfilePage({
     Key? key,
     required this.businessData,
+    this.onRefreshRequest
   }) : super(key: key);
 
   @override
@@ -34,17 +36,32 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
 
   @override
   void initState() {
-    subscribedBillingPlansResponse = getWorkflowViewModel(context).billingPlan;
-
-    if (subscribedBillingPlansResponse == null) {
-      getWorkflowViewModel(context).skipSetup(context).then((value) {
-        setState(() {
-          subscribedBillingPlansResponse = getWorkflowViewModel(context).billingPlan;
-        });
-      });
-    }
-
     super.initState();
+    
+    // Fetch billing plan information after the build phase
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadSubscriptionData();
+    });
+  }
+  
+  Future<void> _loadSubscriptionData() async {
+    final billingPlan = getWorkflowViewModel(context).billingPlan;
+    
+    if (mounted) {
+      setState(() {
+        subscribedBillingPlansResponse = billingPlan;
+      });
+      
+      if (subscribedBillingPlansResponse == null) {
+        await getWorkflowViewModel(context).skipSetup(context);
+        
+        if (mounted) {
+          setState(() {
+            subscribedBillingPlansResponse = getWorkflowViewModel(context).billingPlan;
+          });
+        }
+      }
+    }
   }
 
   @override
@@ -54,29 +71,29 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
       appBar: AuthAppBar(
         title:'Business Profile',
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+      body: RefreshIndicator(
+        onRefresh: () async {
+          if (widget.onRefreshRequest != null) {
+            await widget.onRefreshRequest!();
+          }
+        },
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(), // <--- important!
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 8),
-              // Business Header Section
               _buildBusinessHeader(),
-
               const Divider(height: 32, thickness: 0.5),
-
-              // Subscription Section
               _buildSubscriptionSection(),
-
               const Divider(height: 32, thickness: 0.5),
-
-              // Business Details Section
               _buildBusinessDetailsSection(),
+              const SizedBox(height: 32), // for scrollable area
             ],
           ),
         ),
       ),
+
     );
   }
 
@@ -197,7 +214,7 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
                 const GetStartedPage(initialStep:2, isExistingPlan:true).launch(context);
               },
               child: Text(
-                'Change/Cancel',
+                'Change/Post Pay',
                 style: TextStyle(
                   color: accentRed, // highlightHighlightDarkest
                   fontWeight: FontWeight.w600,
@@ -304,7 +321,11 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
             ),
             GestureDetector(
               onTap: () {
-                Navigator.pushNamed(context, AppRoutes.getEditBusinessScreenRoute());
+                Navigator.pushNamed(context, AppRoutes.getEditBusinessScreenRoute()).then((_) {
+                  if (widget.onRefreshRequest != null) {
+                    widget.onRefreshRequest!();
+                  }
+                });
               },
               child: Text(
                 'Edit',

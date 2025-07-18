@@ -263,6 +263,21 @@ class BusinessRepo{
       return ApiResponse.withError(ApiErrorHandler.handleError(e));
     }
   }
+  Future<ApiResponse> getAllActiveStock({
+    required int page ,
+    required int limit ,
+    required String searchValue ,
+    required String categoryId ,
+  }) async {
+    try {
+      final response =
+      await dioClient!.get('${AppConstants.getAllActiveStock}?page=$page&limit=$limit&search=$searchValue&categoryId=$categoryId');
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
 
   Future<ApiResponse> getSetupStatus() async {
     try {

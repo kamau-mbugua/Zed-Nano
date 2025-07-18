@@ -16,37 +16,62 @@ class BaseProvider extends ChangeNotifier {
   /// Set loading state and show/hide loading overlay
   void setLoading(bool loading, BuildContext context) {
     _isLoading = loading;
-    // Get the context from the navigator key
-    // final context = Get.context;
     
-    // Only show/dismiss loading if context is available
-        try{
-      if (context != null) {
-        if (loading) {
-          context.showLoading();
-        } else {
-          context.dismissLoading();
+    // Use Future.microtask to avoid setState during build
+    Future.microtask(() {
+      try {
+        // Check if the context is still valid and mounted
+        if (context is StatefulElement && context.state.mounted) {
+          if (loading) {
+            context.showLoading();
+          } else {
+            context.dismissLoading();
+          }
+        } else if (loading) {
+          logger.w('setLoading ⚠️ Context not available or not mounted for loading overlay.');
         }
-      } else if (loading) {
-        logger.w('setLoading ⚠️ Context not available for loading overlay.');
+      } catch(e) {
+        logger.e('setLoading ⚠️ Exception caught: $e');
       }
-    }catch(e){
-          logger.e('setLoading ⚠️ Exception caught: $e');
-    }
-
-    notifyListeners();
+      
+      // Only notify listeners after the current build phase is complete
+      if (!_disposed) {
+        notifyListeners();
+      }
+    });
   }
 
   /// Reset error state
   void resetError() {
     _error = null;
-    notifyListeners();
+    
+    // Use Future.microtask to avoid setState during build
+    Future.microtask(() {
+      if (!_disposed) {
+        notifyListeners();
+      }
+    });
   }
 
   /// Set error state
   void setError(ErrorResponse error) {
     _error = error;
-    notifyListeners();
+    
+    // Use Future.microtask to avoid setState during build
+    Future.microtask(() {
+      if (!_disposed) {
+        notifyListeners();
+      }
+    });
+  }
+
+  // Track disposed state
+  bool _disposed = false;
+  
+  @override
+  void dispose() {
+    _disposed = true;
+    super.dispose();
   }
 
   /// Perform an API call with automatic loading state management

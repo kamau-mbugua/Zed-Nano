@@ -11,6 +11,7 @@ import 'package:zed_nano/models/createProduct/CreateProductResponse.dart';
 import 'package:zed_nano/models/createbillingInvoice/CreateBillingInvoiceResponse.dart';
 import 'package:zed_nano/models/findProduct/FindProductResponse.dart';
 import 'package:zed_nano/models/getVariablePriceStatus/GetVariablePriceStatusResponse.dart';
+import 'package:zed_nano/models/get_all_activeStock/GetAllActiveStockResponse.dart';
 import 'package:zed_nano/models/get_branch_transaction_by_date/BranchTransactionByDateResponse.dart';
 import 'package:zed_nano/models/get_business_info/BusinessInfoResponse.dart';
 import 'package:zed_nano/models/get_payment_methods_with_status/PaymentMethodsResponse.dart';
@@ -708,6 +709,37 @@ class BusinessProviders extends BaseProvider {
     } else {
       finalResponseModel =
           ResponseModel<ListByProductsResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
+  Future<ResponseModel<GetAllActiveStockResponse>> getAllActiveStock(
+      {
+        required int page ,
+        required int limit ,
+        required String categoryId ,
+        required String searchValue ,
+        required BuildContext context,
+      }) async {
+
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.getAllActiveStock(
+          page: page,
+          limit: limit,
+          searchValue: searchValue,
+            categoryId: categoryId
+        ), context);
+
+    ResponseModel<GetAllActiveStockResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<GetAllActiveStockResponse>(
+          true, responseModel.message!, GetAllActiveStockResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<GetAllActiveStockResponse>(false, responseModel.message!);
     }
 
     return finalResponseModel;

@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:nb_utils/nb_utils.dart' hide lightGrey;
 import 'package:provider/provider.dart';
 import 'package:zed_nano/providers/auth/authenticated_app_providers.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/routes/routes.dart';
+import 'package:zed_nano/screens/stock/view_stock_page.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/Images.dart';
+import 'package:nb_utils/nb_utils.dart';
 
 class CustomDrawer extends StatefulWidget {
   final Function()? onClose;
@@ -127,7 +128,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
-                      color: lightGrey,
+                      color: lightGreyColor,
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: const Text('View Profile',
@@ -187,7 +188,13 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     children: [
                       _buildSubMenuItem(
                         title: 'View Stock',
-                        onTap: () => _navigateTo(context, '/stock-levels'),
+                        // onTap: () => /*_navigateTo(context, '/stock-levels')*/ViewStockPage.launch(context)
+                        onTap: (){
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => ViewStockPage()),
+                          );
+                        }
                       ),
                       _buildSubMenuItem(
                         title: 'Add Stock',
@@ -356,7 +363,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 2),
       decoration: const BoxDecoration(
-        color: lightGrey,
+        color: lightGreyColor,
         borderRadius: BorderRadius.all(Radius.circular(8)),
       ),
       child: ListTile(

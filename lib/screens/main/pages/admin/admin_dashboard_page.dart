@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iconsax/iconsax.dart';
@@ -44,7 +46,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
   String? businessName;
 
   // Default selected range label
-  String _selectedRangeLabel = 'this_month';
+  String _selectedRangeLabel = 'this_week';
   late Map<String, String> _dateRange;
 
   final _dateRangeOptions = [
@@ -66,6 +68,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
   
   // Add a debounce flag to prevent multiple rapid fetches
   bool _isFetching = false;
+  Timer? _debounceTimer;
 
   @override
   void initState() {
@@ -135,15 +138,24 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
   }
 
   Future<void> fetchBranchStoreSummary() async {
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      var requestData = {
-        'branchId': getBusinessDetails(context)?.branchId,
-        'endDate':_dateRange.values.last,
-        'startDate':_dateRange.values.first,
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      
+      Map<String, dynamic> requestData = {
+        'startDate': _dateRange.values.first.removeTimezoneOffset,
+        'endDate': _dateRange.values.last.removeTimezoneOffset,
+        'branchId': getBusinessDetails(context)?.branchId ?? ''
       };
-      await branchStoreSummary(requestData:requestData);
-      await getBranchTransactionByDate(requestData:requestData);
-      await viewAllTransactions();
+
+      // Debounce to prevent multiple rapid fetches
+      if (_debounceTimer?.isActive ?? false) _debounceTimer!.cancel();
+      _debounceTimer = Timer(const Duration(milliseconds: 500), () {
+        if (mounted) {
+          branchStoreSummary(requestData: requestData);
+          getBranchTransactionByDate(requestData: requestData);
+          viewAllTransactions();
+        }
+      });
     });
   }
   Future<void> branchStoreSummary({required Map<String, dynamic> requestData}) async {
@@ -153,9 +165,11 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
         .branchStoreSummary(context: context, requestData:requestData)
         .then((value) async {
       if (value.isSuccess) {
-        setState(() {
-          branchStoreSummaryResponse = value.data;
-        });
+        if (mounted) {
+          setState(() {
+            branchStoreSummaryResponse = value.data;
+          });
+        }
       } else {
         showCustomToast(value.message ?? 'Something went wrong');
       }
@@ -168,9 +182,11 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
         .getBranchTransactionByDate(context: context, requestData:requestData)
         .then((value) async {
       if (value.isSuccess) {
-        setState(() {
-          branchTransactionByDateResponse = value.data;
-        });
+        if (mounted) {
+          setState(() {
+            branchTransactionByDateResponse = value.data;
+          });
+        }
       } else {
         showCustomToast(value.message ?? 'Something went wrong');
       }
@@ -189,9 +205,11 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
     )
         .then((value) async {
       if (value.isSuccess) {
-        setState(() {
-          transactionListResponse = value.data;
-        });
+        if (mounted) {
+          setState(() {
+            transactionListResponse = value.data;
+          });
+        }
       } else {
         showCustomToast(value.message ?? 'Something went wrong');
       }

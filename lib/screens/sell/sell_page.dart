@@ -40,7 +40,9 @@ class _SellPageState extends State<SellPage> {
 
   @override
   void initState() {
-    // Initialize pagination controller without immediately fetching data
+    super.initState();
+    
+    // Initialize pagination controller without adding listeners yet
     _paginationController = PaginationController<ProductData>(
       fetchItems: (page, pageSize) async {
         return getListByProducts(page: page, limit: pageSize);
@@ -49,10 +51,12 @@ class _SellPageState extends State<SellPage> {
 
     // Defer API calls to avoid setState during build
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _paginationController.fetchFirstPage();
+      if (mounted) {
+        // Initialize the controller and fetch first page after build is complete
+        _paginationController.initialize();
+        _paginationController.fetchFirstPage();
+      }
     });
-
-    super.initState();
   }
 
   Future<List<ProductData>> getListByProducts(
