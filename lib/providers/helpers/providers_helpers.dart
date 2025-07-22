@@ -16,6 +16,7 @@ AuthenticatedAppProviders getAuthProvider(BuildContext context ,{bool listen = f
 }
 
 BusinessDetails? getBusinessDetails(BuildContext context) {
+  logger.d('getBusinessDetails called ${getAuthProvider(context).businessDetails?.toJson()}');
   return getAuthProvider(context).businessDetails;
 }
 LoginUserDetails? getUserDetails(BuildContext context) {

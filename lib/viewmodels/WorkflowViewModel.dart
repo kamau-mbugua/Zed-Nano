@@ -34,7 +34,12 @@ class WorkflowViewModel with ChangeNotifier {
       
       // Get token after invite
       if (authProvider.isLoggedIn) {
-        await authProvider.getTokenAfterInvite(requestData: {}, context: context);
+
+        final requestData = {
+          'branchId': authProvider.businessDetails?.branchId ?? '',
+        };
+
+        await authProvider.getTokenAfterInvite(requestData: requestData , context: context);
         // Update workflow state
         await businessProvider.getSetupStatus(context: context).then((value) {
           if (value.isSuccess) {

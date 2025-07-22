@@ -1,14 +1,25 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
+import 'package:dio/dio.dart';
 import 'package:zed_nano/models/get_all_activeStock/GetAllActiveStockResponse.dart';
+import 'package:zed_nano/models/listCategories/ListCategoriesResponse.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
+import 'package:zed_nano/screens/sell/select_category_page.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
+import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
+import 'package:zed_nano/screens/widget/common/filter_row_widget.dart';
+import 'package:zed_nano/screens/widget/common/searchview.dart';
 import 'package:zed_nano/utils/pagination_controller.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
+import '../../utils/Images.dart';
+import '../../utils/api_debug_helper.dart';
 
 class ViewStockPage extends StatefulWidget {
   const ViewStockPage({Key? key}) : super(key: key);
@@ -17,29 +28,39 @@ class ViewStockPage extends StatefulWidget {
   _ViewStockPageState createState() => _ViewStockPageState();
 }
 
-class _ViewStockPageState extends State<ViewStockPage> with TickerProviderStateMixin {
-  late TabController _tabController;
+class _ViewStockPageState extends State<ViewStockPage> {
+  late PaginationController<ActiveStockProduct> _paginationController;
+  int _activeStatusFilter = -1; // -1: All, 0: Low Stock, 1: Out of Stock
+  
+  String _searchTerm = '';
+  String? selectedCategoryId;
+  String selectedCategory = 'All Categories';
+  String sortOrder = 'List: A-Z';
+  bool isAscending = true;
+
+  List<ProductCategoryData> categories = [];
+  int totalStockCount = 0;
+  int lowStockCount = 0;
+  int outOfStockCount = 0;
+
   String _selectedCategory = 'All';
   String _sortOrder = 'A-Z';
   TextEditingController _searchController = TextEditingController();
 
-  String selectedCategory = 'All Categories';
-  String sortOrder = 'List: A-Z';
   List<ActiveStockProduct> products = [];
   TextEditingController searchController = TextEditingController();
 
-  late PaginationController<ActiveStockProduct> _paginationController;
-  String _searchTerm = "";
   Timer? _debounceTimer;
-  String? selectedCategoryId = '';
   
   bool _isLoading = true;
   StockStatusSummary? _summary;
 
+  ProductCategoryData? categoryData;
+
+
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
 
     // Initialize pagination controller without adding listeners yet
     _paginationController = PaginationController<ActiveStockProduct>(
@@ -53,35 +74,9 @@ class _ViewStockPageState extends State<ViewStockPage> with TickerProviderStateM
       if (mounted) {
         // Initialize the controller and fetch first page after build is complete
         _paginationController.initialize();
-        _fetchStockSummary();
+        _paginationController.fetchFirstPage();
       }
     });
-  }
-
-  Future<void> _fetchStockSummary() async {
-    try {
-      final response = await getBusinessProvider(context).getAllActiveStock(
-          page: 1,
-          limit: 10,
-          searchValue: '',
-          context: context,
-          categoryId: '');
-      
-      if (response.isSuccess && response.data != null) {
-        setState(() {
-          _summary = response.data!.stockStatusSummary;
-          _isLoading = false;
-        });
-      } else {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-    } catch (e) {
-      setState(() {
-        _isLoading = false;
-      });
-    }
   }
 
   Future<List<ActiveStockProduct>> getAllActiveStock(
@@ -96,7 +91,7 @@ class _ViewStockPageState extends State<ViewStockPage> with TickerProviderStateM
 
       return response.data?.data ?? [];
     } catch (e) {
-      print("Error fetching stock: $e");
+      showCustomToast(e.toString());
       return [];
     }
   }
@@ -111,9 +106,25 @@ class _ViewStockPageState extends State<ViewStockPage> with TickerProviderStateM
     });
   }
 
+  Future<void> _openCategorySelection() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const SelectCategoryPage()),
+    );
+
+    if (result != null && result is ProductCategoryData) {
+      setState(() {
+        categoryData = result;
+        selectedCategoryId = result.id;
+        selectedCategory = result.categoryName ?? 'All Categories';
+      });
+      _paginationController.refresh();
+    }
+  }
+
+
   @override
   void dispose() {
-    _tabController.dispose();
     _searchController.dispose();
     _debounceTimer?.cancel();
     super.dispose();
@@ -123,7 +134,7 @@ class _ViewStockPageState extends State<ViewStockPage> with TickerProviderStateM
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AuthAppBar(title: "View Stock"),
+      appBar: const AuthAppBar(title: 'View Stock'),
       body: Column(
         children: [
           _buildStatusSummary(),
@@ -133,19 +144,19 @@ class _ViewStockPageState extends State<ViewStockPage> with TickerProviderStateM
             child: RefreshIndicator(
               onRefresh: () async {
                 _paginationController.refresh();
-                await _fetchStockSummary();
+                // await _fetchStockSummary();
               },
               child: _buildStockList(),
             ),
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: const Color(0xFF032541),
+      floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          // Navigate to add product page
         },
-        child: const Icon(Icons.add, color: Colors.white),
+        label: const Text('Add', style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white)),
+        icon: const Icon(Icons.add, color: Colors.white),
+        backgroundColor: appThemePrimary,
       ),
     );
   }
@@ -160,36 +171,40 @@ class _ViewStockPageState extends State<ViewStockPage> with TickerProviderStateM
         children: [
           Expanded(
             child: _buildStatusCard(
-              Icons.warning_amber_rounded,
-              Colors.orange,
+              lowStockIcon,
+              orangeColor,
               'Low Stock',
               '$lowStockCount Products',
               onTap: () {
-                _tabController.animateTo(0);
+                setState(() {
+                  _activeStatusFilter = 0;
+                });
               },
-              isActive: _tabController.index == 0,
+              isActive: _activeStatusFilter == 0,
             ),
           ),
           const SizedBox(width: 10),
           Expanded(
             child: _buildStatusCard(
-              Icons.cancel_outlined,
-              Colors.red,
+              outOfStockIcon,
+              errorColors,
               'Out of Stock',
               '$outOfStockCount Products',
               onTap: () {
-                _tabController.animateTo(1);
+                setState(() {
+                  _activeStatusFilter = 1;
+                });
               },
-              isActive: _tabController.index == 1,
+              isActive: _activeStatusFilter == 1,
             ),
-          ),
+          )
         ],
       ),
     );
   }
 
   Widget _buildStatusCard(
-    IconData icon,
+    String iconPath,
     Color color,
     String title,
     String subtitle, {
@@ -204,39 +219,50 @@ class _ViewStockPageState extends State<ViewStockPage> with TickerProviderStateM
           color: Colors.white,
           border: Border.all(
             color: color,
-            width:  1,
+            width:  isActive ? 2 : 0.7,
           ),
           borderRadius: BorderRadius.circular(16),
         ),
-        child: Row(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(icon, color: color, size: 24),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.black87,
-                    ),
+            1.height,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                SvgPicture.asset(
+                  iconPath,
+                  colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
+                  width: 15,
+                  height: 15,
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: textSecondary,
                   ),
-                  Text(
-                    subtitle,
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      color: Colors.red,
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
+            10.height,
+            // 3 Products
+            Text(
+                subtitle,
+                style: TextStyle(
+                    color:  color,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: 'Poppins',
+                    fontStyle:  FontStyle.normal,
+                    fontSize: 14.0
+                ),
+                textAlign: TextAlign.left
+            ),
+            1.height,
           ],
         ),
       ),
@@ -244,105 +270,35 @@ class _ViewStockPageState extends State<ViewStockPage> with TickerProviderStateM
   }
 
   Widget _buildSearchBar() {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      decoration: BoxDecoration(
-        color: Colors.grey[200],
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: TextField(
-        controller: _searchController,
-        decoration: const InputDecoration(
-          hintText: 'Search',
-          hintStyle: TextStyle(fontFamily: 'Poppins'),
-          prefixIcon: Icon(Icons.search),
-          border: InputBorder.none,
-          contentPadding: EdgeInsets.symmetric(vertical: 12),
-        ),
-        style: const TextStyle(fontFamily: 'Poppins'),
-        onChanged: _onSearchChanged,
-      ),
-    );
+    return buildSearchBar(controller: _searchController, onChanged: _onSearchChanged);
   }
 
   Widget _buildFilters() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: Row(
-        children: [
-          Expanded(
-            child: _buildDropdown(
-              'Categories: $_selectedCategory',
-              ['All', 'Food', 'Drinks', 'Stationery', 'Cleaning'],
-              (value) {
-                setState(() {
-                  _selectedCategory = value!;
-                  // Add logic to filter by category
-                  _paginationController.refresh();
-                });
-              },
-            ),
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: _buildDropdown(
-              'List: $_sortOrder',
-              ['A-Z', 'Z-A', 'Price ↑', 'Price ↓'],
-              (value) {
-                setState(() {
-                  _sortOrder = value!;
-                  // Add logic to sort products
-                  _paginationController.refresh();
-                });
-              },
-            ),
-          ),
-        ],
-      ),
+    return FilterRowWidget(
+      leftButtonText: selectedCategory,
+      leftButtonIsActive: selectedCategory != 'All Categories',
+      leftButtonOnTap: _openCategorySelection,
+      leftButtonIcon: Icons.tune,
+      rightButtonText: sortOrder,
+      rightButtonIsActive: sortOrder != 'List: A-Z',
+      rightButtonOnTap: () {
+        setState(() {
+          sortOrder = sortOrder == 'List: A-Z' ? 'List: Z-A' : 'List: A-Z';
+        });
+      },
+      showRightButtonArrow: false,
     );
   }
-
-  Widget _buildDropdown(
-      String hint, List<String> items, Function(String?) onChanged) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.grey.shade300),
-      ),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton<String>(
-          isExpanded: true,
-          hint: Text(hint, style: TextStyle(fontFamily: 'Poppins')),
-          icon: const Icon(Icons.keyboard_arrow_down),
-          items: items.map((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value, style: TextStyle(fontFamily: 'Poppins')),
-            );
-          }).toList(),
-          onChanged: onChanged,
-          style: TextStyle(color: Colors.black87, fontFamily: 'Poppins'),
-        ),
-      ),
-    );
-  }
-
   Widget _buildStockList() {
-    if (_isLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
-
     return PagedListView<int, ActiveStockProduct>(
       pagingController: _paginationController.pagingController,
       builderDelegate: PagedChildBuilderDelegate<ActiveStockProduct>(
         itemBuilder: (context, item, index) {
           return _buildStockItem(item);
         },
-        firstPageProgressIndicatorBuilder: (_) => SizedBox(),
-        newPageProgressIndicatorBuilder: (_) => SizedBox(),
-        noItemsFoundIndicatorBuilder: (context) => Center(
+        firstPageProgressIndicatorBuilder: (_) => const SizedBox(),
+        newPageProgressIndicatorBuilder: (_) => const SizedBox(),
+        noItemsFoundIndicatorBuilder: (context) => const Center(
           child: CompactGifDisplayWidget(
             gifPath: emptyListGif,
             title: "It's empty over here.",
@@ -350,22 +306,12 @@ class _ViewStockPageState extends State<ViewStockPage> with TickerProviderStateM
             'No products in this category yet! Add to view them here.',
           ),
         ),
-        firstPageErrorIndicatorBuilder: (context) => Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(Icons.error_outline, size: 60, color: Colors.grey),
-              const SizedBox(height: 16),
-              const Text(
-                'Failed to load stock data',
-                style: TextStyle(fontFamily: 'Poppins'),
-              ),
-              const SizedBox(height: 8),
-              ElevatedButton(
-                onPressed: () => _paginationController.refresh(),
-                child: const Text('Try Again', style: TextStyle(fontFamily: 'Poppins')),
-              ),
-            ],
+        firstPageErrorIndicatorBuilder: (context) => const Center(
+          child: CompactGifDisplayWidget(
+            gifPath: emptyListGif,
+            title: "It's empty over here.",
+            subtitle:
+            'No products in this category yet! Add to view them here.',
           ),
         ),
       ),
@@ -378,76 +324,104 @@ class _ViewStockPageState extends State<ViewStockPage> with TickerProviderStateM
     
     switch (item.stockStatus) {
       case 'LOW_STOCK':
-        statusColor = Colors.orange;
+        statusColor = warning;
         statusText = 'Low stock: ${item.inStockQuantity} items left';
         break;
       case 'OUT_OF_STOCK':
-        statusColor = Colors.red;
+        statusColor = errorColors;
         statusText = 'Out of stock';
         break;
       case 'IN_STOCK':
       default:
-        statusColor = Colors.green;
+        statusColor = successTextColor;
         statusText = 'In Stock: ${item.inStockQuantity} items';
     }
 
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 9),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
       ),
-      child: Row(
+      child: Column(
         children: [
-          // Status indicator bar
+          Row(
+            children: [
+              // Status indicator bar
+              Container(
+                width: 5,
+                height: 50,
+                decoration: BoxDecoration(
+                  color: statusColor,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(8),
+                    bottomLeft: Radius.circular(8),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(item.productName ?? '',
+                          style: const TextStyle(
+                            fontFamily: 'Poppins',
+                            color: darkGreyColor,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                            fontStyle: FontStyle.normal,
+                          )
+                      ),
+                      const SizedBox(height: 4),
+                      Row(
+                        children: [
+                          Text(
+                              '${item.productCategory} .',
+                              style: const TextStyle(
+                                  color:  textSecondary,
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: 'Poppins',
+                                  fontStyle:  FontStyle.normal,
+                                  fontSize: 10.0
+                              ),
+                              textAlign: TextAlign.left
+                          ),
+                          Text(' $statusText',
+                              style: TextStyle(
+                                fontFamily: 'Poppins',
+                                color: statusColor,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w600,
+                                fontStyle: FontStyle.normal,
+                              )
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child:  Text('${item.currency ?? "KES"} ${item.sellingPrice?.toStringAsFixed(0) ?? "0"}',
+                      style: const TextStyle(
+                        fontFamily: 'Poppins',
+                        color: emailBlue,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        fontStyle: FontStyle.normal,
+                        letterSpacing: 0.12,
+
+                      )
+                  )
+              ),
+            ],
+          ),
           Container(
-            width: 4,
-            height: 80,
-            decoration: BoxDecoration(
-              color: statusColor,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(8),
-                bottomLeft: Radius.circular(8),
-              ),
-            ),
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    item.productName ?? '',
-                    style: const TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    '${item.productCategory} · $statusText',
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 13,
-                      color: Colors.grey[700],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Text(
-              '${item.currency ?? "KES"} ${item.sellingPrice?.toStringAsFixed(0) ?? "0"}',
-              style: const TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 15,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
+            height: 1,
+            color: const Color(0xFFD4D6DD),
           ),
         ],
       ),

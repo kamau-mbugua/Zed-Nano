@@ -14,6 +14,7 @@ import 'package:zed_nano/screens/sell/select_category_page.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
 import 'package:zed_nano/screens/widget/common/searchview.dart';
+import 'package:zed_nano/screens/widget/common/filter_row_widget.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
@@ -117,27 +118,19 @@ class _SellPageState extends State<SellPage> {
       body: Column(
         children: [
           // Filter row
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _buildFilterDynamicButton(
-                  'All Categories',
-                  selectedCategory == 'All Categories',
-                  _openCategorySelection,
-                ),
-                _buildFilterButton(
-                  'List: A-Z',
-                  sortOrder == 'List: A-Z',
-                  () {
-                    setState(() {
-                      sortOrder = 'List: A-Z';
-                    });
-                  },
-                ),
-              ],
-            ),
+          FilterRowWidget(
+            leftButtonText: selectedCategory,
+            leftButtonIsActive: selectedCategory != 'All Categories',
+            leftButtonOnTap: _openCategorySelection,
+            leftButtonIcon: Icons.tune,
+            rightButtonText: sortOrder,
+            rightButtonIsActive: sortOrder != 'List: A-Z',
+            rightButtonOnTap: () {
+              setState(() {
+                sortOrder = sortOrder == 'List: A-Z' ? 'List: Z-A' : 'List: A-Z';
+              });
+            },
+            showRightButtonArrow: false,
           ),
           16.height,
           // Product list
@@ -242,92 +235,6 @@ class _SellPageState extends State<SellPage> {
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildFilterDynamicButton(String text, bool isActive, VoidCallback onTap) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(16),
-      child: Container(
-        height: 40,
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: innactiveBorder,
-          ),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                  Icon(
-                    Icons.tune,
-                    size: 16,
-                    color: Colors.grey.shade600,
-                  ),
-                Text(
-                  selectedCategory,
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontFamily: 'Poppins',
-                    color: Colors.grey.shade800,
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-  Widget _buildFilterButton(String text, bool isActive, VoidCallback onTap) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(16),
-      child: Container(
-        height: 40,
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: innactiveBorder,
-          ),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                if (text == 'All Categories')
-                  Icon(
-                    Icons.tune,
-                    size: 16,
-                    color: Colors.grey.shade600,
-                  ),
-                if (text == 'All Categories') const SizedBox(width: 8),
-                Text(
-                  text,
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontFamily: 'Poppins',
-                    color: Colors.grey.shade800,
-                  ),
-                ),
-              ],
-            ),
-            Icon(
-              Icons.keyboard_arrow_down,
-              size: 16,
-              color: Colors.grey.shade600,
-            ),
-          ],
         ),
       ),
     );

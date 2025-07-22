@@ -270,11 +270,32 @@ class BusinessRepo{
     required String categoryId ,
   }) async {
     try {
-      final response =
-      await dioClient!.get('${AppConstants.getAllActiveStock}?page=$page&limit=$limit&search=$searchValue&categoryId=$categoryId');
+      // Validate parameters
+      if (page < 1) page = 1;
+      if (limit < 1) limit = 10;
+      
+      // Clean search value and categoryId to avoid null/undefined issues
+      final cleanSearchValue = searchValue.trim();
+      final cleanCategoryId = categoryId.trim();
+      
+      // Build query parameters map for better URL encoding
+      final queryParams = <String, dynamic>{
+        'page': page,
+        'limit': limit,
+        'search': cleanSearchValue,
+        'categoryId': cleanCategoryId,
+      };
+      
+      print('🔍 Making API call with params: $queryParams');
+      
+      final response = await dioClient!.get(
+        AppConstants.getAllActiveStock,
+        queryParameters: queryParams,
+      );
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
+      print('🔍 BusinessRepo.getAllActiveStock error: $e');
       return ApiResponse.withError(ApiErrorHandler.handleError(e));
     }
   }

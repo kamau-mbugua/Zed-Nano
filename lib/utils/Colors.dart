@@ -12,9 +12,9 @@ const Color colorWhite = Color(0xFFFFFFFF);
 const Color colorBackground = Color(0xFFFCFCFC);
 
 // Status colors
-const Color success = Color(0xFF17AE7B);
+const Color successTextColor = Color(0xFF17AE7B);
 const Color warning = Color(0xFFFFC107);
-const Color error = Color(0xFFED3241);
+const Color errorColors = Color(0xFFED3241);
 const Color info = Color(0xFF2196F3);
 
 // Social login colors
@@ -41,7 +41,7 @@ const Color inactiveButton = Color(0xFFE8E9F1);
 const Color lightBlue = Color(0xFFE7F1FF);
 const Color lightOrange = Color(0xFFFFF3E6);
 const Color lightGreenColor = Color(0xFFE8F7F2);
-const Color orange = Color(0xFFE86339);
+const Color orangeColor = Color(0xFFE86339);
 const Color lightOrange2 = Color(0xFFFFB37C);
 const Color lightRed = Color(0xFFED9AA2);
 const Color lightGrey = Color(0xFFF2F4F5);

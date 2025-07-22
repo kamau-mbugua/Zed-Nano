@@ -275,7 +275,7 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
                   : 'Inactive',
               style: TextStyle(
                 color: subscribedBillingPlansResponse?.isActiveBillingPackage == true
-                    ? success
+                    ? successTextColor
                     : Colors.orange[700],
                 fontWeight: FontWeight.w400,
                 fontFamily: 'Poppins',

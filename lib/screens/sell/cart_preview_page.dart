@@ -235,7 +235,7 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
                       Text(
                         'KES ${totalAmount.toStringAsFixed(2)}',
                         style: const TextStyle(
-                          color: success,
+                          color: successTextColor,
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w600,
                           fontSize: 16,

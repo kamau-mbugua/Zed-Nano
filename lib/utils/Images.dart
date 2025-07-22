@@ -38,3 +38,5 @@ const stockManagementIcon= 'assets/images/stock_management.svg';
 const usersIcon= 'assets/images/users.svg';
 const logoutIcon= 'assets/images/logout.svg';
 const closeIcon= 'assets/images/closeIcon.svg';
+const lowStockIcon= 'assets/icons/lowStockIcon.svg';
+const outOfStockIcon= 'assets/icons/outOfStockIcon.svg';
