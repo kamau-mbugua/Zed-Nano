@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:zed_nano/providers/auth/authenticated_app_providers.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/routes/routes.dart';
-import 'package:zed_nano/screens/stock/view_stock_page.dart';
+import 'package:zed_nano/screens/stock/view_stock/view_stock_page.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/Images.dart';

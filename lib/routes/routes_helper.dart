@@ -24,6 +24,10 @@ import 'package:zed_nano/screens/products/detail/product_detail_page.dart';
 import 'package:zed_nano/screens/products/edit/edit_product_page.dart';
 import 'package:zed_nano/screens/products/list_categories_page.dart';
 import 'package:zed_nano/screens/sell/sell_page.dart';
+import 'package:zed_nano/screens/stock/add_stock/add_stock_batch_tabs_page.dart';
+import 'package:zed_nano/screens/stock/view_stock/view_stock_page.dart';
+import 'package:zed_nano/screens/stock/view_stock/view_out_of_stock_page.dart';
+import 'package:zed_nano/screens/stock/view_stock/view_low_stock_page.dart';
 
 class RouterHelper {
   static final FluroRouter router = FluroRouter();
@@ -102,6 +106,26 @@ class RouterHelper {
   static final Handler _editBusinessPageHandler = Handler(
     handlerFunc: (BuildContext? context, Map<String, List<String>> params) =>
         EditBusinessPage(),
+  );
+
+  static final Handler _viewLowStockPageHandler = Handler(
+    handlerFunc: (BuildContext? context, Map<String, List<String>> params) =>
+        ViewLowStockPage(),
+  );
+
+  static final Handler _viewOutOfStockPageHandler = Handler(
+    handlerFunc: (BuildContext? context, Map<String, List<String>> params) =>
+        ViewOutOfStockPage(),
+  );
+
+  static final Handler _viewStockPageHandler = Handler(
+    handlerFunc: (BuildContext? context, Map<String, List<String>> params) =>
+        ViewStockPage(),
+  );
+
+  static final Handler _addStockBatchTabsPageHandler = Handler(
+    handlerFunc: (BuildContext? context, Map<String, List<String>> params) =>
+        AddStockBatchTabsPage(),
   );
 
   static final Handler _categoryDetailHandler = Handler(
@@ -302,6 +326,26 @@ class RouterHelper {
     router.define(
       AppRoutes.editBusinessScreenRoute,
       handler: _editBusinessPageHandler,
+      transitionType: TransitionType.fadeIn,
+    );
+    router.define(
+      AppRoutes.viewLowStockScreenRoute,
+      handler: _viewLowStockPageHandler,
+      transitionType: TransitionType.fadeIn,
+    );
+    router.define(
+      AppRoutes.viewOutOfStockScreenRoute,
+      handler: _viewOutOfStockPageHandler,
+      transitionType: TransitionType.fadeIn,
+    );
+    router.define(
+      AppRoutes.viewStockPageScreenRoute,
+      handler: _viewStockPageHandler,
+      transitionType: TransitionType.fadeIn,
+    );
+    router.define(
+      AppRoutes.addStockBatchTabsPageScreenRoute,
+      handler: _addStockBatchTabsPageHandler,
       transitionType: TransitionType.fadeIn,
     );
     router.define(

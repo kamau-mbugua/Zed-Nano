@@ -14,6 +14,10 @@ class AppRoutes {
   static const String addPaymentMethodRoute = '/addPaymentMethodRoute';
   static const String businessProfileScreenRoute = '/businessProfileScreenRoute';
   static const String editBusinessScreenRoute = '/editBusinessScreenRoute';
+  static const String viewLowStockScreenRoute = '/viewLowStockScreenRoute';
+  static const String viewOutOfStockScreenRoute = '/viewOutOfStockScreenRoute';
+  static const String viewStockPageScreenRoute = '/viewStockPageScreenRoute';
+  static const String addStockBatchTabsPageScreenRoute = '/addStockBatchTabsPageScreenRoute';
   static const String categoryDetailRoute = '/categoryDetailRoute/:categoryId';
   static const String editCategoryHRoute = '/editCategoryHRoute/:categoryId';
   static const String productDetailRoute = '/productDetailRoute/:productId';
@@ -38,6 +42,10 @@ class AppRoutes {
   static String getAddPaymentMethodRoute() => addPaymentMethodRoute;
   static String getBusinessProfileScreenRoute() => businessProfileScreenRoute;
   static String getEditBusinessScreenRoute() => editBusinessScreenRoute;
+  static String getViewLowStockScreenRoute() => viewLowStockScreenRoute;
+  static String getViewOutOfStockScreenRoute() => viewOutOfStockScreenRoute;
+  static String getViewStockPageScreenRoute() => viewStockPageScreenRoute;
+  static String getAddStockBatchTabsPageScreenRoute() => addStockBatchTabsPageScreenRoute;
   static String getCategoryDetailRoute(String categoryId) => '$categoryDetailRoute/$categoryId';
   static String getEditCategoryHRoute(String categoryId) => '$editCategoryHRoute/$categoryId';
   static String getProductDetailRoute(String productId) => '$productDetailRoute/$productId';

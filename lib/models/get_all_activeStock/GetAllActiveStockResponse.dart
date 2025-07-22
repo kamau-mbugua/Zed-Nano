@@ -3,7 +3,13 @@ class GetAllActiveStockResponse {
   final String? message;
   final StockStatusSummary? stockStatusSummary;
   final List<ActiveStockProduct>? data;
+  final List<ActiveStockProduct>? inStockProducts;
+  final List<ActiveStockProduct>? lowStockProducts;
+  final List<ActiveStockProduct>? outOfStockProducts;
   final int? count;
+  final int? inStockProductsCount;
+  final int? lowStockProductsCount;
+  final int? outOfStockProductsCount;
 
   GetAllActiveStockResponse({
     this.status,
@@ -11,6 +17,12 @@ class GetAllActiveStockResponse {
     this.stockStatusSummary,
     this.data,
     this.count,
+    this.inStockProducts,
+    this.lowStockProducts,
+    this.outOfStockProducts,
+    this.inStockProductsCount,
+    this.lowStockProductsCount,
+    this.outOfStockProductsCount,
   });
 
   factory GetAllActiveStockResponse.fromJson(Map<String, dynamic> json) {
@@ -23,7 +35,19 @@ class GetAllActiveStockResponse {
       data: (json['data'] as List<dynamic>?)
           ?.map((e) => ActiveStockProduct.fromJson(e as Map<String, dynamic>))
           .toList(),
+      inStockProducts: (json['inStockProducts'] as List<dynamic>?)
+          ?.map((e) => ActiveStockProduct.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      lowStockProducts: (json['lowStockProducts'] as List<dynamic>?)
+          ?.map((e) => ActiveStockProduct.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      outOfStockProducts: (json['outOfStockProducts'] as List<dynamic>?)
+          ?.map((e) => ActiveStockProduct.fromJson(e as Map<String, dynamic>))
+          .toList(),
       count: json['count'] as int?,
+      inStockProductsCount: json['inStockProductsCount'] as int?,
+      lowStockProductsCount: json['lowStockProductsCount'] as int?,
+      outOfStockProductsCount: json['outOfStockProductsCount'] as int?,
     );
   }
 
@@ -32,7 +56,13 @@ class GetAllActiveStockResponse {
     'message': message,
     'stockStatusSummary': stockStatusSummary?.toJson(),
     'data': data?.map((e) => e.toJson()).toList(),
+    'inStockProducts': inStockProducts?.map((e) => e.toJson()).toList(),
+    'lowStockProducts': lowStockProducts?.map((e) => e.toJson()).toList(),
+    'outOfStockProducts': outOfStockProducts?.map((e) => e.toJson()).toList(),
     'count': count,
+    'inStockProductsCount': count,
+    'lowStockProductsCount': count,
+    'outOfStockProductsCount': count,
   };
 }
 

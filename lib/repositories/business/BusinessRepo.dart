@@ -263,11 +263,26 @@ class BusinessRepo{
       return ApiResponse.withError(ApiErrorHandler.handleError(e));
     }
   }
+  Future<ApiResponse> getApprovedAddStockBatchesByBranch({
+    required int page ,
+    required int limit ,
+    required String searchValue ,
+  }) async {
+    try {
+      final response =
+      await dioClient!.get('${AppConstants.getApprovedAddStockBatchesByBranch}?page=$page&limit=$limit');
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
   Future<ApiResponse> getAllActiveStock({
     required int page ,
     required int limit ,
     required String searchValue ,
     required String categoryId ,
+    required bool showStockDashboard,
   }) async {
     try {
       // Validate parameters
@@ -284,6 +299,7 @@ class BusinessRepo{
         'limit': limit,
         'search': cleanSearchValue,
         'categoryId': cleanCategoryId,
+        'showStockDashboard': showStockDashboard,
       };
       
       print('🔍 Making API call with params: $queryParams');

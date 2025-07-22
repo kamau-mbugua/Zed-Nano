@@ -12,6 +12,7 @@ import 'package:zed_nano/models/createbillingInvoice/CreateBillingInvoiceRespons
 import 'package:zed_nano/models/findProduct/FindProductResponse.dart';
 import 'package:zed_nano/models/getVariablePriceStatus/GetVariablePriceStatusResponse.dart';
 import 'package:zed_nano/models/get_all_activeStock/GetAllActiveStockResponse.dart';
+import 'package:zed_nano/models/get_approved_add_stock_batches_by_branch/GetBatchesListResponse.dart';
 import 'package:zed_nano/models/get_branch_transaction_by_date/BranchTransactionByDateResponse.dart';
 import 'package:zed_nano/models/get_business_info/BusinessInfoResponse.dart';
 import 'package:zed_nano/models/get_payment_methods_with_status/PaymentMethodsResponse.dart';
@@ -713,6 +714,34 @@ class BusinessProviders extends BaseProvider {
 
     return finalResponseModel;
   }
+  Future<ResponseModel<GetBatchesListResponse>> getApprovedAddStockBatchesByBranch(
+      {
+        required int page ,
+        required int limit ,
+        required String searchValue ,
+        required BuildContext context,
+      }) async {
+
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.getApprovedAddStockBatchesByBranch(
+          page: page,
+          limit: limit,
+          searchValue: searchValue,
+        ), context);
+
+    ResponseModel<GetBatchesListResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<GetBatchesListResponse>(
+          true, responseModel.message!, GetBatchesListResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<GetBatchesListResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
 
   Future<ResponseModel<GetAllActiveStockResponse>> getAllActiveStock(
       {
@@ -721,6 +750,7 @@ class BusinessProviders extends BaseProvider {
         required String categoryId ,
         required String searchValue ,
         required BuildContext context,
+        required bool showStockDashboard,
       }) async {
 
     final responseModel = await performApiCallWithHandling(
@@ -728,7 +758,8 @@ class BusinessProviders extends BaseProvider {
           page: page,
           limit: limit,
           searchValue: searchValue,
-            categoryId: categoryId
+            categoryId: categoryId,
+            showStockDashboard:showStockDashboard
         ), context);
 
     ResponseModel<GetAllActiveStockResponse> finalResponseModel;

@@ -11,6 +11,7 @@ import 'package:zed_nano/models/get_all_activeStock/GetAllActiveStockResponse.da
 import 'package:zed_nano/models/listCategories/ListCategoriesResponse.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/sell/select_category_page.dart';
+import 'package:zed_nano/screens/stock/itemBuilder/build_stock_item.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/screens/widget/common/filter_row_widget.dart';
@@ -18,8 +19,8 @@ import 'package:zed_nano/screens/widget/common/searchview.dart';
 import 'package:zed_nano/utils/pagination_controller.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
-import '../../utils/Images.dart';
-import '../../utils/api_debug_helper.dart';
+import '../../../utils/Images.dart';
+import 'package:zed_nano/routes/routes.dart';
 
 class ViewStockPage extends StatefulWidget {
   const ViewStockPage({Key? key}) : super(key: key);
@@ -56,6 +57,7 @@ class _ViewStockPageState extends State<ViewStockPage> {
   StockStatusSummary? _summary;
 
   ProductCategoryData? categoryData;
+  GetAllActiveStockResponse? getAllActiveStockResponse;
 
 
   @override
@@ -87,7 +89,15 @@ class _ViewStockPageState extends State<ViewStockPage> {
           limit: limit,
           searchValue: _searchTerm,
           context: context,
-          categoryId: selectedCategoryId ?? '');
+          categoryId: selectedCategoryId ?? '',
+          showStockDashboard:true
+      );
+
+      setState(() {
+        totalStockCount = response.data?.count ?? 0;
+        lowStockCount = response.data?.lowStockProductsCount ?? 0;
+        outOfStockCount = response.data?.outOfStockProductsCount ?? 0;
+      });
 
       return response.data?.data ?? [];
     } catch (e) {
@@ -153,6 +163,7 @@ class _ViewStockPageState extends State<ViewStockPage> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
+          Navigator.pushNamed(context, AppRoutes.getAddStockBatchTabsPageScreenRoute());
         },
         label: const Text('Add', style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white)),
         icon: const Icon(Icons.add, color: Colors.white),
@@ -162,9 +173,7 @@ class _ViewStockPageState extends State<ViewStockPage> {
   }
 
   Widget _buildStatusSummary() {
-    final int lowStockCount = _summary?.totalProductsInLowStock ?? 0;
-    final int outOfStockCount = _summary?.totalProductsOutOfStock ?? 0;
-    
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(
@@ -176,9 +185,7 @@ class _ViewStockPageState extends State<ViewStockPage> {
               'Low Stock',
               '$lowStockCount Products',
               onTap: () {
-                setState(() {
-                  _activeStatusFilter = 0;
-                });
+                Navigator.pushNamed(context, AppRoutes.getViewLowStockScreenRoute());
               },
               isActive: _activeStatusFilter == 0,
             ),
@@ -191,9 +198,7 @@ class _ViewStockPageState extends State<ViewStockPage> {
               'Out of Stock',
               '$outOfStockCount Products',
               onTap: () {
-                setState(() {
-                  _activeStatusFilter = 1;
-                });
+                Navigator.pushNamed(context, AppRoutes.getViewOutOfStockScreenRoute());
               },
               isActive: _activeStatusFilter == 1,
             ),
@@ -294,7 +299,7 @@ class _ViewStockPageState extends State<ViewStockPage> {
       pagingController: _paginationController.pagingController,
       builderDelegate: PagedChildBuilderDelegate<ActiveStockProduct>(
         itemBuilder: (context, item, index) {
-          return _buildStockItem(item);
+          return buildStockItem(item);
         },
         firstPageProgressIndicatorBuilder: (_) => const SizedBox(),
         newPageProgressIndicatorBuilder: (_) => const SizedBox(),
@@ -314,116 +319,6 @@ class _ViewStockPageState extends State<ViewStockPage> {
             'No products in this category yet! Add to view them here.',
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildStockItem(ActiveStockProduct item) {
-    Color statusColor;
-    String statusText;
-    
-    switch (item.stockStatus) {
-      case 'LOW_STOCK':
-        statusColor = warning;
-        statusText = 'Low stock: ${item.inStockQuantity} items left';
-        break;
-      case 'OUT_OF_STOCK':
-        statusColor = errorColors;
-        statusText = 'Out of stock';
-        break;
-      case 'IN_STOCK':
-      default:
-        statusColor = successTextColor;
-        statusText = 'In Stock: ${item.inStockQuantity} items';
-    }
-
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 9),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              // Status indicator bar
-              Container(
-                width: 5,
-                height: 50,
-                decoration: BoxDecoration(
-                  color: statusColor,
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(8),
-                    bottomLeft: Radius.circular(8),
-                  ),
-                ),
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(item.productName ?? '',
-                          style: const TextStyle(
-                            fontFamily: 'Poppins',
-                            color: darkGreyColor,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                            fontStyle: FontStyle.normal,
-                          )
-                      ),
-                      const SizedBox(height: 4),
-                      Row(
-                        children: [
-                          Text(
-                              '${item.productCategory} .',
-                              style: const TextStyle(
-                                  color:  textSecondary,
-                                  fontWeight: FontWeight.w400,
-                                  fontFamily: 'Poppins',
-                                  fontStyle:  FontStyle.normal,
-                                  fontSize: 10.0
-                              ),
-                              textAlign: TextAlign.left
-                          ),
-                          Text(' $statusText',
-                              style: TextStyle(
-                                fontFamily: 'Poppins',
-                                color: statusColor,
-                                fontSize: 10,
-                                fontWeight: FontWeight.w600,
-                                fontStyle: FontStyle.normal,
-                              )
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child:  Text('${item.currency ?? "KES"} ${item.sellingPrice?.toStringAsFixed(0) ?? "0"}',
-                      style: const TextStyle(
-                        fontFamily: 'Poppins',
-                        color: emailBlue,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                        fontStyle: FontStyle.normal,
-                        letterSpacing: 0.12,
-
-                      )
-                  )
-              ),
-            ],
-          ),
-          Container(
-            height: 1,
-            color: const Color(0xFFD4D6DD),
-          ),
-        ],
       ),
     );
   }
