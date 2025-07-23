@@ -85,7 +85,9 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
             children: [
               _buildBusinessHeader(),
               const Divider(height: 32, thickness: 0.5),
-              _buildSubscriptionSection(),
+              subscribedBillingPlansResponse!.data!.isNotEmpty ?
+              _buildSubscriptionSection() :
+              const SizedBox(height: 32),
               const Divider(height: 32, thickness: 0.5),
               _buildBusinessDetailsSection(),
               const SizedBox(height: 32), // for scrollable area
@@ -234,9 +236,18 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                subscribedBillingPlansResponse != null && subscribedBillingPlansResponse!.data!.isNotEmpty ? Text(
                 '${subscribedBillingPlansResponse?.data?[0]?.billingPeriodName ?? ''} Subscription',
                   style: const TextStyle(
+                    color: darkGreyColor, // neutralDarkDarkest
+                    fontWeight: FontWeight.w400,
+                    fontFamily: 'Poppins',
+                    fontSize: 14.0,
+                  ),
+                )
+                : const Text(
+                  'Subscription',
+                  style: TextStyle(
                     color: darkGreyColor, // neutralDarkDarkest
                     fontWeight: FontWeight.w400,
                     fontFamily: 'Poppins',

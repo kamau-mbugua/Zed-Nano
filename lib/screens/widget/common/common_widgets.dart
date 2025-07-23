@@ -180,7 +180,7 @@ Widget borderWidget({
 
   Color getBorderColor(int index) {
     if (index < activeIndex!) {
-      return mint;
+      return mintColors;
     } else if (index == activeIndex) {
       return darkBlueColor;
     } else {

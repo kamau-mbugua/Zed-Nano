@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
+import 'package:zed_nano/models/get_all_activeStock/GetAllActiveStockResponse.dart';
 import 'package:zed_nano/models/listCategories/ListCategoriesResponse.dart';
 import 'package:zed_nano/models/listProducts/ListProductsResponse.dart';
 import 'package:zed_nano/models/product_model.dart';
@@ -11,14 +12,18 @@ import 'package:zed_nano/providers/cart/CartViewModel.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/sell/cart_preview_page.dart';
 import 'package:zed_nano/screens/sell/select_category_page.dart';
+import 'package:zed_nano/screens/stock/itemBuilder/add_stock_build_product_item.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
+import 'package:zed_nano/screens/widget/common/bottom_sheet_helper.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
+import 'package:zed_nano/screens/widget/common/heading.dart';
 import 'package:zed_nano/screens/widget/common/searchview.dart';
 import 'package:zed_nano/screens/widget/common/filter_row_widget.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
 import 'package:zed_nano/utils/pagination_controller.dart';
+import 'package:zed_nano/viewmodels/add_stock_viewmodel.dart';
 
 class AddStockProductsPage extends StatefulWidget {
   final VoidCallback onNext;
@@ -35,7 +40,7 @@ class _AddStockProductsPageState extends State<AddStockProductsPage> {
   List<Product> products = []; // This would come from your API
   TextEditingController searchController = TextEditingController();
 
-  late PaginationController<ProductData> _paginationController;
+  late PaginationController<ActiveStockProduct> _paginationController;
   String _searchTerm = "";
   ProductCategoryData? categoryData;
   Timer? _debounceTimer;
@@ -46,9 +51,9 @@ class _AddStockProductsPageState extends State<AddStockProductsPage> {
     super.initState();
 
     // Initialize pagination controller without adding listeners yet
-    _paginationController = PaginationController<ProductData>(
+    _paginationController = PaginationController<ActiveStockProduct>(
       fetchItems: (page, pageSize) async {
-        return getListByProducts(page: page, limit: pageSize);
+        return getAllActiveStock(page: page, limit: pageSize);
       },
     );
 
@@ -62,16 +67,22 @@ class _AddStockProductsPageState extends State<AddStockProductsPage> {
     });
   }
 
-  Future<List<ProductData>> getListByProducts(
+  Future<List<ActiveStockProduct>> getAllActiveStock(
       {required int page, required int limit}) async {
-    final response = await getBusinessProvider(context).getListByProducts(
-        page: page,
-        limit: limit,
-        searchValue: _searchTerm,
-        context: context,
-        categoryId: selectedCategoryId ?? '');
+    try {
+      final response = await getBusinessProvider(context).getAllActiveStock(
+          page: page,
+          limit: limit,
+          searchValue: _searchTerm,
+          context: context,
+          categoryId: selectedCategoryId ?? '',
+          showStockDashboard:true
+      );
 
-    return response.data?.data ?? [];
+      return response.data?.lowStockProducts ?? [];
+    } catch (e) {
+      return [];
+    }
   }
 
   @override
@@ -111,15 +122,20 @@ class _AddStockProductsPageState extends State<AddStockProductsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final cartViewModel = Provider.of<CartViewModel>(context);
-    final selectedItems = cartViewModel.itemCount;
+    final addStockViewModel = Provider.of<AddStockViewModel>(context);
+    final selectedItems = addStockViewModel.itemCount;
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const AuthAppBar(title: 'Sell'),
+      appBar:  AuthAppBar(title: 'Add Stock', onBackPressed: widget.onPrevious,),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Filter row
+          headings(
+            label: 'Select Products',
+            subLabel: 'Pick products to add stock.',
+          ).paddingSymmetric(horizontal: 16),
           FilterRowWidget(
             leftButtonText: selectedCategory,
             leftButtonIsActive: selectedCategory != 'All Categories',
@@ -141,41 +157,22 @@ class _AddStockProductsPageState extends State<AddStockProductsPage> {
               onRefresh: () async {
                 await _paginationController.refresh();
               },
-              child: PagedListView<int, ProductData>(
+              child: PagedListView<int, ActiveStockProduct>(
                 pagingController: _paginationController.pagingController,
-                builderDelegate: PagedChildBuilderDelegate<ProductData>(
+                builderDelegate: PagedChildBuilderDelegate<ActiveStockProduct>(
                   itemBuilder: (context, item, index) {
                     final product = item;
-                    final cartItem = cartViewModel.findItem(product.id ?? '');
+                    final cartItem = addStockViewModel.findItem(product.id ?? '');
                     final quantity = cartItem?.quantity ?? 0;
 
-                    return _buildProductItem(
+                    return addStockBuildProductItem(
                       product: product,
-                      quantity: quantity,
-                      onDecrease: () {
-                        if (quantity > 0) {
-                          if (quantity == 1) {
-                            cartViewModel.removeItem(product.id ?? '');
-                          } else {
-                            cartViewModel.updateQuantity(
-                                product.id ?? '', quantity - 1);
-                          }
-                        }
-                      },
-                      onIncrease: () {
-                        if (quantity == 0) {
-                          cartViewModel.addItem(
-                            product.id ?? '',
-                            product.productName ?? '',
-                            product.productPrice?.toDouble() ?? 0.0,
-                            product.imagePath ?? '',
-                            product.currency ?? '',
-                            product.productCategory ?? '',
-                          );
-                        } else {
-                          cartViewModel.updateQuantity(
-                              product.id ?? '', quantity + 1);
-                        }
+                      quantity: quantity.toInt(),
+                      onTap: () {
+                        BottomSheetHelper.showAddStockBottomSheet(
+                          context,
+                          activeStockProduct: product,
+                        );
                       },
                     );
                   },
@@ -226,10 +223,11 @@ class _AddStockProductsPageState extends State<AddStockProductsPage> {
                 child: appButton(
                   text: 'Preview: $selectedItems',
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const CartPreviewPage()),
-                    );
+                    widget.onNext();
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(builder: (context) => const CartPreviewPage()),
+                    // );
                   },
                   context: context,
                   width: 120, // Fixed width instead of full width
@@ -238,165 +236,6 @@ class _AddStockProductsPageState extends State<AddStockProductsPage> {
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildProductItem({
-    required ProductData product,
-    required int quantity,
-    required VoidCallback onDecrease,
-    required VoidCallback onIncrease,
-  }) {
-    final bool isSelected = quantity > 0;
-    final int totalPrice = product.productPrice! * quantity;
-
-    return Container(
-      margin: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: isSelected ? highlightMainDark : innactiveBorder,
-          width: isSelected ? 1.5 : 1.0,
-        ),
-      ),
-      child: Row(
-        children: [
-          rfCommonCachedNetworkImage(
-            product.imagePath ?? '',
-            fit: BoxFit.cover,
-            height: 42,
-            width: 42,
-          ),
-          const SizedBox(width: 16),
-          // Product details
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  product.productName ?? '',
-                  style: const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w700,
-                    fontFamily: 'Poppins',
-                    color: Color(0xFF323232),
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Row(
-                  children: [
-                    Text(
-                      product.productCategory ?? '',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontFamily: 'Poppins',
-                        color: Colors.grey.shade500,
-                      ),
-                    ),
-                    Text(
-                      ' · ',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontFamily: 'Poppins',
-                        color: Colors.grey.shade500,
-                      ),
-                    ),
-                    Text(
-                      '${product.currency} ${product.productPrice}',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontFamily: 'Poppins',
-                        color: Colors.grey.shade500,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-
-          // Quantity controls
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Row(
-                children: [
-                  // Minus button
-                  InkWell(
-                    onTap: onDecrease,
-                    child: Container(
-                      width: 24,
-                      height: 24,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: lightGreyColor,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Container(
-                        width: 8,
-                        height: 1.5,
-                        color: isSelected
-                            ? highlightMainDark
-                            : Colors.grey.shade400,
-                      ),
-                    ),
-                  ),
-
-                  // Quantity
-                  Container(
-                    width: 30,
-                    alignment: Alignment.center,
-                    child: Text(
-                      quantity.toString(),
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontFamily: 'Poppins',
-                        color: highlightMainDark,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ),
-
-                  // Plus button
-                  InkWell(
-                    onTap: onIncrease,
-                    child: Container(
-                      width: 24,
-                      height: 24,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: lightGreyColor,
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(
-                        Icons.add,
-                        size: 10,
-                        color: highlightMainDark,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 8),
-
-              // Total price
-              Text(
-                'KES ${totalPrice.round()}',
-                style: TextStyle(
-                  fontSize: 12,
-                  fontFamily: 'Poppins',
-                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                  color: isSelected
-                      ? const Color(0xFF323232)
-                      : Colors.grey.shade400,
-                ),
-              ),
-            ],
-          ),
-        ],
       ),
     );
   }

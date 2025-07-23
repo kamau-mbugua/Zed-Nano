@@ -274,6 +274,27 @@ class BusinessProviders extends BaseProvider {
 
     return finalResponseModel;
   }
+
+  Future<ResponseModel<CommonResponse>> addStockRequest(
+      {
+        required Map<String, dynamic> requestData,
+      required BuildContext context}) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.addStockRequest(requestData: requestData), context);
+
+    ResponseModel<CommonResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<CommonResponse>(
+          true, responseModel.message!, CommonResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<CommonResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
   Future<ResponseModel<CommonResponse>> enableSettleInvoiceStatus(
       {
         required Map<String, dynamic> requestData,

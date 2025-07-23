@@ -104,6 +104,16 @@ class BusinessRepo{
       return ApiResponse.withError(ApiErrorHandler.handleError(e));
     }
   }
+  Future<ApiResponse> addStockRequest({required Map<String, dynamic> requestData}) async {
+    try {
+      final response =
+      await dioClient!.post('${AppConstants.addStockRequest}', data: requestData);
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
   Future<ApiResponse> enableSettleInvoiceStatus({required Map<String, dynamic> requestData}) async {
     try {
       final response =

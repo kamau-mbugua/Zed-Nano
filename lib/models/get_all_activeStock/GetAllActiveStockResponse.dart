@@ -108,6 +108,7 @@ class ActiveStockProduct {
   final int? sellingPrice;
   final String? lastUpdated;
   final String? stockStatus;
+  final String? imagePath;
 
   ActiveStockProduct({
     this.businessID,
@@ -151,6 +152,7 @@ class ActiveStockProduct {
     this.sellingPrice,
     this.lastUpdated,
     this.stockStatus,
+    this.imagePath,
   });
 
   factory ActiveStockProduct.fromJson(Map<String, dynamic> json) {
@@ -200,6 +202,7 @@ class ActiveStockProduct {
       sellingPrice: json['sellingPrice'] as int?,
       lastUpdated: json['lastUpdated'] as String?,
       stockStatus: json['stockStatus'] as String?,
+      imagePath: json['imagePath'] as String?,
     );
   }
 
@@ -245,6 +248,7 @@ class ActiveStockProduct {
     'sellingPrice': sellingPrice,
     'lastUpdated': lastUpdated,
     'stockStatus': stockStatus,
+    'imagePath': imagePath,
   };
 }
 

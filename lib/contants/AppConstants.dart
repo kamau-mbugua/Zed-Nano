@@ -43,6 +43,7 @@ class AppConstants{
   static const String createProduct = 'api/createProduct';
   static const String createBillingInvoice = 'api/v1/billing/businesss/createbilling-invoice';
   static const String enableCashPayment = 'api/activate_cash_payment';
+  static const String addStockRequest = 'api/addStockRequest';
   static const String enableSettleInvoiceStatus = 'api/v1/business/enablesetttleinvoicetstatus';
   static const String addKCBPayment = 'api/v1/payments/activate_kcb_mpesa?status=true';
   static const String addMPESAPayment = 'api/activate_daraja_for_business';

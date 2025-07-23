@@ -20,6 +20,7 @@ class StyledTextField extends StatelessWidget {
   final TextInputAction? textInputAction;
   final int? maxLength;
   final bool showCounter;
+  final String prefixText;
 
 
   const StyledTextField({
@@ -36,6 +37,7 @@ class StyledTextField extends StatelessWidget {
     this.textInputAction,
     this.maxLength,
     this.showCounter = false,
+    this.prefixText = '',
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -82,10 +84,20 @@ class StyledTextField extends StatelessWidget {
             color: Color(0xff8f9098),
             fontWeight: FontWeight.w400,
             fontFamily: "Poppins", // Poppins font as per user preference
-            fontSize: 14.0,
+            fontSize: 12.0,
+
           ),
-          contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+          contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 16),
           counterText: showCounter ? null : '',
+          prefix: prefixText == '' ? null :  Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: lightGreyColor,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child:Text("$prefixText ", style: boldTextStyle(size: 11)),
+
+          )
         ),
       ),
     );

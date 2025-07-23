@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
@@ -12,6 +13,8 @@ import 'package:zed_nano/screens/sell/select_category_page.dart';
 import 'package:zed_nano/screens/stock/add_stock/addStock/steps/category/add_stock_select_category_page.dart';
 import 'package:zed_nano/screens/stock/add_stock/addStock/steps/preview/add_stock_preview_page.dart';
 import 'package:zed_nano/screens/stock/add_stock/addStock/steps/products/add_stock_products_page.dart';
+import 'package:zed_nano/screens/widget/common/reusable_stepper_widget.dart';
+import 'package:zed_nano/screens/widget/common/stepper_usage_examples.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/models/createbillingInvoice/CreateBillingInvoiceResponse.dart';
 import 'package:zed_nano/viewmodels/WorkflowViewModel.dart';
@@ -29,36 +32,7 @@ class AddStockParentPage extends StatefulWidget {
 }
 
 class _AddStockParentPageState extends State<AddStockParentPage> {
-  @override
-  void initState() {
-    super.initState();
-    stepNumber = widget.initialStep;
-  }
-
-  int stepNumber = 0;
   CreateBillingInvoiceResponse? invoiceData;
-
-
-  void goToNextStep() {
-    if (stepNumber < 2) {  // Changed from 3 to 2 since array length is 3 (indexes 0,1,2)
-      setState(() {
-        stepNumber += 1;
-      });
-    } else {
-      Navigator.of(context).pop();
-    }
-  }
-
-
-  void goPreviousStep() {
-    if (stepNumber > 0) {
-      setState(() {
-        stepNumber -= 1;
-      });
-    } else {
-      Navigator.of(context).pop();
-    }
-  }
 
   void handleInvoiceCreated(CreateBillingInvoiceResponse invoice) {
     setState(() {
@@ -66,36 +40,57 @@ class _AddStockParentPageState extends State<AddStockParentPage> {
     });
   }
 
+  void _onStepChanged(int currentStep) {
+    // Handle step changes if needed
+    print('Current step: $currentStep');
+  }
 
+  void _onCompleted() {
+    // Handle completion - navigate back or show success
+    Navigator.of(context).pop();
+  }
+
+  void _onCancelled() {
+    // Handle cancellation - navigate back
+    Navigator.of(context).pop();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final pages = [
-      AddStockSelectCategoryPage(onNext: goToNextStep, onPrevious: goPreviousStep,),
-      AddStockProductsPage(onNext: goToNextStep, onPrevious: goPreviousStep,),
-      AddStockPreviewPage(onNext: goToNextStep, onPrevious: goPreviousStep,),
-    ];
+    return ReusableStepperWidget(
+      initialStep: widget.initialStep,
+      onStepChanged: _onStepChanged,
+      onCompleted: _onCompleted,
+      onCancelled: _onCancelled,
+      stepTitles: const [
+        'Products',
+        'Preview',
+      ],
+      steps: [
+        _AddStockProductsPageWrapper(),
+        _AddStockPreviewPageWrapper(),
+      ],
+    );
+  }
+}
 
-    return Scaffold(
-      backgroundColor: colorBackground,
-      body: SafeArea(
-        child: Column(
-          children: [
-            const SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: StepperIndicator(currentStep: stepNumber, totalSteps: 4),
-            ),
-            const SizedBox(height: 16),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: pages[stepNumber],
-              ),
-            ),
-          ],
-        ),
-      ),
+// Wrapper widgets to integrate with the new stepper system
+class _AddStockProductsPageWrapper extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return AddStockProductsPage(
+      onNext: () => StepperController.nextStep(context),
+      onPrevious: () => StepperController.previousStep(context),
+    );
+  }
+}
+
+class _AddStockPreviewPageWrapper extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return AddStockPreviewPage(
+      onNext: () => StepperController.nextStep(context),
+      onPrevious: () => StepperController.previousStep(context),
     );
   }
 }

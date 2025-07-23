@@ -9,6 +9,7 @@ import 'package:zed_nano/screens/stock/add_stock/addStock/add_stock_parent_page.
 import 'package:zed_nano/screens/stock/itemBuilder/build_batch_item.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/screens/widget/common/searchview.dart';
+import 'package:zed_nano/screens/widget/common/stepper_usage_examples.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
 import 'package:zed_nano/utils/pagination_controller.dart';
@@ -100,6 +101,8 @@ class _AddStockApprovedBatchPageState extends State<AddStockApprovedBatchPage> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           const AddStockParentPage(initialStep:0).launch(context);
+          // CustomButtonStepperExample().launch(context);
+
 
         },
         label: const Text('Add Stock', style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white)),
