@@ -1,10 +1,16 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/models/get_approved_add_stock_batches_by_branch/GetBatchesListResponse.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
+import 'package:zed_nano/screens/stock/add_stock/addStock/add_stock_parent_page.dart';
+import 'package:zed_nano/screens/stock/itemBuilder/build_batch_item.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/screens/widget/common/searchview.dart';
+import 'package:zed_nano/utils/Colors.dart';
+import 'package:zed_nano/utils/GifsImages.dart';
 import 'package:zed_nano/utils/pagination_controller.dart';
 
 class AddStockApprovedBatchPage extends StatefulWidget {
@@ -75,13 +81,69 @@ class _AddStockApprovedBatchPageState extends State<AddStockApprovedBatchPage> {
   }
   @override
   Widget build(BuildContext context) {
-    return Container();
-  }
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Column(
+        children: [
+          _buildSearchBar(),
+          Expanded(
+            child: RefreshIndicator(
+              onRefresh: () async {
+                _paginationController.refresh();
+                // await _fetchStockSummary();
+              },
+              child: _buildApprovedStockList(),
+            ),
+          ),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          const AddStockParentPage(initialStep:0).launch(context);
+
+        },
+        label: const Text('Add Stock', style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white)),
+        icon: const Icon(Icons.add, color: Colors.white),
+        backgroundColor: appThemePrimary,
+      ),
+    );  }
 
 
   Widget _buildSearchBar() {
     return buildSearchBar(controller: _searchController, onChanged: _onSearchChanged);
   }
+
+  Widget _buildApprovedStockList() {
+    return PagedListView<int, BatchData>(
+      pagingController: _paginationController.pagingController,
+      builderDelegate: PagedChildBuilderDelegate<BatchData>(
+        itemBuilder: (context, item, index) {
+          return buildBatchItem(item, onTap: () {
+
+          });
+        },
+        firstPageProgressIndicatorBuilder: (_) => const SizedBox(),
+        newPageProgressIndicatorBuilder: (_) => const SizedBox(),
+        noItemsFoundIndicatorBuilder: (context) => const Center(
+          child: CompactGifDisplayWidget(
+            gifPath: emptyListGif,
+            title: "It's empty over here.",
+            subtitle:
+            'No approved batches here yet! Add to view them here.',
+          ),
+        ),
+        firstPageErrorIndicatorBuilder: (context) => const Center(
+          child: CompactGifDisplayWidget(
+            gifPath: emptyListGif,
+            title: "It's empty over here.",
+            subtitle:
+            'No approved batches here yet! Add to view them here.',
+          ),
+        ),
+      ),
+    );
+  }
+
 
 }
 

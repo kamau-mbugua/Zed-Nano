@@ -270,7 +270,21 @@ class BusinessRepo{
   }) async {
     try {
       final response =
-      await dioClient!.get('${AppConstants.getApprovedAddStockBatchesByBranch}?page=$page&limit=$limit');
+      await dioClient!.post('${AppConstants.getApprovedAddStockBatchesByBranch}?page=$page&limit=$limit');
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
+  Future<ApiResponse> getPendingAddStockBatchesByBranch({
+    required int page ,
+    required int limit ,
+    required String searchValue ,
+  }) async {
+    try {
+      final response =
+      await dioClient!.post('${AppConstants.getPendingAddStockBatchesByBranch}?page=$page&limit=$limit');
 
       return ApiResponse.withSuccess(response);
     } catch (e) {

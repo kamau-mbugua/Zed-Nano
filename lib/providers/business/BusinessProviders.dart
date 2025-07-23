@@ -742,6 +742,34 @@ class BusinessProviders extends BaseProvider {
 
     return finalResponseModel;
   }
+  Future<ResponseModel<GetBatchesListResponse>> getPendingAddStockBatchesByBranch(
+      {
+        required int page ,
+        required int limit ,
+        required String searchValue ,
+        required BuildContext context,
+      }) async {
+
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.getPendingAddStockBatchesByBranch(
+          page: page,
+          limit: limit,
+          searchValue: searchValue,
+        ), context);
+
+    ResponseModel<GetBatchesListResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<GetBatchesListResponse>(
+          true, responseModel.message!, GetBatchesListResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<GetBatchesListResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
 
   Future<ResponseModel<GetAllActiveStockResponse>> getAllActiveStock(
       {

@@ -4,7 +4,7 @@ import 'package:zed_nano/utils/Colors.dart' show lightGrey;
 Widget buildSearchBar({
   required TextEditingController controller,
   required Function(String) onChanged,
-  String hint = 'Search category',
+  String hint = 'Search',
 }) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
