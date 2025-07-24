@@ -32,7 +32,7 @@ class _ViewStockTakeBatchDetailState extends State<ViewStockTakeBatchDetail> {
     // Initialize pagination controller without adding listeners yet
     _paginationController = PaginationController<StockItem>(
       fetchItems: (page, pageSize) async {
-        return getAddStockProductsBatch(page: page, limit: pageSize);
+        return getAddStockPendingProductsBatch(page: page, limit: pageSize);
       },
     );
 
@@ -46,7 +46,7 @@ class _ViewStockTakeBatchDetailState extends State<ViewStockTakeBatchDetail> {
     });
   }
 
-  Future<List<StockItem>> getAddStockProductsBatch(
+  Future<List<StockItem>> getAddStockPendingProductsBatch(
       {required int page, required int limit}) async {
     var request = {
       'batchId': widget.batchId,
@@ -54,7 +54,7 @@ class _ViewStockTakeBatchDetailState extends State<ViewStockTakeBatchDetail> {
 
     try {
       final response = await getBusinessProvider(context)
-          .getAddStockProductsBatch(
+          .getAddStockPendingProductsBatch(
               page: page, limit: limit, context: context, requestData: request);
 
       setState(() {
@@ -94,7 +94,7 @@ class _ViewStockTakeBatchDetailState extends State<ViewStockTakeBatchDetail> {
       pagingController: _paginationController.pagingController,
       builderDelegate: PagedChildBuilderDelegate<StockItem>(
         itemBuilder: (context, item, index) {
-          return viewBatchProductItem(
+          return viewBatchStockTakeProductItem(
             item: item,
           );
         },

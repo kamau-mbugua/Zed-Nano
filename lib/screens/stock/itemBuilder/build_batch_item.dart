@@ -3,8 +3,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:zed_nano/models/get_approved_add_stock_batches_by_branch/GetBatchesListResponse.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Images.dart';
+import 'package:zed_nano/utils/extensions.dart';
 
-Widget buildBatchItem(BatchData batch, {VoidCallback? onTap}) {
+Widget buildBatchItem(BatchData batch, {VoidCallback? onTap, bool isStockTake = false}) {
   // Format the approval date
   String formattedDate = '';
   if (batch.dateApproved != null) {
@@ -75,8 +76,8 @@ Widget buildBatchItem(BatchData batch, {VoidCallback? onTap}) {
                       ],
                     ),
                     const SizedBox(height: 4),
-                    
-                    // Supplier information
+
+                    if (!isStockTake)
                     Text(
                       'Supplier: $supplierName',
                       style: const TextStyle(
@@ -92,8 +93,18 @@ Widget buildBatchItem(BatchData batch, {VoidCallback? onTap}) {
                     // Approval date and product count row
                     Row(
                       children: [
+                        batch.status == 'APPROVED'?
                         Text(
-                          'Approved on: $formattedDate',
+                          'Approved on: ${batch?.dateApproved?.toFormattedDate()}',
+                          style: const TextStyle(
+                            fontFamily: 'Poppins',
+                            color: textSecondary,
+                            fontSize: 11,
+                            fontWeight: FontWeight.w400,
+                            fontStyle: FontStyle.normal,
+                          ),
+                        ):  Text(
+                          'Created on: ${batch?.dateCreated?.toFormattedDate()}',
                           style: const TextStyle(
                             fontFamily: 'Poppins',
                             color: textSecondary,
@@ -123,6 +134,7 @@ Widget buildBatchItem(BatchData batch, {VoidCallback? onTap}) {
                           ),
                         ),
                         const SizedBox(width: 8),
+                        if(!isStockTake)
                         Container(
                           width: 4,
                           height: 4,
@@ -132,7 +144,8 @@ Widget buildBatchItem(BatchData batch, {VoidCallback? onTap}) {
                           ),
                         ),
                         const SizedBox(width: 8),
-                        const Text(
+                        if(!isStockTake)
+                          const Text(
                           '+150 Items',
                           style: TextStyle(
                             fontFamily: 'Poppins',

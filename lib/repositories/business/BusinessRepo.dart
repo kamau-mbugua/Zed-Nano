@@ -114,6 +114,16 @@ class BusinessRepo{
       return ApiResponse.withError(ApiErrorHandler.handleError(e));
     }
   }
+  Future<ApiResponse> updateStockItem({required List<Map<String, dynamic>> requestData}) async {
+    try {
+      final response =
+      await dioClient!.post('${AppConstants.updateStockItem}', data: requestData);
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
   Future<ApiResponse> enableSettleInvoiceStatus({required Map<String, dynamic> requestData}) async {
     try {
       final response =
@@ -287,6 +297,20 @@ class BusinessRepo{
       return ApiResponse.withError(ApiErrorHandler.handleError(e));
     }
   }
+  Future<ApiResponse> getApprovedBatchesByBranch({
+    required int page ,
+    required int limit ,
+    required String searchValue ,
+  }) async {
+    try {
+      final response =
+      await dioClient!.post('${AppConstants.getApprovedBatchesByBranch}?page=$page&limit=$limit');
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
   Future<ApiResponse> getPendingAddStockBatchesByBranch({
     required int page ,
     required int limit ,
@@ -295,6 +319,20 @@ class BusinessRepo{
     try {
       final response =
       await dioClient!.post('${AppConstants.getPendingAddStockBatchesByBranch}?page=$page&limit=$limit');
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
+  Future<ApiResponse> getPendingBatchesByBranch({
+    required int page ,
+    required int limit ,
+    required String searchValue ,
+  }) async {
+    try {
+      final response =
+      await dioClient!.post('${AppConstants.getPendingBatchesByBranch}?page=$page&limit=$limit');
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -339,6 +377,41 @@ class BusinessRepo{
       return ApiResponse.withError(ApiErrorHandler.handleError(e));
     }
   }
+  Future<ApiResponse> getListStockTake({
+    required int page ,
+    required int limit ,
+    required String searchValue ,
+    required String categoryId ,
+  }) async {
+    try {
+      // Validate parameters
+      if (page < 1) page = 1;
+      if (limit < 1) limit = 10;
+
+      // Clean search value and categoryId to avoid null/undefined issues
+      final cleanSearchValue = searchValue.trim();
+      final cleanCategoryId = categoryId.trim();
+
+      // Build query parameters map for better URL encoding
+      final queryParams = <String, dynamic>{
+        'page': page,
+        'limit': limit,
+        'search': cleanSearchValue,
+        'categoryId': cleanCategoryId,
+      };
+
+
+      final response = await dioClient!.get(
+        AppConstants.getListStockTake,
+        queryParameters: queryParams,
+      );
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      print('🔍 BusinessRepo.getAllActiveStock error: $e');
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
   Future<ApiResponse> getAddStockProductsBatch({
     required int page ,
     required int limit ,
@@ -355,6 +428,31 @@ class BusinessRepo{
 
       final response = await dioClient!.post(
         AppConstants.getAddStockProductsBatch,
+        queryParameters: queryParams,
+        data: requestData
+      );
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
+  Future<ApiResponse> getAddStockPendingProductsBatch({
+    required int page ,
+    required int limit ,
+    required Map<String, dynamic> requestData ,
+  }) async {
+    try {
+      if (page < 1) page = 1;
+      if (limit < 1) limit = 10;
+
+      final queryParams = <String, dynamic>{
+        'page': page,
+        'limit': limit,
+      };
+
+      final response = await dioClient!.post(
+        AppConstants.getAddStockPendingProductsBatch,
         queryParameters: queryParams,
         data: requestData
       );

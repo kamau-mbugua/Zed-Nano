@@ -41,4 +41,5 @@ const closeIcon= 'assets/images/closeIcon.svg';
 const lowStockIcon= 'assets/icons/lowStockIcon.svg';
 const outOfStockIcon= 'assets/icons/outOfStockIcon.svg';
 const batchIcon= 'assets/icons/batchIcon.svg';
+const editIcon= 'assets/icons/editIcon.svg';
 const pendingBatchIcon= 'assets/icons/pendingBatchIcon.svg';

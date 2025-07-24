@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:zed_nano/models/get_all_activeStock/GetAllActiveStockResponse.dart';
 import 'package:zed_nano/models/listCategories/ListCategoriesResponse.dart';
 import 'package:zed_nano/models/listProducts/ListProductsResponse.dart';
+import 'package:zed_nano/models/listStockTake/GetActiveStockTakeResponse.dart';
 import 'package:zed_nano/models/product_model.dart';
 import 'package:zed_nano/providers/cart/CartViewModel.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
@@ -23,6 +24,7 @@ import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
 import 'package:zed_nano/utils/pagination_controller.dart';
+import 'package:zed_nano/viewmodels/add_stock_take_viewmodel.dart';
 import 'package:zed_nano/viewmodels/add_stock_viewmodel.dart';
 
 class AddStockTakeProductsPage extends StatefulWidget {
@@ -40,7 +42,7 @@ class _AddStockTakeProductsPageState extends State<AddStockTakeProductsPage> {
   List<Product> products = []; // This would come from your API
   TextEditingController searchController = TextEditingController();
 
-  late PaginationController<ActiveStockProduct> _paginationController;
+  late PaginationController<StockTakeProduct> _paginationController;
   String _searchTerm = "";
   ProductCategoryData? categoryData;
   Timer? _debounceTimer;
@@ -51,9 +53,9 @@ class _AddStockTakeProductsPageState extends State<AddStockTakeProductsPage> {
     super.initState();
 
     // Initialize pagination controller without adding listeners yet
-    _paginationController = PaginationController<ActiveStockProduct>(
+    _paginationController = PaginationController<StockTakeProduct>(
       fetchItems: (page, pageSize) async {
-        return getAllActiveStock(page: page, limit: pageSize);
+        return getListStockTake(page: page, limit: pageSize);
       },
     );
 
@@ -67,16 +69,15 @@ class _AddStockTakeProductsPageState extends State<AddStockTakeProductsPage> {
     });
   }
 
-  Future<List<ActiveStockProduct>> getAllActiveStock(
+  Future<List<StockTakeProduct>> getListStockTake(
       {required int page, required int limit}) async {
     try {
-      final response = await getBusinessProvider(context).getAllActiveStock(
+      final response = await getBusinessProvider(context).getListStockTake(
           page: page,
           limit: limit,
           searchValue: _searchTerm,
           context: context,
           categoryId: selectedCategoryId ?? '',
-          showStockDashboard:false
       );
 
       return response.data?.data ?? [];
@@ -122,19 +123,19 @@ class _AddStockTakeProductsPageState extends State<AddStockTakeProductsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final addStockViewModel = Provider.of<AddStockViewModel>(context);
+    final addStockViewModel = Provider.of<AddStockTakeViewModel>(context);
     final selectedItems = addStockViewModel.itemCount;
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar:  AuthAppBar(title: 'Add Stock', onBackPressed: widget.onPrevious,),
+      appBar:  AuthAppBar(title: 'Stock Take', onBackPressed: widget.onPrevious,),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Filter row
           headings(
-            label: 'Select Products',
-            subLabel: 'Pick products to add stock.',
+            label: 'Update Stock',
+            subLabel: 'Tap on a product to edit stock.',
           ).paddingSymmetric(horizontal: 16),
           FilterRowWidget(
             leftButtonText: selectedCategory,
@@ -157,19 +158,21 @@ class _AddStockTakeProductsPageState extends State<AddStockTakeProductsPage> {
               onRefresh: () async {
                 await _paginationController.refresh();
               },
-              child: PagedListView<int, ActiveStockProduct>(
+              child: PagedListView<int, StockTakeProduct>(
                 pagingController: _paginationController.pagingController,
-                builderDelegate: PagedChildBuilderDelegate<ActiveStockProduct>(
+                builderDelegate: PagedChildBuilderDelegate<StockTakeProduct>(
                   itemBuilder: (context, item, index) {
                     final product = item;
                     final cartItem = addStockViewModel.findItem(product.id ?? '');
                     final quantity = cartItem?.quantity ?? 0;
+                    final variance = cartItem?.variation ?? 0;
 
-                    return addStockBuildProductItem(
+                    return addStockTakeBuildProductItem(
                       product: product,
                       quantity: quantity.toInt(),
+                      variance: variance.toInt(),
                       onTap: () {
-                        BottomSheetHelper.showAddStockBottomSheet(
+                        BottomSheetHelper.showAddStockTakeBottomSheet(
                           context,
                           activeStockProduct: product,
                         );

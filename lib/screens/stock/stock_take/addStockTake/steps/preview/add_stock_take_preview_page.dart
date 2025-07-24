@@ -8,11 +8,14 @@ import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/stock/itemBuilder/preview_add_stock_item.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
+import 'package:zed_nano/screens/widget/common/flexible_rich_text.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
 import 'package:zed_nano/screens/widget/common/searchview.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
+import 'package:zed_nano/utils/extensions.dart';
+import 'package:zed_nano/viewmodels/add_stock_take_viewmodel.dart';
 import 'package:zed_nano/viewmodels/add_stock_viewmodel.dart';
 
 class AddStockTakePreviewPage extends StatefulWidget {
@@ -35,9 +38,8 @@ class _AddStockTakePreviewPageState extends State<AddStockTakePreviewPage> {
 
   @override
   Widget build(BuildContext context) {
-    final cartViewModel = Provider.of<AddStockViewModel>(context);
+    final cartViewModel = Provider.of<AddStockTakeViewModel>(context);
     final cartItems = cartViewModel.items;
-    final totalAmount = 0.0;
     final itemCount = cartViewModel.itemCount;
 
     return Scaffold(
@@ -73,10 +75,10 @@ class _AddStockTakePreviewPageState extends State<AddStockTakePreviewPage> {
                 color: cardBackgroundColor,
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: const Column(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Batch No: --|--',
+                  const Text('Batch No: --|--',
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         color: textPrimary,
@@ -85,6 +87,18 @@ class _AddStockTakePreviewPageState extends State<AddStockTakePreviewPage> {
                         fontStyle: FontStyle.normal,
                       )
                   ),
+                  FlexibleRichText(
+                    segments: [
+                       const TextSegment(
+                        text: 'Created On: ',
+                        color: textSecondary, // or your textColorSecondary
+                      ),
+                      TextSegment(
+                        text: DateTime.now().toIso8601String().toFormattedDate(),
+                        color: textPrimary, // or your textColorPrimary
+                      ),
+                    ],
+                  )
 
                 ],
               )
@@ -98,7 +112,7 @@ class _AddStockTakePreviewPageState extends State<AddStockTakePreviewPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      '$itemCount Products added',
+                      '$itemCount Products Updated',
                       style: const TextStyle(
                         color: textPrimary,
                         fontFamily: 'Poppins',
@@ -151,7 +165,7 @@ class _AddStockTakePreviewPageState extends State<AddStockTakePreviewPage> {
               separatorBuilder: (context, index) => const Divider(height: 0.5, color: innactiveBorderCart,),
               itemBuilder: (context, index) {
                 final item = cartItems[index];
-                return previewAddStockItem(
+                return previewAddStockTakeItem(
                   item: item,
                   cartViewModel: cartViewModel,
                 );
@@ -181,15 +195,11 @@ class _AddStockTakePreviewPageState extends State<AddStockTakePreviewPage> {
                     height: 56,
                     child: appButton(text: 'Submit Batch', onTap: (){
 
-                      var payload = {
-                        'supplierId': '',
-                        'warehouseId':'',
-                        'products': cartViewModel.items.map((item) => item.toJson()).toList()
-                      };
+                      var payload = cartViewModel.items.map((item) => item.toJson()).toList();
 
                       logger.d(payload);
 
-                      getBusinessProvider(context).addStockRequest(
+                      getBusinessProvider(context).updateStockItem(
                           requestData: payload,
                           context: context
                       ).then((value) {

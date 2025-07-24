@@ -21,7 +21,7 @@ class StyledTextField extends StatelessWidget {
   final int? maxLength;
   final bool showCounter;
   final String prefixText;
-
+  final bool isActive;
 
   const StyledTextField({
     Key? key,
@@ -38,21 +38,25 @@ class StyledTextField extends StatelessWidget {
     this.maxLength,
     this.showCounter = false,
     this.prefixText = '',
+    this.isActive = true,
   }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Container(
       // Only apply fixed height for single-line text fields
       height: textFieldType == TextFieldType.MULTILINE ? null : 50, // Fixed height as per user preference (56px)
       decoration: BoxDecoration(
-        border: Border.all(color: BodyWhite),
+        border: Border.all(color: isActive ? BodyWhite : Colors.grey.shade300),
         borderRadius: BorderRadius.circular(13), // Border radius as per user preference (16px)
+        color: isActive ? Colors.white : Colors.grey.shade100,
       ),
       child: AppTextField(
         controller: controller,
         focus: focusNode,
         textFieldType: textFieldType,
-        onChanged: onChanged,
+        onChanged: isActive ? onChanged : null,
+        enabled: isActive,
         maxLines: textFieldType == TextFieldType.MULTILINE ? null : 1, // Use null for multiline to allow unlimited lines
         onFieldSubmitted: (value) {
           if (nextFocus != null) {
@@ -81,7 +85,7 @@ class StyledTextField extends StatelessWidget {
           border: InputBorder.none,
           hintText: hintText,
           hintStyle: TextStyle(
-            color: Color(0xff8f9098),
+            color: isActive ? Color(0xff8f9098) : Colors.grey.shade400,
             fontWeight: FontWeight.w400,
             fontFamily: "Poppins", // Poppins font as per user preference
             fontSize: 12.0,

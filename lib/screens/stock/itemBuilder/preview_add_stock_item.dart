@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:zed_nano/models/get_add_stock_products_batch/StockBatchDetail.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
 import 'package:zed_nano/utils/Colors.dart';
+import 'package:zed_nano/viewmodels/add_stock_take_viewmodel.dart';
 import 'package:zed_nano/viewmodels/add_stock_viewmodel.dart';
 
 Widget previewAddStockItem({
@@ -119,6 +120,109 @@ Widget previewAddStockItem({
 }
 
 
+Widget previewAddStockTakeItem({
+  required AddStockTakeCartItem item,
+  required AddStockTakeViewModel cartViewModel,
+
+}) {
+  return Container(
+    margin: const EdgeInsets.only(left: 0, right: 0, bottom: 0),
+    padding: const EdgeInsets.all(5),
+    decoration: BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(16),
+    ),
+    child: Row(
+      children: [
+        rfCommonCachedNetworkImage(
+          item.imagePath ?? '',
+          fit: BoxFit.cover,
+          height: 42,
+          width: 42,
+        ),
+        const SizedBox(width: 16),
+        // Product details
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                item.productName ?? '',
+                style: const TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w700,
+                  fontFamily: 'Poppins',
+                  color: Color(0xFF323232),
+                ),
+              ),
+              const SizedBox(height: 4),
+              Row(
+                children: [
+                  Text(
+                    'Expected:${item.expectedQuantity}',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontFamily: 'Poppins',
+                      color: Colors.grey.shade500,
+                    ),
+                  ),
+                  Text(
+                    ' · ',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontFamily: 'Poppins',
+                      color: Colors.grey.shade500,
+                    ),
+                  ),
+                  Text(
+                    'Actual:${item.quantity}',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontFamily: 'Poppins',
+                      color: successTextColor,
+                      fontWeight: FontWeight.w600,
+
+                    ),
+                  ),
+                ],
+              ),
+              Text("Variance: ${item.variation}",
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    color: textPrimary,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    fontStyle: FontStyle.normal,
+
+
+                  )
+              )
+            ],
+          ),
+        ),
+
+        InkWell(
+          onTap: () {
+            cartViewModel.removeItem(item.productId);
+          },
+          child: Container(
+            width: 24,
+            height: 24,
+            child: const Center(
+              child: Icon(
+                Icons.remove,
+                color: accentRed,
+                size: 16,
+              ),
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+
 Widget viewBatchProductItem({
   required StockItem item,
 }) {
@@ -201,6 +305,110 @@ Widget viewBatchProductItem({
                     )
                 ),
                 Text("${item.newQuantity} Items",
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      color: textPrimary,
+                      fontSize: 10,
+                      fontWeight: FontWeight.w600,
+                      fontStyle: FontStyle.normal,
+                    )
+                )
+              ],
+            ),
+          ],
+        ),
+        Divider(
+          height: 1,
+          color: Colors.grey.shade300,
+        ),
+      ],
+    ),
+  );
+}
+
+
+Widget viewBatchStockTakeProductItem({
+  required StockItem item,
+}) {
+  return Container(
+    margin: const EdgeInsets.only(left: 0, right: 0, bottom: 0),
+    padding: const EdgeInsets.all(5),
+    decoration: BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(16),
+    ),
+    child: Column(
+      children: [
+        Row(
+          children: [
+            rfCommonCachedNetworkImage(
+              item.imagePath ?? '',
+              fit: BoxFit.cover,
+              height: 42,
+              width: 42,
+            ),
+            const SizedBox(width: 16),
+            // Product details
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    item.productName ?? '',
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                      fontFamily: 'Poppins',
+                      color: Color(0xFF323232),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    children: [
+                      Text(
+                        "Expected: ${item?.expectedQuantity}" ?? 'N/A',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontFamily: 'Poppins',
+                          color: Colors.grey.shade500,
+                        ),
+                      ),
+                      Text(
+                        ' · ',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontFamily: 'Poppins',
+                          color: Colors.grey.shade500,
+                        ),
+                      ),
+                      Text(
+                        'Actual: ${item.newQuantity}',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontFamily: 'Poppins',
+                          color: successTextColor,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+
+            // Quantity controls
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text("",
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      color: successTextColor,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      fontStyle: FontStyle.normal,
+                    )
+                ),
+                Text("Variance: ${item.variance}",
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       color: textPrimary,

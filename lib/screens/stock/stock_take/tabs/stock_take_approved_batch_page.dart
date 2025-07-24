@@ -8,6 +8,9 @@ import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/stock/add_stock/addStock/add_stock_parent_page.dart';
 import 'package:zed_nano/screens/stock/add_stock/view_stock_batch_detail.dart';
 import 'package:zed_nano/screens/stock/itemBuilder/build_batch_item.dart';
+import 'package:zed_nano/screens/stock/stock_take/addStockTake/add_stock_take_parent_page.dart';
+import 'package:zed_nano/screens/stock/stock_take/addStockTake/steps/products/add_stock_take_products_page.dart';
+import 'package:zed_nano/screens/stock/stock_take/view_stock__take_batch_detail.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/screens/widget/common/searchview.dart';
 import 'package:zed_nano/screens/widget/common/stepper_usage_examples.dart';
@@ -34,7 +37,7 @@ class _StockTakeApprovedBatchPageState extends State<StockTakeApprovedBatchPage>
     super.initState();
     _paginationController = PaginationController<BatchData>(
       fetchItems: (page, pageSize) async {
-        return getApprovedAddStockBatchesByBranch(page: page, limit: pageSize);
+        return getApprovedBatchesByBranch(page: page, limit: pageSize);
       },
     );
 
@@ -47,10 +50,10 @@ class _StockTakeApprovedBatchPageState extends State<StockTakeApprovedBatchPage>
   }
 
 
-  Future<List<BatchData>> getApprovedAddStockBatchesByBranch(
+  Future<List<BatchData>> getApprovedBatchesByBranch(
       {required int page, required int limit}) async {
     try {
-      final response = await getBusinessProvider(context).getApprovedAddStockBatchesByBranch(
+      final response = await getBusinessProvider(context).getApprovedBatchesByBranch(
           page: page,
           limit: limit,
           searchValue: _searchTerm,
@@ -101,10 +104,10 @@ class _StockTakeApprovedBatchPageState extends State<StockTakeApprovedBatchPage>
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          const AddStockParentPage(initialStep:0).launch(context);
+          const AddStockTakeParentPage(initialStep:0).launch(context);
 
         },
-        label: const Text('Add Stock', style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white)),
+        label: const Text('Stock Take', style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white)),
         icon: const Icon(Icons.add, color: Colors.white),
         backgroundColor: appThemePrimary,
       ),
@@ -121,10 +124,10 @@ class _StockTakeApprovedBatchPageState extends State<StockTakeApprovedBatchPage>
       builderDelegate: PagedChildBuilderDelegate<BatchData>(
         itemBuilder: (context, item, index) {
           return buildBatchItem(item, onTap: () {
-            ViewStockBatchDetail(
+            ViewStockTakeBatchDetail(
                 batchId: item?.batchId ?? '',
             ).launch(context);
-          });
+          },isStockTake: true);;
         },
         firstPageProgressIndicatorBuilder: (_) => const SizedBox(),
         newPageProgressIndicatorBuilder: (_) => const SizedBox(),

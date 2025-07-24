@@ -44,6 +44,7 @@ class AppConstants{
   static const String createBillingInvoice = 'api/v1/billing/businesss/createbilling-invoice';
   static const String enableCashPayment = 'api/activate_cash_payment';
   static const String addStockRequest = 'api/addStockRequest';
+  static const String updateStockItem = 'api/updateStockItem';
   static const String enableSettleInvoiceStatus = 'api/v1/business/enablesetttleinvoicetstatus';
   static const String addKCBPayment = 'api/v1/payments/activate_kcb_mpesa?status=true';
   static const String addMPESAPayment = 'api/activate_daraja_for_business';
@@ -59,9 +60,13 @@ class AppConstants{
   static const String findProduct = 'api/findProduct';
   static const String getListByProducts = 'api/listByProducts';
   static const String getApprovedAddStockBatchesByBranch = 'api/get_approved_add_stock_batches_by_branch';
+  static const String getApprovedBatchesByBranch = 'api/get_approved_batches_by_branch';
   static const String getPendingAddStockBatchesByBranch = 'api/get_pending_add_stock_batches_by_branch';
+  static const String getPendingBatchesByBranch = 'api/get_pending_batches_by_branch';
   static const String getAllActiveStock = 'api/get_all_activeStock';
+  static const String getListStockTake = 'api/listStockTake';
   static const String getAddStockProductsBatch = 'api/get_add_stock_products_batch';
+  static const String getAddStockPendingProductsBatch = 'api/get_add_stock_pending_products_batch';
   static const String createBusiness = 'postBusiness';
   static const String getSetupStatus = 'api/get_setup_status';
   static const String listSubscribedBillingPlans = 'api/v1/billing/listsubscribed_billing_plans';

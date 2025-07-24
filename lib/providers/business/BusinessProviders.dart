@@ -20,6 +20,7 @@ import 'package:zed_nano/models/get_payment_methods_with_status/PaymentMethodsRe
 import 'package:zed_nano/models/listByProducts/ListByProductsResponse.dart';
 import 'package:zed_nano/models/listCategories/ListCategoriesResponse.dart';
 import 'package:zed_nano/models/listProducts/ListProductsResponse.dart';
+import 'package:zed_nano/models/listStockTake/GetActiveStockTakeResponse.dart';
 import 'package:zed_nano/models/listbillingplan_packages/BillingPlanPackagesResponse.dart';
 import 'package:zed_nano/models/listsubscribed_billing_plans/SubscribedBillingPlansResponse.dart';
 import 'package:zed_nano/models/pushstk/PushStkResponse.dart';
@@ -282,6 +283,27 @@ class BusinessProviders extends BaseProvider {
       required BuildContext context}) async {
     final responseModel = await performApiCallWithHandling(
         () => businessRepo.addStockRequest(requestData: requestData), context);
+
+    ResponseModel<CommonResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<CommonResponse>(
+          true, responseModel.message!, CommonResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<CommonResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
+  Future<ResponseModel<CommonResponse>> updateStockItem(
+      {
+        required List<Map<String, dynamic>> requestData,
+      required BuildContext context}) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.updateStockItem(requestData: requestData), context);
 
     ResponseModel<CommonResponse> finalResponseModel;
 
@@ -764,6 +786,34 @@ class BusinessProviders extends BaseProvider {
 
     return finalResponseModel;
   }
+  Future<ResponseModel<GetBatchesListResponse>> getApprovedBatchesByBranch(
+      {
+        required int page ,
+        required int limit ,
+        required String searchValue ,
+        required BuildContext context,
+      }) async {
+
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.getApprovedBatchesByBranch(
+          page: page,
+          limit: limit,
+          searchValue: searchValue,
+        ), context);
+
+    ResponseModel<GetBatchesListResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<GetBatchesListResponse>(
+          true, responseModel.message!, GetBatchesListResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<GetBatchesListResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
   Future<ResponseModel<GetBatchesListResponse>> getPendingAddStockBatchesByBranch(
       {
         required int page ,
@@ -774,6 +824,34 @@ class BusinessProviders extends BaseProvider {
 
     final responseModel = await performApiCallWithHandling(
         () => businessRepo.getPendingAddStockBatchesByBranch(
+          page: page,
+          limit: limit,
+          searchValue: searchValue,
+        ), context);
+
+    ResponseModel<GetBatchesListResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<GetBatchesListResponse>(
+          true, responseModel.message!, GetBatchesListResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<GetBatchesListResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+  Future<ResponseModel<GetBatchesListResponse>> getPendingBatchesByBranch(
+      {
+        required int page ,
+        required int limit ,
+        required String searchValue ,
+        required BuildContext context,
+      }) async {
+
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.getPendingBatchesByBranch(
           page: page,
           limit: limit,
           searchValue: searchValue,
@@ -826,6 +904,37 @@ class BusinessProviders extends BaseProvider {
     return finalResponseModel;
   }
 
+  Future<ResponseModel<GetActiveStockTakeResponse>> getListStockTake(
+      {
+        required int page ,
+        required int limit ,
+        required String categoryId ,
+        required String searchValue ,
+        required BuildContext context,
+      }) async {
+
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.getListStockTake(
+          page: page,
+          limit: limit,
+          searchValue: searchValue,
+            categoryId: categoryId,
+        ), context);
+
+    ResponseModel<GetActiveStockTakeResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<GetActiveStockTakeResponse>(
+          true, responseModel.message!, GetActiveStockTakeResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<GetActiveStockTakeResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
 
   Future<ResponseModel<StockBatchDetail>> getAddStockProductsBatch(
       {
@@ -837,6 +946,36 @@ class BusinessProviders extends BaseProvider {
 
     final responseModel = await performApiCallWithHandling(
         () => businessRepo.getAddStockProductsBatch(
+          page: page,
+          limit: limit,
+            requestData: requestData,
+        ), context);
+
+    ResponseModel<StockBatchDetail> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<StockBatchDetail>(
+          true, responseModel.message!, StockBatchDetail.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<StockBatchDetail>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
+
+  Future<ResponseModel<StockBatchDetail>> getAddStockPendingProductsBatch(
+      {
+        required int page ,
+        required int limit ,
+        required BuildContext context,
+        required Map<String, dynamic> requestData,
+      }) async {
+
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.getAddStockPendingProductsBatch(
           page: page,
           limit: limit,
             requestData: requestData,

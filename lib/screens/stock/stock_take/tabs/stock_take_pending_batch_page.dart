@@ -8,6 +8,8 @@ import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/stock/add_stock/addStock/add_stock_parent_page.dart';
 import 'package:zed_nano/screens/stock/add_stock/view_stock_batch_detail.dart';
 import 'package:zed_nano/screens/stock/itemBuilder/build_batch_item.dart';
+import 'package:zed_nano/screens/stock/stock_take/addStockTake/add_stock_take_parent_page.dart';
+import 'package:zed_nano/screens/stock/stock_take/view_stock__take_batch_detail.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/screens/widget/common/searchview.dart';
 import 'package:zed_nano/utils/Colors.dart';
@@ -33,7 +35,7 @@ class _StockTakePendingBatchPageState extends State<StockTakePendingBatchPage> {
     super.initState();
     _paginationController = PaginationController<BatchData>(
       fetchItems: (page, pageSize) async {
-        return getPendingAddStockBatchesByBranch(page: page, limit: pageSize);
+        return getPendingBatchesByBranch(page: page, limit: pageSize);
       },
     );
 
@@ -46,10 +48,10 @@ class _StockTakePendingBatchPageState extends State<StockTakePendingBatchPage> {
   }
 
 
-  Future<List<BatchData>> getPendingAddStockBatchesByBranch(
+  Future<List<BatchData>> getPendingBatchesByBranch(
       {required int page, required int limit}) async {
     try {
-      final response = await getBusinessProvider(context).getPendingAddStockBatchesByBranch(
+      final response = await getBusinessProvider(context).getPendingBatchesByBranch(
         page: page,
         limit: limit,
         searchValue: _searchTerm,
@@ -100,9 +102,9 @@ class _StockTakePendingBatchPageState extends State<StockTakePendingBatchPage> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          const AddStockParentPage(initialStep:0).launch(context);
+          const AddStockTakeParentPage(initialStep:0).launch(context);
         },
-        label: const Text('Add Stock', style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white)),
+        label: const Text('Stock Take', style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white)),
         icon: const Icon(Icons.add, color: Colors.white),
         backgroundColor: appThemePrimary,
       ),
@@ -119,10 +121,10 @@ class _StockTakePendingBatchPageState extends State<StockTakePendingBatchPage> {
       builderDelegate: PagedChildBuilderDelegate<BatchData>(
         itemBuilder: (context, item, index) {
           return buildBatchItem(item, onTap: () {
-            ViewStockBatchDetail(
+            ViewStockTakeBatchDetail(
               batchId: item?.batchId ?? '',
             ).launch(context);
-          });
+          },isStockTake: true);
         },
         firstPageProgressIndicatorBuilder: (_) => const SizedBox(),
         newPageProgressIndicatorBuilder: (_) => const SizedBox(),

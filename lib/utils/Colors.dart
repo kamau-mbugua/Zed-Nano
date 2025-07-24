@@ -16,6 +16,8 @@ const Color successTextColor = Color(0xFF17AE7B);
 const Color warning = Color(0xFFFFC107);
 const Color errorColors = Color(0xFFED3241);
 const Color info = Color(0xFF2196F3);
+//add 1573fe
+const Color primaryBlueTextColor = Color(0xFF1573fe);
 
 // Social login colors
 const Color googleRed = Color(0xFFED3241);

@@ -19,6 +19,7 @@ import 'package:zed_nano/viewmodels/WorkflowViewModel.dart';
 import 'package:zed_nano/services/firebase_service.dart';
 import 'package:zed_nano/utils/app_loading.dart';
 import 'package:zed_nano/utils/permission_service.dart';
+import 'package:zed_nano/viewmodels/add_stock_take_viewmodel.dart';
 import 'package:zed_nano/viewmodels/add_stock_viewmodel.dart';
 
 // Global navigator key for accessing navigator from anywhere
@@ -99,6 +100,7 @@ Future<void> initializeApp(Flavor flavor) async {
         ChangeNotifierProvider(create: (_) => RefreshViewModel()),
         ChangeNotifierProvider(create: (_) => CartViewModel()),
         ChangeNotifierProvider(create: (_) => AddStockViewModel()),
+        ChangeNotifierProvider(create: (_) => AddStockTakeViewModel()),
       ],
       child: App(navigatorKey: navigatorKey),
     ),

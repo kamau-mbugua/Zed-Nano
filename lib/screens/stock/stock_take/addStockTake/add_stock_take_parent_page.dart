@@ -13,6 +13,9 @@ import 'package:zed_nano/screens/sell/select_category_page.dart';
 import 'package:zed_nano/screens/stock/add_stock/addStock/steps/category/add_stock_select_category_page.dart';
 import 'package:zed_nano/screens/stock/add_stock/addStock/steps/preview/add_stock_preview_page.dart';
 import 'package:zed_nano/screens/stock/add_stock/addStock/steps/products/add_stock_products_page.dart';
+import 'package:zed_nano/screens/stock/stock_take/addStockTake/steps/preview/add_stock_take_preview_page.dart';
+import 'package:zed_nano/screens/stock/stock_take/addStockTake/steps/products/add_stock_take_product_bottom_sheet.dart';
+import 'package:zed_nano/screens/stock/stock_take/addStockTake/steps/products/add_stock_take_products_page.dart';
 import 'package:zed_nano/screens/widget/common/reusable_stepper_widget.dart';
 import 'package:zed_nano/screens/widget/common/stepper_usage_examples.dart';
 import 'package:zed_nano/utils/Colors.dart';
@@ -78,7 +81,7 @@ class _AddStockTakeParentPageState extends State<AddStockTakeParentPage> {
 class _AddStockProductsPageWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return AddStockProductsPage(
+    return AddStockTakeProductsPage(
       onNext: () => StepperController.nextStep(context),
       onPrevious: () => StepperController.previousStep(context),
     );
@@ -88,7 +91,7 @@ class _AddStockProductsPageWrapper extends StatelessWidget {
 class _AddStockPreviewPageWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return AddStockPreviewPage(
+    return AddStockTakePreviewPage(
       onNext: () => StepperController.nextStep(context),
       onPrevious: () => StepperController.previousStep(context),
     );
