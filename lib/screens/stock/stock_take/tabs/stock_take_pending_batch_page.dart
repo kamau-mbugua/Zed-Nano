@@ -10,20 +10,19 @@ import 'package:zed_nano/screens/stock/add_stock/view_stock_batch_detail.dart';
 import 'package:zed_nano/screens/stock/itemBuilder/build_batch_item.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/screens/widget/common/searchview.dart';
-import 'package:zed_nano/screens/widget/common/stepper_usage_examples.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
 import 'package:zed_nano/utils/pagination_controller.dart';
 
-class AddStockApprovedBatchPage extends StatefulWidget {
-  const AddStockApprovedBatchPage({Key? key}) : super(key: key);
+class StockTakePendingBatchPage extends StatefulWidget {
+  const StockTakePendingBatchPage({Key? key}) : super(key: key);
 
   @override
-  _AddStockApprovedBatchPageState createState() =>
-      _AddStockApprovedBatchPageState();
+  _StockTakePendingBatchPageState createState() =>
+      _StockTakePendingBatchPageState();
 }
 
-class _AddStockApprovedBatchPageState extends State<AddStockApprovedBatchPage> {
+class _StockTakePendingBatchPageState extends State<StockTakePendingBatchPage> {
   TextEditingController _searchController = TextEditingController();
   Timer? _debounceTimer;
   String _searchTerm = '';
@@ -34,7 +33,7 @@ class _AddStockApprovedBatchPageState extends State<AddStockApprovedBatchPage> {
     super.initState();
     _paginationController = PaginationController<BatchData>(
       fetchItems: (page, pageSize) async {
-        return getApprovedAddStockBatchesByBranch(page: page, limit: pageSize);
+        return getPendingAddStockBatchesByBranch(page: page, limit: pageSize);
       },
     );
 
@@ -47,14 +46,14 @@ class _AddStockApprovedBatchPageState extends State<AddStockApprovedBatchPage> {
   }
 
 
-  Future<List<BatchData>> getApprovedAddStockBatchesByBranch(
+  Future<List<BatchData>> getPendingAddStockBatchesByBranch(
       {required int page, required int limit}) async {
     try {
-      final response = await getBusinessProvider(context).getApprovedAddStockBatchesByBranch(
-          page: page,
-          limit: limit,
-          searchValue: _searchTerm,
-          context: context,
+      final response = await getBusinessProvider(context).getPendingAddStockBatchesByBranch(
+        page: page,
+        limit: limit,
+        searchValue: _searchTerm,
+        context: context,
       );
 
       return response.data?.data ?? [];
@@ -102,9 +101,8 @@ class _AddStockApprovedBatchPageState extends State<AddStockApprovedBatchPage> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           const AddStockParentPage(initialStep:0).launch(context);
-
         },
-        label: const Text('Stock Take', style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white)),
+        label: const Text('Add Stock', style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white)),
         icon: const Icon(Icons.add, color: Colors.white),
         backgroundColor: appThemePrimary,
       ),
@@ -122,7 +120,7 @@ class _AddStockApprovedBatchPageState extends State<AddStockApprovedBatchPage> {
         itemBuilder: (context, item, index) {
           return buildBatchItem(item, onTap: () {
             ViewStockBatchDetail(
-                batchId: item?.batchId ?? '',
+              batchId: item?.batchId ?? '',
             ).launch(context);
           });
         },

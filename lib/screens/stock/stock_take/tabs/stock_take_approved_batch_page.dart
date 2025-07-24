@@ -15,15 +15,15 @@ import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
 import 'package:zed_nano/utils/pagination_controller.dart';
 
-class AddStockApprovedBatchPage extends StatefulWidget {
-  const AddStockApprovedBatchPage({Key? key}) : super(key: key);
+class StockTakeApprovedBatchPage extends StatefulWidget {
+  const StockTakeApprovedBatchPage({Key? key}) : super(key: key);
 
   @override
-  _AddStockApprovedBatchPageState createState() =>
-      _AddStockApprovedBatchPageState();
+  _StockTakeApprovedBatchPageState createState() =>
+      _StockTakeApprovedBatchPageState();
 }
 
-class _AddStockApprovedBatchPageState extends State<AddStockApprovedBatchPage> {
+class _StockTakeApprovedBatchPageState extends State<StockTakeApprovedBatchPage> {
   TextEditingController _searchController = TextEditingController();
   Timer? _debounceTimer;
   String _searchTerm = '';
@@ -104,7 +104,7 @@ class _AddStockApprovedBatchPageState extends State<AddStockApprovedBatchPage> {
           const AddStockParentPage(initialStep:0).launch(context);
 
         },
-        label: const Text('Stock Take', style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white)),
+        label: const Text('Add Stock', style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white)),
         icon: const Icon(Icons.add, color: Colors.white),
         backgroundColor: appThemePrimary,
       ),
