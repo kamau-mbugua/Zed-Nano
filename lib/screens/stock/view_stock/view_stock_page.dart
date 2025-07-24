@@ -161,13 +161,16 @@ class _ViewStockPageState extends State<ViewStockPage> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          Navigator.pushNamed(context, AppRoutes.getAddStockBatchTabsPageScreenRoute());
-        },
-        label: const Text('Add', style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white)),
-        icon: const Icon(Icons.add, color: Colors.white),
-        backgroundColor: appThemePrimary,
+      floatingActionButton: Visibility(
+        visible: false,
+        child: FloatingActionButton.extended(
+          onPressed: () {
+            Navigator.pushNamed(context, AppRoutes.getAddStockBatchTabsPageScreenRoute());
+          },
+          label: const Text('Add', style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white)),
+          icon: const Icon(Icons.add, color: Colors.white),
+          backgroundColor: appThemePrimary,
+        ),
       ),
     );
   }

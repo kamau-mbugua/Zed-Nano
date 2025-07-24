@@ -339,6 +339,31 @@ class BusinessRepo{
       return ApiResponse.withError(ApiErrorHandler.handleError(e));
     }
   }
+  Future<ApiResponse> getAddStockProductsBatch({
+    required int page ,
+    required int limit ,
+    required Map<String, dynamic> requestData ,
+  }) async {
+    try {
+      if (page < 1) page = 1;
+      if (limit < 1) limit = 10;
+
+      final queryParams = <String, dynamic>{
+        'page': page,
+        'limit': limit,
+      };
+
+      final response = await dioClient!.post(
+        AppConstants.getAddStockProductsBatch,
+        queryParameters: queryParams,
+        data: requestData
+      );
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
 
   Future<ApiResponse> getSetupStatus() async {
     try {

@@ -6,6 +6,7 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/models/get_approved_add_stock_batches_by_branch/GetBatchesListResponse.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/stock/add_stock/addStock/add_stock_parent_page.dart';
+import 'package:zed_nano/screens/stock/add_stock/view_stock_batch_detail.dart';
 import 'package:zed_nano/screens/stock/itemBuilder/build_batch_item.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/screens/widget/common/searchview.dart';
@@ -118,7 +119,9 @@ class _AddStockPendingBatchPageState extends State<AddStockPendingBatchPage> {
       builderDelegate: PagedChildBuilderDelegate<BatchData>(
         itemBuilder: (context, item, index) {
           return buildBatchItem(item, onTap: () {
-
+            ViewStockBatchDetail(
+              batchId: item?.batchId ?? '',
+            ).launch(context);
           });
         },
         firstPageProgressIndicatorBuilder: (_) => const SizedBox(),

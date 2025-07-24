@@ -198,7 +198,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       ),
                       _buildSubMenuItem(
                         title: 'Add Stock',
-                        onTap: () => _navigateTo(context, '/stock-adjustments'),
+                        onTap: () {
+                        Navigator.pushNamed(context, AppRoutes.getAddStockBatchTabsPageScreenRoute());
+
+                      },
                       ),
                       _buildSubMenuItem(
                         title: 'Stock Take',

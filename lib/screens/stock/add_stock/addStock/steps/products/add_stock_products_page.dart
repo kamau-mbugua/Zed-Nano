@@ -76,10 +76,10 @@ class _AddStockProductsPageState extends State<AddStockProductsPage> {
           searchValue: _searchTerm,
           context: context,
           categoryId: selectedCategoryId ?? '',
-          showStockDashboard:true
+          showStockDashboard:false
       );
 
-      return response.data?.lowStockProducts ?? [];
+      return response.data?.data ?? [];
     } catch (e) {
       return [];
     }

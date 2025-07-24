@@ -11,6 +11,7 @@ import 'package:zed_nano/models/createProduct/CreateProductResponse.dart';
 import 'package:zed_nano/models/createbillingInvoice/CreateBillingInvoiceResponse.dart';
 import 'package:zed_nano/models/findProduct/FindProductResponse.dart';
 import 'package:zed_nano/models/getVariablePriceStatus/GetVariablePriceStatusResponse.dart';
+import 'package:zed_nano/models/get_add_stock_products_batch/StockBatchDetail.dart';
 import 'package:zed_nano/models/get_all_activeStock/GetAllActiveStockResponse.dart';
 import 'package:zed_nano/models/get_approved_add_stock_batches_by_branch/GetBatchesListResponse.dart';
 import 'package:zed_nano/models/get_branch_transaction_by_date/BranchTransactionByDateResponse.dart';
@@ -820,6 +821,36 @@ class BusinessProviders extends BaseProvider {
     } else {
       finalResponseModel =
           ResponseModel<GetAllActiveStockResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
+
+  Future<ResponseModel<StockBatchDetail>> getAddStockProductsBatch(
+      {
+        required int page ,
+        required int limit ,
+        required BuildContext context,
+        required Map<String, dynamic> requestData,
+      }) async {
+
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.getAddStockProductsBatch(
+          page: page,
+          limit: limit,
+            requestData: requestData,
+        ), context);
+
+    ResponseModel<StockBatchDetail> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<StockBatchDetail>(
+          true, responseModel.message!, StockBatchDetail.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<StockBatchDetail>(false, responseModel.message!);
     }
 
     return finalResponseModel;

@@ -61,6 +61,7 @@ class AppConstants{
   static const String getApprovedAddStockBatchesByBranch = 'api/get_approved_add_stock_batches_by_branch';
   static const String getPendingAddStockBatchesByBranch = 'api/get_pending_add_stock_batches_by_branch';
   static const String getAllActiveStock = 'api/get_all_activeStock';
+  static const String getAddStockProductsBatch = 'api/get_add_stock_products_batch';
   static const String createBusiness = 'postBusiness';
   static const String getSetupStatus = 'api/get_setup_status';
   static const String listSubscribedBillingPlans = 'api/v1/billing/listsubscribed_billing_plans';
