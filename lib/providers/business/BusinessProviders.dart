@@ -9,6 +9,8 @@ import 'package:zed_nano/models/branch-store-summary/BranchStoreSummaryResponse.
 import 'package:zed_nano/models/createCategory/CreateCategoryResponse.dart';
 import 'package:zed_nano/models/createProduct/CreateProductResponse.dart';
 import 'package:zed_nano/models/createbillingInvoice/CreateBillingInvoiceResponse.dart';
+import 'package:zed_nano/models/customerTransactions/CustomerTransactionsResponse.dart';
+import 'package:zed_nano/models/customers_list/CustomerListResponse.dart';
 import 'package:zed_nano/models/findProduct/FindProductResponse.dart';
 import 'package:zed_nano/models/getVariablePriceStatus/GetVariablePriceStatusResponse.dart';
 import 'package:zed_nano/models/get_add_stock_products_batch/StockBatchDetail.dart';
@@ -16,7 +18,9 @@ import 'package:zed_nano/models/get_all_activeStock/GetAllActiveStockResponse.da
 import 'package:zed_nano/models/get_approved_add_stock_batches_by_branch/GetBatchesListResponse.dart';
 import 'package:zed_nano/models/get_branch_transaction_by_date/BranchTransactionByDateResponse.dart';
 import 'package:zed_nano/models/get_business_info/BusinessInfoResponse.dart';
+import 'package:zed_nano/models/get_customer_by_number/CustomerListResponse.dart';
 import 'package:zed_nano/models/get_payment_methods_with_status/PaymentMethodsResponse.dart';
+import 'package:zed_nano/models/get_user_invoices/InvoiceListResponse.dart';
 import 'package:zed_nano/models/listByProducts/ListByProductsResponse.dart';
 import 'package:zed_nano/models/listCategories/ListCategoriesResponse.dart';
 import 'package:zed_nano/models/listProducts/ListProductsResponse.dart';
@@ -84,7 +88,8 @@ class BusinessProviders extends BaseProvider {
       {required Map<String, dynamic> requestData,
       required BuildContext context}) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.doInitiateKcbStkPush(requestData: requestData), context);
+        () => businessRepo.doInitiateKcbStkPush(requestData: requestData),
+        context);
 
     ResponseModel<PushStkResponse> finalResponseModel;
 
@@ -104,7 +109,8 @@ class BusinessProviders extends BaseProvider {
       {required Map<String, dynamic> requestData,
       required BuildContext context}) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.activateFreeTrialPlan(requestData: requestData), context);
+        () => businessRepo.activateFreeTrialPlan(requestData: requestData),
+        context);
 
     ResponseModel<CommonResponse> finalResponseModel;
 
@@ -119,6 +125,7 @@ class BusinessProviders extends BaseProvider {
 
     return finalResponseModel;
   }
+
   Future<ResponseModel<CreateCategoryResponse>> createCategory(
       {required Map<String, dynamic> requestData,
       required BuildContext context}) async {
@@ -138,6 +145,7 @@ class BusinessProviders extends BaseProvider {
 
     return finalResponseModel;
   }
+
   Future<ResponseModel<CreateCategoryResponse>> getCategoryById(
       {required Map<String, dynamic> requestData,
       required BuildContext context}) async {
@@ -157,6 +165,7 @@ class BusinessProviders extends BaseProvider {
 
     return finalResponseModel;
   }
+
   Future<ResponseModel<CommonResponse>> updateCategory(
       {required Map<String, dynamic> requestData,
       required BuildContext context}) async {
@@ -176,6 +185,7 @@ class BusinessProviders extends BaseProvider {
 
     return finalResponseModel;
   }
+
   Future<ResponseModel<CommonResponse>> updateProduct(
       {required Map<String, dynamic> requestData,
       required BuildContext context}) async {
@@ -195,12 +205,15 @@ class BusinessProviders extends BaseProvider {
 
     return finalResponseModel;
   }
+
   Future<ResponseModel<CommonResponse>> updateBusinessInfo(
       {required Map<String, dynamic> requestData,
-        required String businessNumber,
+      required String businessNumber,
       required BuildContext context}) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.updateBusinessInfo(requestData: requestData,businessNumber:businessNumber), context);
+        () => businessRepo.updateBusinessInfo(
+            requestData: requestData, businessNumber: businessNumber),
+        context);
 
     ResponseModel<CommonResponse> finalResponseModel;
 
@@ -215,6 +228,7 @@ class BusinessProviders extends BaseProvider {
 
     return finalResponseModel;
   }
+
   Future<ResponseModel<CreateProductResponse>> createProduct(
       {required Map<String, dynamic> requestData,
       required BuildContext context}) async {
@@ -234,34 +248,56 @@ class BusinessProviders extends BaseProvider {
 
     return finalResponseModel;
   }
-  Future<ResponseModel<CreateBillingInvoiceResponse>> createBillingInvoice(
+
+  Future<ResponseModel<CreateProductResponse>> createCustomer(
       {required Map<String, dynamic> requestData,
       required BuildContext context}) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.createBillingInvoice(requestData: requestData), context);
+        () => businessRepo.createCustomer(requestData: requestData), context);
 
-    ResponseModel<CreateBillingInvoiceResponse> finalResponseModel;
+    ResponseModel<CreateProductResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
-      finalResponseModel = ResponseModel<CreateBillingInvoiceResponse>(
-          true, responseModel.message!, CreateBillingInvoiceResponse.fromJson(map));
+      finalResponseModel = ResponseModel<CreateProductResponse>(
+          true, responseModel.message!, CreateProductResponse.fromJson(map));
     } else {
       finalResponseModel =
-          ResponseModel<CreateBillingInvoiceResponse>(false, responseModel.message!);
+          ResponseModel<CreateProductResponse>(false, responseModel.message!);
     }
 
     return finalResponseModel;
   }
 
-
-  Future<ResponseModel<CommonResponse>> enableCashPayment(
-      {
-        required Map<String, dynamic> requestData,
-        required String status,
+  Future<ResponseModel<CreateBillingInvoiceResponse>> createBillingInvoice(
+      {required Map<String, dynamic> requestData,
       required BuildContext context}) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.enableCashPayment(requestData: requestData, status:status), context);
+        () => businessRepo.createBillingInvoice(requestData: requestData),
+        context);
+
+    ResponseModel<CreateBillingInvoiceResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<CreateBillingInvoiceResponse>(true,
+          responseModel.message!, CreateBillingInvoiceResponse.fromJson(map));
+    } else {
+      finalResponseModel = ResponseModel<CreateBillingInvoiceResponse>(
+          false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
+  Future<ResponseModel<CommonResponse>> enableCashPayment(
+      {required Map<String, dynamic> requestData,
+      required String status,
+      required BuildContext context}) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.enableCashPayment(
+            requestData: requestData, status: status),
+        context);
 
     ResponseModel<CommonResponse> finalResponseModel;
 
@@ -278,8 +314,7 @@ class BusinessProviders extends BaseProvider {
   }
 
   Future<ResponseModel<CommonResponse>> addStockRequest(
-      {
-        required Map<String, dynamic> requestData,
+      {required Map<String, dynamic> requestData,
       required BuildContext context}) async {
     final responseModel = await performApiCallWithHandling(
         () => businessRepo.addStockRequest(requestData: requestData), context);
@@ -299,8 +334,7 @@ class BusinessProviders extends BaseProvider {
   }
 
   Future<ResponseModel<CommonResponse>> updateStockItem(
-      {
-        required List<Map<String, dynamic>> requestData,
+      {required List<Map<String, dynamic>> requestData,
       required BuildContext context}) async {
     final responseModel = await performApiCallWithHandling(
         () => businessRepo.updateStockItem(requestData: requestData), context);
@@ -318,12 +352,13 @@ class BusinessProviders extends BaseProvider {
 
     return finalResponseModel;
   }
+
   Future<ResponseModel<CommonResponse>> enableSettleInvoiceStatus(
-      {
-        required Map<String, dynamic> requestData,
+      {required Map<String, dynamic> requestData,
       required BuildContext context}) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.enableSettleInvoiceStatus(requestData: requestData), context);
+        () => businessRepo.enableSettleInvoiceStatus(requestData: requestData),
+        context);
 
     ResponseModel<CommonResponse> finalResponseModel;
 
@@ -340,8 +375,7 @@ class BusinessProviders extends BaseProvider {
   }
 
   Future<ResponseModel<CommonResponse>> addKCBPayment(
-      {
-        required Map<String, dynamic> requestData,
+      {required Map<String, dynamic> requestData,
       required BuildContext context}) async {
     final responseModel = await performApiCallWithHandling(
         () => businessRepo.addKCBPayment(requestData: requestData), context);
@@ -361,8 +395,7 @@ class BusinessProviders extends BaseProvider {
   }
 
   Future<ResponseModel<CommonResponse>> addMPESAPayment(
-      {
-        required Map<String, dynamic> requestData,
+      {required Map<String, dynamic> requestData,
       required BuildContext context}) async {
     final responseModel = await performApiCallWithHandling(
         () => businessRepo.addMPESAPayment(requestData: requestData), context);
@@ -382,11 +415,11 @@ class BusinessProviders extends BaseProvider {
   }
 
   Future<ResponseModel<CommonResponse>> updateBusinessSetupStatus(
-      {
-        required Map<String, dynamic> requestData,
+      {required Map<String, dynamic> requestData,
       required BuildContext context}) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.updateBusinessSetupStatus(requestData: requestData), context);
+        () => businessRepo.updateBusinessSetupStatus(requestData: requestData),
+        context);
 
     ResponseModel<CommonResponse> finalResponseModel;
 
@@ -403,47 +436,49 @@ class BusinessProviders extends BaseProvider {
   }
 
   Future<ResponseModel<BranchStoreSummaryResponse>> branchStoreSummary(
-      {
-        required Map<String, dynamic> requestData,
+      {required Map<String, dynamic> requestData,
       required BuildContext context}) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.branchStoreSummary(requestData: requestData), context);
+        () => businessRepo.branchStoreSummary(requestData: requestData),
+        context);
 
     ResponseModel<BranchStoreSummaryResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
-      finalResponseModel = ResponseModel<BranchStoreSummaryResponse>(
-          true, responseModel.message!, BranchStoreSummaryResponse.fromJson(map));
+      finalResponseModel = ResponseModel<BranchStoreSummaryResponse>(true,
+          responseModel.message!, BranchStoreSummaryResponse.fromJson(map));
     } else {
-      finalResponseModel =
-          ResponseModel<BranchStoreSummaryResponse>(false, responseModel.message!);
+      finalResponseModel = ResponseModel<BranchStoreSummaryResponse>(
+          false, responseModel.message!);
     }
 
     return finalResponseModel;
   }
 
-  Future<ResponseModel<BranchTransactionByDateResponse>> getBranchTransactionByDate(
-      {
-        required Map<String, dynamic> requestData,
-      required BuildContext context}) async {
+  Future<ResponseModel<BranchTransactionByDateResponse>>
+      getBranchTransactionByDate(
+          {required Map<String, dynamic> requestData,
+          required BuildContext context}) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.getBranchTransactionByDate(requestData: requestData), context);
+        () => businessRepo.getBranchTransactionByDate(requestData: requestData),
+        context);
 
     ResponseModel<BranchTransactionByDateResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<BranchTransactionByDateResponse>(
-          true, responseModel.message!, BranchTransactionByDateResponse.fromJson(map));
+          true,
+          responseModel.message!,
+          BranchTransactionByDateResponse.fromJson(map));
     } else {
-      finalResponseModel =
-          ResponseModel<BranchTransactionByDateResponse>(false, responseModel.message!);
+      finalResponseModel = ResponseModel<BranchTransactionByDateResponse>(
+          false, responseModel.message!);
     }
 
     return finalResponseModel;
   }
-
 
   Future<ResponseModel<SetupStatusResponse>> getSetupStatus(
       {required BuildContext context}) async {
@@ -464,8 +499,8 @@ class BusinessProviders extends BaseProvider {
     return finalResponseModel;
   }
 
-  Future<ResponseModel<SubscribedBillingPlansResponse>> listSubscribedBillingPlans(
-      {required BuildContext context}) async {
+  Future<ResponseModel<SubscribedBillingPlansResponse>>
+      listSubscribedBillingPlans({required BuildContext context}) async {
     final responseModel = await performApiCallWithHandling(
         () => businessRepo.listSubscribedBillingPlans(), context);
 
@@ -473,15 +508,16 @@ class BusinessProviders extends BaseProvider {
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
-      finalResponseModel = ResponseModel<SubscribedBillingPlansResponse>(
-          true, responseModel.message!, SubscribedBillingPlansResponse.fromJson(map));
+      finalResponseModel = ResponseModel<SubscribedBillingPlansResponse>(true,
+          responseModel.message!, SubscribedBillingPlansResponse.fromJson(map));
     } else {
-      finalResponseModel =
-          ResponseModel<SubscribedBillingPlansResponse>(false, responseModel.message!);
+      finalResponseModel = ResponseModel<SubscribedBillingPlansResponse>(
+          false, responseModel.message!);
     }
 
     return finalResponseModel;
   }
+
   Future<ResponseModel<ListBusinessCategoryResponse>> listBusinessCategory(
       {required BuildContext context}) async {
     final responseModel = await performApiCallWithHandling(
@@ -491,11 +527,11 @@ class BusinessProviders extends BaseProvider {
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
-      finalResponseModel = ResponseModel<ListBusinessCategoryResponse>(
-          true, responseModel.message!, ListBusinessCategoryResponse.fromJson(map));
+      finalResponseModel = ResponseModel<ListBusinessCategoryResponse>(true,
+          responseModel.message!, ListBusinessCategoryResponse.fromJson(map));
     } else {
-      finalResponseModel =
-          ResponseModel<ListBusinessCategoryResponse>(false, responseModel.message!);
+      finalResponseModel = ResponseModel<ListBusinessCategoryResponse>(
+          false, responseModel.message!);
     }
 
     return finalResponseModel;
@@ -510,16 +546,15 @@ class BusinessProviders extends BaseProvider {
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
-      finalResponseModel = ResponseModel<BillingPlanPackagesResponse>(
-          true, responseModel.message!, BillingPlanPackagesResponse.fromJson(map));
+      finalResponseModel = ResponseModel<BillingPlanPackagesResponse>(true,
+          responseModel.message!, BillingPlanPackagesResponse.fromJson(map));
     } else {
-      finalResponseModel =
-          ResponseModel<BillingPlanPackagesResponse>(false, responseModel.message!);
+      finalResponseModel = ResponseModel<BillingPlanPackagesResponse>(
+          false, responseModel.message!);
     }
 
     return finalResponseModel;
   }
-
 
   Future<ResponseModel<UnitOfMeasureResponse>> getUnitOfMeasure(
       {required BuildContext context}) async {
@@ -549,20 +584,18 @@ class BusinessProviders extends BaseProvider {
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
-      finalResponseModel = ResponseModel<GetVariablePriceStatusResponse>(
-          true, responseModel.message!, GetVariablePriceStatusResponse.fromJson(map));
+      finalResponseModel = ResponseModel<GetVariablePriceStatusResponse>(true,
+          responseModel.message!, GetVariablePriceStatusResponse.fromJson(map));
     } else {
-      finalResponseModel =
-          ResponseModel<GetVariablePriceStatusResponse>(false, responseModel.message!);
+      finalResponseModel = ResponseModel<GetVariablePriceStatusResponse>(
+          false, responseModel.message!);
     }
 
     return finalResponseModel;
   }
 
-
   Future<ResponseModel<CommonResponse>> uploadBusinessLogo(
-      {required File logo ,required BuildContext context}) async {
-
+      {required File logo, required BuildContext context}) async {
     final formData = FormData.fromMap({
       'businessLogo': await MultipartFile.fromFile(
         logo.path,
@@ -588,15 +621,14 @@ class BusinessProviders extends BaseProvider {
     return finalResponseModel;
   }
 
-  Future<ResponseModel<CommonResponse>> uploadProductCategoryImage(
-      {
-        required FormData formData ,
-        required BuildContext context,
-        required String urlPart,
-      }) async {
-
+  Future<ResponseModel<CommonResponse>> uploadProductCategoryImage({
+    required FormData formData,
+    required BuildContext context,
+    required String urlPart,
+  }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.uploadImage(requestData: formData, urlPart:urlPart), context);
+        () => businessRepo.uploadImage(requestData: formData, urlPart: urlPart),
+        context);
 
     ResponseModel<CommonResponse> finalResponseModel;
 
@@ -612,11 +644,9 @@ class BusinessProviders extends BaseProvider {
     return finalResponseModel;
   }
 
-  Future<ResponseModel<PaymentMethodsResponse>> getPaymentMethodsWithStatus(
-      {
-        required BuildContext context,
-      }) async {
-
+  Future<ResponseModel<PaymentMethodsResponse>> getPaymentMethodsWithStatus({
+    required BuildContext context,
+  }) async {
     final responseModel = await performApiCallWithHandling(
         () => businessRepo.getPaymentMethodsWithStatus(), context);
 
@@ -634,22 +664,20 @@ class BusinessProviders extends BaseProvider {
     return finalResponseModel;
   }
 
-  Future<ResponseModel<ListCategoriesResponse>> getListCategories(
-      {
-        required int page ,
-        required int limit ,
-        required String productService ,
-        required String searchValue ,
-        required BuildContext context,
-      }) async {
-
+  Future<ResponseModel<ListCategoriesResponse>> getListCategories({
+    required int page,
+    required int limit,
+    required String productService,
+    required String searchValue,
+    required BuildContext context,
+  }) async {
     final responseModel = await performApiCallWithHandling(
         () => businessRepo.getListCategories(
-          page: page,
-          limit: limit,
-          searchValue: searchValue,
-            productService: productService
-        ), context);
+            page: page,
+            limit: limit,
+            searchValue: searchValue,
+            productService: productService),
+        context);
 
     ResponseModel<ListCategoriesResponse> finalResponseModel;
 
@@ -665,24 +693,116 @@ class BusinessProviders extends BaseProvider {
     return finalResponseModel;
   }
 
-  Future<ResponseModel<TransactionListResponse>> viewAllTransactions(
-      {
-        required int page ,
-        required int limit ,
-        required String startDate ,
-        required String searchValue ,
-        required String endDate ,
-        required BuildContext context,
-      }) async {
+  Future<ResponseModel<CustomerListResponse>> getListCustomers({
+    required int page,
+    required int limit,
+    required String searchValue,
+    required String status,
+    required String paymentType,
+    required String customerType,
+    required BuildContext context,
+  }) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.getListCustomers(
+              page: page,
+              limit: limit,
+              searchValue: searchValue,
+              status: status,
+              paymentType: paymentType,
+              customerType: customerType,
+            ),
+        context);
 
+    ResponseModel<CustomerListResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<CustomerListResponse>(
+          true, responseModel.message!, CustomerListResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<CustomerListResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
+  Future<ResponseModel<CustomerTransactionsResponse>> getCustomerTransactions({
+    required int page,
+    required int limit,
+    required String searchValue,
+    required String customerId,
+    required BuildContext context,
+  }) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.getCustomerTransactions(
+              page: page,
+              limit: limit,
+              searchValue: searchValue,
+          customerId: customerId,
+            ),
+        context);
+
+    ResponseModel<CustomerTransactionsResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<CustomerTransactionsResponse>(
+          true, responseModel.message!, CustomerTransactionsResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<CustomerTransactionsResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
+  Future<ResponseModel<CustomerInvoiceListResponse>> getCustomerInvoices({
+    required int page,
+    required int limit,
+    required String searchValue,
+    required String customerId,
+    required BuildContext context,
+  }) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.getCustomerInvoices(
+              page: page,
+              limit: limit,
+              searchValue: searchValue,
+          customerId: customerId,
+            ),
+        context);
+
+    ResponseModel<CustomerInvoiceListResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<CustomerInvoiceListResponse>(
+          true, responseModel.message!, CustomerInvoiceListResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<CustomerInvoiceListResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
+  Future<ResponseModel<TransactionListResponse>> viewAllTransactions({
+    required int page,
+    required int limit,
+    required String startDate,
+    required String searchValue,
+    required String endDate,
+    required BuildContext context,
+  }) async {
     final responseModel = await performApiCallWithHandling(
         () => businessRepo.viewAllTransactions(
-          page: page,
-          limit: limit,
-          searchValue: searchValue,
-          startDate: startDate,
-          endDate: endDate
-        ), context);
+            page: page,
+            limit: limit,
+            searchValue: searchValue,
+            startDate: startDate,
+            endDate: endDate),
+        context);
 
     ResponseModel<TransactionListResponse> finalResponseModel;
 
@@ -698,22 +818,20 @@ class BusinessProviders extends BaseProvider {
     return finalResponseModel;
   }
 
-  Future<ResponseModel<ListProductsResponse>> getListProducts(
-      {
-        required int page ,
-        required int limit ,
-        required String productService ,
-        required String searchValue ,
-        required BuildContext context,
-      }) async {
-
+  Future<ResponseModel<ListProductsResponse>> getListProducts({
+    required int page,
+    required int limit,
+    required String productService,
+    required String searchValue,
+    required BuildContext context,
+  }) async {
     final responseModel = await performApiCallWithHandling(
         () => businessRepo.getListProducts(
-          page: page,
-          limit: limit,
-          searchValue: searchValue,
-          productService: productService
-        ), context);
+            page: page,
+            limit: limit,
+            searchValue: searchValue,
+            productService: productService),
+        context);
 
     ResponseModel<ListProductsResponse> finalResponseModel;
 
@@ -728,22 +846,21 @@ class BusinessProviders extends BaseProvider {
 
     return finalResponseModel;
   }
-  Future<ResponseModel<ListByProductsResponse>> getListByProducts(
-      {
-        required int page ,
-        required int limit ,
-        required String categoryId ,
-        required String searchValue ,
-        required BuildContext context,
-      }) async {
 
+  Future<ResponseModel<ListByProductsResponse>> getListByProducts({
+    required int page,
+    required int limit,
+    required String categoryId,
+    required String searchValue,
+    required BuildContext context,
+  }) async {
     final responseModel = await performApiCallWithHandling(
         () => businessRepo.getListByProducts(
-          page: page,
-          limit: limit,
-          searchValue: searchValue,
-            categoryId: categoryId
-        ), context);
+            page: page,
+            limit: limit,
+            searchValue: searchValue,
+            categoryId: categoryId),
+        context);
 
     ResponseModel<ListByProductsResponse> finalResponseModel;
 
@@ -758,20 +875,21 @@ class BusinessProviders extends BaseProvider {
 
     return finalResponseModel;
   }
-  Future<ResponseModel<GetBatchesListResponse>> getApprovedAddStockBatchesByBranch(
-      {
-        required int page ,
-        required int limit ,
-        required String searchValue ,
-        required BuildContext context,
-      }) async {
 
+  Future<ResponseModel<GetBatchesListResponse>>
+      getApprovedAddStockBatchesByBranch({
+    required int page,
+    required int limit,
+    required String searchValue,
+    required BuildContext context,
+  }) async {
     final responseModel = await performApiCallWithHandling(
         () => businessRepo.getApprovedAddStockBatchesByBranch(
-          page: page,
-          limit: limit,
-          searchValue: searchValue,
-        ), context);
+              page: page,
+              limit: limit,
+              searchValue: searchValue,
+            ),
+        context);
 
     ResponseModel<GetBatchesListResponse> finalResponseModel;
 
@@ -786,20 +904,20 @@ class BusinessProviders extends BaseProvider {
 
     return finalResponseModel;
   }
-  Future<ResponseModel<GetBatchesListResponse>> getApprovedBatchesByBranch(
-      {
-        required int page ,
-        required int limit ,
-        required String searchValue ,
-        required BuildContext context,
-      }) async {
 
+  Future<ResponseModel<GetBatchesListResponse>> getApprovedBatchesByBranch({
+    required int page,
+    required int limit,
+    required String searchValue,
+    required BuildContext context,
+  }) async {
     final responseModel = await performApiCallWithHandling(
         () => businessRepo.getApprovedBatchesByBranch(
-          page: page,
-          limit: limit,
-          searchValue: searchValue,
-        ), context);
+              page: page,
+              limit: limit,
+              searchValue: searchValue,
+            ),
+        context);
 
     ResponseModel<GetBatchesListResponse> finalResponseModel;
 
@@ -814,20 +932,21 @@ class BusinessProviders extends BaseProvider {
 
     return finalResponseModel;
   }
-  Future<ResponseModel<GetBatchesListResponse>> getPendingAddStockBatchesByBranch(
-      {
-        required int page ,
-        required int limit ,
-        required String searchValue ,
-        required BuildContext context,
-      }) async {
 
+  Future<ResponseModel<GetBatchesListResponse>>
+      getPendingAddStockBatchesByBranch({
+    required int page,
+    required int limit,
+    required String searchValue,
+    required BuildContext context,
+  }) async {
     final responseModel = await performApiCallWithHandling(
         () => businessRepo.getPendingAddStockBatchesByBranch(
-          page: page,
-          limit: limit,
-          searchValue: searchValue,
-        ), context);
+              page: page,
+              limit: limit,
+              searchValue: searchValue,
+            ),
+        context);
 
     ResponseModel<GetBatchesListResponse> finalResponseModel;
 
@@ -842,20 +961,20 @@ class BusinessProviders extends BaseProvider {
 
     return finalResponseModel;
   }
-  Future<ResponseModel<GetBatchesListResponse>> getPendingBatchesByBranch(
-      {
-        required int page ,
-        required int limit ,
-        required String searchValue ,
-        required BuildContext context,
-      }) async {
 
+  Future<ResponseModel<GetBatchesListResponse>> getPendingBatchesByBranch({
+    required int page,
+    required int limit,
+    required String searchValue,
+    required BuildContext context,
+  }) async {
     final responseModel = await performApiCallWithHandling(
         () => businessRepo.getPendingBatchesByBranch(
-          page: page,
-          limit: limit,
-          searchValue: searchValue,
-        ), context);
+              page: page,
+              limit: limit,
+              searchValue: searchValue,
+            ),
+        context);
 
     ResponseModel<GetBatchesListResponse> finalResponseModel;
 
@@ -871,85 +990,80 @@ class BusinessProviders extends BaseProvider {
     return finalResponseModel;
   }
 
-  Future<ResponseModel<GetAllActiveStockResponse>> getAllActiveStock(
-      {
-        required int page ,
-        required int limit ,
-        required String categoryId ,
-        required String searchValue ,
-        required BuildContext context,
-        required bool showStockDashboard,
-      }) async {
-
+  Future<ResponseModel<GetAllActiveStockResponse>> getAllActiveStock({
+    required int page,
+    required int limit,
+    required String categoryId,
+    required String searchValue,
+    required BuildContext context,
+    required bool showStockDashboard,
+  }) async {
     final responseModel = await performApiCallWithHandling(
         () => businessRepo.getAllActiveStock(
-          page: page,
-          limit: limit,
-          searchValue: searchValue,
+            page: page,
+            limit: limit,
+            searchValue: searchValue,
             categoryId: categoryId,
-            showStockDashboard:showStockDashboard
-        ), context);
+            showStockDashboard: showStockDashboard),
+        context);
 
     ResponseModel<GetAllActiveStockResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
-      finalResponseModel = ResponseModel<GetAllActiveStockResponse>(
-          true, responseModel.message!, GetAllActiveStockResponse.fromJson(map));
+      finalResponseModel = ResponseModel<GetAllActiveStockResponse>(true,
+          responseModel.message!, GetAllActiveStockResponse.fromJson(map));
     } else {
-      finalResponseModel =
-          ResponseModel<GetAllActiveStockResponse>(false, responseModel.message!);
+      finalResponseModel = ResponseModel<GetAllActiveStockResponse>(
+          false, responseModel.message!);
     }
 
     return finalResponseModel;
   }
 
-  Future<ResponseModel<GetActiveStockTakeResponse>> getListStockTake(
-      {
-        required int page ,
-        required int limit ,
-        required String categoryId ,
-        required String searchValue ,
-        required BuildContext context,
-      }) async {
-
+  Future<ResponseModel<GetActiveStockTakeResponse>> getListStockTake({
+    required int page,
+    required int limit,
+    required String categoryId,
+    required String searchValue,
+    required BuildContext context,
+  }) async {
     final responseModel = await performApiCallWithHandling(
         () => businessRepo.getListStockTake(
-          page: page,
-          limit: limit,
-          searchValue: searchValue,
-            categoryId: categoryId,
-        ), context);
+              page: page,
+              limit: limit,
+              searchValue: searchValue,
+              categoryId: categoryId,
+            ),
+        context);
 
     ResponseModel<GetActiveStockTakeResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
-      finalResponseModel = ResponseModel<GetActiveStockTakeResponse>(
-          true, responseModel.message!, GetActiveStockTakeResponse.fromJson(map));
+      finalResponseModel = ResponseModel<GetActiveStockTakeResponse>(true,
+          responseModel.message!, GetActiveStockTakeResponse.fromJson(map));
     } else {
-      finalResponseModel =
-          ResponseModel<GetActiveStockTakeResponse>(false, responseModel.message!);
+      finalResponseModel = ResponseModel<GetActiveStockTakeResponse>(
+          false, responseModel.message!);
     }
 
     return finalResponseModel;
   }
 
-
-  Future<ResponseModel<StockBatchDetail>> getAddStockProductsBatch(
-      {
-        required int page ,
-        required int limit ,
-        required BuildContext context,
-        required Map<String, dynamic> requestData,
-      }) async {
-
+  Future<ResponseModel<StockBatchDetail>> getAddStockProductsBatch({
+    required int page,
+    required int limit,
+    required BuildContext context,
+    required Map<String, dynamic> requestData,
+  }) async {
     final responseModel = await performApiCallWithHandling(
         () => businessRepo.getAddStockProductsBatch(
-          page: page,
-          limit: limit,
-            requestData: requestData,
-        ), context);
+              page: page,
+              limit: limit,
+              requestData: requestData,
+            ),
+        context);
 
     ResponseModel<StockBatchDetail> finalResponseModel;
 
@@ -965,21 +1079,19 @@ class BusinessProviders extends BaseProvider {
     return finalResponseModel;
   }
 
-
-  Future<ResponseModel<StockBatchDetail>> getAddStockPendingProductsBatch(
-      {
-        required int page ,
-        required int limit ,
-        required BuildContext context,
-        required Map<String, dynamic> requestData,
-      }) async {
-
+  Future<ResponseModel<StockBatchDetail>> getAddStockPendingProductsBatch({
+    required int page,
+    required int limit,
+    required BuildContext context,
+    required Map<String, dynamic> requestData,
+  }) async {
     final responseModel = await performApiCallWithHandling(
         () => businessRepo.getAddStockPendingProductsBatch(
-          page: page,
-          limit: limit,
-            requestData: requestData,
-        ), context);
+              page: page,
+              limit: limit,
+              requestData: requestData,
+            ),
+        context);
 
     ResponseModel<StockBatchDetail> finalResponseModel;
 
@@ -995,12 +1107,10 @@ class BusinessProviders extends BaseProvider {
     return finalResponseModel;
   }
 
-  Future<ResponseModel<FindProductsResponse>> getProductById(
-      {
-        required Map<String, dynamic> requestData,
-        required BuildContext context,
-      }) async {
-
+  Future<ResponseModel<FindProductsResponse>> getProductById({
+    required Map<String, dynamic> requestData,
+    required BuildContext context,
+  }) async {
     final responseModel = await performApiCallWithHandling(
         () => businessRepo.getProductById(requestData: requestData), context);
 
@@ -1013,6 +1123,27 @@ class BusinessProviders extends BaseProvider {
     } else {
       finalResponseModel =
           ResponseModel<FindProductsResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
+  Future<ResponseModel<GetCustomerByNumberResponse>> getCustomerByNumber({
+    required String customerNumber,
+    required BuildContext context,
+  }) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.getCustomerByNumber(customerNumber: customerNumber), context);
+
+    ResponseModel<GetCustomerByNumberResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<GetCustomerByNumberResponse>(
+          true, responseModel.message!, GetCustomerByNumberResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<GetCustomerByNumberResponse>(false, responseModel.message!);
     }
 
     return finalResponseModel;

@@ -27,16 +27,53 @@ class _StockTakeBatchTabsPageState extends State<StockTakeBatchTabsPage> {
           children: [
             const SizedBox(height: 4),
             // Tabs
+            // Example 1: Original 2-tab version (still works as before)
+            // CustomTabSwitcher(
+            //   tabs: const ["Approved", "Pending"],
+            //   selectedIndex: selectedTab,
+            //   onTabSelected: (index) => setState(() => selectedTab = index),
+            // ),
+            
+            // Example 2: 3 tabs with individual colors
             CustomTabSwitcher(
               tabs: const ["Approved", "Pending"],
               selectedIndex: selectedTab,
               onTabSelected: (index) => setState(() => selectedTab = index),
+              // selectedTabColors: const [
+              //   Colors.green,      // Approved tab color
+              //   Colors.orange,     // Pending tab color
+              //   // Colors.red,        // Rejected tab color
+              // ],
+              // selectedTextColors: const [
+              //   Colors.white,      // Approved text color
+              //   Colors.white,      // Pending text color
+              //   // Colors.white,      // Rejected text color
+              // ],
+              // selectedBorderColors: const [
+              //   Colors.green,      // Approved border color
+              //   Colors.orange,     // Pending border color
+              //   // Colors.red,        // Rejected border color
+              // ],
             ),
+            
+            // Example 3: Mixed approach - some tabs with custom colors, others use default
+            // CustomTabSwitcher(
+            //   tabs: const ["Active", "Inactive", "Draft"],
+            //   selectedIndex: selectedTab,
+            //   onTabSelected: (index) => setState(() => selectedTab = index),
+            //   selectedTabColors: const [
+            //     Colors.blue,       // Active tab - custom color
+            //     Colors.grey,       // Inactive tab - custom color
+            //     // Draft tab will use default selectedTabColor (Colors.white)
+            //   ],
+            // ),
             const SizedBox(height: 16),
             Expanded(
               child: selectedTab == 0
                   ? const StockTakeApprovedBatchPage()
-                  : const StockTakePendingBatchPage(),
+                  : selectedTab == 1
+                      ? const StockTakePendingBatchPage()
+                      : const Text("Rejected"),
             ),
           ],
         )

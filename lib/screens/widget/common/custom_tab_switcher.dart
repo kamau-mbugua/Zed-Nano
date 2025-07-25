@@ -16,6 +16,9 @@ class CustomTabSwitcher extends StatelessWidget {
   final double? fontSize;
   final FontWeight? fontWeight;
   final String? fontFamily;
+  final List<Color>? selectedTabColors;
+  final List<Color>? selectedBorderColors;
+  final List<Color>? selectedTextColors;
 
   const CustomTabSwitcher({
     Key? key,
@@ -34,6 +37,9 @@ class CustomTabSwitcher extends StatelessWidget {
     this.fontSize = 12,
     this.fontWeight = FontWeight.w600,
     this.fontFamily = 'Poppins',
+    this.selectedTabColors,
+    this.selectedBorderColors,
+    this.selectedTextColors,
   }) : super(key: key);
 
   @override
@@ -59,16 +65,36 @@ class CustomTabSwitcher extends StatelessWidget {
 
   Expanded _buildTab(String title, int index) {
     final isSelected = selectedIndex == index;
+    
+    // Get individual colors for this tab, or fall back to default colors
+    final tabColor = isSelected 
+        ? (selectedTabColors != null && index < selectedTabColors!.length
+            ? selectedTabColors![index]
+            : selectedTabColor)
+        : Colors.transparent;
+        
+    final borderColor = isSelected 
+        ? (selectedBorderColors != null && index < selectedBorderColors!.length
+            ? selectedBorderColors![index]
+            : selectedBorderColor)
+        : null;
+        
+    final textColor = isSelected 
+        ? (selectedTextColors != null && index < selectedTextColors!.length
+            ? selectedTextColors![index]
+            : selectedTextColor)
+        : unselectedTextColor;
+    
     return Expanded(
       child: GestureDetector(
         onTap: () => onTabSelected(index),
         child: Container(
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: isSelected ? selectedTabColor : Colors.transparent,
+            color: tabColor,
             borderRadius: BorderRadius.circular(tabBorderRadius!),
-            border: isSelected
-                ? Border.all(color: selectedBorderColor!)
+            border: isSelected && borderColor != null
+                ? Border.all(color: borderColor)
                 : null,
           ),
           child: Text(
@@ -77,7 +103,7 @@ class CustomTabSwitcher extends StatelessWidget {
               fontSize: fontSize,
               fontWeight: fontWeight,
               fontFamily: fontFamily,
-              color: isSelected ? selectedTextColor : unselectedTextColor,
+              color: textColor,
             ),
             textAlign: TextAlign.center,
           ),

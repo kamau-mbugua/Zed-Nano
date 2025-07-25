@@ -105,6 +105,12 @@ extension StringValidationExtensions on String {
       return this;
     }
   }
+
+  //formatCurrency extension
+  String formatCurrency({String locale = 'en_KE'}) {
+    final formatter = NumberFormat("#,##0", locale);
+    return formatter.format(this);
+  }
 }
 
 

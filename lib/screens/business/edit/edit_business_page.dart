@@ -320,7 +320,6 @@ class _EditBusinessPageState extends State<EditBusinessPage> {
             LocationPickerField(
               controller: locationController,
               focusNode: _locationFocusNode,
-              apiKey: '',
               label: 'Location',
               onLocationSelected: (location) {
                 setState(() {

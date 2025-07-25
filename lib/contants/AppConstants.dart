@@ -41,6 +41,7 @@ class AppConstants{
   static const String updateProduct = 'api/updateProduct';
   static const String updateBusinessInfo = 'api/updateBusiness';
   static const String createProduct = 'api/createProduct';
+  static const String createCustomer = 'api/addCustomer';
   static const String createBillingInvoice = 'api/v1/billing/businesss/createbilling-invoice';
   static const String enableCashPayment = 'api/activate_cash_payment';
   static const String addStockRequest = 'api/addStockRequest';
@@ -55,9 +56,13 @@ class AppConstants{
   static const String uploadImage = 'api/v1/ecommerce/generate_file_system_url';
   static const String getPaymentMethodsWithStatus = 'api/get_payment_methods_with_status';
   static const String getListCategories = 'api/listCategories/Active';
+  static const String getListCustomers = 'api/customers_list';
+  static const String getCustomerTransactions = 'api/customerTransactions';
+  static const String getCustomerInvoices = 'api/get_user_invoices';
   static const String viewAllTransactions = 'viewAllTransactions';
   static const String getListProducts = 'api/listProducts/Active';
   static const String findProduct = 'api/findProduct';
+  static const String getCustomerByNumber = 'api/get_customer_by_number';
   static const String getListByProducts = 'api/listByProducts';
   static const String getApprovedAddStockBatchesByBranch = 'api/get_approved_add_stock_batches_by_branch';
   static const String getApprovedBatchesByBranch = 'api/get_approved_batches_by_branch';

@@ -84,6 +84,16 @@ class BusinessRepo{
       return ApiResponse.withError(ApiErrorHandler.handleError(e));
     }
   }
+  Future<ApiResponse> createCustomer({required Map<String, dynamic> requestData}) async {
+    try {
+      final response =
+      await dioClient!.post('${AppConstants.createCustomer}', data: requestData);
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
   Future<ApiResponse> createBillingInvoice({required Map<String, dynamic> requestData}) async {
     try {
       final response =
@@ -230,6 +240,53 @@ class BusinessRepo{
     try {
       final response =
       await dioClient!.get('${AppConstants.getListCategories}?page=$page&limit=$limit&searchValue=$searchValue&productService=$productService');
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
+  Future<ApiResponse> getListCustomers({
+    required int page ,
+    required int limit ,
+    required String searchValue ,
+    required String status ,
+    required String paymentType ,
+    required String customerType ,
+  }) async {
+    try {
+      final response =
+      await dioClient!.get('${AppConstants.getListCustomers}?page=$page&limit=$limit&searchValue=$searchValue&status=$status${paymentType.isNotEmpty ? '&paymentType=$paymentType' : ''}${customerType.isNotEmpty ? '&customerType=$customerType' : ''}');
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
+  Future<ApiResponse> getCustomerTransactions({
+    required int page ,
+    required int limit ,
+    required String searchValue ,
+    required String customerId ,
+  }) async {
+    try {
+      final response =
+      await dioClient!.get('${AppConstants.getCustomerTransactions}?page=$page&limit=$limit&searchValue=$searchValue${customerId.isNotEmpty ? '&customerId=$customerId' : ''}');
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
+  Future<ApiResponse> getCustomerInvoices({
+    required int page ,
+    required int limit ,
+    required String searchValue ,
+    required String customerId ,
+  }) async {
+    try {
+      final response =
+      await dioClient!.get('${AppConstants.getCustomerInvoices}?page=$page&limit=$limit&searchValue=$searchValue${customerId.isNotEmpty ? '&customerId=$customerId' : ''}');
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -573,6 +630,17 @@ class BusinessRepo{
       final productId = requestData['productId'];
       final response =
       await dioClient!.get('${AppConstants.findProduct}/$productId');
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
+
+  Future<ApiResponse> getCustomerByNumber({required String customerNumber}) async {
+    try {
+      final response =
+      await dioClient!.get('${AppConstants.getCustomerByNumber}?customerId=$customerNumber');
 
       return ApiResponse.withSuccess(response);
     } catch (e) {

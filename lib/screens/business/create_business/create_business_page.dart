@@ -282,7 +282,6 @@ class _CreateBusinessPageState extends State<CreateBusinessPage> {
             LocationPickerField(
               controller: locationController,
               focusNode: _locationFocusNode,
-              apiKey: '',
               label: 'Location',
               onLocationSelected: (location) {
                 setState(() {

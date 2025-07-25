@@ -113,6 +113,8 @@ Widget rfCommonCachedNetworkImage(
       bool usePlaceholderIfUrlEmpty = true,
       double? radius,
       Color? color,
+      double horizontalMargin = 0,
+      double verticalMargin = 0
     }) {
       if(url.isEmptyOrNull){
         return placeHolderWidget(height: height, width: width, fit: fit, alignment: alignment, radius: radius);
@@ -143,7 +145,14 @@ Widget rfCommonCachedNetworkImage(
         ),
       ),
     );
-  } else {
+  }else if (url.endsWith('.svg')) {
+    return SvgPicture.asset(
+      url,
+      width: width,
+      height: height,
+      fit: fit ?? BoxFit.cover, alignment: alignment ?? Alignment.center,
+    ).cornerRadiusWithClipRRect(radius ?? defaultRadius).paddingSymmetric(horizontal: horizontalMargin, vertical: verticalMargin);
+  }   else {
     return Image.asset(url, height: height, width: width, fit: fit, color: color, alignment: alignment ?? Alignment.center).cornerRadiusWithClipRRect(radius ?? defaultRadius);
   }
 }

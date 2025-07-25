@@ -96,9 +96,7 @@ class _ProductCategoriesTabState extends State<ProductCategoriesTab> {
           ),
         ),
       ),
-      body: !_isInitialized
-          ? const Center(child: CircularProgressIndicator())
-          : RefreshIndicator(
+      body:RefreshIndicator(
               onRefresh: () async {
                 await _paginationController.refresh();
               },
