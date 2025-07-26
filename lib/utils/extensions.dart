@@ -155,7 +155,20 @@ extension DateTimeFormatExtension on String {
       return this;
     }
   }
-  
+
+  /// Converts ISO date string (2025-07-05T13:16:48.063Z) to formatted date (05 July 2025 13:16)
+  String toFormattedDateTime() {
+    try {
+      final dateTime = DateTime.parse(this);
+      final formatter = DateFormat('dd MMMM yyyy HH:mm');
+      return formatter.format(dateTime);
+    } catch (e) {
+      // Return original string if parsing fails
+      return this;
+    }
+  }
+
+
   /// Converts ISO date string (2025-07-05T13:16:48.063Z) to formatted date with custom format
   String toCustomFormattedDate(String format) {
     try {

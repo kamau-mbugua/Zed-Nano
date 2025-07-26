@@ -1,10 +1,10 @@
 class CustomerTransactionsResponse {
   final String? status;
   final String? message;
-  final int? total;
+  final double? total;
   final int? count;
   final List<CustomerTransaction>? transaction;
-  final int? customerBalance;
+  final num? customerBalance;
 
   CustomerTransactionsResponse({
     this.status,
@@ -21,12 +21,12 @@ class CustomerTransactionsResponse {
     return CustomerTransactionsResponse(
       status: json['Status'] as String?,
       message: json['Message'] as String?,
-      total: json['total'] as int?,
-      count: json['count'] as int?,
+      total: (json['total'] as num?)?.toDouble(),
+      count: (json['count'] as num?)?.toInt(),
       transaction: (json['transaction'] as List<dynamic>?)
-          ?.map((e) => CustomerTransaction.fromJson(e as Map<String, dynamic>?))
+          ?.map((e) => CustomerTransaction.fromJson(e as Map<String, dynamic>))
           .toList(),
-      customerBalance: json['customerBalance'] as int?,
+      customerBalance: (json['customerBalance'] as num?)?.toDouble(),
     );
   }
 
@@ -45,18 +45,18 @@ class CustomerTransaction {
   final String? transactionNo;
   final String? transactionTime;
   final String? servedBy;
-  final int? noOfItems;
+  final double? noOfItems;
   final String? business;
-  final int? amount;
+  final double? amount;
   final String? approvedBy;
   final String? branchName;
   final String? customerName;
   final String? currency;
-  final int? customerBalance;
+  final double? customerBalance;
   final String? status;
-  final int? totalPaid;
-  final int? totalInvoices;
-  final int? totalOrder;
+  final double? totalPaid;
+  final double? totalInvoices;
+  final double? totalOrder;
 
   CustomerTransaction({
     this.transactionId,
@@ -77,26 +77,24 @@ class CustomerTransaction {
     this.totalOrder,
   });
 
-  factory CustomerTransaction.fromJson(Map<String, dynamic>? json) {
-    if (json == null) return CustomerTransaction();
-
+  factory CustomerTransaction.fromJson(Map<String, dynamic> json) {
     return CustomerTransaction(
       transactionId: json['transactionId'] as String?,
       transactionNo: json['transactionNo'] as String?,
       transactionTime: json['transactionTime'] as String?,
       servedBy: json['servedBy'] as String?,
-      noOfItems: json['noOfItems'] as int?,
+      noOfItems: (json['noOfItems'] as num?)?.toDouble(),
       business: json['business'] as String?,
-      amount: json['amount'] as int?,
+      amount: (json['amount'] as num?)?.toDouble(),
       approvedBy: json['approvedBy'] as String?,
       branchName: json['branchName'] as String?,
       customerName: json['customerName'] as String?,
       currency: json['currency'] as String?,
-      customerBalance: json['customerBalance'] as int?,
+      customerBalance: (json['customerBalance'] as num?)?.toDouble(),
       status: json['status'] as String?,
-      totalPaid: json['totalPaid'] as int?,
-      totalInvoices: json['totalInvoices'] as int?,
-      totalOrder: json['totalOrder'] as int?,
+      totalPaid: (json['totalPaid'] as num?)?.toDouble(),
+      totalInvoices: (json['totalInvoices'] as num?)?.toDouble(),
+      totalOrder: (json['totalOrder'] as num?)?.toDouble(),
     );
   }
 

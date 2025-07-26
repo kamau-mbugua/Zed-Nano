@@ -24,8 +24,6 @@ Widget listCustomersItemBuilder(Customer customer) {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
-                  width: 55,
-                  height: 55,
                   decoration: BoxDecoration(
                     color: Colors.grey[100],
                     borderRadius: BorderRadius.circular(8),
@@ -35,8 +33,8 @@ Widget listCustomersItemBuilder(Customer customer) {
                           ? customerIndividualIcon
                           : customerCompanyIcon,
                       fit: BoxFit.cover,
-                      height: 40,
-                      width: 40,
+                      height: 30,
+                      width: 30,
                       radius: 8
                   ),
                 ),

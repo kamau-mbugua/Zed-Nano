@@ -5,6 +5,8 @@ import 'package:zed_nano/providers/auth/authenticated_app_providers.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/routes/routes.dart';
 import 'package:zed_nano/screens/customers/customers_list_page.dart';
+import 'package:zed_nano/screens/orders/orders_list_main_page.dart';
+import 'package:zed_nano/screens/payments/list_payments_page.dart';
 import 'package:zed_nano/screens/stock/view_stock/view_stock_page.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
@@ -229,7 +231,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       ),
                       _buildSubMenuItem(
                         title: 'Orders',
-                        onTap: () => _navigateTo(context, '/pos'),
+                        onTap: () => OrdersListMainPage().launch(context),
                       ),
                       _buildSubMenuItem(
                         title: 'Receipts',
@@ -242,6 +244,12 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     ],
                   ),
                   
+                  // Users
+                  _buildMenuItem(
+                    title: 'Payment',
+                    iconPath: usersIcon,
+                    onTap: () => AddPaymentMethodScreen(isWorkFlow:false).launch(context),
+                  ),
                   // Users
                   _buildMenuItem(
                     title: 'Users',

@@ -33,7 +33,11 @@ class FilteredPaymentMethod {
 }
 
 class AddPaymentMethodScreen extends StatefulWidget {
-  const AddPaymentMethodScreen({super.key});
+
+  //add a defult isworkFlow to true
+  final bool isWorkFlow;
+
+  AddPaymentMethodScreen({super.key, this.isWorkFlow = true});
 
   @override
   State<AddPaymentMethodScreen> createState() => _AddPaymentMethodScreenState();
@@ -264,6 +268,7 @@ class _AddPaymentMethodScreenState extends State<AddPaymentMethodScreen> {
                   ),
             ),
             const SizedBox(height: 10),
+            if(widget.isWorkFlow)
             appButton(text: "Complete", onTap: () {
               Map<String, dynamic> requestData = {
                 "workflowState": "COMPLETE",

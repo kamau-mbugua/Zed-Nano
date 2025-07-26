@@ -4,12 +4,16 @@ import 'package:zed_nano/models/customers_list/CustomerListResponse.dart';
 import 'package:zed_nano/models/get_customer_by_number/CustomerListResponse.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/customers/details/customer_items_main_page.dart';
+import 'package:zed_nano/screens/sell/sell_page.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
+import 'package:zed_nano/screens/widget/common/bottom_sheet_helper.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
+import 'package:zed_nano/screens/widget/common/custom_dialog.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Images.dart';
 import 'package:zed_nano/utils/extensions.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class CustomerDetailsPage extends StatefulWidget {
   String? customerID;
@@ -49,12 +53,126 @@ class _CustomerDetailsPageState extends State<CustomerDetailsPage> {
       showCustomToast('Failed to load product details');
     }
   }
+  Future<void> activateCustomer() async {
+    try {
+      final response =
+      await getBusinessProvider(context).activateCustomer(customerNumber: widget.customerID!, context: context);
+
+      if (response.isSuccess) {
+        showCustomToast(response.message, isError: false);
+        await getCustomerByNumber();
+
+      } else {
+        showCustomToast(response.message ?? 'Failed to load product details');
+      }
+    } catch (e) {
+      showCustomToast('Failed to load product details');
+    }
+  }
+  Future<void> suspendCustomer() async {
+    try {
+      final response =
+      await getBusinessProvider(context).suspendCustomer(customerNumber: widget.customerID!, context: context);
+
+      if (response.isSuccess) {
+        showCustomToast(response.message, isError: false);
+        await getCustomerByNumber();
+
+      } else {
+        showCustomToast(response.message ?? 'Failed to load product details');
+      }
+    } catch (e) {
+      showCustomToast('Failed to load product details');
+    }
+  }
+
+  void _showSuspendCustomerBottomSheet() {
+    showCustomDialog(
+      context: context,
+      title: 'Suspend Customer?',
+      subtitle:
+      "Are you sure you want to suspend ${_cusomerData?.firstName}?",
+      negativeButtonText: 'Cancel',
+      positiveButtonText: 'Suspend',
+      onNegativePressed: () => Navigator.pop(context),
+      onPositivePressed: () async {
+        Navigator.pop(context); // Close dialog
+        await suspendCustomer();
+        },
+    );
+  }
+
+  void _showRestoreCustomerBottomSheet() {
+    showCustomDialog(
+      context: context,
+      title: 'Unsuspend Customer??',
+      subtitle:
+      "Are you sure you want to unsuspend ${_cusomerData?.firstName}? You’ll be able to create invoices and place orders for this customer.",
+      negativeButtonText: 'Cancel',
+      positiveButtonText: 'Unsuspend',
+      onNegativePressed: () => Navigator.pop(context),
+      onPositivePressed: () {
+        // Add subscription cancellation logic here
+        Navigator.pop(context); // Close dialog
+        Navigator.pop(context); // Return to previous screen
+      },
+    );
+  }
+
+  void _showAwaitingCustomerBottomSheet() {
+    showCustomDialog(
+      context: context,
+      title: 'Activate Customer?',
+      subtitle:
+      "Are you sure you want to activate ${_cusomerData?.firstName}?",
+      negativeButtonText: 'Cancel',
+      positiveButtonText: 'Activate',
+      onNegativePressed: () => Navigator.pop(context),
+      onPositivePressed: () async {
+        // Add subscription cancellation logic here
+        Navigator.pop(context); // Close dialog
+        await activateCustomer();
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const AuthAppBar(title: 'Customer Profile'),
+      appBar:  AuthAppBar(title: 'Customer Profile',
+        actions: [
+        TextButton(
+          onPressed: () {
+            if (_cusomerData?.status == 'Active') {
+              _showSuspendCustomerBottomSheet();
+              return;
+            }
+            if (_cusomerData?.status == 'Suspended') {
+              _showRestoreCustomerBottomSheet();
+              return;
+            }
+            if (_cusomerData?.status == 'Awaiting') {
+              _showAwaitingCustomerBottomSheet();
+              return;
+            }
+          },
+          child:  Text(
+            _cusomerData?.status == 'Active'
+                ? 'Suspend'
+                : _cusomerData?.status == 'Suspended'
+                ? 'Restore'
+                : _cusomerData?.status == 'Awaiting'
+                ? 'Activate' : '',
+            style: TextStyle(
+              color: accentRed,
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w500,
+              fontSize: 14,
+            ),
+          ),
+        ),
+      ],),
       body: RefreshIndicator(
         onRefresh: () async {
           await getCustomerByNumber();
@@ -75,6 +193,20 @@ class _CustomerDetailsPageState extends State<CustomerDetailsPage> {
           ).paddingSymmetric(horizontal: 18),
         ),
       ),
+      floatingActionButton: _cusomerData?.status == 'Active' 
+        ? FloatingActionButton(
+            onPressed: () async {
+              BottomSheetHelper.showCustomerOptionsBottomSheet(context, customerData: _cusomerData!);
+            },
+            backgroundColor: inactiveButton,
+            child: SvgPicture.asset(
+              fabMenuIcon,
+              width: 20,
+              height: 20,
+              colorFilter: const ColorFilter.mode(textPrimary, BlendMode.srcIn),
+            ),
+          )
+        : null,
     );
   }
   Widget _buildeCustomerItems(){
@@ -316,6 +448,7 @@ class _CustomerDetailsPageState extends State<CustomerDetailsPage> {
                           width: 20,
                           radius: 0
                       ),
+
                       10.width,
                       Text("Created on ${_cusomerData?.createdAt?.toFormattedDate() ?? 'N/A'}",
                           style: const TextStyle(
@@ -333,15 +466,30 @@ class _CustomerDetailsPageState extends State<CustomerDetailsPage> {
                 ]
               ),
             ),
-            rfCommonCachedNetworkImage(
-                _cusomerData?.customerType == 'Individual'
-                    ? customerIndividualIcon
-                    : customerCompanyIcon,
-                fit: BoxFit.cover,
-                height: 40,
-                width: 40,
-                radius: 8
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.grey[100],
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child:   rfCommonCachedNetworkImage(
+                  _cusomerData?.customerType == 'Individual'
+                      ? customerIndividualIcon
+                      : customerCompanyIcon,
+                  fit: BoxFit.cover,
+                  height: 40,
+                  width: 40,
+                  radius: 8
+              ),
             ),
+            // rfCommonCachedNetworkImage(
+            //     _cusomerData?.customerType == 'Individual'
+            //         ? customerIndividualIcon
+            //         : customerCompanyIcon,
+            //     fit: BoxFit.cover,
+            //     height: 40,
+            //     width: 40,
+            //     radius: 8
+            // ),
           ],
         ),
         16.height,

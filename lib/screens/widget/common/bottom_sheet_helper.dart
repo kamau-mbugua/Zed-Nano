@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:zed_nano/models/get_all_activeStock/GetAllActiveStockResponse.dart';
+import 'package:zed_nano/models/get_customer_by_number/CustomerListResponse.dart';
 import 'package:zed_nano/models/listStockTake/GetActiveStockTakeResponse.dart';
 import 'package:zed_nano/screens/business/bottomsheets/product_service_category_bottom_sheet.dart';
 import 'package:zed_nano/screens/business/bottomsheets/setup_bottom_sheet.dart';
+import 'package:zed_nano/screens/customers/details/bottomsheet/customer_options_bottom_sheet.dart';
+import 'package:zed_nano/screens/orders/bottomsheets/printing_options_bottom_sheet.dart';
 import 'package:zed_nano/screens/payments/bottomsheets/add_kcb_options_bottomsheet.dart';
 import 'package:zed_nano/screens/payments/bottomsheets/add_mpesa_options_bottomsheet.dart';
 import 'package:zed_nano/screens/stock/add_stock/addStock/steps/products/add_stock_product_bottom_sheet.dart';
@@ -23,6 +26,29 @@ class BottomSheetHelper {
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (context) => SetupStepBottomSheet(currentStep: currentStep),
+    );
+  }
+
+  static Future<void> showCustomerOptionsBottomSheet(
+    BuildContext context, {
+    required CustomerData customerData,
+  }) {
+    return showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => CustomerOptionsBottomSheet(customerData: customerData),
+    );
+  }
+  static Future<void> showPrintingOptionsBottomSheet(
+    BuildContext context, {
+    required String? printOrderInvoiceId,
+  }) {
+    return showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => PrintingOptionsBottomSheet(printOrderInvoiceId: printOrderInvoiceId),
     );
   }
 

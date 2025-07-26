@@ -152,6 +152,58 @@ Widget appButton(
   );
 }
 
+Widget appButtonWithIcon({
+  required String text,
+  required Function onTap,
+  String? iconPath, // SVG path
+  IconData? icon, // Regular Flutter icon
+  double? width,
+  bool isEnable = true,
+  bool iconOnRight = false, // Position icon on right side
+  double iconSize = 16,
+  Color? iconColor,
+  Color? backgroundColor,
+  Color? textColor,
+  required BuildContext context,
+}) {
+  Widget iconWidget = const SizedBox.shrink();
+  
+  if (iconPath != null) {
+    // SVG icon
+    iconWidget = SvgPicture.asset(
+      iconPath,
+      width: iconSize,
+      height: iconSize,
+      colorFilter: ColorFilter.mode(Colors.black,
+        BlendMode.srcIn,
+      ),
+    );
+  } else if (icon != null) {
+    // Regular Flutter icon
+    iconWidget = Icon(
+      icon,
+      size: iconSize,
+      color: iconColor ?? Colors.white,
+    );
+  }
+
+  return Container(
+    width: width ?? context.width() - 32,
+    height: 50,
+    child: ElevatedButton(
+      onPressed: isEnable ? () => onTap() : null,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: inactiveButton,
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppCommonRadius),
+        ),
+      ),
+      child:  Center(child: iconWidget),
+    ),
+  );
+}
+
 Widget outlineButton(
     {required String text,
     required Function onTap,

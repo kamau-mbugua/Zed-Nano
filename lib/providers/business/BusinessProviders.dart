@@ -11,6 +11,7 @@ import 'package:zed_nano/models/createProduct/CreateProductResponse.dart';
 import 'package:zed_nano/models/createbillingInvoice/CreateBillingInvoiceResponse.dart';
 import 'package:zed_nano/models/customerTransactions/CustomerTransactionsResponse.dart';
 import 'package:zed_nano/models/customers_list/CustomerListResponse.dart';
+import 'package:zed_nano/models/fetchByStatus/OrderResponse.dart';
 import 'package:zed_nano/models/findProduct/FindProductResponse.dart';
 import 'package:zed_nano/models/getVariablePriceStatus/GetVariablePriceStatusResponse.dart';
 import 'package:zed_nano/models/get_add_stock_products_batch/StockBatchDetail.dart';
@@ -27,6 +28,7 @@ import 'package:zed_nano/models/listProducts/ListProductsResponse.dart';
 import 'package:zed_nano/models/listStockTake/GetActiveStockTakeResponse.dart';
 import 'package:zed_nano/models/listbillingplan_packages/BillingPlanPackagesResponse.dart';
 import 'package:zed_nano/models/listsubscribed_billing_plans/SubscribedBillingPlansResponse.dart';
+import 'package:zed_nano/models/order_payment_status/OrderDetailResponse.dart';
 import 'package:zed_nano/models/pushstk/PushStkResponse.dart';
 import 'package:zed_nano/models/unitofmeasure/UnitOfMeasureResponse.dart';
 import 'package:zed_nano/models/viewAllTransactions/TransactionListResponse.dart';
@@ -786,6 +788,43 @@ class BusinessProviders extends BaseProvider {
 
     return finalResponseModel;
   }
+  Future<ResponseModel<OrderResponse>> fetchByStatus({
+    required int page,
+    required int limit,
+    required String searchValue,
+    required String status ,
+    required String startDate,
+    required String endDate,
+    required String customerId,
+    required String cashier,
+    required BuildContext context,
+  }) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.fetchByStatus(
+              page: page,
+              limit: limit,
+              searchValue: searchValue,
+              status: status,
+              startDate: startDate,
+              endDate: endDate,
+              cashier: cashier,
+          customerId: customerId,
+            ),
+        context);
+
+    ResponseModel<OrderResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<OrderResponse>(
+          true, responseModel.message!, OrderResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<OrderResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
 
   Future<ResponseModel<TransactionListResponse>> viewAllTransactions({
     required int page,
@@ -1144,6 +1183,90 @@ class BusinessProviders extends BaseProvider {
     } else {
       finalResponseModel =
           ResponseModel<GetCustomerByNumberResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
+  Future<ResponseModel<OrderDetailResponse>> getOrderPaymentStatus({
+    required Map<String, dynamic> requestData,
+    required BuildContext context,
+  }) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.getOrderPaymentStatus(requestData: requestData), context);
+
+    ResponseModel<OrderDetailResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<OrderDetailResponse>(
+          true, responseModel.message!, OrderDetailResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<OrderDetailResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
+  Future<ResponseModel<CommonResponse>> cancelPushyTransaction({
+    required String? orderId,
+    required BuildContext context,
+  }) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.cancelPushyTransaction(orderId: orderId), context);
+
+    ResponseModel<CommonResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<CommonResponse>(
+          true, responseModel.message!, CommonResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<CommonResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
+  Future<ResponseModel<CommonResponse>> activateCustomer({
+    required String customerNumber,
+    required BuildContext context,
+  }) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.activateCustomer(customerNumber: customerNumber), context);
+
+    ResponseModel<CommonResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<CommonResponse>(
+          true, responseModel.message!, CommonResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<CommonResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
+  Future<ResponseModel<CommonResponse>> suspendCustomer({
+    required String customerNumber,
+    required BuildContext context,
+  }) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.suspendCustomer(customerNumber: customerNumber), context);
+
+    ResponseModel<CommonResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<CommonResponse>(
+          true, responseModel.message!, CommonResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<CommonResponse>(false, responseModel.message!);
     }
 
     return finalResponseModel;

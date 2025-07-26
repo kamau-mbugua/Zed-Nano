@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/utils/Colors.dart';
 
 class FilterRowWidget extends StatelessWidget {
@@ -34,14 +35,14 @@ class FilterRowWidget extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _buildFilterButton(
+          buildFilterButton(
             text: leftButtonText,
             isActive: leftButtonIsActive,
             onTap: leftButtonOnTap,
             icon: leftButtonIcon,
             showArrow: showLeftButtonArrow,
           ),
-          _buildFilterButton(
+          buildFilterButton(
             text: rightButtonText,
             isActive: rightButtonIsActive,
             onTap: rightButtonOnTap,
@@ -51,61 +52,70 @@ class FilterRowWidget extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget _buildFilterButton({
-    required String text,
-    required bool isActive,
-    required VoidCallback onTap,
-    IconData? icon,
-    bool showArrow = true,
-  }) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(16),
-      child: Container(
-        height: 40,
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: isActive ? appThemePrimary : innactiveBorder,
-            width: isActive ? 1.5 : 1,
-          ),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                if (icon != null) ...[
-                  Icon(
-                    icon,
-                    size: 16,
-                    color: isActive ? appThemePrimary : Colors.grey.shade600,
-                  ),
-                  const SizedBox(width: 8),
-                ],
-                Text(
-                  text,
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontFamily: 'Poppins',
-                    color: isActive ? appThemePrimary : Colors.grey.shade800,
-                    fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
-                  ),
-                ),
-              ],
-            ),
-            if (showArrow)
-              Icon(
-                Icons.keyboard_arrow_down,
-                size: 16,
-                color: isActive ? appThemePrimary : Colors.grey.shade600,
-              ),
-          ],
+
+Widget buildFilterButton({
+  required String text,
+  required bool isActive,
+  required VoidCallback onTap,
+  IconData? icon,
+  bool showArrow = true,
+  bool showTrailingText = false,
+  Widget trailingWidget = const SizedBox(),
+}) {
+  return InkWell(
+    onTap: onTap,
+    borderRadius: BorderRadius.circular(16),
+    child: Container(
+      height: 40,
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: isActive ? appThemePrimary : innactiveBorder,
+          width: isActive ? 1.5 : 1,
         ),
       ),
-    );
-  }
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              if (icon != null) ...[
+                Icon(
+                  icon,
+                  size: 16,
+                  color: isActive ? appThemePrimary : Colors.grey.shade600,
+                ),
+                const SizedBox(width: 8),
+              ],
+              Text(
+                text,
+                style: TextStyle(
+                  fontSize: 12,
+                  fontFamily: 'Poppins',
+                  color: isActive ? appThemePrimary : Colors.grey.shade800,
+                  fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
+                ),
+              ),
+            ],
+          ),
+          if (showArrow)
+            Row(
+              children: [
+                if (showTrailingText)trailingWidget,
+                16.width,
+                Icon(
+                  Icons.keyboard_arrow_down,
+                  size: 16,
+                  color: isActive ? appThemePrimary : Colors.grey.shade600,
+                ),
+              ],
+            )
+        ],
+      ),
+    ),
+  );
 }

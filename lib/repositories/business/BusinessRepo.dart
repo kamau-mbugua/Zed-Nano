@@ -434,6 +434,49 @@ class BusinessRepo{
       return ApiResponse.withError(ApiErrorHandler.handleError(e));
     }
   }
+  Future<ApiResponse> fetchByStatus({
+    required int page ,
+    required int limit ,
+    required String searchValue ,
+    required String status ,
+    required String startDate,
+    required String endDate,
+    required String customerId,
+    required String cashier,
+  }) async {
+    try {
+      // Validate parameters
+      if (page < 1) page = 1;
+      if (limit < 1) limit = 10;
+
+      // Clean search value and categoryId to avoid null/undefined issues
+      final cleanSearchValue = searchValue.trim();
+
+      // Build query parameters map for better URL encoding
+      final queryParams = <String, dynamic>{
+        'page': page,
+        'limit': limit,
+        'search': cleanSearchValue,
+        'status': status,
+        'startDate': startDate,
+        'endDate': endDate,
+        'customerId': customerId,
+        'cashier': cashier,
+      };
+
+      print('🔍 Making API call with params: $queryParams');
+
+      final response = await dioClient!.get(
+        AppConstants.fetchByStatus,
+        queryParameters: queryParams,
+      );
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      print('🔍 BusinessRepo.getAllActiveStock error: $e');
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
   Future<ApiResponse> getListStockTake({
     required int page ,
     required int limit ,
@@ -641,6 +684,50 @@ class BusinessRepo{
     try {
       final response =
       await dioClient!.get('${AppConstants.getCustomerByNumber}?customerId=$customerNumber');
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
+
+  Future<ApiResponse> getOrderPaymentStatus({required Map<String, dynamic> requestData}) async {
+    try {
+      final response =
+      await dioClient!.post('${AppConstants.getOrderPaymentStatus}', data: requestData);
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
+
+  Future<ApiResponse> cancelPushyTransaction({required String? orderId}) async {
+    try {
+      final response =
+      await dioClient!.put('${AppConstants.cancelPushyTransaction}?_id=$orderId');
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
+
+  Future<ApiResponse> activateCustomer({required String customerNumber}) async {
+    try {
+      final response =
+      await dioClient!.get('${AppConstants.activateCustomer}?customerId=$customerNumber');
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
+
+  Future<ApiResponse> suspendCustomer({required String customerNumber}) async {
+    try {
+      final response =
+      await dioClient!.get('${AppConstants.suspendCustomer}?customerId=$customerNumber');
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
