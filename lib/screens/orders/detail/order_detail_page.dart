@@ -4,6 +4,8 @@ import 'package:zed_nano/models/order_payment_status/OrderDetailResponse.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/orders/itemBuilder/order_item_builders.dart';
 import 'package:zed_nano/screens/orders/void_transaction/void_order_transaction_page.dart';
+import 'package:zed_nano/screens/payments/checkout_payment/check_out_payments_page.dart';
+import 'package:zed_nano/screens/sell/sell_stepper_page.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/bottom_sheet_helper.dart';
 import 'package:zed_nano/screens/widget/common/custom_dialog.dart';
@@ -189,6 +191,19 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                       VoidOrderTransactionPage(
                         orderId: widget.orderId
                       ).launch(context);
+                    }else{
+                      // Option 1: Navigate to checkout step (step 2, 0-indexed) with order ID
+                      SellStepperPage(
+                        initialStep: 2,
+                        initialStepData: {'orderId': widget.orderId},
+                      ).launch(context);
+                      
+                      // Option 2: Navigate directly to CheckOutPaymentsPage (uncomment if preferred)
+                      // CheckOutPaymentsPage(
+                      //   orderId: widget.orderId,
+                      //   onNext: () => Navigator.pop(context),
+                      //   onPrevious: () => Navigator.pop(context),
+                      // ).launch(context);
                     }
 
                   },

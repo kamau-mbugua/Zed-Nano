@@ -47,6 +47,12 @@ class ReusableStepperWidget extends StatefulWidget {
   /// Custom step titles (optional)
   final List<String>? stepTitles;
 
+  /// Data to be passed between steps
+  final Map<String, dynamic>? stepData;
+
+  /// Callback when step data changes
+  final Function(Map<String, dynamic>)? onStepDataChanged;
+
   const ReusableStepperWidget({
     Key? key,
     required this.steps,
@@ -62,6 +68,8 @@ class ReusableStepperWidget extends StatefulWidget {
     this.indicatorHeight,
     this.showStepNumbers = false,
     this.stepTitles,
+    this.stepData,
+    this.onStepDataChanged,
   }) : super(key: key);
 
   @override
@@ -70,11 +78,13 @@ class ReusableStepperWidget extends StatefulWidget {
 
 class _ReusableStepperWidgetState extends State<ReusableStepperWidget> {
   late int currentStep;
+  late Map<String, dynamic> _stepData;
 
   @override
   void initState() {
     super.initState();
     currentStep = widget.initialStep;
+    _stepData = widget.stepData ?? {};
   }
 
   /// Navigate to next step
@@ -111,6 +121,19 @@ class _ReusableStepperWidgetState extends State<ReusableStepperWidget> {
       });
       widget.onStepChanged?.call(currentStep);
     }
+  }
+
+  // skip and close
+  void skipAndClose() {
+    widget.onCancelled?.call();
+  }
+
+  /// Update step data
+  void updateStepData(Map<String, dynamic> data) {
+    setState(() {
+      _stepData = data;
+    });
+    widget.onStepDataChanged?.call(data);
   }
 
   /// Build progress bar style indicator
@@ -212,7 +235,10 @@ class _ReusableStepperWidgetState extends State<ReusableStepperWidget> {
                   onPrevious: goToPreviousStep,
                   onGoToStep: goToStep,
                   currentStep: currentStep,
+                  skipAndClose: skipAndClose,
                   totalSteps: widget.steps.length,
+                  stepData: _stepData,
+                  updateStepData: updateStepData,
                 ),
               ),
             ),
@@ -230,6 +256,9 @@ class _StepperContent extends InheritedWidget {
   final Function(int) onGoToStep;
   final int currentStep;
   final int totalSteps;
+  final VoidCallback skipAndClose;
+  final Map<String, dynamic> stepData;
+  final Function(Map<String, dynamic>) updateStepData;
 
   const _StepperContent({
     required Widget child,
@@ -238,6 +267,9 @@ class _StepperContent extends InheritedWidget {
     required this.onGoToStep,
     required this.currentStep,
     required this.totalSteps,
+    required this.skipAndClose,
+    required this.stepData,
+    required this.updateStepData,
   }) : super(child: child);
 
   static _StepperContent? of(BuildContext context) {
@@ -246,7 +278,7 @@ class _StepperContent extends InheritedWidget {
 
   @override
   bool updateShouldNotify(_StepperContent oldWidget) {
-    return currentStep != oldWidget.currentStep;
+    return currentStep != oldWidget.currentStep || stepData != oldWidget.stepData;
   }
 }
 
@@ -267,6 +299,11 @@ class StepperController {
     stepperContent?.onGoToStep(step);
   }
 
+  static void skipAndClose(BuildContext context) {
+    final stepperContent = _StepperContent.of(context);
+    stepperContent?.skipAndClose();
+  }
+
   static int getCurrentStep(BuildContext context) {
     final stepperContent = _StepperContent.of(context);
     return stepperContent?.currentStep ?? 0;
@@ -284,5 +321,15 @@ class StepperController {
   static bool isLastStep(BuildContext context) {
     final stepperContent = _StepperContent.of(context);
     return stepperContent?.currentStep == (stepperContent?.totalSteps ?? 1) - 1;
+  }
+
+  static Map<String, dynamic> getStepData(BuildContext context) {
+    final stepperContent = _StepperContent.of(context);
+    return stepperContent?.stepData ?? {};
+  }
+
+  static void updateStepData(BuildContext context, Map<String, dynamic> data) {
+    final stepperContent = _StepperContent.of(context);
+    stepperContent?.updateStepData(data);
   }
 }

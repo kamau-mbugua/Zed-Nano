@@ -8,6 +8,7 @@ import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/screens/widget/common/heading.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
+import 'package:zed_nano/utils/extensions.dart';
 
 class CheckOutPaymentsPage extends StatefulWidget {
   final VoidCallback onNext;
@@ -23,6 +24,7 @@ class CheckOutPaymentsPage extends StatefulWidget {
 class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
 
   OrderDetail? orderDetail;
+  OrderDetailData? orderDetailData;
   List<String> paymentMethods = [];
   String selectedPayment = '';
 
@@ -35,7 +37,7 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
     super.initState();
     // Defer the first data fetch until after the build is complete
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      // getOrderPaymentStatus();
+      getOrderPaymentStatus();
       getPaymentMethodsStatusNoAuth();
     });
   }
@@ -52,6 +54,7 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
       if (response.isSuccess) {
         setState(() {
           orderDetail = response.data?.order;
+          orderDetailData = response.data?.data;
         });
       } else {
         showCustomToast(response.message ?? 'Failed to load product details');
@@ -80,6 +83,107 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
     } catch (e) {
       showCustomToast('Failed to load Order details');
     }
+  }
+
+  Future<void> doCashPayment() async {
+    List<String> orderId = [];
+    if (orderDetail?.id != null) {
+      orderId.add(orderDetail!.id!);
+    }
+
+    Map<String, dynamic> requestData = {
+      'billRefNo': orderDetail?.pushTransactionId,
+      'paymentChanel': "Mobile",
+      'transamount': orderDetailData?.deficit,
+      'pushyTransactionId': orderId,
+      'transactionType': "Cash Payment"
+    };
+
+    try {
+      final response =
+      await getBusinessProvider(context).doCashPayment(requestData: requestData, context: context);
+
+      if (response.isSuccess) {
+        showCustomToast(response.message, isError: false);
+        widget.onNext();
+      } else {
+        showCustomToast(response.message);
+      }
+    } catch (e) {
+      showCustomToast('Failed to load Order details');
+    }
+  }
+
+  Future<void> doMpesaPayment() async {
+    Map<String, dynamic> requestData = {
+      'billRefNo': orderDetail?.pushTransactionId,
+      'paymentChanel': "Mobile",
+      'transamount': orderDetailData?.deficit,
+      'pushyTransactionId': orderDetail?.id,
+      'transactionType': "Cash Payment"
+    };
+
+    // try {
+    //   final response =
+    //   await getBusinessProvider(context).doMpesaPayment(requestData: requestData, context: context);
+    //
+    //   if (response.isSuccess) {
+    //     showCustomToast(response.message, isError: false);
+    //     widget.onNext();
+    //   } else {
+    //     showCustomToast(response.message ?? 'Failed to load product details');
+    //   }
+    // } catch (e) {
+    //   showCustomToast('Failed to load Order details');
+    // }
+  }
+
+  Future<void> doKcbMpesaPayment() async {
+    Map<String, dynamic> requestData = {
+      'billRefNo': orderDetail?.pushTransactionId,
+      'paymentChanel': "Mobile",
+      'transamount': orderDetailData?.deficit,
+      'pushyTransactionId': orderDetail?.id,
+      'transactionType': "Cash Payment"
+    };
+
+    // try {
+    //   final response =
+    //   await getBusinessProvider(context).doKcbMpesaPayment(requestData: requestData, context: context);
+    //
+    //   if (response.isSuccess) {
+    //     showCustomToast(response.message, isError: false);
+    //     widget.onNext();
+    //   } else {
+    //     showCustomToast(response.message ?? 'Failed to load product details');
+    //   }
+    // } catch (e) {
+    //   showCustomToast('Failed to load Order details');
+    // }
+  }
+
+  Future<void> doCardPayment() async {
+    Map<String, dynamic> requestData = {
+      'billRefNo': orderDetail?.pushTransactionId,
+      'paymentChanel': "Mobile",
+      'transamount': orderDetailData?.deficit,
+      'pushyTransactionId': orderDetail?.id,
+      'transactionType': "Cash Payment"
+    };
+
+    // try {
+    //   final response =
+    //   await getBusinessProvider(context).doCardPayment(requestData: requestData, context: context);
+    //
+    //   if (response.isSuccess) {
+    //     showCustomToast(response.message, isError: false);
+    //     widget.onNext();
+    //   } else {
+    //     showCustomToast(response.message ?? 'Failed to load product details');
+    //   }
+    // } catch (e) {
+    //   showCustomToast('Failed to load Order details');
+    // }
   }
 
   @override
@@ -125,7 +229,16 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
       child: SafeArea(
         child: appButton(
           text: 'Pay Now',
-          onTap: () {
+          onTap: () async {
+            if (selectedPayment == 'cash') {
+              await doCashPayment();
+            }else if (selectedPayment == 'mpesa') {
+              await doMpesaPayment();
+            }else if (selectedPayment == 'kcbBankPaybill') {
+              await doKcbMpesaPayment();
+            }else if (selectedPayment == 'card') {
+              await doCardPayment();
+            }
 
           },
           context: context,
@@ -280,6 +393,32 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                const Text('Amount',
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      color: textSecondary,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                      fontStyle: FontStyle.normal,
+                      letterSpacing: 0.12,
+
+                    )
+                ),
+                Text("${orderDetail?.currency} ${orderDetailData?.deficit?.formatCurrency() ?? '0'}",
+                    style: const TextStyle(
+                      fontFamily: 'Poppins',
+                      color: textSecondary,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                      fontStyle: FontStyle.normal,
+                      letterSpacing: 0.12,
+                    )
+                )
+              ],
+            ).paddingSymmetric(vertical: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
                 const Text('No. of Items',
                     style: TextStyle(
                       fontFamily: 'Poppins',
@@ -309,7 +448,7 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
   PreferredSizeWidget _buildAppBar() {
     return AuthAppBar(
       title: 'Void Transaction',
-      onBackPressed: widget.onPrevious,
+      onBackPressed: widget.onNext,
     );
   }
 }

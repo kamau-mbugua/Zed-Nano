@@ -16,12 +16,26 @@ import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
 import 'package:zed_nano/utils/Images.dart';
 import 'package:zed_nano/utils/extensions.dart';
+import 'package:zed_nano/screens/widget/common/reusable_stepper_widget.dart'; // Import the StepperController
+
+
+//create an enum class for
+// - SaveOrder
+// - RequestPayment
+// - MoreOptions
+
+enum CreateOrderOption {
+  saveOrder,
+  requestPayment,
+  moreOptions,
+}
 
 class CartPreviewPage extends StatefulWidget {
   final String? customerId;
   final VoidCallback onNext;
   final VoidCallback onPrevious;
-  CartPreviewPage({Key? key, required this.onNext, required this.onPrevious, this.customerId}) : super(key: key);
+  final VoidCallback skipAndClose;
+  CartPreviewPage({Key? key, required this.onNext, required this.onPrevious, this.customerId, required this.skipAndClose}) : super(key: key);
 
   @override
   State<CartPreviewPage> createState() => _CartPreviewPageState();
@@ -36,7 +50,7 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
     super.dispose();
   }
 
-  Future<void> saveOrder() async {
+  Future<void> saveOrder(CreateOrderOption  createOrderOption) async {
     final cartViewModel = Provider.of<CartViewModel>(context, listen: false);
     final cartItems = cartViewModel.items;
     final subTotalAmount = cartViewModel.subTotalAmount;
@@ -76,7 +90,24 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
       if (value.isSuccess) {
         showCustomToast(value.message ?? 'Customer created successfully',
             isError: false);
-        Navigator.pop(context);
+        if (createOrderOption == CreateOrderOption.saveOrder) {
+          widget.skipAndClose();
+        }
+        if (createOrderOption == CreateOrderOption.requestPayment) {
+          // Pass the order ID to the stepper system
+          final orderId = value.data?.data?.id;
+          if (orderId != null) {
+            final currentStepData = StepperController.getStepData(context);
+            currentStepData['orderId'] = orderId;
+            StepperController.updateStepData(context, currentStepData);
+          }
+          widget.onNext();
+        }
+        if (createOrderOption == CreateOrderOption.moreOptions) {
+          widget.skipAndClose();
+          BottomSheetHelper.showPrintingOptionsBottomSheet(context, printOrderInvoiceId: value.data?.data?.id);
+        }
+        cartViewModel.clear();
       } else {
         showCustomToast(value.message ?? 'Something went wrong');
       }
@@ -229,7 +260,7 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
                 child: outlineButton(
                   text:'Save Order',
                   onTap: () async {
-                    await saveOrder();
+                    await saveOrder(CreateOrderOption.saveOrder);
 
                   },
                   context: context,
@@ -242,7 +273,9 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
               child: Visibility(
                 child: appButton(
                   text:'Request Payment',
-                  onTap: () {
+                  onTap: () async {
+                    await saveOrder(CreateOrderOption.requestPayment);
+
 
                   },
                   context: context,
@@ -256,7 +289,8 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
                 text: '',
                 iconPath: fabMenuIcon,
                 context: context,
-                onTap: () {
+                onTap: () async {
+                  await saveOrder(CreateOrderOption.moreOptions);
                   // BottomSheetHelper.showPrintingOptionsBottomSheet(context, printOrderInvoiceId: orderDetail?.id);
                 },
               ),

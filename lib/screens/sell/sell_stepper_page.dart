@@ -10,11 +10,13 @@ import 'package:zed_nano/models/createbillingInvoice/CreateBillingInvoiceRespons
 class SellStepperPage extends StatefulWidget {
   final int initialStep;
   final String? customerId;
+  final Map<String, dynamic>? initialStepData;
 
   const SellStepperPage({
     Key? key,
     this.initialStep = 0,
-    this.customerId
+    this.customerId,
+    this.initialStepData,
   }) : super(key: key);
 
   @override
@@ -23,6 +25,7 @@ class SellStepperPage extends StatefulWidget {
 
 class _SellStepperPageState extends State<SellStepperPage> {
   CreateBillingInvoiceResponse? invoiceData;
+  late Map<String, dynamic> stepData;
 
   void handleInvoiceCreated(CreateBillingInvoiceResponse invoice) {
     setState(() {
@@ -45,6 +48,18 @@ class _SellStepperPageState extends State<SellStepperPage> {
     Navigator.of(context).pop();
   }
 
+  void _onStepDataChanged(Map<String, dynamic> data) {
+    setState(() {
+      stepData = data;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    stepData = widget.initialStepData ?? {};
+  }
+
   @override
   Widget build(BuildContext context) {
     return ReusableStepperWidget(
@@ -52,6 +67,8 @@ class _SellStepperPageState extends State<SellStepperPage> {
       onStepChanged: _onStepChanged,
       onCompleted: _onCompleted,
       onCancelled: _onCancelled,
+      stepData: stepData,
+      onStepDataChanged: _onStepDataChanged,
       stepTitles: const [
         'Sell',
         'Preview',
@@ -60,7 +77,7 @@ class _SellStepperPageState extends State<SellStepperPage> {
       steps: [
         _SellPageWrapper(),
         _CartPreviewPageWrapper(customerId: widget.customerId),
-        _CheckOutPaymentsPageWrapper(),
+        _CheckOutPaymentsPageWrapper(orderId: stepData['orderId'] as String?),
       ],
     );
   }
@@ -87,17 +104,23 @@ class _CartPreviewPageWrapper extends StatelessWidget {
     return CartPreviewPage(
       onNext: () => StepperController.nextStep(context),
       onPrevious: () => StepperController.previousStep(context),
+      skipAndClose: () => StepperController.skipAndClose(context),
       customerId: customerId,
     );
   }
 }
 
 class _CheckOutPaymentsPageWrapper extends StatelessWidget {
+  final String? orderId;
+  
+  const _CheckOutPaymentsPageWrapper({Key? key, this.orderId}) : super(key: key);
+  
   @override
   Widget build(BuildContext context) {
     return CheckOutPaymentsPage(
       onNext: () => StepperController.nextStep(context),
       onPrevious: () => StepperController.previousStep(context),
+      orderId: orderId,
     );
   }
 }

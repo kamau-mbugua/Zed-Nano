@@ -12,7 +12,7 @@ class CreateOrderResponse {
   factory CreateOrderResponse.fromJson(Map<String, dynamic> json) => CreateOrderResponse(
     status: json['Status'] as String?,
     message: json['message'] as String?,
-    data: json['data'] != null ? TransactionData.fromJson(json['data'] as Map<String, dynamic>?) : null,
+    data: json['data'] != null ? TransactionData.fromJson(json['data'] as Map<String, dynamic>) : null,
   );
 }
 

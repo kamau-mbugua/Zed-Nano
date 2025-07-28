@@ -723,6 +723,18 @@ class BusinessRepo{
     }
   }
 
+
+  Future<ApiResponse> doCashPayment({required Map<String, dynamic> requestData}) async {
+    try {
+      final response =
+      await dioClient!.post('${AppConstants.doCashPayment}', data: requestData);
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
+
   Future<ApiResponse> cancelPushyTransaction({required String? orderId}) async {
     try {
       final response =

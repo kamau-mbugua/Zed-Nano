@@ -67,6 +67,7 @@ class AppConstants{
   static const String getCustomerByNumber = 'api/get_customer_by_number';
   static const String getOrderPaymentStatus = 'api/order_payment_status';
   static const String getPaymentMethodsStatusNoAuth = 'api/v1/payments/payment_methods_status_no_auth';
+  static const String doCashPayment = 'api/transactions/cashPayment';
   static const String cancelPushyTransaction = 'api/cancelPushyTransaction';
   static const String activateCustomer = 'api/activateCustomer';
   static const String suspendCustomer = 'api/suspendCustomer';

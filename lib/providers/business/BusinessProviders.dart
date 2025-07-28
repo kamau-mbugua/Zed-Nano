@@ -1252,6 +1252,27 @@ class BusinessProviders extends BaseProvider {
     return finalResponseModel;
   }
 
+  Future<ResponseModel<CheckoutPaymentResponse>> doCashPayment({
+    required Map<String, dynamic> requestData,
+    required BuildContext context,
+  }) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.doCashPayment(requestData: requestData), context);
+
+    ResponseModel<CheckoutPaymentResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<CheckoutPaymentResponse>(
+          true, responseModel.message!, CheckoutPaymentResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<CheckoutPaymentResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
   Future<ResponseModel<CommonResponse>> cancelPushyTransaction({
     required String? orderId,
     required BuildContext context,
