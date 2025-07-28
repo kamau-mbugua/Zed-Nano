@@ -187,3 +187,10 @@ extension CurrencyFormatter on num {
     return formatter.format(this);
   }
 }
+
+extension DoubleCurrencyFormatter on double {
+  String formatCurrency({String locale = 'en_KE'}) {
+    final formatter = NumberFormat("#,##0", locale);
+    return formatter.format(this);
+  }
+}

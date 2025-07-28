@@ -123,7 +123,10 @@ class BaseBottomSheet extends StatelessWidget {
               
               // Main content
               Expanded(
-                child: bodyContent,
+                child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: bodyContent,
+                ),
               ),
             ],
           ),

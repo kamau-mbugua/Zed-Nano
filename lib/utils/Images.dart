@@ -56,3 +56,4 @@ const phoneIconGray = 'assets/icons/phoneIcon.svg';
 const customerTransactionsIcon = 'assets/icons/customerTransactionsIcon.svg';
 const customersTranascionIcons = 'assets/icons/customersTranascionIcons.svg';
 const invoiceIcon = 'assets/icons/invoiceIcon.svg';
+const discountIcon = 'assets/icons/discountIcon.svg';

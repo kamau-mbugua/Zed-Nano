@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:zed_nano/models/get_all_activeStock/GetAllActiveStockResponse.dart';
 import 'package:zed_nano/models/get_customer_by_number/CustomerListResponse.dart';
+import 'package:zed_nano/models/listProducts/ListProductsResponse.dart';
 import 'package:zed_nano/models/listStockTake/GetActiveStockTakeResponse.dart';
 import 'package:zed_nano/screens/business/bottomsheets/product_service_category_bottom_sheet.dart';
 import 'package:zed_nano/screens/business/bottomsheets/setup_bottom_sheet.dart';
@@ -8,6 +9,7 @@ import 'package:zed_nano/screens/customers/details/bottomsheet/customer_options_
 import 'package:zed_nano/screens/orders/bottomsheets/printing_options_bottom_sheet.dart';
 import 'package:zed_nano/screens/payments/bottomsheets/add_kcb_options_bottomsheet.dart';
 import 'package:zed_nano/screens/payments/bottomsheets/add_mpesa_options_bottomsheet.dart';
+import 'package:zed_nano/screens/sell/bottomsheet/add_discount_bottom_sheet.dart';
 import 'package:zed_nano/screens/stock/add_stock/addStock/steps/products/add_stock_product_bottom_sheet.dart';
 import 'package:zed_nano/screens/stock/stock_take/addStockTake/steps/products/add_stock_take_product_bottom_sheet.dart';
 import 'package:zed_nano/screens/widget/common/base_bottom_sheet.dart';
@@ -49,6 +51,18 @@ class BottomSheetHelper {
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (context) => PrintingOptionsBottomSheet(printOrderInvoiceId: printOrderInvoiceId),
+    );
+  }
+
+  static Future<void> showAddDiscountBottomSheet(
+    BuildContext context, {
+    required ProductData? productData,
+  }) {
+    return showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => AddDiscountBottomSheet(productData: productData),
     );
   }
 

@@ -53,10 +53,10 @@ class RouterHelper {
     handlerFunc: (BuildContext? context, Map<String, List<String>> params) =>
         ResetPinScreen(),
   );
-  static final Handler _sellPageHandler = Handler(
-    handlerFunc: (BuildContext? context, Map<String, List<String>> params) =>
-        SellPage(),
-  );
+  // static final Handler _sellPageHandler = Handler(
+  //   handlerFunc: (BuildContext? context, Map<String, List<String>> params) =>
+  //       SellPage(),
+  // );
   static final Handler _setPinHandler = Handler(
     handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
       final settings = ModalRoute.of(context!)!.settings;
@@ -298,11 +298,11 @@ class RouterHelper {
       transitionType: TransitionType.fadeIn,
     );
 
-    router.define(
-      AppRoutes.sellPageRoute,
-      handler: _sellPageHandler,
-      transitionType: TransitionType.fadeIn,
-    );
+    // router.define(
+    //   AppRoutes.sellPageRoute,
+    //   handler: _sellPageHandler,
+    //   transitionType: TransitionType.fadeIn,
+    // );
 
     router.define(
       AppRoutes.listCategoriesRoute,

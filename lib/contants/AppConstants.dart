@@ -42,6 +42,7 @@ class AppConstants{
   static const String updateBusinessInfo = 'api/updateBusiness';
   static const String createProduct = 'api/createProduct';
   static const String createCustomer = 'api/addCustomer';
+  static const String createOrder = 'api/savePushy';
   static const String createBillingInvoice = 'api/v1/billing/businesss/createbilling-invoice';
   static const String enableCashPayment = 'api/activate_cash_payment';
   static const String addStockRequest = 'api/addStockRequest';
@@ -65,6 +66,7 @@ class AppConstants{
   static const String findProduct = 'api/findProduct';
   static const String getCustomerByNumber = 'api/get_customer_by_number';
   static const String getOrderPaymentStatus = 'api/order_payment_status';
+  static const String getPaymentMethodsStatusNoAuth = 'api/v1/payments/payment_methods_status_no_auth';
   static const String cancelPushyTransaction = 'api/cancelPushyTransaction';
   static const String activateCustomer = 'api/activateCustomer';
   static const String suspendCustomer = 'api/suspendCustomer';

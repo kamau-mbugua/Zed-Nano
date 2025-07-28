@@ -15,6 +15,7 @@ import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/routes/routes.dart';
 import 'package:zed_nano/screens/business/get_started_page.dart';
 import 'package:zed_nano/screens/business/bottomsheets/setup_bottom_sheet.dart';
+import 'package:zed_nano/screens/sell/sell_stepper_page.dart';
 import 'package:zed_nano/screens/widget/common/bottom_sheet_helper.dart';
 import 'package:zed_nano/screens/widget/common/custom_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
@@ -395,7 +396,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          Navigator.of(context).pushNamed(AppRoutes.getSellPageRoute());
+          SellStepperPage().launch(context);
         },
         label: const Text('Sell', style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white)),
         icon: const Icon(Icons.lock, color: Colors.white),

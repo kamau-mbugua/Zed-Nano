@@ -94,6 +94,16 @@ class BusinessRepo{
       return ApiResponse.withError(ApiErrorHandler.handleError(e));
     }
   }
+  Future<ApiResponse> createOrder({required Map<String, dynamic> requestData}) async {
+    try {
+      final response =
+      await dioClient!.post('${AppConstants.createOrder}', data: requestData);
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
   Future<ApiResponse> createBillingInvoice({required Map<String, dynamic> requestData}) async {
     try {
       final response =
@@ -695,6 +705,17 @@ class BusinessRepo{
     try {
       final response =
       await dioClient!.post('${AppConstants.getOrderPaymentStatus}', data: requestData);
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
+
+  Future<ApiResponse> getPaymentMethodsStatusNoAuth({required Map<String, dynamic> requestData}) async {
+    try {
+      final response =
+      await dioClient!.post('${AppConstants.getPaymentMethodsStatusNoAuth}', data: requestData);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {

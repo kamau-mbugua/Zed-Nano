@@ -7,6 +7,7 @@ import 'package:http_parser/http_parser.dart';
 import 'package:path/path.dart' as p;
 import 'package:zed_nano/models/branch-store-summary/BranchStoreSummaryResponse.dart';
 import 'package:zed_nano/models/createCategory/CreateCategoryResponse.dart';
+import 'package:zed_nano/models/savePushy/CreateOrderResponse.dart';
 import 'package:zed_nano/models/createProduct/CreateProductResponse.dart';
 import 'package:zed_nano/models/createbillingInvoice/CreateBillingInvoiceResponse.dart';
 import 'package:zed_nano/models/customerTransactions/CustomerTransactionsResponse.dart';
@@ -29,6 +30,7 @@ import 'package:zed_nano/models/listStockTake/GetActiveStockTakeResponse.dart';
 import 'package:zed_nano/models/listbillingplan_packages/BillingPlanPackagesResponse.dart';
 import 'package:zed_nano/models/listsubscribed_billing_plans/SubscribedBillingPlansResponse.dart';
 import 'package:zed_nano/models/order_payment_status/OrderDetailResponse.dart';
+import 'package:zed_nano/models/payment_methods_status_no_auth/CheckoutPaymentResponse.dart';
 import 'package:zed_nano/models/pushstk/PushStkResponse.dart';
 import 'package:zed_nano/models/unitofmeasure/UnitOfMeasureResponse.dart';
 import 'package:zed_nano/models/viewAllTransactions/TransactionListResponse.dart';
@@ -266,6 +268,26 @@ class BusinessProviders extends BaseProvider {
     } else {
       finalResponseModel =
           ResponseModel<CreateProductResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
+  Future<ResponseModel<CreateOrderResponse>> createOrder(
+      {required Map<String, dynamic> requestData,
+      required BuildContext context}) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.createOrder(requestData: requestData), context);
+
+    ResponseModel<CreateOrderResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<CreateOrderResponse>(
+          true, responseModel.message!, CreateOrderResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<CreateOrderResponse>(false, responseModel.message!);
     }
 
     return finalResponseModel;
@@ -1204,6 +1226,27 @@ class BusinessProviders extends BaseProvider {
     } else {
       finalResponseModel =
           ResponseModel<OrderDetailResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
+  Future<ResponseModel<CheckoutPaymentResponse>> getPaymentMethodsStatusNoAuth({
+    required Map<String, dynamic> requestData,
+    required BuildContext context,
+  }) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.getPaymentMethodsStatusNoAuth(requestData: requestData), context);
+
+    ResponseModel<CheckoutPaymentResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<CheckoutPaymentResponse>(
+          true, responseModel.message!, CheckoutPaymentResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<CheckoutPaymentResponse>(false, responseModel.message!);
     }
 
     return finalResponseModel;

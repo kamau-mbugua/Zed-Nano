@@ -52,6 +52,7 @@ class StyledTextField extends StatelessWidget {
         color: isActive ? Colors.white : Colors.grey.shade100,
       ),
       child: AppTextField(
+        key: prefixText.isNotEmpty ? ValueKey('textfield_$prefixText') : null,
         controller: controller,
         focus: focusNode,
         textFieldType: textFieldType,
@@ -93,14 +94,14 @@ class StyledTextField extends StatelessWidget {
           ),
           contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 16),
           counterText: showCounter ? null : '',
-          prefix: prefixText == '' ? null :  Container(
+          prefix: prefixText.isEmpty ? null : Container(
+            key: ValueKey('prefix_$prefixText'),
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
               color: lightGreyColor,
               borderRadius: BorderRadius.circular(10),
             ),
             child:Text("$prefixText ", style: boldTextStyle(size: 11)),
-
           )
         ),
       ),

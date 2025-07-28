@@ -4,6 +4,7 @@ import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/models/get_customer_by_number/CustomerListResponse.dart';
 import 'package:zed_nano/routes/routes.dart';
 import 'package:zed_nano/screens/sell/sell_page.dart';
+import 'package:zed_nano/screens/sell/sell_stepper_page.dart';
 import 'package:zed_nano/screens/widget/common/base_bottom_sheet.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
 
@@ -57,7 +58,7 @@ class CustomerOptionsBottomSheet extends StatelessWidget {
                     break;
                   case 'Place Order':
                     logger.d('Place Order' );
-                    const SellPage().launch(context);
+                    SellStepperPage(customerId: customerData!.id).launch(context);
                     break;
                   default:
                     break;
