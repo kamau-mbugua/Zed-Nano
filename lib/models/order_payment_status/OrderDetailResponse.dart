@@ -327,4 +327,25 @@ class OrderItem {
       currency: json['currency'] as String?,
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'itemAmount': itemAmount,
+      'itemCategory': itemCategory,
+      'itemCount': itemCount,
+      'itemName': itemName,
+      'orderNote': orderNote,
+      'reciptNumber': reciptNumber,
+      'totalAmount': totalAmount,
+      'productId': productId,
+      '_id': id,
+      'status': status,
+      'discount': discount,
+      'pumpId': pumpId,
+      'beneficiary': beneficiary,
+      'mileage': mileage,
+      'imagePath': imagePath,
+      'currency': currency,
+    };
+  }
 }

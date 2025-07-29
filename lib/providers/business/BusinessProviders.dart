@@ -9,7 +9,10 @@ import 'package:zed_nano/models/branch-store-summary/BranchStoreSummaryResponse.
 import 'package:zed_nano/models/branchTerminals/BranchTerminalsResponse.dart';
 import 'package:zed_nano/models/cashPayment/OrderCheckoutPaymentResponse.dart';
 import 'package:zed_nano/models/createCategory/CreateCategoryResponse.dart';
+import 'package:zed_nano/models/get_business_invoices_by_status/GetBusinessInvoicesByStatusResponse.dart';
 import 'package:zed_nano/models/get_business_roles/GetBusinessRolesResponse.dart';
+import 'package:zed_nano/models/get_invoice_by_invoice_number/GetInvoiceByInvoiceNumberResponse.dart';
+import 'package:zed_nano/models/get_invoice_receipt_payment_methods_no_login/GetInvoiceReceiptPaymentMethodsNoLoginResponse.dart';
 import 'package:zed_nano/models/listUsers/ListUsersResponse.dart';
 import 'package:zed_nano/models/savePushy/CreateOrderResponse.dart';
 import 'package:zed_nano/models/createProduct/CreateProductResponse.dart';
@@ -921,6 +924,43 @@ class BusinessProviders extends BaseProvider {
 
     return finalResponseModel;
   }
+  Future<ResponseModel<GetBusinessInvoicesByStatusResponse>> getBusinessInvoicesByStatus({
+    required int page,
+    required int limit,
+    required String searchValue,
+    required String status ,
+    required String startDate,
+    required String endDate,
+    required String customerId,
+    required String cashier,
+    required BuildContext context,
+  }) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.getBusinessInvoicesByStatus(
+              page: page,
+              limit: limit,
+              searchValue: searchValue,
+              status: status,
+              startDate: startDate,
+              endDate: endDate,
+              cashier: cashier,
+          customerId: customerId,
+            ),
+        context);
+
+    ResponseModel<GetBusinessInvoicesByStatusResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<GetBusinessInvoicesByStatusResponse>(
+          true, responseModel.message!, GetBusinessInvoicesByStatusResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<GetBusinessInvoicesByStatusResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
 
   Future<ResponseModel<TransactionListResponse>> viewAllTransactions({
     required int page,
@@ -1300,6 +1340,49 @@ class BusinessProviders extends BaseProvider {
     } else {
       finalResponseModel =
           ResponseModel<OrderDetailResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
+  Future<ResponseModel<GetInvoiceByInvoiceNumberResponse>> getInvoiceByInvoiceNumber({
+    required Map<String, dynamic> requestData,
+    required BuildContext context,
+  }) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.getInvoiceByInvoiceNumber(requestData: requestData), context);
+
+    ResponseModel<GetInvoiceByInvoiceNumberResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<GetInvoiceByInvoiceNumberResponse>(
+          true, responseModel.message!, GetInvoiceByInvoiceNumberResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<GetInvoiceByInvoiceNumberResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
+
+  Future<ResponseModel<GetInvoiceReceiptPaymentMethodsNoLoginResponse>> getInvoiceReceiptPaymentMethodsNoLogin({
+    required Map<String, dynamic> requestData,
+    required BuildContext context,
+  }) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.getInvoiceReceiptPaymentMethodsNoLogin(requestData: requestData), context);
+
+    ResponseModel<GetInvoiceReceiptPaymentMethodsNoLoginResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<GetInvoiceReceiptPaymentMethodsNoLoginResponse>(
+          true, responseModel.message!, GetInvoiceReceiptPaymentMethodsNoLoginResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<GetInvoiceReceiptPaymentMethodsNoLoginResponse>(false, responseModel.message!);
     }
 
     return finalResponseModel;

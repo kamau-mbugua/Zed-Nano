@@ -1,33 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:zed_nano/models/get_invoice_by_invoice_number/GetInvoiceByInvoiceNumberResponse.dart';
+import 'package:zed_nano/models/get_invoice_receipt_payment_methods_no_login/GetInvoiceReceiptPaymentMethodsNoLoginResponse.dart';
 import 'package:zed_nano/models/order_payment_status/OrderDetailResponse.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
+import 'package:zed_nano/screens/invoices/itemBuilders/invoices_item_builders.dart';
 import 'package:zed_nano/screens/orders/itemBuilder/order_item_builders.dart';
 import 'package:zed_nano/screens/orders/void_transaction/void_order_transaction_page.dart';
 import 'package:zed_nano/screens/payments/checkout_payment/check_out_payments_page.dart';
 import 'package:zed_nano/screens/sell/sell_stepper_page.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/bottom_sheet_helper.dart';
+import 'package:zed_nano/screens/widget/common/common_widgets.dart';
 import 'package:zed_nano/screens/widget/common/custom_dialog.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
+import 'package:zed_nano/screens/widget/common/heading.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
 import 'package:zed_nano/utils/Images.dart';
 import 'package:zed_nano/utils/extensions.dart';
 
-class OrderDetailPage extends StatefulWidget {
-  String? orderId;
+class InvoiceDetailPage extends StatefulWidget {
+  String? invoiceNumber;
 
-  OrderDetailPage({Key? key, this.orderId}) : super(key: key);
+  InvoiceDetailPage({Key? key, this.invoiceNumber}) : super(key: key);
 
   @override
-  _OrderDetailPageState createState() => _OrderDetailPageState();
+  _InvoiceDetailPageState createState() => _InvoiceDetailPageState();
 }
 
-class _OrderDetailPageState extends State<OrderDetailPage> {
-  OrderDetail? orderDetail;
-  List<OrderTransactionTotals>? orderTransactionTotals;
+class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
+  InvoiceDetail? getInvoiceByInvoiceNumberResponse;
+  List<PaymentReceipt>? paymentReceipt;
+
+  bool _isContactDetailsExpanded = false;
+
 
 
   @override
@@ -35,45 +43,71 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
     super.initState();
     // Defer the first data fetch until after the build is complete
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      getOrderPaymentStatus();
+      getInvoiceByInvoiceNumber();
     });
   }
 
-  Future<void> getOrderPaymentStatus() async {
+  Future<void> getInvoiceByInvoiceNumber() async {
     Map<String, dynamic> requestData = {
-      'pushyTransactionId': widget.orderId
+      'invoiceNumber': widget.invoiceNumber,
+      'businessNumber': getBusinessDetails(context)?.businessNumber,
+      'purchaseOrderNumber': '',
     };
 
     try {
       final response =
-      await getBusinessProvider(context).getOrderPaymentStatus(requestData: requestData, context: context);
+      await getBusinessProvider(context).getInvoiceByInvoiceNumber(requestData: requestData, context: context);
 
       if (response.isSuccess) {
         setState(() {
-          orderDetail = response.data?.order;
-          orderTransactionTotals = response.data?.transactionsList;
+          getInvoiceByInvoiceNumberResponse = response.data?.data;
+        });
+        if ((response.data?.data?.invoiceStatus?.toLowerCase() == 'paid') || response.data?.data?.invoiceStatus?.toLowerCase() == 'partial') {
+          await getInvoiceReceiptPaymentMethodsNoLogin();
+        }
+      } else {
+        showCustomToast(response.message ?? 'Failed to load product details');
+      }
+    } catch (e) {
+      showCustomToast('Failed to load Invoice details');
+    }
+  }
+
+  Future<void> getInvoiceReceiptPaymentMethodsNoLogin() async {
+    Map<String, dynamic> requestData = {
+      'invoiceNumber': widget.invoiceNumber,
+      'businessNumber': getBusinessDetails(context)?.businessNumber,
+    };
+
+    try {
+      final response =
+      await getBusinessProvider(context).getInvoiceReceiptPaymentMethodsNoLogin(requestData: requestData, context: context);
+
+      if (response.isSuccess) {
+        setState(() {
+          paymentReceipt = response.data?.data;
         });
       } else {
         showCustomToast(response.message ?? 'Failed to load product details');
       }
     } catch (e) {
-      showCustomToast('Failed to load Order details');
+      showCustomToast('Failed to load Invoice details');
     }
   }
 
   Future<void> cancelPushyTransaction() async {
     try {
       final response =
-      await getBusinessProvider(context).cancelPushyTransaction(orderId: widget.orderId, context: context);
+      await getBusinessProvider(context).cancelPushyTransaction(orderId: widget.invoiceNumber, context: context);
 
       if (response.isSuccess) {
         showCustomToast(response.message, isError: false);
-        await getOrderPaymentStatus();
+        await getInvoiceByInvoiceNumber();
       } else {
         showCustomToast(response.message ?? 'Failed to load product details');
       }
     } catch (e) {
-      showCustomToast('Failed to load Order details');
+      showCustomToast('Failed to load Invoice details');
     }
   }
 
@@ -81,16 +115,16 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
   void _showCancelOrderBottomSheet() {
     showCustomDialog(
       context: context,
-      title: 'Cancel Order?',
+      title: 'Cancel Invoice?',
       subtitle:
-      "Are you sure you want to cancel order #${orderDetail?.orderNumber ?? 'N/A'}. This action can not be undone.",
-      negativeButtonText: 'Keep Order',
-      positiveButtonText: 'Cancel Order',
+      "Are you sure you want to cancel invoice #${getInvoiceByInvoiceNumberResponse?.invoiceNumber ?? 'N/A'}. This action can not be undone.",
+      negativeButtonText: 'Keep Invoice',
+      positiveButtonText: 'Cancel Invoice',
       onNegativePressed: () => Navigator.pop(context),
       onPositivePressed: () async {
         // Add subscription cancellation logic here
         Navigator.pop(context); // Close dialog
-        await cancelPushyTransaction();
+        // await cancelPushyTransaction();
       },
     );
   }
@@ -100,19 +134,20 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
       backgroundColor: Colors.white,
       appBar: _buildAppBar(),
       body: RefreshIndicator(
-        onRefresh: getOrderPaymentStatus,
+        onRefresh: getInvoiceByInvoiceNumber,
         child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _orderHearder(),
+              _invoiceHearder(),
               _buildSummary(),
-              _buildOrderItems(),
-              _buildNaration(),
-              orderDetail?.status == 'paid' ? _buildPaymentMethod() : Container(),
-              _buildOrderSummary(),
-              _buildServedBy(),
+              _buildCustomerDetails(),
+              _buildInvoiceItems(),
+              // _buildNaration(),
+              getInvoiceByInvoiceNumberResponse?.invoiceStatus?.toLowerCase() == 'paid' ? _buildPaymentMethod() : Container(),
+              _buildInvoiceSummary(),
+              // _buildServedBy(),
             ],
           ).paddingSymmetric(horizontal: 18),
         ),
@@ -121,8 +156,126 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
     );
   }
 
+  Widget _buildCustomerDetails(){
+    return Container(
+      margin: const EdgeInsets.only(right: 8),
+      padding: const EdgeInsets.symmetric(
+          horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(
+        color: Colors.grey[100],
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Column(
+        children: [
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                _isContactDetailsExpanded = !_isContactDetailsExpanded;
+              });
+            },
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text("To: ${getInvoiceByInvoiceNumberResponse?.customerName ?? 'N/A'}",
+                      style: const TextStyle(
+                        fontFamily: 'Poppins',
+                        color: textPrimary,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        fontStyle: FontStyle.normal,
+                      )
+                  ),
+                ),
+                rfCommonCachedNetworkImage(
+                    _isContactDetailsExpanded ? upIcon : dropIcon,
+                    fit: BoxFit.cover,
+                    height: 15,
+                    width: 15,
+                    radius: 8
+                ),
+              ],
+            ).paddingSymmetric(vertical: 10),
+          ),
+          if (_isContactDetailsExpanded) ...[
+            Row(
+                children: [
+                  rfCommonCachedNetworkImage(
+                      phoneIconGray,
+                      fit: BoxFit.cover,
+                      height: 15,
+                      width: 15,
+                      radius: 8
+                  ),
+                  6.width,
+                  Text("${getInvoiceByInvoiceNumberResponse?.customerPhoneNumber ?? 'N/A'}",
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        color: textSecondary,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        fontStyle: FontStyle.normal,
+                        letterSpacing: 0.12,
+
+                      )
+                  )
+                ]
+            ).paddingSymmetric(vertical: 5),
+            Row(
+                children: [
+                  rfCommonCachedNetworkImage(
+                      emailIconGray,
+                      fit: BoxFit.cover,
+                      height: 15,
+                      width: 15,
+                      radius: 0
+                  ),
+                  6.width,
+                  Text("${getInvoiceByInvoiceNumberResponse?.sentTo ?? 'N/A'}",
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        color: textSecondary,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        fontStyle: FontStyle.normal,
+                        letterSpacing: 0.12,
+
+                      )
+                  )
+                ]
+            ).paddingSymmetric(vertical: 5),
+            Row(
+                children: [
+                  rfCommonCachedNetworkImage(
+                      locationIcon,
+                      fit: BoxFit.cover,
+                      height: 15,
+                      width: 15,
+                      radius: 0
+                  ),
+                  6.width,
+                  Expanded(
+                    child: Text("${getInvoiceByInvoiceNumberResponse?.businessLocation ?? 'N/A'}",
+                        style: const TextStyle(
+                          fontFamily: 'Poppins',
+                          color: textSecondary,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                          fontStyle: FontStyle.normal,
+                          letterSpacing: 0.12,
+                        )
+                    ),
+                  )
+                ]
+            ).paddingSymmetric(vertical: 5),
+          ],
+        ],
+      ),
+    );
+  }
+
+
   Widget _buildPaymentMethod(){
-    final cartItems = orderTransactionTotals ?? [];
+    final cartItems = paymentReceipt ?? [];
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -142,7 +295,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
               gifPath: emptyListGif,
               title: "It's empty, over here.",
               subtitle:
-              'No Payments in for this order yet! Add to view them here.',
+              'No Payments in for this Invoice yet! Add to view them here.',
             ),
           ) else ListView.separated(
             shrinkWrap: true,
@@ -152,7 +305,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
             separatorBuilder: (context, index) => const Divider(height: 0.5, color: innactiveBorderCart,),
             itemBuilder: (context, index) {
               final item = cartItems[index];
-              return buildOrderPaymentSummary(
+              return buildInvoicePaymentSummary(
                   item: item,
                   context: context
               );
@@ -183,28 +336,21 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
             Expanded(
               flex: 7,
               child: Visibility(
-                visible: orderDetail?.status == 'unpaid' || orderDetail?.status == 'partial' || orderDetail?.status == 'paid',
+                visible: getInvoiceByInvoiceNumberResponse?.invoiceStatus?.toLowerCase() == 'unpaid' || getInvoiceByInvoiceNumberResponse?.invoiceStatus?.toLowerCase() == 'partial' || getInvoiceByInvoiceNumberResponse?.invoiceStatus?.toLowerCase() == 'paid',
                 child: appButton(
-                  text: orderDetail?.status == 'paid' ? 'Cancel Transaction' : 'Checkout',
+                  text: getInvoiceByInvoiceNumberResponse?.invoiceStatus?.toLowerCase() == 'paid' ? 'Cancel Transaction' : 'Pay Invoice',
                   onTap: () {
-                    if (orderDetail?.status == 'paid') {
-                      VoidOrderTransactionPage(
-                        orderId: widget.orderId
-                      ).launch(context);
-                    }else{
-                      // Option 1: Navigate to checkout step (step 2, 0-indexed) with order ID
-                      SellStepperPage(
-                        initialStep: 2,
-                        initialStepData: {'orderId': widget.orderId},
-                      ).launch(context);
-                      
-                      // Option 2: Navigate directly to CheckOutPaymentsPage (uncomment if preferred)
-                      // CheckOutPaymentsPage(
-                      //   orderId: widget.orderId,
-                      //   onNext: () => Navigator.pop(context),
-                      //   onPrevious: () => Navigator.pop(context),
-                      // ).launch(context);
-                    }
+                    // if (getInvoiceByInvoiceNumberResponse?.invoiceStatus?.toLowerCase() == 'paid') {
+                    //   VoidOrderTransactionPage(
+                    //     orderId: widget.invoiceNumber
+                    //   ).launch(context);
+                    // }else{
+                    //   SellStepperPage(
+                    //     initialStep: 2,
+                    //     initialStepData: {'orderId': widget.invoiceNumber},
+                    //   ).launch(context);
+                    //
+                    // }
 
                   },
                   context: context,
@@ -219,9 +365,9 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                 iconPath: fabMenuIcon,
                 context: context,
                 onTap: () {
-                  BottomSheetHelper.showPrintingOptionsBottomSheet(context, printOrderInvoiceId: orderDetail?.id).then((value) {
-
-                  });
+                  // BottomSheetHelper.showPrintingOptionsBottomSheet(context, printOrderInvoiceId: getInvoiceByInvoiceNumberResponse?.id).then((value) {
+                  //
+                  // });
                 },
               ),
             ),
@@ -256,7 +402,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("${orderDetail?.cashier ?? 'N/A'}",
+                Text("${/*getInvoiceByInvoiceNumberResponse?.cashier ??*/ 'N/A'}",
                     style: const TextStyle(
                       fontFamily: 'Poppins',
                       color: textSecondary,
@@ -273,7 +419,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
     );
   }
 
-  Widget _buildOrderSummary() {
+  Widget _buildInvoiceSummary() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
@@ -312,7 +458,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
 
                         )
                     ),
-                    Text("${orderDetail?.createdAt?.toFormattedDateTime() ?? 'N/A'}",
+                    Text("${getInvoiceByInvoiceNumberResponse?.createdAt?.toFormattedDateTime() ?? 'N/A'}",
                         style: const TextStyle(
                           fontFamily: 'Poppins',
                           color: textSecondary,
@@ -338,7 +484,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
 
                         )
                     ),
-                    Text("${orderDetail?.currency ?? 'N/A'} ${orderDetail?.subTotal?.formatCurrency() ?? 'N/A'}",
+                    Text("${getInvoiceByInvoiceNumberResponse?.currency ?? 'N/A'} ${getInvoiceByInvoiceNumberResponse?.invoiceAmount?.formatCurrency() ?? 'N/A'}",
                         style: const TextStyle(
                           fontFamily: 'Poppins',
                           color: textSecondary,
@@ -364,7 +510,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
 
                         )
                     ),
-                    Text("${orderDetail?.currency ?? 'N/A'} ${orderDetail?.discountAmount?.formatCurrency() ?? 'N/A'}",
+                    Text("${getInvoiceByInvoiceNumberResponse?.currency ?? 'N/A'} ${getInvoiceByInvoiceNumberResponse?.invoiceDiscountAmount?.formatCurrency() ?? 'N/A'}",
                         style: const TextStyle(
                           fontFamily: 'Poppins',
                           color: textSecondary,
@@ -390,7 +536,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
 
                         )
                     ),
-                    Text("${orderDetail?.currency ?? 'N/A'} ${orderDetail?.transamount?.formatCurrency() ?? 'N/A'}",
+                    Text("${getInvoiceByInvoiceNumberResponse?.currency ?? 'N/A'} ${getInvoiceByInvoiceNumberResponse?.total?.formatCurrency() ?? 'N/A'}",
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           color: textPrimary,
@@ -433,7 +579,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("${orderDetail?.orderTable ?? 'N/A'}",
+                Text("${/*getInvoiceByInvoiceNumberResponse?.orderTable ??*/ 'N/A'}",
                     style: const TextStyle(
                       fontFamily: 'Poppins',
                       color: textSecondary,
@@ -450,13 +596,13 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
     );
   }
 
-  Widget _buildOrderItems() {
-    final cartItems = orderDetail?.items ?? [];
+  Widget _buildInvoiceItems() {
+    final cartItems = getInvoiceByInvoiceNumberResponse?.items ?? [];
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          const Text('Order Items',
+          const Text('Invoice Items',
               style: TextStyle(
                 fontFamily: 'Poppins',
                 color: textPrimary,
@@ -481,7 +627,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
             separatorBuilder: (context, index) => const Divider(height: 0.5, color: innactiveBorderCart,),
             itemBuilder: (context, index) {
               final item = cartItems[index];
-              return buildOrderItem(
+              return buildInvoiceItem(
                   item: item);
             },
           ),
@@ -505,7 +651,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text('Order Number',
+                  const Text('Invoice Number',
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         color: textSecondary,
@@ -515,7 +661,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                         letterSpacing: 0.15,
                       )),
                   6.height,
-                  Text("#${orderDetail?.orderNumber ?? 'N/A'}",
+                  Text("#${getInvoiceByInvoiceNumberResponse?.invoiceNumber ?? 'N/A'}",
                       style: const TextStyle(
                         fontFamily: 'Poppins',
                         color: textPrimary,
@@ -550,7 +696,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                         letterSpacing: 0.15,
                       )),
                   6.height,
-                  Text('${orderDetail?.items?.length ?? 0}',
+                  Text('${getInvoiceByInvoiceNumberResponse?.items?.length ?? 0}',
                       style: const TextStyle(
                         fontFamily: 'Poppins',
                         color: highlightMainLight,
@@ -567,9 +713,9 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
           child: Container(
               height: 85,
               decoration: BoxDecoration(
-                color: orderDetail?.status == 'paid'
+                color: getInvoiceByInvoiceNumberResponse?.invoiceStatus?.toLowerCase() == 'paid'
                     ? lightGreenColor
-                    : orderDetail?.status == 'partial'
+                    : getInvoiceByInvoiceNumberResponse?.invoiceStatus?.toLowerCase() == 'partial'
                         ? lightOrange
                         : primaryYellowTextColor,
                 borderRadius: BorderRadius.circular(8),
@@ -589,12 +735,12 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                         letterSpacing: 0.12,
                       )),
                   6.height,
-                  Text("${orderDetail?.currency ?? 'N/A'} ${orderDetail?.transamount?.formatCurrency() ?? 'N/A'}",
+                  Text("${getInvoiceByInvoiceNumberResponse?.currency ?? 'N/A'} ${getInvoiceByInvoiceNumberResponse?.invoiceAmount?.formatCurrency() ?? 'N/A'}",
                       style: TextStyle(
                         fontFamily: 'Poppins',
-                        color: orderDetail?.status == 'paid'
+                        color: getInvoiceByInvoiceNumberResponse?.invoiceStatus?.toLowerCase() == 'paid'
                             ? successTextColor
-                            : orderDetail?.status == 'partial'
+                            : getInvoiceByInvoiceNumberResponse?.invoiceStatus?.toLowerCase() == 'partial'
                                 ? primaryOrangeTextColor
                                 : googleRed,
                         fontSize: 14,
@@ -608,13 +754,18 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
     ).paddingSymmetric(vertical: 16);
   }
 
-  Widget _orderHearder() {
+  Widget _invoiceHearder() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        headings(
+          label: 'Preview Invoice',
+          subLabel: 'Here is a preview of your invoice.',
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text('Order Details',
+            const Text('Invoice Details',
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   color: textPrimary,
@@ -627,19 +778,19 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
               margin: const EdgeInsets.only(right: 0),
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
-                color: orderDetail?.status == 'paid'
+                color: getInvoiceByInvoiceNumberResponse?.invoiceStatus?.toLowerCase() == 'paid'
                     ? lightGreenColor
-                    : orderDetail?.status == 'partial'
+                    : getInvoiceByInvoiceNumberResponse?.invoiceStatus?.toLowerCase() == 'partial'
                         ? lightOrange
                         : primaryYellowTextColor,
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: Text(orderDetail?.status?.toUpperCase() ?? 'N/A',
+              child: Text(getInvoiceByInvoiceNumberResponse?.invoiceStatus ?? 'N/A',
                   style: TextStyle(
                     fontFamily: 'Poppins',
-                    color: orderDetail?.status == 'paid'
+                    color: getInvoiceByInvoiceNumberResponse?.invoiceStatus?.toLowerCase() == 'paid'
                         ? successTextColor
-                        : orderDetail?.status == 'partial'
+                        : getInvoiceByInvoiceNumberResponse?.invoiceStatus?.toLowerCase() == 'partial'
                             ? primaryOrangeTextColor
                             : googleRed,
                     fontSize: 10,
@@ -655,22 +806,22 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
 
   PreferredSizeWidget _buildAppBar() {
     return AuthAppBar(
-      title: 'View Order',
-      actions: [
-        if (orderDetail?.status == 'unpaid') TextButton(
-          onPressed: () {
-            _showCancelOrderBottomSheet();
-          },
-          child: const Text('Cancel Order',
-            style: TextStyle(
-              color: accentRed,
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.w500,
-              fontSize: 14,
-            ),
-          ),
-        ) else Container()
-      ],
+      title: 'View Invoice',
+      // actions: [
+      //   if (getInvoiceByInvoiceNumberResponse?.invoiceStatus?.toLowerCase() == 'unpaid') TextButton(
+      //     onPressed: () {
+      //       _showCancelOrderBottomSheet();
+      //     },
+      //     child: const Text('Cancel Invoice',
+      //       style: TextStyle(
+      //         color: accentRed,
+      //         fontFamily: 'Poppins',
+      //         fontWeight: FontWeight.w500,
+      //         fontSize: 14,
+      //       ),
+      //     ),
+      //   ) else Container()
+      // ],
     );
   }
 }

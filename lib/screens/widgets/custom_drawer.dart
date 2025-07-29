@@ -5,9 +5,11 @@ import 'package:zed_nano/providers/auth/authenticated_app_providers.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/routes/routes.dart';
 import 'package:zed_nano/screens/customers/customers_list_page.dart';
+import 'package:zed_nano/screens/invoices/invoices_list_main_page.dart';
 import 'package:zed_nano/screens/orders/orders_list_main_page.dart';
 import 'package:zed_nano/screens/payments/list_payments_page.dart';
 import 'package:zed_nano/screens/stock/view_stock/view_stock_page.dart';
+import 'package:zed_nano/screens/users/users_main_list.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/Images.dart';
@@ -195,7 +197,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         onTap: (){
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => ViewStockPage()),
+                            MaterialPageRoute(builder: (context) => const ViewStockPage()),
                           );
                         }
                       ),
@@ -223,15 +225,15 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     children: [
                       _buildSubMenuItem(
                         title: 'Customers',
-                        onTap: () => CustomersListPage().launch(context),
+                        onTap: () => const CustomersListPage().launch(context),
                       ),
                       _buildSubMenuItem(
                         title: 'Invoices',
-                        onTap: () => _navigateTo(context, '/pos'),
+                        onTap: () => InvoicesListMainPage().launch(context),
                       ),
                       _buildSubMenuItem(
                         title: 'Orders',
-                        onTap: () => OrdersListMainPage().launch(context),
+                        onTap: () => const OrdersListMainPage().launch(context),
                       ),
                       _buildSubMenuItem(
                         title: 'Receipts',
@@ -254,7 +256,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   _buildMenuItem(
                     title: 'Users',
                     iconPath: usersIcon,
-                    onTap: () => _navigateTo(context, '/users'),
+                    onTap: () => const UsersMainList().launch(context),
                   ),
                   
                   // Approvals

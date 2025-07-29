@@ -64,11 +64,14 @@ class AppConstants{
   static const String getCustomerTransactions = 'api/customerTransactions';
   static const String getCustomerInvoices = 'api/get_user_invoices';
   static const String fetchByStatus = 'api/fetchByStatus';
+  static const String getBusinessInvoicesByStatus = 'api/get_business_invoices_by_status';
   static const String viewAllTransactions = 'viewAllTransactions';
   static const String getListProducts = 'api/listProducts/Active';
   static const String findProduct = 'api/findProduct';
   static const String getCustomerByNumber = 'api/get_customer_by_number';
   static const String getOrderPaymentStatus = 'api/order_payment_status';
+  static const String getInvoiceByInvoiceNumber = 'api/get_invoice_by_invoice_number';
+  static const String getInvoiceReceiptPaymentMethodsNoLogin = 'api/get_invoice_receipt_payment_methods_no_login';
   static const String doSendToPos = '/api/sendPushy';
   static const String getBranchTerminals = 'api/v1/branchTerminals/Active';
   static const String getPaymentMethodsStatusNoAuth = 'api/v1/payments/payment_methods_status_no_auth';

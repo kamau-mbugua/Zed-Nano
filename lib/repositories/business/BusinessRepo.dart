@@ -522,6 +522,46 @@ class BusinessRepo{
       return ApiResponse.withError(ApiErrorHandler.handleError(e));
     }
   }
+  Future<ApiResponse> getBusinessInvoicesByStatus({
+    required int page ,
+    required int limit ,
+    required String searchValue ,
+    required String status ,
+    required String startDate,
+    required String endDate,
+    required String customerId,
+    required String cashier,
+  }) async {
+    try {
+      // Validate parameters
+      if (page < 1) page = 1;
+      if (limit < 1) limit = 10;
+
+      // Clean search value and categoryId to avoid null/undefined issues
+      final cleanSearchValue = searchValue.trim();
+
+      // Build query parameters map for better URL encoding
+      final queryParams = <String, dynamic>{
+        'page': page,
+        'limit': limit,
+        'search': cleanSearchValue,
+        'status': status,
+        'startDate': startDate,
+        'endDate': endDate,
+        'customerId': customerId,
+        'cashier': cashier,
+      };
+
+      final response = await dioClient!.get(
+        AppConstants.getBusinessInvoicesByStatus,
+        queryParameters: queryParams,
+      );
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
   Future<ApiResponse> getListStockTake({
     required int page ,
     required int limit ,
@@ -740,6 +780,28 @@ class BusinessRepo{
     try {
       final response =
       await dioClient!.post('${AppConstants.getOrderPaymentStatus}', data: requestData);
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
+
+  Future<ApiResponse> getInvoiceByInvoiceNumber({required Map<String, dynamic> requestData}) async {
+    try {
+      final response =
+      await dioClient!.get('${AppConstants.getInvoiceByInvoiceNumber}',queryParameters: requestData);
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
+
+  Future<ApiResponse> getInvoiceReceiptPaymentMethodsNoLogin({required Map<String, dynamic> requestData}) async {
+    try {
+      final response =
+      await dioClient!.get('${AppConstants.getInvoiceReceiptPaymentMethodsNoLogin}',queryParameters: requestData);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
