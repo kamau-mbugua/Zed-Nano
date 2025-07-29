@@ -129,7 +129,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
     
     fetchBranchStoreSummary().then((_) {
       // Reset the fetching flag after a short delay
-      Future.delayed(Duration(milliseconds: 500), () {
+      Future.delayed(const Duration(milliseconds: 500), () {
         _isFetching = false;
       });
     }).catchError((error) {
@@ -140,26 +140,23 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
 
   Future<void> fetchBranchStoreSummary() async {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) return;
-      
-      Map<String, dynamic> requestData = {
-        'startDate': _dateRange.values.first.removeTimezoneOffset,
-        'endDate': _dateRange.values.last.removeTimezoneOffset,
-        'branchId': getBusinessDetails(context)?.branchId ?? ''
-      };
-
-      // Debounce to prevent multiple rapid fetches
       if (_debounceTimer?.isActive ?? false) _debounceTimer!.cancel();
       _debounceTimer = Timer(const Duration(milliseconds: 500), () {
         if (mounted) {
-          branchStoreSummary(requestData: requestData);
-          getBranchTransactionByDate(requestData: requestData);
+          branchStoreSummary();
+          getBranchTransactionByDate();
           viewAllTransactions();
         }
       });
     });
   }
-  Future<void> branchStoreSummary({required Map<String, dynamic> requestData}) async {
+  Future<void> branchStoreSummary() async {
+
+    Map<String, dynamic> requestData = {
+      'startDate': _dateRange.values.first.removeTimezoneOffset,
+      'endDate': _dateRange.values.last.removeTimezoneOffset,
+      'branchId': getBusinessDetails(context)?.branchId ?? ''
+    };
 
     await context
         .read<BusinessProviders>()
@@ -176,8 +173,13 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
       }
     });
   }
-  Future<void> getBranchTransactionByDate({required Map<String, dynamic> requestData}) async {
-    requestData['type'] = 'ALL';
+  Future<void> getBranchTransactionByDate() async {
+    Map<String, dynamic> requestData = {
+      'startDate': _dateRange.values.first.removeTimezoneOffset,
+      'endDate': _dateRange.values.last.removeTimezoneOffset,
+      'branch_id': getBusinessDetails(context)?.branchId ?? '',
+      'type': 'ALL',
+    };
     await context
         .read<BusinessProviders>()
         .getBranchTransactionByDate(context: context, requestData:requestData)
@@ -199,7 +201,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
         .read<BusinessProviders>()
         .viewAllTransactions(context: context,
         page:1,
-        limit:10,
+        limit:5,
         searchValue: '',
         startDate:_dateRange.values.first.removeTimezoneOffset,
         endDate: _dateRange.values.last.removeTimezoneOffset
@@ -336,7 +338,15 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text('Overview', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
+                      const Text("Overview",
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            color: textPrimary,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            fontStyle: FontStyle.normal,
+                          )
+                      ),
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
                         decoration: BoxDecoration(
@@ -369,16 +379,16 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                         crossAxisSpacing: 16,
                         childAspectRatio: cardWidth / 120, // Maintain the height of 120
                         children: [
-                          buildOverviewCard('Total Sales', 'KES ${branchStoreSummaryResponse?.data?.totalSales?.amount?? '0.00'}', totalSalesIcon, lightGreenColor, width: cardWidth),
+                          buildOverviewCard('Total Sales', 'KES ${branchStoreSummaryResponse?.data?.totalSales?.amount?.formatCurrency() ?? '0.00'}', totalSalesIcon, lightGreenColor, width: cardWidth),
                           buildOverviewCard('Products Sold', '${branchStoreSummaryResponse?.data?.soldStock?.businessSoldStockQuantity?? '0.00'}', productIcon, lightGrey, width: cardWidth),
-                          buildOverviewCard('Pending Payment', 'KES ${branchStoreSummaryResponse?.data?.unpaidTotals?.totalUnpaid ?? '0.00'}', pendingPaymentsIcon, lightOrange, width: cardWidth),
+                          buildOverviewCard('Pending Payment', 'KES ${branchStoreSummaryResponse?.data?.unpaidTotals?.totalUnpaid?.formatCurrency()  ?? '0.00'}', pendingPaymentsIcon, lightOrange, width: cardWidth),
                           buildOverviewCard('Customers', '${branchStoreSummaryResponse?.data?.customerCount?.totalCustomers ?? '0.00'}', customerCreatedIcon, lightBlue, width: cardWidth),
                         ],
                       );
                     },
                   ),
                   10.height,
-                  const Text('Payment Summary', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
+                  const Text('Sales Summary', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
                   10.height,
                   buildSalesSummaryList(),
                   16.height,
@@ -396,7 +406,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          SellStepperPage().launch(context);
+          const SellStepperPage().launch(context);
         },
         label: const Text('Sell', style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white)),
         icon: const Icon(Icons.lock, color: Colors.white),
@@ -412,59 +422,135 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
       return buildEmptyCard('Nothing here. For Now!', 'Recent sales will be displayed here.');
     }
 
-    return Container(
-      padding: const EdgeInsets.all(8),
+    return Column(
+      children: [
+    Container(
+    width: context.width(),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey.shade200),
+        color: lightGreyColor,
+        borderRadius: BorderRadius.circular(8),
       ),
-      child: Column(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+      child: const Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Trans. ID', style: TextStyle(fontWeight: FontWeight.w600)),
-                  Text('Products', style: TextStyle(fontWeight: FontWeight.w400)),
-                ],
+              Text("Trans. ID",
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    color: textPrimary,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    fontStyle: FontStyle.normal,
+
+
+                  )
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Amount', style: TextStyle(fontWeight: FontWeight.w600)),
-                  Text('Date', style: TextStyle(fontWeight: FontWeight.w400)),
-                ],
-              ),
+              Text("Amount",
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    color: textPrimary,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    fontStyle: FontStyle.normal,
+                  )
+              )
             ],
           ),
-          const Divider(),
-          ...transactions.map<Widget>((tx) => Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4.0),
-            child:  Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(tx.transactionID ?? '', style: TextStyle(fontWeight: FontWeight.w600)),
-                    Text('${tx.items?.length ?? 0}', style: TextStyle(fontWeight: FontWeight.w400)),
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('${tx.transamount?.formatCurrency()}', style: TextStyle(fontWeight: FontWeight.w600)),
-                    Text(tx.transtime?.toShortDateTime ?? '', style: TextStyle(fontWeight: FontWeight.w400)),
-                  ],
-                ),
-              ],
-            ),
-          )),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text("Products",
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    color: textSecondary,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w400,
+                    fontStyle: FontStyle.normal,
+                    letterSpacing: 0.12,
+
+                  )
+              ),
+              Text("Date",
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    color: textSecondary,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w400,
+                    fontStyle: FontStyle.normal,
+                    letterSpacing: 0.12,
+
+                  )
+              )
+            ],
+          )
         ],
-      ),
+      )),
+        const Divider(),
+        ...transactions.map<Widget>((tx) => Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4.0),
+          child:  Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(tx.transactionID ?? '',
+                      style: const TextStyle(
+                        fontFamily: 'Poppins',
+                        color: darkGreyColor,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        fontStyle: FontStyle.normal,
+                        letterSpacing: 0.12,
+                      )
+                  ),
+                  Text('${tx.currency ?? 'KES'} ${tx.transamount?.formatCurrency()}',
+                      style: const TextStyle(
+                        fontFamily: 'Poppins',
+                        color: darkGreyColor,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        fontStyle: FontStyle.normal,
+                        letterSpacing: 0.12,
+                      )
+                  )
+                ],
+              ),
+               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('${tx.items?.length ?? 0}',
+                      style: const TextStyle(
+                        fontFamily: 'Poppins',
+                        color: textSecondary,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        fontStyle: FontStyle.normal,
+                        letterSpacing: 0.12,
+
+                      )
+                  ),
+                  Text(tx.transtime?.toShortDateTime ?? '',
+                      style: const TextStyle(
+                        fontFamily: 'Poppins',
+                        color: textSecondary,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        fontStyle: FontStyle.normal,
+                        letterSpacing: 0.12,
+
+                      )
+                  )
+                ],
+              )
+            ],
+          ),
+        )),
+      ],
     );
   }
   Widget buildSalesSummaryList() {
@@ -475,14 +561,25 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
     }
 
     // Optionally define color per payment type
-    Color getBarColor(String type) {
+    Color getBarColorActive(String type) {
       switch (type.toUpperCase()) {
-        case 'MPESA': return Colors.green;
-        case 'CASH': return Colors.blue;
-        case 'Kcb Mpesa': return Colors.orange;
+        case 'MPESA': return successTextColor;
+        case 'CASH': return primaryBlueTextColor;
+        case 'KCB MPESA': return orangeColor;
         default: return Colors.teal;
       }
     }
+    // Optionally define color per payment type
+    Color getBarColorReminder(String type) {
+      switch (type.toUpperCase()) {
+        case 'MPESA': return lightGreenColor;
+        case 'CASH': return lightBlue;
+        case 'KCB MPESA': return lightOrange;
+        default: return Colors.teal;
+      }
+    }
+
+
 
     return Column(
       children: summaryList.map<Widget>((item) {
@@ -491,7 +588,8 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
           currency: item?.currency ?? '',
           amount: item?.amount ?? 0,
           percentage: item?.percentageOfTotal?.toDouble() ?? 0,
-          color: getBarColor(item?.transationType ?? ''),
+          color: getBarColorActive(item?.transationType ?? ''),
+          backgroundColor: getBarColorReminder(item?.transationType ?? ''),
         );
       }).toList(),
     );

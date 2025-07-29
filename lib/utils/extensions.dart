@@ -106,6 +106,16 @@ extension StringValidationExtensions on String {
     }
   }
 
+  //remove + from phone number
+  String get removePlus {
+    return this.replaceAll('+', '');
+  }
+
+  //check if phonenumber starts with a 0, remove it
+  String get removeZero {
+    return this.startsWith('0') ? this.substring(1) : this;
+  }
+
   //formatCurrency extension
   String formatCurrency({String locale = 'en_KE'}) {
     final formatter = NumberFormat("#,##0", locale);

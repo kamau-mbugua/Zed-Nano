@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:path/path.dart' as p;
 import 'package:zed_nano/models/branch-store-summary/BranchStoreSummaryResponse.dart';
+import 'package:zed_nano/models/cashPayment/OrderCheckoutPaymentResponse.dart';
 import 'package:zed_nano/models/createCategory/CreateCategoryResponse.dart';
 import 'package:zed_nano/models/savePushy/CreateOrderResponse.dart';
 import 'package:zed_nano/models/createProduct/CreateProductResponse.dart';
@@ -1252,22 +1253,22 @@ class BusinessProviders extends BaseProvider {
     return finalResponseModel;
   }
 
-  Future<ResponseModel<CheckoutPaymentResponse>> doCashPayment({
+  Future<ResponseModel<OrderCheckoutPaymentResponse>> doCashPayment({
     required Map<String, dynamic> requestData,
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
         () => businessRepo.doCashPayment(requestData: requestData), context);
 
-    ResponseModel<CheckoutPaymentResponse> finalResponseModel;
+    ResponseModel<OrderCheckoutPaymentResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
-      finalResponseModel = ResponseModel<CheckoutPaymentResponse>(
-          true, responseModel.message!, CheckoutPaymentResponse.fromJson(map));
+      finalResponseModel = ResponseModel<OrderCheckoutPaymentResponse>(
+          true, responseModel.message!, OrderCheckoutPaymentResponse.fromJson(map));
     } else {
       finalResponseModel =
-          ResponseModel<CheckoutPaymentResponse>(false, responseModel.message!);
+          ResponseModel<OrderCheckoutPaymentResponse>(false, responseModel.message!);
     }
 
     return finalResponseModel;

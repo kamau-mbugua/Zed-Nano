@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/models/order_payment_status/OrderDetailResponse.dart';
+import 'package:zed_nano/models/pushstk/PushStkResponse.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
+import 'package:zed_nano/screens/business/subscription/mpesa_payment_waiting_screen.dart';
+import 'package:zed_nano/screens/orders/order_payment_summary/order_payment_summary.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/auth/input_fields.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
@@ -9,6 +13,7 @@ import 'package:zed_nano/screens/widget/common/heading.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/extensions.dart';
+
 
 class CheckOutPaymentsPage extends StatefulWidget {
   final VoidCallback onNext;
@@ -27,6 +32,8 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
   OrderDetailData? orderDetailData;
   List<String> paymentMethods = [];
   String selectedPayment = '';
+  List<String> orderId = [];
+
 
   final TextEditingController phoneNumberController = TextEditingController();
   final TextEditingController countryCodeController = TextEditingController();
@@ -35,7 +42,8 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
   @override
   void initState() {
     super.initState();
-    // Defer the first data fetch until after the build is complete
+
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       getOrderPaymentStatus();
       getPaymentMethodsStatusNoAuth();
@@ -43,7 +51,7 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
   }
 
   Future<void> getOrderPaymentStatus() async {
-    Map<String, dynamic> requestData = {
+    final requestData = <String, dynamic>{
       'pushyTransactionId': widget.orderId
     };
 
@@ -55,17 +63,21 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
         setState(() {
           orderDetail = response.data?.order;
           orderDetailData = response.data?.data;
+          if (orderDetail?.id != null) {
+            orderId.add(orderDetail!.id!);
+          }
         });
       } else {
         showCustomToast(response.message ?? 'Failed to load product details');
       }
     } catch (e) {
+      logger.e('getOrderPaymentStatus $e');
       showCustomToast('Failed to load Order details');
     }
   }
 
   Future<void> getPaymentMethodsStatusNoAuth() async {
-    Map<String, dynamic> requestData = {
+    final requestData = <String, dynamic>{
       'businessNumber': getBusinessDetails(context)?.businessNumber
     };
 
@@ -81,22 +93,19 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
         showCustomToast(response.message ?? 'Failed to load product details');
       }
     } catch (e) {
+      logger.e(e);
       showCustomToast('Failed to load Order details');
     }
   }
 
   Future<void> doCashPayment() async {
-    List<String> orderId = [];
-    if (orderDetail?.id != null) {
-      orderId.add(orderDetail!.id!);
-    }
 
-    Map<String, dynamic> requestData = {
+    final requestData = <String, dynamic>{
       'billRefNo': orderDetail?.pushTransactionId,
-      'paymentChanel': "Mobile",
+      'paymentChanel': 'Mobile',
       'transamount': orderDetailData?.deficit,
       'pushyTransactionId': orderId,
-      'transactionType': "Cash Payment"
+      'transactionType': 'Cash Payment'
     };
 
     try {
@@ -106,69 +115,74 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
       if (response.isSuccess) {
         showCustomToast(response.message, isError: false);
         widget.onNext();
+        await OrderPaymentSummary(orderId: orderDetail?.id).launch(context);
       } else {
         showCustomToast(response.message);
+      }
+    } catch (e) {
+      logger.e(e);
+      showCustomToast('Failed to load Order details');
+    }
+  }
+
+  Future<void> doMpesaPayment(String phoneNumber) async {
+    final requestData = <String, dynamic>{
+      'paymentChanel': 'mobile',
+      'amount': orderDetailData?.deficit,
+      'orderIds': orderId,
+      'businessId': getBusinessDetails(context)?.businessId,
+      'phone': phoneNumber,
+      'type': 'order'
+    };
+
+    try {
+      final response =
+      await getBusinessProvider(context).doPushStk(requestData: requestData, context: context);
+      if (response.isSuccess) {
+        showCustomToast(response.message, isError: false);
+        var stkResponse = response.data;
+        await handleStkPushWebsocket(stkResponse, requestData, STKPaymentType.Mpesa);
+      } else {
+        showCustomToast(response.message ?? 'Failed to load product details');
       }
     } catch (e) {
       showCustomToast('Failed to load Order details');
     }
   }
 
-  Future<void> doMpesaPayment() async {
-    Map<String, dynamic> requestData = {
-      'billRefNo': orderDetail?.pushTransactionId,
-      'paymentChanel': "Mobile",
-      'transamount': orderDetailData?.deficit,
-      'pushyTransactionId': orderDetail?.id,
-      'transactionType': "Cash Payment"
+  Future<void> doKcbMpesaPayment(String phoneNumber) async {
+    final requestData = <String, dynamic>{
+      'paymentChanel': 'mobile',
+      'amount': orderDetailData?.deficit,
+      'orderIds': orderId,
+      'businessId': getBusinessDetails(context)?.businessId,
+      'phone': phoneNumber,
+      'type': 'order'
     };
 
-    // try {
-    //   final response =
-    //   await getBusinessProvider(context).doMpesaPayment(requestData: requestData, context: context);
-    //
-    //   if (response.isSuccess) {
-    //     showCustomToast(response.message, isError: false);
-    //     widget.onNext();
-    //   } else {
-    //     showCustomToast(response.message ?? 'Failed to load product details');
-    //   }
-    // } catch (e) {
-    //   showCustomToast('Failed to load Order details');
-    // }
+    try {
+      final response =
+      await getBusinessProvider(context).doInitiateKcbStkPush(requestData: requestData, context: context);
+      if (response.isSuccess) {
+        showCustomToast(response.message, isError: false);
+        var stkResponse = response.data;
+        await handleStkPushWebsocket(stkResponse, requestData, STKPaymentType.KCB);
+      } else {
+        showCustomToast(response.message ?? 'Failed to load product details');
+      }
+    } catch (e) {
+      showCustomToast('Failed to load Order details');
+    }
   }
 
-  Future<void> doKcbMpesaPayment() async {
-    Map<String, dynamic> requestData = {
-      'billRefNo': orderDetail?.pushTransactionId,
-      'paymentChanel': "Mobile",
-      'transamount': orderDetailData?.deficit,
-      'pushyTransactionId': orderDetail?.id,
-      'transactionType': "Cash Payment"
-    };
-
-    // try {
-    //   final response =
-    //   await getBusinessProvider(context).doKcbMpesaPayment(requestData: requestData, context: context);
-    //
-    //   if (response.isSuccess) {
-    //     showCustomToast(response.message, isError: false);
-    //     widget.onNext();
-    //   } else {
-    //     showCustomToast(response.message ?? 'Failed to load product details');
-    //   }
-    // } catch (e) {
-    //   showCustomToast('Failed to load Order details');
-    // }
-  }
 
   Future<void> doCardPayment() async {
-    Map<String, dynamic> requestData = {
+    final requestData = <String, dynamic>{
       'billRefNo': orderDetail?.pushTransactionId,
-      'paymentChanel': "Mobile",
+      'paymentChanel': 'Mobile',
       'transamount': orderDetailData?.deficit,
       'pushyTransactionId': orderDetail?.id,
-      'transactionType': "Cash Payment"
+      'transactionType': 'Cash Payment'
     };
 
     // try {
@@ -184,6 +198,34 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
     // } catch (e) {
     //   showCustomToast('Failed to load Order details');
     // }
+  }
+
+
+  Future<void> handleStkPushWebsocket(PushStkResponse? stkResponse, Map<String, dynamic> requestData, STKPaymentType stkPaymentType) async{
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MpesaPaymentWaitingScreen(
+          invoiceNumber: stkResponse?.data?.stkOrderId ?? '',
+          referenceNumber: stkResponse?.data?.requestReferenceId  ?? '',
+          paymentData: requestData,
+          onPaymentSuccess: () async {
+            showCustomToast('Payment completed successfully!', isError: false);
+            widget.onNext();
+            await OrderPaymentSummary(orderId: orderDetail?.id).launch(context).then((value) {
+              widget.onNext();
+            });
+          },
+          sTKPaymentType: STKPaymentType.Mpesa,
+          onPaymentError: (errorMessage) {
+            showCustomToast(errorMessage, isError: true);
+          },
+          onCancel: () {
+            showCustomToast('Payment cancelled', isError: true);
+          },
+        ),
+      ),
+    );
   }
 
   @override
@@ -233,9 +275,23 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
             if (selectedPayment == 'cash') {
               await doCashPayment();
             }else if (selectedPayment == 'mpesa') {
-              await doMpesaPayment();
+              var phoneNumber = phoneNumberController.text;
+              if (!phoneNumber.isValidPhoneNumber) {
+                showCustomToast('Please enter phone number');
+                return;
+              }
+
+              phoneNumber = '254${phoneNumber.removeZero}';
+              await doMpesaPayment(phoneNumber);
             }else if (selectedPayment == 'kcbBankPaybill') {
-              await doKcbMpesaPayment();
+              var phoneNumber = phoneNumberController.text;
+              if (!phoneNumber.isValidPhoneNumber) {
+                showCustomToast('Please enter phone number');
+                return;
+              }
+
+              phoneNumber = '254${phoneNumber.removeZero}';
+              await doKcbMpesaPayment(phoneNumber);
             }else if (selectedPayment == 'card') {
               await doCardPayment();
             }
@@ -260,7 +316,7 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
   }
 
   Widget _buildPaymentOption(String method) {
-    final bool selected = selectedPayment == method;
+    final selected = selectedPayment == method;
     return GestureDetector(
       onTap: () {
         setState(() {

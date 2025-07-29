@@ -212,7 +212,7 @@ Widget buildOrderPaymentSummary({
 
                   )
               ),
-              Text("${item?.transactionId?? 'N/A'}",
+              Text("${item?.receiptId?? 'N/A'}",
                   style: const TextStyle(
                     fontFamily: 'Poppins',
                     color: textSecondary,

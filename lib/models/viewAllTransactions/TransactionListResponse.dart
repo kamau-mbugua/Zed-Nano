@@ -78,6 +78,7 @@ class TransactionData {
   final String? transactionID;
   final String? billRefNo;
   final String? uploadTime;
+  final String? currency;
 
   TransactionData({
     this.id,
@@ -109,6 +110,7 @@ class TransactionData {
     this.transactionID,
     this.billRefNo,
     this.uploadTime,
+    this.currency,
   });
 
   factory TransactionData.fromJson(Map<String, dynamic> json) {
@@ -118,7 +120,7 @@ class TransactionData {
       businessName: json['businessName'] as String?,
       transactionType: json['transactionType'] as String?,
       transtime: json['transtime'] as String?,
-      transamount: json['transamount'] as int?,
+      transamount: (json['transamount'] as num?)?.toInt(),
       customerPhone: json['customerPhone'] as String?,
       customerFirstName: json['customerFirstName'] as String?,
       customerMiddleName: json['customerMiddleName'] as String?,
@@ -134,8 +136,8 @@ class TransactionData {
           .toList(),
       settled: json['settled'] as bool?,
       customerId: json['customerId'] as String?,
-      discountAmount: json['discountAmount'] as int?,
-      discountPercent: json['discountPercent'] as int?,
+      discountAmount: (json['discountAmount'] as num?)?.toInt(),
+      discountPercent: (json['discountPercent'] as num?)?.toInt(),
       invoiceId: json['invoiceId'] as String?,
       status: json['status'] as String?,
       documentType: json['documentType'] as String?,
@@ -144,25 +146,26 @@ class TransactionData {
       transactionID: json['transactionID'] as String?,
       billRefNo: json['billRefNo'] as String?,
       uploadTime: json['uploadTime'] as String?,
+      currency: json['currency'] as String?,
     );
   }
 }
 
 class TransactionItem {
-  final int? itemAmount;
+  final double? itemAmount;
   final String? itemCategory;
-  final int? itemCount;
+  final double? itemCount;
   final String? itemName;
   final String? reciptNumber;
-  final int? totalAmount;
+  final double? totalAmount;
   final String? productId;
   final String? orderNote;
   final String? variationKeyId;
   final String? variationKey;
   final List<String>? tags;
-  final int? discountPercent;
+  final double? discountPercent;
   final String? discountType;
-  final int? discount;
+  final double? discount;
   final bool? isPreOrder;
   final String? pumpId;
   final String? beneficiary;
@@ -195,20 +198,20 @@ class TransactionItem {
 
   factory TransactionItem.fromJson(Map<String, dynamic> json) {
     return TransactionItem(
-      itemAmount: json['itemAmount'] as int?,
+      itemAmount: (json['itemAmount'] as num?)?.toDouble(),
       itemCategory: json['itemCategory'] as String?,
-      itemCount: json['itemCount'] as int?,
+      itemCount: (json['itemCount'] as num?)?.toDouble(),
       itemName: json['itemName'] as String?,
       reciptNumber: json['reciptNumber'] as String?,
-      totalAmount: json['totalAmount'] as int?,
+      totalAmount: (json['totalAmount'] as num?)?.toDouble(),
       productId: json['productId'] as String?,
       orderNote: json['orderNote'] as String?,
       variationKeyId: json['variationKeyId'] as String?,
       variationKey: json['variationKey'] as String?,
       tags: (json['tags'] as List<dynamic>?)?.map((e) => e as String).toList(),
-      discountPercent: json['discountPercent'] as int?,
+      discountPercent: (json['discountPercent'] as num?)?.toDouble(),
       discountType: json['discountType'] as String?,
-      discount: json['discount'] as int?,
+      discount: (json['discount'] as num?)?.toDouble(),
       isPreOrder: json['isPreOrder'] as bool?,
       pumpId: json['pumpId'] as String?,
       beneficiary: json['beneficiary'] as String?,

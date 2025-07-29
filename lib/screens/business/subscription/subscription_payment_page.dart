@@ -103,6 +103,7 @@ class _CompleteSubscriptionScreenState extends State<CompleteSubscriptionScreen>
               invoiceNumber: stkResponse?.data?.stkOrderId ?? '',
               referenceNumber: stkResponse?.data?.requestReferenceId  ?? '',
               paymentData: data,
+              sTKPaymentType: STKPaymentType.KCB,
               onPaymentSuccess: () {
                 showCustomToast('Payment completed successfully!', isError: false);
                 // Navigate back to parent screens or home

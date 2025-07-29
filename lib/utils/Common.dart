@@ -174,7 +174,7 @@ Widget appButtonWithIcon({
       iconPath,
       width: iconSize,
       height: iconSize,
-      colorFilter: ColorFilter.mode(Colors.black,
+      colorFilter: const ColorFilter.mode(Colors.black,
         BlendMode.srcIn,
       ),
     );
@@ -368,18 +368,23 @@ Widget buildOverviewCard(
           height: 30,
         ),
         const SizedBox(height: 14),
-        Text(title, 
+        Text(title,
             style: const TextStyle(
-              color: Color(0xff71727a), 
-              fontSize: 14,
               fontFamily: 'Poppins',
+              color: textPrimary,
+              fontSize: 14,
+              fontWeight: FontWeight.w400,
+              fontStyle: FontStyle.normal,
             )),
         Text(value,
             style: const TextStyle(
-                color: Color(0xff333333),
-                fontWeight: FontWeight.w600,
-                fontFamily: 'Poppins',
-                fontSize: 14)),
+              fontFamily: 'Poppins',
+              color:textPrimary,
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              fontStyle: FontStyle.normal,
+            )
+        ),
       ],
     ),
   );
@@ -402,6 +407,7 @@ Widget buildSalesSummaryRow({
   required String currency,
   required num amount,
   required double percentage,
+  required Color backgroundColor,
   Color color = Colors.green,
 }) {
   return Padding(
@@ -412,17 +418,38 @@ Widget buildSalesSummaryRow({
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(name, style: const TextStyle(fontWeight: FontWeight.w500)),
-            Text('$currency ${amount.formatCurrency()}', style: const TextStyle(fontWeight: FontWeight.w600)),
+            Text(name,
+                style: const TextStyle(
+                  fontFamily: 'Poppins',
+                  color: textPrimary,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  fontStyle: FontStyle.normal,
+                )
+            ),
+            Text("$currency ${amount.formatCurrency()}",
+                style: const TextStyle(
+                  fontFamily: 'Poppins',
+                  color: textSecondary,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w400,
+                  fontStyle: FontStyle.normal,
+                  letterSpacing: 0.12,
+
+                )
+            )
           ],
         ),
         const SizedBox(height: 6),
-        LinearProgressIndicator(
-          value: percentage / 100,
-          minHeight: 6,
-          backgroundColor: Colors.grey.shade200,
-          valueColor: AlwaysStoppedAnimation<Color>(color),
-        ),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(3.0), // Half of minHeight (6/2 = 3)
+          child: LinearProgressIndicator(
+            value: percentage / 100,
+            minHeight: 10,
+            backgroundColor: backgroundColor,
+            valueColor: AlwaysStoppedAnimation<Color>(color),
+          ),
+        ).paddingSymmetric(vertical: 10),
       ],
     ),
   );

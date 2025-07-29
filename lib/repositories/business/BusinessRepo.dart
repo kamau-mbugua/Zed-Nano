@@ -197,7 +197,7 @@ class BusinessRepo{
   Future<ApiResponse> getBranchTransactionByDate({required Map<String, dynamic> requestData}) async {
     try {
       final response =
-      await dioClient!.post('${AppConstants.getBranchTransactionByDate}', data: requestData);
+      await dioClient!.post('${AppConstants.getBranchTransactionByDate}?limit=1000&page=1', data: requestData);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -734,6 +734,8 @@ class BusinessRepo{
       return ApiResponse.withError(ApiErrorHandler.handleError(e));
     }
   }
+
+
 
   Future<ApiResponse> cancelPushyTransaction({required String? orderId}) async {
     try {

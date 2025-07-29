@@ -16,8 +16,9 @@ class OrderDetailResponse {
       status: json['Status'] as String?,
       data: json['data'] != null ? OrderDetailData.fromJson(json['data'] as Map<String, dynamic>) : null,
       order: json['order'] != null ? OrderDetail.fromJson(json['order'] as Map<String, dynamic>) : null,
-      transactionsList: json['TransactionTotals'] as List<OrderTransactionTotals>?,
-    );
+      transactionsList: (json['transactionsList'] as List<dynamic>?)
+          ?.map((e) => OrderTransactionTotals.fromJson(e as Map<String, dynamic>))
+          .toList(),    );
   }
 }
 
@@ -26,6 +27,7 @@ class OrderTransactionTotals {
   final String? transactionId;
   final String? transactionDate;
   final String? currency;
+  final String? receiptId;
   final double? amount;
 
   OrderTransactionTotals({
@@ -33,6 +35,7 @@ class OrderTransactionTotals {
     this.transactionId,
     this.transactionDate,
     this.currency,
+    this.receiptId,
     this.amount,
   });
 
@@ -42,7 +45,8 @@ class OrderTransactionTotals {
       transactionId: json['transactionId'] as String?,
       transactionDate: json['transactionDate'] as String?,
       currency: json['currency'] as String?,
-      amount: (json['Totals'] as num?)?.toDouble(),
+      receiptId: json['receiptId'] as String?,
+      amount: (json['total'] as num?)?.toDouble(),
     );
   }
 }

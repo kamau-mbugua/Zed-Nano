@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/app/app_initializer.dart';
+import 'package:zed_nano/networking/models/response_model.dart';
 import 'package:zed_nano/screens/widget/common/fading_circular_progress.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/services/websocket_service.dart';
@@ -11,6 +12,11 @@ import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 typedef PaymentCallback = void Function();
 typedef PaymentErrorCallback = void Function(String errorMessage);
 
+enum STKPaymentType {
+  Mpesa,
+  KCB,
+}
+
 class MpesaPaymentWaitingScreen extends StatefulWidget {
   final String invoiceNumber;
   final String referenceNumber;
@@ -18,12 +24,14 @@ class MpesaPaymentWaitingScreen extends StatefulWidget {
   final PaymentCallback? onPaymentSuccess;
   final PaymentErrorCallback? onPaymentError;
   final VoidCallback? onCancel;
+  final STKPaymentType? sTKPaymentType;
 
   const MpesaPaymentWaitingScreen({
     super.key,
     required this.invoiceNumber,
     required this.referenceNumber,
     required this.paymentData,
+    required this.sTKPaymentType,
     this.onPaymentSuccess,
     this.onPaymentError,
     this.onCancel,
@@ -192,10 +200,19 @@ class _MpesaPaymentWaitingScreenState extends State<MpesaPaymentWaitingScreen> {
     });
 
     try {
-      final response = await getBusinessProvider(context).doInitiateKcbStkPush(
-        requestData: widget.paymentData,
-        context: context,
-      );
+      final ResponseModel response;
+      if (widget.sTKPaymentType == STKPaymentType.KCB) {
+        response = await getBusinessProvider(context).doInitiateKcbStkPush(
+          requestData: widget.paymentData,
+          context: context,
+        );
+      }else{
+        response = await getBusinessProvider(context).doPushStk(
+          requestData: widget.paymentData,
+          context: context,
+        );
+      }
+
 
       if (response.isSuccess) {
         showCustomToast('You will receive a prompt on your phone',
@@ -304,7 +321,6 @@ class _MpesaPaymentWaitingScreenState extends State<MpesaPaymentWaitingScreen> {
 
                       // Reset state
                       setState(() {
-                        _isLoading = true;
                         _canResend = false;
                         _resendCountdown = 60;
                       });

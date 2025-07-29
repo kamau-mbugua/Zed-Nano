@@ -152,3 +152,68 @@ class CompactGifDisplayWidget extends StatelessWidget {
     );
   }
 }
+
+// Alternative compact version for smaller spaces
+class CompactSuccessGifDisplayWidget extends StatelessWidget {
+  final String gifPath;
+  final String title;
+  final String subtitle;
+  final double? gifSize;
+  final EdgeInsets? padding;
+
+  const CompactSuccessGifDisplayWidget({
+    Key? key,
+    required this.gifPath,
+    required this.title,
+    required this.subtitle,
+    this.gifSize,
+    this.padding,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: padding ?? const EdgeInsets.all(Dimensions.paddingSizeDefault),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Gif(
+              autostart: Autostart.loop,
+              placeholder: (context) =>
+              const Center(child: CircularProgressIndicator()),
+              image: AssetImage(gifPath),
+            ),
+
+            const SizedBox(height: Dimensions.paddingSizeDefault),
+            Text(title,
+                style: const TextStyle(
+                  fontFamily: 'Poppins',
+                  color: successTextColor,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  fontStyle: FontStyle.normal,
+                  letterSpacing: 0.09,
+
+                ),
+            ),
+            const SizedBox(height: Dimensions.paddingSizeExtraSmall),
+            Text(subtitle,
+                style: const TextStyle(
+                  fontFamily: 'Poppins',
+                  color: textSecondary,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w400,
+                  fontStyle: FontStyle.normal,
+                  letterSpacing: 0.12,
+
+                ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
