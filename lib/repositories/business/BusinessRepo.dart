@@ -94,6 +94,26 @@ class BusinessRepo{
       return ApiResponse.withError(ApiErrorHandler.handleError(e));
     }
   }
+  Future<ApiResponse> addNewUser({required Map<String, dynamic> requestData}) async {
+    try {
+      final response =
+      await dioClient!.post('${AppConstants.addNewUser}', data: requestData);
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
+  Future<ApiResponse> getBusinessRoles({required Map<String, dynamic> requestData}) async {
+    try {
+      final response =
+      await dioClient!.post('${AppConstants.getBusinessRoles}', data: requestData);
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
   Future<ApiResponse> createOrder({required Map<String, dynamic> requestData}) async {
     try {
       final response =
@@ -267,6 +287,21 @@ class BusinessRepo{
     try {
       final response =
       await dioClient!.get('${AppConstants.getListCustomers}?page=$page&limit=$limit&searchValue=$searchValue&status=$status${paymentType.isNotEmpty ? '&paymentType=$paymentType' : ''}${customerType.isNotEmpty ? '&customerType=$customerType' : ''}');
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
+  Future<ApiResponse> getListListUsers({
+    required int page ,
+    required int limit ,
+    required String searchValue ,
+    required String status ,
+  }) async {
+    try {
+      final response =
+      await dioClient!.get('${AppConstants.getListListUsers}/$status/?page=$page&limit=$limit&searchValue=$searchValue');
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -705,6 +740,28 @@ class BusinessRepo{
     try {
       final response =
       await dioClient!.post('${AppConstants.getOrderPaymentStatus}', data: requestData);
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
+
+  Future<ApiResponse> doSendToPos({required Map<String, dynamic> requestData}) async {
+    try {
+      final response =
+      await dioClient!.post('${AppConstants.doSendToPos}', data: requestData);
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
+
+  Future<ApiResponse> getBranchTerminals() async {
+    try {
+      final response =
+      await dioClient!.get('${AppConstants.getBranchTerminals}');
 
       return ApiResponse.withSuccess(response);
     } catch (e) {

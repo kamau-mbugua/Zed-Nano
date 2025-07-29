@@ -219,7 +219,9 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                 iconPath: fabMenuIcon,
                 context: context,
                 onTap: () {
-                  BottomSheetHelper.showPrintingOptionsBottomSheet(context, printOrderInvoiceId: orderDetail?.id);
+                  BottomSheetHelper.showPrintingOptionsBottomSheet(context, printOrderInvoiceId: orderDetail?.id).then((value) {
+
+                  });
                 },
               ),
             ),

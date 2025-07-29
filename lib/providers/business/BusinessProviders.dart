@@ -6,8 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:path/path.dart' as p;
 import 'package:zed_nano/models/branch-store-summary/BranchStoreSummaryResponse.dart';
+import 'package:zed_nano/models/branchTerminals/BranchTerminalsResponse.dart';
 import 'package:zed_nano/models/cashPayment/OrderCheckoutPaymentResponse.dart';
 import 'package:zed_nano/models/createCategory/CreateCategoryResponse.dart';
+import 'package:zed_nano/models/get_business_roles/GetBusinessRolesResponse.dart';
+import 'package:zed_nano/models/listUsers/ListUsersResponse.dart';
 import 'package:zed_nano/models/savePushy/CreateOrderResponse.dart';
 import 'package:zed_nano/models/createProduct/CreateProductResponse.dart';
 import 'package:zed_nano/models/createbillingInvoice/CreateBillingInvoiceResponse.dart';
@@ -269,6 +272,46 @@ class BusinessProviders extends BaseProvider {
     } else {
       finalResponseModel =
           ResponseModel<CreateProductResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
+  Future<ResponseModel<CommonResponse>> addNewUser(
+      {required Map<String, dynamic> requestData,
+      required BuildContext context}) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.addNewUser(requestData: requestData), context);
+
+    ResponseModel<CommonResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<CommonResponse>(
+          true, responseModel.message!, CommonResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<CommonResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
+  Future<ResponseModel<GetBusinessRolesResponse>> getBusinessRoles(
+      {required Map<String, dynamic> requestData,
+      required BuildContext context}) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.getBusinessRoles(requestData: requestData), context);
+
+    ResponseModel<GetBusinessRolesResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<GetBusinessRolesResponse>(
+          true, responseModel.message!, GetBusinessRolesResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<GetBusinessRolesResponse>(false, responseModel.message!);
     }
 
     return finalResponseModel;
@@ -752,6 +795,36 @@ class BusinessProviders extends BaseProvider {
     return finalResponseModel;
   }
 
+  Future<ResponseModel<ListUsersResponse>> getListListUsers({
+    required int page,
+    required int limit,
+    required String searchValue,
+    required String status,
+    required BuildContext context,
+  }) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.getListListUsers(
+              page: page,
+              limit: limit,
+              searchValue: searchValue,
+              status: status,
+            ),
+        context);
+
+    ResponseModel<ListUsersResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<ListUsersResponse>(
+          true, responseModel.message!, ListUsersResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<ListUsersResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
   Future<ResponseModel<CustomerTransactionsResponse>> getCustomerTransactions({
     required int page,
     required int limit,
@@ -1227,6 +1300,47 @@ class BusinessProviders extends BaseProvider {
     } else {
       finalResponseModel =
           ResponseModel<OrderDetailResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
+  Future<ResponseModel<CommonResponse>> doSendToPos({
+    required Map<String, dynamic> requestData,
+    required BuildContext context,
+  }) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.doSendToPos(requestData: requestData), context);
+
+    ResponseModel<CommonResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<CommonResponse>(
+          true, responseModel.message!, CommonResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<CommonResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
+  Future<ResponseModel<BranchTerminalsResponse>> getBranchTerminals({
+    required BuildContext context,
+  }) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.getBranchTerminals(), context);
+
+    ResponseModel<BranchTerminalsResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<BranchTerminalsResponse>(
+          true, responseModel.message!, BranchTerminalsResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<BranchTerminalsResponse>(false, responseModel.message!);
     }
 
     return finalResponseModel;

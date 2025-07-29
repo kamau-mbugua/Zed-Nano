@@ -104,8 +104,9 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
           widget.onNext();
         }
         if (createOrderOption == CreateOrderOption.moreOptions) {
-          widget.skipAndClose();
-          BottomSheetHelper.showPrintingOptionsBottomSheet(context, printOrderInvoiceId: value.data?.data?.id);
+          BottomSheetHelper.showPrintingOptionsBottomSheet(context, printOrderInvoiceId: value.data?.data?.id).then((value) {
+            widget.skipAndClose();
+          });
         }
         cartViewModel.clear();
       } else {

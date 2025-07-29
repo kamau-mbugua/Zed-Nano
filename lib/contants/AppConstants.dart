@@ -42,6 +42,8 @@ class AppConstants{
   static const String updateBusinessInfo = 'api/updateBusiness';
   static const String createProduct = 'api/createProduct';
   static const String createCustomer = 'api/addCustomer';
+  static const String addNewUser = 'api/addNewUser';
+  static const String getBusinessRoles = 'api/get_business_roles';
   static const String createOrder = 'api/savePushy';
   static const String createBillingInvoice = 'api/v1/billing/businesss/createbilling-invoice';
   static const String enableCashPayment = 'api/activate_cash_payment';
@@ -58,6 +60,7 @@ class AppConstants{
   static const String getPaymentMethodsWithStatus = 'api/get_payment_methods_with_status';
   static const String getListCategories = 'api/listCategories/Active';
   static const String getListCustomers = 'api/customers_list';
+  static const String getListListUsers = 'api/listUsers';
   static const String getCustomerTransactions = 'api/customerTransactions';
   static const String getCustomerInvoices = 'api/get_user_invoices';
   static const String fetchByStatus = 'api/fetchByStatus';
@@ -66,6 +69,8 @@ class AppConstants{
   static const String findProduct = 'api/findProduct';
   static const String getCustomerByNumber = 'api/get_customer_by_number';
   static const String getOrderPaymentStatus = 'api/order_payment_status';
+  static const String doSendToPos = '/api/sendPushy';
+  static const String getBranchTerminals = 'api/v1/branchTerminals/Active';
   static const String getPaymentMethodsStatusNoAuth = 'api/v1/payments/payment_methods_status_no_auth';
   static const String doCashPayment = 'api/transactions/cashPayment';
   static const String cancelPushyTransaction = 'api/cancelPushyTransaction';
