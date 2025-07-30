@@ -149,7 +149,7 @@ class _CustomerDetailsPageState extends State<CustomerDetailsPage> {
               return;
             }
             if (_cusomerData?.status == 'Suspended') {
-              _showRestoreCustomerBottomSheet();
+              _showAwaitingCustomerBottomSheet();
               return;
             }
             if (_cusomerData?.status == 'Awaiting') {

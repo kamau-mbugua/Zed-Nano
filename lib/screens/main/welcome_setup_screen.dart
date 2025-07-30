@@ -5,6 +5,7 @@ import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/business/get_started_page.dart';
 import 'package:zed_nano/screens/widget/common/custom_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/feature_card.dart';
+import 'package:zed_nano/screens/widgets/custom_drawer.dart';
 import 'package:zed_nano/screens/widgets/drawer_widget.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/Images.dart';
@@ -30,7 +31,9 @@ class _WelcomeSetupScreenState extends State<WelcomeSetupScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      drawer: const DrawerWidget(),
+      drawer: CustomDrawer(
+        onClose: () => Navigator.pop(context),
+      ),
       appBar: const CustomDashboardAppBar(title: ''),
       body: SafeArea(
         child: SingleChildScrollView(

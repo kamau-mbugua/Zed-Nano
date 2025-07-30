@@ -31,7 +31,7 @@ $ flutter run --flavor staging --target lib/main_staging.dart
 $ flutter run --flavor production --target lib/main_production.dart
 ```
 
-_\*Zed Nano works on iOS, Android, Web, and Windows._
+_*Zed Nano works on iOS, Android, Web, and Windows._
 
 ---
 
@@ -52,6 +52,50 @@ $ genhtml coverage/lcov.info -o coverage/
 # Open Coverage Report
 $ open coverage/index.html
 ```
+
+---
+
+## Building APKs 🔨
+
+To build APKs for different flavors, use the following commands:
+
+### Debug APKs (for testing)
+```sh
+# Development
+$ flutter build apk --flavor development --target lib/main_development.dart
+
+# Staging
+$ flutter build apk --flavor staging --target lib/main_staging.dart
+
+# Production
+$ flutter build apk --flavor production --target lib/main_production.dart
+```
+
+### Release APKs (for distribution)
+```sh
+# Development
+$ flutter build apk --flavor development --target lib/main_development.dart --release
+
+# Staging
+$ flutter build apk --flavor staging --target lib/main_staging.dart --release
+
+# Production
+$ flutter build apk --flavor production --target lib/main_production.dart --release
+```
+
+### App Bundles (for Play Store)
+```sh
+# Development
+$ flutter build appbundle --flavor development --target lib/main_development.dart --release
+
+# Staging
+$ flutter build appbundle --flavor staging --target lib/main_staging.dart --release
+
+# Production
+$ flutter build appbundle --flavor production --target lib/main_production.dart --release
+```
+
+**Output Location:** APKs will be generated in `build/app/outputs/flutter-apk/`
 
 ---
 

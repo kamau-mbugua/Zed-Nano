@@ -356,6 +356,7 @@ class _LoginPageState extends State<LoginPage> {
     final Map<String, dynamic> loginData = {
       'email': email,
       'userPin': pass,
+      'isCreatedViaNano':true
     };
     logger.d(loginData);
 
@@ -382,6 +383,7 @@ class _LoginPageState extends State<LoginPage> {
     final Map<String, dynamic> loginData = {
       'userPhone': phoneNumber,
       'userPin': pass,
+      'isCreatedViaNano':true
     };
     logger.d(loginData);
 

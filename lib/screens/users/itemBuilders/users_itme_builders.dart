@@ -3,6 +3,7 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/models/customers_list/CustomerListResponse.dart';
 import 'package:zed_nano/models/listUsers/ListUsersResponse.dart';
 import 'package:zed_nano/screens/customers/details/customer_details_page.dart';
+import 'package:zed_nano/screens/users/detail/user_details_page.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Images.dart';
@@ -12,6 +13,7 @@ Widget listUsersItemBuilder(ListUserData customer) {
     builder: (context) => GestureDetector(
       onTap: () {
         // CustomerDetailsPage(customerID: customer.id,).launch(context);
+        UserDetailsPage(customerID: customer.userId).launch(context);
       },
       child: Container(
         margin: const EdgeInsets.only(bottom: 10),

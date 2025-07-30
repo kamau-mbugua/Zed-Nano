@@ -82,7 +82,9 @@ class AppConstants{
   static const String doCashPaymentInvoice = 'api/v1/payments/generalpayment';
   static const String cancelPushyTransaction = 'api/cancelPushyTransaction';
   static const String activateCustomer = 'api/activateCustomer';
+  static const String getUserByNumber = 'api/getZedPayItUserById';
   static const String suspendCustomer = 'api/suspendCustomer';
+  static const String changeStatus = 'api/v1/user/changeStatus';
   static const String getListByProducts = 'api/listByProducts';
   static const String getApprovedAddStockBatchesByBranch = 'api/get_approved_add_stock_batches_by_branch';
   static const String getApprovedBatchesByBranch = 'api/get_approved_batches_by_branch';

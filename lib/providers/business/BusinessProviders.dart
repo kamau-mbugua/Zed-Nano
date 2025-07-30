@@ -9,6 +9,7 @@ import 'package:zed_nano/models/branch-store-summary/BranchStoreSummaryResponse.
 import 'package:zed_nano/models/branchTerminals/BranchTerminalsResponse.dart';
 import 'package:zed_nano/models/cashPayment/OrderCheckoutPaymentResponse.dart';
 import 'package:zed_nano/models/createCategory/CreateCategoryResponse.dart';
+import 'package:zed_nano/models/getZedPayItUserById/GetZedPayItUserByIdResponse.dart';
 import 'package:zed_nano/models/get_business_invoices_by_status/GetBusinessInvoicesByStatusResponse.dart';
 import 'package:zed_nano/models/get_business_roles/GetBusinessRolesResponse.dart';
 import 'package:zed_nano/models/get_invoice_by_invoice_number/GetInvoiceByInvoiceNumberResponse.dart';
@@ -1598,12 +1599,55 @@ class BusinessProviders extends BaseProvider {
     return finalResponseModel;
   }
 
+  Future<ResponseModel<GetZedPayItUserByIdResponse>> getUserByNumber({
+    required String customerNumber,
+    required BuildContext context,
+  }) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.getUserByNumber(customerNumber: customerNumber), context);
+
+    ResponseModel<GetZedPayItUserByIdResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<GetZedPayItUserByIdResponse>(
+          true, responseModel.message!, GetZedPayItUserByIdResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<GetZedPayItUserByIdResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
   Future<ResponseModel<CommonResponse>> suspendCustomer({
     required String customerNumber,
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
         () => businessRepo.suspendCustomer(customerNumber: customerNumber), context);
+
+    ResponseModel<CommonResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<CommonResponse>(
+          true, responseModel.message!, CommonResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<CommonResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
+  Future<ResponseModel<CommonResponse>> changeStatus({
+    required String customerNumber,
+    required String status,
+    required BuildContext context,
+  }) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.changeStatus(customerNumber: customerNumber, status: status), context);
 
     ResponseModel<CommonResponse> finalResponseModel;
 

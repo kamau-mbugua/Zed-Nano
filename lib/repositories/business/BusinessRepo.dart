@@ -920,10 +920,37 @@ class BusinessRepo{
     }
   }
 
+  Future<ApiResponse> getUserByNumber({required String customerNumber}) async {
+    try {
+      final response =
+      await dioClient!.get('${AppConstants.getUserByNumber}?userId=$customerNumber');
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
+
   Future<ApiResponse> suspendCustomer({required String customerNumber}) async {
     try {
       final response =
       await dioClient!.get('${AppConstants.suspendCustomer}?customerId=$customerNumber');
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
+
+  Future<ApiResponse> changeStatus({required String customerNumber, required String status}) async {
+    try {
+
+      var data = {
+        'status': status,
+      };
+
+      final response =
+      await dioClient!.post('${AppConstants.changeStatus}/$customerNumber', data:data);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
