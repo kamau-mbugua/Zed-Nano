@@ -32,6 +32,7 @@ class BaseProvider extends ChangeNotifier {
         }
       } catch(e) {
         logger.e('setLoading ⚠️ Exception caught: $e');
+        context.dismissLoading();
       }
       
       // Only notify listeners after the current build phase is complete

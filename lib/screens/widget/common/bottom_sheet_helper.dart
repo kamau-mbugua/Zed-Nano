@@ -6,6 +6,7 @@ import 'package:zed_nano/models/listStockTake/GetActiveStockTakeResponse.dart';
 import 'package:zed_nano/screens/business/bottomsheets/product_service_category_bottom_sheet.dart';
 import 'package:zed_nano/screens/business/bottomsheets/setup_bottom_sheet.dart';
 import 'package:zed_nano/screens/customers/details/bottomsheet/customer_options_bottom_sheet.dart';
+import 'package:zed_nano/screens/invoices/bottomsheet/invoice_options_bottom_sheet.dart';
 import 'package:zed_nano/screens/orders/bottomsheets/printing_options_bottom_sheet.dart';
 import 'package:zed_nano/screens/payments/bottomsheets/add_kcb_options_bottomsheet.dart';
 import 'package:zed_nano/screens/payments/bottomsheets/add_mpesa_options_bottomsheet.dart';
@@ -88,6 +89,19 @@ class BottomSheetHelper {
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (context) => AddStockTakeProductBottomSheet(product: activeStockProduct),
+    );
+  }
+
+
+  static Future<void> showInvoiceOptionsBottomSheet(
+    BuildContext context, {
+    required String? invoiceNumber,
+  }) {
+    return showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => InvoiceOptionsBottomSheet(invoiceNumber: invoiceNumber),
     );
   }
 

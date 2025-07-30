@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:zed_nano/models/get_invoice_by_invoice_number/GetInvoiceByInvoiceNumberResponse.dart';
+import 'package:zed_nano/models/get_invoice_receipt_payment_methods_no_login/GetInvoiceReceiptPaymentMethodsNoLoginResponse.dart';
 import 'package:zed_nano/models/order_payment_status/OrderDetailResponse.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
+import 'package:zed_nano/screens/invoices/itemBuilders/invoices_item_builders.dart';
 import 'package:zed_nano/screens/orders/itemBuilder/order_item_builders.dart';
+import 'package:zed_nano/screens/payments/checkout_payment/check_out_payments_page.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
@@ -11,8 +15,9 @@ import 'package:zed_nano/utils/extensions.dart';
 
 class OrderPaymentSummary extends StatefulWidget {
   String? orderId;
+  CheckOutType? checkOutType;
 
-  OrderPaymentSummary({Key? key, required this.orderId}) : super(key: key);
+  OrderPaymentSummary({Key? key, required this.orderId, this.checkOutType = CheckOutType.Order}) : super(key: key);
 
   @override
   _OrderPaymentSummaryState createState() => _OrderPaymentSummaryState();
@@ -22,12 +27,18 @@ class _OrderPaymentSummaryState extends State<OrderPaymentSummary> {
   OrderDetail? orderDetail;
   List<OrderTransactionTotals>? orderTransactionTotals;
 
+  InvoiceDetail? getInvoiceByInvoiceNumberResponse;
+  List<PaymentReceipt>? paymentReceipt;
+
   @override
   void initState() {
     super.initState();
-    // Defer the first data fetch until after the build is complete
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      getOrderPaymentStatus();
+      if (widget.checkOutType == CheckOutType.Invoice) {
+        getInvoiceByInvoiceNumber();
+      }else{
+        getOrderPaymentStatus();
+      }
     });
   }
 
@@ -48,6 +59,54 @@ class _OrderPaymentSummaryState extends State<OrderPaymentSummary> {
       }
     } catch (e) {
       showCustomToast('Failed to load Order details');
+    }
+  }
+
+  Future<void> getInvoiceByInvoiceNumber() async {
+    Map<String, dynamic> requestData = {
+      'invoiceNumber': widget.orderId,
+      'businessNumber': getBusinessDetails(context)?.businessNumber,
+      'purchaseOrderNumber': '',
+    };
+
+    try {
+      final response =
+      await getBusinessProvider(context).getInvoiceByInvoiceNumber(requestData: requestData, context: context);
+
+      if (response.isSuccess) {
+        setState(() {
+          getInvoiceByInvoiceNumberResponse = response.data?.data;
+        });
+        if ((response.data?.data?.invoiceStatus?.toLowerCase() == 'paid') || response.data?.data?.invoiceStatus?.toLowerCase() == 'partially paid') {
+          await getInvoiceReceiptPaymentMethodsNoLogin();
+        }
+      } else {
+        showCustomToast(response.message ?? 'Failed to load product details');
+      }
+    } catch (e) {
+      showCustomToast('Failed to load Invoice details');
+    }
+  }
+
+  Future<void> getInvoiceReceiptPaymentMethodsNoLogin() async {
+    Map<String, dynamic> requestData = {
+      'invoiceNumber': widget.orderId,
+      'businessNumber': getBusinessDetails(context)?.businessNumber,
+    };
+
+    try {
+      final response =
+      await getBusinessProvider(context).getInvoiceReceiptPaymentMethodsNoLogin(requestData: requestData, context: context);
+
+      if (response.isSuccess) {
+        setState(() {
+          paymentReceipt = response.data?.data;
+        });
+      } else {
+        showCustomToast(response.message ?? 'Failed to load product details');
+      }
+    } catch (e) {
+      showCustomToast('Failed to load Invoice details');
     }
   }
 
@@ -110,7 +169,7 @@ class _OrderPaymentSummaryState extends State<OrderPaymentSummary> {
   }
 
   Widget _buildOrderSummary() {
-    return Column(
+    return  widget.checkOutType == CheckOutType.Order ? Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -182,11 +241,87 @@ class _OrderPaymentSummaryState extends State<OrderPaymentSummary> {
               ],
             )),
       ],
+    ):Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        const Text('Summary',
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              color: Color(0xff000000),
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              fontStyle: FontStyle.normal,
+            )),
+        Container(
+            width: context.width(),
+            decoration: BoxDecoration(
+              color: lightGreyColor,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text('Invoice Number',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          color: textSecondary,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                          fontStyle: FontStyle.normal,
+                          letterSpacing: 0.12,
+                        )),
+                    Text("${getInvoiceByInvoiceNumberResponse?.invoiceNumber}",
+                        style: const TextStyle(
+                          fontFamily: 'Poppins',
+                          color: textSecondary,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                          fontStyle: FontStyle.normal,
+                          letterSpacing: 0.12,
+                        ))
+                  ],
+                ).paddingSymmetric(vertical: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text('No. of Items',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          color: textSecondary,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                          fontStyle: FontStyle.normal,
+                          letterSpacing: 0.12,
+                        )),
+                    Text("${getInvoiceByInvoiceNumberResponse?.items?.length}",
+                        style: const TextStyle(
+                          fontFamily: 'Poppins',
+                          color: textSecondary,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                          fontStyle: FontStyle.normal,
+                          letterSpacing: 0.12,
+                        ))
+                  ],
+                ).paddingSymmetric(vertical: 8),
+              ],
+            )),
+      ],
     );
   }
 
   Widget _orderHearder() {
-    return const CompactSuccessGifDisplayWidget(
+    return widget.checkOutType == CheckOutType.Invoice ? const CompactSuccessGifDisplayWidget(
+      gifPath: successGif,
+      title: 'Payment Successful!',
+      subtitle: 'Thank you. Your Invoice has been processed successfully.',
+    ):const CompactSuccessGifDisplayWidget(
       gifPath: successGif,
       title: 'Payment Successful!',
       subtitle: 'Thank you. Your order has been processed successfully.',
@@ -195,7 +330,8 @@ class _OrderPaymentSummaryState extends State<OrderPaymentSummary> {
 
   Widget _buildPaymentMethod() {
     final cartItems = orderTransactionTotals ?? [];
-    return Column(
+    final invoiceItems = paymentReceipt ?? [];
+    return widget.checkOutType == CheckOutType.Order ? Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -232,6 +368,44 @@ class _OrderPaymentSummaryState extends State<OrderPaymentSummary> {
                 return buildOrderPaymentSummary(item: item, context: context);
               },
             ),
-        ]).paddingSymmetric(vertical: 16);
+        ]).paddingSymmetric(vertical: 16)
+        : Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          const Text('Payment Summary',
+              style: TextStyle(
+                fontFamily: 'Poppins',
+                color: textPrimary,
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                fontStyle: FontStyle.normal,
+              )
+          ),
+          8.height,
+          if (invoiceItems.isEmpty) const Center(
+            child: CompactGifDisplayWidget(
+              gifPath: emptyListGif,
+              title: "It's empty, over here.",
+              subtitle:
+              'No Payments in for this Invoice yet! Add to view them here.',
+            ),
+          ) else ListView.separated(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            padding: const EdgeInsets.symmetric(horizontal: 0),
+            itemCount: invoiceItems.length,
+            separatorBuilder: (context, index) => const Divider(height: 0.5, color: innactiveBorderCart,),
+            itemBuilder: (context, index) {
+              final item = invoiceItems[index];
+              return buildInvoicePaymentSummary(
+                  item: item,
+                  context: context
+              );
+            },
+          ),
+        ]
+    ).paddingSymmetric(vertical: 16);
+
   }
 }

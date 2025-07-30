@@ -5,6 +5,7 @@ import 'package:zed_nano/models/customers_list/CustomerListResponse.dart';
 import 'package:zed_nano/models/fetchByStatus/OrderResponse.dart';
 import 'package:zed_nano/models/get_user_invoices/InvoiceListResponse.dart';
 import 'package:zed_nano/screens/customers/details/customer_details_page.dart';
+import 'package:zed_nano/screens/invoices/detail/invoice_detail_page.dart';
 import 'package:zed_nano/screens/orders/detail/order_detail_page.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
 import 'package:zed_nano/utils/Colors.dart';
@@ -225,6 +226,8 @@ Widget listCustomersInvoicesItemBuilder(CustomerInvoiceData customerTransaction)
   return Builder(
     builder: (context) => GestureDetector(
       onTap: () {
+        InvoiceDetailPage(invoiceNumber: customerTransaction?.invoiceNumber).launch(context).then((value) {
+        });
       },
       child: Container(
         margin: const EdgeInsets.only(bottom: 10),

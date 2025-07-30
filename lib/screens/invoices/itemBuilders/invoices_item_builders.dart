@@ -349,7 +349,7 @@ Widget buildInvoiceItem({
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text("${item.currency ?? 'KES'} ${((item.productPrice ?? 0) * (item.quantity ?? 0))?.formatCurrency()}",
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontFamily: 'Poppins',
                               color: textPrimary,
                               fontSize: 12,

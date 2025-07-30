@@ -178,7 +178,6 @@ extension DateTimeFormatExtension on String {
     }
   }
 
-
   /// Converts ISO date string (2025-07-05T13:16:48.063Z) to formatted date with custom format
   String toCustomFormattedDate(String format) {
     try {
@@ -188,6 +187,50 @@ extension DateTimeFormatExtension on String {
     } catch (e) {
       return this;
     }
+  }
+}
+
+/// Utility class for date formatting
+class DateFormatter {
+  /// Returns current date in format "05 July 2025"
+  static String getCurrentFormattedDate() {
+    final now = DateTime.now();
+    final formatter = DateFormat('dd MMMM yyyy');
+    return formatter.format(now);
+  }
+
+  /// Formats any DateTime to "05 July 2025" format
+  static String formatDate(DateTime date) {
+    final formatter = DateFormat('dd MMMM yyyy');
+    return formatter.format(date);
+  }
+
+  /// Formats any DateTime to "05 July 2025 13:16" format
+  static String formatDateTime(DateTime date) {
+    final formatter = DateFormat('dd MMMM yyyy HH:mm');
+    return formatter.format(date);
+  }
+
+  /// Returns current date and time in format "30/07/25 11:49 AM"
+  static String getCurrentShortDateTime() {
+    final now = DateTime.now();
+    final formatter = DateFormat('dd/MM/yy hh:mm a');
+    return formatter.format(now);
+  }
+}
+
+/// Extension for DateTime formatting
+extension DateTimeExtensions on DateTime {
+  /// Formats DateTime to "05 July 2025" format
+  String toFormattedDate() {
+    final formatter = DateFormat('dd MMMM yyyy');
+    return formatter.format(this);
+  }
+
+  /// Formats DateTime to "05 July 2025 13:16" format
+  String toFormattedDateTime() {
+    final formatter = DateFormat('dd MMMM yyyy HH:mm');
+    return formatter.format(this);
   }
 }
 

@@ -41,6 +41,27 @@ class BusinessRepo{
       return ApiResponse.withError(ApiErrorHandler.handleError(e));
     }
   }
+  Future<ApiResponse> resendInvoice({required Map<String, dynamic> requestData}) async {
+    try {
+      final response =
+      await dioClient!.get('${AppConstants.resendInvoice}', queryParameters: requestData);
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
+
+  Future<ApiResponse> shareInvoice({required Map<String, dynamic> requestData}) async {
+    try {
+      final response =
+      await dioClient!.get('${AppConstants.shareInvoice}', queryParameters: requestData);
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
 
   Future<ApiResponse> activateFreeTrialPlan({required Map<String, dynamic> requestData}) async {
     try {
@@ -118,6 +139,16 @@ class BusinessRepo{
     try {
       final response =
       await dioClient!.post('${AppConstants.createOrder}', data: requestData);
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
+  Future<ApiResponse> sendInvoice({required Map<String, dynamic> requestData}) async {
+    try {
+      final response =
+      await dioClient!.post('${AppConstants.sendInvoice}', data: requestData);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -847,6 +878,17 @@ class BusinessRepo{
     try {
       final response =
       await dioClient!.post('${AppConstants.doCashPayment}', data: requestData);
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
+
+  Future<ApiResponse> doCashPaymentInvoice({required Map<String, dynamic> requestData}) async {
+    try {
+      final response =
+      await dioClient!.post('${AppConstants.doCashPaymentInvoice}', data: requestData);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {

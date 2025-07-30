@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/app/app_initializer.dart';
+import 'package:zed_nano/models/get_invoice_by_invoice_number/GetInvoiceByInvoiceNumberResponse.dart';
+import 'package:zed_nano/models/get_invoice_receipt_payment_methods_no_login/GetInvoiceReceiptPaymentMethodsNoLoginResponse.dart';
 import 'package:zed_nano/models/order_payment_status/OrderDetailResponse.dart';
 import 'package:zed_nano/models/pushstk/PushStkResponse.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
@@ -14,13 +16,18 @@ import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/extensions.dart';
 
+enum CheckOutType{
+  Invoice,
+  Order
+}
 
 class CheckOutPaymentsPage extends StatefulWidget {
-  final VoidCallback onNext;
-  final VoidCallback onPrevious;
+  final VoidCallback? onNext;
+  final VoidCallback? onPrevious;
   String? orderId;
+  CheckOutType? checkOutType;
 
-  CheckOutPaymentsPage({Key? key, required this.onNext, required this.onPrevious, this.orderId}) : super(key: key);
+  CheckOutPaymentsPage({Key? key, this.onNext,  this.onPrevious, this.orderId, this.checkOutType = CheckOutType.Order}) : super(key: key);
 
   @override
   _CheckOutPaymentsPageState createState() => _CheckOutPaymentsPageState();
@@ -33,6 +40,8 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
   List<String> paymentMethods = [];
   String selectedPayment = '';
   List<String> orderId = [];
+  InvoiceDetail? getInvoiceByInvoiceNumberResponse;
+  List<PaymentReceipt>? paymentReceipt;
 
 
   final TextEditingController phoneNumberController = TextEditingController();
@@ -45,9 +54,62 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
 
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      getOrderPaymentStatus();
+
+      if (widget.checkOutType == CheckOutType.Invoice) {
+        getInvoiceByInvoiceNumber();
+      } else{
+        getOrderPaymentStatus();
+      }
       getPaymentMethodsStatusNoAuth();
     });
+  }
+
+  Future<void> getInvoiceByInvoiceNumber() async {
+    Map<String, dynamic> requestData = {
+      'invoiceNumber': widget.orderId,
+      'businessNumber': getBusinessDetails(context)?.businessNumber,
+      'purchaseOrderNumber': '',
+    };
+
+    try {
+      final response =
+      await getBusinessProvider(context).getInvoiceByInvoiceNumber(requestData: requestData, context: context);
+
+      if (response.isSuccess) {
+        setState(() {
+          getInvoiceByInvoiceNumberResponse = response.data?.data;
+        });
+        if ((response.data?.data?.invoiceStatus?.toLowerCase() == 'paid') || response.data?.data?.invoiceStatus?.toLowerCase() == 'partially paid') {
+          await getInvoiceReceiptPaymentMethodsNoLogin();
+        }
+      } else {
+        showCustomToast(response.message ?? 'Failed to load product details');
+      }
+    } catch (e) {
+      showCustomToast('Failed to load Invoice details');
+    }
+  }
+
+  Future<void> getInvoiceReceiptPaymentMethodsNoLogin() async {
+    Map<String, dynamic> requestData = {
+      'invoiceNumber': widget.orderId,
+      'businessNumber': getBusinessDetails(context)?.businessNumber,
+    };
+
+    try {
+      final response =
+      await getBusinessProvider(context).getInvoiceReceiptPaymentMethodsNoLogin(requestData: requestData, context: context);
+
+      if (response.isSuccess) {
+        setState(() {
+          paymentReceipt = response.data?.data;
+        });
+      } else {
+        showCustomToast(response.message ?? 'Failed to load product details');
+      }
+    } catch (e) {
+      showCustomToast('Failed to load Invoice details');
+    }
   }
 
   Future<void> getOrderPaymentStatus() async {
@@ -114,7 +176,7 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
 
       if (response.isSuccess) {
         showCustomToast(response.message, isError: false);
-        widget.onNext();
+        widget!.onNext!();
         await OrderPaymentSummary(orderId: orderDetail?.id).launch(context);
       } else {
         showCustomToast(response.message);
@@ -125,15 +187,58 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
     }
   }
 
-  Future<void> doMpesaPayment(String phoneNumber) async {
+  Future<void> doCashPaymentInvoice() async {
+    String currentDateTime = DateFormatter.getCurrentShortDateTime();
+
     final requestData = <String, dynamic>{
-      'paymentChanel': 'mobile',
-      'amount': orderDetailData?.deficit,
-      'orderIds': orderId,
-      'businessId': getBusinessDetails(context)?.businessId,
-      'phone': phoneNumber,
-      'type': 'order'
+      'paymentChanel': 'Mobile',
+      'amount': getInvoiceByInvoiceNumberResponse?.invoiceBalance,
+      'invoiceNumber': getInvoiceByInvoiceNumberResponse?.invoiceNumber,
+      'paymentMethod': 'Cash Payment',
+      'businessNumber': getBusinessDetails(context)?.businessNumber,
+      'referenceNo':currentDateTime
     };
+
+    try {
+      final response =
+      await getBusinessProvider(context).doCashPaymentInvoice(requestData: requestData, context: context);
+
+      if (response.isSuccess) {
+        showCustomToast(response.message, isError: false);
+        await OrderPaymentSummary(orderId: getInvoiceByInvoiceNumberResponse?.invoiceNumber, checkOutType: widget.checkOutType).launch(context).then((value) {
+          finish(context);
+        });
+      } else {
+        showCustomToast(response.message);
+      }
+    } catch (e) {
+      logger.e(e);
+      showCustomToast('Failed to load Order details');
+    }
+  }
+
+  Future<void> doMpesaPayment(String phoneNumber) async {
+    var requestData = <String, dynamic>{};
+
+    if (widget.checkOutType == CheckOutType.Order) {
+      requestData = <String, dynamic>{
+        'paymentChanel': 'mobile',
+        'amount': orderDetailData?.deficit,
+        'orderIds': orderId,
+        'businessId': getBusinessDetails(context)?.businessId,
+        'phone': phoneNumber,
+        'type': 'order'
+      };
+    }else {
+      requestData = <String, dynamic>{
+        'paymentChanel': 'mobile',
+        'amount': getInvoiceByInvoiceNumberResponse?.invoiceBalance,
+        'orderID': getInvoiceByInvoiceNumberResponse?.invoiceNumber,
+        'businessId': getBusinessDetails(context)?.businessId,
+        'phone': phoneNumber,
+      };
+    }
+
 
     try {
       final response =
@@ -151,14 +256,26 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
   }
 
   Future<void> doKcbMpesaPayment(String phoneNumber) async {
-    final requestData = <String, dynamic>{
-      'paymentChanel': 'mobile',
-      'amount': orderDetailData?.deficit,
-      'orderIds': orderId,
-      'businessId': getBusinessDetails(context)?.businessId,
-      'phone': phoneNumber,
-      'type': 'order'
-    };
+    var requestData = <String, dynamic>{};
+    if (widget.checkOutType == CheckOutType.Order) {
+      requestData = <String, dynamic>{
+        'paymentChanel': 'mobile',
+        'amount': orderDetailData?.deficit,
+        'orderIds': orderId,
+        'businessId': getBusinessDetails(context)?.businessId,
+        'phone': phoneNumber,
+        'type': 'order'
+      };
+    }else{
+      requestData = <String, dynamic>{
+        'paymentChanel': 'mobile',
+        'amount': getInvoiceByInvoiceNumberResponse?.invoiceBalance,
+        'orderID': getInvoiceByInvoiceNumberResponse?.invoiceNumber,
+        'phone': phoneNumber,
+        'type':'invoice'
+      };
+    }
+
 
     try {
       final response =
@@ -211,10 +328,17 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
           paymentData: requestData,
           onPaymentSuccess: () async {
             showCustomToast('Payment completed successfully!', isError: false);
-            widget.onNext();
-            await OrderPaymentSummary(orderId: orderDetail?.id).launch(context).then((value) {
-              widget.onNext();
-            });
+
+            if (widget.checkOutType == CheckOutType.Order) {
+              await OrderPaymentSummary(orderId: orderDetail?.id).launch(context).then((value) {
+                widget!.onNext!();
+              });
+            }else{
+              finish(context);
+              // await OrderPaymentSummary(orderId: getInvoiceByInvoiceNumberResponse?.invoiceNumber, checkOutType: widget.checkOutType).launch(context).then((value) {
+              //   finish(context);
+              // });
+            }
           },
           sTKPaymentType: STKPaymentType.Mpesa,
           onPaymentError: (errorMessage) {
@@ -234,7 +358,7 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
       backgroundColor: Colors.white,
       appBar: _buildAppBar(),
       body: RefreshIndicator(
-        onRefresh: getOrderPaymentStatus,
+        onRefresh: widget.checkOutType == CheckOutType.Order ? getOrderPaymentStatus : getInvoiceByInvoiceNumber,
         child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
           child: Column(
@@ -273,7 +397,11 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
           text: 'Pay Now',
           onTap: () async {
             if (selectedPayment == 'cash') {
-              await doCashPayment();
+              if (widget.checkOutType == CheckOutType.Invoice) {
+                doCashPaymentInvoice();
+              }else {
+                await doCashPayment();
+              }
             }else if (selectedPayment == 'mpesa') {
               var phoneNumber = phoneNumberController.text;
               if (!phoneNumber.isValidPhoneNumber) {
@@ -400,7 +528,107 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
 
 
   Widget _buildOrderSummary() {
-    return Container(
+    return widget.checkOutType == CheckOutType.Invoice ? Container(
+        width: context.width(),
+        decoration: BoxDecoration(
+          color: lightGreyColor,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text('Invoice Summary',
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  color: Color(0xff000000),
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  fontStyle: FontStyle.normal,
+                )
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text('Invoice Number',
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      color: textSecondary,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                      fontStyle: FontStyle.normal,
+                      letterSpacing: 0.12,
+
+                    )
+                ),
+                Text("${getInvoiceByInvoiceNumberResponse?.invoiceNumber ?? 'N/A'}",
+                    style: const TextStyle(
+                      fontFamily: 'Poppins',
+                      color: textSecondary,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                      fontStyle: FontStyle.normal,
+                      letterSpacing: 0.12,
+                    )
+                )
+              ],
+            ).paddingSymmetric(vertical: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text('Amount',
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      color: textSecondary,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                      fontStyle: FontStyle.normal,
+                      letterSpacing: 0.12,
+
+                    )
+                ),
+                Text("${getInvoiceByInvoiceNumberResponse?.currency ?? ''} ${getInvoiceByInvoiceNumberResponse?.invoiceBalance?.formatCurrency() ?? '0'}",
+                    style: const TextStyle(
+                      fontFamily: 'Poppins',
+                      color: textSecondary,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                      fontStyle: FontStyle.normal,
+                      letterSpacing: 0.12,
+                    )
+                )
+              ],
+            ).paddingSymmetric(vertical: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text('No. of Items',
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      color: textSecondary,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                      fontStyle: FontStyle.normal,
+                      letterSpacing: 0.12,
+
+                    )
+                ),
+                Text('${getInvoiceByInvoiceNumberResponse?.items?.length ?? 0}',
+                    style: const TextStyle(
+                      fontFamily: 'Poppins',
+                      color: textSecondary,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                      fontStyle: FontStyle.normal,
+                      letterSpacing: 0.12,
+                    )
+                )
+              ],
+            ).paddingSymmetric(vertical: 8),
+          ],
+        )
+    ) : Container(
         width: context.width(),
         decoration: BoxDecoration(
           color: lightGreyColor,
@@ -460,7 +688,7 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
 
                     )
                 ),
-                Text("${orderDetail?.currency} ${orderDetailData?.deficit?.formatCurrency() ?? '0'}",
+                Text("${orderDetail?.currency ?? ''} ${orderDetailData?.deficit?.formatCurrency() ?? '0'}",
                     style: const TextStyle(
                       fontFamily: 'Poppins',
                       color: textSecondary,
@@ -504,7 +732,7 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
   PreferredSizeWidget _buildAppBar() {
     return AuthAppBar(
       title: 'Void Transaction',
-      onBackPressed: widget.onNext,
+      onBackPressed: widget.checkOutType == CheckOutType.Order ? widget.onNext : () => finish(context),
     );
   }
 }

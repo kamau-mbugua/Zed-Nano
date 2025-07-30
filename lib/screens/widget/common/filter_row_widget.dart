@@ -12,6 +12,8 @@ class FilterRowWidget extends StatelessWidget {
   final IconData? leftButtonIcon;
   final bool showLeftButtonArrow;
   final bool showRightButtonArrow;
+  final bool showLeftButton;
+  final bool showRightButton;
   final EdgeInsets? padding;
 
   const FilterRowWidget({
@@ -25,30 +27,55 @@ class FilterRowWidget extends StatelessWidget {
     this.leftButtonIcon,
     this.showLeftButtonArrow = true,
     this.showRightButtonArrow = true,
+    this.showLeftButton = true,
+    this.showRightButton = true,
     this.padding,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    // Build list of visible buttons
+    List<Widget> buttons = [];
+    
+    if (showLeftButton) {
+      Widget leftButton = buildFilterButton(
+        text: leftButtonText,
+        isActive: leftButtonIsActive,
+        onTap: leftButtonOnTap,
+        icon: leftButtonIcon,
+        showArrow: showLeftButtonArrow,
+      );
+      
+      // If only one button is shown, wrap it in Expanded to take full width
+      if (!showRightButton) {
+        leftButton = Expanded(child: leftButton);
+      }
+      
+      buttons.add(leftButton);
+    }
+    
+    if (showRightButton) {
+      Widget rightButton = buildFilterButton(
+        text: rightButtonText,
+        isActive: rightButtonIsActive,
+        onTap: rightButtonOnTap,
+        showArrow: showRightButtonArrow,
+      );
+      // If only one button is shown, wrap it in Expanded to take full width
+      if (!showLeftButton) {
+        rightButton = Expanded(child: rightButton);
+      }
+      
+      buttons.add(rightButton);
+    }
+
     return Padding(
-      padding: padding ?? const EdgeInsets.fromLTRB(16, 16, 16, 0),
+      padding: padding ?? const EdgeInsets.fromLTRB(0, 16, 16, 0),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          buildFilterButton(
-            text: leftButtonText,
-            isActive: leftButtonIsActive,
-            onTap: leftButtonOnTap,
-            icon: leftButtonIcon,
-            showArrow: showLeftButtonArrow,
-          ),
-          buildFilterButton(
-            text: rightButtonText,
-            isActive: rightButtonIsActive,
-            onTap: rightButtonOnTap,
-            showArrow: showRightButtonArrow,
-          ),
-        ],
+        mainAxisAlignment: buttons.length == 1 
+            ? MainAxisAlignment.start 
+            : MainAxisAlignment.spaceBetween,
+        children: buttons,
       ),
     );
   }

@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:provider/provider.dart';
 import 'package:zed_nano/app/app_initializer.dart';
+import 'package:zed_nano/models/customers_list/CustomerListResponse.dart';
 import 'package:zed_nano/models/get_customer_by_number/CustomerListResponse.dart';
 import 'package:zed_nano/routes/routes.dart';
 import 'package:zed_nano/screens/sell/sell_page.dart';
 import 'package:zed_nano/screens/sell/sell_stepper_page.dart';
 import 'package:zed_nano/screens/widget/common/base_bottom_sheet.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
+import 'package:zed_nano/viewmodels/CustomerInvoicingViewModel.dart';
 
 class CustomerOptionsBottomSheet extends StatelessWidget {
   CustomerData? customerData;
@@ -21,6 +24,7 @@ class CustomerOptionsBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var customerInvoicingViewModel = Provider.of<CustomerInvoicingViewModel>(context);
     return BaseBottomSheet(
       title: 'More Actions',
       initialChildSize: 0.5,
@@ -53,8 +57,32 @@ class CustomerOptionsBottomSheet extends StatelessWidget {
                 String stepName = steps[index as int];
                 switch (stepName) {
                   case 'Create Invoice':
-                    logger.d('Create Invoice' );
-                    // Navigator.pushNamed(context, AppRoutes.getNewCategoryRoutes());
+
+                    var customer = Customer(
+                      id: customerData?.id ?? '',
+                      customerType: customerData?.customerType ?? '',
+                      paymentType: customerData?.paymentType ?? 'Normal',
+                      isParentPrimary: customerData?.isParentPrimary ?? false,
+                      parentType: customerData?.parentType ?? '',
+                      limit: customerData?.limit ?? 0,
+                      amountReceived: customerData?.amountReceived ?? 0,
+                      status: customerData?.status ?? 'Active',
+                      billableItems: customerData?.billableItems ?? [],
+                      customerName: '${customerData?.firstName ?? ''} ${customerData?.lastName ?? ''}'.trim(),
+                      physicalAddress: customerData?.customerAddress ?? '',
+                      mobileNumber: customerData?.phone ?? '',
+                      email: customerData?.email ?? '',
+                      createdOn: DateTime.tryParse(customerData?.createdAt ?? '') ?? DateTime.now(),
+                      userId: customerData?.userId ?? '',
+                      servicesCount: 0, 
+                      services: [], 
+                      pendingInvoices: customerData?.pendingInvoicesCount ?? 0,
+                      pendingAmount: customerData?.pendingAmount ?? 0,
+                      numberOfActiveHouses: 0, 
+                    );
+
+                    customerInvoicingViewModel.setCustomerData(customer);
+                    const SellStepperPage(stepType: SellStepType.Invoice,initialStep:1).launch(context);
                     break;
                   case 'Place Order':
                     logger.d('Place Order' );

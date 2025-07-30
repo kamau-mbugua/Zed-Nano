@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/screens/invoices/tabs/invoices_list_cancelled_page.dart';
 import 'package:zed_nano/screens/invoices/tabs/invoices_list_paid_page.dart';
 import 'package:zed_nano/screens/invoices/tabs/invoices_list_partial_page.dart';
@@ -7,6 +8,7 @@ import 'package:zed_nano/screens/orders/tabs/orders_list_cancelled_page.dart';
 import 'package:zed_nano/screens/orders/tabs/orders_list_paid_page.dart';
 import 'package:zed_nano/screens/orders/tabs/orders_list_partial_page.dart';
 import 'package:zed_nano/screens/orders/tabs/orders_list_unpaid_page.dart';
+import 'package:zed_nano/screens/sell/sell_stepper_page.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/custom_tab_switcher.dart';
 import 'package:zed_nano/utils/Colors.dart';
@@ -69,6 +71,8 @@ class _InvoicesListMainPageState extends State<InvoicesListMainPage> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
           // AddUserPage().launch(context);
+          SellStepperPage(stepType: SellStepType.Invoice,).launch(context);
+
         },
         backgroundColor: const Color(0xFF032541),
         icon: const Icon(Icons.add, size: 20, color: Colors.white),

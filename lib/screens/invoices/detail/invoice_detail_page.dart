@@ -62,7 +62,7 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
         setState(() {
           getInvoiceByInvoiceNumberResponse = response.data?.data;
         });
-        if ((response.data?.data?.invoiceStatus?.toLowerCase() == 'paid') || response.data?.data?.invoiceStatus?.toLowerCase() == 'partial') {
+        if ((response.data?.data?.invoiceStatus?.toLowerCase() == 'paid') || response.data?.data?.invoiceStatus?.toLowerCase() == 'partially paid') {
           await getInvoiceReceiptPaymentMethodsNoLogin();
         }
       } else {
@@ -336,21 +336,25 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
             Expanded(
               flex: 7,
               child: Visibility(
-                visible: getInvoiceByInvoiceNumberResponse?.invoiceStatus?.toLowerCase() == 'unpaid' || getInvoiceByInvoiceNumberResponse?.invoiceStatus?.toLowerCase() == 'partial' || getInvoiceByInvoiceNumberResponse?.invoiceStatus?.toLowerCase() == 'paid',
+                visible: getInvoiceByInvoiceNumberResponse?.invoiceStatus?.toLowerCase() == 'unpaid' || getInvoiceByInvoiceNumberResponse?.invoiceStatus?.toLowerCase() == 'partially paid',
                 child: appButton(
                   text: getInvoiceByInvoiceNumberResponse?.invoiceStatus?.toLowerCase() == 'paid' ? 'Cancel Transaction' : 'Pay Invoice',
                   onTap: () {
-                    // if (getInvoiceByInvoiceNumberResponse?.invoiceStatus?.toLowerCase() == 'paid') {
-                    //   VoidOrderTransactionPage(
-                    //     orderId: widget.invoiceNumber
-                    //   ).launch(context);
-                    // }else{
-                    //   SellStepperPage(
-                    //     initialStep: 2,
-                    //     initialStepData: {'orderId': widget.invoiceNumber},
-                    //   ).launch(context);
-                    //
-                    // }
+                    if (getInvoiceByInvoiceNumberResponse?.invoiceStatus?.toLowerCase() == 'paid') {
+                      // VoidOrderTransactionPage(
+                      //   orderId: widget.invoiceNumber
+                      // ).launch(context);
+                    }else{
+                      // SellStepperPage(
+                      //   initialStep: 2,
+                      //   initialStepData: {'orderId': widget.invoiceNumber},
+                      // ).launch(context);
+                      CheckOutPaymentsPage(checkOutType:CheckOutType.Invoice, orderId: widget.invoiceNumber).launch(context).then((value) {
+                        // refreshPage();
+                        getInvoiceByInvoiceNumber();
+                      });
+
+                    }
 
                   },
                   context: context,
@@ -360,15 +364,18 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
             const SizedBox(width: 8),
             Expanded(
               flex: 2,
-              child: appButtonWithIcon(
-                text: '',
-                iconPath: fabMenuIcon,
-                context: context,
-                onTap: () {
-                  // BottomSheetHelper.showPrintingOptionsBottomSheet(context, printOrderInvoiceId: getInvoiceByInvoiceNumberResponse?.id).then((value) {
-                  //
-                  // });
-                },
+              child: Visibility(
+                visible: getInvoiceByInvoiceNumberResponse?.invoiceStatus?.toLowerCase() == 'unpaid' || getInvoiceByInvoiceNumberResponse?.invoiceStatus?.toLowerCase() == 'partially paid',
+                child: appButtonWithIcon(
+                  text: '',
+                  iconPath: fabMenuIcon,
+                  context: context,
+                  onTap: () {
+                    BottomSheetHelper.showInvoiceOptionsBottomSheet(context, invoiceNumber: getInvoiceByInvoiceNumberResponse?.invoiceNumber).then((value) {
+
+                    });
+                  },
+                ),
               ),
             ),
           ],
@@ -715,7 +722,7 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
               decoration: BoxDecoration(
                 color: getInvoiceByInvoiceNumberResponse?.invoiceStatus?.toLowerCase() == 'paid'
                     ? lightGreenColor
-                    : getInvoiceByInvoiceNumberResponse?.invoiceStatus?.toLowerCase() == 'partial'
+                    : getInvoiceByInvoiceNumberResponse?.invoiceStatus?.toLowerCase() == 'partially paid'
                         ? lightOrange
                         : primaryYellowTextColor,
                 borderRadius: BorderRadius.circular(8),
@@ -740,7 +747,7 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
                         fontFamily: 'Poppins',
                         color: getInvoiceByInvoiceNumberResponse?.invoiceStatus?.toLowerCase() == 'paid'
                             ? successTextColor
-                            : getInvoiceByInvoiceNumberResponse?.invoiceStatus?.toLowerCase() == 'partial'
+                            : getInvoiceByInvoiceNumberResponse?.invoiceStatus?.toLowerCase() == 'partially paid'
                                 ? primaryOrangeTextColor
                                 : googleRed,
                         fontSize: 14,
@@ -780,7 +787,7 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
               decoration: BoxDecoration(
                 color: getInvoiceByInvoiceNumberResponse?.invoiceStatus?.toLowerCase() == 'paid'
                     ? lightGreenColor
-                    : getInvoiceByInvoiceNumberResponse?.invoiceStatus?.toLowerCase() == 'partial'
+                    : getInvoiceByInvoiceNumberResponse?.invoiceStatus?.toLowerCase() == 'partially paid'
                         ? lightOrange
                         : primaryYellowTextColor,
                 borderRadius: BorderRadius.circular(8),
@@ -790,7 +797,7 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
                     fontFamily: 'Poppins',
                     color: getInvoiceByInvoiceNumberResponse?.invoiceStatus?.toLowerCase() == 'paid'
                         ? successTextColor
-                        : getInvoiceByInvoiceNumberResponse?.invoiceStatus?.toLowerCase() == 'partial'
+                        : getInvoiceByInvoiceNumberResponse?.invoiceStatus?.toLowerCase() == 'partially paid'
                             ? primaryOrangeTextColor
                             : googleRed,
                     fontSize: 10,

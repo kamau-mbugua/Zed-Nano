@@ -15,6 +15,7 @@ import 'package:zed_nano/screens/sell/select_category_page.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/bottom_sheet_helper.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
+import 'package:zed_nano/screens/widget/common/heading.dart';
 import 'package:zed_nano/screens/widget/common/searchview.dart';
 import 'package:zed_nano/screens/widget/common/filter_row_widget.dart';
 import 'package:zed_nano/utils/Colors.dart';
@@ -23,6 +24,7 @@ import 'package:zed_nano/utils/GifsImages.dart';
 import 'package:zed_nano/utils/Images.dart';
 import 'package:zed_nano/utils/logger.dart';
 import 'package:zed_nano/utils/pagination_controller.dart';
+import 'package:zed_nano/viewmodels/CustomerInvoicingViewModel.dart';
 
 class SellPage extends StatefulWidget {
   final VoidCallback onNext;
@@ -147,20 +149,41 @@ class _SellPageState extends State<SellPage> {
   @override
   Widget build(BuildContext context) {
     final cartViewModel = Provider.of<CartViewModel>(context);
+    var customerInvoicingViewModel = Provider.of<CustomerInvoicingViewModel>(context);
+
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AuthAppBar(title: 'Sell', onBackPressed: widget.onPrevious),
+      appBar: AuthAppBar(title:
+      customerInvoicingViewModel.customerData != null
+          ? 'Create Invoice'
+          : 'Sell', onBackPressed: widget.onPrevious),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Filter row
+          _createInvoiceHeader(customerInvoicingViewModel),
           _createFilterRow(),
           16.height,
           _createListView(cartViewModel),
           // Product list
         ],
-      ),
+      ).paddingSymmetric(horizontal: 16),
       bottomNavigationBar: _createBottomNavBar(cartViewModel),
+    );
+  }
+
+  Widget _createInvoiceHeader(CustomerInvoicingViewModel customerInvoicingViewModel) {
+    return Visibility(
+      visible: customerInvoicingViewModel.customerData != null,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          headings(
+            label: 'Invoice Items',
+            subLabel: 'Fill in the details to create your invoice.',
+          ),
+        ],
+      ),
     );
   }
 

@@ -5,6 +5,7 @@ import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/models/product_model.dart';
 import 'package:zed_nano/providers/cart/CartViewModel.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
+import 'package:zed_nano/screens/invoices/detail/invoice_detail_page.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/auth/input_fields.dart';
 import 'package:zed_nano/screens/widget/common/bottom_sheet_helper.dart';
@@ -16,8 +17,9 @@ import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
 import 'package:zed_nano/utils/Images.dart';
 import 'package:zed_nano/utils/extensions.dart';
-import 'package:zed_nano/screens/widget/common/reusable_stepper_widget.dart'; // Import the StepperController
-
+import 'package:zed_nano/screens/widget/common/reusable_stepper_widget.dart';
+import 'package:zed_nano/viewmodels/CustomerInvoicingViewModel.dart';
+import 'package:zed_nano/models/generateInvoice/GenerateInvoiceResponse.dart';
 
 //create an enum class for
 // - SaveOrder
@@ -43,6 +45,7 @@ class CartPreviewPage extends StatefulWidget {
 
 class _CartPreviewPageState extends State<CartPreviewPage> {
   final TextEditingController _narrationController = TextEditingController();
+  bool _isContactDetailsExpanded = false;
 
   @override
   void dispose() {
@@ -115,27 +118,74 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
     });
 
   }
+  Future<void> _sendInvoice() async {
+    final cartViewModel = Provider.of<CartViewModel>(context, listen: false);
+    var customerInvoicingViewModel = Provider.of<CustomerInvoicingViewModel>(context, listen: false);
+    final cartItems = cartViewModel.items;
+    final List<Map<String, dynamic>> itemsArray = cartItems.map((item) {
+      return {
+        'discount': item.discount,
+        'discountPercent': 0.0,
+        'discountType': 'Amount',
+        'productId': item.id,
+        'amount': item.price,
+        'quantity': item.quantity.toDouble(),
+      };
+    }).toList();
+
+    final requestData = <String, dynamic>{
+      'customerId': customerInvoicingViewModel.invoiceDetailItem.customerId,
+      'type': customerInvoicingViewModel.invoiceDetailItem.type,
+      'frequency': customerInvoicingViewModel.invoiceDetailItem.frequency,
+      'products': itemsArray,
+    };
+
+    logger.d('Request Data: $requestData');
+
+
+    await getBusinessProvider(context).sendInvoice(
+        requestData: requestData,
+        context: context)
+        .then((value) {
+      if (value.isSuccess) {
+        showCustomToast(value.message ?? 'Invoice Generated successfully',
+            isError: false);
+
+        InvoiceDetailPage(invoiceNumber: value.data?.data?.invoiceNumber).launch(context).then((value) {
+          widget.onNext();
+          customerInvoicingViewModel.clearData();
+          cartViewModel.clear();
+        });
+
+      } else {
+        showCustomToast(value.message ?? 'Something went wrong');
+      }
+    });
+
+  }
 
   @override
   Widget build(BuildContext context) {
     final cartViewModel = Provider.of<CartViewModel>(context);
+    var customerInvoicingViewModel = Provider.of<CustomerInvoicingViewModel>(context);
+
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar:_buildAppBar(),
+      appBar:_buildAppBar(customerInvoicingViewModel),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _cartHeader(cartViewModel),
+          _cartHeader(cartViewModel, customerInvoicingViewModel),
           16.height,
           Expanded(
             child: _cartListing(cartViewModel),
           ),
-          _createNarationView(cartViewModel),
+          _createNarationView(cartViewModel, customerInvoicingViewModel),
           _createSummaryView(cartViewModel),
         ],
       ),
-      bottomNavigationBar: _buildSubmitButton(cartViewModel),
+      bottomNavigationBar: _buildSubmitButton(cartViewModel, customerInvoicingViewModel),
     );
   }
 
@@ -210,7 +260,7 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Total',
+                const Text('Total',
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       color: textPrimary,
@@ -222,7 +272,7 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
                     )
                 ),
                 Text('KES ${totalAmount.formatCurrency()}',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontFamily: 'Poppins',
                       color: textPrimary,
                       fontSize: 14,
@@ -238,9 +288,41 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
         )).paddingSymmetric(horizontal: 16);
   }
 
-  Widget _buildSubmitButton(CartViewModel cartViewModel) {
+  Widget _buildSubmitButton(CartViewModel cartViewModel, CustomerInvoicingViewModel customerInvoicingViewModel) {
 
-    return Container(
+    return customerInvoicingViewModel.customerData != null
+    ?  Container(
+      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 7),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, -5),
+          ),
+        ],
+      ),
+      child: SafeArea(
+        child: Row(
+          children: [
+            Expanded(
+              flex: 3,
+              child: Visibility(
+                child: appButton(
+                  text:'Send Invoice',
+                  onTap: () async {
+                    await _sendInvoice();
+                  },
+                  context: context,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    )
+     : Container(
       padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 7),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -367,42 +449,45 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
     );
   }
 
-  Widget _createNarationView(CartViewModel cartViewModel) {
-    return  Padding(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              const Text(
-                'Narration',
-                style: TextStyle(
-                  color: textPrimary,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16,
+  Widget _createNarationView(CartViewModel cartViewModel, CustomerInvoicingViewModel customerInvoicingViewModel) {
+    return  Visibility(
+      visible: customerInvoicingViewModel.customerData == null,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                const Text(
+                  'Narration',
+                  style: TextStyle(
+                    color: textPrimary,
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16,
+                  ),
                 ),
-              ),
-              const SizedBox(width: 8),
-              Text(
-                '(Optional)',
-                style: TextStyle(
-                  color: Colors.grey.shade600,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w400,
-                  fontSize: 14,
+                const SizedBox(width: 8),
+                Text(
+                  '(Optional)',
+                  style: TextStyle(
+                    color: Colors.grey.shade600,
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w400,
+                    fontSize: 14,
+                  ),
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          StyledTextField(
-            textFieldType: TextFieldType.MULTILINE,
-            hintText:'Enter narration...',
-            controller: _narrationController,
-          ),
-        ],
+              ],
+            ),
+            const SizedBox(height: 8),
+            StyledTextField(
+              textFieldType: TextFieldType.MULTILINE,
+              hintText:'Enter narration...',
+              controller: _narrationController,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -432,7 +517,7 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
           onDecrease: () {
             if (item.quantity > 0) {
               if (item.quantity == 1) {
-                cartViewModel.removeItem(item.id ?? '');
+                cartViewModel.removeItem(item.id);
               } else {
                 cartViewModel.updateQuantity(
                     item.id ?? '', item.quantity - 1);
@@ -459,14 +544,14 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
     );
   }
 
-  Widget _cartHeader(CartViewModel cartViewModel){
+  Widget _cartHeader(CartViewModel cartViewModel, CustomerInvoicingViewModel customerInvoicingViewModel){
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Order Items',
-              style: TextStyle(
+          Text(customerInvoicingViewModel.customerData != null ? 'Preview Invoice' : 'Order Items',
+              style: const TextStyle(
                 fontFamily: 'Poppins',
                 color: textPrimary,
                 fontSize: 18,
@@ -478,8 +563,8 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text('Tap on a product to edit.',
-                  style: TextStyle(
+              Text(customerInvoicingViewModel.customerData != null ? 'Here’s a preview of your invoice.' :'Tap on a product to edit.',
+                  style: const TextStyle(
                     fontFamily: 'Poppins',
                     color: textSecondary,
                     fontSize: 12,
@@ -488,41 +573,322 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
                     letterSpacing: 0.12,
                   )
               ),
-              TextButton(
-                onPressed: cartViewModel.clear,
-                child: const Text(
-                  'Clear Cart',
-                  style: TextStyle(
-                    color: accentRed,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w600,
-                    fontSize: 10,
+              Visibility(
+                visible: customerInvoicingViewModel.customerData == null,
+                child: TextButton(
+                  onPressed: cartViewModel.clear,
+                  child: const Text(
+                    'Clear Cart',
+                    style: TextStyle(
+                      color: accentRed,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w600,
+                      fontSize: 10,
+                    ),
                   ),
                 ),
               ),
             ],
           ),
+          Visibility(
+            visible: customerInvoicingViewModel.customerData != null,
+            child: Column(
+              children: [
+                16.height,
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Invoice Details',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          color: Color(0xff000000),
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          fontStyle: FontStyle.normal,
+                        )
+                    ),
+                    Text('Edit',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          color: googleRed,
+                          fontSize: 10,
+                          fontWeight: FontWeight.w600,
+                          fontStyle: FontStyle.normal,
+                        )
+                    )
+                  ],
+                ),
+                8.height,
+                _buildSummary(customerInvoicingViewModel),
+                8.height,
+                _buildCustomerDetails(customerInvoicingViewModel),
+                8.height,
+                _buildInvoiceItemsHeader(),
+              ],
+            ),
+          )
         ],
       ),
     );
   }
 
-  PreferredSizeWidget _buildAppBar() {
+  Widget _buildInvoiceItemsHeader(){
+    return const Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text("Items",
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              color: textPrimary,
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              fontStyle: FontStyle.normal,
+            )
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text("Tap on a product to edit.",
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  color: textSecondary,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w400,
+                  fontStyle: FontStyle.normal,
+                  letterSpacing: 0.12,
+
+                )
+            ),
+            Text("Add Item",
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  color: googleRed,
+                  fontSize: 10,
+                  fontWeight: FontWeight.w600,
+                  fontStyle: FontStyle.normal,
+                )
+            )
+          ],
+        )
+      ],
+    );
+  }
+
+  Widget _buildCustomerDetails(CustomerInvoicingViewModel customerInvoicingViewModel){
+    return Container(
+      margin: const EdgeInsets.only(right: 8),
+      padding: const EdgeInsets.symmetric(
+          horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(
+        color: Colors.grey[100],
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Column(
+        children: [
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                _isContactDetailsExpanded = !_isContactDetailsExpanded;
+              });
+            },
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text("To: ${customerInvoicingViewModel.customerData?.customerName ?? 'N/A'}",
+                      style: const TextStyle(
+                        fontFamily: 'Poppins',
+                        color: textPrimary,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        fontStyle: FontStyle.normal,
+                      )
+                  ),
+                ),
+                rfCommonCachedNetworkImage(
+                    _isContactDetailsExpanded ? upIcon : dropIcon,
+                    fit: BoxFit.cover,
+                    height: 15,
+                    width: 15,
+                    radius: 8
+                ),
+              ],
+            ).paddingSymmetric(vertical: 10),
+          ),
+          if (_isContactDetailsExpanded) ...[
+            Row(
+                children: [
+                  rfCommonCachedNetworkImage(
+                      phoneIconGray,
+                      fit: BoxFit.cover,
+                      height: 15,
+                      width: 15,
+                      radius: 8
+                  ),
+                  6.width,
+                  Text("${customerInvoicingViewModel.customerData?.mobileNumber ?? 'N/A'}",
+                      style: const TextStyle(
+                        fontFamily: 'Poppins',
+                        color: textSecondary,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        fontStyle: FontStyle.normal,
+                        letterSpacing: 0.12,
+
+                      )
+                  )
+                ]
+            ).paddingSymmetric(vertical: 5),
+            Row(
+                children: [
+                  rfCommonCachedNetworkImage(
+                      emailIconGray,
+                      fit: BoxFit.cover,
+                      height: 15,
+                      width: 15,
+                      radius: 0
+                  ),
+                  6.width,
+                  Text("${customerInvoicingViewModel.customerData?.email ?? 'N/A'}",
+                      style: const TextStyle(
+                        fontFamily: 'Poppins',
+                        color: textSecondary,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        fontStyle: FontStyle.normal,
+                        letterSpacing: 0.12,
+
+                      )
+                  )
+                ]
+            ).paddingSymmetric(vertical: 5),
+            Row(
+                children: [
+                  rfCommonCachedNetworkImage(
+                      locationIcon,
+                      fit: BoxFit.cover,
+                      height: 15,
+                      width: 15,
+                      radius: 0
+                  ),
+                  6.width,
+                  Expanded(
+                    child: Text("${customerInvoicingViewModel.customerData?.physicalAddress ?? 'N/A'}",
+                        style: const TextStyle(
+                          fontFamily: 'Poppins',
+                          color: textSecondary,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                          fontStyle: FontStyle.normal,
+                          letterSpacing: 0.12,
+                        )
+                    ),
+                  )
+                ]
+            ).paddingSymmetric(vertical: 5),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSummary(CustomerInvoicingViewModel customerInvoicingViewModel) {
+    return Row(
+      children: [
+        Expanded(
+          child: Container(
+
+              decoration: BoxDecoration(
+                color: cardBackgroundColor,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child:Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text("Date Issued",
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        color: textPrimary,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        fontStyle: FontStyle.normal,
+                        letterSpacing: 0.12,
+
+                      )
+                  ),
+                  Text(DateFormatter.getCurrentFormattedDate(),
+                      style: const TextStyle(
+                        fontFamily: 'Poppins',
+                        color: textSecondary,
+                        fontSize: 11,
+                        fontWeight: FontWeight.w400,
+                        fontStyle: FontStyle.normal,
+                      )
+                  )
+                ],
+              )
+          ),
+        ),
+        16.width,
+        Expanded(
+          child: Container(
+              decoration: BoxDecoration(
+                color: cardBackgroundColor,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child:Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text("Purchase Order No",
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        color: textPrimary,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        fontStyle: FontStyle.normal,
+                        letterSpacing: 0.12,
+
+                      )
+                  ),
+                  Text(customerInvoicingViewModel.invoiceDetailItem.purchaseOrderNumber ?? 'N/A',
+                      style: const TextStyle(
+                        fontFamily: 'Poppins',
+                        color: textSecondary,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w400,
+                        fontStyle: FontStyle.normal,
+                      )
+                  )
+                ],
+              )
+          ),
+        ),
+      ],
+    );
+  }
+
+  PreferredSizeWidget _buildAppBar(CustomerInvoicingViewModel customerInvoicingViewModel) {
     return AuthAppBar(
-      title: 'Preview Cart',
+      title: customerInvoicingViewModel.customerData != null ? 'Create Invoice' : 'Preview Cart',
       onBackPressed: widget.onPrevious,
       actions: [
-        TextButton(
-          onPressed: () {
-            widget.onPrevious();
-          },
-          child: const Text(
-            'Add Items',
-            style: TextStyle(
-              color: accentRed,
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.w500,
-              fontSize: 14,
+        Visibility(
+          visible: customerInvoicingViewModel.customerData == null,
+          child: TextButton(
+            onPressed: () {
+              widget.onPrevious();
+            },
+            child: const Text(
+              'Add Items',
+              style: TextStyle(
+                color: accentRed,
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w500,
+                fontSize: 14,
+              ),
             ),
           ),
         ),
@@ -667,4 +1033,5 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
       vertical: 16,
     );
   }
-}
+
+  }

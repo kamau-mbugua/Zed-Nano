@@ -34,6 +34,8 @@ class AppConstants{
   static const String getBusinessInfo = 'api/get_business_info';
   static const String doPushStk = 'api/pushstk';
   static const String initiateKcbStkPush = 'api/v1/payments/initiate_kcb_stk_push';
+  static const String resendInvoice = 'api/resendInvoice';
+  static const String shareInvoice = 'api/v1/customers/get_whatsapp_message_for_invoice';
   static const String activateFreeTrialPlan = 'api/v1/billing/activate_freetrialplan';
   static const String createCategory = 'api/createCategory';
   static const String getCategoryById = 'api/getCategoryById';
@@ -45,6 +47,7 @@ class AppConstants{
   static const String addNewUser = 'api/addNewUser';
   static const String getBusinessRoles = 'api/get_business_roles';
   static const String createOrder = 'api/savePushy';
+  static const String sendInvoice = 'api/generateInvoice';
   static const String createBillingInvoice = 'api/v1/billing/businesss/createbilling-invoice';
   static const String enableCashPayment = 'api/activate_cash_payment';
   static const String addStockRequest = 'api/addStockRequest';
@@ -76,6 +79,7 @@ class AppConstants{
   static const String getBranchTerminals = 'api/v1/branchTerminals/Active';
   static const String getPaymentMethodsStatusNoAuth = 'api/v1/payments/payment_methods_status_no_auth';
   static const String doCashPayment = 'api/transactions/cashPayment';
+  static const String doCashPaymentInvoice = 'api/v1/payments/generalpayment';
   static const String cancelPushyTransaction = 'api/cancelPushyTransaction';
   static const String activateCustomer = 'api/activateCustomer';
   static const String suspendCustomer = 'api/suspendCustomer';

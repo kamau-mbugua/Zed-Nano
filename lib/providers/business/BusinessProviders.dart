@@ -13,6 +13,7 @@ import 'package:zed_nano/models/get_business_invoices_by_status/GetBusinessInvoi
 import 'package:zed_nano/models/get_business_roles/GetBusinessRolesResponse.dart';
 import 'package:zed_nano/models/get_invoice_by_invoice_number/GetInvoiceByInvoiceNumberResponse.dart';
 import 'package:zed_nano/models/get_invoice_receipt_payment_methods_no_login/GetInvoiceReceiptPaymentMethodsNoLoginResponse.dart';
+import 'package:zed_nano/models/get_whatsapp_message_for_invoice/GetWhatsappMessageForInvoiceResponse.dart';
 import 'package:zed_nano/models/listUsers/ListUsersResponse.dart';
 import 'package:zed_nano/models/savePushy/CreateOrderResponse.dart';
 import 'package:zed_nano/models/createProduct/CreateProductResponse.dart';
@@ -49,6 +50,7 @@ import 'package:zed_nano/networking/models/response_model.dart';
 import 'package:zed_nano/providers/base/base_provider.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/repositories/business/BusinessRepo.dart';
+import 'package:zed_nano/models/generateInvoice/GenerateInvoiceResponse.dart';
 
 class BusinessProviders extends BaseProvider {
   final BusinessRepo businessRepo;
@@ -111,6 +113,48 @@ class BusinessProviders extends BaseProvider {
     } else {
       finalResponseModel =
           ResponseModel<PushStkResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
+  Future<ResponseModel<CommonResponse>> resendInvoice(
+      {required Map<String, dynamic> requestData,
+      required BuildContext context}) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.resendInvoice(requestData: requestData),
+        context);
+
+    ResponseModel<CommonResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<CommonResponse>(
+          true, responseModel.message!, CommonResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<CommonResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
+  Future<ResponseModel<GetWhatsappMessageForInvoiceResponse>> shareInvoice(
+      {required Map<String, dynamic> requestData,
+      required BuildContext context}) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.shareInvoice(requestData: requestData),
+        context);
+
+    ResponseModel<GetWhatsappMessageForInvoiceResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<GetWhatsappMessageForInvoiceResponse>(
+          true, responseModel.message!, GetWhatsappMessageForInvoiceResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<GetWhatsappMessageForInvoiceResponse>(false, responseModel.message!);
     }
 
     return finalResponseModel;
@@ -335,6 +379,26 @@ class BusinessProviders extends BaseProvider {
     } else {
       finalResponseModel =
           ResponseModel<CreateOrderResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
+  Future<ResponseModel<GenerateInvoiceResponse>> sendInvoice(
+      {required Map<String, dynamic> requestData,
+      required BuildContext context}) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.sendInvoice(requestData: requestData), context);
+
+    ResponseModel<GenerateInvoiceResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<GenerateInvoiceResponse>(
+          true, responseModel.message!, GenerateInvoiceResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<GenerateInvoiceResponse>(false, responseModel.message!);
     }
 
     return finalResponseModel;
@@ -1456,6 +1520,27 @@ class BusinessProviders extends BaseProvider {
   }) async {
     final responseModel = await performApiCallWithHandling(
         () => businessRepo.doCashPayment(requestData: requestData), context);
+
+    ResponseModel<OrderCheckoutPaymentResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<OrderCheckoutPaymentResponse>(
+          true, responseModel.message!, OrderCheckoutPaymentResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<OrderCheckoutPaymentResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
+  Future<ResponseModel<OrderCheckoutPaymentResponse>> doCashPaymentInvoice({
+    required Map<String, dynamic> requestData,
+    required BuildContext context,
+  }) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.doCashPaymentInvoice(requestData: requestData), context);
 
     ResponseModel<OrderCheckoutPaymentResponse> finalResponseModel;
 

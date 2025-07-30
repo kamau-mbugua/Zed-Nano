@@ -14,6 +14,7 @@ import 'package:zed_nano/providers/cart/CartViewModel.dart';
 import 'package:zed_nano/providers/common/SplashProvider.dart';
 import 'package:zed_nano/providers/auth/authenticated_app_providers.dart';
 import 'package:zed_nano/providers/common/theme_provider.dart';
+import 'package:zed_nano/viewmodels/CustomerInvoicingViewModel.dart';
 import 'package:zed_nano/viewmodels/RefreshViewModel.dart';
 import 'package:zed_nano/viewmodels/WorkflowViewModel.dart';
 import 'package:zed_nano/services/firebase_service.dart';
@@ -101,6 +102,7 @@ Future<void> initializeApp(Flavor flavor) async {
         ChangeNotifierProvider(create: (_) => CartViewModel()),
         ChangeNotifierProvider(create: (_) => AddStockViewModel()),
         ChangeNotifierProvider(create: (_) => AddStockTakeViewModel()),
+        ChangeNotifierProvider(create: (_) => CustomerInvoicingViewModel()),
       ],
       child: App(navigatorKey: navigatorKey),
     ),

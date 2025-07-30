@@ -21,7 +21,7 @@ Widget buildProductItem({
   final int totalPrice = product.productPrice! * quantity;
 
   return Container(
-    margin: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
+    margin: const EdgeInsets.only(left: 0, right: 0, bottom: 8),
     padding: const EdgeInsets.all(10),
     decoration: BoxDecoration(
       color: Colors.white,
