@@ -6,10 +6,13 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:logger/logger.dart';
 import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/firebase_options.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'dart:io';
 
 /// A service class that handles Firebase initialization and provides
@@ -25,6 +28,13 @@ class FirebaseService {
   late final FirebaseMessaging messaging;
   late final FirebaseAnalytics analytics;
   late final FirebaseCrashlytics crashlytics;
+
+  // Google Sign In instance
+  final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
+  bool _isGoogleSignInInitialized = false;
+
+  // Facebook Auth instance
+  final FacebookAuth _facebookAuth = FacebookAuth.instance;
 
   // Singleton pattern
   factory FirebaseService() => _instance;
@@ -183,5 +193,64 @@ class FirebaseService {
     }
   }
 
+  /// Signs in with Google
+  Future<UserCredential> signInWithGoogle() async {
+    try {
+      if (!_isGoogleSignInInitialized) {
+        await _googleSignIn.initialize();
+        _isGoogleSignInInitialized = true;
+      }
 
+      // Trigger the authentication flow using v7 API
+      final GoogleSignInAccount googleUser = await _googleSignIn.authenticate(
+        scopeHint: ['email', 'profile'],
+      );
+
+      // Obtain the auth details from the request (now synchronous in v7)
+      final GoogleSignInAuthentication googleAuth = googleUser.authentication;
+
+      // Get authorization for Firebase scopes
+      final authClient = _googleSignIn.authorizationClient;
+      final authorization = await authClient.authorizationForScopes(['email', 'profile']);
+
+      if (authorization?.accessToken == null || googleAuth.idToken == null) {
+        throw Exception('Failed to obtain Google authentication tokens');
+      }
+
+      // Create a new credential
+      final OAuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: authorization!.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      // Once signed in, return the UserCredential
+      return await auth.signInWithCredential(credential);
+    } catch (e) {
+      logger.e('Google sign-in error: $e');
+      rethrow;
+    }
+  }
+
+  /// Signs in with Facebook
+  Future<UserCredential> signInWithFacebook() async {
+    final LoginResult result = await _facebookAuth.login();
+
+    if (result.status == LoginStatus.success) {
+      final OAuthCredential credential = FacebookAuthProvider.credential(result.accessToken!.tokenString);
+
+      return await auth.signInWithCredential(credential);
+    } else {
+      throw Exception('Failed to sign in with Facebook');
+    }
+  }
+
+  /// Signs in with Twitter
+  Future<UserCredential> signInWithTwitter() async {
+    final OAuthProvider twitterProvider = OAuthProvider('twitter.com');
+    
+    // You can add additional scopes if needed
+    twitterProvider.addScope('email');
+    
+    return await auth.signInWithProvider(twitterProvider);
+  }
 }

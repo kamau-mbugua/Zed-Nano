@@ -183,6 +183,17 @@ class AuthenticatedRepo {
       return ApiResponse.withError(ApiErrorHandler.handleError(e));
     }
   }
+  Future<ApiResponse> loginByFirebase({required Map<String, dynamic> requestData}) async {
+    try {
+      final response =
+          await dioClient!.post('${AppConstants.loginByFirebase}', data: requestData);
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      // Use the improved ApiErrorHandler that now returns ErrorResponse objects
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
 
   /// Register a new user
   /// 
@@ -192,6 +203,16 @@ class AuthenticatedRepo {
       final response =
           await dioClient!.post('${AppConstants.register}', data: requestData);
       
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
+  Future<ApiResponse> registerByFirebase({required Map<String, dynamic> requestData}) async {
+    try {
+      final response =
+          await dioClient!.post('${AppConstants.registerByFirebase}', data: requestData);
+
       return ApiResponse.withSuccess(response);
     } catch (e) {
       return ApiResponse.withError(ApiErrorHandler.handleError(e));

@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:zed_nano/screens/common/common_webview_page.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/utils/Colors.dart';
 
@@ -8,6 +9,7 @@ import 'package:zed_nano/utils/Colors.dart';
 class TermsCheckbox extends StatefulWidget {
   final bool initialValue;
   final Function(bool) onChanged;
+  final VoidCallback? onClick;
   final Color? activeColor;
   final Color? textColor;
   final Color? linkColor;
@@ -19,6 +21,7 @@ class TermsCheckbox extends StatefulWidget {
     this.activeColor,
     this.textColor,
     this.linkColor,
+    this.onClick,
   }) : super(key: key);
 
   @override
@@ -63,44 +66,53 @@ class _TermsCheckboxState extends State<TermsCheckbox> {
           ),
           12.width,
           Expanded(
-            child: RichText(
-              text: TextSpan(
-                style: TextStyle(
-                  color: textColor,
-                  fontFamily: "Poppins",
-                  fontSize: 12,
-                  fontWeight: FontWeight.w400,
+            child: GestureDetector(
+              onTap: (){
+
+              },
+              child: RichText(
+                text: TextSpan(
+                  style: TextStyle(
+                    color: textColor,
+                    fontFamily: "Poppins",
+                    fontSize: 12,
+                    fontWeight: FontWeight.w400,
+                  ),
+                  children: [
+                    TextSpan(
+                      text: 'By creating an account, you agree to our ',
+                    ),
+                    TextSpan(
+                      text: 'Terms and Conditions',
+                      style: TextStyle(
+                        color: linkColor,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          const CommonWebViewPage(
+                            url: 'https://zed.business/Terms%20&%20Conditions.html',
+                            showAppBar: true,
+                          ).launch(context);                        },
+                    ),
+                    TextSpan(
+                      text: ' and ',
+                    ),
+                    TextSpan(
+                      text: 'Privacy Policy',
+                      style: TextStyle(
+                        color: linkColor,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          const CommonWebViewPage(
+                            url: 'https://zed.business/Terms%20&%20Conditions.html',
+                            showAppBar: true,
+                          ).launch(context);                        },
+                    ),
+                  ],
                 ),
-                children: [
-                  TextSpan(
-                    text: 'By creating an account, you agree to our ',
-                  ),
-                  TextSpan(
-                    text: 'Terms and Conditions',
-                    style: TextStyle(
-                      color: linkColor,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () {
-                        showCustomSnackBar('Terms and Conditions tapped');
-                      },
-                  ),
-                  TextSpan(
-                    text: ' and ',
-                  ),
-                  TextSpan(
-                    text: 'Privacy Policy',
-                    style: TextStyle(
-                      color: linkColor,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () {
-                        showCustomSnackBar('Privacy Policy tapped');
-                      },
-                  ),
-                ],
               ),
             ),
           ),

@@ -120,6 +120,28 @@ class AuthenticatedAppProviders extends BaseProvider {
     return finalResponseModel;
   }
 
+
+  Future<ResponseModel<LoginResponse>> loginByFirebase(
+      {required Map<String, dynamic> requestData,
+      required BuildContext context}) async {
+    final responseModel = await performApiCallWithHandling(
+        () => authenticatedRepo.loginByFirebase(requestData: requestData), context);
+
+    ResponseModel<LoginResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      _loginResponse = LoginResponse.fromJson(map);
+      return await _processLoginResponse(_loginResponse,
+          context, responseModel.message!,requestData['userPin'].toString());
+    } else {
+      finalResponseModel =
+          ResponseModel<LoginResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
   /// Log out the current user
   Future<ResponseModel> logout(BuildContext context) async {
     return await performApiCallWithHandling(() async {
@@ -151,6 +173,25 @@ class AuthenticatedAppProviders extends BaseProvider {
       required BuildContext context}) async {
     final responseModel = await performApiCallWithHandling(
         () => authenticatedRepo.register(requestData: requestData), context);
+
+    ResponseModel<CommonResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<CommonResponse>(
+          true, responseModel.message!, CommonResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<CommonResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+  Future<ResponseModel<CommonResponse>> registerByFirebase(
+      {required Map<String, dynamic> requestData,
+      required BuildContext context}) async {
+    final responseModel = await performApiCallWithHandling(
+        () => authenticatedRepo.registerByFirebase(requestData: requestData), context);
 
     ResponseModel<CommonResponse> finalResponseModel;
 

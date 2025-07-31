@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class AppRoutes {
   static const String homeMainRoute = '/';
   static const String splashRoute = '/splashRoute';
@@ -27,6 +29,7 @@ class AppRoutes {
   static const String getNewProductWithParamRoute = '/getNewProductWithParamRoute/:doNotUpdate';
   static const String getNewAddKCBPaymenParamRoute = '/getNewAddKCBPaymenParamRoute/:kcbAccountType';
   static const String getNewAddMPESAPaymenParamRoute = '/getNewAddMPESAPaymenParamRoute/:mpesaAccountType';
+  static const String commonWebViewRoute = '/commonWebViewRoute';
 
   static String getHomeMainPageRoute() => homeMainRoute;
   static String getSplashPageRoute() => splashRoute;
@@ -56,4 +59,22 @@ class AppRoutes {
   static String getNewProductWithParamRoutes(String doNotUpdate) => '$getNewProductWithParamRoute/$doNotUpdate';
   static String getNewAddKCBPaymentParamRoute(String kcbAccountType) => '$getNewAddKCBPaymenParamRoute/$kcbAccountType';
   static String getNewAddMPESAPaymentParamRoute(String mpesaAccountType) => '$getNewAddMPESAPaymenParamRoute/$mpesaAccountType';
+  static String getCommonWebViewRoute() => commonWebViewRoute;
+
+  // Helper method to navigate to webview with parameters
+  static void navigateToWebView(BuildContext context, {
+    required String url,
+    String? title,
+    bool showAppBar = true,
+  }) {
+    Navigator.pushNamed(
+      context,
+      commonWebViewRoute,
+      arguments: {
+        'url': url,
+        'title': title,
+        'showAppBar': showAppBar,
+      },
+    );
+  }
 }

@@ -29,6 +29,7 @@ import 'package:zed_nano/screens/stock/stock_take/stock_take_batch_tabs_page.dar
 import 'package:zed_nano/screens/stock/view_stock/view_stock_page.dart';
 import 'package:zed_nano/screens/stock/view_stock/view_out_of_stock_page.dart';
 import 'package:zed_nano/screens/stock/view_stock/view_low_stock_page.dart';
+import 'package:zed_nano/screens/common/common_webview_page.dart';
 
 class RouterHelper {
   static final FluroRouter router = FluroRouter();
@@ -243,6 +244,21 @@ class RouterHelper {
     },
   );
 
+  static final Handler _commonWebViewHandler = Handler(
+    handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
+      final arguments = context?.settings?.arguments as Map<String, dynamic>?;
+      final url = arguments?['url'] as String? ?? 'https://google.com';
+      final title = arguments?['title'] as String?;
+      final showAppBar = arguments?['showAppBar'] as bool? ?? true;
+      
+      return CommonWebViewPage(
+        url: url,
+        title: title,
+        showAppBar: showAppBar,
+      );
+    },
+  );
+
   static void setupRouter() {
     router.define(
       AppRoutes.splashRoute,
@@ -399,6 +415,12 @@ class RouterHelper {
     router.define(
       '${AppRoutes.getNewAddMPESAPaymenParamRoute}/:mpesaAccountType',
       handler: _newAddMPESAPaymenHandler,
+      transitionType: TransitionType.fadeIn,
+    );
+
+    router.define(
+      AppRoutes.commonWebViewRoute,
+      handler: _commonWebViewHandler,
       transitionType: TransitionType.fadeIn,
     );
 

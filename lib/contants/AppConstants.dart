@@ -24,7 +24,9 @@ class AppConstants{
   //ENDPOINTS
   /// ******AUTHENTICATION ENDPOINTS*******
   static const String login = 'posLoginVersion2';
+  static const String loginByFirebase = 'api/v1/users/firebase/login';
   static const String register = 'api/addNewUser';
+  static const String registerByFirebase = 'api/v1/users/firebase/signup';
   static const String resetPinVersion = 'api/resetPinVersion2';
   static const String forgotPin = 'posForgotPinVersion2';
   static const String getTokenAfterInvite = 'api/get_token_after_invite';

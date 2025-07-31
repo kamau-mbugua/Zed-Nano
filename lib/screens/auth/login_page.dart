@@ -14,6 +14,7 @@ import 'package:zed_nano/screens/widget/auth/social_buttons.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/services/firebase_service.dart';
+import 'package:zed_nano/services/social_auth_service.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/Images.dart';
@@ -112,14 +113,15 @@ class _LoginPageState extends State<LoginPage> {
                     icon: googleIcon,
                     label: 'Google',
                     backgroundColor: googleRed,
-                    onTap: () {
-                      // Handle Google login
+                    onTap: () async {
+                      final socialAuthService = SocialAuthService();
+                      await socialAuthService.signInWithGoogle(context);
                     },
                   ),
                   // Email/Phone Toggle Buttons
                   if (isEmailLoginActive)
                     SocialButton(
-                      icon: phoneIcon,
+                      icon: phoneIconGray,
                       label: 'Phone',
                       backgroundColor: emailBlue,
                       onTap: () {
@@ -139,18 +141,27 @@ class _LoginPageState extends State<LoginPage> {
                         });
                       },
                     ),
-                  CircularSocialButton(
-                    icon: facebookIcon,
-                    backgroundColor: facebookBlue,
-                    onTap: () {},
+                  Visibility(
+                    visible: false,
+                    child: CircularSocialButton(
+                      icon: facebookIcon,
+                      backgroundColor: facebookBlue,
+                      onTap: () async {
+                        final socialAuthService = SocialAuthService();
+                        await socialAuthService.signInWithFacebook(context);
+                      },
+                    ),
                   ),
-                  CircularSocialButton(
-                    icon: twitterIcon,
-                    backgroundColor: twitterBlue,
-                    onTap: () {
-                      // Handle Twitter login
-                      toast('Twitter login tapped');
-                    },
+                  Visibility(
+                    visible: false,
+                    child: CircularSocialButton(
+                      icon: twitterIcon,
+                      backgroundColor: twitterBlue,
+                      onTap: () async {
+                        final socialAuthService = SocialAuthService();
+                        await socialAuthService.signInWithTwitter(context);
+                      },
+                    ),
                   ),
                 ],
               ),

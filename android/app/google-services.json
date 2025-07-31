@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "251853629051-qpavj94e7805k9eam5mnl7kp4729pbic.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rbs.zednano.dev",
+            "certificate_hash": "d61a97636dc0790246b21ac5a0c809d273b46572"
+          }
+        },
+        {
           "client_id": "251853629051-4v7vu75n1dgl5ki71q3im59mgtj034ta.apps.googleusercontent.com",
           "client_type": 3
         }
