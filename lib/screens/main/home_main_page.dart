@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/main/pages/admin/admin_dashboard_page.dart';
 import 'package:zed_nano/screens/main/pages/common/p_o_s_pages.dart';
 import 'package:zed_nano/screens/main/welcome_setup_screen.dart';
+import 'package:zed_nano/screens/orders/orders_list_main_page.dart';
 import 'package:zed_nano/screens/reports/reports_list_page.dart';
+import 'package:zed_nano/screens/widget/common/custom_app_bar.dart';
+import 'package:zed_nano/screens/widgets/custom_drawer.dart';
 import 'package:zed_nano/screens/widgets/nav_bar_item.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
@@ -81,6 +85,7 @@ class _HomeMainPageState extends State<HomeMainPage> {
     return [
       _buildScrollableScreen(const AdminDashboardPage()),
       _buildScrollableScreen(const POSPages()),
+      _buildScrollableScreen( OrdersListMainPage(showAppBar: false,)),
       _buildScrollableScreen(const ReportsListPage()),
     ];
   }
@@ -117,6 +122,10 @@ class _HomeMainPageState extends State<HomeMainPage> {
         iconPath: salesIcon,
       ),
       NavBarItem.create(
+        label: 'Order',
+        iconPath: customerOrdersIcon,
+      ),
+      NavBarItem.create(
         label: 'Report',
         iconPath: reportsIcon,
       ),
@@ -148,6 +157,10 @@ class _HomeMainPageState extends State<HomeMainPage> {
 
         return Scaffold(
           backgroundColor: getScaffoldColor(),
+          drawer: CustomDrawer(
+            onClose: () => Navigator.pop(context),
+          ),
+          appBar: CustomDashboardAppBar(title: getBusinessDetails(context)?.businessName ?? '',),
           body: RefreshIndicator(
             key: _refreshIndicatorKey,
             onRefresh: _handleRefresh,

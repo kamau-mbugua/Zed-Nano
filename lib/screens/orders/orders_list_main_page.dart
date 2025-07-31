@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/screens/orders/tabs/orders_list_cancelled_page.dart';
 import 'package:zed_nano/screens/orders/tabs/orders_list_paid_page.dart';
 import 'package:zed_nano/screens/orders/tabs/orders_list_partial_page.dart';
 import 'package:zed_nano/screens/orders/tabs/orders_list_unpaid_page.dart';
+import 'package:zed_nano/screens/sell/sell_stepper_page.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/custom_tab_switcher.dart';
 import 'package:zed_nano/utils/Colors.dart';
 
 class OrdersListMainPage extends StatefulWidget {
-  const OrdersListMainPage({Key? key}) : super(key: key);
+  bool? showAppBar;
+  OrdersListMainPage({Key? key, this.showAppBar = true}) : super(key: key);
 
   @override
   _OrdersListMainPageState createState() => _OrdersListMainPageState();
@@ -20,12 +23,12 @@ class _OrdersListMainPageState extends State<OrdersListMainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AuthAppBar(
-          title: 'Orders'
-      ),
+      appBar:widget?.showAppBar == true ? AuthAppBar(
+          title: 'Orders '
+      ) : null,
       body: Column(
         children: [
-          const SizedBox(height: 24),
+          // SizedBox(height: 24),
           // Tabs
           CustomTabSwitcher(
             tabs: const ['Unpaid', 'Partial', 'Paid', 'Cancelled'],
@@ -61,6 +64,15 @@ class _OrdersListMainPageState extends State<OrdersListMainPage> {
                 : const OrdersListCancelledPage(),
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        heroTag: "orders_list_fab",
+        onPressed: () {
+          const SellStepperPage().launch(context);
+        },
+        label: const Text('Sell', style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white)),
+        icon: const Icon(Icons.lock, color: Colors.white),
+        backgroundColor: appThemePrimary,
       ),
     );
   }

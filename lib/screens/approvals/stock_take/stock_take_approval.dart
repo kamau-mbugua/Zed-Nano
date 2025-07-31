@@ -5,30 +5,28 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/models/get_approved_add_stock_batches_by_branch/GetBatchesListResponse.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
-import 'package:zed_nano/screens/stock/add_stock/addStock/add_stock_parent_page.dart';
-import 'package:zed_nano/screens/stock/add_stock/view_stock_batch_detail.dart';
-import 'package:zed_nano/screens/stock/itemBuilder/build_batch_item.dart';
-import 'package:zed_nano/screens/stock/stock_take/addStockTake/add_stock_take_parent_page.dart';
+import 'package:zed_nano/screens/approvals/itemBuilders/stock_take_item_builders.dart';
 import 'package:zed_nano/screens/stock/stock_take/view_stock__take_batch_detail.dart';
+import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
+import 'package:zed_nano/screens/widget/common/heading.dart';
 import 'package:zed_nano/screens/widget/common/searchview.dart';
-import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
 import 'package:zed_nano/utils/pagination_controller.dart';
 
-class StockTakePendingBatchPage extends StatefulWidget {
-  const StockTakePendingBatchPage({Key? key}) : super(key: key);
+class StockTakeApproval extends StatefulWidget {
+  const StockTakeApproval({Key? key}) : super(key: key);
 
   @override
-  _StockTakePendingBatchPageState createState() =>
-      _StockTakePendingBatchPageState();
+  _StockTakeApprovalState createState() => _StockTakeApprovalState();
 }
 
-class _StockTakePendingBatchPageState extends State<StockTakePendingBatchPage> {
+class _StockTakeApprovalState extends State<StockTakeApproval> {
   TextEditingController _searchController = TextEditingController();
   Timer? _debounceTimer;
   String _searchTerm = '';
   late PaginationController<BatchData> _paginationController;
+  Set<String> _selectedItems = {}; // Add this to track selected items
 
   @override
   void initState() {
@@ -86,29 +84,27 @@ class _StockTakePendingBatchPageState extends State<StockTakePendingBatchPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar: AuthAppBar(title: 'Stock Take Approval'),
       body: Column(
         children: [
+          headings(
+            label: 'Stock Take Requests',
+            subLabel: 'Tap on a request to view more details.',
+          ),
           _buildSearchBar(),
           Expanded(
             child: RefreshIndicator(
               onRefresh: () async {
                 _paginationController.refresh();
+                // await _fetchStockSummary();
               },
-              child: _buildApprovedStockList(),
+              child: _buildApprovedStockList().paddingSymmetric(horizontal: 16),
             ),
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          const AddStockTakeParentPage(initialStep:0).launch(context);
-        },
-        label: const Text('Stock Take', style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white)),
-        icon: const Icon(Icons.add, color: Colors.white),
-        backgroundColor: appThemePrimary,
-      ),
-    );  }
-
+    );
+  }
 
   Widget _buildSearchBar() {
     return buildSearchBar(controller: _searchController, onChanged: _onSearchChanged);
@@ -119,11 +115,25 @@ class _StockTakePendingBatchPageState extends State<StockTakePendingBatchPage> {
       pagingController: _paginationController.pagingController,
       builderDelegate: PagedChildBuilderDelegate<BatchData>(
         itemBuilder: (context, item, index) {
-          return buildBatchItem(item, onTap: () {
-            ViewStockTakeBatchDetail(
-              batchId: item?.batchId ?? '',
-            ).launch(context);
-          },isStockTake: true);
+          return stockTakeItemBuilder(item,
+              onChecked: () {
+                setState(() {
+                  if (_selectedItems.contains(item.id)) {
+                    _selectedItems.remove(item.id);
+                  } else {
+                    _selectedItems.add(item.id!);
+                  }
+                });
+              },
+              onApprove: () {},
+              onDecline: () {},
+              onTap: () {
+                ViewStockTakeBatchDetail(
+                  batchId: item?.batchId ?? '',
+                ).launch(context);
+              },
+              context: context,
+              isSelected: _selectedItems.contains(item.id));
         },
         firstPageProgressIndicatorBuilder: (_) => const SizedBox(),
         newPageProgressIndicatorBuilder: (_) => const SizedBox(),
@@ -146,8 +156,4 @@ class _StockTakePendingBatchPageState extends State<StockTakePendingBatchPage> {
       ),
     );
   }
-
-
 }
-
-

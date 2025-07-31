@@ -75,6 +75,7 @@ class AppConstants{
   static const String findProduct = 'api/findProduct';
   static const String getCustomerByNumber = 'api/get_customer_by_number';
   static const String getOrderPaymentStatus = 'api/order_payment_status';
+  static const String getApprovalByStatus = 'api/getApprovalByStatus';
   static const String getInvoiceByInvoiceNumber = 'api/get_invoice_by_invoice_number';
   static const String getInvoiceReceiptPaymentMethodsNoLogin = 'api/get_invoice_receipt_payment_methods_no_login';
   static const String doSendToPos = '/api/sendPushy';

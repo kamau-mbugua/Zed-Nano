@@ -143,7 +143,7 @@ class _ViewOutOfStockPageState extends State<ViewOutOfStockPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const AuthAppBar(title: 'Out of Stock'),
+      appBar:  AuthAppBar(title: 'Out of Stock'),
       body: Column(
         children: [
           _buildSearchBar(),

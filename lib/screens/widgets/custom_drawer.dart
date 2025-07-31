@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:zed_nano/providers/auth/authenticated_app_providers.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/routes/routes.dart';
+import 'package:zed_nano/screens/approvals/approvals_main_page.dart';
 import 'package:zed_nano/screens/customers/customers_list_page.dart';
 import 'package:zed_nano/screens/invoices/invoices_list_main_page.dart';
 import 'package:zed_nano/screens/orders/orders_list_main_page.dart';
@@ -233,7 +234,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       ),
                       _buildSubMenuItem(
                         title: 'Orders',
-                        onTap: () => const OrdersListMainPage().launch(context),
+                        onTap: () => OrdersListMainPage().launch(context),
                       ),
                       _buildSubMenuItem(
                         title: 'Receipts',
@@ -263,7 +264,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   _buildMenuItem(
                     title: 'Approvals',
                     iconPath: approvalsIcon,
-                    onTap: () => _navigateTo(context, '/approvals'),
+                    onTap: () => ApprovalsMainPage().launch(context),
                   ),
                   
                   // Reports

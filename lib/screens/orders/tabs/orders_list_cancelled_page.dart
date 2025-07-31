@@ -178,24 +178,27 @@ class _OrdersListCancelledPageState extends State<OrdersListCancelledPage> {
 
   Widget _buildList() {
     return Expanded(
-      child: PagedListView<int, OrderData>(
-        pagingController: _paginationController.pagingController,
-        builderDelegate: PagedChildBuilderDelegate<OrderData>(
-          itemBuilder: (context, item, index) {
-            return listCustomersOrdersItemBuilder(item);
-          },
-          firstPageProgressIndicatorBuilder: (_) => const SizedBox.shrink(),
-          newPageProgressIndicatorBuilder: (_) => const SizedBox.shrink(),
-          noItemsFoundIndicatorBuilder: (context) =>  const Center(
-            child: CompactGifDisplayWidget(
-              gifPath: emptyListGif,
-              title: "It's empty, over here.",
-              subtitle:
-              "No Unpaid orders in your business, yet! Add to view them here.",
+      child: RefreshIndicator(
+        onRefresh: () => _paginationController.refresh(),
+        child: PagedListView<int, OrderData>(
+          pagingController: _paginationController.pagingController,
+          builderDelegate: PagedChildBuilderDelegate<OrderData>(
+            itemBuilder: (context, item, index) {
+              return listCustomersOrdersItemBuilder(item);
+            },
+            firstPageProgressIndicatorBuilder: (_) => const SizedBox.shrink(),
+            newPageProgressIndicatorBuilder: (_) => const SizedBox.shrink(),
+            noItemsFoundIndicatorBuilder: (context) =>  const Center(
+              child: CompactGifDisplayWidget(
+                gifPath: emptyListGif,
+                title: "It's empty, over here.",
+                subtitle:
+                "No Cancelled orders in your business, yet! Add to view them here.",
+              ),
             ),
           ),
-        ),
-      ).paddingSymmetric(vertical: 16),
+        ).paddingSymmetric(vertical: 16),
+      ),
     );
   }
 

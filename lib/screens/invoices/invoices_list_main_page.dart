@@ -69,6 +69,7 @@ class _InvoicesListMainPageState extends State<InvoicesListMainPage> {
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
+        heroTag: "invoices_list_fab",
         onPressed: () async {
           // AddUserPage().launch(context);
           SellStepperPage(stepType: SellStepType.Invoice,).launch(context);

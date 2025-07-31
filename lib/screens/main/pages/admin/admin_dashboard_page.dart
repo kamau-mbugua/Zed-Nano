@@ -248,17 +248,13 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: colorWhite,
-      drawer: CustomDrawer(
-        onClose: () => Navigator.pop(context),
-      ),
-      appBar: CustomDashboardAppBar(title: businessName ?? '',),
       body: Consumer2<WorkflowViewModel, RefreshViewModel>(
         builder: (context, viewModel,refreshViewModel, _) {
           //
 
           return SafeArea(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.only(right: 16, left: 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -405,6 +401,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
         }
       ),
       floatingActionButton: FloatingActionButton.extended(
+        heroTag: "admin_dashboard_fab", // Add unique hero tag
         onPressed: () {
           const SellStepperPage().launch(context);
         },

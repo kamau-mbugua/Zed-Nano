@@ -45,7 +45,7 @@ class _ResetPinScreenState extends State<ResetPinScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const AuthAppBar(
+      appBar: AuthAppBar(
         title: 'Forgot PIN',
       ),
       body: SafeArea(

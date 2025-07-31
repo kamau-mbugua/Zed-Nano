@@ -32,6 +32,7 @@ Widget buildProductItem({
       ),
     ),
     child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           children: [
@@ -106,6 +107,18 @@ Widget buildProductItem({
 
             // Quantity controls
           ],
+        ),
+        8.height,
+        Text("Qty: ${product.quantityInStock}",
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              color: textPrimary,
+              fontSize: 10,
+              fontWeight: FontWeight.w600,
+              fontStyle: FontStyle.normal,
+
+
+            )
         ),
         10.height,
         Row(

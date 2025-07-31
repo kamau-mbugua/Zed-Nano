@@ -18,7 +18,7 @@ class _ListCategoriesPageState extends State<ListCategoriesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const AuthAppBar(title: 'Categories'),
+      appBar:  AuthAppBar(title: 'Categories'),
       body: Column(
         children: [
           const SizedBox(height: 24),

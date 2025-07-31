@@ -85,7 +85,7 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
             children: [
               _buildBusinessHeader(),
               const Divider(height: 32, thickness: 0.5),
-              subscribedBillingPlansResponse!.data!.isNotEmpty ?
+              subscribedBillingPlansResponse?.data?.isNotEmpty == true ?
               _buildSubscriptionSection() :
               const SizedBox(height: 32),
               const Divider(height: 32, thickness: 0.5),

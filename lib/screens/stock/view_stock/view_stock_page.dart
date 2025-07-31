@@ -144,7 +144,7 @@ class _ViewStockPageState extends State<ViewStockPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const AuthAppBar(title: 'View Stock'),
+      appBar:  AuthAppBar(title: 'View Stock'),
       body: Column(
         children: [
           _buildStatusSummary(),

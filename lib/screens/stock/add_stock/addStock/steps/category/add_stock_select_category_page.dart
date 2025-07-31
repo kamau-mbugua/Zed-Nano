@@ -105,7 +105,7 @@ class _AddStockSelectCategoryPageState extends State<AddStockSelectCategoryPage>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const AuthAppBar(title: 'Select Category'),
+      appBar:  AuthAppBar(title: 'Select Category'),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

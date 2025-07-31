@@ -10,7 +10,7 @@ class AuthAppBar extends StatelessWidget implements PreferredSizeWidget {
   final List<Widget>? actions;
   final double elevation;
   
-  const AuthAppBar({
+  AuthAppBar({
     Key? key,
     required this.title,
     this.onBackPressed,
@@ -28,7 +28,7 @@ class AuthAppBar extends StatelessWidget implements PreferredSizeWidget {
       titleSpacing: 0,
       surfaceTintColor: Colors.transparent,
       iconTheme: IconThemeData(color: getBodyColor()),
-      leading: IconButton(
+      leading:  title.isEmpty ? const SizedBox() : IconButton(
         icon: Icon(Icons.arrow_back_ios_new, color: getBodyColor()),
         onPressed: onBackPressed ?? () {
           Navigator.pop(context);

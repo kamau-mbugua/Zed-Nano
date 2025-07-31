@@ -105,7 +105,7 @@ class _AddMpesaPaymentPageState extends State<AddMpesaPaymentPage> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const AuthAppBar(title: 'Add Payment Method'),
+      appBar:  AuthAppBar(title: 'Add Payment Method'),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: ListView(

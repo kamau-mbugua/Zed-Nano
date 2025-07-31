@@ -92,16 +92,19 @@ class StyledTextField extends StatelessWidget {
             fontSize: 12.0,
 
           ),
-          contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 16),
+          contentPadding: EdgeInsets.symmetric(vertical: isPassword ? 15 :0, horizontal: 16),
           counterText: showCounter ? null : '',
-          prefix: prefixText.isEmpty ? null : Container(
-            key: ValueKey('prefix_$prefixText'),
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: lightGreyColor,
-              borderRadius: BorderRadius.circular(10),
+          prefix: prefixText.isEmpty ? null : Padding(
+            padding: const EdgeInsets.only(left: 8.0),
+            child: Container(
+              key: ValueKey('prefix_$prefixText'),
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: lightGreyColor,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child:Text("$prefixText ", style: boldTextStyle(size: 11)),
             ),
-            child:Text("$prefixText ", style: boldTextStyle(size: 11)),
           )
         ),
       ),

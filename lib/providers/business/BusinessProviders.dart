@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:path/path.dart' as p;
+import 'package:zed_nano/models/approval_response.dart';
 import 'package:zed_nano/models/branch-store-summary/BranchStoreSummaryResponse.dart';
 import 'package:zed_nano/models/branchTerminals/BranchTerminalsResponse.dart';
 import 'package:zed_nano/models/cashPayment/OrderCheckoutPaymentResponse.dart';
@@ -1405,6 +1406,27 @@ class BusinessProviders extends BaseProvider {
     } else {
       finalResponseModel =
           ResponseModel<OrderDetailResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
+  Future<ResponseModel<ApprovalResponse>> getApprovalByStatus({
+    required Map<String, dynamic> requestData,
+    required BuildContext context,
+  }) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.getApprovalByStatus(requestData: requestData), context);
+
+    ResponseModel<ApprovalResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<ApprovalResponse>(
+          true, responseModel.message!, ApprovalResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<ApprovalResponse>(false, responseModel.message!);
     }
 
     return finalResponseModel;

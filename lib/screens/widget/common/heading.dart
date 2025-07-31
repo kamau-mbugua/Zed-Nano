@@ -1,7 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:nb_utils/nb_utils.dart';
 
-Widget headings({required String label,required String subLabel}) {
+Widget headings({
+  required String label,
+  required String subLabel,
+  double? textSizeTitle,
+  double? textSizeSubTitle,
+}) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -9,7 +14,7 @@ Widget headings({required String label,required String subLabel}) {
       Text(
         label,
         style: TextStyle(
-          fontSize: 28,
+          fontSize: textSizeTitle ?? 28,
           fontWeight: FontWeight.w600,
           fontFamily: 'Poppins',
           color: Color(0xFF1F2024),
@@ -19,7 +24,7 @@ Widget headings({required String label,required String subLabel}) {
       Text(
         subLabel,
         style: TextStyle(
-          fontSize: 12,
+          fontSize: textSizeSubTitle ?? 12,
           fontWeight: FontWeight.w400,
           fontFamily: 'Poppins',
           color: Color(0xFF8A8D9F),

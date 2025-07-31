@@ -143,7 +143,7 @@ class _ViewLowStockPageState extends State<ViewLowStockPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const AuthAppBar(title: 'Low Stock'),
+      appBar:  AuthAppBar(title: 'Low Stock'),
       body: Column(
         children: [
           _buildSearchBar(),

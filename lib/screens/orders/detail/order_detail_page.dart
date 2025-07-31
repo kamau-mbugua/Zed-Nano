@@ -27,6 +27,7 @@ class OrderDetailPage extends StatefulWidget {
 
 class _OrderDetailPageState extends State<OrderDetailPage> {
   OrderDetail? orderDetail;
+  OrderDetailData? orderDetailData;
   List<OrderTransactionTotals>? orderTransactionTotals;
 
 
@@ -51,6 +52,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
       if (response.isSuccess) {
         setState(() {
           orderDetail = response.data?.order;
+          orderDetailData = response.data?.data;
           orderTransactionTotals = response.data?.transactionsList;
         });
       } else {
@@ -110,7 +112,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
               _buildSummary(),
               _buildOrderItems(),
               _buildNaration(),
-              orderDetail?.status == 'paid' ? _buildPaymentMethod() : Container(),
+              orderDetail?.status == 'paid' || orderDetail?.status == 'partial' ? _buildPaymentMethod() : Container(),
               _buildOrderSummary(),
               _buildServedBy(),
             ],
@@ -515,11 +517,11 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                         letterSpacing: 0.15,
                       )),
                   6.height,
-                  Text("#${orderDetail?.orderNumber ?? 'N/A'}",
+                  Text("${orderDetail?.orderNumber ?? 'N/A'}",
                       style: const TextStyle(
                         fontFamily: 'Poppins',
                         color: textPrimary,
-                        fontSize: 16,
+                        fontSize: 15,
                         fontWeight: FontWeight.w400,
                         fontStyle: FontStyle.normal,
                       ))
@@ -589,7 +591,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                         letterSpacing: 0.12,
                       )),
                   6.height,
-                  Text("${orderDetail?.currency ?? 'N/A'} ${orderDetail?.transamount?.formatCurrency() ?? 'N/A'}",
+                  Text("${orderDetail?.currency ?? 'N/A'} ${orderDetail?.status == 'partial' ? orderDetailData?.deficit?.formatCurrency() : orderDetail?.transamount?.formatCurrency() ?? 'N/A'}",
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         color: orderDetail?.status == 'paid'

@@ -59,6 +59,7 @@ class _CustomersListPageState extends State<CustomersListPage> {
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
+        heroTag: "customers_list_fab",
         onPressed: () async {
           AddCustomers().launch(context);
         },

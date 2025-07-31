@@ -146,7 +146,7 @@ class _VoidOrderTransactionPageState extends State<VoidOrderTransactionPage> {
   }
 
   PreferredSizeWidget _buildAppBar() {
-    return const AuthAppBar(
+    return  AuthAppBar(
       title: 'Void Transaction',
     );
   }

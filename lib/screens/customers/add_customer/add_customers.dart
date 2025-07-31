@@ -75,7 +75,7 @@ class _AddCustomersState extends State<AddCustomers> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const AuthAppBar(title: 'Add Customers'),
+      appBar:  AuthAppBar(title: 'Add Customers'),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

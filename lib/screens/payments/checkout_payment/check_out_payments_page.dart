@@ -46,6 +46,8 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
 
   final TextEditingController phoneNumberController = TextEditingController();
   final TextEditingController countryCodeController = TextEditingController();
+  final TextEditingController amountToPayController = TextEditingController();
+  final FocusNode amountToPayFocusNode = FocusNode();
 
 
   @override
@@ -77,6 +79,7 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
 
       if (response.isSuccess) {
         setState(() {
+          amountToPayController.text = response.data?.data?.invoiceBalance.toString() ?? '';
           getInvoiceByInvoiceNumberResponse = response.data?.data;
         });
         if ((response.data?.data?.invoiceStatus?.toLowerCase() == 'paid') || response.data?.data?.invoiceStatus?.toLowerCase() == 'partially paid') {
@@ -125,6 +128,7 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
         setState(() {
           orderDetail = response.data?.order;
           orderDetailData = response.data?.data;
+          amountToPayController.text = response.data?.data?.deficit.toString() ?? '';
           if (orderDetail?.id != null) {
             orderId.add(orderDetail!.id!);
           }
@@ -160,12 +164,17 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
     }
   }
 
+  double? textToDouble(String amount) {
+    return double.parse(amount);
+  }
+
   Future<void> doCashPayment() async {
+
 
     final requestData = <String, dynamic>{
       'billRefNo': orderDetail?.pushTransactionId,
       'paymentChanel': 'Mobile',
-      'transamount': orderDetailData?.deficit,
+      'transamount': textToDouble(amountToPayController.text) ?? orderDetailData?.deficit,
       'pushyTransactionId': orderId,
       'transactionType': 'Cash Payment'
     };
@@ -192,7 +201,7 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
 
     final requestData = <String, dynamic>{
       'paymentChanel': 'Mobile',
-      'amount': getInvoiceByInvoiceNumberResponse?.invoiceBalance,
+      'amount': textToDouble(amountToPayController.text) ?? getInvoiceByInvoiceNumberResponse?.invoiceBalance,
       'invoiceNumber': getInvoiceByInvoiceNumberResponse?.invoiceNumber,
       'paymentMethod': 'Cash Payment',
       'businessNumber': getBusinessDetails(context)?.businessNumber,
@@ -232,7 +241,7 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
     }else {
       requestData = <String, dynamic>{
         'paymentChanel': 'mobile',
-        'amount': getInvoiceByInvoiceNumberResponse?.invoiceBalance,
+        'amount': textToDouble(amountToPayController.text) ?? getInvoiceByInvoiceNumberResponse?.invoiceBalance,
         'orderID': getInvoiceByInvoiceNumberResponse?.invoiceNumber,
         'businessId': getBusinessDetails(context)?.businessId,
         'phone': phoneNumber,
@@ -260,7 +269,7 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
     if (widget.checkOutType == CheckOutType.Order) {
       requestData = <String, dynamic>{
         'paymentChanel': 'mobile',
-        'amount': orderDetailData?.deficit,
+        'amount': textToDouble(amountToPayController.text) ?? orderDetailData?.deficit,
         'orderIds': orderId,
         'businessId': getBusinessDetails(context)?.businessId,
         'phone': phoneNumber,
@@ -269,7 +278,7 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
     }else{
       requestData = <String, dynamic>{
         'paymentChanel': 'mobile',
-        'amount': getInvoiceByInvoiceNumberResponse?.invoiceBalance,
+        'amount': textToDouble(amountToPayController.text) ?? getInvoiceByInvoiceNumberResponse?.invoiceBalance,
         'orderID': getInvoiceByInvoiceNumberResponse?.invoiceNumber,
         'phone': phoneNumber,
         'type':'invoice'
@@ -437,7 +446,27 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
     final filteredMethods = paymentMethods.where((method) => allowedMethods.contains(method)).toList();
     
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        8.height,
+        const Text(
+          'Amount to Pay',
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
+            fontFamily: 'Poppins',
+            color: Color(0xFF484848),
+          ),
+        ),
+        const SizedBox(height: 8),
+        StyledTextField(
+          textFieldType: TextFieldType.NUMBER,
+          hintText: '',
+          prefixText:widget.checkOutType == CheckOutType.Invoice ? getInvoiceByInvoiceNumberResponse?.currency ?? 'KES':  orderDetail?.currency ?? 'KES',
+          focusNode: amountToPayFocusNode,
+          controller: amountToPayController,
+        ),
+        8.height,
         ...filteredMethods.map((method) => _buildPaymentOption(method)).toList(),
       ],
     );

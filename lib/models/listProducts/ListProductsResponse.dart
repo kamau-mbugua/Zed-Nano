@@ -73,6 +73,7 @@ class ProductData {
   final String? glAccountName;
   final String? imagePath;
   final String? thumbailImagePath;
+  final double? quantityInStock;
 
   ProductData({
     this.businessID,
@@ -115,6 +116,7 @@ class ProductData {
     this.glAccountName,
     this.imagePath,
     this.thumbailImagePath,
+    this.quantityInStock,
   });
 
   factory ProductData.fromJson(Map<String, dynamic> json) {
@@ -159,6 +161,7 @@ class ProductData {
       glAccountName: json['glAccountName'] as String?,
       imagePath: json['imagePath'] as String?,
       thumbailImagePath: json['thumbailImagePath'] as String?,
+      quantityInStock: (json['quantityInStock'] as num?)?.toDouble(),
     );
   }
 
@@ -204,6 +207,7 @@ class ProductData {
       'glAccountName': glAccountName,
       'imagePath': imagePath,
       'thumbailImagePath': thumbailImagePath,
+      'quantityInStock': quantityInStock,
     };
   }
 }

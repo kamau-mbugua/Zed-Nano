@@ -72,7 +72,7 @@ class _ViewStockTakeBatchDetailState extends State<ViewStockTakeBatchDetail> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: const AuthAppBar(
+      appBar:  AuthAppBar(
         title: 'Batch Details',
       ),
       body: Column(
