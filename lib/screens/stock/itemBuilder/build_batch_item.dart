@@ -123,9 +123,9 @@ Widget buildBatchItem(BatchData batch, {VoidCallback? onTap, bool isStockTake = 
                           ),
                         ),
                         const SizedBox(width: 8),
-                        const Text(
-                          '4 Products',
-                          style: TextStyle(
+                        Text(
+                          '${batch?.productCount ?? 0} Products',
+                          style: const TextStyle(
                             fontFamily: 'Poppins',
                             color: textPrimary,
                             fontSize: 11,

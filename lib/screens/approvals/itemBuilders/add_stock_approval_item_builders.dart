@@ -7,7 +7,7 @@ import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/Images.dart';
 import 'package:zed_nano/utils/extensions.dart';
 
-Widget stockTakeItemBuilder(BatchData batch,
+Widget addStockApprovalItemBuilder(BatchData batch,
     {VoidCallback? onChecked,
     VoidCallback? onApprove,
     VoidCallback? onDecline,
@@ -239,6 +239,6 @@ Widget stockTakeItemBuilder(BatchData batch,
             ),
         ],
       ),
-    ).paddingSymmetric(vertical: 4),
+    ).paddingSymmetric(vertical: 4)
   );
 }

@@ -5,36 +5,40 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/models/get_approved_add_stock_batches_by_branch/GetBatchesListResponse.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
-import 'package:zed_nano/screens/approvals/itemBuilders/stock_take_item_builders.dart';
-import 'package:zed_nano/screens/stock/stock_take/view_stock__take_batch_detail.dart';
+import 'package:zed_nano/screens/approvals/itemBuilders/add_stock_approval_item_builders.dart';
+import 'package:zed_nano/screens/stock/add_stock/addStock/add_stock_parent_page.dart';
+import 'package:zed_nano/screens/stock/add_stock/view_stock_batch_detail.dart';
+import 'package:zed_nano/screens/stock/itemBuilder/build_batch_item.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
-import 'package:zed_nano/screens/widget/common/heading.dart';
 import 'package:zed_nano/screens/widget/common/searchview.dart';
+import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
 import 'package:zed_nano/utils/pagination_controller.dart';
 
-class StockTakeApproval extends StatefulWidget {
-  const StockTakeApproval({Key? key}) : super(key: key);
+class AddStockApprovalPage extends StatefulWidget {
+  const AddStockApprovalPage({Key? key}) : super(key: key);
 
   @override
-  _StockTakeApprovalState createState() => _StockTakeApprovalState();
+  _AddStockApprovalPageState createState() =>
+      _AddStockApprovalPageState();
 }
 
-class _StockTakeApprovalState extends State<StockTakeApproval> {
+class _AddStockApprovalPageState extends State<AddStockApprovalPage> {
   TextEditingController _searchController = TextEditingController();
   Timer? _debounceTimer;
   String _searchTerm = '';
   late PaginationController<BatchData> _paginationController;
   List<String> _selectedItems = []; // Add this to track selected items
 
+
   @override
   void initState() {
     super.initState();
     _paginationController = PaginationController<BatchData>(
       fetchItems: (page, pageSize) async {
-        return getPendingBatchesByBranch(page: page, limit: pageSize);
+        return getPendingAddStockBatchesByBranch(page: page, limit: pageSize);
       },
     );
 
@@ -47,10 +51,10 @@ class _StockTakeApprovalState extends State<StockTakeApproval> {
   }
 
 
-  Future<List<BatchData>> getPendingBatchesByBranch(
+  Future<List<BatchData>> getPendingAddStockBatchesByBranch(
       {required int page, required int limit}) async {
     try {
-      final response = await getBusinessProvider(context).getPendingBatchesByBranch(
+      final response = await getBusinessProvider(context).getPendingAddStockBatchesByBranch(
         page: page,
         limit: limit,
         searchValue: _searchTerm,
@@ -65,10 +69,12 @@ class _StockTakeApprovalState extends State<StockTakeApproval> {
   }
 
 
+
+
   Future<void> _approveSelectedStockTake(
       {required Map<String, dynamic> requestData}) async {
     try {
-      await getBusinessProvider(context).approveSelectedStockTake(
+      await getBusinessProvider(context).approveMultipleAddStockBatches(
         requestData: requestData,
         context: context,
       ).then((response) {
@@ -86,6 +92,7 @@ class _StockTakeApprovalState extends State<StockTakeApproval> {
       showCustomToast(e.toString());
     }
   }
+
 
   @override
   void dispose() {
@@ -108,21 +115,17 @@ class _StockTakeApprovalState extends State<StockTakeApproval> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AuthAppBar(title: 'Stock Take Approval'),
+      appBar: AuthAppBar(title: 'Add Stock Requests'),
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          headings(
-            label: 'Stock Take Requests',
-            subLabel: 'Tap on a request to view more details.',
-          ).paddingSymmetric(horizontal: 16),
           _buildSearchBar(),
           Expanded(
             child: RefreshIndicator(
               onRefresh: () async {
                 _paginationController.refresh();
+                // await _fetchStockSummary();
               },
-              child: _buildApprovedStockList().paddingSymmetric(horizontal: 16),
+              child: _buildApprovedStockList(),
             ),
           ),
         ],
@@ -147,8 +150,6 @@ class _StockTakeApprovalState extends State<StockTakeApproval> {
       child: SafeArea(
         child: Row(
           children: [
-            // Checkout button takes most of the width
-
             Expanded(
               flex: 7,
               child: Visibility(
@@ -182,7 +183,7 @@ class _StockTakeApprovalState extends State<StockTakeApproval> {
       pagingController: _paginationController.pagingController,
       builderDelegate: PagedChildBuilderDelegate<BatchData>(
         itemBuilder: (context, item, index) {
-          return stockTakeItemBuilder(item,
+          return addStockApprovalItemBuilder(item,
               onChecked: () {
                 setState(() {
                   if (_selectedItems.contains(item.id)) {
@@ -213,7 +214,7 @@ class _StockTakeApprovalState extends State<StockTakeApproval> {
                 _approveSelectedStockTake(requestData:requestData);
               },
               onTap: () {
-                ViewStockTakeBatchDetail(
+                ViewStockBatchDetail(
                   batchId: item?.batchId ?? '',
                 ).launch(context);
               },
@@ -241,4 +242,9 @@ class _StockTakeApprovalState extends State<StockTakeApproval> {
       ),
     );
   }
+
+
 }
+
+
+

@@ -1,7 +1,8 @@
 class OrderResponse {
   String? status;
   String? message;
-  int? total;
+  double? total;
+  int? orderCount;
   List<OrdeTotal>? transactionTotals;
   List<OrderData>? transaction;
   OrderSummary? orderSummary;
@@ -15,13 +16,14 @@ class OrderResponse {
     this.transaction,
     this.orderSummary,
     this.count,
+    this.orderCount,
   });
 
   factory OrderResponse.fromJson(Map<String, dynamic> json) {
     return OrderResponse(
       status: json['Status'] as String?,
       message: json['Message'] as String?,
-      total: json['total'] as int?,
+      total: (json['total'] as num?)?.toDouble(),
       transactionTotals: (json['TransactionTotals'] as List?)
           ?.map((e) => OrdeTotal.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -29,6 +31,7 @@ class OrderResponse {
           ?.map((e) => OrderData.fromJson(e as Map<String, dynamic>))
           .toList(),
       count: json['count'] as int?,
+      orderCount: json['orderCount'] as int?,
       orderSummary: json['orderSummary'] as OrderSummary?,
     );
   }

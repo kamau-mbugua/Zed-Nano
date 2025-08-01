@@ -150,6 +150,7 @@ Widget rfCommonCachedNetworkImage(
       url,
       width: width,
       height: height,
+      color: color ?? null,
       fit: fit ?? BoxFit.cover, alignment: alignment ?? Alignment.center,
     ).cornerRadiusWithClipRRect(radius ?? defaultRadius).paddingSymmetric(horizontal: horizontalMargin, vertical: verticalMargin);
   }   else {

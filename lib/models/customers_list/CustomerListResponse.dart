@@ -46,6 +46,7 @@ class Customer {
   final String physicalAddress;
   final String mobileNumber;
   final String email;
+  final String? createdByName;
   final DateTime createdOn;
   final String userId;
   final int servicesCount;
@@ -75,6 +76,7 @@ class Customer {
     required this.pendingInvoices,
     required this.pendingAmount,
     required this.numberOfActiveHouses,
+    this.createdByName,
   });
 
   factory Customer.fromJson(Map<String, dynamic> json) {
@@ -94,6 +96,7 @@ class Customer {
       email: json['email'] as String,
       createdOn: DateTime.parse(json['createdOn'] as String),
       userId: json['userId'] as String,
+      createdByName: json['createdByName'] as String?,
       servicesCount: json['servicesCount'] as int,
       services: json['services'] as List<dynamic>,
       pendingInvoices: json['pendingInvoices'] as int,
@@ -123,5 +126,6 @@ class Customer {
     'pendingInvoices': pendingInvoices,
     'pendingAmount': pendingAmount,
     'numberOfActiveHouses': numberOfActiveHouses,
+    if (createdByName != null) 'createdByName': createdByName,
   };
 }

@@ -58,6 +58,8 @@ class AppConstants{
   static const String addKCBPayment = 'api/v1/payments/activate_kcb_mpesa?status=true';
   static const String addMPESAPayment = 'api/activate_daraja_for_business';
   static const String updateBusinessSetupStatus = 'api/update_business_setup_status';
+  static const String approveSelectedStockTake = 'api/approve_multiple_stock_take_batches';
+  static const String approveMultipleAddStockBatches = 'api/approve_multiple_add_stock_batches';
   static const String branchStoreSummary   = 'api/v1/business/branch-store-summary';
   static const String getBranchTransactionByDate   = 'api/get_branch_transaction_by_date';
   static const String uploadBusinessLogo = 'api/edit_business_logo';
@@ -75,7 +77,7 @@ class AppConstants{
   static const String findProduct = 'api/findProduct';
   static const String getCustomerByNumber = 'api/get_customer_by_number';
   static const String getOrderPaymentStatus = 'api/order_payment_status';
-  static const String getApprovalByStatus = 'api/getApprovalByStatus';
+  static const String getApprovalByStatus = 'api/stock/stocksummary';
   static const String getInvoiceByInvoiceNumber = 'api/get_invoice_by_invoice_number';
   static const String getInvoiceReceiptPaymentMethodsNoLogin = 'api/get_invoice_receipt_payment_methods_no_login';
   static const String doSendToPos = '/api/sendPushy';
@@ -90,7 +92,9 @@ class AppConstants{
   static const String changeStatus = 'api/v1/user/changeStatus';
   static const String getListByProducts = 'api/listByProducts';
   static const String getApprovedAddStockBatchesByBranch = 'api/get_approved_add_stock_batches_by_branch';
+  static const String getAddStockCancelledBatchesByBranch = 'api/get_add_stock_cancelled_batches_by_branch';
   static const String getApprovedBatchesByBranch = 'api/get_approved_batches_by_branch';
+  static const String getStockTakeCancelledBatchesByBranch = 'api/get_stock_take_cancelled_batches_by_branch';
   static const String getPendingAddStockBatchesByBranch = 'api/get_pending_add_stock_batches_by_branch';
   static const String getPendingBatchesByBranch = 'api/get_pending_batches_by_branch';
   static const String getAllActiveStock = 'api/get_all_activeStock';

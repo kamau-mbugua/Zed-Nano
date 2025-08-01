@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/models/approval_data.dart';
+import 'package:zed_nano/models/approval_response.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
+import 'package:zed_nano/screens/approvals/add_stock/add_stock_approval_declined.dart';
+import 'package:zed_nano/screens/approvals/customers/customers_declined_approval_page.dart';
 import 'package:zed_nano/screens/approvals/itemBuilders/approval_types.dart';
+import 'package:zed_nano/screens/approvals/stock_take/stock_take_approval_declined.dart';
+import 'package:zed_nano/screens/approvals/users/add_users_declined_approval_page.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/screens/widget/common/heading.dart';
@@ -11,6 +16,7 @@ import 'package:zed_nano/utils/Images.dart';
 
 class DeclinedApprovalsPage extends StatefulWidget {
   String? getStatus;
+
   DeclinedApprovalsPage({Key? key, this.getStatus}) : super(key: key);
 
   @override
@@ -18,10 +24,7 @@ class DeclinedApprovalsPage extends StatefulWidget {
 }
 
 class _DeclinedApprovalsPageState extends State<DeclinedApprovalsPage> {
-
-
   List<ApprovalData>? approvalData;
-
 
   @override
   void initState() {
@@ -33,17 +36,28 @@ class _DeclinedApprovalsPageState extends State<DeclinedApprovalsPage> {
   }
 
   Future<void> getApprovalByStatus() async {
-    Map<String, dynamic> requestData = {
-      'status': widget.getStatus
-    };
+    Map<String, dynamic> requestData = {'status': widget.getStatus};
 
     try {
-      final response =
-      await getBusinessProvider(context).getApprovalByStatus(requestData: requestData, context: context);
+      final response = await getBusinessProvider(context)
+          .getApprovalByStatus(requestData: requestData, context: context);
 
       if (response.isSuccess) {
         setState(() {
-          approvalData = response.data?.data ?? [];
+          ApprovalListData? approvalListData = response.data?.data;
+          approvalData = [
+            ApprovalData(
+                name: 'Stock Take',
+                count: approvalListData?.stockTakeCount.toString()),
+            ApprovalData(
+                name: 'Add Stock',
+                count: approvalListData?.addStockCount.toString()),
+            ApprovalData(
+                name: 'Users', count: approvalListData?.usersCount.toString()),
+            ApprovalData(
+                name: 'Customers',
+                count: approvalListData?.customersCount.toString()),
+          ];
         });
       } else {
         showCustomToast(response.message ?? 'Failed to load product details');
@@ -52,11 +66,12 @@ class _DeclinedApprovalsPageState extends State<DeclinedApprovalsPage> {
       showCustomToast('Failed to load Order details');
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body:  RefreshIndicator(
+      body: RefreshIndicator(
         onRefresh: () async {
           await getApprovalByStatus();
         },
@@ -76,6 +91,7 @@ class _DeclinedApprovalsPageState extends State<DeclinedApprovalsPage> {
       ),
     );
   }
+
   Widget _createListView() {
     return Expanded(
       child: GridView.builder(
@@ -88,7 +104,24 @@ class _DeclinedApprovalsPageState extends State<DeclinedApprovalsPage> {
         ),
         itemCount: approvalData?.length ?? 0,
         itemBuilder: (context, index) {
-          return createListItem(approvalData?[index], widget.getStatus ?? '');
+          return createListItem(
+            approvalData?[index],
+            widget.getStatus ?? '',
+            onTap: () {
+              if (approvalData?[index].name == 'Stock Take') {
+                StockTakeApprovalDeclined().launch(context);
+              }
+              if (approvalData?[index].name == 'Add Stock') {
+                AddStockApprovalDeclined().launch(context);
+              }
+              if (approvalData?[index].name == 'Users') {
+                AddUsersDeclinedApprovalPageState().launch(context);
+              }
+              if (approvalData?[index].name == 'Customers') {
+                CustomersDeclinedApprovalPageState().launch(context);
+              }
+            },
+          );
         },
       ),
     );

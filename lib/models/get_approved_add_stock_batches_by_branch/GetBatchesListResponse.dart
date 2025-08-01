@@ -43,6 +43,7 @@ class BatchData {
   final String? approvedById;
   final BatchHeader? batchHeader;
   final String? createdByName;
+  final int? productCount;
 
   BatchData({
     this.id,
@@ -57,6 +58,7 @@ class BatchData {
     this.approvedById,
     this.batchHeader,
     this.createdByName,
+    this.productCount,
   });
 
   factory BatchData.fromJson(Map<String, dynamic> json) {
@@ -75,6 +77,7 @@ class BatchData {
           ? BatchHeader.fromJson(json['batchHeader'] as Map<String, dynamic>)
           : null,
       createdByName: json['createdByName'] as String?,
+      productCount: json['productCount'] as int?,
     );
   }
 
@@ -91,6 +94,7 @@ class BatchData {
     'approvedById': approvedById,
     'batchHeader': batchHeader?.toJson(),
     'createdByName': createdByName,
+    'productCount': productCount,
   };
 }
 

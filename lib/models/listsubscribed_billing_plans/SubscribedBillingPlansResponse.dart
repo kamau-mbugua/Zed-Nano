@@ -53,6 +53,7 @@ class SubscribedBillingBillingPlan {
   final String? planName;
   final String? planStatus;
   final String? dateSubscribed;
+  final String? dueDate;
   final String? billingPeriodName;
   final int? totalBillingPlanAmount;
   final int? planSetUpFee;
@@ -69,6 +70,7 @@ class SubscribedBillingBillingPlan {
     this.planSetUpFee,
     this.isSetUpFeePaid,
     this.billingPeriodAmount,
+    this.dueDate,
   });
 
   factory SubscribedBillingBillingPlan.fromJson(Map<String, dynamic> json) {
@@ -77,6 +79,7 @@ class SubscribedBillingBillingPlan {
       planName: json['planName'] as String?,
       planStatus: json['planStatus'] as String?,
       dateSubscribed: json['dateSubscribed'] as String?,
+      dueDate: json['dueDate'] as String?,
       billingPeriodName: json['billingPeriodName'] as String?,
       totalBillingPlanAmount: json['totalBillingPlanAmount'] as int?,
       planSetUpFee: json['planSetUpFee'] as int?,
@@ -91,6 +94,7 @@ class SubscribedBillingBillingPlan {
       'planName': planName,
       'planStatus': planStatus,
       'dateSubscribed': dateSubscribed,
+      'dueDate': dueDate,
       'billingPeriodName': billingPeriodName,
       'totalBillingPlanAmount': totalBillingPlanAmount,
       'planSetUpFee': planSetUpFee,

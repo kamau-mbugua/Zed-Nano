@@ -10,6 +10,7 @@ import 'package:zed_nano/screens/widget/common/filter_row_widget.dart';
 import 'package:zed_nano/screens/widget/common/searchview.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
+import 'package:zed_nano/utils/extensions.dart';
 import 'package:zed_nano/utils/pagination_controller.dart';
 
 class OrdersListUnpaidPage extends StatefulWidget {
@@ -121,7 +122,7 @@ class _OrdersListUnpaidPageState extends State<OrdersListUnpaidPage> {
 
                     )
                 ),
-                Text("${orderResponse?.orderSummary?.orderCount ?? 0}",
+                Text("${orderResponse?.count ?? 0}",
                     style: const TextStyle(
                       fontFamily: 'Poppins',
                       color: errorColors,
@@ -147,7 +148,7 @@ class _OrdersListUnpaidPageState extends State<OrdersListUnpaidPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text("Order Count",
+                  const Text("Order Amount",
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         color: textPrimary,
@@ -158,7 +159,7 @@ class _OrdersListUnpaidPageState extends State<OrdersListUnpaidPage> {
 
                       )
                   ),
-                  Text("${orderResponse?.orderSummary?.currency ?? 'KES'} ${orderResponse?.orderSummary?.orderTotal ?? 0.0}",
+                  Text("${orderResponse?.orderSummary?.currency ?? 'KES'} ${orderResponse?.total?.formatCurrency() ?? 0.0}",
                       style: const TextStyle(
                         fontFamily: 'Poppins',
                         color: errorColors,

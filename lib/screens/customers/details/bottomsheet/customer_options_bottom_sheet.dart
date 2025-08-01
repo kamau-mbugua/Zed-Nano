@@ -78,7 +78,8 @@ class CustomerOptionsBottomSheet extends StatelessWidget {
                       services: [], 
                       pendingInvoices: customerData?.pendingInvoicesCount ?? 0,
                       pendingAmount: customerData?.pendingAmount ?? 0,
-                      numberOfActiveHouses: 0, 
+                      numberOfActiveHouses: 0,
+                      createdByName: customerData?.createdByName,
                     );
 
                     customerInvoicingViewModel.setCustomerData(customer);

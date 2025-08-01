@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/models/approval_data.dart';
+import 'package:zed_nano/models/approval_response.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
+import 'package:zed_nano/screens/approvals/add_stock/add_stock_approval_page.dart';
+import 'package:zed_nano/screens/approvals/customers/customers_pending_approval_page.dart';
 import 'package:zed_nano/screens/approvals/itemBuilders/approval_types.dart';
 import 'package:zed_nano/screens/approvals/stock_take/stock_take_approval.dart';
+import 'package:zed_nano/screens/approvals/users/add_users_pending_approval_page.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/screens/widget/common/heading.dart';
@@ -13,6 +17,7 @@ import 'package:zed_nano/utils/Images.dart';
 
 class PendingApprovalsPage extends StatefulWidget {
   String? getStatus;
+
   PendingApprovalsPage({Key? key, this.getStatus}) : super(key: key);
 
   @override
@@ -20,14 +25,10 @@ class PendingApprovalsPage extends StatefulWidget {
 }
 
 class _PendingApprovalsPageState extends State<PendingApprovalsPage> {
-
   // Mock data for testing purposes
-  List<ApprovalData>? approvalData = [
-    ApprovalData(name: 'Stock Take', count: '12'),
-    ApprovalData(name: 'Add Stock', count: '8'),
-    ApprovalData(name: 'Users', count: '5'),
-    ApprovalData(name: 'Customers', count: '3'),
-  ];
+
+  ApprovalListData? approvalListData;
+  List<ApprovalData>? approvalData = [];
 
   @override
   void initState() {
@@ -39,17 +40,28 @@ class _PendingApprovalsPageState extends State<PendingApprovalsPage> {
   }
 
   Future<void> getApprovalByStatus() async {
-    Map<String, dynamic> requestData = {
-      'status': widget.getStatus
-    };
+    Map<String, dynamic> requestData = {'status': widget.getStatus};
 
     try {
-      final response =
-      await getBusinessProvider(context).getApprovalByStatus(requestData: requestData, context: context);
+      final response = await getBusinessProvider(context)
+          .getApprovalByStatus(requestData: requestData, context: context);
 
       if (response.isSuccess) {
         setState(() {
-          approvalData = response.data?.data ?? [];
+          ApprovalListData? approvalListData = response.data?.data;
+          approvalData = [
+            ApprovalData(
+                name: 'Stock Take',
+                count: approvalListData?.stockTakeCount.toString()),
+            ApprovalData(
+                name: 'Add Stock',
+                count: approvalListData?.addStockCount.toString()),
+            ApprovalData(
+                name: 'Users', count: approvalListData?.usersCount.toString()),
+            ApprovalData(
+                name: 'Customers',
+                count: approvalListData?.customersCount.toString()),
+          ];
         });
       } else {
         showCustomToast(response.message ?? 'Failed to load product details');
@@ -58,11 +70,12 @@ class _PendingApprovalsPageState extends State<PendingApprovalsPage> {
       showCustomToast('Failed to load Order details');
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body:  RefreshIndicator(
+      body: RefreshIndicator(
         onRefresh: () async {
           await getApprovalByStatus();
         },
@@ -82,6 +95,7 @@ class _PendingApprovalsPageState extends State<PendingApprovalsPage> {
       ),
     );
   }
+
   Widget _createListView() {
     return Expanded(
       child: GridView.builder(
@@ -97,15 +111,23 @@ class _PendingApprovalsPageState extends State<PendingApprovalsPage> {
           return createListItem(
             approvalData?[index],
             widget.getStatus ?? '',
-            onTap: (){
-              logger.d('Selected Approval: ${approvalData?[index]?.name}');
-              if(approvalData?[index]?.name == 'Stock Take'){
-                StockTakeApproval().launch(context);
+            onTap: () {
+              if (approvalData?[index].name == 'Stock Take') {
+                const StockTakeApproval().launch(context);
               }
-            },);
+              if (approvalData?[index].name == 'Add Stock') {
+                const AddStockApprovalPage().launch(context);
+              }
+              if (approvalData?[index].name == 'Users') {
+                AddUsersPendingApprovalPage().launch(context);
+              }
+              if (approvalData?[index].name == 'Customers') {
+                CustomersPendingApprovalPage().launch(context);
+              }
+            },
+          );
         },
       ),
     );
   }
-
 }

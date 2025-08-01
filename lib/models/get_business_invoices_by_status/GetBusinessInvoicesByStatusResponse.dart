@@ -3,7 +3,6 @@ class GetBusinessInvoicesByStatusResponse {
   final String? message;
   final List<BusinessInvoice>? data;
   final int? count;
-
   InvoiceSummary? invoiceSummary;
 
   GetBusinessInvoicesByStatusResponse({
@@ -22,7 +21,9 @@ class GetBusinessInvoicesByStatusResponse {
           ?.map((e) => BusinessInvoice.fromJson(e as Map<String, dynamic>))
           .toList(),
       count: (json['count'] as num?)?.toInt(),
-      invoiceSummary: json['invoiceSummary'] as InvoiceSummary?,
+      invoiceSummary: json['invoiceSummary'] != null
+          ? InvoiceSummary.fromJson(json['invoiceSummary'] as Map<String, dynamic>)
+          : null,
     );
   }
 
@@ -49,12 +50,13 @@ class InvoiceSummary {
 
   factory InvoiceSummary.fromJson(Map<String, dynamic> json) {
     return InvoiceSummary(
-      orderTotal: (json['invoiceTotal'] as int)?.toDouble(),
-      orderCount: json['invoiceCount'] as int?,
+      orderTotal: (json['orderTotal'] as num?)?.toDouble(),
+      orderCount: (json['orderCount'] as num?)?.toInt(),
       currency: json['currency'] as String?,
     );
   }
 }
+
 class BusinessInvoice {
   final String? id;
   final String? businessId;

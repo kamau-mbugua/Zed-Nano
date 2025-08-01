@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
@@ -21,6 +22,8 @@ import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/Images.dart';
 import 'package:zed_nano/utils/extensions.dart';
 import 'package:zed_nano/utils/image_picker_util.dart';
+import 'package:path/path.dart' as p;
+import 'package:http_parser/http_parser.dart';
 
 class CreateBusinessPage extends StatefulWidget {
   final VoidCallback onNext;
@@ -106,7 +109,7 @@ class _CreateBusinessPageState extends State<CreateBusinessPage> {
             isError: false,);
 
         if (_logoImage != null) {
-          await _uploadBusinessLogo();
+          await _uploadBusinessLogo(value.data!.businessNumber);
         } else {
           widget.onNext();
         }
@@ -117,19 +120,45 @@ class _CreateBusinessPageState extends State<CreateBusinessPage> {
     });
   }
 
-  Future<void> _uploadBusinessLogo() async {
+  // Future<void> _uploadBusinessLogo() async {
+  //   await context
+  //       .read<BusinessProviders>()
+  //       .uploadBusinessLogo(context: context, logo: _logoImage!)
+  //       .then((value) async {
+  //     if (value.isSuccess) {
+  //       showCustomToast(
+  //           value.message ?? 'Business logo uploaded successfully',
+  //           isError: false);
+  //       await _fetchGetTokenAfterInvite();
+  //     } else {
+  //       showCustomToast(
+  //           value.message ?? 'Something went wrong');
+  //     }
+  //   });
+  // }
+
+  Future<void> _uploadBusinessLogo(String? businessNumber) async {
+    final formData = FormData.fromMap({
+      'file': await MultipartFile.fromFile(
+        _logoImage!.path,
+        filename: p.basename(_logoImage!.path),
+        contentType: MediaType('image', 'jpeg'), // or png
+      ),
+      'businessNumber': businessNumber
+    });
+
+    final urlPart = '?businessId=${businessNumber}';
+
     await context
         .read<BusinessProviders>()
-        .uploadBusinessLogo(context: context, logo: _logoImage!)
+        .uploadProductCategoryImage(context: context, formData: formData!, urlPart:urlPart)
         .then((value) async {
       if (value.isSuccess) {
-        showCustomToast(
-            value.message ?? 'Business logo uploaded successfully',
+        showCustomToast(value.message ?? 'Business logo uploaded successfully',
             isError: false);
-        await _fetchGetTokenAfterInvite();
+        Navigator.pop(context);
       } else {
-        showCustomToast(
-            value.message ?? 'Something went wrong');
+        showCustomToast(value.message ?? 'Something went wrong');
       }
     });
   }

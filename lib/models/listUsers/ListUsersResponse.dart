@@ -57,6 +57,7 @@ class ListUserData {
   final List<UserBranch>? branches;
   final int? branchCount;
   final String? storeName;
+  final String? createdByName;
   final List<dynamic>? assignedModules;
 
   ListUserData({
@@ -76,6 +77,7 @@ class ListUserData {
     this.branches,
     this.branchCount,
     this.storeName,
+    this.createdByName,
     this.assignedModules,
   });
 
@@ -99,6 +101,7 @@ class ListUserData {
           .toList(),
       branchCount: json['branchCount'] as int?,
       storeName: json['storeName'] as String?,
+      createdByName: json['addedBy'] as String?,
       assignedModules: json['assignedModules'] as List<dynamic>?,
     );
   }
@@ -121,9 +124,13 @@ class ListUserData {
       'branches': branches?.map((e) => e.toJson()).toList(),
       'branchCount': branchCount,
       'storeName': storeName,
+      'createdByName': createdByName,
       'assignedModules': assignedModules,
     };
   }
+
+  String get fullName => '$firstName $secondName';
+
 }
 
 class UserBranch {

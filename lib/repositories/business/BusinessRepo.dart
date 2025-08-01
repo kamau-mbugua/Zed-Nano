@@ -235,6 +235,26 @@ class BusinessRepo{
       return ApiResponse.withError(ApiErrorHandler.handleError(e));
     }
   }
+  Future<ApiResponse> approveSelectedStockTake({required Map<String, dynamic> requestData}) async {
+    try {
+      final response =
+      await dioClient!.post('${AppConstants.approveSelectedStockTake}', data: requestData);
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
+  Future<ApiResponse> approveMultipleAddStockBatches({required Map<String, dynamic> requestData}) async {
+    try {
+      final response =
+      await dioClient!.post('${AppConstants.approveMultipleAddStockBatches}', data: requestData);
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
   Future<ApiResponse> branchStoreSummary({required Map<String, dynamic> requestData}) async {
     try {
       final response =
@@ -260,7 +280,7 @@ class BusinessRepo{
   }) async {
     try {
       final response =
-      await dioClient!.post('${AppConstants.uploadBusinessLogo}', data: requestData);
+      await dioClient!.post('${AppConstants.uploadBusinessLogo}/', data: requestData);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -430,6 +450,20 @@ class BusinessRepo{
       return ApiResponse.withError(ApiErrorHandler.handleError(e));
     }
   }
+  Future<ApiResponse> getAddStockCancelledBatchesByBranch({
+    required int page ,
+    required int limit ,
+    required String searchValue ,
+  }) async {
+    try {
+      final response =
+      await dioClient!.post('${AppConstants.getAddStockCancelledBatchesByBranch}?page=$page&limit=$limit');
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
   Future<ApiResponse> getApprovedBatchesByBranch({
     required int page ,
     required int limit ,
@@ -438,6 +472,20 @@ class BusinessRepo{
     try {
       final response =
       await dioClient!.post('${AppConstants.getApprovedBatchesByBranch}?page=$page&limit=$limit');
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
+  Future<ApiResponse> getStockTakeCancelledBatchesByBranch({
+    required int page ,
+    required int limit ,
+    required String searchValue ,
+  }) async {
+    try {
+      final response =
+      await dioClient!.post('${AppConstants.getStockTakeCancelledBatchesByBranch}?page=$page&limit=$limit');
 
       return ApiResponse.withSuccess(response);
     } catch (e) {

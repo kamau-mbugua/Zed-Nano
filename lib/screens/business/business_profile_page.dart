@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:zed_nano/contants/AppConstants.dart';
 import 'package:zed_nano/models/get_business_info/BusinessInfoResponse.dart';
+import 'package:zed_nano/models/get_token_after_invite/GetTokenAfterInviteResponse.dart';
 import 'package:zed_nano/models/listsubscribed_billing_plans/SubscribedBillingPlansResponse.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/routes/routes.dart';
@@ -31,7 +32,7 @@ class BusinessProfilePage extends StatefulWidget {
 
 class _BusinessProfilePageState extends State<BusinessProfilePage> {
 
-  SubscribedBillingPlansResponse? subscribedBillingPlansResponse;
+  NanoSubscription? subscribedBillingPlansResponse;
 
 
   @override
@@ -268,7 +269,7 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      'Due: ${subscribedBillingPlansResponse?.data?[0]?.dateSubscribed?.toFormattedDate()}',
+                      '. Due: ${subscribedBillingPlansResponse?.data?[0]?.dueDate?.toFormattedDate()}',
                       style: const TextStyle(
                         color: textSecondary, // neutralDarkLight
                         fontWeight: FontWeight.w400,

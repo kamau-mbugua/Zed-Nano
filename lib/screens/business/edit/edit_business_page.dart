@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
@@ -24,6 +25,8 @@ import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/Images.dart';
 import 'package:zed_nano/utils/extensions.dart';
 import 'package:zed_nano/utils/image_picker_util.dart';
+import 'package:path/path.dart' as p;
+import 'package:http_parser/http_parser.dart';
 
 class EditBusinessPage extends StatefulWidget {
   const EditBusinessPage({Key? key}) : super(key: key);
@@ -190,23 +193,49 @@ class _EditBusinessPageState extends State<EditBusinessPage> {
     });
   }
 
-
   Future<void> _uploadBusinessLogo() async {
+    final formData = FormData.fromMap({
+      'file': await MultipartFile.fromFile(
+        _logoImage!.path,
+        filename: p.basename(_logoImage!.path),
+        contentType: MediaType('image', 'jpeg'), // or png
+      ),
+      'businessNumber': getBusinessDetails(context)?.businessNumber
+    });
+
+    final urlPart = '?businessId=${getBusinessDetails(context)?.businessNumber}';
+
     await context
         .read<BusinessProviders>()
-        .uploadBusinessLogo(context: context, logo: _logoImage!)
+        .uploadProductCategoryImage(context: context, formData: formData!, urlPart:urlPart)
         .then((value) async {
       if (value.isSuccess) {
-        showCustomToast(
-            value.message ?? 'Business logo uploaded successfully',
+        showCustomToast(value.message ?? 'Business logo uploaded successfully',
             isError: false);
         Navigator.pop(context);
       } else {
-        showCustomToast(
-            value.message ?? 'Something went wrong');
+        showCustomToast(value.message ?? 'Something went wrong');
       }
     });
   }
+
+  //
+  // Future<void> _uploadBusinessLogo() async {
+  //   await context
+  //       .read<BusinessProviders>()
+  //       .uploadBusinessLogo(context: context, logo: _logoImage!)
+  //       .then((value) async {
+  //     if (value.isSuccess) {
+  //       showCustomToast(
+  //           value.message ?? 'Business logo uploaded successfully',
+  //           isError: false);
+  //       Navigator.pop(context);
+  //     } else {
+  //       showCustomToast(
+  //           value.message ?? 'Something went wrong');
+  //     }
+  //   });
+  // }
 
 
   @override
@@ -326,7 +355,7 @@ class _EditBusinessPageState extends State<EditBusinessPage> {
                   _selectedLocation = location;
                 });
               },
-            ),
+            ).paddingSymmetric(horizontal: 16),
             10.height,
             const Text('Country & Currency',
                 style: TextStyle(

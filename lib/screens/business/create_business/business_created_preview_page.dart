@@ -6,6 +6,7 @@ import 'package:zed_nano/contants/AppConstants.dart';
 import 'package:zed_nano/models/get_business_info/BusinessInfoResponse.dart';
 import 'package:zed_nano/providers/business/BusinessProviders.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
+import 'package:zed_nano/routes/routes.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/utils/Colors.dart';
@@ -176,7 +177,9 @@ class _BusinessCreatedPreviewPageState extends State<BusinessCreatedPreviewPage>
                   outlineButton(
                       text: 'Edit',
                       onTap: () {
-
+                        Navigator.pushNamed(context, AppRoutes.getEditBusinessScreenRoute()).then((_) {
+                          getBusinessInformation();
+                        });
                       },
                       context: context
                   ).paddingSymmetric(horizontal: 12),

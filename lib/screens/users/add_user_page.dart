@@ -73,6 +73,14 @@ class _AddUserPageState extends State<AddUserPage> {
   }
 
   Future<void> _addNewUser(Map<String, dynamic> requestData) async {
+    requestData['assignToBusiness'] = 'assignToBusiness';
+    requestData['assignedBusiness'] = getBusinessDetails(context)?.businessNumber;
+    requestData['businessName'] = getBusinessDetails(context)?.businessName;
+    requestData['businessLocation'] = '';
+    requestData['businessPhone'] = '';
+    requestData['loginState'] = 'Active';
+    requestData['isCreatedViaNano'] = true;
+    requestData['businessNumber'] = getBusinessDetails(context)?.businessNumber;
     await getBusinessProvider(context)
         .addNewUser(requestData: requestData, context: context)
         .then((value) {

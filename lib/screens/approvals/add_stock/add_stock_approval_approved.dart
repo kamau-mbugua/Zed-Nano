@@ -15,19 +15,19 @@ import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
 import 'package:zed_nano/utils/pagination_controller.dart';
 
-class StockTakeApproval extends StatefulWidget {
-  const StockTakeApproval({Key? key}) : super(key: key);
+class AddStockApprovalApproved extends StatefulWidget {
+  const AddStockApprovalApproved({Key? key}) : super(key: key);
 
   @override
-  _StockTakeApprovalState createState() => _StockTakeApprovalState();
+  _AddStockApprovalApprovedState createState() => _AddStockApprovalApprovedState();
 }
 
-class _StockTakeApprovalState extends State<StockTakeApproval> {
+class _AddStockApprovalApprovedState extends State<AddStockApprovalApproved> {
   TextEditingController _searchController = TextEditingController();
   Timer? _debounceTimer;
   String _searchTerm = '';
   late PaginationController<BatchData> _paginationController;
-  List<String> _selectedItems = []; // Add this to track selected items
+  Set<String> _selectedItems = {}; // Add this to track selected items
 
   @override
   void initState() {
@@ -50,7 +50,7 @@ class _StockTakeApprovalState extends State<StockTakeApproval> {
   Future<List<BatchData>> getPendingBatchesByBranch(
       {required int page, required int limit}) async {
     try {
-      final response = await getBusinessProvider(context).getPendingBatchesByBranch(
+      final response = await getBusinessProvider(context).getApprovedAddStockBatchesByBranch(
         page: page,
         limit: limit,
         searchValue: _searchTerm,
@@ -74,7 +74,7 @@ class _StockTakeApprovalState extends State<StockTakeApproval> {
       ).then((response) {
         if (response.isSuccess) {
           _selectedItems.clear();
-          showCustomToast(response.message ?? 'Stock Take Approved Successfully', isError: false);
+          showCustomToast(response.message ?? 'Stock Take Approved Successfully');
           _paginationController.refresh();
         } else {
           showCustomToast(response.message ?? 'Failed to approve stock take');
@@ -108,12 +108,12 @@ class _StockTakeApprovalState extends State<StockTakeApproval> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AuthAppBar(title: 'Stock Take Approval'),
+      appBar: AuthAppBar(title: 'Add Stock Approval'),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           headings(
-            label: 'Stock Take Requests',
+            label: 'Add Stock Requests',
             subLabel: 'Tap on a request to view more details.',
           ).paddingSymmetric(horizontal: 16),
           _buildSearchBar(),
@@ -121,6 +121,7 @@ class _StockTakeApprovalState extends State<StockTakeApproval> {
             child: RefreshIndicator(
               onRefresh: () async {
                 _paginationController.refresh();
+                // await _fetchStockSummary();
               },
               child: _buildApprovedStockList().paddingSymmetric(horizontal: 16),
             ),
@@ -154,11 +155,11 @@ class _StockTakeApprovalState extends State<StockTakeApproval> {
               child: Visibility(
                 visible: _selectedItems.isNotEmpty,
                 child: appButton(
-                  text: 'Approve Selected',
+                  text: "Approve Selected",
                   onTap: () {
-                    final requestData = <String, dynamic>{
-                      'listBatchIds': _selectedItems,
-                      'status': 'APPROVED'
+                    Map<String, dynamic> requestData = {
+                      "listBatchIds": _selectedItems,
+                      "status": "APPROVED"
                     };
                     _approveSelectedStockTake(requestData:requestData);
                   },
@@ -183,35 +184,6 @@ class _StockTakeApprovalState extends State<StockTakeApproval> {
       builderDelegate: PagedChildBuilderDelegate<BatchData>(
         itemBuilder: (context, item, index) {
           return stockTakeItemBuilder(item,
-              onChecked: () {
-                setState(() {
-                  if (_selectedItems.contains(item.id)) {
-                    _selectedItems.remove(item.id);
-                  } else {
-                    _selectedItems.add(item.id!);
-                  }
-                });
-              },
-              onApprove: () {
-                if (!_selectedItems.contains(item.id)) {
-                  _selectedItems.add(item.id!);
-                }
-                final requestData = <String, dynamic>{
-                  'listBatchIds': _selectedItems,
-                  'status': 'APPROVED'
-                };
-                _approveSelectedStockTake(requestData:requestData);
-              },
-              onDecline: () {
-                if (!_selectedItems.contains(item.id)) {
-                  _selectedItems.add(item.id!);
-                }
-                final requestData = <String, dynamic>{
-                  'listBatchIds': _selectedItems,
-                  'status': 'DECLINED'
-                };
-                _approveSelectedStockTake(requestData:requestData);
-              },
               onTap: () {
                 ViewStockTakeBatchDetail(
                   batchId: item?.batchId ?? '',

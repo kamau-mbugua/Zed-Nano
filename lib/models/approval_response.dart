@@ -1,49 +1,113 @@
 import 'approval_data.dart';
 
 class ApprovalResponse {
-  final List<ApprovalData>? data;
+  final String? status;
+  final String? message;
+  final ApprovalListData? data;
 
   ApprovalResponse({
+    this.status,
+    this.message,
     this.data,
   });
 
   factory ApprovalResponse.fromJson(Map<String, dynamic> json) {
     return ApprovalResponse(
+      status: json['status'] as String?,
+      message: json['message'] as String?,
       data: json['data'] != null
-          ? (json['data'] as List)
-              .map((item) => ApprovalData.fromJson(item as Map<String, dynamic>))
-              .toList()
+          ? ApprovalListData.fromJson(json['data'] as Map<String, dynamic>)
           : null,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'data': data?.map((item) => item.toJson()).toList(),
+      'status': status,
+      'message': message,
+      'data': data?.toJson(),
     };
   }
 
+  /// Check if the response indicates success
+  bool get isSuccess => status == 'SUCCESS';
+
   @override
   String toString() {
-    return 'ApprovalResponse(data: $data)';
+    return 'ApprovalResponse(status: $status, message: $message, data: $data)';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     return other is ApprovalResponse && 
-        _listEquals(other.data, data);
+        other.status == status &&
+        other.message == message &&
+        other.data == data;
   }
 
   @override
-  int get hashCode => data.hashCode;
-
-  bool _listEquals<T>(List<T>? a, List<T>? b) {
-    if (a == null) return b == null;
-    if (b == null || a.length != b.length) return false;
-    for (int index = 0; index < a.length; index += 1) {
-      if (a[index] != b[index]) return false;
-    }
-    return true;
-  }
+  int get hashCode => Object.hash(status, message, data);
 }
+
+class ApprovalListData {
+  final int? addStockCount;
+  final int? stockTakeCount;
+  final int? stockTransferCount;
+  final int? customersCount;
+  final int? usersCount;
+
+  ApprovalListData({
+    this.addStockCount,
+    this.stockTakeCount,
+    this.stockTransferCount,
+    this.customersCount,
+    this.usersCount,
+  });
+
+  factory ApprovalListData.fromJson(Map<String, dynamic> json) {
+    return ApprovalListData(
+      addStockCount: json['addStockCount'] as int?,
+      stockTakeCount: json['stockTakeCount'] as int?,
+      stockTransferCount: json['stockTransferCount'] as int?,
+      customersCount: json['customersCount'] as int?,
+      usersCount: json['usersCount'] as int?,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'addStockCount': addStockCount,
+      'stockTakeCount': stockTakeCount,
+      'stockTransferCount': stockTransferCount,
+      'customersCount': customersCount,
+      'usersCount': usersCount,
+    };
+  }
+
+  @override
+  String toString() {
+    return 'ApprovalData(addStockCount: $addStockCount, stockTakeCount: $stockTakeCount, stockTransferCount: $stockTransferCount, customersCount: $customersCount, usersCount: $usersCount)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is ApprovalListData &&
+        other.addStockCount == addStockCount &&
+        other.stockTakeCount == stockTakeCount &&
+        other.stockTransferCount == stockTransferCount &&
+        other.customersCount == customersCount &&
+        other.usersCount == usersCount;
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      addStockCount,
+      stockTakeCount,
+      stockTransferCount,
+      customersCount,
+      usersCount
+  );
+}
+

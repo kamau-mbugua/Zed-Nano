@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:zed_nano/models/get_approved_add_stock_batches_by_branch/GetBatchesListResponse.dart';
+import 'package:zed_nano/models/listUsers/ListUsersResponse.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/Images.dart';
 import 'package:zed_nano/utils/extensions.dart';
 
-Widget stockTakeItemBuilder(BatchData batch,
+Widget addUsersApprovalItemBuilder(ListUserData batch,
     {VoidCallback? onChecked,
     VoidCallback? onApprove,
     VoidCallback? onDecline,
@@ -34,14 +34,15 @@ Widget stockTakeItemBuilder(BatchData batch,
                     Row(
                       children: [
                         rfCommonCachedNetworkImage(
-                          approvalStockTake,
+                          approvalUsers,
                           fit: BoxFit.fitHeight,
                           height: 20,
+                          color: batch.userStatus == 'ACTIVE'?successTextColor:orangeColor,
                           width: 15,
                         ),
                         8.width,
                         Expanded(
-                          child: Text('${batch.batchNumber}',
+                          child: Text('${batch.fullName}',
                               style: const TextStyle(
                                 fontFamily: 'Poppins',
                                 color: textPrimary,
@@ -55,9 +56,7 @@ Widget stockTakeItemBuilder(BatchData batch,
                     8.height,
                     // Subtitle
                     Text(
-                        batch.status == 'APPROVED' || batch.status == 'DECLINED'
-                            ? 'Approved on ${batch?.dateCreated?.toFormattedDate()}'
-                            : 'Requested on:  ${batch?.dateCreated?.toFormattedDate()}',
+                        'Created on:  ${batch?.createdAt?.toFormattedDate()}',
                         style: const TextStyle(
                             color: textSecondary,
                             fontWeight: FontWeight.w400,
@@ -68,35 +67,28 @@ Widget stockTakeItemBuilder(BatchData batch,
                   ],
                 ),
               ),
-              if (batch.status == 'APPROVED' || batch.status == 'DECLINED')
-                Container(
-                  margin: const EdgeInsets.only(right: 0),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: batch.status == 'APPROVED'
-                        ? lightGreenColor
-                        : primaryYellowTextColor,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Text(batch.status?.toUpperCase() ?? '',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        color: batch.status == 'APPROVED'
-                            ? successTextColor
-                            : googleRed,
-                        fontSize: 10,
-                        fontWeight: FontWeight.w600,
-                        fontStyle: FontStyle.normal,
-                      )),
-                )
-              else
-                Checkbox(
-                  value: isSelected,
-                  onChanged: (bool? newValue) {
-                    onChecked?.call();
-                  },
+              Container(
+                margin: const EdgeInsets.only(right: 0),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(
+                  color: batch.userStatus == 'ACTIVE'
+                      ?lightGreenColor
+                      :primaryYellowTextColor,
+                  borderRadius: BorderRadius.circular(8),
                 ),
+                child: Text(batch.userStatus?.toUpperCase() ?? '',
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      color: batch.userStatus == 'ACTIVE'
+                          ? successTextColor
+                          : googleRed,
+                      fontSize: 10,
+                      fontWeight: FontWeight.w600,
+                      fontStyle: FontStyle.normal,
+                    )
+                ),
+              ),
             ],
           ),
           8.height,
@@ -107,9 +99,7 @@ Widget stockTakeItemBuilder(BatchData batch,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                      batch.status == 'APPROVED' || batch.status == 'DECLINED'
-                          ? 'Approved By'
-                          : 'Requested by:',
+                      'Created by:',
                       style: const TextStyle(
                         fontFamily: 'Poppins',
                         color: textSecondary,
@@ -132,7 +122,7 @@ Widget stockTakeItemBuilder(BatchData batch,
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Products',
+                  const Text('Role:',
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         color: textSecondary,
@@ -142,7 +132,7 @@ Widget stockTakeItemBuilder(BatchData batch,
                         letterSpacing: 0.15,
                       )),
                   8.height,
-                  Text(batch.productCount.toString() ?? 'N/A',
+                  Text(batch.userRole.toString() ?? 'N/A',
                       style: const TextStyle(
                         fontFamily: 'Poppins',
                         color: textPrimary,
@@ -156,7 +146,7 @@ Widget stockTakeItemBuilder(BatchData batch,
             ],
           ),
           8.height,
-          if (batch.status == 'APPROVED' || batch.status == 'DECLINED')
+          if (batch.userStatus == 'ACTIVE' || batch.userStatus == 'SUSPENDED')
             const SizedBox(
               height: 1,
             )
@@ -239,6 +229,6 @@ Widget stockTakeItemBuilder(BatchData batch,
             ),
         ],
       ),
-    ).paddingSymmetric(vertical: 4),
+    ).paddingSymmetric(vertical:4)
   );
 }

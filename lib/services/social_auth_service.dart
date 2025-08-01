@@ -211,6 +211,7 @@ class SocialAuthService {
       }
       payload['fcmToken'] = fcmToken;
       payload['deviceId'] = deviceId;
+      payload['isCreatedViaNano'] = true;
 
       logger.d('Firebase login payload: $payload');
 

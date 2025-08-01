@@ -572,6 +572,48 @@ class BusinessProviders extends BaseProvider {
     return finalResponseModel;
   }
 
+  Future<ResponseModel<CommonResponse>> approveSelectedStockTake(
+      {required Map<String, dynamic> requestData,
+      required BuildContext context}) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.approveSelectedStockTake(requestData: requestData),
+        context);
+
+    ResponseModel<CommonResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<CommonResponse>(
+          true, responseModel.message!, CommonResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<CommonResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
+  Future<ResponseModel<CommonResponse>> approveMultipleAddStockBatches(
+      {required Map<String, dynamic> requestData,
+      required BuildContext context}) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.approveMultipleAddStockBatches(requestData: requestData),
+        context);
+
+    ResponseModel<CommonResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<CommonResponse>(
+          true, responseModel.message!, CommonResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<CommonResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
   Future<ResponseModel<BranchStoreSummaryResponse>> branchStoreSummary(
       {required Map<String, dynamic> requestData,
       required BuildContext context}) async {
@@ -1146,6 +1188,35 @@ class BusinessProviders extends BaseProvider {
     return finalResponseModel;
   }
 
+  Future<ResponseModel<GetBatchesListResponse>>
+  getAddStockCancelledBatchesByBranch({
+    required int page,
+    required int limit,
+    required String searchValue,
+    required BuildContext context,
+  }) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.getAddStockCancelledBatchesByBranch(
+              page: page,
+              limit: limit,
+              searchValue: searchValue,
+            ),
+        context);
+
+    ResponseModel<GetBatchesListResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<GetBatchesListResponse>(
+          true, responseModel.message!, GetBatchesListResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<GetBatchesListResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
   Future<ResponseModel<GetBatchesListResponse>> getApprovedBatchesByBranch({
     required int page,
     required int limit,
@@ -1154,6 +1225,34 @@ class BusinessProviders extends BaseProvider {
   }) async {
     final responseModel = await performApiCallWithHandling(
         () => businessRepo.getApprovedBatchesByBranch(
+              page: page,
+              limit: limit,
+              searchValue: searchValue,
+            ),
+        context);
+
+    ResponseModel<GetBatchesListResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<GetBatchesListResponse>(
+          true, responseModel.message!, GetBatchesListResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<GetBatchesListResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
+  Future<ResponseModel<GetBatchesListResponse>> getStockTakeCancelledBatchesByBranch({
+    required int page,
+    required int limit,
+    required String searchValue,
+    required BuildContext context,
+  }) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.getStockTakeCancelledBatchesByBranch(
               page: page,
               limit: limit,
               searchValue: searchValue,

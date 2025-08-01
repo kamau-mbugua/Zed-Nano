@@ -294,7 +294,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                         await viewModel.skipSetup(context);
                         return;
                       }
-                      BottomSheetHelper.showSetupStepBottomSheet(
+                      await BottomSheetHelper.showSetupStepBottomSheet(
                           context,
                         currentStep: viewModel.workflowState!.toLowerCase(),
                       );

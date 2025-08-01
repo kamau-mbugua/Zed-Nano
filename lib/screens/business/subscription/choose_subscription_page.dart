@@ -3,6 +3,7 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/models/business/BusinessDetails.dart';
+import 'package:zed_nano/models/get_token_after_invite/GetTokenAfterInviteResponse.dart';
 import 'package:zed_nano/models/listbillingplan_packages/BillingPlanPackagesResponse.dart';
 import 'package:zed_nano/models/createbillingInvoice/CreateBillingInvoiceResponse.dart';
 import 'package:zed_nano/models/listsubscribed_billing_plans/SubscribedBillingPlansResponse.dart';
@@ -13,6 +14,7 @@ import 'package:zed_nano/screens/widget/common/custom_dialog.dart';
 import 'package:zed_nano/screens/widget/common/heading.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
+import 'package:zed_nano/utils/GifsImages.dart';
 import 'package:zed_nano/utils/extensions.dart';
 
 class SubscriptionScreen extends StatefulWidget {
@@ -38,7 +40,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
   List<BillingPlanPackageGroup>? plans;
   String? noOfFreeTrialDays;
   BusinessDetails? businessDetails;
-  SubscribedBillingPlansResponse? subscribedBillingPlansResponse;
+  NanoSubscription? subscribedBillingPlansResponse;
 
   @override
   void initState() {
@@ -117,7 +119,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
       'billingPlanPaymentPlanId':
           '${plans?[selectedIndex]?.plans?[0]?.billingPlanPaymentPlanId}',
       'packageId': '${plans?[selectedIndex].plans?[0].packageId}',
-      'isChangePlan':widget.isExistingPlan
+      'isChangePlan': widget.isExistingPlan
     };
 
     await context
@@ -174,22 +176,22 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
             fontSize: 16.0,
           ),
         ),
-        actions: widget.isExistingPlan
-            ? [
-                TextButton(
-                  onPressed: _showCancelPlanDialog,
-                  child: Text(
-                    'Cancel Plan',
-                    style: TextStyle(
-                      color: Colors.red[700], // Using your accentRed color
-                      fontWeight: FontWeight.w500,
-                      fontFamily: 'Poppins',
-                      fontSize: 14.0,
-                    ),
-                  ),
-                ),
-              ]
-            : null,
+        // actions: widget.isExistingPlan
+        //     ? [
+        //         TextButton(
+        //           onPressed: _showCancelPlanDialog,
+        //           child: Text(
+        //             'Cancel Plan',
+        //             style: TextStyle(
+        //               color: Colors.red[700], // Using your accentRed color
+        //               fontWeight: FontWeight.w500,
+        //               fontFamily: 'Poppins',
+        //               fontSize: 14.0,
+        //             ),
+        //           ),
+        //         ),
+        //       ]
+        //     : null,
       ),
       body: SafeArea(
         child: Stack(
@@ -206,233 +208,264 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                         'Enjoy a free ${noOfFreeTrialDays ?? 0} trial period..',
                   ),
                   const SizedBox(height: 10),
+                  _buildListing(),
+                  const SizedBox(height: 16),
+                  _buildSubscriptionsHeaders()
+                ],
+              ),
+            ),
+            _builSubscriptionButtons(),
+          ],
+        ),
+      ),
+    );
+  }
 
-                  // Current subscription info with styled container
-                  if (widget.isExistingPlan)
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: lightGreyColor,
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: Colors.grey.shade200),
+  Widget _builSubscriptionButtons() {
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            widget.isExistingPlan
+                ? SizedBox.shrink()
+                : outlineButton(
+                    text: 'Start ${noOfFreeTrialDays ?? 0} Day Free Trial',
+                    onTap: () {
+                      activateFreeTrialPlan();
+                    },
+                    context: context,
+                  ).paddingSymmetric(horizontal: 12),
+            10.height,
+            appButton(
+              text: 'Subscribe',
+              onTap: () {
+                if (selectedIndex == -1) {
+                  showCustomToast('Please select a plan');
+                  return;
+                }
+                createBillingInvoice();
+              },
+              isEnable: selectedIndex != -1,
+              context: context,
+            ).paddingSymmetric(horizontal: 12),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSubscriptionsHeaders() {
+    return Column(
+      children: [
+        if (plans != null)
+          ...plans!.asMap().entries.map((entry) {
+            var index = entry.key;
+            var plan = entry.value;
+
+            return GestureDetector(
+              onTap: () => setState(() => selectedIndex = index),
+              child: Stack(
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 16),
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: selectedIndex == index
+                            ? const Color(0xff032541)
+                            : Colors.grey.shade300,
+                        width: 1.5,
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
+                      color: selectedIndex == index
+                          ? const Color(0xFFF2F4F5)
+                          : Colors.white,
+                    ),
+                    child: Row(
+                      children: [
+                        Radio<int>(
+                          value: index,
+                          groupValue: selectedIndex,
+                          onChanged: (value) =>
+                              setState(() => selectedIndex = value!),
+                          activeColor: const Color(0xff032541),
+                        ),
+                        Expanded(
+                          child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Current: ${subscribedBillingPlansResponse?.data?[0].billingPeriodName}',
+                                plan?.id ?? '',
                                 style: const TextStyle(
                                   fontSize: 14,
+                                  fontWeight: FontWeight.w600,
                                   fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.w400,
-                                  color: darkGreyColor,
+                                  color: Color(0xff1f2024),
                                 ),
                               ),
-                              const SizedBox(height: 4),
-                              Text(
-                                'Next Billing Date: ${subscribedBillingPlansResponse?.data![0].dateSubscribed?.toFormattedDate()}',
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                  fontFamily: 'Poppins',
-                                  color: textSecondary,
+                              const Visibility(
+                                visible: false,
+                                child: Text(
+                                  '0',
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: 'Poppins',
+                                    color: Color(0xff032541),
+                                  ),
                                 ),
                               ),
                             ],
                           ),
-                          Text(
-                            'KES ${subscribedBillingPlansResponse?.data![0].billingPeriodAmount?.formatCurrency()}',
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              fontFamily: 'Poppins',
-                              color: darkGreyColor,
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-                  else
-                    const SizedBox.shrink(),
-
-                  const SizedBox(height: 16),
-                  // Subscription List
-                  if (plans != null)
-                    ...plans!.asMap().entries.map((entry) {
-                      var index = entry.key;
-                      var plan = entry.value;
-
-                      return GestureDetector(
-                        onTap: () => setState(() => selectedIndex = index),
-                        child: Stack(
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            Container(
-                              margin: const EdgeInsets.only(bottom: 16),
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                border: Border.all(
-                                  color: selectedIndex == index
-                                      ? const Color(0xff032541)
-                                      : Colors.grey.shade300,
-                                  width: 1.5,
-                                ),
-                                color: selectedIndex == index
-                                    ? const Color(0xFFF2F4F5)
-                                    : Colors.white,
+                            Text(
+                              "${businessDetails?.localCurrency ?? 'KSH'} ${plan?.plans?[0]?.billingPeriodAmount ?? ''}",
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                fontFamily: 'Poppins',
+                                color: Color(0xff1f2024),
                               ),
-                              child: Row(
-                                children: [
-                                  Radio<int>(
-                                    value: index,
-                                    groupValue: selectedIndex,
-                                    onChanged: (value) =>
-                                        setState(() => selectedIndex = value!),
-                                    activeColor: const Color(0xff032541),
-                                  ),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          plan?.id ?? '',
-                                          style: const TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w600,
-                                            fontFamily: 'Poppins',
-                                            color: Color(0xff1f2024),
-                                          ),
-                                        ),
-                                        const Visibility(
-                                          visible: false,
-                                          child: Text(
-                                            '0',
-                                            style: TextStyle(
-                                              fontSize: 10,
-                                              fontWeight: FontWeight.w400,
-                                              fontFamily: 'Poppins',
-                                              color: Color(0xff032541),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      Text(
-                                        "${businessDetails?.localCurrency ?? 'KSH'} ${plan?.plans?[0]?.billingPeriodAmount ?? ''}",
-                                        style: const TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w600,
-                                          fontFamily: 'Poppins',
-                                          color: Color(0xff1f2024),
-                                        ),
-                                      ),
-                                      Text(
-                                        "every ${plan?.id ?? ''}",
-                                        style: const TextStyle(
-                                          fontSize: 10,
-                                          fontWeight: FontWeight.w400,
-                                          fontFamily: 'Poppins',
-                                          color: Color(0xff1f2024),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ).paddingSymmetric(horizontal: 1),
                             ),
-                            if (plan.isRecommended == true)
-                              Positioned(
-                                top: -1,
-                                right: 0,
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 4, vertical: 4),
-                                  decoration: BoxDecoration(
-                                    color: Colors.green,
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: const Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Icon(
-                                        Icons.star,
-                                        color: Colors.white,
-                                        size: 12,
-                                      ),
-                                      SizedBox(width: 0),
-                                      Text(
-                                        '',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 10,
-                                          fontWeight: FontWeight.w500,
-                                          fontFamily: 'Poppins',
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                            Text(
+                              "every ${plan?.id ?? ''}",
+                              style: const TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.w400,
+                                fontFamily: 'Poppins',
+                                color: Color(0xff1f2024),
                               ),
+                            ),
                           ],
                         ),
-                      );
-                    }).toList()
-                  else ...[
-                    Container(
-                      height: 200,
-                      child: const Center(
-                        child: Text(
-                          'No plans found',
+                      ],
+                    ).paddingSymmetric(horizontal: 1),
+                  ),
+                  if (plan.isRecommended == true)
+                    Positioned(
+                      top: -1,
+                      right: 0,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 4, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: Colors.green,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: const Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.star,
+                              color: Colors.white,
+                              size: 12,
+                            ),
+                            SizedBox(width: 0),
+                            Text(
+                              '',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: 'Poppins',
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                  ],
                 ],
               ),
+            );
+          }).toList()
+        else ...[
+          const CompactGifDisplayWidget(
+            gifPath: emptyListGif,
+            title: "It's empty over here.",
+            subtitle: 'No Subscriptions here yet! Add to view them here.',
+          )
+        ],
+      ],
+    );
+  }
+
+  Widget _buildListing() {
+    return Column(
+      children: [
+        if (widget.isExistingPlan)
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: lightGreyColor,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: Colors.grey.shade200),
             ),
-            // Bottom Buttons
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    outlineButton(
-                      text: 'Start ${noOfFreeTrialDays ?? 0} Day Free Trial',
-                      onTap: () {
-                        activateFreeTrialPlan();
-                      },
-                      context: context,
-                    ).paddingSymmetric(horizontal: 12),
-                    10.height,
-                    appButton(
-                      text: 'Subscribe',
-                      onTap: () {
-                        if (selectedIndex == -1) {
-                          showCustomToast('Please select a plan');
-                          return;
-                        }
-                        createBillingInvoice();
-                      },
-                      isEnable: selectedIndex != -1,
-                      context: context,
-                    ).paddingSymmetric(horizontal: 12),
-                  ],
-                ),
-              ),
+            child: ListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: subscribedBillingPlansResponse?.data?.length ?? 0,
+              itemBuilder: (context, index) {
+                final plan = subscribedBillingPlansResponse?.data?[index];
+                return Container(
+                  // margin: const EdgeInsets.only(bottom: 1),
+                  // padding: const EdgeInsets.all(8),
+                  // decoration: BoxDecoration(
+                  //   color: Colors.white,
+                  //   borderRadius: BorderRadius.circular(8),
+                  //   border: Border.all(color: Colors.grey.shade200),
+                  // ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Current: ${plan?.billingPeriodName ?? 'N/A'}',
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.w400,
+                                color: darkGreyColor,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              'Next Billing Date: ${plan?.dueDate?.toFormattedDate() ?? 'N/A'}',
+                              style: const TextStyle(
+                                fontSize: 12,
+                                fontFamily: 'Poppins',
+                                color: textSecondary,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Text(
+                        'KES ${plan?.billingPeriodAmount?.formatCurrency() ?? '0'}',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          fontFamily: 'Poppins',
+                          color: darkGreyColor,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
             ),
-          ],
-        ),
-      ),
+          )
+        else
+          const SizedBox.shrink(),
+      ],
     );
   }
 }
