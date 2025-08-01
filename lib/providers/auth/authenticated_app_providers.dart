@@ -60,13 +60,13 @@ class AuthenticatedAppProviders extends BaseProvider {
         await authenticatedRepo.saveUserToken(token);
 
         final details = BusinessDetails(
-            businessId: loginResponse?.defaultBusinessId ?? '',
-            businessNumber: loginResponse?.businessNumber ?? '',
-            group: loginResponse?.group ?? '',
-            branchId: loginResponse?.branchId ?? '',
-            localCurrency: loginResponse?.localCurrency ?? '',
-            businessCategory: loginResponse?.businessCategory ?? '',
-            businessName: loginResponse?.businessName ?? '',
+            businessId: loginResponse?.defaultBusinessId,
+            businessNumber: loginResponse?.businessNumber,
+            group: loginResponse?.group,
+            branchId: loginResponse?.branchId,
+            localCurrency: loginResponse?.localCurrency,
+            businessCategory: loginResponse?.businessCategory,
+            businessName: loginResponse?.businessName,
         );
 
         _businessDetails = details;
@@ -300,13 +300,13 @@ class AuthenticatedAppProviders extends BaseProvider {
         _token = newToken;
 
         final details = BusinessDetails(
-            businessId: postBusinessData?.defaultBusinessId ?? '',
-            businessNumber: postBusinessData?.businessNumber ?? '',
-            group: postBusinessData?.group ?? '',
-            branchId: postBusinessData?.branchId ?? '',
-            localCurrency: postBusinessData?.localCurrency ?? '',
-            businessCategory: postBusinessData?.businessCategory ?? '',
-            businessName: postBusinessData?.businessName ?? '',
+            businessId: postBusinessData?.defaultBusinessId,
+            businessNumber: postBusinessData?.businessNumber,
+            group: postBusinessData?.group,
+            branchId: postBusinessData?.branchId,
+            localCurrency: postBusinessData?.localCurrency,
+            businessCategory: postBusinessData?.businessCategory,
+            businessName: postBusinessData?.businessName,
         );
 
         _businessDetails = details;

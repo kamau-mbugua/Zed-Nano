@@ -15,10 +15,11 @@ import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/Images.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:zed_nano/viewmodels/WorkflowViewModel.dart';
 
 class CustomDrawer extends StatefulWidget {
   final Function()? onClose;
-  
+
   const CustomDrawer({Key? key, this.onClose}) : super(key: key);
 
   @override
@@ -40,7 +41,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
     final user = authProvider?.userDetails;
     final userName = user?.name ?? 'User';
     final phoneNumber = user?.phoneNumber ?? '';
-    
+
     return Container(
       width: context.width() /** 0.7*/, // 85% of screen width
       decoration: const BoxDecoration(
@@ -74,9 +75,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         fontWeight: FontWeight.w600,
                         fontStyle: FontStyle.normal,
                         letterSpacing: 0.08,
-
-                      )
-                  ),
+                      )),
                   IconButton(
                     icon: SvgPicture.asset(closeIcon, width: 20, height: 20),
                     onPressed: widget.onClose,
@@ -84,21 +83,21 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 ],
               ),
             ),
-            
+
             // User profile section
             Padding(
               padding: const EdgeInsets.all(10.0),
               child: Row(
                 children: [
                   // Profile image
-                commonCachedNetworkImage(
-                  defaultAvatarIcon,
-                width: 40,
-                height: 40,
-                fit: BoxFit.cover,
-                usePlaceholderIfUrlEmpty: true,
-                radius: 16,
-              ),
+                  commonCachedNetworkImage(
+                    defaultAvatarIcon,
+                    width: 40,
+                    height: 40,
+                    fit: BoxFit.cover,
+                    usePlaceholderIfUrlEmpty: true,
+                    radius: 16,
+                  ),
                   16.width,
                   // User info
                   Expanded(
@@ -112,10 +111,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                               fontSize: 14,
                               fontWeight: FontWeight.w600,
                               fontStyle: FontStyle.normal,
-
-
-                            )
-                        ),
+                            )),
                         Text(phoneNumber,
                             style: const TextStyle(
                               fontFamily: 'Poppins',
@@ -124,15 +120,14 @@ class _CustomDrawerState extends State<CustomDrawer> {
                               fontWeight: FontWeight.w400,
                               fontStyle: FontStyle.normal,
                               letterSpacing: 0.12,
-
-                            )
-                        ),
+                            )),
                       ],
                     ),
                   ),
                   // View Profile button
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
                       color: lightGreyColor,
                       borderRadius: BorderRadius.circular(16),
@@ -144,187 +139,188 @@ class _CustomDrawerState extends State<CustomDrawer> {
                           fontSize: 10,
                           fontWeight: FontWeight.w600,
                           fontStyle: FontStyle.normal,
-                        )
+                        )),
+                  ),
+                ],
+              ),
+            ),
+
+            if (Provider.of<WorkflowViewModel>(context, listen: false).showBusinessSetup) Expanded(
+                    child: ListView(
+                      padding: EdgeInsets.zero,
+                      children: [
+                        // Businesses - expandable
+                        _buildMenuItem(
+                          title: 'Home',
+                          iconPath: homeIcon,
+                          onTap: () => widget.onClose,
+                        ),
+                        // Users
+                        _buildMenuItem(
+                          title: 'Create Business',
+                          iconPath: createBusinessIcon,
+                          onTap: () => const UsersMainList().launch(context),
+                        ),
+                      ],
+                    ),
+                  ) else Expanded(
+                    child: ListView(
+                      padding: EdgeInsets.zero,
+                      children: [
+                        // Businesses - expandable
+                        _buildExpandableMenuItem(
+                          title: 'Businesses',
+                          iconPath: businessesIcon,
+                          children: [
+                            _buildSubMenuItem(
+                              title: 'My Businesses',
+                              onTap: () => _navigateTo(context,
+                                  AppRoutes.getBusinessProfileScreenRoute()),
+                            ),
+                          ],
+                        ),
+
+                        // Inventory - expandable
+                        _buildExpandableMenuItem(
+                          title: 'Inventory',
+                          iconPath: inventoryIcon,
+                          children: [
+                            _buildSubMenuItem(
+                              title: 'Categories',
+                              onTap: () => _navigateTo(
+                                  context, AppRoutes.getListCategoriesRoute()),
+                            ),
+                            _buildSubMenuItem(
+                              title: 'Products and Services',
+                              onTap: () => _navigateTo(context,
+                                  AppRoutes.getListProductsAndServicesRoute()),
+                            ),
+                          ],
+                        ),
+
+                        // Stock Management - expandable
+                        _buildExpandableMenuItem(
+                          title: 'Stock Management',
+                          iconPath: stockManagementIcon,
+                          children: [
+                            _buildSubMenuItem(
+                                title: 'View Stock',
+                                // onTap: () => /*_navigateTo(context, '/stock-levels')*/ViewStockPage.launch(context)
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const ViewStockPage()),
+                                  );
+                                }),
+                            _buildSubMenuItem(
+                              title: 'Add Stock',
+                              onTap: () {
+                                Navigator.pushNamed(
+                                    context,
+                                    AppRoutes
+                                        .getAddStockBatchTabsPageScreenRoute());
+                              },
+                            ),
+                            _buildSubMenuItem(
+                              title: 'Stock Take',
+                              onTap: () {
+                                Navigator.pushNamed(
+                                    context,
+                                    AppRoutes
+                                        .getAddStockTakeBatchTabsPageScreenRoute());
+                              },
+                            ),
+                          ],
+                        ),
+
+                        // Sales - expandable
+                        _buildExpandableMenuItem(
+                          title: 'Sales',
+                          iconPath: salesSideMenuIcon,
+                          children: [
+                            _buildSubMenuItem(
+                              title: 'Customers',
+                              onTap: () =>
+                                  const CustomersListPage().launch(context),
+                            ),
+                            _buildSubMenuItem(
+                              title: 'Invoices',
+                              onTap: () =>
+                                  InvoicesListMainPage().launch(context),
+                            ),
+                            _buildSubMenuItem(
+                              title: 'Orders',
+                              onTap: () => OrdersListMainPage().launch(context),
+                            ),
+                            _buildSubMenuItem(
+                              title: 'Receipts',
+                              onTap: () => _navigateTo(context, '/pos'),
+                            ),
+                            _buildSubMenuItem(
+                              title: 'Transactions',
+                              onTap: () => _navigateTo(context, '/pos'),
+                            ),
+                          ],
+                        ),
+
+                        // Users
+                        _buildMenuItem(
+                          title: 'Payment',
+                          iconPath: usersIcon,
+                          onTap: () => AddPaymentMethodScreen(isWorkFlow: false)
+                              .launch(context),
+                        ),
+                        // Users
+                        _buildMenuItem(
+                          title: 'Users',
+                          iconPath: usersIcon,
+                          onTap: () => const UsersMainList().launch(context),
+                        ),
+
+                        // Approvals
+                        _buildMenuItem(
+                          title: 'Approvals',
+                          iconPath: approvalsIcon,
+                          onTap: () => ApprovalsMainPage().launch(context),
+                        ),
+
+                        // Reports
+                        _buildMenuItem(
+                          title: 'Reports',
+                          iconPath: reportsSideMenuIcon,
+                          onTap: () => _navigateTo(context, '/reports'),
+                        ),
+
+                        // Settings
+                        _buildMenuItem(
+                          title: 'Settings',
+                          iconPath: settingsIcon,
+                          onTap: () => _navigateTo(context, '/settings'),
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
-            ),
-            
-            // const Divider(height: 1),
-            
-            // Menu items in a scrollable list
-            Expanded(
-              child: ListView(
-                padding: EdgeInsets.zero,
-                children: [
-                  // Businesses - expandable
-                  _buildExpandableMenuItem(
-                    title: 'Businesses',
-                    iconPath: businessesIcon,
-                    children: [
-                      _buildSubMenuItem(
-                        title: 'My Businesses',
-                        onTap: () => _navigateTo(context, AppRoutes.getBusinessProfileScreenRoute()),
-                      ),
-                    ],
-                  ),
-                  
-                  // Inventory - expandable
-                  _buildExpandableMenuItem(
-                    title: 'Inventory',
-                    iconPath: inventoryIcon,
-                    children: [
-                      _buildSubMenuItem(
-                        title: 'Categories',
-                        onTap: () => _navigateTo(context, AppRoutes.getListCategoriesRoute()),
-                      ),
-                      _buildSubMenuItem(
-                        title: 'Products and Services',
-                        onTap: () => _navigateTo(context, AppRoutes.getListProductsAndServicesRoute()),
-                      ),
 
-                    ],
-                  ),
-                  
-                  // Stock Management - expandable
-                  _buildExpandableMenuItem(
-                    title: 'Stock Management',
-                    iconPath: stockManagementIcon,
-                    children: [
-                      _buildSubMenuItem(
-                        title: 'View Stock',
-                        // onTap: () => /*_navigateTo(context, '/stock-levels')*/ViewStockPage.launch(context)
-                        onTap: (){
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => const ViewStockPage()),
-                          );
-                        }
-                      ),
-                      _buildSubMenuItem(
-                        title: 'Add Stock',
-                        onTap: () {
-                        Navigator.pushNamed(context, AppRoutes.getAddStockBatchTabsPageScreenRoute());
-
-                      },
-                      ),
-                      _buildSubMenuItem(
-                        title: 'Stock Take',
-                        onTap: (){
-                          Navigator.pushNamed(context, AppRoutes.getAddStockTakeBatchTabsPageScreenRoute());
-
-                        },
-                      ),
-                    ],
-                  ),
-                  
-                  // Sales - expandable
-                  _buildExpandableMenuItem(
-                    title: 'Sales',
-                    iconPath: salesSideMenuIcon,
-                    children: [
-                      _buildSubMenuItem(
-                        title: 'Customers',
-                        onTap: () => const CustomersListPage().launch(context),
-                      ),
-                      _buildSubMenuItem(
-                        title: 'Invoices',
-                        onTap: () => InvoicesListMainPage().launch(context),
-                      ),
-                      _buildSubMenuItem(
-                        title: 'Orders',
-                        onTap: () => OrdersListMainPage().launch(context),
-                      ),
-                      _buildSubMenuItem(
-                        title: 'Receipts',
-                        onTap: () => _navigateTo(context, '/pos'),
-                      ),
-                      _buildSubMenuItem(
-                        title: 'Transactions',
-                        onTap: () => _navigateTo(context, '/pos'),
-                      ),
-                    ],
-                  ),
-                  
-                  // Users
-                  _buildMenuItem(
-                    title: 'Payment',
-                    iconPath: usersIcon,
-                    onTap: () => AddPaymentMethodScreen(isWorkFlow:false).launch(context),
-                  ),
-                  // Users
-                  _buildMenuItem(
-                    title: 'Users',
-                    iconPath: usersIcon,
-                    onTap: () => const UsersMainList().launch(context),
-                  ),
-                  
-                  // Approvals
-                  _buildMenuItem(
-                    title: 'Approvals',
-                    iconPath: approvalsIcon,
-                    onTap: () => ApprovalsMainPage().launch(context),
-                  ),
-                  
-                  // Reports
-                  _buildMenuItem(
-                    title: 'Reports',
-                    iconPath: reportsSideMenuIcon,
-                    onTap: () => _navigateTo(context, '/reports'),
-                  ),
-                  
-                  // Settings
-                  _buildMenuItem(
-                    title: 'Settings',
-                    iconPath: settingsIcon,
-                    onTap: () => _navigateTo(context, '/settings'),
-                  ),
-                ],
-              ),
-            ),
-            
-            // const Divider(height: 1),
-            
-            // Logout button
             ListTile(
               leading: SvgPicture.asset(logoutIcon, color: Colors.red),
-              title:const Text("Logout",
+              title: const Text("Logout",
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     color: accentRed,
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
                     fontStyle: FontStyle.normal,
-                  )
-              ),
+                  )),
               onTap: () {
-                // Show confirmation dialog
-                // showDialog(
-                //   context: context,
-                //   builder: (context) => AlertDialog(
-                //     title: const Text('Logout Confirmation'),
-                //     content: const Text('Are you sure you want to logout?'),
-                //     actions: [
-                //       TextButton(
-                //         onPressed: () => Navigator.pop(context),
-                //         child: const Text('CANCEL'),
-                //       ),
-                //       TextButton(
-                //         onPressed: () {
-                //           Navigator.pop(context); // Close dialog
-                          Provider.of<AuthenticatedAppProviders>(context, listen: false).logout(context);
-                          Navigator.pushNamedAndRemoveUntil(
-                            context,
-                            AppRoutes.getSplashPageRoute(),
-                            (route) => false,
-                          );
-                //         },
-                //         child: const Text('LOGOUT', style: TextStyle(color: Colors.red)),
-                //       ),
-                //     ],
-                //   ),
-                // );
+                Provider.of<AuthenticatedAppProviders>(context, listen: false)
+                    .logout(context);
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  AppRoutes.getSplashPageRoute(),
+                  (route) => false,
+                );
               },
             ),
             16.height, // Bottom padding
@@ -344,17 +340,14 @@ class _CustomDrawerState extends State<CustomDrawer> {
       children: [
         ListTile(
           leading: SvgPicture.asset(iconPath, color: Colors.black54),
-          title: Text(
-              title,
+          title: Text(title,
               style: const TextStyle(
-                  color:  const Color(0xff000000),
+                  color: const Color(0xff000000),
                   fontWeight: FontWeight.w400,
                   fontFamily: 'Poppins',
-                  fontStyle:  FontStyle.normal,
-                  fontSize: 12.0
-              ),
-              textAlign: TextAlign.left
-          ),
+                  fontStyle: FontStyle.normal,
+                  fontSize: 12.0),
+              textAlign: TextAlign.left),
           trailing: Icon(
             _isExpanded[title] == true
                 ? Icons.keyboard_arrow_up
@@ -367,8 +360,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
             });
           },
         ),
-        if (_isExpanded[title] == true)
-          Column(children: children),
+        if (_isExpanded[title] == true) Column(children: children),
       ],
     );
   }
@@ -394,8 +386,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
               fontWeight: FontWeight.w400,
               fontStyle: FontStyle.normal,
               letterSpacing: 0.12,
-            )
-        ),
+            )),
         onTap: () {
           Navigator.pop(context); // Close drawer
           onTap();
@@ -420,9 +411,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
             fontWeight: FontWeight.w400,
             fontStyle: FontStyle.normal,
             letterSpacing: 0.12,
-
-          )
-      ),
+          )),
       onTap: () {
         Navigator.pop(context); // Close drawer
         onTap();

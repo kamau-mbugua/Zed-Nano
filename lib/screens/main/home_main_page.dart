@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
+import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/main/pages/admin/admin_dashboard_page.dart';
 import 'package:zed_nano/screens/main/pages/common/p_o_s_pages.dart';
 import 'package:zed_nano/screens/main/welcome_setup_screen.dart';
 import 'package:zed_nano/screens/orders/orders_list_main_page.dart';
 import 'package:zed_nano/screens/reports/reports_list_page.dart';
+import 'package:zed_nano/screens/sell/sell_stepper_page.dart';
 import 'package:zed_nano/screens/widget/common/custom_app_bar.dart';
 import 'package:zed_nano/screens/widgets/custom_drawer.dart';
 import 'package:zed_nano/screens/widgets/nav_bar_item.dart';
@@ -32,8 +35,10 @@ class _HomeMainPageState extends State<HomeMainPage> {
     super.initState();
     // Run API calls after first frame to ensure context is available
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      final businessDetails = getBusinessDetails(context);
+
       Provider.of<WorkflowViewModel>(context, listen: false)
-      .skipSetup(context);
+          .skipSetup(context);
     });
   }
 
@@ -93,15 +98,12 @@ class _HomeMainPageState extends State<HomeMainPage> {
   Widget _buildScrollableScreen(Widget screen) {
     return NotificationListener<ScrollNotification>(
       onNotification: (ScrollNotification scrollInfo) {
-        // Prevent nested scroll conflicts
         return false;
       },
       child: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
         controller: _scrollController,
         child: SizedBox(
-          // Make sure the content is at least as tall as the viewport
-          // to allow pulling even when content is small
           height: MediaQuery.of(context).size.height - 
                  kBottomNavigationBarHeight - 
                  MediaQuery.of(context).padding.top,
@@ -151,7 +153,9 @@ class _HomeMainPageState extends State<HomeMainPage> {
   Widget build(BuildContext context) {
     return Consumer2<WorkflowViewModel, RefreshViewModel>(
       builder: (context, workflowViewModel, refreshViewModel, _) {
-        if (workflowViewModel.showBusinessSetup) {
+        logger.i("HomeMainPage ${workflowViewModel.showBusinessSetup} and ${getBusinessDetails(context)?.businessNumber}");
+        if (workflowViewModel.showBusinessSetup || getBusinessDetails(context)!.businessNumber?.isEmptyOrNull ?? true) {
+          logger.i("HomeMainPage ${workflowViewModel.showBusinessSetup}");
           return const WelcomeSetupScreen();
         }
 
@@ -172,6 +176,15 @@ class _HomeMainPageState extends State<HomeMainPage> {
             ),
           ),
           bottomNavigationBar: _buildBottomNavigationBar(),
+          floatingActionButton: selectedIndex == 0 || selectedIndex == 2 ? FloatingActionButton.extended(
+            heroTag: "home_main_fab",
+            onPressed: () {
+              const SellStepperPage().launch(context);
+            },
+            label: const Text('Sell', style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white)),
+            icon: const Icon(Icons.shopping_cart, color: Colors.white),
+            backgroundColor: appThemePrimary,
+          ) : null,
         );
       },
     );

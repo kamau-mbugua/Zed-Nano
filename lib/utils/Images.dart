@@ -63,3 +63,4 @@ const approvalStockTake = 'assets/icons/approvalStockTake.svg';
 const approvalUsers = 'assets/icons/approvalUsers.svg';
 const cancelIcon = 'assets/icons/cancelIcon.svg';
 const checkIcon = 'assets/icons/checkIcon.svg';
+const createBusinessIcon = 'assets/icons/createBusinessIcon.svg';

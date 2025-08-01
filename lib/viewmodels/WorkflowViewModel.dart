@@ -1,6 +1,6 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/models/get_token_after_invite/GetTokenAfterInviteResponse.dart';
 import 'package:zed_nano/models/listbillingplan_packages/BillingPlanPackagesResponse.dart';
@@ -12,8 +12,8 @@ class WorkflowViewModel with ChangeNotifier {
   bool _showBusinessSetup = false;
 
   NanoSubscription? _billingPlan;
-  bool get showBusinessSetup => _showBusinessSetup;
 
+  bool get showBusinessSetup => _showBusinessSetup;
 
   String? _workflowState;
 
@@ -26,59 +26,44 @@ class WorkflowViewModel with ChangeNotifier {
     _workflowState = state;
     notifyListeners();
   }
-  
+
   Future<void> skipSetup(BuildContext context) async {
+    logger.i("BusinessWorkflowViewModel 1 ${getBusinessDetails(context)!.businessNumber}");
+
+    if (getBusinessDetails(context)!.businessNumber?.isEmptyOrNull ?? true) {
+      logger.i("BusinessWorkflowViewModel ${getBusinessDetails(context)!.businessNumber}");
+      _showBusinessSetup = true;
+      return;
+    }
+
     try {
       // Get providers
       final authProvider = getAuthProvider(context);
       final businessProvider = getBusinessProvider(context);
-      
+
       // Get token after invite
       if (authProvider.isLoggedIn) {
-
         final requestData = {
           'branchId': authProvider.businessDetails?.branchId ?? '',
         };
-
-        await authProvider.getTokenAfterInvite(requestData: requestData , context: context).then((value) {
+        await authProvider
+            .getTokenAfterInvite(requestData: requestData, context: context)
+            .then((value) {
           if (value.isSuccess) {
             final response = value.data!;
-            setWorkflowState( response.data?.workflowState);
-            _billingPlan = response.data?.businessBillingDetails?.nanoSubscription;
+            _showBusinessSetup = (response.data?.workflowState == null);
+            setWorkflowState(response.data?.workflowState);
+            _billingPlan =
+                response.data?.businessBillingDetails?.nanoSubscription;
             notifyListeners();
-          }else{
+          } else {
             showCustomToast(value.message);
             logger.e("Failed to get token: ${value.message}");
           }
         });
-        // // Update workflow state
-        // await businessProvider.getSetupStatus(context: context).then((value) {
-        //   if (value.isSuccess) {
-        //     final response = value.data!;
-        //     _showBusinessSetup = response.data?.workflowState == null;
-        //     setWorkflowState( response.data?.workflowState);
-        //     notifyListeners();
-        //   }else{
-        //     showCustomToast(value.message);
-        //     logger.e("Failed to get setup status: ${value.message}");
-        //   }
-        // });
-        //
-        // await businessProvider.listSubscribedBillingPlans(context: context).then((value) {
-        //   if (value.isSuccess) {
-        //     final response = value.data!;
-        //     _billingPlan = response;
-        //     notifyListeners();
-        //   }else{
-        //     showCustomToast(value.message);
-        //     logger.e("Failed to get setup status: ${value.message}");
-        //   }
-        // });
-      }else{
+      } else {
         logger.i("User is not logged in");
       }
-      
-     
     } catch (e) {
       logger.e('Error in skipSetup: $e');
     }

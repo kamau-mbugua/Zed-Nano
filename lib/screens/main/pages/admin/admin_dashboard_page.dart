@@ -246,172 +246,169 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: colorWhite,
-      body: Consumer2<WorkflowViewModel, RefreshViewModel>(
-        builder: (context, viewModel,refreshViewModel, _) {
-          //
-
-          return SafeArea(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.only(right: 16, left: 16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("Hello ${loginResponse?.username ?? ''}", style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w600, color: darkGreyColor)),
-                            const SizedBox(height: 4),
-                            const Text('We are glad to have you with us.', style: TextStyle(fontSize: 12, color: textSecondary)),
-                          ]),
-                      Visibility(
-                        visible: viewModel.billingPlan?.freeTrialStatus != 'InActive',
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                          decoration: BoxDecoration(
-                              border: Border.all(color: accentRed), borderRadius: BorderRadius.circular(6)),
-                          child: RichText(
-                            text: TextSpan(
-                              children: [
-                                TextSpan(text: '${viewModel.billingPlan?.freeTrialPeriodRemainingdays ?? 0} ', style: const TextStyle(color: accentRed, fontWeight: FontWeight.w600, fontSize: 16)),
-                                const TextSpan(text: 'Days Trial Left', style: TextStyle(color: accentRed, fontSize: 10)),
-                              ],
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                  10.height,
-                  GestureDetector(
-                    onTap: () async {
-
-                      if (viewModel.workflowState == null) {
-                        await viewModel.skipSetup(context);
-                        return;
-                      }
-                      await BottomSheetHelper.showSetupStepBottomSheet(
-                          context,
-                        currentStep: viewModel.workflowState!.toLowerCase(),
-                      );
-                      // showModalBottomSheet(
-                      //   context: context,
-                      //   backgroundColor: Colors.white,
-                      //   shape: const RoundedRectangleBorder(
-                      //     borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-                      //   ),
-                      //   builder: (context) => SetupStepBottomSheet(currentStep: viewModel.workflowState!.toLowerCase()),
-                      // );
-                    },
-                    child: Visibility(
-                      visible: viewModel.workflowState != 'COMPLETE',
-                      child: Container(
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                            border: Border.all(color: const Color(0xffffb37c)),
-                            borderRadius: BorderRadius.circular(10)),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Text('Complete setting up your business',
-                                style: TextStyle(fontSize: 14, color: darkGreyColor)),
-                            CircularProgressIndicator(
-                              value: getValue(viewModel),
-                              strokeWidth: 5,
-                              valueColor: const AlwaysStoppedAnimation(Color(0xffe86339)),
-                              backgroundColor: const Color(0xffffb37c),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  10.height,
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text("Overview",
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
-                            color: textPrimary,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            fontStyle: FontStyle.normal,
-                          )
-                      ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey.shade300),
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child:DropdownButton<String>(
-                          value: _selectedRangeLabel,
-                          items: _dateRangeOptions.map((val) => DropdownMenuItem(
-                            value: val,
-                            child: Text(_dateRangeLabels[val] ?? val),
-                          )).toList(),
-                          onChanged: _onRangeChanged,
-                        )
-                      )
-                    ],
-                  ),
-                  10.height,
-                  LayoutBuilder(
-                    builder: (context, constraints) {
-                      // Calculate the width for each card based on available space
-                      // For 2 cards per row with spacing of 16 between them
-                      final cardWidth = (constraints.maxWidth - 16) / 2;
-
-                      return GridView.count(
-                        crossAxisCount: 2,
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        mainAxisSpacing: 16,
-                        crossAxisSpacing: 16,
-                        childAspectRatio: cardWidth / 120, // Maintain the height of 120
-                        children: [
-                          buildOverviewCard('Total Sales', 'KES ${branchStoreSummaryResponse?.data?.totalSales?.amount?.formatCurrency() ?? '0.00'}', totalSalesIcon, lightGreenColor, width: cardWidth),
-                          buildOverviewCard('Products Sold', '${branchStoreSummaryResponse?.data?.soldStock?.businessSoldStockQuantity?? '0.00'}', productIcon, lightGrey, width: cardWidth),
-                          buildOverviewCard('Pending Payment', 'KES ${branchStoreSummaryResponse?.data?.unpaidTotals?.totalUnpaid?.formatCurrency()  ?? '0.00'}', pendingPaymentsIcon, lightOrange, width: cardWidth),
-                          buildOverviewCard('Customers', '${branchStoreSummaryResponse?.data?.customerCount?.totalCustomers ?? '0.00'}', customerCreatedIcon, lightBlue, width: cardWidth),
-                        ],
-                      );
-                    },
-                  ),
-                  10.height,
-                  const Text('Sales Summary', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
-                  10.height,
-                  buildSalesSummaryList(),
-                  16.height,
-                  const Text('Recent Sales', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
-                  10.height,
-                  buildRecentSalesList(),
-                  10.height
-
-                ],
-              ),
+    return Consumer2<WorkflowViewModel, RefreshViewModel>(
+      builder: (context, viewModel, refreshViewModel, _) {
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: ListView(
+              children: [
+                _buildHeader(viewModel),
+                10.height,
+                _buildSetupSteps(viewModel),
+                10.height,
+                _buildOverviewFilter(viewModel),
+                10.height,
+                _buildTransactionSummaryView(),
+                10.height,
+                const Text('Sales Summary', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
+                10.height,
+                buildSalesSummaryList(),
+                16.height,
+                const Text('Recent Sales', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
+                10.height,
+                buildRecentSalesList(),
+                80.height, // extra space for FAB to float without covering content
+              ],
             ),
+          ),
+        );
+      },
+    );
+  }
+  Widget _buildTransactionSummaryView(){
+    return    LayoutBuilder(
+      builder: (context, constraints) {
+        // Calculate the width for each card based on available space
+        // For 2 cards per row with spacing of 16 between them
+        final cardWidth = (constraints.maxWidth - 16) / 2;
 
-          );
+        return GridView.count(
+          crossAxisCount: 2,
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          mainAxisSpacing: 16,
+          crossAxisSpacing: 16,
+          childAspectRatio: cardWidth / 120, // Maintain the height of 120
+          children: [
+            buildOverviewCard('Total Sales', 'KES ${branchStoreSummaryResponse?.data?.totalSales?.amount?.formatCurrency() ?? '0.00'}', totalSalesIcon, lightGreenColor, width: cardWidth),
+            buildOverviewCard('Products Sold', '${branchStoreSummaryResponse?.data?.soldStock?.businessSoldStockQuantity?? '0.00'}', productIcon, lightGrey, width: cardWidth),
+            buildOverviewCard('Pending Payment', 'KES ${branchStoreSummaryResponse?.data?.unpaidTotals?.totalUnpaid?.formatCurrency()  ?? '0.00'}', pendingPaymentsIcon, lightOrange, width: cardWidth),
+            buildOverviewCard('Customers', '${branchStoreSummaryResponse?.data?.customerCount?.totalCustomers ?? '0.00'}', customerCreatedIcon, lightBlue, width: cardWidth),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildOverviewFilter(WorkflowViewModel viewModel){
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        const Text("Overview",
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              color: textPrimary,
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              fontStyle: FontStyle.normal,
+            )
+        ),
+        Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.grey.shade300),
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child:DropdownButton<String>(
+              value: _selectedRangeLabel,
+              items: _dateRangeOptions.map((val) => DropdownMenuItem(
+                value: val,
+                child: Text(_dateRangeLabels[val] ?? val),
+              )).toList(),
+              onChanged: _onRangeChanged,
+            )
+        )
+      ],
+    );
+  }
+
+  Widget _buildSetupSteps(WorkflowViewModel viewModel){
+    return GestureDetector(
+      onTap: () async {
+
+        if (viewModel.workflowState == null) {
+          await viewModel.skipSetup(context);
+          return;
         }
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        heroTag: "admin_dashboard_fab", // Add unique hero tag
-        onPressed: () {
-          const SellStepperPage().launch(context);
-        },
-        label: const Text('Sell', style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white)),
-        icon: const Icon(Icons.lock, color: Colors.white),
-        backgroundColor: appThemePrimary,
+        await BottomSheetHelper.showSetupStepBottomSheet(
+          context,
+          currentStep: viewModel.workflowState!.toLowerCase(),
+        );
+        // showModalBottomSheet(
+        //   context: context,
+        //   backgroundColor: Colors.white,
+        //   shape: const RoundedRectangleBorder(
+        //     borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        //   ),
+        //   builder: (context) => SetupStepBottomSheet(currentStep: viewModel.workflowState!.toLowerCase()),
+        // );
+      },
+      child: Visibility(
+        visible: viewModel.workflowState != 'COMPLETE',
+        child: Container(
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+              border: Border.all(color: const Color(0xffffb37c)),
+              borderRadius: BorderRadius.circular(10)),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text('Complete setting up your business',
+                  style: TextStyle(fontSize: 14, color: darkGreyColor)),
+              CircularProgressIndicator(
+                value: getValue(viewModel),
+                strokeWidth: 5,
+                valueColor: const AlwaysStoppedAnimation(Color(0xffe86339)),
+                backgroundColor: const Color(0xffffb37c),
+              )
+            ],
+          ),
+        ),
       ),
     );
   }
 
+  Widget _buildHeader(WorkflowViewModel viewModel){
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text("Hello ${loginResponse?.username ?? ''}", style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w600, color: darkGreyColor)),
+              const SizedBox(height: 4),
+              const Text('We are glad to have you with us.', style: TextStyle(fontSize: 12, color: textSecondary)),
+            ]),
+        Visibility(
+          visible: viewModel.billingPlan?.freeTrialStatus != 'InActive',
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+            decoration: BoxDecoration(
+                border: Border.all(color: accentRed), borderRadius: BorderRadius.circular(6)),
+            child: RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(text: '${viewModel.billingPlan?.freeTrialPeriodRemainingdays ?? 0} ', style: const TextStyle(color: accentRed, fontWeight: FontWeight.w600, fontSize: 16)),
+                  const TextSpan(text: 'Days Trial Left', style: TextStyle(color: accentRed, fontSize: 10)),
+                ],
+              ),
+            ),
+          ),
+        )
+      ],
+    );
+  }
 
   Widget buildRecentSalesList() {
     final transactions = transactionListResponse?.data ?? [];

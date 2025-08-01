@@ -3,13 +3,13 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class BusinessDetails {
-  final String businessId;
-  final String businessNumber;
-  final String group;
-  final String branchId;
-  final String localCurrency;
-  final String businessCategory;
-  final String businessName;
+  final String? businessId;
+  final String? businessNumber;
+  final String? group;
+  final String? branchId;
+  final String? localCurrency;
+  final String? businessCategory;
+  final String? businessName;
 
   BusinessDetails({
     required this.businessId,
@@ -35,13 +35,13 @@ class BusinessDetails {
 
   factory BusinessDetails.fromJson(Map<String, dynamic> json) {
     return BusinessDetails(
-      businessId: json['businessId'] as String,
-      businessNumber: json['businessNumber'] as String,
-      group: json['group'] as String,
-      branchId: json['branchId'] as String,
-      localCurrency: json['localCurrency'] as String,
-      businessCategory: json['businessCategory'] as String,
-      businessName: json['businessName'] as String,
+      businessId: json['businessId'] as String?,
+      businessNumber: json['businessNumber'] as String?,
+      group: json['group'] as String?,
+      branchId: json['branchId'] as String?,
+      localCurrency: json['localCurrency'] as String?,
+      businessCategory: json['businessCategory'] as String?,
+      businessName: json['businessName'] as String?,
     );
   }
 

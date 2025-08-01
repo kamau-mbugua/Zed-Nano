@@ -31,10 +31,10 @@ class _WelcomeSetupScreenState extends State<WelcomeSetupScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      // drawer: CustomDrawer(
-      //   onClose: () => Navigator.pop(context),
-      // ),
-      // appBar: const CustomDashboardAppBar(title: ''),
+      drawer: CustomDrawer(
+        onClose: () => Navigator.pop(context),
+      ),
+      appBar: CustomDashboardAppBar(title:'',),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
