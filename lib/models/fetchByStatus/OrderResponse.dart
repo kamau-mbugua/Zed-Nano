@@ -50,7 +50,7 @@ class OrderSummary {
 
   factory OrderSummary.fromJson(Map<String, dynamic> json) {
     return OrderSummary(
-      orderTotal: (json['orderTotal'] as int)?.toDouble(),
+      orderTotal: (json['orderTotal'] as int).toDouble(),
       orderCount: json['orderCount'] as int?,
       currency: json['currency'] as String?,
     );

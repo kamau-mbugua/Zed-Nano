@@ -19,6 +19,7 @@ import 'package:zed_nano/screens/sell/sell_stepper_page.dart';
 import 'package:zed_nano/screens/widget/common/bottom_sheet_helper.dart';
 import 'package:zed_nano/screens/widget/common/custom_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
+import 'package:zed_nano/screens/widget/common/date_range_filter_bottom_sheet.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/Images.dart';
@@ -244,32 +245,58 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
     fetchBranchStoreSummary();
   }
 
+  Future<void> _refreshDashboardData() async {
+    await fetchBranchStoreSummary();
+  }
+
+  void _showPeriodSelector() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => DateRangeFilterBottomSheet(
+        selectedRangeLabel: _selectedRangeLabel,
+        onRangeSelected: (option) {
+          setState(() {
+            _selectedRangeLabel = option;
+            _dateRange = DateRangeUtil.getDateRange(option);
+          });
+          fetchBranchStoreSummary();
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer2<WorkflowViewModel, RefreshViewModel>(
       builder: (context, viewModel, refreshViewModel, _) {
         return SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: ListView(
-              children: [
-                _buildHeader(viewModel),
-                10.height,
-                _buildSetupSteps(viewModel),
-                10.height,
-                _buildOverviewFilter(viewModel),
-                10.height,
-                _buildTransactionSummaryView(),
-                10.height,
-                const Text('Sales Summary', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
-                10.height,
-                buildSalesSummaryList(),
-                16.height,
-                const Text('Recent Sales', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
-                10.height,
-                buildRecentSalesList(),
-                80.height, // extra space for FAB to float without covering content
-              ],
+          child: RefreshIndicator(
+            onRefresh: _refreshDashboardData,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: ListView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                children: [
+                  _buildHeader(viewModel),
+                  10.height,
+                  _buildSetupSteps(viewModel),
+                  10.height,
+                  _buildOverviewFilter(viewModel),
+                  10.height,
+                  _buildTransactionSummaryView(),
+                  10.height,
+                  const Text('Sales Summary', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
+                  10.height,
+                  buildSalesSummaryList(),
+                  16.height,
+                  const Text('Recent Sales', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
+                  10.height,
+                  buildRecentSalesList(),
+                  80.height, // extra space for FAB to float without covering content
+                ],
+              ),
             ),
           ),
         );
@@ -314,21 +341,42 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
               fontStyle: FontStyle.normal,
             )
         ),
-        Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+        GestureDetector(
+          onTap: _showPeriodSelector,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
             decoration: BoxDecoration(
               border: Border.all(color: Colors.grey.shade300),
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(8),
             ),
-            child:DropdownButton<String>(
-              value: _selectedRangeLabel,
-              items: _dateRangeOptions.map((val) => DropdownMenuItem(
-                value: val,
-                child: Text(_dateRangeLabels[val] ?? val),
-              )).toList(),
-              onChanged: _onRangeChanged,
-            )
-        )
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(
+                  Icons.filter_list,
+                  size: 16,
+                  color: textSecondary,
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  _dateRangeLabels[_selectedRangeLabel] ?? '',
+                  style: const TextStyle(
+                    color: textPrimary,
+                    fontWeight: FontWeight.w400,
+                    fontFamily: "Poppins",
+                    fontSize: 12,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                const Icon(
+                  Icons.keyboard_arrow_down,
+                  size: 16,
+                  color: textSecondary,
+                ),
+              ],
+            ),
+          ),
+        ),
       ],
     );
   }

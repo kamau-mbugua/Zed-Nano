@@ -5,9 +5,10 @@ Widget buildSearchBar({
   required TextEditingController controller,
   required Function(String) onChanged,
   String hint = 'Search',
+  double horizontalPadding = 16,
 }) {
   return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+    padding:  EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: 12),
     child: Container(
       height: 48, // Fixed height for better control
       decoration: BoxDecoration(

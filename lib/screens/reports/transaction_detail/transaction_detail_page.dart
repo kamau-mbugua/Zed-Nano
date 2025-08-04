@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:zed_nano/app/app_initializer.dart';
+import 'package:zed_nano/models/by-transaction-id/TransactionDetailResponse.dart';
 import 'package:zed_nano/models/order_payment_status/OrderDetailResponse.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/orders/itemBuilder/order_item_builders.dart';
@@ -16,19 +18,17 @@ import 'package:zed_nano/utils/GifsImages.dart';
 import 'package:zed_nano/utils/Images.dart';
 import 'package:zed_nano/utils/extensions.dart';
 
-class OrderDetailPage extends StatefulWidget {
-  String? orderId;
+class TransactionDetailPage extends StatefulWidget {
+  String? transactionId;
 
-  OrderDetailPage({Key? key, this.orderId}) : super(key: key);
+  TransactionDetailPage({Key? key, this.transactionId}) : super(key: key);
 
   @override
-  _OrderDetailPageState createState() => _OrderDetailPageState();
+  _TransactionDetailPageState createState() => _TransactionDetailPageState();
 }
 
-class _OrderDetailPageState extends State<OrderDetailPage> {
-  OrderDetail? orderDetail;
-  OrderDetailData? orderDetailData;
-  List<OrderTransactionTotals>? orderTransactionTotals;
+class _TransactionDetailPageState extends State<TransactionDetailPage> {
+  ByTransactionIdDetailResponse? byTransactionIdDetailResponse;
 
   @override
   void initState() {
@@ -40,57 +40,24 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
   }
 
   Future<void> getOrderPaymentStatus() async {
-    Map<String, dynamic> requestData = {'pushyTransactionId': widget.orderId};
+    Map<String, dynamic> requestData = {'transactionId': widget.transactionId};
 
     try {
       final response = await getBusinessProvider(context)
-          .getOrderPaymentStatus(requestData: requestData, context: context);
+          .getTransactionByTransactionId(
+              requestData: requestData, context: context);
 
       if (response.isSuccess) {
         setState(() {
-          orderDetail = response.data?.order;
-          orderDetailData = response.data?.data;
-          orderTransactionTotals = response.data?.transactionsList;
+          byTransactionIdDetailResponse = response.data;
         });
       } else {
         showCustomToast(response.message ?? 'Failed to load product details');
       }
     } catch (e) {
+      logger.e('getOrderPaymentStatus $e');
       showCustomToast('Failed to load Order details');
     }
-  }
-
-  Future<void> cancelPushyTransaction() async {
-    try {
-      final response = await getBusinessProvider(context)
-          .cancelPushyTransaction(orderId: widget.orderId, context: context);
-
-      if (response.isSuccess) {
-        showCustomToast(response.message, isError: false);
-        await getOrderPaymentStatus();
-      } else {
-        showCustomToast(response.message ?? 'Failed to load product details');
-      }
-    } catch (e) {
-      showCustomToast('Failed to load Order details');
-    }
-  }
-
-  void _showCancelOrderBottomSheet() {
-    showCustomDialog(
-      context: context,
-      title: 'Cancel Order?',
-      subtitle:
-          "Are you sure you want to cancel order #${orderDetail?.orderNumber ?? 'N/A'}. This action can not be undone.",
-      negativeButtonText: 'Keep Order',
-      positiveButtonText: 'Cancel Order',
-      onNegativePressed: () => Navigator.pop(context),
-      onPositivePressed: () async {
-        // Add subscription cancellation logic here
-        Navigator.pop(context); // Close dialog
-        await cancelPushyTransaction();
-      },
-    );
   }
 
   @override
@@ -108,10 +75,6 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
               _orderHearder(),
               _buildSummary(),
               _buildOrderItems(),
-              _buildNaration(),
-              orderDetail?.status == 'paid' || orderDetail?.status == 'partial'
-                  ? _buildPaymentMethod()
-                  : Container(),
               _buildOrderSummary(),
               _buildServedBy(),
             ],
@@ -122,111 +85,46 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
     );
   }
 
-  Widget _buildPaymentMethod() {
-    final cartItems = orderTransactionTotals ?? [];
-    return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          const Text('Payment Summary',
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                color: textPrimary,
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                fontStyle: FontStyle.normal,
-              )),
-          8.height,
-          if (cartItems.isEmpty)
-            const Center(
-              child: CompactGifDisplayWidget(
-                gifPath: emptyListGif,
-                title: "It's empty, over here.",
-                subtitle:
-                    'No Payments in for this order yet! Add to view them here.',
-              ),
-            )
-          else
-            ListView.separated(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              padding: const EdgeInsets.symmetric(horizontal: 0),
-              itemCount: cartItems.length,
-              separatorBuilder: (context, index) => const Divider(
-                height: 0.5,
-                color: innactiveBorderCart,
-              ),
-              itemBuilder: (context, index) {
-                final item = cartItems[index];
-                return buildOrderPaymentSummary(item: item, context: context);
-              },
-            ),
-        ]).paddingSymmetric(vertical: 16);
-  }
-
   Widget _buildSubmitButton() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, -5),
-          ),
-        ],
-      ),
-      child: SafeArea(
-        child: Row(
-          children: [
-            // Checkout button takes most of the width
-
-            Expanded(
-              flex: 7,
-              child: Visibility(
-                visible: orderDetail?.status == 'unpaid' ||
-                    orderDetail?.status == 'partial',
-                child: appButton(
-                  text: orderDetail?.status == 'paid'
-                      ? 'Cancel Transaction'
-                      : 'Checkout',
-                  onTap: () {
-                    if (orderDetail?.status == 'paid') {
-                      VoidOrderTransactionPage(
-                        transactionId: orderDetail?.transactionId,
-                        quantity: '${orderDetail?.items?.length ?? 0}',
-                        amount: orderDetail?.transamount?.formatCurrency() ?? '0',
-                        date: orderDetail?.createdAt?.toFormattedDateTime() ?? 'N/A',)
-                          .launch(context).then((value) {
-                            getOrderPaymentStatus();
-                      });
-                    } else {
-                      SellStepperPage(
-                        initialStep: 2,
-                        initialStepData: {'orderId': widget.orderId},
-                      ).launch(context);
-                    }
-                  },
-                  context: context,
-                ),
-              ),
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              flex: 2,
-              child: appButtonWithIcon(
-                text: '',
-                iconPath: fabMenuIcon,
-                context: context,
-                onTap: () {
-                  BottomSheetHelper.showPrintingOptionsBottomSheet(context,
-                          printOrderInvoiceId: orderDetail?.id)
-                      .then((value) {});
-                },
-              ),
+    return Visibility(
+      visible: (byTransactionIdDetailResponse?.data?.voidStatus.isEmptyOrNull ==
+              true) ||
+          (byTransactionIdDetailResponse?.data?.voidStatus == 'VOIDED'),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 10,
+              offset: const Offset(0, -5),
             ),
           ],
+        ),
+        child: SafeArea(
+          child: Row(
+            children: [
+              Expanded(
+                child: Visibility(
+                  child: appButton(
+                    text: 'Cancel Transaction',
+                    onTap: () {
+                      VoidOrderTransactionPage(
+                        transactionId: widget.transactionId,
+                        quantity: '${byTransactionIdDetailResponse?.data?.items?.length ?? 0}',
+                        amount: byTransactionIdDetailResponse?.data?.transamount?.formatCurrency() ?? '0',
+                        date: byTransactionIdDetailResponse?.data?.createdAt?.toFormattedDateTime() ?? 'N/A',
+                      ).launch(context).then((value) {
+                        getOrderPaymentStatus();
+                      });
+                    },
+                    context: context,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -256,7 +154,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("${orderDetail?.cashier ?? 'N/A'}",
+                Text("${byTransactionIdDetailResponse?.data?.cashier ?? 'N/A'}",
                     style: const TextStyle(
                       fontFamily: 'Poppins',
                       color: textSecondary,
@@ -308,7 +206,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                           letterSpacing: 0.12,
                         )),
                     Text(
-                        "${orderDetail?.createdAt?.toFormattedDateTime() ?? 'N/A'}",
+                        "${byTransactionIdDetailResponse?.data?.createdAt?.toFormattedDateTime() ?? 'N/A'}",
                         style: const TextStyle(
                           fontFamily: 'Poppins',
                           color: textSecondary,
@@ -332,7 +230,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                           letterSpacing: 0.12,
                         )),
                     Text(
-                        "${orderDetail?.currency ?? 'KES'} ${orderDetail?.subTotal?.formatCurrency() ?? 'N/A'}",
+                        "${byTransactionIdDetailResponse?.currency ?? 'KES'} ${byTransactionIdDetailResponse?.data?.subTotal?.formatCurrency() ?? 'N/A'}",
                         style: const TextStyle(
                           fontFamily: 'Poppins',
                           color: textSecondary,
@@ -356,7 +254,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                           letterSpacing: 0.12,
                         )),
                     Text(
-                        "${orderDetail?.currency ?? 'KES'} ${orderDetail?.discountAmount?.formatCurrency() ?? 'N/A'}",
+                        "${byTransactionIdDetailResponse?.currency ?? 'KES'} ${byTransactionIdDetailResponse?.data?.discountAmount?.formatCurrency() ?? 'N/A'}",
                         style: const TextStyle(
                           fontFamily: 'Poppins',
                           color: textSecondary,
@@ -370,7 +268,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Total',
+                    const Text('Total',
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           color: textPrimary,
@@ -379,8 +277,8 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                           fontStyle: FontStyle.normal,
                         )),
                     Text(
-                        "${orderDetail?.currency ?? 'KES'} ${orderDetail?.transamount?.formatCurrency() ?? 'N/A'}",
-                        style: TextStyle(
+                        "${byTransactionIdDetailResponse?.currency ?? 'KES'} ${byTransactionIdDetailResponse?.data?.transamount?.formatCurrency() ?? 'N/A'}",
+                        style: const TextStyle(
                           fontFamily: 'Poppins',
                           color: textPrimary,
                           fontSize: 14,
@@ -395,52 +293,13 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
     );
   }
 
-  Widget _buildNaration() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        const Text('Narration',
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              color: Color(0xff000000),
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              fontStyle: FontStyle.normal,
-            )),
-        Container(
-            width: context.width(),
-            decoration: BoxDecoration(
-              color: lightGreyColor,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text("${orderDetail?.orderTable ?? 'N/A'}",
-                    style: const TextStyle(
-                      fontFamily: 'Poppins',
-                      color: textSecondary,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w400,
-                      fontStyle: FontStyle.normal,
-                      letterSpacing: 0.12,
-                    ))
-              ],
-            )),
-      ],
-    );
-  }
-
   Widget _buildOrderItems() {
-    final cartItems = orderDetail?.items ?? [];
+    final cartItems = byTransactionIdDetailResponse?.data?.items ?? [];
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          const Text('Order Items',
+          const Text('Transaction Items',
               style: TextStyle(
                 fontFamily: 'Poppins',
                 color: textPrimary,
@@ -470,7 +329,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
               ),
               itemBuilder: (context, index) {
                 final item = cartItems[index];
-                return buildOrderItem(item: item);
+                return buildTransactionItem(item: item);
               },
             ),
         ]).paddingSymmetric(vertical: 16);
@@ -480,7 +339,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
     return Row(
       children: [
         Expanded(
-          flex: 2,
+          flex: 3,
           child: Container(
               height: 85,
               decoration: BoxDecoration(
@@ -492,7 +351,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text('Order Number',
+                  const Text('Transaction Id',
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         color: textSecondary,
@@ -502,7 +361,8 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                         letterSpacing: 0.15,
                       )),
                   6.height,
-                  Text("${orderDetail?.orderNumber ?? 'N/A'}",
+                  Text(
+                      "${byTransactionIdDetailResponse?.data?.transactionID ?? 'N/A'}",
                       style: const TextStyle(
                         fontFamily: 'Poppins',
                         color: textPrimary,
@@ -537,7 +397,8 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                         letterSpacing: 0.15,
                       )),
                   6.height,
-                  Text('${orderDetail?.items?.length ?? 0}',
+                  Text(
+                      '${byTransactionIdDetailResponse?.data?.items?.length ?? 0}',
                       style: const TextStyle(
                         fontFamily: 'Poppins',
                         color: highlightMainLight,
@@ -554,11 +415,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
           child: Container(
               height: 85,
               decoration: BoxDecoration(
-                color: orderDetail?.status == 'paid'
-                    ? lightGreenColor
-                    : orderDetail?.status == 'partial'
-                        ? lightOrange
-                        : primaryYellowTextColor,
+                color: lightGreenColor,
                 borderRadius: BorderRadius.circular(8),
               ),
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -577,14 +434,10 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                       )),
                   6.height,
                   Text(
-                      "${orderDetail?.currency ?? 'KES'} ${orderDetail?.status == 'partial' ? orderDetailData?.deficit?.formatCurrency() : orderDetail?.transamount?.formatCurrency() ?? 'N/A'}",
-                      style: TextStyle(
+                      "${byTransactionIdDetailResponse?.currency ?? 'KES'} ${byTransactionIdDetailResponse?.data?.transamount?.formatCurrency() ?? 'N/A'}",
+                      style: const TextStyle(
                         fontFamily: 'Poppins',
-                        color: orderDetail?.status == 'paid'
-                            ? successTextColor
-                            : orderDetail?.status == 'partial'
-                                ? primaryOrangeTextColor
-                                : googleRed,
+                        color: successTextColor,
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                         fontStyle: FontStyle.normal,
@@ -599,10 +452,103 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
   Widget _orderHearder() {
     return Column(
       children: [
+        if (byTransactionIdDetailResponse?.data?.voidStatus == 'REQUEST')
+          Container(
+            height: 50,
+            margin: EdgeInsets.zero,
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            decoration: BoxDecoration(
+              color: appThemePrimary,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Row(
+              children: [
+                const Icon(
+                  Icons.info,
+                  color: colorBackground,
+                  size: 16,
+                ),
+                8.width,
+                const Expanded(
+                  child: Text('Void Request initiated, pending approval',
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        color: colorBackground,
+                        fontSize: 10,
+                        fontWeight: FontWeight.w600,
+                        fontStyle: FontStyle.normal,
+                      )),
+                ),
+              ],
+            ),
+          )
+        else if (byTransactionIdDetailResponse?.data?.voidStatus == 'DECLINED')
+          Container(
+            height: 50,
+            margin: EdgeInsets.zero,
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            decoration: BoxDecoration(
+              color: appThemePrimary,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Row(
+              children: [
+                const Icon(
+                  Icons.info,
+                  color: colorBackground,
+                  size: 16,
+                ),
+                8.width,
+                const Expanded(
+                  child: Text('Void Request Declined. Please try again',
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        color: colorBackground,
+                        fontSize: 10,
+                        fontWeight: FontWeight.w600,
+                        fontStyle: FontStyle.normal,
+                      )),
+                ),
+              ],
+            ),
+          )
+        else if (byTransactionIdDetailResponse?.data?.voidStatus == 'VOIDED')
+          Container(
+            height: 50,
+            margin: EdgeInsets.zero,
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            decoration: BoxDecoration(
+              color: appThemePrimary,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Row(
+              children: [
+                const Icon(
+                  Icons.info,
+                  color: colorBackground,
+                  size: 16,
+                ),
+                8.width,
+                const Expanded(
+                  child: Text('Void Request Approved',
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        color: colorBackground,
+                        fontSize: 10,
+                        fontWeight: FontWeight.w600,
+                        fontStyle: FontStyle.normal,
+                      )),
+                ),
+              ],
+            ),
+          )
+        else
+          Container(),
+        8.height,
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text('Order Details',
+            const Text('Transaction Details',
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   color: textPrimary,
@@ -615,21 +561,15 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
               margin: const EdgeInsets.only(right: 0),
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
-                color: orderDetail?.status == 'paid'
-                    ? lightGreenColor
-                    : orderDetail?.status == 'partial'
-                        ? lightOrange
-                        : primaryYellowTextColor,
+                color: lightGreenColor,
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: Text(orderDetail?.status?.toUpperCase() ?? 'N/A',
-                  style: TextStyle(
+              child: Text(
+                  byTransactionIdDetailResponse?.data?.status?.toUpperCase() ??
+                      'N/A',
+                  style: const TextStyle(
                     fontFamily: 'Poppins',
-                    color: orderDetail?.status == 'paid'
-                        ? successTextColor
-                        : orderDetail?.status == 'partial'
-                            ? primaryOrangeTextColor
-                            : googleRed,
+                    color: successTextColor,
                     fontSize: 10,
                     fontWeight: FontWeight.w600,
                     fontStyle: FontStyle.normal,
@@ -643,26 +583,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
 
   PreferredSizeWidget _buildAppBar() {
     return AuthAppBar(
-      title: 'View Order',
-      actions: [
-        if (orderDetail?.status == 'unpaid')
-          TextButton(
-            onPressed: () {
-              _showCancelOrderBottomSheet();
-            },
-            child: const Text(
-              'Cancel Order',
-              style: TextStyle(
-                color: accentRed,
-                fontFamily: 'Poppins',
-                fontWeight: FontWeight.w500,
-                fontSize: 14,
-              ),
-            ),
-          )
-        else
-          Container()
-      ],
+      title: 'View Transaction',
     );
   }
 }

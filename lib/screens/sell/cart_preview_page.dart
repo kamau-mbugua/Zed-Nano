@@ -968,7 +968,7 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
                       ),
                     ),
                     Text(
-                      '${item.currency ?? 'N/A'} ${item.total.formatCurrency()}',
+                      '${item.currency ?? 'KES'} ${item.total.formatCurrency()}',
                       style: TextStyle(
                         fontSize: 12,
                         fontFamily: 'Poppins',
@@ -998,7 +998,7 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Text("${item.currency ?? 'N/A'} ${item.price?.formatCurrency()}",
+                      Text("${item.currency ?? 'KES'} ${item.price?.formatCurrency()}",
                           style: const TextStyle(
                             fontFamily: 'Poppins',
                             color: textPrimary,
@@ -1009,7 +1009,7 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
 
                           )
                       ),
-                      Text("${item.currency ?? 'N/A'} ${item.discount.formatCurrency()}",
+                      Text("${item.currency ?? 'KES'} ${item.discount.formatCurrency()}",
                           style: TextStyle(
                             fontFamily: 'Poppins',
                             color: item.discount == 0 ? Colors.grey : successTextColor,

@@ -15,6 +15,7 @@ import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/repositories/auth/AuthenticatedRepo.dart';
 import 'package:zed_nano/routes/routes.dart';
 import 'package:zed_nano/routes/routes_helper.dart';
+import 'package:zed_nano/services/business_setup_service.dart';
 
 class AuthenticatedAppProviders extends BaseProvider {
   final AuthenticatedRepo authenticatedRepo;
@@ -148,6 +149,16 @@ class AuthenticatedAppProviders extends BaseProvider {
       final result = await authenticatedRepo.clearSharedData();
 
       if (result) {
+        // Clear BusinessSetupService data to ensure clean state for next user
+        try {
+          final businessSetupService = BusinessSetupService();
+          await businessSetupService.logout();
+          logger.i('✅ BusinessSetupService logout completed');
+        } catch (e) {
+          logger.e('❌ Failed to logout BusinessSetupService: $e');
+          // Continue with logout even if BusinessSetupService fails
+        }
+
         // Clear local state
         _token = '';
         _loginResponse = null;

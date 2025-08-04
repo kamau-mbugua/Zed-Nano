@@ -2,20 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 import 'package:zed_nano/app/app_initializer.dart';
-import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/main/pages/admin/admin_dashboard_page.dart';
 import 'package:zed_nano/screens/main/pages/common/p_o_s_pages.dart';
+import 'package:zed_nano/screens/main/pages/common/report_page.dart';
 import 'package:zed_nano/screens/main/welcome_setup_screen.dart';
 import 'package:zed_nano/screens/orders/orders_list_main_page.dart';
-import 'package:zed_nano/screens/reports/reports_list_page.dart';
 import 'package:zed_nano/screens/sell/sell_stepper_page.dart';
 import 'package:zed_nano/screens/widget/common/custom_app_bar.dart';
 import 'package:zed_nano/screens/widgets/custom_drawer.dart';
 import 'package:zed_nano/screens/widgets/nav_bar_item.dart';
+import 'package:zed_nano/services/business_setup_extensions.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/Images.dart';
-import 'package:zed_nano/viewmodels/RefreshViewModel.dart';
 import 'package:zed_nano/viewmodels/WorkflowViewModel.dart';
 
 class HomeMainPage extends StatefulWidget {
@@ -30,17 +29,7 @@ class _HomeMainPageState extends State<HomeMainPage> {
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
   final ScrollController _scrollController = ScrollController();
 
-  @override
-  void initState() {
-    super.initState();
-    // Run API calls after first frame to ensure context is available
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final businessDetails = getBusinessDetails(context);
-
-      Provider.of<WorkflowViewModel>(context, listen: false)
-          .skipSetup(context);
-    });
-  }
+  
 
   @override
   void dispose() {
@@ -56,42 +45,23 @@ class _HomeMainPageState extends State<HomeMainPage> {
 
   /// Handle the refresh action
   Future<void> _handleRefresh() async {
-    final refreshViewModel = Provider.of<RefreshViewModel>(context, listen: false);
-    final workflowViewModel = Provider.of<WorkflowViewModel>(context, listen: false);
-    
-    // Start the refresh process
-    refreshViewModel.startRefresh();
-    
     try {
-      // Refresh workflow state
-      await workflowViewModel.skipSetup(context);
-      // Mark specific pages as refreshed
-      refreshViewModel.refreshPage('dashboard');
-      refreshViewModel.refreshPage('pos');
-      refreshViewModel.refreshPage('reports');
-      refreshViewModel.refreshPage('admin_dashboard');  // Make sure this matches
-
-
+      // Add any refresh logic here in the future
+      await Future.delayed(const Duration(seconds: 1)); // Simulate a network call
     } catch (e) {
       // Handle any errors
-    } finally {
-      // Complete the refresh process
-      refreshViewModel.completeRefresh();
     }
   }
 
-  /// Trigger refresh programmatically
-  void triggerRefresh() {
-    _refreshIndicatorKey.currentState?.show();
-  }
+  
 
   List<Widget> _buildScreens() {
     // Wrap each screen in a ScrollView to make RefreshIndicator work
     return [
       _buildScrollableScreen(const AdminDashboardPage()),
-      _buildScrollableScreen(const POSPages()),
+      _buildScrollableScreen(const POSPagesScreen()),
       _buildScrollableScreen( OrdersListMainPage(showAppBar: false,)),
-      _buildScrollableScreen(const ReportsListPage()),
+      _buildScrollableScreen(const ReportPage()),
     ];
   }
 
@@ -151,20 +121,27 @@ class _HomeMainPageState extends State<HomeMainPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer2<WorkflowViewModel, RefreshViewModel>(
-      builder: (context, workflowViewModel, refreshViewModel, _) {
-        logger.i("HomeMainPage ${workflowViewModel.showBusinessSetup} and ${getBusinessDetails(context)?.businessNumber}");
-        if (workflowViewModel.showBusinessSetup || getBusinessDetails(context)!.businessNumber?.isEmptyOrNull ?? true) {
-          logger.i("HomeMainPage ${workflowViewModel.showBusinessSetup}");
+    return Consumer<WorkflowViewModel>(
+      builder: (context, workflowViewModel, _) {
+        // Debug logging
+        logger.i(
+            'HomeMainPage - WorkflowViewModel.showBusinessSetup: ${workflowViewModel.showBusinessSetup}');
+
+        // Show business setup screen if required
+        if (workflowViewModel.showBusinessSetup) {
+          logger.i('HomeMainPage - Showing WelcomeSetupScreen');
           return const WelcomeSetupScreen();
         }
 
+        // Show main app interface
         return Scaffold(
           backgroundColor: getScaffoldColor(),
           drawer: CustomDrawer(
             onClose: () => Navigator.pop(context),
           ),
-          appBar: CustomDashboardAppBar(title: getBusinessDetails(context)?.businessName ?? '',),
+          appBar: CustomDashboardAppBar(
+            title: context.businessDisplayName,
+          ),
           body: RefreshIndicator(
             key: _refreshIndicatorKey,
             onRefresh: _handleRefresh,
@@ -176,15 +153,19 @@ class _HomeMainPageState extends State<HomeMainPage> {
             ),
           ),
           bottomNavigationBar: _buildBottomNavigationBar(),
-          floatingActionButton: selectedIndex == 0 || selectedIndex == 2 ? FloatingActionButton.extended(
-            heroTag: "home_main_fab",
-            onPressed: () {
-              const SellStepperPage().launch(context);
-            },
-            label: const Text('Sell', style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white)),
-            icon: const Icon(Icons.shopping_cart, color: Colors.white),
-            backgroundColor: appThemePrimary,
-          ) : null,
+          floatingActionButton: selectedIndex == 0 || selectedIndex == 2
+              ? FloatingActionButton.extended(
+                  heroTag: 'home_main_fab',
+                  onPressed: () {
+                    const SellStepperPage().launch(context);
+                  },
+                  label: const Text('Sell',
+                      style: TextStyle(
+                          fontWeight: FontWeight.w600, color: Colors.white)),
+                  icon: const Icon(Icons.shopping_cart, color: Colors.white),
+                  backgroundColor: appThemePrimary,
+                )
+              : null,
         );
       },
     );

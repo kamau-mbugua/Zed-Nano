@@ -265,6 +265,26 @@ class BusinessRepo{
       return ApiResponse.withError(ApiErrorHandler.handleError(e));
     }
   }
+  Future<ApiResponse> getbusinessMetrics({required Map<String, dynamic> requestData}) async {
+    try {
+      final response =
+      await dioClient!.get('${AppConstants.getbusinessMetrics}', queryParameters: requestData);
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
+  Future<ApiResponse> getSalesByDay({required Map<String, dynamic> requestData}) async {
+    try {
+      final response =
+      await dioClient!.post('${AppConstants.getSalesByDay}', data: requestData);
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
   Future<ApiResponse> getBranchTransactionByDate({required Map<String, dynamic> requestData}) async {
     try {
       final response =
@@ -866,6 +886,28 @@ class BusinessRepo{
     }
   }
 
+  Future<ApiResponse> voidTransaction({required Map<String, dynamic> requestData}) async {
+    try {
+      final response =
+      await dioClient!.post('${AppConstants.voidTransaction}', data: requestData);
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
+
+  Future<ApiResponse> getTransactionByTransactionId({required Map<String, dynamic> requestData}) async {
+    try {
+      final response =
+      await dioClient!.get('${AppConstants.getTransactionByTransactionId}', queryParameters: requestData);
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
+
   Future<ApiResponse> getApprovalByStatus({required Map<String, dynamic> requestData}) async {
     try {
       final response =
@@ -1010,6 +1052,53 @@ class BusinessRepo{
 
       final response =
       await dioClient!.post('${AppConstants.changeStatus}/$customerNumber', data:data);
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
+
+  Future<ApiResponse> getUserProfile() async {
+    try {
+      final response = await dioClient!.get('${AppConstants.getUserProfile}');
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
+
+  Future<ApiResponse> updateUserProfile({required Map<String, dynamic> requestData}) async {
+    try {
+      final response = await dioClient!.put('${AppConstants.updateUserProfile}', data: requestData);
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
+
+  Future<ApiResponse> deleteUserAccount({required Map<String, dynamic> requestData}) async {
+    try {
+      final response = await dioClient!.delete('${AppConstants.deleteUserAccount}', data: requestData);
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
+
+  Future<ApiResponse> resetUserPin({required Map<String, dynamic> requestData}) async {
+    try {
+      final response = await dioClient!.post('${AppConstants.resetUserPin}', data: requestData);
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
+
+  Future<ApiResponse> getApprovalByStatus({required Map<String, dynamic> requestData}) async {
+    try {
+      final response =
+      await dioClient!.get('${AppConstants.getApprovalByStatus}', queryParameters: requestData);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {

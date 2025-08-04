@@ -1,12 +1,11 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
-import 'package:nb_utils/nb_utils.dart';
+import 'package:provider/provider.dart';
 import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/models/get_token_after_invite/GetTokenAfterInviteResponse.dart';
-import 'package:zed_nano/models/listbillingplan_packages/BillingPlanPackagesResponse.dart';
 import 'package:zed_nano/models/listsubscribed_billing_plans/SubscribedBillingPlansResponse.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
+import 'package:zed_nano/services/business_setup_service.dart';
 
 class WorkflowViewModel with ChangeNotifier {
   bool _showBusinessSetup = false;
@@ -28,18 +27,27 @@ class WorkflowViewModel with ChangeNotifier {
   }
 
   Future<void> skipSetup(BuildContext context) async {
-    logger.i("BusinessWorkflowViewModel 1 ${getBusinessDetails(context)!.businessNumber}");
-
-    if (getBusinessDetails(context)!.businessNumber?.isEmptyOrNull ?? true) {
-      logger.i("BusinessWorkflowViewModel ${getBusinessDetails(context)!.businessNumber}");
-      _showBusinessSetup = true;
-      return;
-    }
-
     try {
+      // Get business setup service
+      final businessSetupService = Provider.of<BusinessSetupService>(context, listen: false);
+      
+      // Ensure business setup service is initialized
+      if (!businessSetupService.isInitialized) {
+        await businessSetupService.initialize();
+      }
+      
+      logger.i("WorkflowViewModel - BusinessSetupService.requiresBusinessSetup: ${businessSetupService.requiresBusinessSetup}");
+      
+      // Check if business setup is required using the service
+      if (businessSetupService.requiresBusinessSetup) {
+        logger.i("WorkflowViewModel - Business setup required, showing setup screen");
+        _showBusinessSetup = true;
+        notifyListeners();
+        return;
+      }
+
       // Get providers
       final authProvider = getAuthProvider(context);
-      final businessProvider = getBusinessProvider(context);
 
       // Get token after invite
       if (authProvider.isLoggedIn) {

@@ -6,13 +6,14 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
-import 'package:zed_nano/contants/AppConstants.dart';
-import 'package:zed_nano/providers/common/SplashProvider.dart';
+import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/routes/routes.dart';
-import 'package:zed_nano/screens/onboarding/onboarding_screen.dart';
+import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
+import 'package:zed_nano/services/business_setup_extensions.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Images.dart';
+import 'package:zed_nano/viewmodels/WorkflowViewModel.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({Key? key}) : super(key: key);
@@ -23,7 +24,7 @@ class SplashPage extends StatefulWidget {
 
 class _SplashPageState extends State<SplashPage> {
 
-  final GlobalKey<ScaffoldMessengerState> _globalKey = GlobalKey();
+  
   String _appVersion = '';
 
   Future<void> _fetchAppVersion() async {
@@ -41,51 +42,56 @@ class _SplashPageState extends State<SplashPage> {
   }
 
 
-  void _initiState() async {
-    Connectivity()
-        .onConnectivityChanged
-        .listen((List<ConnectivityResult> result) {
-      bool isNotConnected = result.isEmpty ||
-          (result[0] != ConnectivityResult.wifi &&
-              result[0] != ConnectivityResult.mobile);
-      if (!isNotConnected) {
-        _globalKey.currentState?.hideCurrentSnackBar();
-      }
-      _globalKey.currentState?.showSnackBar(SnackBar(
-        backgroundColor: isNotConnected ? Colors.red : Colors.green,
-        duration: Duration(seconds: isNotConnected ? 6000 : 3),
-        content: Text(
-          isNotConnected ? 'No internet connection' : 'Connected',
-          textAlign: TextAlign.center,
-        ),
-      ));
-
-      // Navigate if connected
-      if (!isNotConnected) {
-        _route();
+  void _initiState() {
+    Connectivity().onConnectivityChanged.listen((List<ConnectivityResult> result) {
+      final bool isNotConnected = result.isEmpty ||
+          (result.every((res) => res == ConnectivityResult.none));
+      if (isNotConnected) {
+        showCustomToast('No internet connection', isError: true);
       }
     });
 
-    // Initialize splash data (shared data, etc.)
-
+    // Initial navigation
     _route();
+  }
+
+  Future<void> _initializeBusinessSetup() async {
+    if (!mounted) return;
+
+    try {
+      // Initialize business setup service using extension
+      await context.businessSetup.initialize();
+
+      // Run workflow setup after initialization
+      if (mounted) {
+        await Provider.of<WorkflowViewModel>(context, listen: false).skipSetup(context);
+      }
+    } catch (e) {
+      logger.e('Failed to initialize business setup: $e');
+    }
   }
 
   void _route() {
     Timer(
       const Duration(seconds: 3),
-          () async {
+      () async {
         if (mounted) {
           final authProvider = getAuthProvider(context);
 
           if (authProvider.isLoggedIn) {
+            await _initializeBusinessSetup(); // Initialize only when logged in
             await Navigator.pushNamedAndRemoveUntil(
-                context, AppRoutes.getHomeMainPageRoute(), (route) => false);
+              context,
+              AppRoutes.getHomeMainPageRoute(),
+              (route) => false,
+            );
           } else {
             await Navigator.pushNamedAndRemoveUntil(
-                context, AppRoutes.getOnBoardingPageRoute(), (route) => false);
+              context,
+              AppRoutes.getOnBoardingPageRoute(),
+              (route) => false,
+            );
           }
-
         }
       },
     );

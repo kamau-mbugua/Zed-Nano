@@ -1,14 +1,16 @@
 class TransactionListResponse {
   final String? status;
   final String? message;
+  final String? currency;
   final int? total;
   final int? count;
   final List<TransactionTotal>? transactionTotals;
-  final List<TransactionData>? data;
+  final List<ViewTransactionData>? data;
 
   TransactionListResponse({
     this.status,
     this.message,
+    this.currency,
     this.total,
     this.count,
     this.transactionTotals,
@@ -19,13 +21,14 @@ class TransactionListResponse {
     return TransactionListResponse(
       status: json['Status'] as String?,
       message: json['message'] as String?,
+      currency: json['currency'] as String?,
       total: json['Total'] as int?,
       count: json['count'] as int?,
       transactionTotals: (json['TransactionTotals'] as List<dynamic>?)
           ?.map((e) => TransactionTotal.fromJson(e as Map<String, dynamic>))
           .toList(),
       data: (json['data'] as List<dynamic>?)
-          ?.map((e) => TransactionData.fromJson(e as Map<String, dynamic>))
+          ?.map((e) => ViewTransactionData.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
   }
@@ -48,7 +51,7 @@ class TransactionTotal {
   }
 }
 
-class TransactionData {
+class ViewTransactionData {
   final String? id;
   final String? businessNo;
   final String? businessName;
@@ -80,7 +83,7 @@ class TransactionData {
   final String? uploadTime;
   final String? currency;
 
-  TransactionData({
+  ViewTransactionData({
     this.id,
     this.businessNo,
     this.businessName,
@@ -113,8 +116,8 @@ class TransactionData {
     this.currency,
   });
 
-  factory TransactionData.fromJson(Map<String, dynamic> json) {
-    return TransactionData(
+  factory ViewTransactionData.fromJson(Map<String, dynamic> json) {
+    return ViewTransactionData(
       id: json['_id'] as String?,
       businessNo: json['businessNo'] as String?,
       businessName: json['businessName'] as String?,

@@ -8,15 +8,17 @@ import 'package:path/path.dart' as p;
 import 'package:zed_nano/models/approval_response.dart';
 import 'package:zed_nano/models/branch-store-summary/BranchStoreSummaryResponse.dart';
 import 'package:zed_nano/models/branchTerminals/BranchTerminalsResponse.dart';
+import 'package:zed_nano/models/by-transaction-id/TransactionDetailResponse.dart';
 import 'package:zed_nano/models/cashPayment/OrderCheckoutPaymentResponse.dart';
 import 'package:zed_nano/models/createCategory/CreateCategoryResponse.dart';
 import 'package:zed_nano/models/getZedPayItUserById/GetZedPayItUserByIdResponse.dart';
 import 'package:zed_nano/models/get_business_invoices_by_status/GetBusinessInvoicesByStatusResponse.dart';
 import 'package:zed_nano/models/get_business_roles/GetBusinessRolesResponse.dart';
 import 'package:zed_nano/models/get_invoice_by_invoice_number/GetInvoiceByInvoiceNumberResponse.dart';
-import 'package:zed_nano/models/get_invoice_receipt_payment_methods_no_login/GetInvoiceReceiptPaymentMethodsNoLoginResponse.dart';
 import 'package:zed_nano/models/get_whatsapp_message_for_invoice/GetWhatsappMessageForInvoiceResponse.dart';
 import 'package:zed_nano/models/listUsers/ListUsersResponse.dart';
+import 'package:zed_nano/models/profile/ProfileResponse.dart';
+import 'package:zed_nano/models/sales_dashboard/SalesDashboardResponse.dart';
 import 'package:zed_nano/models/savePushy/CreateOrderResponse.dart';
 import 'package:zed_nano/models/createProduct/CreateProductResponse.dart';
 import 'package:zed_nano/models/createbillingInvoice/CreateBillingInvoiceResponse.dart';
@@ -629,6 +631,48 @@ class BusinessProviders extends BaseProvider {
           responseModel.message!, BranchStoreSummaryResponse.fromJson(map));
     } else {
       finalResponseModel = ResponseModel<BranchStoreSummaryResponse>(
+          false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
+  Future<ResponseModel<SalesDashboardResponse>> getbusinessMetrics(
+      {required Map<String, dynamic> requestData,
+      required BuildContext context}) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.getbusinessMetrics(requestData: requestData),
+        context);
+
+    ResponseModel<SalesDashboardResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<SalesDashboardResponse>(true,
+          responseModel.message!, SalesDashboardResponse.fromJson(map));
+    } else {
+      finalResponseModel = ResponseModel<SalesDashboardResponse>(
+          false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
+  Future<ResponseModel<CommonResponse>> getSalesByDay(
+      {required Map<String, dynamic> requestData,
+      required BuildContext context}) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.getSalesByDay(requestData: requestData),
+        context);
+
+    ResponseModel<CommonResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<CommonResponse>(true,
+          responseModel.message!, CommonResponse.fromJson(map));
+    } else {
+      finalResponseModel = ResponseModel<CommonResponse>(
           false, responseModel.message!);
     }
 
@@ -1510,6 +1554,48 @@ class BusinessProviders extends BaseProvider {
     return finalResponseModel;
   }
 
+  Future<ResponseModel<CommonResponse>> voidTransaction({
+    required Map<String, dynamic> requestData,
+    required BuildContext context,
+  }) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.voidTransaction(requestData: requestData), context);
+
+    ResponseModel<CommonResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<CommonResponse>(
+          true, responseModel.message!, CommonResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<CommonResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
+  Future<ResponseModel<ByTransactionIdDetailResponse>> getTransactionByTransactionId({
+    required Map<String, dynamic> requestData,
+    required BuildContext context,
+  }) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.getTransactionByTransactionId(requestData: requestData), context);
+
+    ResponseModel<ByTransactionIdDetailResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<ByTransactionIdDetailResponse>(
+          true, responseModel.message!, ByTransactionIdDetailResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<ByTransactionIdDetailResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
   Future<ResponseModel<ApprovalResponse>> getApprovalByStatus({
     required Map<String, dynamic> requestData,
     required BuildContext context,
@@ -1769,6 +1855,90 @@ class BusinessProviders extends BaseProvider {
   }) async {
     final responseModel = await performApiCallWithHandling(
         () => businessRepo.changeStatus(customerNumber: customerNumber, status: status), context);
+
+    ResponseModel<CommonResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<CommonResponse>(
+          true, responseModel.message!, CommonResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<CommonResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
+  // Profile related methods
+  Future<ResponseModel<ProfileResponse>> getUserProfile({
+    required BuildContext context,
+  }) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.getUserProfile(), context);
+
+    ResponseModel<ProfileResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<ProfileResponse>(
+          true, responseModel.message!, ProfileResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<ProfileResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
+  Future<ResponseModel<CommonResponse>> updateUserProfile({
+    required Map<String, dynamic> requestData,
+    required BuildContext context,
+  }) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.updateUserProfile(requestData: requestData), context);
+
+    ResponseModel<CommonResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<CommonResponse>(
+          true, responseModel.message!, CommonResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<CommonResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
+  Future<ResponseModel<CommonResponse>> deleteUserAccount({
+    required Map<String, dynamic> requestData,
+    required BuildContext context,
+  }) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.deleteUserAccount(requestData: requestData), context);
+
+    ResponseModel<CommonResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<CommonResponse>(
+          true, responseModel.message!, CommonResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<CommonResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
+  Future<ResponseModel<CommonResponse>> resetUserPin({
+    required Map<String, dynamic> requestData,
+    required BuildContext context,
+  }) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.resetUserPin(requestData: requestData), context);
 
     ResponseModel<CommonResponse> finalResponseModel;
 

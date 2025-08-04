@@ -491,7 +491,7 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
 
                         )
                     ),
-                    Text("${getInvoiceByInvoiceNumberResponse?.currency ?? 'N/A'} ${getInvoiceByInvoiceNumberResponse?.invoiceAmount?.formatCurrency() ?? 'N/A'}",
+                    Text("${getInvoiceByInvoiceNumberResponse?.currency ?? 'KES'} ${getInvoiceByInvoiceNumberResponse?.invoiceAmount?.formatCurrency() ?? 'N/A'}",
                         style: const TextStyle(
                           fontFamily: 'Poppins',
                           color: textSecondary,
@@ -517,7 +517,7 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
 
                         )
                     ),
-                    Text("${getInvoiceByInvoiceNumberResponse?.currency ?? 'N/A'} ${getInvoiceByInvoiceNumberResponse?.invoiceDiscountAmount?.formatCurrency() ?? 'N/A'}",
+                    Text("${getInvoiceByInvoiceNumberResponse?.currency ?? 'KES'} ${getInvoiceByInvoiceNumberResponse?.invoiceDiscountAmount?.formatCurrency() ?? 'N/A'}",
                         style: const TextStyle(
                           fontFamily: 'Poppins',
                           color: textSecondary,
@@ -543,7 +543,7 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
 
                         )
                     ),
-                    Text("${getInvoiceByInvoiceNumberResponse?.currency ?? 'N/A'} ${getInvoiceByInvoiceNumberResponse?.total?.formatCurrency() ?? 'N/A'}",
+                    Text("${getInvoiceByInvoiceNumberResponse?.currency ?? 'KES'} ${getInvoiceByInvoiceNumberResponse?.total?.formatCurrency() ?? 'N/A'}",
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           color: textPrimary,
@@ -742,7 +742,7 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
                         letterSpacing: 0.12,
                       )),
                   6.height,
-                  Text("${getInvoiceByInvoiceNumberResponse?.currency ?? 'N/A'} ${getInvoiceByInvoiceNumberResponse?.invoiceAmount?.formatCurrency() ?? 'N/A'}",
+                  Text("${getInvoiceByInvoiceNumberResponse?.currency ?? 'KES'} ${getInvoiceByInvoiceNumberResponse?.invoiceAmount?.formatCurrency() ?? 'N/A'}",
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         color: getInvoiceByInvoiceNumberResponse?.invoiceStatus?.toLowerCase() == 'paid'

@@ -61,6 +61,8 @@ class AppConstants{
   static const String approveSelectedStockTake = 'api/approve_multiple_stock_take_batches';
   static const String approveMultipleAddStockBatches = 'api/approve_multiple_add_stock_batches';
   static const String branchStoreSummary   = 'api/v1/business/branch-store-summary';
+  static const String getbusinessMetrics   = 'api/v1/business/businessmetrics';
+  static const String getSalesByDay   = 'api/v1/sales/sales-by-day';
   static const String getBranchTransactionByDate   = 'api/get_branch_transaction_by_date';
   static const String uploadBusinessLogo = 'api/edit_business_logo';
   static const String uploadImage = 'api/v1/ecommerce/generate_file_system_url';
@@ -77,6 +79,8 @@ class AppConstants{
   static const String findProduct = 'api/findProduct';
   static const String getCustomerByNumber = 'api/get_customer_by_number';
   static const String getOrderPaymentStatus = 'api/order_payment_status';
+  static const String voidTransaction = 'api/v1/payments/void';
+  static const String getTransactionByTransactionId = 'api/v1/payments/by-transaction-id';
   static const String getApprovalByStatus = 'api/stock/stocksummary';
   static const String getInvoiceByInvoiceNumber = 'api/get_invoice_by_invoice_number';
   static const String getInvoiceReceiptPaymentMethodsNoLogin = 'api/get_invoice_receipt_payment_methods_no_login';
@@ -84,6 +88,10 @@ class AppConstants{
   static const String getBranchTerminals = 'api/v1/branchTerminals/Active';
   static const String getPaymentMethodsStatusNoAuth = 'api/v1/payments/payment_methods_status_no_auth';
   static const String doCashPayment = 'api/transactions/cashPayment';
+  static const String getUserProfile = 'api/v1/user/profile';
+  static const String updateUserProfile = 'api/v1/user/profile/update';
+  static const String deleteUserAccount = 'api/v1/user/account/delete';
+  static const String resetUserPin = 'api/v1/user/pin/reset';
   static const String doCashPaymentInvoice = 'api/v1/payments/generalpayment';
   static const String cancelPushyTransaction = 'api/cancelPushyTransaction';
   static const String activateCustomer = 'api/activateCustomer';

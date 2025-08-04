@@ -160,6 +160,7 @@ class CompactSuccessGifDisplayWidget extends StatelessWidget {
   final String subtitle;
   final double? gifSize;
   final EdgeInsets? padding;
+  final TextAlign? textAlign;
 
   const CompactSuccessGifDisplayWidget({
     Key? key,
@@ -168,6 +169,7 @@ class CompactSuccessGifDisplayWidget extends StatelessWidget {
     required this.subtitle,
     this.gifSize,
     this.padding,
+    this.textAlign,
   }) : super(key: key);
 
   @override
@@ -201,6 +203,7 @@ class CompactSuccessGifDisplayWidget extends StatelessWidget {
             ),
             const SizedBox(height: Dimensions.paddingSizeExtraSmall),
             Text(subtitle,
+              textAlign: textAlign ?? TextAlign.start,
                 style: const TextStyle(
                   fontFamily: 'Poppins',
                   color: textSecondary,

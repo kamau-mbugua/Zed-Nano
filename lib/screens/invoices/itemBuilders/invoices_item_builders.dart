@@ -167,7 +167,7 @@ Widget buildInvoicePaymentSummary({
 
                   )
               ),
-              Text("${item?.currency ?? 'N/A'} ${item?.amount?.formatCurrency() ?? 'N/A'}",
+              Text("${item?.currency ?? 'KES'} ${item?.amount?.formatCurrency() ?? 'N/A'}",
                   style: const TextStyle(
                     fontFamily: 'Poppins',
                     color: textSecondary,

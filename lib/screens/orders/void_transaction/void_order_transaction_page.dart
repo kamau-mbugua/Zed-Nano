@@ -13,8 +13,11 @@ import 'package:zed_nano/utils/GifsImages.dart';
 import 'package:zed_nano/utils/extensions.dart';
 
 class VoidOrderTransactionPage extends StatefulWidget {
-  String? orderId;
-  VoidOrderTransactionPage({Key? key, this.orderId}) : super(key: key);
+  String? transactionId;
+  String? quantity;
+  String? amount;
+  String? date;
+  VoidOrderTransactionPage({Key? key, this.transactionId, this.quantity, this.amount, this.date}) : super(key: key);
 
   @override
   _VoidOrderTransactionPageState createState() =>
@@ -22,36 +25,27 @@ class VoidOrderTransactionPage extends StatefulWidget {
 }
 
 class _VoidOrderTransactionPageState extends State<VoidOrderTransactionPage> {
-
-  OrderDetail? orderDetail;
-  List<OrderTransactionTotals>? orderTransactionTotals;
-
   TextEditingController reasonController = TextEditingController();
   FocusNode reasonFocusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
-    // Defer the first data fetch until after the build is complete
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      getOrderPaymentStatus();
-    });
   }
 
   Future<void> getOrderPaymentStatus() async {
     Map<String, dynamic> requestData = {
-      'pushyTransactionId': widget.orderId
+      'comments': reasonController.text,
+      'action':'request',
+      'transactionId': widget.transactionId
     };
 
     try {
       final response =
-      await getBusinessProvider(context).getOrderPaymentStatus(requestData: requestData, context: context);
+      await getBusinessProvider(context).voidTransaction(requestData: requestData, context: context);
 
       if (response.isSuccess) {
-        setState(() {
-          orderDetail = response.data?.order;
-          orderTransactionTotals = response.data?.transactionsList;
-        });
+        finish(context);
       } else {
         showCustomToast(response.message ?? 'Failed to load product details');
       }
@@ -84,7 +78,6 @@ class _VoidOrderTransactionPageState extends State<VoidOrderTransactionPage> {
                 subLabel: 'Enter a reason why you want to void the transaction.',
               ),
               _buildOrderSummary(),
-              _buildPaymentMethod(),
               _buildReasonInputField(),
             ],
           ).paddingSymmetric(horizontal: 18),
@@ -98,7 +91,7 @@ class _VoidOrderTransactionPageState extends State<VoidOrderTransactionPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text("Reason to Void",
+        const Text('Reason to Void',
             style: TextStyle(
               fontFamily: 'Poppins',
               color: Color(0xff000000),
@@ -137,7 +130,7 @@ class _VoidOrderTransactionPageState extends State<VoidOrderTransactionPage> {
         child: appButton(
           text: 'Request to Void',
           onTap: () {
-
+            getOrderPaymentStatus();
           },
           context: context,
         ),
@@ -162,7 +155,7 @@ class _VoidOrderTransactionPageState extends State<VoidOrderTransactionPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text('Order Summary',
+            const Text('Transaction Summary',
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   color: Color(0xff000000),
@@ -174,7 +167,7 @@ class _VoidOrderTransactionPageState extends State<VoidOrderTransactionPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text('Order Number',
+                const Text('Transaction Number',
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       color: textSecondary,
@@ -185,7 +178,7 @@ class _VoidOrderTransactionPageState extends State<VoidOrderTransactionPage> {
 
                     )
                 ),
-                Text("${orderDetail?.orderNumber ?? 'N/A'}",
+                Text("${widget.transactionId ?? 'N/A'}",
                     style: const TextStyle(
                       fontFamily: 'Poppins',
                       color: textSecondary,
@@ -211,7 +204,59 @@ class _VoidOrderTransactionPageState extends State<VoidOrderTransactionPage> {
 
                     )
                 ),
-                Text('${orderDetail?.items?.length ?? 0}',
+                Text('${widget.quantity}',
+                    style: const TextStyle(
+                      fontFamily: 'Poppins',
+                      color: textSecondary,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                      fontStyle: FontStyle.normal,
+                      letterSpacing: 0.12,
+                    )
+                )
+              ],
+            ).paddingSymmetric(vertical: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text('Transaction Amount',
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      color: textSecondary,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                      fontStyle: FontStyle.normal,
+                      letterSpacing: 0.12,
+
+                    )
+                ),
+                Text('KES ${widget.amount}',
+                    style: const TextStyle(
+                      fontFamily: 'Poppins',
+                      color: textSecondary,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                      fontStyle: FontStyle.normal,
+                      letterSpacing: 0.12,
+                    )
+                )
+              ],
+            ).paddingSymmetric(vertical: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text('Transaction Date',
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      color: textSecondary,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                      fontStyle: FontStyle.normal,
+                      letterSpacing: 0.12,
+
+                    )
+                ),
+                Text('${widget.date}',
                     style: const TextStyle(
                       fontFamily: 'Poppins',
                       color: textSecondary,
@@ -225,45 +270,5 @@ class _VoidOrderTransactionPageState extends State<VoidOrderTransactionPage> {
             ).paddingSymmetric(vertical: 8),
           ],
         ));
-  }
-  Widget _buildPaymentMethod(){
-    final cartItems = orderTransactionTotals ?? [];
-    return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          const Text('Payment Summary',
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                color: textPrimary,
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                fontStyle: FontStyle.normal,
-              )
-          ),
-          8.height,
-          if (cartItems.isEmpty) const Center(
-            child: CompactGifDisplayWidget(
-              gifPath: emptyListGif,
-              title: "It's empty, over here.",
-              subtitle:
-              'No Payments in for this order yet! Add to view them here.',
-            ),
-          ) else ListView.separated(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            padding: const EdgeInsets.symmetric(horizontal: 0),
-            itemCount: cartItems.length,
-            separatorBuilder: (context, index) => const Divider(height: 0.5, color: innactiveBorderCart,),
-            itemBuilder: (context, index) {
-              final item = cartItems[index];
-              return buildOrderPaymentSummary(
-                  item: item,
-                  context: context
-              );
-            },
-          ),
-        ]
-    ).paddingSymmetric(vertical: 16);
   }
 }

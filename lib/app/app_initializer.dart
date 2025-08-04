@@ -22,6 +22,7 @@ import 'package:zed_nano/utils/app_loading.dart';
 import 'package:zed_nano/utils/permission_service.dart';
 import 'package:zed_nano/viewmodels/add_stock_take_viewmodel.dart';
 import 'package:zed_nano/viewmodels/add_stock_viewmodel.dart';
+import 'package:zed_nano/services/business_setup_service.dart';
 
 // Global navigator key for accessing navigator from anywhere
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -103,6 +104,7 @@ Future<void> initializeApp(Flavor flavor) async {
         ChangeNotifierProvider(create: (_) => AddStockViewModel()),
         ChangeNotifierProvider(create: (_) => AddStockTakeViewModel()),
         ChangeNotifierProvider(create: (_) => CustomerInvoicingViewModel()),
+        ChangeNotifierProvider(create: (_) => BusinessSetupService()),
       ],
       child: App(navigatorKey: navigatorKey),
     ),
