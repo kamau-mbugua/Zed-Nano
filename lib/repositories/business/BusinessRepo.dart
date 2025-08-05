@@ -1137,4 +1137,89 @@ class BusinessRepo{
       return ApiResponse.withError(ApiErrorHandler.handleError(e));
     }
   }
+
+  Future<ApiResponse> getProductGrossMargin({
+    required String startDate,
+    required String endDate,
+    int limit = 10000,
+    int page = 1,
+  }) async {
+    try {
+      final response = await dioClient!.post(
+        '${AppConstants.getProductGrossMargin}?limit=$limit&page=$page&startDate=$startDate&endDate=$endDate',
+        data: {},
+      );
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
+
+  Future<ApiResponse> getClosingOpeningReport({
+    required String startDate,
+    required String endDate,
+    int limit = 10000,
+    int page = 1,
+  }) async {
+    try {
+      final response = await dioClient!.post(
+        '${AppConstants.getClosingOpeningReport}?limit=$limit&page=$page&startDate=$startDate&endDate=$endDate',
+        data: {},
+      );
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
+
+  Future<ApiResponse> getTotalQuantitiesSold({
+    required String startDate,
+    required String endDate,
+    int limit = 10000,
+    int page = 1,
+  }) async {
+    try {
+      final response = await dioClient!.post(
+        '${AppConstants.getTotalQuantitiesSold}?limit=$limit&page=$page&startDate=$startDate&endDate=$endDate',
+        data: {},
+      );
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
+
+  Future<ApiResponse> getTotalSalesReport({
+    required String startDate,
+    required String endDate,
+    int limit = 10000,
+    int page = 1,
+  }) async {
+    try {
+      final response = await dioClient!.post(
+        '${AppConstants.getTotalSalesReport}?limit=$limit&page=$page&startDate=$startDate&endDate=$endDate',
+        data: {},
+      );
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
+
+  Future<ApiResponse> getProductTotalCost({
+    required String startDate,
+    required String endDate,
+    int limit = 10000,
+    int page = 1,
+  }) async {
+    try {
+      final response = await dioClient!.post(
+        '${AppConstants.getProductTotalCost}?limit=$limit&page=$page&startDate=$startDate&endDate=$endDate',
+        data: {},
+      );
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
 }

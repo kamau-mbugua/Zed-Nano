@@ -16,9 +16,14 @@ import 'package:zed_nano/models/get_business_invoices_by_status/GetBusinessInvoi
 import 'package:zed_nano/models/get_business_roles/GetBusinessRolesResponse.dart';
 import 'package:zed_nano/models/get_invoice_by_invoice_number/GetInvoiceByInvoiceNumberResponse.dart';
 import 'package:zed_nano/models/get_invoice_receipt_payment_methods_no_login/GetInvoiceReceiptPaymentMethodsNoLoginResponse.dart';
+import 'package:zed_nano/models/get_product_gross_margin/GetProductGrossMarginResponse.dart';
+import 'package:zed_nano/models/get_total_sales/GetTotalSalesResponse.dart';
 import 'package:zed_nano/models/get_whatsapp_message_for_invoice/GetWhatsappMessageForInvoiceResponse.dart';
 import 'package:zed_nano/models/listUsers/ListUsersResponse.dart';
+import 'package:zed_nano/models/opening_closing/OpeningClosingResponse.dart';
+import 'package:zed_nano/models/product_total_cost/ProductTotalCostResponse.dart';
 import 'package:zed_nano/models/profile/ProfileResponse.dart';
+import 'package:zed_nano/models/quantities_sold/QuantitiesSoldResponse.dart';
 import 'package:zed_nano/models/sales_dashboard/SalesDashboardResponse.dart';
 import 'package:zed_nano/models/sales_report/SalesReportResponse.dart';
 import 'package:zed_nano/models/savePushy/CreateOrderResponse.dart';
@@ -1919,6 +1924,151 @@ class BusinessProviders extends BaseProvider {
     } else {
       finalResponseModel =
           ResponseModel<SalesReportTotalSalesResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
+  Future<ResponseModel<GetProductGrossMarginResponse>> getProductGrossMargin({
+    required String startDate,
+    required String endDate,
+    int limit = 10000,
+    int page = 1,
+    required BuildContext context,
+  }) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.getProductGrossMargin(
+          startDate: startDate,
+          endDate: endDate,
+          limit: limit,
+          page: page,
+        ), context);
+
+    ResponseModel<GetProductGrossMarginResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<GetProductGrossMarginResponse>(
+          true, responseModel.message!, GetProductGrossMarginResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<GetProductGrossMarginResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
+  Future<ResponseModel<OpeningClosingResponse>> getClosingOpeningReport({
+    required String startDate,
+    required String endDate,
+    int limit = 10000,
+    int page = 1,
+    required BuildContext context,
+  }) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.getClosingOpeningReport(
+          startDate: startDate,
+          endDate: endDate,
+          limit: limit,
+          page: page,
+        ), context);
+
+    ResponseModel<OpeningClosingResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<OpeningClosingResponse>(
+          true, responseModel.message!, OpeningClosingResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<OpeningClosingResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
+  Future<ResponseModel<QuantitiesSoldResponse>> getTotalQuantitiesSold({
+    required String startDate,
+    required String endDate,
+    int limit = 10000,
+    int page = 1,
+    required BuildContext context,
+  }) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.getTotalQuantitiesSold(
+          startDate: startDate,
+          endDate: endDate,
+          limit: limit,
+          page: page,
+        ), context);
+
+    ResponseModel<QuantitiesSoldResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<QuantitiesSoldResponse>(
+          true, responseModel.message!, QuantitiesSoldResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<QuantitiesSoldResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
+  Future<ResponseModel<GetTotalSalesResponse>> getTotalSalesReport({
+    required String startDate,
+    required String endDate,
+    int limit = 10000,
+    int page = 1,
+    required BuildContext context,
+  }) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.getTotalSalesReport(
+          startDate: startDate,
+          endDate: endDate,
+          limit: limit,
+          page: page,
+        ), context);
+
+    ResponseModel<GetTotalSalesResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<GetTotalSalesResponse>(
+          true, responseModel.message!, GetTotalSalesResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<GetTotalSalesResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
+  Future<ResponseModel<ProductTotalCostResponse>> getProductTotalCost({
+    required String startDate,
+    required String endDate,
+    required int limit,
+    required int page,
+    required BuildContext context,
+  }) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.getProductTotalCost(
+          startDate: startDate,
+          endDate: endDate,
+          limit: limit,
+          page: page,
+        ), context);
+
+    ResponseModel<ProductTotalCostResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<ProductTotalCostResponse>(
+          true, responseModel.message!, ProductTotalCostResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<ProductTotalCostResponse>(false, responseModel.message!);
     }
 
     return finalResponseModel;

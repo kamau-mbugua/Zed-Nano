@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/screens/reports/all_transactions/all_t_ranasctions_page.dart';
+import 'package:zed_nano/screens/reports/opening_closing_report/opening_closing_report_page.dart';
 import 'package:zed_nano/screens/reports/sales_report/sales_report_page.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/utils/Colors.dart';
@@ -215,6 +216,7 @@ class _ReportPageState extends State<ReportPage> {
         const SalesReportByDayPage().launch(context);
         break;
       case 'Opening and Closing Stock Report':
+        const OpeningClosingReportPage().launch(context);
         break;
       case 'All Transactions Report':
         AllTRanasctionsPage().launch(context);

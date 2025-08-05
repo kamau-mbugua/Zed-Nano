@@ -3,12 +3,12 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 import 'package:zed_nano/contants/AppConstants.dart';
+import 'package:zed_nano/models/get_product_gross_margin/GetProductGrossMarginResponse.dart';
+import 'package:zed_nano/models/opening_closing/OpeningClosingResponse.dart';
 import 'package:zed_nano/models/sales_report/SalesReportResponse.dart';
 import 'package:zed_nano/providers/business/BusinessProviders.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
-import 'package:zed_nano/screens/reports/sales_report/sub_reports/gross_margin_page.dart';
 import 'package:zed_nano/screens/reports/sales_report/sub_reports/quantities_sold_page.dart';
-import 'package:zed_nano/screens/reports/sales_report/sub_reports/total_cost_of_goods_page.dart';
 import 'package:zed_nano/screens/reports/sales_report/sub_reports/total_sales_page.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
@@ -22,42 +22,40 @@ import 'package:zed_nano/utils/date_range_util.dart';
 import 'package:zed_nano/utils/extensions.dart';
 import 'package:zed_nano/utils/pagination_controller.dart';
 
-class SalesReportPage extends StatefulWidget {
-  const SalesReportPage({Key? key}) : super(key: key);
+class OpeningClosingReportPage extends StatefulWidget {
+  const OpeningClosingReportPage({Key? key}) : super(key: key);
 
   @override
-  State<SalesReportPage> createState() => _SalesReportPageState();
+  State<OpeningClosingReportPage> createState() => _OpeningClosingReportPageState();
 }
 
-class _SalesReportPageState extends State<SalesReportPage> {
+class _OpeningClosingReportPageState extends State<OpeningClosingReportPage> {
   bool _isLoading = false;
   String _selectedRangeLabel = 'this_month';
-  SalesReportSummaryData? _summaryData;
-  List<SalesReportTotalSalesData> _recentSales = [];
+  OpeningClosingResponse? _summaryData;
 
-  late PaginationController<SalesReportTotalSalesData> _paginationController;
+  late PaginationController<OpeningClosingData> _paginationController;
 
 
   @override
   void initState() {
     super.initState();
-    _paginationController = PaginationController<SalesReportTotalSalesData>(
+    _paginationController = PaginationController<OpeningClosingData>(
       fetchItems: (page, pageSize) async {
-        return getTotalSales(page: page, limit: pageSize);
+        return getClosingOpeningReport(page: page, limit: pageSize);
       },
     );
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _paginationController.fetchFirstPage();
     });
-    _loadSalesData();
   }
 
-  Future<List<SalesReportTotalSalesData>> getTotalSales({required int page, required int limit}) async {
+  Future<List<OpeningClosingData>> getClosingOpeningReport({required int page, required int limit}) async {
     final dateRange = DateRangeUtil.getDateRange(_selectedRangeLabel);
     final startDate = dateRange.values.first.removeTimezoneOffset;
     final endDate = dateRange.values.last.removeTimezoneOffset;
-    final response = await getBusinessProvider(context).getTotalSales(
+    final response = await getBusinessProvider(context).getClosingOpeningReport(
         page: page,
         limit: limit,
         startDate: startDate,
@@ -65,30 +63,6 @@ class _SalesReportPageState extends State<SalesReportPage> {
         context: context
     );
     return response.data?.data ?? [];
-  }
-  Future<void> _loadSalesData() async {
-    setState(() {
-      _isLoading = true;
-    });
-
-    try {
-      final dateRange = DateRangeUtil.getDateRange(_selectedRangeLabel);
-      final startDate = dateRange.values.first.removeTimezoneOffset;
-      final endDate = dateRange.values.last.removeTimezoneOffset;
-
-      final summaryResponse = await Provider.of<BusinessProviders>(context, listen: false)
-          .getSalesSummary(startDate: startDate, endDate: endDate, context: context);
-
-      if (summaryResponse.isSuccess && summaryResponse.data?.data != null) {
-        _summaryData = summaryResponse.data!.data;
-      }
-    } catch (e) {
-      showCustomToast('Error loading sales data: $e');
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
-    }
   }
 
   void _showDateRangeFilter() {
@@ -102,7 +76,6 @@ class _SalesReportPageState extends State<SalesReportPage> {
           setState(() {
             _selectedRangeLabel = rangeLabel;
           });
-          _loadSalesData();
           _paginationController.refresh();
         },
       ),
@@ -155,7 +128,7 @@ class _SalesReportPageState extends State<SalesReportPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Sales Report',
+          'Opening & Closing Stock Report.',
           style: TextStyle(
             color: textPrimary,
             fontWeight: FontWeight.w600,
@@ -165,7 +138,7 @@ class _SalesReportPageState extends State<SalesReportPage> {
         ),
         const SizedBox(height: 8),
         Text(
-          'An overview of sales performance.',
+          'An overview of stock performance.',
           style: TextStyle(
             color: textSecondary,
             fontWeight: FontWeight.w400,
@@ -248,80 +221,26 @@ class _SalesReportPageState extends State<SalesReportPage> {
           children: [
             Expanded(
               child: _buildSummaryCard(
-                title: 'Quantities\nSold',
-                value: _summaryData?.soldQuantity?.toStringAsFixed(0) ?? '0',
+                title: 'Total Opening Stock',
+                value: _summaryData?.totalOpeningStock?.toStringAsFixed(0) ?? '0',
                 icon: approvalStockTake,
-                iconColor: emailBlue,
+                iconColor: primaryBlueTextColor,
                 backgroundColor: lightGreyColor,
-              ).onTap(
-                  ()=> QuantitiesSoldPage().launch(context)
-              ) ,
+              ),
             ),
             const SizedBox(width: 16),
             Expanded(
               child: _buildSummaryCard(
-                title: 'Total\nSales',
-                value: 'KES ${(_summaryData?.totalSales?.formatCurrency() ?? 0)}',
-                icon: outOfStockIcon,
-                iconColor: successTextColor,
+                title: 'Total Closing Stock',
+                value: '${(_summaryData?.totalClosingStock?.formatCurrency() ?? 0)}',
+                icon: approvalStockTake,
+                iconColor: primaryOrangeTextColor,
                 backgroundColor: lightGreenColor,
-              ).onTap(
-                  () => TotalSalesPage().launch(context)
               ),
             ),
           ],
         ),
         const SizedBox(height: 16),
-        Row(
-          children: [
-            Expanded(
-              child: _buildSummaryCard(
-                title: 'Total Cost of\nGoods Sold',
-                value: _summaryData?.totalCostOfGoodsSold?.toStringAsFixed(0) ?? '0',
-                icon: moneyInIcon,
-                iconColor: primaryOrangeTextColor,
-                backgroundColor: lightOrange,
-              ).onTap(
-                      ()=> TotalCostOfGoodsPage().launch(context)
-              ) ,
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: _buildSummaryCard(
-                title: 'Gross\nMargin',
-                value: 'KES ${(_summaryData?.grossMargin?.formatCurrency() ?? 0)}',
-                icon: approvalCustomers,
-                iconColor: primaryBlueTextColor,
-                backgroundColor: lightBlueColor,
-              ).onTap(
-                      () => GrossMarginPage().launch(context)
-              ),
-            ),
-          ],
-        ),
-        // Row(
-        //   children: [
-        //     Expanded(
-        //       child: _buildSummaryCard(
-        //         title: 'Total Cost of\nGoods Sold',
-        //         value: 'KES ${(_summaryData?.totalCostOfGoodsSold?.formatCurrency() ?? 0)}',
-        //         icon: moneyInIcon,
-        //         iconColor: primaryOrangeTextColor,
-        //         backgroundColor: lightOrange,
-        //       ),
-        //     ).onTap(()=>TotalCostOfGoodsPage().launch(context)),
-        //     const SizedBox(width: 16),
-        //     Expanded(
-        //       child: _buildSummaryCard(
-        //         title: 'Gross\nMargin',
-        //         value: 'KES ${(_summaryData?.grossMargin?.formatCurrency() ?? 0)}',
-        //         icon: approvalCustomers,
-        //         iconColor: primaryBlueTextColor,
-        //         backgroundColor: lightBlueColor,
-        //       ).onTap(()=>GrossMarginPage().launch(context)),
-        //     ),
-        //   ],
-        // ),
       ],
     );
   }
@@ -350,10 +269,10 @@ class _SalesReportPageState extends State<SalesReportPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           rfCommonCachedNetworkImage(
-            icon,
-            width: 25,
-            height: 25,
-            color: iconColor,radius: 0
+              icon,
+              width: 25,
+              height: 25,
+              color: iconColor,radius: 0
           ),
           const SizedBox(height: 16),
           Text(
@@ -395,12 +314,12 @@ class _SalesReportPageState extends State<SalesReportPage> {
         ),
         const SizedBox(height: 16),
         Expanded(
-          child: PagedListView<int, SalesReportTotalSalesData>(
+          child: PagedListView<int, OpeningClosingData>(
             pagingController: _paginationController.pagingController,
             padding: const EdgeInsets.all(0),
-            builderDelegate: PagedChildBuilderDelegate<SalesReportTotalSalesData>(
+            builderDelegate: PagedChildBuilderDelegate<OpeningClosingData>(
               itemBuilder: (context, item, index) {
-               return _buildRecentSaleItem(item).paddingSymmetric(horizontal: 16,vertical: 8);
+                return _buildRecentSaleItem(item).paddingSymmetric(horizontal: 16,vertical: 8);
               },
               firstPageProgressIndicatorBuilder: (_) => const Center(
                 child: SizedBox(),
@@ -421,7 +340,7 @@ class _SalesReportPageState extends State<SalesReportPage> {
       ],
     );
   }
-  Widget _buildRecentSaleItem(SalesReportTotalSalesData sale) {
+  Widget _buildRecentSaleItem(OpeningClosingData sale) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -454,27 +373,31 @@ class _SalesReportPageState extends State<SalesReportPage> {
                   fontSize: 14,
                 ),
               ),
+              6.height,
+              Text("Opening Stock: ${sale.openingStock?.toStringAsFixed(0) ?? '0'}",
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    color: neutralDarkLight,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w400,
+                    fontStyle: FontStyle.normal,
+                    letterSpacing: 0.15,
+
+                  )
+              ),
               const SizedBox(height: 12),
               Row(
                 children: [
-                  _buildProductDetail('Qty:', sale.quantitySold?.toStringAsFixed(0) ?? '0'),
-                  const SizedBox(width: 24),
-                  _buildProductDetail('Selling Price:', 'KES ${(sale.sellingPrice?.formatCurrency() ?? 0)}'),
-                  const SizedBox(width: 24),
-                  _buildProductDetail('Discount:', 'KES ${(sale.discount?.formatCurrency() ?? 0)}'),
+                  _buildProductDetail('Qty Sold:', sale.quantitySold?.toStringAsFixed(0) ?? '0'),
+                  const SizedBox(width: 12),
+                  _buildProductDetail('Received:', '${(sale.quantityReceived?.toStringAsFixed(0) ?? 0)}'),
+                  const SizedBox(width: 12),
+                  _buildProductDetail('Variance:', '${(sale.quantityVariance?.toStringAsFixed(0) ?? 0)}'),
+                  const SizedBox(width: 12),
+                  _buildProductDetail('Closing Stock::', '${(sale.closingStock?.toStringAsFixed(0) ?? 0)}'),
                 ],
               ),
             ],
-          ),
-        ),
-        // Total amount
-        Text(
-          'KES ${(sale.totalSales?.formatCurrency() ?? 0)}',
-          style: TextStyle(
-            color: textPrimary,
-            fontWeight: FontWeight.w600,
-            fontFamily: 'Poppins',
-            fontSize: 14,
           ),
         ),
       ],
@@ -509,7 +432,7 @@ class _SalesReportPageState extends State<SalesReportPage> {
   }
 
   Future<void> _refreshData() async {
-    await _loadSalesData();
     _paginationController.refresh();
   }
 }
+
