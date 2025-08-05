@@ -7,6 +7,7 @@ import 'package:zed_nano/screens/main/pages/common/p_o_s_pages.dart';
 import 'package:zed_nano/screens/main/pages/common/report_page.dart';
 import 'package:zed_nano/screens/main/welcome_setup_screen.dart';
 import 'package:zed_nano/screens/orders/orders_list_main_page.dart';
+import 'package:zed_nano/screens/profile/profile_page.dart';
 import 'package:zed_nano/screens/sell/sell_stepper_page.dart';
 import 'package:zed_nano/screens/widget/common/custom_app_bar.dart';
 import 'package:zed_nano/screens/widgets/custom_drawer.dart';
@@ -61,7 +62,7 @@ class _HomeMainPageState extends State<HomeMainPage> {
       _buildScrollableScreen(const AdminDashboardPage()),
       _buildScrollableScreen(const POSPagesScreen()),
       _buildScrollableScreen( OrdersListMainPage(showAppBar: false,)),
-      _buildScrollableScreen(const ReportPage()),
+      _buildScrollableScreen(ReportPage()),
     ];
   }
 
@@ -141,6 +142,7 @@ class _HomeMainPageState extends State<HomeMainPage> {
           ),
           appBar: CustomDashboardAppBar(
             title: context.businessDisplayName,
+            onProfileTap: () =>const ProfilePage().launch(context),
           ),
           body: RefreshIndicator(
             key: _refreshIndicatorKey,

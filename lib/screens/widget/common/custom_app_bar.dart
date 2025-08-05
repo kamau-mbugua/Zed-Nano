@@ -45,10 +45,13 @@ class CustomDashboardAppBar extends StatelessWidget implements PreferredSizeWidg
       actions: [
         IconButton(
           onPressed: onProfileTap,
-          icon: SvgPicture.asset(
-            userIcon,
-            width: 30,
-            height: 30,
+          icon: ClipOval(
+            child: Image.asset(
+              defaultAvatarIcon,
+              width: 30,
+              height: 30,
+              fit: BoxFit.cover,
+            ),
           ),
         ),
       ],

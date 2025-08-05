@@ -6,6 +6,7 @@ import 'package:zed_nano/screens/profile/edit_profile_page.dart';
 import 'package:zed_nano/screens/profile/reset_pin_page.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
+import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Images.dart';
 
@@ -83,7 +84,7 @@ class _ProfilePageState extends State<ProfilePage> {
         ],
       ),
       body: isLoading
-        ? const Center(child: CircularProgressIndicator())
+        ? const Center(child: SizedBox())
         : SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -158,13 +159,13 @@ class _ProfilePageState extends State<ProfilePage> {
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             border: Border.all(
-              color: appThemePrimary,
+              color: colorWhite,
               width: 1.5,
             ),
           ),
           child: ClipOval(
             child: rfCommonCachedNetworkImage(
-              userProfileIcon,
+              defaultAvatarIcon,
               fit: BoxFit.cover,
               height: 80,
               width: 80,
@@ -178,13 +179,13 @@ class _ProfilePageState extends State<ProfilePage> {
             width: 24,
             height: 24,
             decoration: const BoxDecoration(
-              color: colorBackground,
+              color: appThemePrimary,
               shape: BoxShape.circle,
             ),
             child: const Icon(
               Icons.edit,
               size: 12,
-              color: textSecondary,
+              color: colorWhite,
             ),
           ),
         ),
@@ -227,7 +228,7 @@ class _ProfilePageState extends State<ProfilePage> {
         _buildSectionHeader('Security & Account'),
         24.height,
         _buildActionCard(
-          icon: Icons.lock_outline,
+          icon: resetPinIcon,
           iconColor: primaryOrangeTextColor,
           title: 'Reset PIN',
           subtitle: 'Change your security PIN for enhanced security.',
@@ -240,7 +241,7 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         16.height,
         _buildActionCard(
-          icon: Icons.delete_outline,
+          icon: deleteAccount,
           iconColor: googleRed,
           title: 'Delete Account',
           subtitle: 'Permanently delete your account and all associated data.',
@@ -265,34 +266,50 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget _buildInfoItem(String title, String value) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          title,
-          style: const TextStyle(
-            color: textSecondary,
-            fontWeight: FontWeight.w400,
-            fontFamily: 'Poppins',
-            fontSize: 14,
+    return Container(
+      width: context.width(),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 4,
+            offset: const Offset(0, 2),
           ),
-        ),
-        8.height,
-        Text(
-          value,
-          style: const TextStyle(
-            color: textPrimary,
-            fontWeight: FontWeight.w400,
-            fontFamily: 'Poppins',
-            fontSize: 14,
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: const TextStyle(
+              color: textSecondary,
+              fontWeight: FontWeight.w400,
+              fontFamily: 'Poppins',
+              fontSize: 14,
+            ),
           ),
-        ),
-      ],
+          8.height,
+          Text(
+            value,
+            style: const TextStyle(
+              color: textPrimary,
+              fontWeight: FontWeight.w400,
+              fontFamily: 'Poppins',
+              fontSize: 14,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
   Widget _buildActionCard({
-    required IconData icon,
+    required String icon,
     required Color iconColor,
     required String title,
     required String subtitle,
@@ -314,16 +331,18 @@ class _ProfilePageState extends State<ProfilePage> {
         child: Row(
           children: [
             Container(
-              width: 40,
-              height: 40,
+              width: 20,
+              height: 20,
               decoration: BoxDecoration(
                 color: iconColor.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: Icon(
+              child: rfCommonCachedNetworkImage(
                 icon,
                 color: iconColor,
-                size: 20,
+                width: 15,
+                height: 15,
+                radius: 0
               ),
             ),
             16.width,

@@ -1094,15 +1094,15 @@ class BusinessRepo{
       return ApiResponse.withError(ApiErrorHandler.handleError(e));
     }
   }
-
-  Future<ApiResponse> getApprovalByStatus({required Map<String, dynamic> requestData}) async {
-    try {
-      final response =
-      await dioClient!.get('${AppConstants.getApprovalByStatus}', queryParameters: requestData);
-
-      return ApiResponse.withSuccess(response);
-    } catch (e) {
-      return ApiResponse.withError(ApiErrorHandler.handleError(e));
-    }
-  }
+  //
+  // Future<ApiResponse> getApprovalByStatus({required Map<String, dynamic> requestData}) async {
+  //   try {
+  //     final response =
+  //     await dioClient!.get('${AppConstants.getApprovalByStatus}', queryParameters: requestData);
+  //
+  //     return ApiResponse.withSuccess(response);
+  //   } catch (e) {
+  //     return ApiResponse.withError(ApiErrorHandler.handleError(e));
+  //   }
+  // }
 }

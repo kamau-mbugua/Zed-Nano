@@ -6,7 +6,9 @@ import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/utils/Colors.dart';
+import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/Images.dart';
+import 'package:zed_nano/utils/extensions.dart';
 
 class EditProfilePage extends StatefulWidget {
   final ProfileData? profileData;
@@ -109,7 +111,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             ),
             child: ClipOval(
               child: rfCommonCachedNetworkImage(
-                userProfileIcon,
+                defaultAvatarIcon,
                 fit: BoxFit.cover,
                 height: 100,
                 width: 100,
@@ -337,9 +339,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
       width: double.infinity,
       child: appButton(
         text: _isLoading ? 'Saving...' : 'Save Changes',
-        onTap: _isLoading ? null : _saveProfile,
+        onTap: _saveProfile,
         context: context,
-        isLoading: _isLoading,
       ),
     );
   }

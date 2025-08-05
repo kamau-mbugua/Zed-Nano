@@ -7,8 +7,10 @@ import 'package:zed_nano/routes/routes.dart';
 import 'package:zed_nano/screens/approvals/approvals_main_page.dart';
 import 'package:zed_nano/screens/customers/customers_list_page.dart';
 import 'package:zed_nano/screens/invoices/invoices_list_main_page.dart';
+import 'package:zed_nano/screens/main/pages/common/report_page.dart';
 import 'package:zed_nano/screens/orders/orders_list_main_page.dart';
 import 'package:zed_nano/screens/payments/list_payments_page.dart';
+import 'package:zed_nano/screens/profile/profile_page.dart';
 import 'package:zed_nano/screens/stock/view_stock/view_stock_page.dart';
 import 'package:zed_nano/screens/users/users_main_list.dart';
 import 'package:zed_nano/utils/Colors.dart';
@@ -140,7 +142,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                           fontWeight: FontWeight.w600,
                           fontStyle: FontStyle.normal,
                         )),
-                  ),
+                  ).onTap(() => const ProfilePage().launch(context)),
                 ],
               ),
             ),
@@ -290,7 +292,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         _buildMenuItem(
                           title: 'Reports',
                           iconPath: reportsSideMenuIcon,
-                          onTap: () => _navigateTo(context, '/reports'),
+                          onTap: () => ReportPage(isShowAppBar: true,).launch(context),
                         ),
 
                         // Settings

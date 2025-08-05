@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/screens/reports/all_transactions/all_t_ranasctions_page.dart';
+import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Images.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
 import 'package:zed_nano/screens/reports/sales_by_day/sales_report_by_day_page.dart';
 
-class ReportPage extends StatelessWidget {
-  const ReportPage({Key? key}) : super(key: key);
+class ReportPage extends StatefulWidget {
+  bool isShowAppBar;
+  ReportPage({Key? key, this.isShowAppBar = false}) : super(key: key);
 
+  @override
+  State<ReportPage> createState() => _ReportPageState();
+}
+
+class _ReportPageState extends State<ReportPage> {
   // Define report types with their properties
   final List<ReportType> reportTypes = const [
     ReportType(
@@ -47,6 +54,7 @@ class ReportPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: colorBackground,
+      appBar: !(widget.isShowAppBar) ? null : AuthAppBar(title: 'Reports'),
       body: SafeArea(
         child: RefreshIndicator(
           onRefresh: () async {

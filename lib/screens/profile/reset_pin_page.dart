@@ -4,7 +4,9 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
+import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/utils/Colors.dart';
+import 'package:zed_nano/utils/Common.dart';
 
 class ResetPinPage extends StatefulWidget {
   const ResetPinPage({Key? key}) : super(key: key);
@@ -62,7 +64,7 @@ class _ResetPinPageState extends State<ResetPinPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: colorBackground,
-      appBar: const AuthAppBar(title: 'Reset PIN'),
+      appBar: AuthAppBar(title: 'Reset PIN'),
       body: Form(
         key: _formKey,
         child: SingleChildScrollView(
@@ -302,9 +304,8 @@ class _ResetPinPageState extends State<ResetPinPage> {
       width: double.infinity,
       child: appButton(
         text: _isLoading ? 'Resetting PIN...' : 'Reset PIN',
-        onTap: _isLoading ? null : _resetPin,
+        onTap: _resetPin,
         context: context,
-        isLoading: _isLoading,
       ),
     );
   }
