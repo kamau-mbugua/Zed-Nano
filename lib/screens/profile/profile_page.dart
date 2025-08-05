@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/models/profile/ProfileResponse.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
+import 'package:zed_nano/screens/profile/delete_user_account_page.dart';
 import 'package:zed_nano/screens/profile/edit_profile_page.dart';
 import 'package:zed_nano/screens/profile/reset_pin_page.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
+import 'package:zed_nano/screens/widget/common/custom_dialog.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Images.dart';
@@ -246,10 +248,26 @@ class _ProfilePageState extends State<ProfilePage> {
           title: 'Delete Account',
           subtitle: 'Permanently delete your account and all associated data.',
           onTap: () {
-            _showDeleteAccountDialog();
+            // _showDeleteAccountDialog();
+            _confirmDeleteUserAccount();
           },
         ),
       ],
+    );
+  }
+
+  void _confirmDeleteUserAccount() {
+    showCustomDialog(
+      context: context,
+      title: 'Delete Account',
+      subtitle: 'By deleting your account, you will lose your personal and business data. This action cannot be undone.',
+      positiveButtonText: 'Delete',
+      negativeButtonText: 'Cancel',
+      positiveButtonColor: googleRed,
+      onPositivePressed: () async {
+        Navigator.pop(context);
+        await DeleteUserAccountPage().launch(context);
+      },
     );
   }
 

@@ -1061,7 +1061,9 @@ class BusinessRepo{
 
   Future<ApiResponse> getUserProfile() async {
     try {
-      final response = await dioClient!.get('${AppConstants.getUserProfile}');
+      var data = {};
+
+      final response = await dioClient!.post('${AppConstants.getUserProfile}', data: data);
       return ApiResponse.withSuccess(response);
     } catch (e) {
       return ApiResponse.withError(ApiErrorHandler.handleError(e));
@@ -1070,7 +1072,7 @@ class BusinessRepo{
 
   Future<ApiResponse> updateUserProfile({required Map<String, dynamic> requestData}) async {
     try {
-      final response = await dioClient!.put('${AppConstants.updateUserProfile}', data: requestData);
+      final response = await dioClient!.put('${AppConstants.updateUserProfile}/${requestData['id']}', data: requestData);
       return ApiResponse.withSuccess(response);
     } catch (e) {
       return ApiResponse.withError(ApiErrorHandler.handleError(e));
@@ -1088,7 +1090,7 @@ class BusinessRepo{
 
   Future<ApiResponse> resetUserPin({required Map<String, dynamic> requestData}) async {
     try {
-      final response = await dioClient!.post('${AppConstants.resetUserPin}', data: requestData);
+      final response = await dioClient!.put('${AppConstants.resetUserPin}', data: requestData);
       return ApiResponse.withSuccess(response);
     } catch (e) {
       return ApiResponse.withError(ApiErrorHandler.handleError(e));
@@ -1105,4 +1107,34 @@ class BusinessRepo{
   //     return ApiResponse.withError(ApiErrorHandler.handleError(e));
   //   }
   // }
+
+  // Sales Report APIs
+  Future<ApiResponse> getSalesSummary({required String startDate, required String endDate}) async {
+    try {
+      final response = await dioClient!.post(
+        '${AppConstants.getSalesSummary}?startDate=$startDate&endDate=$endDate',
+        data: {},
+      );
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
+
+  Future<ApiResponse> getTotalSales({
+    required String startDate,
+    required String endDate,
+    int limit = 10000,
+    int page = 1,
+  }) async {
+    try {
+      final response = await dioClient!.post(
+        '${AppConstants.getTotalSales}?limit=$limit&page=$page&startDate=$startDate&endDate=$endDate',
+        data: {},
+      );
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
 }

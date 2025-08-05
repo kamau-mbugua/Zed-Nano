@@ -20,6 +20,7 @@ import 'package:zed_nano/models/get_whatsapp_message_for_invoice/GetWhatsappMess
 import 'package:zed_nano/models/listUsers/ListUsersResponse.dart';
 import 'package:zed_nano/models/profile/ProfileResponse.dart';
 import 'package:zed_nano/models/sales_dashboard/SalesDashboardResponse.dart';
+import 'package:zed_nano/models/sales_report/SalesReportResponse.dart';
 import 'package:zed_nano/models/savePushy/CreateOrderResponse.dart';
 import 'package:zed_nano/models/createProduct/CreateProductResponse.dart';
 import 'package:zed_nano/models/createbillingInvoice/CreateBillingInvoiceResponse.dart';
@@ -1866,6 +1867,58 @@ class BusinessProviders extends BaseProvider {
     } else {
       finalResponseModel =
           ResponseModel<CommonResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
+  // Sales Report APIs
+  Future<ResponseModel<SalesReportSummaryResponse>> getSalesSummary({
+    required String startDate,
+    required String endDate,
+    required BuildContext context,
+  }) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.getSalesSummary(startDate: startDate, endDate: endDate), context);
+
+    ResponseModel<SalesReportSummaryResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<SalesReportSummaryResponse>(
+          true, responseModel.message!, SalesReportSummaryResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<SalesReportSummaryResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
+  Future<ResponseModel<SalesReportTotalSalesResponse>> getTotalSales({
+    required String startDate,
+    required String endDate,
+    int limit = 10000,
+    int page = 1,
+    required BuildContext context,
+  }) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.getTotalSales(
+          startDate: startDate,
+          endDate: endDate,
+          limit: limit,
+          page: page,
+        ), context);
+
+    ResponseModel<SalesReportTotalSalesResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<SalesReportTotalSalesResponse>(
+          true, responseModel.message!, SalesReportTotalSalesResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<SalesReportTotalSalesResponse>(false, responseModel.message!);
     }
 
     return finalResponseModel;

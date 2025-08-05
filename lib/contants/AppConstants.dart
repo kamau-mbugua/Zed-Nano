@@ -88,10 +88,12 @@ class AppConstants{
   static const String getBranchTerminals = 'api/v1/branchTerminals/Active';
   static const String getPaymentMethodsStatusNoAuth = 'api/v1/payments/payment_methods_status_no_auth';
   static const String doCashPayment = 'api/transactions/cashPayment';
-  static const String getUserProfile = 'api/v1/user/profile';
-  static const String updateUserProfile = 'api/v1/user/profile/update';
-  static const String deleteUserAccount = 'api/v1/user/account/delete';
-  static const String resetUserPin = 'api/v1/user/pin/reset';
+  static const String getUserProfile = 'api/get_my_user_profile';
+  static const String updateUserProfile = 'api/updateUser';
+  static const String deleteUserAccount = 'api/deleteAccount';
+  static const String resetUserPin = 'api/resetPinVersion2';
+  static const String getSalesSummary = 'api/v1/sales/sales_summary';
+  static const String getTotalSales = 'api/v1/sales/get_total_sales';
   static const String doCashPaymentInvoice = 'api/v1/payments/generalpayment';
   static const String cancelPushyTransaction = 'api/cancelPushyTransaction';
   static const String activateCustomer = 'api/activateCustomer';

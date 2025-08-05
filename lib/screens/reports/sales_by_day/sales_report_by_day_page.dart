@@ -22,6 +22,7 @@ class _SalesReportByDayPageState extends State<SalesReportByDayPage> {
   DateTime? _fromDate;
   DateTime? _toDate;
 
+
   final List<String> _durationOptions = [
     'this_week',
     'this_month',

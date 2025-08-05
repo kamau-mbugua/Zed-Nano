@@ -159,7 +159,8 @@ class CustomDialog extends StatelessWidget {
                   child: appButton(
                     text: positiveButtonText ?? 'Confirm',
                     onTap: onPositivePressed ?? () => Navigator.of(context).pop(true),
-                    context: context
+                    context: context,
+                      buttonColor: positiveButtonColor
                   ),
                 ),
             ],

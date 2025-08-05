@@ -28,12 +28,12 @@ InputDecoration inputDecoration(BuildContext context,
     prefixIcon: prefixIcon,
     errorMaxLines: 2,
     errorStyle: primaryTextStyle(color: Colors.red, size: 12),
-    enabledBorder:
-        const UnderlineInputBorder(borderSide: BorderSide(color: AppBorderColor)),
-    focusedBorder:
-        const UnderlineInputBorder(borderSide: BorderSide(color: appThemePrimary)),
-    border:
-        const UnderlineInputBorder(borderSide: BorderSide(color: appThemePrimary)),
+    enabledBorder: const UnderlineInputBorder(
+        borderSide: BorderSide(color: AppBorderColor)),
+    focusedBorder: const UnderlineInputBorder(
+        borderSide: BorderSide(color: appThemePrimary)),
+    border: const UnderlineInputBorder(
+        borderSide: BorderSide(color: appThemePrimary)),
     focusedErrorBorder: const UnderlineInputBorder(
         borderSide: BorderSide(color: Colors.red, width: 1.0)),
     errorBorder: const UnderlineInputBorder(
@@ -136,17 +136,20 @@ Widget appButton(
     {required String text,
     required Function onTap,
     double? width,
-      bool isEnable = true,
+    bool isEnable = true,
+    Color? buttonColor = appThemePrimary,
     required BuildContext context}) {
   return AppButton(
     shapeBorder: RoundedRectangleBorder(borderRadius: radius(AppCommonRadius)),
     text: text,
-    textStyle: boldTextStyle(color: Colors.white, fontFamily: "Poppins",
+    textStyle: boldTextStyle(
+        color: Colors.white,
+        fontFamily: "Poppins",
         size: 14,
         weight: FontWeight.w500),
     onTap: onTap,
     elevation: 0,
-    color: isEnable ? appThemePrimary : textSecondary,
+    color: isEnable ? buttonColor : textSecondary,
     width: width ?? context.width() - 32,
     height: 50,
   );
@@ -167,14 +170,15 @@ Widget appButtonWithIcon({
   required BuildContext context,
 }) {
   Widget iconWidget = const SizedBox.shrink();
-  
+
   if (iconPath != null) {
     // SVG icon
     iconWidget = SvgPicture.asset(
       iconPath,
       width: iconSize,
       height: iconSize,
-      colorFilter: const ColorFilter.mode(Colors.black,
+      colorFilter: const ColorFilter.mode(
+        Colors.black,
         BlendMode.srcIn,
       ),
     );
@@ -199,7 +203,7 @@ Widget appButtonWithIcon({
           borderRadius: BorderRadius.circular(AppCommonRadius),
         ),
       ),
-      child:  Center(child: iconWidget),
+      child: Center(child: iconWidget),
     ),
   );
 }
@@ -221,8 +225,7 @@ Widget outlineButton(
         color: textColor ?? appThemePrimary,
         fontFamily: "Poppins",
         size: 14,
-      weight: FontWeight.w500
-    ),
+        weight: FontWeight.w500),
     onTap: onTap,
     elevation: 0,
     color: Colors.transparent,
@@ -379,12 +382,11 @@ Widget buildOverviewCard(
         Text(value,
             style: const TextStyle(
               fontFamily: 'Poppins',
-              color:textPrimary,
+              color: textPrimary,
               fontSize: 14,
               fontWeight: FontWeight.w600,
               fontStyle: FontStyle.normal,
-            )
-        ),
+            )),
       ],
     ),
   );
@@ -393,7 +395,8 @@ Widget buildOverviewCard(
 /// Returns a BoxDecoration that matches the styling of StyledTextField
 BoxDecoration getStyledDropdownDecoration({bool disabled = false}) {
   return BoxDecoration(
-    borderRadius: BorderRadius.circular(13), // Matching StyledTextField border radius
+    borderRadius: BorderRadius.circular(13),
+    // Matching StyledTextField border radius
     color: disabled ? Colors.grey.shade100 : Colors.white,
     border: Border.all(
       color: BodyWhite, // Matching StyledTextField border color
@@ -425,8 +428,7 @@ Widget buildSalesSummaryRow({
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
                   fontStyle: FontStyle.normal,
-                )
-            ),
+                )),
             Text("$currency ${amount.formatCurrency()}",
                 style: const TextStyle(
                   fontFamily: 'Poppins',
@@ -435,14 +437,13 @@ Widget buildSalesSummaryRow({
                   fontWeight: FontWeight.w400,
                   fontStyle: FontStyle.normal,
                   letterSpacing: 0.12,
-
-                )
-            )
+                ))
           ],
         ),
         const SizedBox(height: 6),
         ClipRRect(
-          borderRadius: BorderRadius.circular(3.0), // Half of minHeight (6/2 = 3)
+          borderRadius: BorderRadius.circular(3.0),
+          // Half of minHeight (6/2 = 3)
           child: LinearProgressIndicator(
             value: percentage / 100,
             minHeight: 10,

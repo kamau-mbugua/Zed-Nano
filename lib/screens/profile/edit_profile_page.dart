@@ -5,6 +5,7 @@ import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
+import 'package:zed_nano/screens/widget/common/heading.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/Images.dart';
@@ -60,20 +61,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
       backgroundColor: colorBackground,
       appBar: AuthAppBar(
         title: 'Edit Profile',
-        actions: [
-          TextButton(
-            onPressed: _isLoading ? null : _saveProfile,
-            child: Text(
-              'Save',
-              style: TextStyle(
-                color: _isLoading ? textSecondary : appThemePrimary,
-                fontFamily: 'Poppins',
-                fontWeight: FontWeight.w600,
-                fontSize: 14,
-              ),
-            ),
-          ),
-        ],
       ),
       body: Form(
         key: _formKey,
@@ -81,15 +68,47 @@ class _EditProfilePageState extends State<EditProfilePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildProfileImageSection(),
-              32.height,
+              headings(
+                label: 'Edit Profile',
+                subLabel:
+                'Edit your personal information.',
+              ),
               _buildPersonalInfoSection(),
-              32.height,
               _buildContactInfoSection(),
-              32.height,
-              _buildSaveButton(),
             ],
           ).paddingAll(16),
+        ),
+      ),
+      bottomNavigationBar: _buildSubmitButton(),
+    );
+  }
+
+  Widget _buildSubmitButton() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, -5),
+          ),
+        ],
+      ),
+      child: SafeArea(
+        child: Row(
+          children: [
+            Expanded(
+              child: Visibility(
+                child: appButton(
+                  text: _isLoading ? 'Saving...' : 'Save Changes',
+                  onTap: _saveProfile,
+                  context: context,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -154,31 +173,40 @@ class _EditProfilePageState extends State<EditProfilePage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildSectionHeader('Personal Information'),
+        // _buildSectionHeader('Personal Information'),
         24.height,
-        _buildTextFormField(
-          controller: _firstNameController,
-          label: 'First Name',
-          hint: 'Enter your first name',
-          validator: (value) {
-            if (value == null || value.trim().isEmpty) {
-              return 'First name is required';
-            }
-            return null;
-          },
+        Row(
+          children: [
+            Expanded(
+              child: _buildTextFormField(
+                controller: _firstNameController,
+                label: 'First Name',
+                hint: 'Enter your first name',
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return 'First name is required';
+                  }
+                  return null;
+                },
+              ),
+            ),
+            16.width,
+            Expanded(
+              child: _buildTextFormField(
+                controller: _lastNameController,
+                label: 'Last Name',
+                hint: 'Enter your last name',
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return 'Last name is required';
+                  }
+                  return null;
+                },
+              ),
+            )
+          ],
         ),
-        20.height,
-        _buildTextFormField(
-          controller: _lastNameController,
-          label: 'Last Name',
-          hint: 'Enter your last name',
-          validator: (value) {
-            if (value == null || value.trim().isEmpty) {
-              return 'Last name is required';
-            }
-            return null;
-          },
-        ),
+
         20.height,
         _buildTextFormField(
           controller: _usernameController,
@@ -202,8 +230,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildSectionHeader('Contact Information'),
-        24.height,
         _buildTextFormField(
           controller: _emailController,
           label: 'Email Address',
@@ -239,6 +265,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
+
+
   Widget _buildSectionHeader(String title) {
     return Text(
       title,
@@ -261,14 +289,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: const TextStyle(
-            color: textPrimary,
-            fontWeight: FontWeight.w500,
-            fontFamily: 'Poppins',
-            fontSize: 14,
-          ),
+        Text(label,
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              color: textPrimary,
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+              fontStyle: FontStyle.normal,
+            )
         ),
         8.height,
         TextFormField(
@@ -355,12 +383,20 @@ class _EditProfilePageState extends State<EditProfilePage> {
     });
 
     try {
+
+      //get current timestamp
+      final now = DateTime.now();
+      final timestamp = now.toIso8601String();
+
       final requestData = {
-        'first_name': _firstNameController.text.trim(),
-        'seconde_name': _lastNameController.text.trim(),
-        'user_name': _usernameController.text.trim(),
-        'email': _emailController.text.trim(),
-        'phone_number': _phoneController.text.trim(),
+        'firstname': _firstNameController.text.trim(),
+        'secondname': _lastNameController.text.trim(),
+        'userName': _usernameController.text.trim(),
+        'userEmail': _emailController.text.trim(),
+        'userPhone': _phoneController.text.trim(),
+        'id': getAuthProvider(context).loginResponse?.userId,
+        'modifiedAtBy': getAuthProvider(context).loginResponse?.username,
+        'modifiedAt': '$timestamp'
       };
 
       final response = await getBusinessProvider(context).updateUserProfile(

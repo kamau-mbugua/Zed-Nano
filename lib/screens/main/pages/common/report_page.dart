@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/screens/reports/all_transactions/all_t_ranasctions_page.dart';
+import 'package:zed_nano/screens/reports/sales_report/sales_report_page.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Images.dart';
@@ -208,6 +209,7 @@ class _ReportPageState extends State<ReportPage> {
   void _handleReportTap(ReportType reportType, BuildContext context) {
     switch (reportType.title) {
       case 'Sales Report':
+        const SalesReportPage().launch(context);
         break;
       case 'Sales Report By Day':
         const SalesReportByDayPage().launch(context);

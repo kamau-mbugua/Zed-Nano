@@ -45,6 +45,7 @@ const Color grey900 = Color(0xFF212121);
 // Additional colors
 const Color inactiveButton = Color(0xFFE8E9F1);
 const Color lightBlue = Color(0xFFE7F1FF);
+const Color lightBlueColor = Color(0xFFE7F1FF);
 const Color lightOrange = Color(0xFFFFF3E6);
 const Color lightGreenColor = Color(0xFFE8F7F2);
 const Color orangeColor = Color(0xFFE86339);

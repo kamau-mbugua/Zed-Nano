@@ -321,9 +321,9 @@ class _ResetPinPageState extends State<ResetPinPage> {
 
     try {
       final requestData = {
-        'current_pin': _currentPinController.text,
-        'new_pin': _newPinController.text,
-        'confirm_pin': _confirmPinController.text,
+        'userPin': _currentPinController.text,
+        'userNewPin': _newPinController.text,
+        'userEmail': getAuthProvider(context).loginResponse?.email,
       };
 
       final response = await getBusinessProvider(context).resetUserPin(
