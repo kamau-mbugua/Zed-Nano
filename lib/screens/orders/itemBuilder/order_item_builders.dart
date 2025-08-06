@@ -42,7 +42,7 @@ Widget buildOrderItem({
                       color: Color(0xFF323232),
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 0),
                   Row(
                     children: [
                       Text(
@@ -75,7 +75,7 @@ Widget buildOrderItem({
               ),
             ),
             Expanded(
-              flex: 2,
+              flex: 3,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

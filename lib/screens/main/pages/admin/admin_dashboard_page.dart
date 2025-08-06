@@ -271,31 +271,34 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
   Widget build(BuildContext context) {
     return Consumer2<WorkflowViewModel, RefreshViewModel>(
       builder: (context, viewModel, refreshViewModel, _) {
-        return SafeArea(
-          child: RefreshIndicator(
-            onRefresh: _refreshDashboardData,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: ListView(
-                physics: const AlwaysScrollableScrollPhysics(),
-                children: [
-                  _buildHeader(viewModel),
-                  10.height,
-                  _buildSetupSteps(viewModel),
-                  10.height,
-                  _buildOverviewFilter(viewModel),
-                  10.height,
-                  _buildTransactionSummaryView(),
-                  10.height,
-                  const Text('Sales Summary', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
-                  10.height,
-                  buildSalesSummaryList(),
-                  16.height,
-                  const Text('Recent Sales', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
-                  10.height,
-                  buildRecentSalesList(),
-                  80.height, // extra space for FAB to float without covering content
-                ],
+        return Container(
+          color: Colors.white, // Add white background
+          child: SafeArea(
+            child: RefreshIndicator(
+              onRefresh: _refreshDashboardData,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: ListView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  children: [
+                    _buildHeader(viewModel),
+                    10.height,
+                    _buildSetupSteps(viewModel),
+                    10.height,
+                    _buildOverviewFilter(viewModel),
+                    10.height,
+                    _buildTransactionSummaryView(),
+                    10.height,
+                    const Text('Sales Summary', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
+                    10.height,
+                    buildSalesSummaryList(),
+                    16.height,
+                    const Text('Recent Sales', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
+                    10.height,
+                    buildRecentSalesList(),
+                    80.height, // extra space for FAB to float without covering content
+                  ],
+                ),
               ),
             ),
           ),
@@ -448,7 +451,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
               text: TextSpan(
                 children: [
                   TextSpan(text: '${viewModel.billingPlan?.freeTrialPeriodRemainingdays ?? 0} ', style: const TextStyle(color: accentRed, fontWeight: FontWeight.w600, fontSize: 16)),
-                  const TextSpan(text: 'Days Trial Left', style: TextStyle(color: accentRed, fontSize: 10)),
+                  const TextSpan(text: 'Trial Left', style: TextStyle(color: accentRed, fontSize: 10)),
                 ],
               ),
             ),

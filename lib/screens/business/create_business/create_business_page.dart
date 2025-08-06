@@ -16,6 +16,7 @@ import 'package:zed_nano/screens/widget/common/heading.dart';
 import 'package:zed_nano/screens/widget/common/location_picker_field.dart';
 import 'package:zed_nano/screens/widget/common/sub_category_picker.dart';
 import 'package:zed_nano/screens/widget/country_currency_picker.dart';
+import 'package:zed_nano/services/business_setup_extensions.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/Images.dart';
@@ -23,6 +24,7 @@ import 'package:zed_nano/utils/extensions.dart';
 import 'package:zed_nano/utils/image_picker_util.dart';
 import 'package:path/path.dart' as p;
 import 'package:http_parser/http_parser.dart';
+import 'package:zed_nano/viewmodels/WorkflowViewModel.dart';
 
 class CreateBusinessPage extends StatefulWidget {
   final VoidCallback onNext;
@@ -107,6 +109,8 @@ class _CreateBusinessPageState extends State<CreateBusinessPage> {
             value.message ?? 'Business created successfully',
             isError: false,);
 
+        await _initializeBusinessSetupAfterCreation(context);
+
         if (_logoImage != null) {
           await _uploadBusinessLogo(value.data!.businessNumber);
         } else {
@@ -117,6 +121,17 @@ class _CreateBusinessPageState extends State<CreateBusinessPage> {
             value.message ?? 'Something went wrong');
       }
     });
+  }
+
+  /// Initialize business setup after successful business creation
+  Future<void> _initializeBusinessSetupAfterCreation(BuildContext context) async {
+    try {
+      await context.businessSetup.initialize();
+
+      await Provider.of<WorkflowViewModel>(context, listen: false).skipSetup(context);
+    } catch (e) {
+      logger.e('Failed to initialize business setup after business creation: $e');
+    }
   }
 
   // Future<void> _uploadBusinessLogo() async {
@@ -155,7 +170,8 @@ class _CreateBusinessPageState extends State<CreateBusinessPage> {
       if (value.isSuccess) {
         showCustomToast(value.message ?? 'Business logo uploaded successfully',
             isError: false);
-        Navigator.pop(context);
+        widget.onNext();
+        // await _fetchGetTokenAfterInvite();
       } else {
         showCustomToast(value.message ?? 'Something went wrong');
       }
@@ -250,9 +266,19 @@ class _CreateBusinessPageState extends State<CreateBusinessPage> {
             5.height,
             SubCategoryPicker(
               label: 'Select BusinessCategory',
-              options:
-                  businessCategory?.map((e) => e.categoryName ?? '').toList() ??
-                      [],
+              options: businessCategory
+                  ?.where((category) => ![
+                        'SACCO(MICRO FINANCE)',
+                        'FMCG',
+                        'Rental',
+                        'Transport',
+                        'School/University/College',
+                        'Events',
+                        'Service station (Gas station)'
+                      ].contains(category.categoryName))
+                  .map((e) => e.categoryName ?? '')
+                  .toList() ??
+                  [],
               selectedValue: selectedCategory,
               onChanged: (value) {
                 final selectedCat = value;
@@ -316,7 +342,7 @@ class _CreateBusinessPageState extends State<CreateBusinessPage> {
                   _selectedLocation = location;
                 });
               },
-            ),
+            ).paddingSymmetric(horizontal: 16),
             10.height,
             const Text('Country & Currency',
                     style: TextStyle(

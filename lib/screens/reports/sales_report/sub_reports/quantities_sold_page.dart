@@ -193,7 +193,7 @@ class _QuantitiesSoldPageState extends State<QuantitiesSoldPage> {
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  'Filter',
+                  (_selectedRangeLabel ?? 'Filter').toDisplayLabel,
                   style: TextStyle(
                     color: textPrimary,
                     fontWeight: FontWeight.w400,

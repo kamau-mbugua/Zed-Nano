@@ -28,6 +28,191 @@ class BusinessInfoResponse {
   }
 }
 
+class BusinessBillingDetails {
+  final String? planId;
+  final String? customPlanId;
+  final String? subscriptionPlanName;
+  final String? subscriptionType;
+  final String? billingStatus;
+  final String? billingDueDate;
+  final int? billingRemainingDays;
+  final String? billingPeriodName;
+  final List<dynamic>? billableFeatures;
+  final String? billingType;
+  final NanoBusinessSubscription? nanoSubscription;
+
+  BusinessBillingDetails({
+    this.planId,
+    this.customPlanId,
+    this.subscriptionPlanName,
+    this.subscriptionType,
+    this.billingStatus,
+    this.billingDueDate,
+    this.billingRemainingDays,
+    this.billingPeriodName,
+    this.billableFeatures,
+    this.billingType,
+    this.nanoSubscription,
+  });
+
+  factory BusinessBillingDetails.fromJson(Map<String, dynamic> json) {
+    return BusinessBillingDetails(
+      planId: json['planId'] as String?,
+      customPlanId: json['customPlanId'] as String?,
+      subscriptionPlanName: json['subscriptionPlanName'] as String?,
+      subscriptionType: json['subscriptionType'] as String?,
+      billingStatus: json['billingStatus'] as String?,
+      billingDueDate: json['billingDueDate'] as String?,
+      billingRemainingDays: json['billingRemainingDays'] as int?,
+      billingPeriodName: json['billingPeriodName'] as String?,
+      billableFeatures: json['billableFeatures'] as List<dynamic>?,
+      billingType: json['billingType'] as String?,
+      nanoSubscription: json['nanoSubscription'] != null
+          ? NanoBusinessSubscription.fromJson(json['nanoSubscription'] as Map<String, dynamic>)
+          : null,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'planId': planId,
+      'customPlanId': customPlanId,
+      'subscriptionPlanName': subscriptionPlanName,
+      'subscriptionType': subscriptionType,
+      'billingStatus': billingStatus,
+      'billingDueDate': billingDueDate,
+      'billingRemainingDays': billingRemainingDays,
+      'billingPeriodName': billingPeriodName,
+      'billableFeatures': billableFeatures,
+      'billingType': billingType,
+      'nanoSubscription': nanoSubscription?.toJson(),
+    };
+  }
+}
+
+class NanoBusinessSubscription {
+  final List<NanoSubscriptionData>? data;
+  final String? freeTrialStatus;
+  final String? freeTrialPlanName;
+  final String? freeTrialEndTime;
+  final bool? isFreeTrialTried;
+  final bool? isFreeTrialEnded;
+  final bool? isActiveBillingPackage;
+  final int? freeTrialPeriodRemainingdays;
+
+  NanoBusinessSubscription({
+    this.data,
+    this.freeTrialStatus,
+    this.freeTrialPlanName,
+    this.freeTrialEndTime,
+    this.isFreeTrialTried,
+    this.isFreeTrialEnded,
+    this.isActiveBillingPackage,
+    this.freeTrialPeriodRemainingdays,
+  });
+
+  factory NanoBusinessSubscription.fromJson(Map<String, dynamic> json) {
+    return NanoBusinessSubscription(
+      data: json['data'] != null
+          ? (json['data'] as List)
+              .map((item) => NanoSubscriptionData.fromJson(item as Map<String, dynamic>))
+              .toList()
+          : null,
+      freeTrialStatus: json['freeTrialStatus'] as String?,
+      freeTrialPlanName: json['freeTrialPlanName'] as String?,
+      freeTrialEndTime: json['freeTrialEndTime'] as String?,
+      isFreeTrialTried: json['isFreeTrialTried'] as bool?,
+      isFreeTrialEnded: json['isFreeTrialEnded'] as bool?,
+      isActiveBillingPackage: json['isActiveBillingPackage'] as bool?,
+      freeTrialPeriodRemainingdays: json['freeTrialPeriodRemainingdays'] as int?,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'data': data?.map((item) => item.toJson()).toList(),
+      'freeTrialStatus': freeTrialStatus,
+      'freeTrialPlanName': freeTrialPlanName,
+      'freeTrialEndTime': freeTrialEndTime,
+      'isFreeTrialTried': isFreeTrialTried,
+      'isFreeTrialEnded': isFreeTrialEnded,
+      'isActiveBillingPackage': isActiveBillingPackage,
+      'freeTrialPeriodRemainingdays': freeTrialPeriodRemainingdays,
+    };
+  }
+}
+
+class NanoSubscriptionData {
+  final String? planId;
+  final String? planName;
+  final String? planStatus;
+  final String? dateSubscribed;
+  final String? startDate;
+  final String? dueDate;
+  final String? billingPeriodName;
+  final double? totalBillingPlanAmount;
+  final double? planSetUpFee;
+  final bool? isSetUpFeePaid;
+  final double? billingPeriodAmount;
+
+  NanoSubscriptionData({
+    this.planId,
+    this.planName,
+    this.planStatus,
+    this.dateSubscribed,
+    this.startDate,
+    this.dueDate,
+    this.billingPeriodName,
+    this.totalBillingPlanAmount,
+    this.planSetUpFee,
+    this.isSetUpFeePaid,
+    this.billingPeriodAmount,
+  });
+
+  factory NanoSubscriptionData.fromJson(Map<String, dynamic> json) {
+    return NanoSubscriptionData(
+      planId: json['planId'] as String?,
+      planName: json['planName'] as String?,
+      planStatus: json['planStatus'] as String?,
+      dateSubscribed: json['dateSubscribed'] as String?,
+      startDate: json['startDate'] as String?,
+      dueDate: json['dueDate'] as String?,
+      billingPeriodName: json['billingPeriodName'] as String?,
+      totalBillingPlanAmount: _parseDouble(json['totalBillingPlanAmount']),
+      planSetUpFee: _parseDouble(json['planSetUpFee']),
+      isSetUpFeePaid: json['isSetUpFeePaid'] as bool?,
+      billingPeriodAmount: _parseDouble(json['billingPeriodAmount']),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'planId': planId,
+      'planName': planName,
+      'planStatus': planStatus,
+      'dateSubscribed': dateSubscribed,
+      'startDate': startDate,
+      'dueDate': dueDate,
+      'billingPeriodName': billingPeriodName,
+      'totalBillingPlanAmount': totalBillingPlanAmount,
+      'planSetUpFee': planSetUpFee,
+      'isSetUpFeePaid': isSetUpFeePaid,
+      'billingPeriodAmount': billingPeriodAmount,
+    };
+  }
+
+  /// Helper method to safely parse double values
+  static double? _parseDouble(dynamic value) {
+    if (value == null) return null;
+    if (value is double) return value;
+    if (value is int) return value.toDouble();
+    if (value is String) {
+      return double.tryParse(value);
+    }
+    return null;
+  }
+}
+
 class BusinessInfoData {
   final bool? isNanoBusiness;
   final String? id;
@@ -202,6 +387,7 @@ class BusinessInfoData {
   final bool? isOpeningClosingStockEnabled;
   final bool? isStockOrderEnabled;
   final String? sessionTimeout;
+  final BusinessBillingDetails? businessBillingDetails;
 
   BusinessInfoData({
     this.isNanoBusiness,
@@ -377,6 +563,7 @@ class BusinessInfoData {
     this.isOpeningClosingStockEnabled,
     this.isStockOrderEnabled,
     this.sessionTimeout,
+    this.businessBillingDetails,
   });
 
   factory BusinessInfoData.fromJson(Map<String, dynamic> json) {
@@ -554,6 +741,9 @@ class BusinessInfoData {
       isOpeningClosingStockEnabled: json['isOpeningClosingStockEnabled'] as bool?,
       isStockOrderEnabled: json['isStockOrderEnabled'] as bool?,
       sessionTimeout: json['sessionTimeout'] as String?,
+      businessBillingDetails: json['businessBillingDetails'] != null
+          ? BusinessBillingDetails.fromJson(json['businessBillingDetails'] as Map<String, dynamic>)
+          : null,
     );
   }
 
@@ -732,6 +922,7 @@ class BusinessInfoData {
       'isOpeningClosingStockEnabled': isOpeningClosingStockEnabled,
       'isStockOrderEnabled': isStockOrderEnabled,
       'sessionTimeout': sessionTimeout,
+      'businessBillingDetails': businessBillingDetails?.toJson(),
     };
   }
 }

@@ -124,7 +124,7 @@ class _OpeningClosingReportPageState extends State<OpeningClosingReportPage> {
   }
 
   Widget _buildHeader() {
-    return Column(
+    return const Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
@@ -136,7 +136,7 @@ class _OpeningClosingReportPageState extends State<OpeningClosingReportPage> {
             fontSize: 28,
           ),
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: 8),
         Text(
           'An overview of stock performance.',
           style: TextStyle(
@@ -165,7 +165,7 @@ class _OpeningClosingReportPageState extends State<OpeningClosingReportPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
+        const Text(
           'Summary',
           style: TextStyle(
             color: textPrimary,
@@ -185,15 +185,15 @@ class _OpeningClosingReportPageState extends State<OpeningClosingReportPage> {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(
+                const Icon(
                   Icons.filter_list,
                   size: 16,
                   color: textSecondary,
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  'Filter',
-                  style: TextStyle(
+                  (_selectedRangeLabel ?? 'Filter').toDisplayLabel,
+                  style: const TextStyle(
                     color: textPrimary,
                     fontWeight: FontWeight.w400,
                     fontFamily: 'Poppins',
@@ -201,7 +201,7 @@ class _OpeningClosingReportPageState extends State<OpeningClosingReportPage> {
                   ),
                 ),
                 const SizedBox(width: 8),
-                Icon(
+                const Icon(
                   Icons.keyboard_arrow_right,
                   size: 16,
                   color: textSecondary,
@@ -277,7 +277,7 @@ class _OpeningClosingReportPageState extends State<OpeningClosingReportPage> {
           const SizedBox(height: 16),
           Text(
             title,
-            style: TextStyle(
+            style: const TextStyle(
               color: textSecondary,
               fontWeight: FontWeight.w400,
               fontFamily: 'Poppins',
@@ -287,7 +287,7 @@ class _OpeningClosingReportPageState extends State<OpeningClosingReportPage> {
           const SizedBox(height: 8),
           Text(
             value,
-            style: TextStyle(
+            style: const TextStyle(
               color: textPrimary,
               fontWeight: FontWeight.w600,
               fontFamily: 'Poppins',
@@ -303,7 +303,7 @@ class _OpeningClosingReportPageState extends State<OpeningClosingReportPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
+        const Text(
           'Recent Sales',
           style: TextStyle(
             color: textPrimary,
@@ -341,64 +341,74 @@ class _OpeningClosingReportPageState extends State<OpeningClosingReportPage> {
     );
   }
   Widget _buildRecentSaleItem(OpeningClosingData sale) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Column(
       children: [
-        Container(
-          width: 40,
-          height: 40,
-          decoration: BoxDecoration(
-            color: lightGreyColor,
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: rfCommonCachedNetworkImage(
-              sale.imageUrl ?? '',
-              width: 25,
-              height: 25
-              ,radius: 0
-          ),
-        ),
-        const SizedBox(width: 16),
-        // Product details
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                sale.productName ?? 'Unknown Product',
-                style: TextStyle(
-                  color: textPrimary,
-                  fontWeight: FontWeight.w400,
-                  fontFamily: 'Poppins',
-                  fontSize: 14,
-                ),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: lightGreyColor,
+                borderRadius: BorderRadius.circular(8),
               ),
-              6.height,
-              Text("Opening Stock: ${sale.openingStock?.toStringAsFixed(0) ?? '0'}",
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    color: neutralDarkLight,
-                    fontSize: 10,
-                    fontWeight: FontWeight.w400,
-                    fontStyle: FontStyle.normal,
-                    letterSpacing: 0.15,
-
-                  )
+              child: rfCommonCachedNetworkImage(
+                  sale.imageUrl ?? '',
+                  width: 25,
+                  height: 25
+                  ,radius: 0
               ),
-              const SizedBox(height: 12),
-              Row(
+            ),
+            const SizedBox(width: 16),
+            // Product details
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildProductDetail('Qty Sold:', sale.quantitySold?.toStringAsFixed(0) ?? '0'),
-                  const SizedBox(width: 12),
-                  _buildProductDetail('Received:', '${(sale.quantityReceived?.toStringAsFixed(0) ?? 0)}'),
-                  const SizedBox(width: 12),
-                  _buildProductDetail('Variance:', '${(sale.quantityVariance?.toStringAsFixed(0) ?? 0)}'),
-                  const SizedBox(width: 12),
-                  _buildProductDetail('Closing Stock::', '${(sale.closingStock?.toStringAsFixed(0) ?? 0)}'),
+                  Text(
+                    sale.productName ?? 'Unknown Product',
+                    style: const TextStyle(
+                      color: textPrimary,
+                      fontWeight: FontWeight.w400,
+                      fontFamily: 'Poppins',
+                      fontSize: 14,
+                    ),
+                  ),
+                  6.height,
+                  Text("Opening Stock: ${sale.openingStock?.toStringAsFixed(0) ?? '0'}",
+                      style: const TextStyle(
+                        fontFamily: 'Poppins',
+                        color: textSecondary,
+                        fontSize: 10,
+                        fontWeight: FontWeight.w400,
+                        fontStyle: FontStyle.normal,
+                        letterSpacing: 0.15,
+
+                      )
+                  ),
+                  const SizedBox(height: 12),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      _buildProductDetail('Qty Sold', sale.quantitySold?.toStringAsFixed(0) ?? '0'),
+                      // const SizedBox(width: 12),
+                      _buildProductDetail('Received', '${(sale.quantityReceived?.toStringAsFixed(0) ?? 0)}'),
+                      // const SizedBox(width: 12),
+                      _buildProductDetail('Variance', '${(sale.quantityVariance?.toStringAsFixed(0) ?? 0)}'),
+                      // const SizedBox(width: 12),
+                      _buildProductDetail('Closing Stock', '${(sale.closingStock?.toStringAsFixed(0) ?? 0)}'),
+                    ],
+                  ),
                 ],
               ),
-            ],
-          ),
+            ),
+          ],
+        ),
+        16.height,
+        const Divider(
+          height: 1,
+          color: lightGreyColor,
         ),
       ],
     );
@@ -410,7 +420,7 @@ class _OpeningClosingReportPageState extends State<OpeningClosingReportPage> {
       children: [
         Text(
           label,
-          style: TextStyle(
+          style: const TextStyle(
             color: textSecondary,
             fontWeight: FontWeight.w400,
             fontFamily: 'Poppins',
@@ -420,7 +430,7 @@ class _OpeningClosingReportPageState extends State<OpeningClosingReportPage> {
         const SizedBox(height: 4),
         Text(
           value,
-          style: TextStyle(
+          style: const TextStyle(
             color: textPrimary,
             fontWeight: FontWeight.w400,
             fontFamily: 'Poppins',
@@ -435,4 +445,3 @@ class _OpeningClosingReportPageState extends State<OpeningClosingReportPage> {
     _paginationController.refresh();
   }
 }
-

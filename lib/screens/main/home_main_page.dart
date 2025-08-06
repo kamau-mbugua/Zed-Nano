@@ -154,8 +154,8 @@ class _HomeMainPageState extends State<HomeMainPage> {
               children: _buildScreens(),
             ),
           ),
-          bottomNavigationBar: _buildBottomNavigationBar(),
-          floatingActionButton: selectedIndex == 0 || selectedIndex == 2
+          bottomNavigationBar: workflowViewModel.workflowState == 'COMPLETE' ? _buildBottomNavigationBar() : null,
+          floatingActionButton: (selectedIndex == 0 || selectedIndex == 2) && workflowViewModel.workflowState == 'COMPLETE'
               ? FloatingActionButton.extended(
                   heroTag: 'home_main_fab',
                   onPressed: () {

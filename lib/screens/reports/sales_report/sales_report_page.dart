@@ -219,7 +219,7 @@ class _SalesReportPageState extends State<SalesReportPage> {
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  'Filter',
+                  (_selectedRangeLabel ?? 'Filter').toDisplayLabel,
                   style: TextStyle(
                     color: textPrimary,
                     fontWeight: FontWeight.w400,
@@ -395,30 +395,36 @@ class _SalesReportPageState extends State<SalesReportPage> {
         ),
         const SizedBox(height: 16),
         Expanded(
-          child: PagedListView<int, SalesReportTotalSalesData>(
-            pagingController: _paginationController.pagingController,
+          child: Container(
             padding: const EdgeInsets.all(0),
-            builderDelegate: PagedChildBuilderDelegate<SalesReportTotalSalesData>(
-              itemBuilder: (context, item, index) {
-               return _buildRecentSaleItem(item).paddingSymmetric(horizontal: 16,vertical: 8);
-              },
-              firstPageProgressIndicatorBuilder: (_) => const Center(
-                child: SizedBox(),
-              ),
-              newPageProgressIndicatorBuilder: (_) => const Center(
-                child: SizedBox(),
-              ),
-              noItemsFoundIndicatorBuilder: (context) => const Center(
-                child: CompactGifDisplayWidget(
-                  gifPath: emptyListGif,
-                  title: "It's empty, over here.",
-                  subtitle: "No recent sales in your business, yet! Add to view them here.",
-                ),
-              ),
-            ),
+            child: _buildRecentSalesList(),
           ),
         ),
       ],
+    );
+  }
+  Widget _buildRecentSalesList() {
+    return PagedListView<int, SalesReportTotalSalesData>(
+      pagingController: _paginationController.pagingController,
+      padding: const EdgeInsets.all(0),
+      builderDelegate: PagedChildBuilderDelegate<SalesReportTotalSalesData>(
+        itemBuilder: (context, item, index) {
+         return _buildRecentSaleItem(item).paddingSymmetric(horizontal: 16,vertical: 8);
+        },
+        firstPageProgressIndicatorBuilder: (_) => const Center(
+          child: SizedBox(),
+        ),
+        newPageProgressIndicatorBuilder: (_) => const Center(
+          child: SizedBox(),
+        ),
+        noItemsFoundIndicatorBuilder: (context) => const Center(
+          child: CompactGifDisplayWidget(
+            gifPath: emptyListGif,
+            title: "It's empty, over here.",
+            subtitle: "No recent sales in your business, yet! Add to view them here.",
+          ),
+        ),
+      ),
     );
   }
   Widget _buildRecentSaleItem(SalesReportTotalSalesData sale) {
@@ -426,8 +432,8 @@ class _SalesReportPageState extends State<SalesReportPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          width: 40,
-          height: 40,
+          width: 30,
+          height: 30,
           decoration: BoxDecoration(
             color: lightGreyColor,
             borderRadius: BorderRadius.circular(8),
@@ -439,28 +445,41 @@ class _SalesReportPageState extends State<SalesReportPage> {
               ,radius: 0
           ),
         ),
-        const SizedBox(width: 16),
+        const SizedBox(width: 10),
         // Product details
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                sale.productName ?? 'Unknown Product',
-                style: TextStyle(
-                  color: textPrimary,
-                  fontWeight: FontWeight.w400,
-                  fontFamily: 'Poppins',
-                  fontSize: 14,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    sale.productName ?? 'Unknown Product',
+                    style: TextStyle(
+                      color: textPrimary,
+                      fontWeight: FontWeight.w400,
+                      fontFamily: 'Poppins',
+                      fontSize: 14,
+                    ),
+                  ),
+                  Text(
+                    'KES ${(sale.totalSales?.formatCurrency() ?? 0)}',
+                    style: TextStyle(
+                      color: textPrimary,
+                      fontWeight: FontWeight.w600,
+                      fontFamily: 'Poppins',
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 12),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   _buildProductDetail('Qty:', sale.quantitySold?.toStringAsFixed(0) ?? '0'),
-                  const SizedBox(width: 24),
                   _buildProductDetail('Selling Price:', 'KES ${(sale.sellingPrice?.formatCurrency() ?? 0)}'),
-                  const SizedBox(width: 24),
                   _buildProductDetail('Discount:', 'KES ${(sale.discount?.formatCurrency() ?? 0)}'),
                 ],
               ),
@@ -468,15 +487,7 @@ class _SalesReportPageState extends State<SalesReportPage> {
           ),
         ),
         // Total amount
-        Text(
-          'KES ${(sale.totalSales?.formatCurrency() ?? 0)}',
-          style: TextStyle(
-            color: textPrimary,
-            fontWeight: FontWeight.w600,
-            fontFamily: 'Poppins',
-            fontSize: 14,
-          ),
-        ),
+
       ],
     );
   }

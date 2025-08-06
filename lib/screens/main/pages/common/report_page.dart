@@ -3,6 +3,7 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/screens/reports/all_transactions/all_t_ranasctions_page.dart';
 import 'package:zed_nano/screens/reports/opening_closing_report/opening_closing_report_page.dart';
 import 'package:zed_nano/screens/reports/sales_report/sales_report_page.dart';
+import 'package:zed_nano/screens/reports/void_transaactions/voided_transactions_page.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Images.dart';
@@ -222,6 +223,7 @@ class _ReportPageState extends State<ReportPage> {
         AllTRanasctionsPage().launch(context);
         break;
       case 'Void Transactions Report':
+        VoidedTransactionsPage().launch(context);
         break;
     }
   }

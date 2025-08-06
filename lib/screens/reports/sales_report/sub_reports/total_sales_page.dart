@@ -184,7 +184,7 @@ class _TotalSalesPageState extends State<TotalSalesPage> {
               border: Border.all(color: textSecondary.withOpacity(0.3)),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: const Row(
+            child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Icon(
@@ -192,9 +192,9 @@ class _TotalSalesPageState extends State<TotalSalesPage> {
                   size: 16,
                   color: textSecondary,
                 ),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 Text(
-                  'Filter',
+                  (_selectedRangeLabel ?? 'Filter').toDisplayLabel,
                   style: TextStyle(
                     color: textPrimary,
                     fontWeight: FontWeight.w400,
@@ -202,7 +202,7 @@ class _TotalSalesPageState extends State<TotalSalesPage> {
                     fontSize: 12,
                   ),
                 ),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 Icon(
                   Icons.keyboard_arrow_right,
                   size: 16,
@@ -423,4 +423,3 @@ class _TotalSalesPageState extends State<TotalSalesPage> {
     _paginationController.refresh();
   }
 }
-

@@ -79,7 +79,7 @@ class _AddUserPageState extends State<AddUserPage> {
     requestData['businessLocation'] = '';
     requestData['businessPhone'] = '';
     requestData['loginState'] = 'Active';
-    requestData['isCreatedViaNano'] = true;
+    requestData['isCreatedViaNano'] = 'true';
     requestData['businessNumber'] = getBusinessDetails(context)?.businessNumber;
     await getBusinessProvider(context)
         .addNewUser(requestData: requestData, context: context)
@@ -360,7 +360,11 @@ class _AddUserPageState extends State<AddUserPage> {
         8.height,
         SubCategoryPicker(
           label: 'Select Role',
-          options: businessRole?.map((e) => e.name ?? '').toList() ?? [],
+          options: businessRole
+              ?.where((role) => ['Cashier', 'Merchant', 'Supervisor', 'Owner']
+                  .contains(role.name))
+              .map((e) => e.name ?? '')
+              .toList() ?? [],
           selectedValue: selectedBusinessRole,
           onChanged: (value) {
             final selectedCat = value;

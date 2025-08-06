@@ -1162,9 +1162,24 @@ class BusinessRepo{
     int page = 1,
   }) async {
     try {
-      final response = await dioClient!.post(
+      final response = await dioClient!.get(
         '${AppConstants.getClosingOpeningReport}?limit=$limit&page=$page&startDate=$startDate&endDate=$endDate',
-        data: {},
+      );
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
+
+  Future<ApiResponse> getVoidedTRansactionReports({
+    required String startDate,
+    required String endDate,
+    int limit = 10000,
+    int page = 1,
+  }) async {
+    try {
+      final response = await dioClient!.get(
+        '${AppConstants.getVoidedTRansactionReports}?limit=$limit&page=$page&startDate=$startDate&endDate=$endDate',
       );
       return ApiResponse.withSuccess(response);
     } catch (e) {

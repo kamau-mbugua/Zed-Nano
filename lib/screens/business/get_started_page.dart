@@ -8,6 +8,7 @@ import 'package:zed_nano/screens/business/create_business/create_business_page.d
 import 'package:zed_nano/screens/business/subscription/choose_subscription_page.dart';
 import 'package:zed_nano/screens/business/subscription/subscription_payment_page.dart';
 import 'package:zed_nano/screens/business/wifget/stepper_indicator.dart';
+import 'package:zed_nano/services/business_setup_extensions.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/models/createbillingInvoice/CreateBillingInvoiceResponse.dart';
 import 'package:zed_nano/viewmodels/WorkflowViewModel.dart';
@@ -56,10 +57,22 @@ class _GetStartedPageState extends State<GetStartedPage> {
       Navigator.pop(context);
       
       // Get the ViewModel and handle the skip operation
-      final viewModel = Provider.of<WorkflowViewModel>(context, listen: false);
-      await viewModel.skipSetup(context);
+      _initializeBusinessSetupAfterCreation(context);
     } catch (e) {
       logger.e('Error in goSkip: $e');
+    }
+  }
+
+  Future<void> _initializeBusinessSetupAfterCreation(BuildContext context) async {
+    try {
+      await context.businessSetup.initialize();
+
+      await Provider.of<WorkflowViewModel>(context, listen: false).skipSetup(context);
+
+      Navigator.of(context).pushReplacementNamed(AppRoutes.getHomeMainPageRoute());
+
+    } catch (e) {
+      logger.e('Failed to initialize business setup after business creation: $e');
     }
   }
 

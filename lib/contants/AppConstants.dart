@@ -96,6 +96,7 @@ class AppConstants{
   static const String getTotalSales = 'api/v1/sales/get_total_sales';
   static const String getProductGrossMargin = 'api/v1/sales/get_product_gross_margin';
   static const String getClosingOpeningReport = 'api/v1/business/getStock';
+  static const String getVoidedTRansactionReports = 'api/v1/payments/void-approved';
   static const String getTotalQuantitiesSold = 'api/v1/sales/quantities_sold';
   static const String getTotalSalesReport = 'api/v1/sales/get_total_sales';
   static const String getProductTotalCost = 'api/v1/sales/product_total_cost';

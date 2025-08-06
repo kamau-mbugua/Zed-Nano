@@ -165,7 +165,7 @@ class _WelcomeSetupScreenState extends State<WelcomeSetupScreen> {
               ),
               16.height,
               Visibility(
-                visible: true,
+                visible: false,
                 child: outlineButton(
                     text: 'Join a Business',
                     onTap: (){

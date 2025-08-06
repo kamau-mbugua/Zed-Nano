@@ -11,12 +11,14 @@ import 'package:zed_nano/screens/customers/itemBuilder/list_customers_transactio
 import 'package:zed_nano/screens/reports/itemBuilders/all_transactions_item_builder.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
+import 'package:zed_nano/screens/widget/common/date_range_filter_bottom_sheet.dart';
 import 'package:zed_nano/screens/widget/common/filter_row_widget.dart';
 import 'package:zed_nano/screens/widget/common/heading.dart';
 import 'package:zed_nano/screens/widget/common/searchview.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
 import 'package:zed_nano/utils/Images.dart';
+import 'package:zed_nano/utils/date_range_util.dart';
 import 'package:zed_nano/utils/extensions.dart';
 import 'package:zed_nano/utils/pagination_controller.dart';
 
@@ -35,6 +37,9 @@ class _AllTRanasctionsPageState extends State<AllTRanasctionsPage> {
   bool _isInitialized = false;
   Timer? _debounceTimer;
   TransactionListResponse? transactionListResponse;
+
+  String _selectedRangeLabel = 'this_month';
+
 
   @override
   void initState() {
@@ -55,13 +60,16 @@ class _AllTRanasctionsPageState extends State<AllTRanasctionsPage> {
 
   Future<List<ViewTransactionData>> viewAllTransactions(
       {required int page, required int limit}) async {
+    final dateRange = DateRangeUtil.getDateRange(_selectedRangeLabel);
+    final startDate = dateRange.values.first.removeTimezoneOffset;
+    final endDate = dateRange.values.last.removeTimezoneOffset;
     final response = await getBusinessProvider(context).viewAllTransactions(
       page: page,
       limit: limit,
       searchValue: _searchTerm,
       context: context,
-      startDate: '',
-      endDate: '',
+      startDate: startDate,
+      endDate: endDate,
     );
     setState(() {
       transactionListResponse = response.data;
@@ -77,6 +85,23 @@ class _AllTRanasctionsPageState extends State<AllTRanasctionsPage> {
       });
       _paginationController.refresh();
     });
+  }
+
+  void _showDateRangeFilter() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => DateRangeFilterBottomSheet(
+        selectedRangeLabel: _selectedRangeLabel,
+        onRangeSelected: (rangeLabel) {
+          setState(() {
+            _selectedRangeLabel = rangeLabel;
+          });
+          _paginationController.refresh();
+        },
+      ),
+    );
   }
 
   @override
@@ -259,9 +284,11 @@ class _AllTRanasctionsPageState extends State<AllTRanasctionsPage> {
               ),
             ),
             buildFilterButton(
-              text: 'Filters',
+              text:(_selectedRangeLabel ?? 'Filter').toDisplayLabel,
               isActive: false,
-              onTap: () {},
+              onTap: () {
+                _showDateRangeFilter();
+              },
               icon: Icons.filter_list,
               showArrow: true,
             ),

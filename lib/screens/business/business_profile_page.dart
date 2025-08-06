@@ -20,45 +20,42 @@ class BusinessProfilePage extends StatefulWidget {
   final BusinessInfoData businessData;
   final Future<void> Function()? onRefreshRequest;
 
-  BusinessProfilePage({
-    Key? key,
-    required this.businessData,
-    this.onRefreshRequest
-  }) : super(key: key);
+  BusinessProfilePage(
+      {Key? key, required this.businessData, this.onRefreshRequest})
+      : super(key: key);
 
   @override
   State<BusinessProfilePage> createState() => _BusinessProfilePageState();
 }
 
 class _BusinessProfilePageState extends State<BusinessProfilePage> {
-
   NanoSubscription? subscribedBillingPlansResponse;
-
 
   @override
   void initState() {
     super.initState();
-    
+
     // Fetch billing plan information after the build phase
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _loadSubscriptionData();
     });
   }
-  
+
   Future<void> _loadSubscriptionData() async {
     final billingPlan = getWorkflowViewModel(context).billingPlan;
-    
+
     if (mounted) {
       setState(() {
         subscribedBillingPlansResponse = billingPlan;
       });
-      
+
       if (subscribedBillingPlansResponse == null) {
         await getWorkflowViewModel(context).skipSetup(context);
-        
+
         if (mounted) {
           setState(() {
-            subscribedBillingPlansResponse = getWorkflowViewModel(context).billingPlan;
+            subscribedBillingPlansResponse =
+                getWorkflowViewModel(context).billingPlan;
           });
         }
       }
@@ -70,7 +67,7 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AuthAppBar(
-        title:'Business Profile',
+        title: 'Business Profile',
       ),
       body: RefreshIndicator(
         onRefresh: () async {
@@ -86,9 +83,7 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
             children: [
               _buildBusinessHeader(),
               const Divider(height: 32, thickness: 0.5),
-              subscribedBillingPlansResponse?.data?.isNotEmpty == true ?
-              _buildSubscriptionSection() :
-              const SizedBox(height: 32),
+              if (subscribedBillingPlansResponse?.data?.isNotEmpty == true) _buildSubscriptionSection() else const SizedBox(height: 32),
               const Divider(height: 32, thickness: 0.5),
               _buildBusinessDetailsSection(),
               const SizedBox(height: 32), // for scrollable area
@@ -96,7 +91,6 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
           ),
         ),
       ),
-
     );
   }
 
@@ -180,12 +174,11 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: rfCommonCachedNetworkImage(
-                '${AppConstants.baseUrl}staticimages/logos/${widget.businessData?.businessLogo}',
-                fit: BoxFit.fill,
-              )
-            ),
+                borderRadius: BorderRadius.circular(12),
+                child: rfCommonCachedNetworkImage(
+                  '${AppConstants.baseUrl}staticimages/logos/${widget.businessData?.businessLogo}',
+                  fit: BoxFit.fill,
+                )),
           ),
         ),
       ],
@@ -214,9 +207,10 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
             ),
             GestureDetector(
               onTap: () {
-                const GetStartedPage(initialStep:2, isExistingPlan:true).launch(context);
+                const GetStartedPage(initialStep: 2, isExistingPlan: true)
+                    .launch(context);
               },
-              child: Text(
+              child: const Text(
                 'Change/Post Pay',
                 style: TextStyle(
                   color: accentRed, // highlightHighlightDarkest
@@ -229,73 +223,110 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
           ],
         ),
         const SizedBox(height: 8),
-
-        // Subscription Details
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                subscribedBillingPlansResponse != null && subscribedBillingPlansResponse!.data!.isNotEmpty ? Text(
-                '${subscribedBillingPlansResponse?.data?[0]?.billingPeriodName ?? ''} Subscription',
-                  style: const TextStyle(
-                    color: darkGreyColor, // neutralDarkDarkest
-                    fontWeight: FontWeight.w400,
-                    fontFamily: 'Poppins',
-                    fontSize: 14.0,
-                  ),
-                )
-                : const Text(
-                  'Subscription',
-                  style: TextStyle(
-                    color: darkGreyColor, // neutralDarkDarkest
-                    fontWeight: FontWeight.w400,
-                    fontFamily: 'Poppins',
-                    fontSize: 14.0,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Row(
-                  children: [
-                    Text(
-                      '${widget.businessData.localCurrency ?? 'KES'} ${subscribedBillingPlansResponse?.data?[0]?.totalBillingPlanAmount?.formatCurrency() ?? '0'}',
-                      style: const TextStyle(
-                        color: textSecondary, // neutralDarkLight
-                        fontWeight: FontWeight.w400,
-                        fontFamily: 'Poppins',
-                        fontSize: 12.0,
+        if ((widget.businessData?.businessBillingDetails?.nanoSubscription
+                        ?.freeTrialStatus ==
+                    'Active') ==
+                true) Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Free Trial Subscription',
+                        style: TextStyle(
+                          color: darkGreyColor, // neutralDarkDarkest
+                          fontWeight: FontWeight.w400,
+                          fontFamily: 'Poppins',
+                          fontSize: 14.0,
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      '. Due: ${subscribedBillingPlansResponse?.data?[0]?.dueDate?.toFormattedDate()}',
-                      style: const TextStyle(
-                        color: textSecondary, // neutralDarkLight
-                        fontWeight: FontWeight.w400,
-                        fontFamily: 'Poppins',
-                        fontSize: 12.0,
+                      const SizedBox(height: 4),
+                      Text(
+                        'Due in:  ${widget.businessData?.businessBillingDetails?.nanoSubscription?.freeTrialPeriodRemainingdays}',
+                        style: const TextStyle(
+                          color: textSecondary, // neutralDarkLight
+                          fontWeight: FontWeight.w400,
+                          fontFamily: 'Poppins',
+                          fontSize: 12.0,
+                        ),
                       ),
+                    ],
+                  ),
+                  Text(
+                    widget.businessData?.businessBillingDetails?.nanoSubscription?.isActiveBillingPackage ==
+                            true
+                        ? 'Active'
+                        : 'Inactive',
+                    style: TextStyle(
+                      color: widget.businessData?.businessBillingDetails?.nanoSubscription?.isActiveBillingPackage ==
+                              true
+                          ? successTextColor
+                          : Colors.orange[700],
+                      fontWeight: FontWeight.w400,
+                      fontFamily: 'Poppins',
+                      fontSize: 18.0,
                     ),
-                  ],
-                ),
-              ],
-            ),
-            Text(
-              subscribedBillingPlansResponse?.isActiveBillingPackage == true
-                  ? 'Active'
-                  : 'Inactive',
-              style: TextStyle(
-                color: subscribedBillingPlansResponse?.isActiveBillingPackage == true
-                    ? successTextColor
-                    : Colors.orange[700],
-                fontWeight: FontWeight.w400,
-                fontFamily: 'Poppins',
-                fontSize: 18.0,
+                  ),
+                ],
+              ) else Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '${widget.businessData?.businessBillingDetails?.nanoSubscription?.data?[0]?.billingPeriodName ?? ''} Subscription',
+                        style: const TextStyle(
+                          color: darkGreyColor, // neutralDarkDarkest
+                          fontWeight: FontWeight.w400,
+                          fontFamily: 'Poppins',
+                          fontSize: 14.0,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Row(
+                        children: [
+                          Text(
+                            '${widget.businessData.localCurrency ?? 'KES'} ${widget.businessData?.businessBillingDetails?.nanoSubscription?.data?[0]?.totalBillingPlanAmount?.formatCurrency() ?? '0'}',
+                            style: const TextStyle(
+                              color: textSecondary, // neutralDarkLight
+                              fontWeight: FontWeight.w400,
+                              fontFamily: 'Poppins',
+                              fontSize: 12.0,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            '. Due: ${widget.businessData?.businessBillingDetails?.nanoSubscription?.data?[0]?.dueDate?.toFormattedDate()}',
+                            style: const TextStyle(
+                              color: textSecondary, // neutralDarkLight
+                              fontWeight: FontWeight.w400,
+                              fontFamily: 'Poppins',
+                              fontSize: 12.0,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  Text(
+                    widget.businessData?.businessBillingDetails?.nanoSubscription?.isActiveBillingPackage ==
+                            true
+                        ? 'Active'
+                        : 'Inactive',
+                    style: TextStyle(
+                      color: widget.businessData?.businessBillingDetails?.nanoSubscription?.isActiveBillingPackage ==
+                              true
+                          ? successTextColor
+                          : Colors.orange[700],
+                      fontWeight: FontWeight.w400,
+                      fontFamily: 'Poppins',
+                      fontSize: 18.0,
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ],
-        ),
         const SizedBox(height: 8),
       ],
     );
@@ -304,12 +335,36 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
   Widget _buildBusinessDetailsSection() {
     // Business details items with dynamic data
     final List<Map<String, String>> details = [
-      {'title': 'Business Name', 'value': widget.businessData.businessName ?? 'N/A', 'color': 'dark'},
-      {'title': 'Phone Number', 'value': widget.businessData.businessOwnerPhone ?? 'N/A', 'color': 'medium'},
-      {'title': 'Email Address', 'value': widget.businessData.businessOwnerEmail ?? 'N/A', 'color': 'medium'},
-      {'title': 'Location', 'value': widget.businessData.businessOwnerAddress ?? 'N/A', 'color': 'dark'},
-      {'title': 'Directors/Owners', 'value': widget.businessData.businessOwnerName ?? 'N/A', 'color': 'medium'},
-      {'title': 'Currency', 'value': widget.businessData.localCurrency ?? 'KES', 'color': 'medium'},
+      {
+        'title': 'Business Name',
+        'value': widget.businessData.businessName ?? 'N/A',
+        'color': 'dark'
+      },
+      {
+        'title': 'Phone Number',
+        'value': widget.businessData.businessOwnerPhone ?? 'N/A',
+        'color': 'medium'
+      },
+      {
+        'title': 'Email Address',
+        'value': widget.businessData.businessOwnerEmail ?? 'N/A',
+        'color': 'medium'
+      },
+      {
+        'title': 'Location',
+        'value': widget.businessData.businessOwnerAddress ?? 'N/A',
+        'color': 'dark'
+      },
+      {
+        'title': 'Directors/Owners',
+        'value': widget.businessData.businessOwnerName ?? 'N/A',
+        'color': 'medium'
+      },
+      {
+        'title': 'Currency',
+        'value': widget.businessData.localCurrency ?? 'KES',
+        'color': 'medium'
+      },
     ];
 
     return Column(
@@ -333,13 +388,15 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
             ),
             GestureDetector(
               onTap: () {
-                Navigator.pushNamed(context, AppRoutes.getEditBusinessScreenRoute()).then((_) {
+                Navigator.pushNamed(
+                        context, AppRoutes.getEditBusinessScreenRoute())
+                    .then((_) {
                   if (widget.onRefreshRequest != null) {
                     widget.onRefreshRequest!();
                   }
                 });
               },
-              child: Text(
+              child: const Text(
                 'Edit',
                 style: TextStyle(
                   color: accentRed, // highlightHighlightDarkest
@@ -354,36 +411,39 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
         const SizedBox(height: 8),
 
         // List of business details
-        ...details.map((item) => Padding(
-          padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                item['title']!,
-                style: const TextStyle(
-                  color: Colors.black45, // neutralDarkLightest
-                  fontWeight: FontWeight.w400,
-                  fontFamily: 'Poppins',
-                  fontSize: 14.0,
-                ),
-              ),
-              Flexible(
-                child: Text(
-                  item['value']!,
-                  textAlign: TextAlign.right,
-                  style: TextStyle(
-                    color: darkGreyColor, // neutralDarkMedium
-                    fontWeight: FontWeight.w400,
-                    fontFamily: 'Poppins',
-                    fontSize: 14.0,
+        ...details
+            .map((item) => Padding(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 12.0, horizontal: 8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        item['title']!,
+                        style: const TextStyle(
+                          color: Colors.black45, // neutralDarkLightest
+                          fontWeight: FontWeight.w400,
+                          fontFamily: 'Poppins',
+                          fontSize: 14.0,
+                        ),
+                      ),
+                      Flexible(
+                        child: Text(
+                          item['value']!,
+                          textAlign: TextAlign.right,
+                          style: const TextStyle(
+                            color: darkGreyColor, // neutralDarkMedium
+                            fontWeight: FontWeight.w400,
+                            fontFamily: 'Poppins',
+                            fontSize: 14.0,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-              ),
-            ],
-          ),
-        )).toList(),
+                ))
+            .toList(),
       ],
     );
   }

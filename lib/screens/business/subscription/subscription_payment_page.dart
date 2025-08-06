@@ -69,6 +69,7 @@ class _CompleteSubscriptionScreenState extends State<CompleteSubscriptionScreen>
           businessNumber: businessDetails?.businessNumber ?? '',
           onPaymentComplete: () {
             showCustomToast('Payment completed successfully!', isError: false);
+            widget?.onSkip();
           },
           onPaymentCancelled: () {
             Navigator.pop(context);
@@ -106,8 +107,9 @@ class _CompleteSubscriptionScreenState extends State<CompleteSubscriptionScreen>
               sTKPaymentType: STKPaymentType.KCB,
               onPaymentSuccess: () {
                 showCustomToast('Payment completed successfully!', isError: false);
-                // Navigate back to parent screens or home
-                Navigator.of(context).popUntil((route) => route.isFirst);
+                widget?.onSkip();
+                // // Navigate back to parent screens or home
+                // Navigator.of(context).popUntil((route) => route.isFirst);
               },
               onPaymentError: (errorMessage) {
                 showCustomToast(errorMessage, isError: true);

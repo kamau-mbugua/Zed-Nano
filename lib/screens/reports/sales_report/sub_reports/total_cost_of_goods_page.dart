@@ -184,7 +184,7 @@ class _TotalCostOfGoodsPageState extends State<TotalCostOfGoodsPage> {
               border: Border.all(color: textSecondary.withOpacity(0.3)),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: const Row(
+            child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Icon(
@@ -194,7 +194,7 @@ class _TotalCostOfGoodsPageState extends State<TotalCostOfGoodsPage> {
                 ),
                 SizedBox(width: 8),
                 Text(
-                  'Filter',
+                  (_selectedRangeLabel ?? 'Filter').toDisplayLabel,
                   style: TextStyle(
                     color: textPrimary,
                     fontWeight: FontWeight.w400,
@@ -421,5 +421,3 @@ class _TotalCostOfGoodsPageState extends State<TotalCostOfGoodsPage> {
     _paginationController.refresh();
   }
 }
-
-

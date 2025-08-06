@@ -53,6 +53,7 @@ import 'package:zed_nano/models/payment_methods_status_no_auth/CheckoutPaymentRe
 import 'package:zed_nano/models/pushstk/PushStkResponse.dart';
 import 'package:zed_nano/models/unitofmeasure/UnitOfMeasureResponse.dart';
 import 'package:zed_nano/models/viewAllTransactions/TransactionListResponse.dart';
+import 'package:zed_nano/models/void-approved/VoidApprovedResponse.dart';
 import 'package:zed_nano/networking/base/api_helpers.dart';
 import 'package:zed_nano/models/common/CommonResponse.dart';
 import 'package:zed_nano/models/get_setup_status/SetupStatusResponse.dart';
@@ -1982,6 +1983,35 @@ class BusinessProviders extends BaseProvider {
     } else {
       finalResponseModel =
           ResponseModel<OpeningClosingResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
+  Future<ResponseModel<VoidApprovedResponse>> getVoidedTRansactionReports({
+    required String startDate,
+    required String endDate,
+    int limit = 10000,
+    int page = 1,
+    required BuildContext context,
+  }) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.getVoidedTRansactionReports(
+          startDate: startDate,
+          endDate: endDate,
+          limit: limit,
+          page: page,
+        ), context);
+
+    ResponseModel<VoidApprovedResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<VoidApprovedResponse>(
+          true, responseModel.message!, VoidApprovedResponse.fromJson(map));
+    } else {
+      finalResponseModel =
+          ResponseModel<VoidApprovedResponse>(false, responseModel.message!);
     }
 
     return finalResponseModel;

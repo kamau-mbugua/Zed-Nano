@@ -149,7 +149,7 @@ class _ViewStockPageState extends State<ViewStockPage> {
         children: [
           _buildStatusSummary(),
           _buildSearchBar(),
-          _buildFilters(),
+          _buildFilters().paddingSymmetric(horizontal: 16),
           Expanded(
             child: RefreshIndicator(
               onRefresh: () async {
@@ -295,6 +295,7 @@ class _ViewStockPageState extends State<ViewStockPage> {
         });
       },
       showRightButtonArrow: false,
+      showRightButton: false
     );
   }
   Widget _buildStockList() {

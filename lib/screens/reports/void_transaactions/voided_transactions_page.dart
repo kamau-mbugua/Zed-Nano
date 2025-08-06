@@ -6,10 +6,12 @@ import 'package:zed_nano/contants/AppConstants.dart';
 import 'package:zed_nano/models/get_product_gross_margin/GetProductGrossMarginResponse.dart';
 import 'package:zed_nano/models/opening_closing/OpeningClosingResponse.dart';
 import 'package:zed_nano/models/sales_report/SalesReportResponse.dart';
+import 'package:zed_nano/models/void-approved/VoidApprovedResponse.dart';
 import 'package:zed_nano/providers/business/BusinessProviders.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/reports/sales_report/sub_reports/quantities_sold_page.dart';
 import 'package:zed_nano/screens/reports/sales_report/sub_reports/total_sales_page.dart';
+import 'package:zed_nano/screens/reports/transaction_detail/transaction_detail_page.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
@@ -32,17 +34,17 @@ class VoidedTransactionsPage extends StatefulWidget {
 class _VoidedTransactionsPageState extends State<VoidedTransactionsPage> {
   bool _isLoading = false;
   String _selectedRangeLabel = 'this_month';
-  OpeningClosingResponse? _summaryData;
+  VoidApprovedResponse? _summaryData;
 
-  late PaginationController<OpeningClosingData> _paginationController;
+  late PaginationController<VoidApprovedTransaction> _paginationController;
 
 
   @override
   void initState() {
     super.initState();
-    _paginationController = PaginationController<OpeningClosingData>(
+    _paginationController = PaginationController<VoidApprovedTransaction>(
       fetchItems: (page, pageSize) async {
-        return getClosingOpeningReport(page: page, limit: pageSize);
+        return getVoidedTRansactionReports(page: page, limit: pageSize);
       },
     );
 
@@ -51,18 +53,23 @@ class _VoidedTransactionsPageState extends State<VoidedTransactionsPage> {
     });
   }
 
-  Future<List<OpeningClosingData>> getClosingOpeningReport({required int page, required int limit}) async {
+  Future<List<VoidApprovedTransaction>> getVoidedTRansactionReports({required int page, required int limit}) async {
     final dateRange = DateRangeUtil.getDateRange(_selectedRangeLabel);
     final startDate = dateRange.values.first.removeTimezoneOffset;
     final endDate = dateRange.values.last.removeTimezoneOffset;
-    final response = await getBusinessProvider(context).getClosingOpeningReport(
+    final response = await getBusinessProvider(context).getVoidedTRansactionReports(
         page: page,
         limit: limit,
         startDate: startDate,
         endDate: endDate,
         context: context
     );
-    return response.data?.data ?? [];
+
+    setState(() {
+      _summaryData = response.data;
+    });
+
+    return response.data?.transactions ?? [];
   }
 
   void _showDateRangeFilter() {
@@ -192,7 +199,7 @@ class _VoidedTransactionsPageState extends State<VoidedTransactionsPage> {
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  'Filter',
+                  (_selectedRangeLabel ?? 'Filter').toDisplayLabel,
                   style: TextStyle(
                     color: textPrimary,
                     fontWeight: FontWeight.w400,
@@ -221,9 +228,9 @@ class _VoidedTransactionsPageState extends State<VoidedTransactionsPage> {
           children: [
             Expanded(
               child: _buildSummaryCard(
-                title: 'Total Opening Stock',
-                value: _summaryData?.totalOpeningStock?.toStringAsFixed(0) ?? '0',
-                icon: approvalStockTake,
+                title: 'Transaction Count',
+                value: _summaryData?.count?.toStringAsFixed(0) ?? '0',
+                icon: voidedTransactionsIcon,
                 iconColor: primaryBlueTextColor,
                 backgroundColor: lightGreyColor,
               ),
@@ -231,10 +238,10 @@ class _VoidedTransactionsPageState extends State<VoidedTransactionsPage> {
             const SizedBox(width: 16),
             Expanded(
               child: _buildSummaryCard(
-                title: 'Total Closing Stock',
-                value: '${(_summaryData?.totalClosingStock?.formatCurrency() ?? 0)}',
-                icon: approvalStockTake,
-                iconColor: primaryOrangeTextColor,
+                title: 'Total Amount Voided',
+                value: 'KES ${(_summaryData?.totalAmount?.formatCurrency() ?? 0)}',
+                icon: voidedTransactionsIcon,
+                iconColor: googleRed,
                 backgroundColor: lightGreenColor,
               ),
             ),
@@ -304,7 +311,7 @@ class _VoidedTransactionsPageState extends State<VoidedTransactionsPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Recent Sales',
+          'Transactions',
           style: TextStyle(
             color: textPrimary,
             fontWeight: FontWeight.w600,
@@ -314,12 +321,12 @@ class _VoidedTransactionsPageState extends State<VoidedTransactionsPage> {
         ),
         const SizedBox(height: 16),
         Expanded(
-          child: PagedListView<int, OpeningClosingData>(
+          child: PagedListView<int, VoidApprovedTransaction>(
             pagingController: _paginationController.pagingController,
             padding: const EdgeInsets.all(0),
-            builderDelegate: PagedChildBuilderDelegate<OpeningClosingData>(
+            builderDelegate: PagedChildBuilderDelegate<VoidApprovedTransaction>(
               itemBuilder: (context, item, index) {
-                return _buildRecentSaleItem(item).paddingSymmetric(horizontal: 16,vertical: 8);
+                return allTransactionsItemBuilder(item).paddingSymmetric(horizontal: 16,vertical: 8);
               },
               firstPageProgressIndicatorBuilder: (_) => const Center(
                 child: SizedBox(),
@@ -331,7 +338,7 @@ class _VoidedTransactionsPageState extends State<VoidedTransactionsPage> {
                 child: CompactGifDisplayWidget(
                   gifPath: emptyListGif,
                   title: "It's empty, over here.",
-                  subtitle: "No recent sales in your business, yet! Add to view them here.",
+                  subtitle: "No recent voids in your business, yet! Add to view them here.",
                 ),
               ),
             ),
@@ -340,69 +347,158 @@ class _VoidedTransactionsPageState extends State<VoidedTransactionsPage> {
       ],
     );
   }
-  Widget _buildRecentSaleItem(OpeningClosingData sale) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          width: 40,
-          height: 40,
+  Widget allTransactionsItemBuilder(VoidApprovedTransaction item) {
+    return GestureDetector(
+      onTap: () {
+        TransactionDetailPage(transactionId: item.transactionID,).launch(context);
+      },
+      child: Container(
+          padding: const EdgeInsets.all(16.0),
           decoration: BoxDecoration(
-            color: lightGreyColor,
-            borderRadius: BorderRadius.circular(8),
+            color: cardBackgroundColor,
+            borderRadius: BorderRadius.circular(8.0),
+            // boxShadow: [
+            //   BoxShadow(
+            //     color: Colors.grey.withOpacity(0.3),
+            //     spreadRadius: 2,
+            //     blurRadius: 5,
+            //     offset: const Offset(0, 3),
+            //   ),
+            // ],
           ),
-          child: rfCommonCachedNetworkImage(
-              sale.imageUrl ?? '',
-              width: 25,
-              height: 25
-              ,radius: 0
-          ),
-        ),
-        const SizedBox(width: 16),
-        // Product details
-        Expanded(
-          child: Column(
+          child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                sale.productName ?? 'Unknown Product',
-                style: TextStyle(
-                  color: textPrimary,
-                  fontWeight: FontWeight.w400,
-                  fontFamily: 'Poppins',
-                  fontSize: 14,
-                ),
-              ),
-              6.height,
-              Text("Opening Stock: ${sale.openingStock?.toStringAsFixed(0) ?? '0'}",
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    color: neutralDarkLight,
-                    fontSize: 10,
-                    fontWeight: FontWeight.w400,
-                    fontStyle: FontStyle.normal,
-                    letterSpacing: 0.15,
+              rfCommonCachedNetworkImage(customerTransactionsIcon,
+                  height: 14, width: 14, radius: 0, color: successTextColor),
+              10.width,
+              Expanded(
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(item.transactionID ?? "",
+                                style: const TextStyle(
+                                  fontFamily: 'Poppins',
+                                  color: textPrimary,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  fontStyle: FontStyle.normal,
+                                )
+                            ),
+                            Text(item.dateVoided?.toFormattedDateTime() ?? "",
+                                style: const TextStyle(
+                                  fontFamily: 'Poppins',
+                                  color: textSecondary,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w400,
+                                  fontStyle: FontStyle.normal,
+                                  letterSpacing: 0.15,
 
-                  )
-              ),
-              const SizedBox(height: 12),
-              Row(
-                children: [
-                  _buildProductDetail('Qty Sold:', sale.quantitySold?.toStringAsFixed(0) ?? '0'),
-                  const SizedBox(width: 12),
-                  _buildProductDetail('Received:', '${(sale.quantityReceived?.toStringAsFixed(0) ?? 0)}'),
-                  const SizedBox(width: 12),
-                  _buildProductDetail('Variance:', '${(sale.quantityVariance?.toStringAsFixed(0) ?? 0)}'),
-                  const SizedBox(width: 12),
-                  _buildProductDetail('Closing Stock::', '${(sale.closingStock?.toStringAsFixed(0) ?? 0)}'),
-                ],
-              ),
+                                )
+                            )
+                          ],
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text("KES ${item.transamount?.formatCurrency() ?? ""}",
+                                style: const TextStyle(
+                                  fontFamily: 'Poppins',
+                                  color: textPrimary,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                  fontStyle: FontStyle.normal,
+                                )
+                            ),
+                            Text("${item.transactionType ?? ""}",
+                                style: const TextStyle(
+                                  fontFamily: 'Poppins',
+                                  color: textSecondary,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w600,
+                                  fontStyle: FontStyle.normal,
+                                )
+                            )
+                          ],
+                        )
+                      ],
+                    ),
+                    Divider(
+                      thickness: 1,
+                      color: Colors.grey[300],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text("Completed By:",
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
+                                  color: textSecondary,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w400,
+                                  fontStyle: FontStyle.normal,
+                                  letterSpacing: 0.15,
+
+                                )
+                            ),
+                            Text("${item.voidedBy ?? ""}",
+                                style: const TextStyle(
+                                  fontFamily: 'Poppins',
+                                  color: textPrimary,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w400,
+                                  fontStyle: FontStyle.normal,
+                                  letterSpacing: 0.12,
+
+                                )
+                            )
+                          ],
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            const Text("Requested By:",
+                                style: TextStyle(
+                                  fontFamily: 'Poppins',
+                                  color: textSecondary,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w400,
+                                  fontStyle: FontStyle.normal,
+                                  letterSpacing: 0.15,
+
+                                )
+                            ),
+                            Text("${item.voidRequestedBy ?? "N/A"}",
+                                style: const TextStyle(
+                                  fontFamily: 'Poppins',
+                                  color: textPrimary,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w400,
+                                  fontStyle: FontStyle.normal,
+                                  letterSpacing: 0.12,
+
+                                )
+                            )
+                          ],
+                        )
+                      ],
+                    )
+                  ],
+                ),
+              )
             ],
-          ),
-        ),
-      ],
+          )),
     );
   }
+
 
   Widget _buildProductDetail(String label, String value) {
     return Column(

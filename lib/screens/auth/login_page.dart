@@ -13,11 +13,13 @@ import 'package:zed_nano/screens/widget/auth/input_fields.dart';
 import 'package:zed_nano/screens/widget/auth/social_buttons.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
+import 'package:zed_nano/services/business_setup_extensions.dart';
 import 'package:zed_nano/services/firebase_service.dart';
 import 'package:zed_nano/services/social_auth_service.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/Images.dart';
+import 'package:zed_nano/viewmodels/WorkflowViewModel.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:zed_nano/utils/extensions.dart';
 
@@ -416,10 +418,37 @@ class _LoginPageState extends State<LoginPage> {
           authProvider.loginResponse?.username ??
           "User";
       showCustomToast('Welcome back $userName!', isError: false);
+      
+      // Initialize business setup after successful login
+      await _initializeBusinessSetupAfterLogin(context);
+      
       Navigator.of(context).pushReplacementNamed(AppRoutes.getHomeMainPageRoute());
     } else {
       logger.d(response.message);
       showCustomToast('${response.message}!');
+    }
+  }
+
+  /// Initialize business setup after successful login
+  Future<void> _initializeBusinessSetupAfterLogin(BuildContext context) async {
+    try {
+      // Double-check authentication before initialization
+      final authProvider = getAuthProvider(context);
+      if (!authProvider.isLoggedIn) {
+        logger.w('Attempted to initialize business setup for non-authenticated user');
+        return;
+      }
+
+      // Initialize business setup service using extension
+      await context.businessSetup.initialize();
+
+      // Run workflow setup after initialization
+      if (mounted) {
+        await Provider.of<WorkflowViewModel>(context, listen: false).skipSetup(context);
+      }
+    } catch (e) {
+      logger.e('Failed to initialize business setup after login: $e');
+      // Don't rethrow - let the app continue to home page even if setup fails
     }
   }
 }

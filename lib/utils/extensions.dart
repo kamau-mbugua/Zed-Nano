@@ -243,7 +243,22 @@ extension CurrencyFormatter on num {
 
 extension DoubleCurrencyFormatter on double {
   String formatCurrency({String locale = 'en_KE'}) {
-    final formatter = NumberFormat("#,##0", locale);
+    final formatter = NumberFormat.currency(locale: locale, symbol: '');
     return formatter.format(this);
+  }
+}
+
+extension DateRangeLabelExtension on String {
+  /// Converts snake_case date range labels to human-readable format
+  /// Example: "this_month" -> "This Month", "last_week" -> "Last Week"
+  String get toDisplayLabel {
+    if (isEmpty) return this;
+    
+    // Split by underscore and capitalize each word
+    return split('_')
+        .map((word) => word.isNotEmpty 
+            ? '${word[0].toUpperCase()}${word.substring(1).toLowerCase()}'
+            : word)
+        .join(' ');
   }
 }

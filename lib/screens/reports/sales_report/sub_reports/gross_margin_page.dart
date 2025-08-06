@@ -191,7 +191,7 @@ class _GrossMarginPageState extends State<GrossMarginPage> {
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  'Filter',
+                  (_selectedRangeLabel ?? 'Filter').toDisplayLabel,
                   style: TextStyle(
                     color: textPrimary,
                     fontWeight: FontWeight.w400,
@@ -453,4 +453,3 @@ class _GrossMarginPageState extends State<GrossMarginPage> {
     _paginationController.refresh();
   }
 }
-

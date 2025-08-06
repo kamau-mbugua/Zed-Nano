@@ -1,10 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
+import 'package:zed_nano/services/business_setup_extensions.dart';
 import 'package:zed_nano/services/firebase_service.dart';
 import 'package:zed_nano/routes/routes.dart';
+import 'package:zed_nano/viewmodels/WorkflowViewModel.dart';
 
 /// Service class for handling social authentication (Google, Facebook, Twitter)
 class SocialAuthService {
@@ -227,6 +230,9 @@ class SocialAuthService {
             "User";
         showCustomToast('Welcome back $userName!', isError: false);
 
+        // Initialize business setup after successful social login
+        await _initializeBusinessSetupAfterLogin(context);
+
         // Navigate to home or wherever appropriate
         Navigator.of(context).pushReplacementNamed(AppRoutes.getHomeMainPageRoute());
       } else {
@@ -235,6 +241,27 @@ class SocialAuthService {
     } catch (e) {
       logger.e('Firebase login error: $e');
       showCustomToast('Login failed: ${e.toString()}');
+    }
+  }
+
+  /// Initialize business setup after successful social login
+  Future<void> _initializeBusinessSetupAfterLogin(BuildContext context) async {
+    try {
+      // Double-check authentication before initialization
+      final authProvider = getAuthProvider(context);
+      if (!authProvider.isLoggedIn) {
+        logger.w('Attempted to initialize business setup for non-authenticated user');
+        return;
+      }
+
+      // Initialize business setup service using extension
+      await context.businessSetup.initialize();
+
+      // Run workflow setup after initialization
+      await Provider.of<WorkflowViewModel>(context, listen: false).skipSetup(context);
+    } catch (e) {
+      logger.e('Failed to initialize business setup after social login: $e');
+      // Don't rethrow - let the app continue to home page even if setup fails
     }
   }
 

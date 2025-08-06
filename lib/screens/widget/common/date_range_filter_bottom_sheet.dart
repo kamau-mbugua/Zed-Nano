@@ -99,9 +99,9 @@ class DateRangeFilterBottomSheet extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: isSelected ? successTextColor.withOpacity(0.1) : Colors.white,
+            color: isSelected ? appThemePrimary.withOpacity(0.1) : Colors.white,
             border: Border.all(
-              color: isSelected ? successTextColor : Colors.grey.shade300,
+              color: isSelected ? appThemePrimary : Colors.grey.shade300,
               width: isSelected ? 2 : 1,
             ),
             borderRadius: BorderRadius.circular(12),
@@ -114,10 +114,10 @@ class DateRangeFilterBottomSheet extends StatelessWidget {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: isSelected ? successTextColor : Colors.grey.shade400,
+                    color: isSelected ? appThemePrimary : Colors.grey.shade400,
                     width: 2,
                   ),
-                  color: isSelected ? successTextColor : Colors.transparent,
+                  color: isSelected ? appThemePrimary : Colors.transparent,
                 ),
                 child: isSelected
                     ? const Icon(
@@ -138,7 +138,7 @@ class DateRangeFilterBottomSheet extends StatelessWidget {
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                         fontFamily: 'Poppins',
-                        color: isSelected ? successTextColor : textPrimary,
+                        color: isSelected ? appThemePrimary : textPrimary,
                       ),
                     ),
                     const SizedBox(height: 2),
@@ -148,7 +148,7 @@ class DateRangeFilterBottomSheet extends StatelessWidget {
                         fontSize: 12,
                         fontWeight: FontWeight.w400,
                         fontFamily: 'Poppins',
-                        color: isSelected ? successTextColor.withOpacity(0.8) : textSecondary,
+                        color: isSelected ? appThemePrimary.withOpacity(0.8) : textSecondary,
                       ),
                     ),
                   ],

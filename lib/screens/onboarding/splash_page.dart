@@ -59,6 +59,13 @@ class _SplashPageState extends State<SplashPage> {
     if (!mounted) return;
 
     try {
+      // Double-check authentication before initialization
+      final authProvider = getAuthProvider(context);
+      if (!authProvider.isLoggedIn) {
+        logger.w('Attempted to initialize business setup for non-authenticated user');
+        return;
+      }
+
       // Initialize business setup service using extension
       await context.businessSetup.initialize();
 
@@ -68,6 +75,7 @@ class _SplashPageState extends State<SplashPage> {
       }
     } catch (e) {
       logger.e('Failed to initialize business setup: $e');
+      // Don't rethrow - let the app continue to home page even if setup fails
     }
   }
 
