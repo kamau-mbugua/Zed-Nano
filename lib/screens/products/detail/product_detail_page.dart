@@ -12,6 +12,7 @@ import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/dimensions.dart';
+import 'package:zed_nano/utils/extensions.dart';
 
 class ProductDetailPage extends StatefulWidget {
   final String? productId;
@@ -59,8 +60,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   void _deleteCategory() {
     showCustomDialog(
       context: context,
-      title: 'Delete Product',
-      subtitle: 'Are you sure you want to delete this product? This action cannot be undone.',
+      title: 'Delete ${_productData?.productService?.toLowerCase() != 'service' ? 'Product' : 'Service'}',
+      subtitle: 'Are you sure you want to delete this ${_productData?.productService?.toLowerCase() != 'service' ? 'Product' : 'Service'}? This action cannot be undone.',
       positiveButtonText: 'Delete',
       negativeButtonText: 'Cancel',
       positiveButtonColor: accentRed,
@@ -98,7 +99,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AuthAppBar(
-        title: 'View Product',
+        title: 'View ${_productData?.productService?.toLowerCase() != 'service' ? 'Product' : 'Service'}',
         actions: [
           TextButton(
             child: const Text('Delete', style: TextStyle(color: accentRed)),
@@ -129,28 +130,34 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             SizedBox(height: 24),
             _buildTwoColumnSection(
               leftTitle: 'Price Type',
-              leftSubtitle: _productData?.priceStatus ?? 'Variable Price',
-              rightTitle: 'Unit of Measure',
-              rightSubtitle: _productData?.unitOfMeasure ?? 'Kilogram (kg)',
+              leftSubtitle: _productData?.priceStatus ?? 'N/A',
+              rightTitle: _productData?.productService?.toLowerCase() != 'service' ? 'Unit of Measure' : 'Price',
+              rightSubtitle: _productData?.productService?.toLowerCase() != 'service' ? _productData?.unitOfMeasure ?? 'Kilogram (kg)' : '${_productData?.currency ?? 'KES'} ${_productData?.productPrice?.formatCurrency() ?? '0'}',
             ),
             SizedBox(height: 24),
-            _buildTwoColumnSection(
-              leftTitle: 'Selling Price',
-              leftSubtitle:
-                  '${_productData?.currency ?? 'KES'} ${_productData?.productPrice ?? '0'}',
-              rightTitle: 'Buying Price',
-              rightSubtitle:
-                  '${_productData?.currency ?? 'KES'} ${_productData?.buyingPrice ?? '200'}',
+            Visibility(
+              visible: _productData?.productService?.toLowerCase() != 'service',
+              child: _buildTwoColumnSection(
+                leftTitle: 'Selling Price',
+                leftSubtitle:
+                    '${_productData?.currency ?? 'KES'} ${_productData?.productPrice ?? '0'}',
+                rightTitle: 'Buying Price',
+                rightSubtitle:
+                    '${_productData?.currency ?? 'KES'} ${_productData?.buyingPrice ?? '200'}',
+              ),
             ),
             SizedBox(height: 24),
-            _buildTwoColumnSection(
-              leftTitle: 'Weighted Product',
-              leftSubtitle:
-                  _productData?.isWeightedProduct == true ? 'Yes' : 'No',
-              rightTitle: 'Restock Level',
-              rightSubtitle: _productData?.reorderLevel != null
-                  ? 'Notify below ${_productData?.reorderLevel}'
-                  : 'Not set',
+            Visibility(
+              visible: _productData?.productService?.toLowerCase() != 'service',
+              child: _buildTwoColumnSection(
+                leftTitle: 'Weighted Product',
+                leftSubtitle:
+                    _productData?.isWeightedProduct == true ? 'Yes' : 'No',
+                rightTitle: 'Restock Level',
+                rightSubtitle: _productData?.reorderLevel != null
+                    ? 'Notify below ${_productData?.reorderLevel}'
+                    : 'Not set',
+              ),
             ),
           ],
         ),
@@ -184,7 +191,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              _productData?.productName ?? 'Product Name',
+              _productData?.productName ?? '${_productData?.productService?.toLowerCase() != 'service' ? 'Product' : 'Service'} Name',
               style: TextStyle(
                 color: textPrimary,
                 fontWeight: FontWeight.w600,
@@ -194,7 +201,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             ),
             SizedBox(height: 8),
             Text(
-              _productData?.productCategory ?? 'Cereals',
+              _productData?.productCategory ?? 'N/A',
               style: TextStyle(
                 color: textSecondary,
                 fontWeight: FontWeight.w400,
@@ -292,7 +299,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         ],
       ),
       child: outlineButton(
-          text: 'Edit Product',
+          text: 'Edit ${_productData?.productService?.toLowerCase() != 'service' ? 'Product' : 'Service'}',
           onTap: () => _navigateToEditProduct(),
           context: context),
     );

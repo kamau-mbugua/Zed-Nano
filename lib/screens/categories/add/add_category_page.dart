@@ -62,13 +62,12 @@ class _NewCategoryPageState extends State<NewCategoryPage> {
       await viewModel.skipSetup(context);
 
       if (mounted) {
-        Navigator.pop(context); // Pop current screen
-        await Navigator.pushNamed(context, AppRoutes.getListProductsAndServicesRoute());
+        Navigator.pop(context);
+        await Navigator.pushNamed(context, AppRoutes.getListCategoriesRoute());
       }
 
     } catch (e) {
       logger.e('Error in refresh: $e');
-      // Don't navigate on error - user stays on current screen
     }
   }
 
@@ -276,7 +275,7 @@ class _NewCategoryPageState extends State<NewCategoryPage> {
               ),
               const SizedBox(height: 8),
               StyledTextField(
-                textFieldType: TextFieldType.MULTILINE,
+                textFieldType: TextFieldType.NAME,
                 hintText: 'Description',
                 controller: descriptionController,
                 focusNode: descriptionFocusNode,

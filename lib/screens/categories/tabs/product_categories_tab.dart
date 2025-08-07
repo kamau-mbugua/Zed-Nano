@@ -81,7 +81,9 @@ class _ProductCategoriesTabState extends State<ProductCategoriesTab> {
       backgroundColor: Colors.white,
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
-          await Navigator.pushNamed(context, AppRoutes.getNewCategoryWithParamRoutes('true'));
+          await Navigator.pushNamed(context, AppRoutes.getNewCategoryWithParamRoutes('true')).then((_) {
+            _paginationController.refresh();
+          });
 
         },
         backgroundColor: const Color(0xFF032541),

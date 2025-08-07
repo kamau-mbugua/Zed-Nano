@@ -67,6 +67,8 @@ class _EditProductPageState extends State<EditProductPage> {
 
   ProductData? _productData;
 
+  String? selectedProductService;
+
 
 
 
@@ -108,6 +110,7 @@ class _EditProductPageState extends State<EditProductPage> {
           isWeightedProduct = _productData?.isWeightedProduct ?? false;
           selectedCategory = _productData?.productCategory;
           productService = _productData?.productService; // Use passed productService if available
+          selectedProductService = _productData?.productService;
 
         });
       } else {
@@ -256,15 +259,15 @@ class _EditProductPageState extends State<EditProductPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar:  AuthAppBar(title: 'Add Product or Service'),
+      appBar:  AuthAppBar(title: 'Edit Product or Service'),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: ListView(
           children: [
             // Category Name
             headings(
-              label: 'New Product',
-              subLabel: 'Enter product details.',
+              label: 'Edit ${selectedProductService?.toLowerCase() != 'service' ? 'Product' : 'Service'}',
+              subLabel: 'Enter ${selectedProductService?.toLowerCase() != 'service' ? 'Product' : 'Service'} details.',
             ),
             _formFields(),
             _uploadImage(),
@@ -379,13 +382,14 @@ class _EditProductPageState extends State<EditProductPage> {
               final selectedCat = value;
               setState(() {
                 selectedCategory = selectedCat;
+                selectedProductService = selectedCat;
               });
             },
           ),
           16.height,
           // Product Name
-          const Text(
-            'Product Name',
+           Text(
+            '${selectedProductService?.toLowerCase() != 'service' ? 'Product' : 'Service'} Name',
             style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w600,
@@ -396,14 +400,12 @@ class _EditProductPageState extends State<EditProductPage> {
           const SizedBox(height: 8),
           StyledTextField(
             textFieldType: TextFieldType.NAME,
-            hintText: 'Product Name',
+            hintText: '${selectedProductService?.toLowerCase() != 'service' ? 'Product' : 'Service'} Name',
             focusNode: productNameFocusNode,
             nextFocus: productDescriptionFocusNode,
             controller: productNameController,
           ),
           16.height,
-
-          // Description
           const Row(
             children: [
               Text(
@@ -428,15 +430,15 @@ class _EditProductPageState extends State<EditProductPage> {
           ),
           const SizedBox(height: 8),
           StyledTextField(
-            textFieldType: TextFieldType.MULTILINE,
+            textFieldType: TextFieldType.NAME,
             hintText: 'Description',
             focusNode: productDescriptionFocusNode,
             controller: productDescriptionController,
             nextFocus: productAmountFocusNode,
           ),
           16.height,
-          const Text(
-            'Product Price Type',
+           Text(
+            '${selectedProductService?.toLowerCase() != 'service' ? 'Product' : 'Service'} Price Type',
             style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w600,
@@ -454,11 +456,12 @@ class _EditProductPageState extends State<EditProductPage> {
               final selectedCat = value;
               setState(() {
                 selectedPriceStatus = selectedCat;
+                selectedProductService = productCategoryDataList?.firstWhere((element) => element.categoryName == selectedCategory).productService;
               });
             },
           ),
           // Show weighted product controls only when price type contains 'variable'
-          if ((selectedPriceStatus?.toLowerCase().contains('variable') ?? false)) ...[
+          if ((selectedPriceStatus?.toLowerCase().contains('variable') ?? false) && selectedProductService?.toLowerCase() != 'service') ...[
             16.height,
             const Text(
               'Weighted product',
@@ -494,104 +497,132 @@ class _EditProductPageState extends State<EditProductPage> {
               ],
             ),
           ],
-          16.height,
-          const Text(
-            'Unit of Measure',
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
-              fontFamily: 'Poppins',
-              color: Color(0xFF484848),
-            ),
-          ),
-          const SizedBox(height: 8),
-          SubCategoryPicker(
-            label: 'Select Unit of Measure',
-            options:unitOfMeasureResponse?.map((e) => e ?? '').toList() ?? [],
-            selectedValue: selectedUnitOfMeasure,
-            onChanged: (value) {
-              final selectedCat = value;
-              setState(() {
-                selectedUnitOfMeasure = selectedCat;
-              });
-            },
-          ),
-
-          const Text(
-            'Selling Price',
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
-              fontFamily: 'Poppins',
-              color: Color(0xFF484848),
-            ),
-          ),
-          const SizedBox(height: 8),
-          StyledTextField(
-            textFieldType: TextFieldType.NAME,
-            hintText: 'Selling Price',
-            focusNode: productAmountFocusNode,
-            nextFocus: buyingPriceFocusNode,
-            controller: productAmountController,
-          ),
-          16.height,
-
-          const Text(
-            'Buying Price',
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
-              fontFamily: 'Poppins',
-              color: Color(0xFF484848),
-            ),
-          ),
-          const SizedBox(height: 8),
-          StyledTextField(
-            textFieldType: TextFieldType.NAME,
-            hintText: 'Buying Price',
-            focusNode: buyingPriceFocusNode,
-            nextFocus: productRestockFocusNode,
-            controller: buyingPriceController,
-          ),
-          16.height,
-          const Row(
+          selectedProductService?.toLowerCase() != 'service' ?
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'Restock Level',
+              const Text(
+                'Unit of Measure',
                 style: TextStyle(
-                  fontSize: 14,
+                  fontSize: 12,
                   fontWeight: FontWeight.w600,
                   fontFamily: 'Poppins',
-                  color: Color(0xFF1F2024),
+                  color: Color(0xFF484848),
                 ),
               ),
-              SizedBox(width: 8),
-              Text(
-                '(Optional)',
+              const SizedBox(height: 8),
+              SubCategoryPicker(
+                label: 'Select Unit of Measure',
+                options:unitOfMeasureResponse?.map((e) => e ?? '').toList() ?? [],
+                selectedValue: selectedUnitOfMeasure,
+                onChanged: (value) {
+                  final selectedCat = value;
+                  setState(() {
+                    selectedUnitOfMeasure = selectedCat;
+                  });
+                },
+              ),
+
+              const Text(
+                'Selling Price',
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'Poppins',
+                  color: Color(0xFF484848),
+                ),
+              ),
+              const SizedBox(height: 8),
+              StyledTextField(
+                textFieldType: TextFieldType.NAME,
+                hintText: 'Selling Price',
+                focusNode: productAmountFocusNode,
+                nextFocus: buyingPriceFocusNode,
+                controller: productAmountController,
+              ),
+              16.height,
+
+              const Text(
+                'Buying Price',
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'Poppins',
+                  color: Color(0xFF484848),
+                ),
+              ),
+              const SizedBox(height: 8),
+              StyledTextField(
+                textFieldType: TextFieldType.NAME,
+                hintText: 'Buying Price',
+                focusNode: buyingPriceFocusNode,
+                nextFocus: productRestockFocusNode,
+                controller: buyingPriceController,
+              ),
+              16.height,
+              const Row(
+                children: [
+                  Text(
+                    'Restock Level',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      fontFamily: 'Poppins',
+                      color: Color(0xFF1F2024),
+                    ),
+                  ),
+                  SizedBox(width: 8),
+                  Text(
+                    '(Optional)',
+                    style: TextStyle(
+                      fontSize: 10,
+                      color: Color(0xFF8F90A6),
+                      fontFamily: 'Poppins',
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              StyledTextField(
+                textFieldType: TextFieldType.NAME,
+                hintText: 'Restock Level',
+                focusNode: productRestockFocusNode,
+                nextFocus: productDescriptionFocusNode,
+                controller: productRestockController,
+              ),
+              4.height,
+              const Text(
+                'Get notified when stock is below this value.',
                 style: TextStyle(
                   fontSize: 10,
-                  color: Color(0xFF8F90A6),
                   fontFamily: 'Poppins',
+                  color: Color(0xFFB5B7C0),
                 ),
               ),
             ],
-          ),
-          const SizedBox(height: 8),
-          StyledTextField(
-            textFieldType: TextFieldType.NAME,
-            hintText: 'Restock Level',
-            focusNode: productRestockFocusNode,
-            nextFocus: productDescriptionFocusNode,
-            controller: productRestockController,
-          ),
-          4.height,
-          const Text(
-            'Get notified when stock is below this value.',
-            style: TextStyle(
-              fontSize: 10,
-              fontFamily: 'Poppins',
-              color: Color(0xFFB5B7C0),
-            ),
+          ):
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Price',
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'Poppins',
+                  color: Color(0xFF484848),
+                ),
+              ),
+              const SizedBox(height: 8),
+              StyledTextField(
+                textFieldType: TextFieldType.NAME,
+                hintText: 'Price',
+                focusNode: productAmountFocusNode,
+                nextFocus: buyingPriceFocusNode,
+                controller: productAmountController,
+              ),
+              16.height,
+            ],
           ),
 
           const SizedBox(height: 24),

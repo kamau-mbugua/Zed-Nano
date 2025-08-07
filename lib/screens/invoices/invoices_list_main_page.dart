@@ -21,7 +21,6 @@ class InvoicesListMainPage extends StatefulWidget {
 }
 
 class _InvoicesListMainPageState extends State<InvoicesListMainPage> {
-  int selectedTab = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,39 +31,34 @@ class _InvoicesListMainPageState extends State<InvoicesListMainPage> {
       body: Column(
         children: [
           const SizedBox(height: 24),
-          // Tabs
-          CustomTabSwitcher(
-            tabs: const ['Unpaid', 'Partial', 'Paid', 'Cancelled'],
-            selectedIndex: selectedTab,
-            onTabSelected: (index) => setState(() => selectedTab = index),
-            selectedTabColors: const [
-              googleRed,      // Unpaid tab color
-              primaryOrangeTextColor,     // Partial tab color
-              successTextColor,        // Paid tab color
-              colorBackground,        // Cancelled tab color
-            ],
-            selectedTextColors: const [
-              Colors.white,      // Unpaid text color
-              Colors.white,      // Partial text color
-              Colors.white,      // Paid text color
-              textPrimary,      // Cancelled text color
-            ],
-            selectedBorderColors: const [
-              googleRed,      // Unpaid border color
-              primaryOrangeTextColor,     // Partial border color
-              successTextColor,        // Paid border color
-              colorBackground,        // Cancelled border color
-            ],
-          ),
-          const SizedBox(height: 16),
           Expanded(
-            child: selectedTab == 0
-                ? const InvoicesListUnpaidPage()
-                : selectedTab == 1
-                ? const InvoicesListPartialPage()
-                : selectedTab == 2
-                ? const InvoicesListPaidPage()
-                : const InvoicesListCancelledPage(),
+            child: SwipeableTabSwitcher(
+              tabs: const ['Unpaid', 'Partial', 'Paid', 'Cancelled'],
+              children: const [
+                InvoicesListUnpaidPage(),
+                InvoicesListPartialPage(),
+                InvoicesListPaidPage(),
+                InvoicesListCancelledPage(),
+              ],
+              selectedTabColors: const [
+                googleRed,      // Unpaid tab color
+                primaryOrangeTextColor,     // Partial tab color
+                successTextColor,        // Paid tab color
+                colorBackground,        // Cancelled tab color
+              ],
+              selectedTextColors: const [
+                Colors.white,      // Unpaid text color
+                Colors.white,      // Partial text color
+                Colors.white,      // Paid text color
+                textPrimary,      // Cancelled text color
+              ],
+              selectedBorderColors: const [
+                googleRed,      // Unpaid border color
+                primaryOrangeTextColor,     // Partial border color
+                successTextColor,        // Paid border color
+                colorBackground,        // Cancelled border color
+              ],
+            ),
           ),
         ],
       ),

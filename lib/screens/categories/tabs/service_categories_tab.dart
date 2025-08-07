@@ -81,7 +81,9 @@ class _ServiceCategoriesTabState extends State<ServiceCategoriesTab> {
       backgroundColor: Colors.white,
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
-          await Navigator.pushNamed(context, AppRoutes.getNewCategoryWithParamRoutes('true'));
+          await Navigator.pushNamed(context, AppRoutes.getNewCategoryWithParamRoutes('true')).then((value) {
+            _paginationController.refresh();
+          });
         },
         backgroundColor: const Color(0xFF032541),
         icon: const Icon(Icons.add, size: 20, color: Colors.white),

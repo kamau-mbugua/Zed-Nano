@@ -12,8 +12,6 @@ class ListProductsAndServicesPage extends StatefulWidget {
 }
 
 class _ListProductsAndServicesPageState extends State<ListProductsAndServicesPage> {
-  int selectedTab = 0; // 0 = Product, 1 = Service
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,17 +20,18 @@ class _ListProductsAndServicesPageState extends State<ListProductsAndServicesPag
       body: Column(
         children: [
           const SizedBox(height: 24),
-          // Tabs
-          CustomTabSwitcher(
-            tabs: const ["Product", "Service"],
-            selectedIndex: selectedTab,
-            onTabSelected: (index) => setState(() => selectedTab = index),
-          ),
-          const SizedBox(height: 16),
           Expanded(
-            child: selectedTab == 0
-                ? const ProductsListPage()
-                : const ServiceListPage(),
+            child: SwipeableTabSwitcher(
+              tabs: const ["Product", "Service"],
+              children: const [
+                ProductsListPage(),
+                ServiceListPage(),
+              ],
+              onTabChanged: (index) {
+                // Optional: Handle tab changes if needed
+                // print('Tab changed to: $index');
+              },
+            ),
           ),
         ],
       )

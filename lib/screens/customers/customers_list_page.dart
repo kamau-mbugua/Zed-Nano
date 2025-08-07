@@ -16,7 +16,6 @@ class CustomersListPage extends StatefulWidget {
 }
 
 class _CustomersListPageState extends State<CustomersListPage> {
-  int selectedTab = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,34 +26,30 @@ class _CustomersListPageState extends State<CustomersListPage> {
       body: Column(
         children: [
           const SizedBox(height: 24),
-          // Tabs
-          CustomTabSwitcher(
-            tabs: const ['Active', 'Pending', 'Suspended'],
-            selectedIndex: selectedTab,
-            onTabSelected: (index) => setState(() => selectedTab = index),
-            selectedTabColors: const [
-              successTextColor,      // Approved tab color
-              primaryOrangeTextColor,     // Pending tab color
-              colorBackground,        // Rejected tab color
-            ],
-            selectedTextColors: const [
-              Colors.white,      // Approved text color
-              Colors.white,      // Pending text color
-              textPrimary,      // Rejected text color
-            ],
-            selectedBorderColors: const [
-              successTextColor,      // Approved border color
-              primaryOrangeTextColor,     // Pending border color
-              colorBackground,        // Rejected border color
-            ],
-          ),
-          const SizedBox(height: 16),
           Expanded(
-            child: selectedTab == 0
-                ? const ApprovedCustomersListPage()
-                : selectedTab == 1
-                ? const PendingCustomersListPage()
-                : const SuspendedCustomersListPage(),
+            child: SwipeableTabSwitcher(
+              tabs: const ['Active', 'Pending', 'Suspended'],
+              children: const [
+                ApprovedCustomersListPage(),
+                PendingCustomersListPage(),
+                SuspendedCustomersListPage(),
+              ],
+              selectedTabColors: const [
+                successTextColor,      // Active tab color
+                primaryOrangeTextColor,     // Pending tab color
+                colorBackground,        // Suspended tab color
+              ],
+              selectedTextColors: const [
+                Colors.white,      // Active text color
+                Colors.white,      // Pending text color
+                textPrimary,      // Suspended text color
+              ],
+              selectedBorderColors: const [
+                successTextColor,      // Active border color
+                primaryOrangeTextColor,     // Pending border color
+                colorBackground,        // Suspended border color
+              ],
+            ),
           ),
         ],
       ),

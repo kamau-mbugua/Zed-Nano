@@ -285,7 +285,7 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    '$productCount Products',
+                    '$productCount ${categoryData?.productService?.toLowerCase() == 'service' ? 'Service' : 'Product'}',
                     style: const TextStyle(
                       color: textSecondary,
                       fontWeight: FontWeight.w400,
@@ -338,8 +338,8 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const Text(
-          'Products',
+         Text(
+          ' ${categoryData?.productService?.toLowerCase() == 'service' ? 'Service' : 'Product'}',
           style: TextStyle(
             color: textPrimary,
             fontWeight: FontWeight.w600,
@@ -349,8 +349,8 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
         ),
         GestureDetector(
           onTap: _navigateToAddProduct,
-          child: const Text(
-            'Add Product',
+          child: Text(
+            ' ${categoryData?.productService?.toLowerCase() == 'service' ? 'Add Service' : 'Add Product'}',
             style: TextStyle(
               color: accentRed,
               fontWeight: FontWeight.w600,

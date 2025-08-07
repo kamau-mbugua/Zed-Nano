@@ -15,43 +15,37 @@ class CustomerItemsMainPage extends StatefulWidget {
 }
 
 class _CustomerItemsMainPageState extends State<CustomerItemsMainPage> {
-  int selectedTab = 0;
-
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         const SizedBox(height: 24),
-        // Tabs
-        CustomTabSwitcher(
-          tabs: const ['Transactions', 'Invoices', 'Orders'],
-          selectedIndex: selectedTab,
-          onTabSelected: (index) => setState(() => selectedTab = index),
-          selectedTabColors: const [
-            colorBackground,      // Approved tab color
-            colorBackground,     // Pending tab color
-            colorBackground,        // Rejected tab color
-          ],
-          selectedTextColors: const [
-            textPrimary,      // Approved text color
-            textPrimary,      // Pending text color
-            textPrimary,      // Rejected text color
-          ],
-          selectedBorderColors: const [
-            colorBackground,      // Approved border color
-            colorBackground,     // Pending border color
-            colorBackground,        // Rejected border color
-          ],
-        ),
-        const SizedBox(height: 16),
-        // Fixed height container for the tab content
+        // Fixed height container for the swipeable tab content
         SizedBox(
           height: 400, // Fixed height to prevent infinite expansion
-          child: selectedTab == 0
-              ? CustomerTransactionsPage(customerID: widget?.customerID ?? '')
-              : selectedTab == 1
-              ? CustomerInvoicesPage(customerId: widget?.customerID ?? '')
-              : CustomerOrdersPages(customerId: widget?.customerID ?? ''),
+          child: SwipeableTabSwitcher(
+            tabs: const ['Transactions', 'Invoices', 'Orders'],
+            children: [
+              CustomerTransactionsPage(customerID: widget?.customerID ?? ''),
+              CustomerInvoicesPage(customerId: widget?.customerID ?? ''),
+              CustomerOrdersPages(customerId: widget?.customerID ?? ''),
+            ],
+            selectedTabColors: const [
+              colorBackground,      // Transactions tab color
+              colorBackground,     // Invoices tab color
+              colorBackground,        // Orders tab color
+            ],
+            selectedTextColors: const [
+              textPrimary,      // Transactions text color
+              textPrimary,      // Invoices text color
+              textPrimary,      // Orders text color
+            ],
+            selectedBorderColors: const [
+              colorBackground,      // Transactions border color
+              colorBackground,     // Invoices border color
+              colorBackground,        // Orders border color
+            ],
+          ),
         ),
       ],
     );

@@ -22,8 +22,6 @@ class ApprovalsMainPage extends StatefulWidget {
 }
 
 class _ApprovalsMainPageState extends State<ApprovalsMainPage> {
-  int selectedTab = 0;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,34 +31,35 @@ class _ApprovalsMainPageState extends State<ApprovalsMainPage> {
       body: Column(
         children: [
           SizedBox(height: widget?.showAppBar == true ? 24 : 80),
-          // Tabs
-          CustomTabSwitcher(
-            tabs: const ['Pending', 'Approved', 'Declined'],
-            selectedIndex: selectedTab,
-            onTabSelected: (index) => setState(() => selectedTab = index),
-            selectedTabColors: const [
-              primaryOrangeTextColor, // Unpaid tab color
-              successTextColor, // Partial tab color
-              googleRed, // Paid tab color
-            ],
-            selectedTextColors: const [
-              Colors.white, // Unpaid text color
-              Colors.white, // Partial text color
-              Colors.white, // Paid text color
-            ],
-            selectedBorderColors: const [
-              primaryOrangeTextColor, // Unpaid border color
-              successTextColor, // Partial border color
-              googleRed, // Paid border color
-            ],
-          ),
-          const SizedBox(height: 16),
           Expanded(
-              child: selectedTab == 0
-                  ? PendingApprovalsPage(getStatus:'Pending')
-                  : selectedTab == 1
-                      ? ApprovedApprovalsPage(getStatus:'Approved')
-                      : DeclinedApprovalsPage(getStatus:'Declined')),
+            child: SwipeableTabSwitcher(
+              tabs: const ['Pending', 'Approved', 'Declined'],
+              children: [
+                PendingApprovalsPage(getStatus: 'Pending'),
+                ApprovedApprovalsPage(getStatus: 'Approved'),
+                DeclinedApprovalsPage(getStatus: 'Declined'),
+              ],
+              selectedTabColors: const [
+                primaryOrangeTextColor, // Pending tab color
+                successTextColor, // Approved tab color
+                googleRed, // Declined tab color
+              ],
+              selectedTextColors: const [
+                Colors.white, // Pending text color
+                Colors.white, // Approved text color
+                Colors.white, // Declined text color
+              ],
+              selectedBorderColors: const [
+                primaryOrangeTextColor, // Pending border color
+                successTextColor, // Approved border color
+                googleRed, // Declined border color
+              ],
+              onTabChanged: (index) {
+                // Optional: Handle tab changes if needed
+                // You can add any logic here when tabs change
+              },
+            ),
+          ),
         ],
       ),
     );

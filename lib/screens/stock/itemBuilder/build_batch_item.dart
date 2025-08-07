@@ -134,27 +134,16 @@ Widget buildBatchItem(BatchData batch, {VoidCallback? onTap, bool isStockTake = 
                           ),
                         ),
                         const SizedBox(width: 8),
-                        if(!isStockTake)
-                        Container(
-                          width: 4,
-                          height: 4,
-                          decoration: const BoxDecoration(
-                            color: textSecondary,
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        if(!isStockTake)
-                          const Text(
-                          '+150 Items',
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
-                            color: successTextColor,
-                            fontSize: 11,
-                            fontWeight: FontWeight.w600,
-                            fontStyle: FontStyle.normal,
-                          ),
-                        ),
+                        // if(!isStockTake)
+                        // Container(
+                        //   width: 4,
+                        //   height: 4,
+                        //   decoration: const BoxDecoration(
+                        //     color: textSecondary,
+                        //     shape: BoxShape.circle,
+                        //   ),
+                        // ),
+                        // const SizedBox(width: 8),
                       ],
                     ),
                   ],

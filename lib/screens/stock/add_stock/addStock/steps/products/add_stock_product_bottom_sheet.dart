@@ -78,7 +78,7 @@ class _AddStockProductBottomSheetState
         productId:product.id.toString(),
         productName: product.productName.toString(),
         buyingPrice: double.parse(buyingPrice),
-        oldStock: double.parse(receivedStock),
+        oldStock: product?.inStockQuantity?.toDouble() ?? 0.0,
         sellingPrice : double.parse(sellingPrice),
         imagePath : product.imagePath.toString(),
         currency : product.currency.toString(),
@@ -92,7 +92,7 @@ class _AddStockProductBottomSheetState
   Widget build(BuildContext context) {
     final product = widget.product;
 
-    final subtitle = 'Add a product to your inventory';
+    const subtitle = 'Add a product to your inventory';
 
     Color statusColor;
     String statusText;

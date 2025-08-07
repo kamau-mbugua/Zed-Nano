@@ -18,7 +18,6 @@ class OrdersListMainPage extends StatefulWidget {
 }
 
 class _OrdersListMainPageState extends State<OrdersListMainPage> {
-  int selectedTab = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,38 +29,34 @@ class _OrdersListMainPageState extends State<OrdersListMainPage> {
         children: [
           // SizedBox(height: 24),
           // Tabs
-          CustomTabSwitcher(
-            tabs: const ['Unpaid', 'Partial', 'Paid', 'Cancelled'],
-            selectedIndex: selectedTab,
-            onTabSelected: (index) => setState(() => selectedTab = index),
-            selectedTabColors: const [
-              googleRed,      // Unpaid tab color
-              primaryOrangeTextColor,     // Partial tab color
-              successTextColor,        // Paid tab color
-              colorBackground,        // Cancelled tab color
-            ],
-            selectedTextColors: const [
-              Colors.white,      // Unpaid text color
-              Colors.white,      // Partial text color
-              Colors.white,      // Paid text color
-              textPrimary,      // Cancelled text color
-            ],
-            selectedBorderColors: const [
-              googleRed,      // Unpaid border color
-              primaryOrangeTextColor,     // Partial border color
-              successTextColor,        // Paid border color
-              colorBackground,        // Cancelled border color
-            ],
-          ),
-          const SizedBox(height: 16),
           Expanded(
-            child: selectedTab == 0
-                ? const OrdersListUnpaidPage()
-                : selectedTab == 1
-                ? const OrdersListPartialPage()
-                : selectedTab == 2
-                ? const OrdersListPaidPage()
-                : const OrdersListCancelledPage(),
+            child: SwipeableTabSwitcher(
+              tabs: const ['Unpaid', 'Partial', 'Paid', 'Cancelled'],
+              children: const [
+                OrdersListUnpaidPage(),
+                OrdersListPartialPage(),
+                OrdersListPaidPage(),
+                OrdersListCancelledPage(),
+              ],
+              selectedTabColors: const [
+                googleRed,      // Unpaid tab color
+                primaryOrangeTextColor,     // Partial tab color
+                successTextColor,        // Paid tab color
+                colorBackground,        // Cancelled tab color
+              ],
+              selectedTextColors: const [
+                Colors.white,      // Unpaid text color
+                Colors.white,      // Partial text color
+                Colors.white,      // Paid text color
+                textPrimary,      // Cancelled text color
+              ],
+              selectedBorderColors: const [
+                googleRed,      // Unpaid border color
+                primaryOrangeTextColor,     // Partial border color
+                successTextColor,        // Paid border color
+                colorBackground,        // Cancelled border color
+              ],
+            ),
           ),
         ],
       ),

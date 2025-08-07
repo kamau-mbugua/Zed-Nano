@@ -60,7 +60,7 @@ Widget previewAddStockItem({
                     ),
                   ),
                   Text(
-                    '${item.quantity}',
+                    '${item.oldStock}',
                     style: TextStyle(
                       fontSize: 12,
                       fontFamily: 'Poppins',
@@ -278,7 +278,7 @@ Widget viewBatchProductItem({
                         ),
                       ),
                       Text(
-                        '${item.newQuantity}',
+                        '${item.inStockQuantity}',
                         style: TextStyle(
                           fontSize: 12,
                           fontFamily: 'Poppins',

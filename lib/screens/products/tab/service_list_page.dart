@@ -82,7 +82,9 @@ class _ServiceListPageState extends State<ServiceListPage> {
       backgroundColor: Colors.white,
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
-          await Navigator.pushNamed(context, AppRoutes.getNewProductWithParamRoutes('true'));
+          await Navigator.pushNamed(context, AppRoutes.getNewProductWithParamRoutes('true')).then((value) {
+            _paginationController.refresh();
+          });
         },
         backgroundColor: const Color(0xFF032541),
         icon: const Icon(Icons.add, size: 20, color: Colors.white),

@@ -24,17 +24,14 @@ class _AddStockBatchTabsPageState extends State<AddStockBatchTabsPage> {
         body: Column(
           children: [
             const SizedBox(height: 4),
-            // Tabs
-            CustomTabSwitcher(
-              tabs: const ["Approved", "Pending"],
-              selectedIndex: selectedTab,
-              onTabSelected: (index) => setState(() => selectedTab = index),
-            ),
-            const SizedBox(height: 16),
             Expanded(
-              child: selectedTab == 0
-                  ? const AddStockApprovedBatchPage()
-                  : const AddStockPendingBatchPage(),
+              child: SwipeableTabSwitcher(
+                tabs: const ["Approved", "Pending"],
+                children: const [
+                  AddStockApprovedBatchPage(),
+                  AddStockPendingBatchPage(),
+                ],
+              ),
             ),
           ],
         )

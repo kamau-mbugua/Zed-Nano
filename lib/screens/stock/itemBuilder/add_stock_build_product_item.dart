@@ -92,6 +92,23 @@ Widget addStockBuildProductItem({
                         color: Colors.grey.shade500,
                       ),
                     ),
+                    Text('${product.inStockQuantity}',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          color: statusColor,
+                          fontSize: 10,
+                          fontWeight: FontWeight.w600,
+                          fontStyle: FontStyle.normal,
+                        ),
+                    ),
+                    Text(
+                      ' · ',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontFamily: 'Poppins',
+                        color: Colors.grey.shade500,
+                      ),
+                    ),
                     Text('$statusText',
                         style: TextStyle(
                           fontFamily: 'Poppins',

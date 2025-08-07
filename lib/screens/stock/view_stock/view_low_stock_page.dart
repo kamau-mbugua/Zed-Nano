@@ -159,13 +159,13 @@ class _ViewLowStockPageState extends State<ViewLowStockPage> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-        },
-        label: const Text('Add', style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white)),
-        icon: const Icon(Icons.add, color: Colors.white),
-        backgroundColor: appThemePrimary,
-      ),
+      // floatingActionButton: FloatingActionButton.extended(
+      //   onPressed: () {
+      //   },
+      //   label: const Text('Add', style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white)),
+      //   icon: const Icon(Icons.add, color: Colors.white),
+      //   backgroundColor: appThemePrimary,
+      // ),
     );
   }
 
@@ -187,7 +187,8 @@ class _ViewLowStockPageState extends State<ViewLowStockPage> {
         });
       },
       showRightButtonArrow: false,
-    );
+      showRightButton: false,
+    ).paddingSymmetric(horizontal: 16);
   }
   Widget _buildStockList() {
     return PagedListView<int, ActiveStockProduct>(

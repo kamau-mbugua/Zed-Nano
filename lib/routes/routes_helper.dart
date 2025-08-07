@@ -22,7 +22,7 @@ import 'package:zed_nano/screens/payments/mpesa/add_mpesa_payment_page.dart';
 import 'package:zed_nano/screens/products/add/add_product_page.dart';
 import 'package:zed_nano/screens/products/detail/product_detail_page.dart';
 import 'package:zed_nano/screens/products/edit/edit_product_page.dart';
-import 'package:zed_nano/screens/products/list_categories_page.dart';
+import 'package:zed_nano/screens/products/list_products_and_services_page.dart';
 import 'package:zed_nano/screens/sell/sell_page.dart';
 import 'package:zed_nano/screens/stock/add_stock/add_stock_batch_tabs_page.dart';
 import 'package:zed_nano/screens/stock/stock_take/stock_take_batch_tabs_page.dart';

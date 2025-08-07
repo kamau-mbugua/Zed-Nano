@@ -35,26 +35,26 @@ class _StockTakeBatchTabsPageState extends State<StockTakeBatchTabsPage> {
             // ),
             
             // Example 2: 3 tabs with individual colors
-            CustomTabSwitcher(
-              tabs: const ["Approved", "Pending"],
-              selectedIndex: selectedTab,
-              onTabSelected: (index) => setState(() => selectedTab = index),
-              // selectedTabColors: const [
-              //   Colors.green,      // Approved tab color
-              //   Colors.orange,     // Pending tab color
-              //   // Colors.red,        // Rejected tab color
-              // ],
-              // selectedTextColors: const [
-              //   Colors.white,      // Approved text color
-              //   Colors.white,      // Pending text color
-              //   // Colors.white,      // Rejected text color
-              // ],
-              // selectedBorderColors: const [
-              //   Colors.green,      // Approved border color
-              //   Colors.orange,     // Pending border color
-              //   // Colors.red,        // Rejected border color
-              // ],
-            ),
+            // CustomTabSwitcher(
+            //   tabs: const ["Approved", "Pending"],
+            //   selectedIndex: selectedTab,
+            //   onTabSelected: (index) => setState(() => selectedTab = index),
+            //   // selectedTabColors: const [
+            //   //   Colors.green,      // Approved tab color
+            //   //   Colors.orange,     // Pending tab color
+            //   //   // Colors.red,        // Rejected tab color
+            //   // ],
+            //   // selectedTextColors: const [
+            //   //   Colors.white,      // Approved text color
+            //   //   Colors.white,      // Pending text color
+            //   //   // Colors.white,      // Rejected text color
+            //   // ],
+            //   // selectedBorderColors: const [
+            //   //   Colors.green,      // Approved border color
+            //   //   Colors.orange,     // Pending border color
+            //   //   // Colors.red,        // Rejected border color
+            //   // ],
+            // ),
             
             // Example 3: Mixed approach - some tabs with custom colors, others use default
             // CustomTabSwitcher(
@@ -69,11 +69,13 @@ class _StockTakeBatchTabsPageState extends State<StockTakeBatchTabsPage> {
             // ),
             const SizedBox(height: 16),
             Expanded(
-              child: selectedTab == 0
-                  ? const StockTakeApprovedBatchPage()
-                  : selectedTab == 1
-                      ? const StockTakePendingBatchPage()
-                      : const Text("Rejected"),
+              child: SwipeableTabSwitcher(
+                tabs: const ["Approved", "Pending"],
+                children: const [
+                  StockTakeApprovedBatchPage(),
+                  StockTakePendingBatchPage(),
+                ],
+              ),
             ),
           ],
         )
