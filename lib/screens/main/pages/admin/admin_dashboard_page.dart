@@ -16,6 +16,7 @@ import 'package:zed_nano/routes/routes.dart';
 import 'package:zed_nano/screens/business/get_started_page.dart';
 import 'package:zed_nano/screens/business/bottomsheets/setup_bottom_sheet.dart';
 import 'package:zed_nano/screens/customers/customers_list_page.dart';
+import 'package:zed_nano/screens/reports/itemBuilders/all_transactions_item_builder.dart';
 import 'package:zed_nano/screens/reports/sales_report/sales_report_page.dart';
 import 'package:zed_nano/screens/reports/sales_report/sub_reports/quantities_sold_page.dart';
 import 'package:zed_nano/screens/reports/sales_report/sub_reports/total_sales_page.dart';
@@ -327,9 +328,14 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                     10.height,
                     buildSalesSummaryList(),
                     16.height,
-                    const Text('Recent Sales',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600, fontSize: 16)),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text('Recent Sales',
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 16)),
+                      ],
+                    ),
                     10.height,
                     buildRecentSalesList(),
                     80.height,
@@ -539,67 +545,67 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
 
     return Column(
       children: [
-        Container(
-            width: context.width(),
-            decoration: BoxDecoration(
-              color: lightGreyColor,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-            child: const Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text("Trans. ID",
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          color: textPrimary,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          fontStyle: FontStyle.normal,
-                        )),
-                    Text("Amount",
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          color: textPrimary,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          fontStyle: FontStyle.normal,
-                        ))
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text("Products",
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          color: textSecondary,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                          fontStyle: FontStyle.normal,
-                          letterSpacing: 0.12,
-                        )),
-                    Text("Date",
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          color: textSecondary,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                          fontStyle: FontStyle.normal,
-                          letterSpacing: 0.12,
-                        ))
-                  ],
-                )
-              ],
-            )),
+        // Container(
+        //     width: context.width(),
+        //     decoration: BoxDecoration(
+        //       color: lightGreyColor,
+        //       borderRadius: BorderRadius.circular(8),
+        //     ),
+        //     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+        //     child: const Column(
+        //       crossAxisAlignment: CrossAxisAlignment.start,
+        //       mainAxisAlignment: MainAxisAlignment.center,
+        //       children: [
+        //         Row(
+        //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //           children: [
+        //             Text("Trans. ID",
+        //                 style: TextStyle(
+        //                   fontFamily: 'Poppins',
+        //                   color: textPrimary,
+        //                   fontSize: 12,
+        //                   fontWeight: FontWeight.w600,
+        //                   fontStyle: FontStyle.normal,
+        //                 )),
+        //             Text("Amount",
+        //                 style: TextStyle(
+        //                   fontFamily: 'Poppins',
+        //                   color: textPrimary,
+        //                   fontSize: 12,
+        //                   fontWeight: FontWeight.w600,
+        //                   fontStyle: FontStyle.normal,
+        //                 ))
+        //           ],
+        //         ),
+        //         Row(
+        //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //           children: [
+        //             Text("Products",
+        //                 style: TextStyle(
+        //                   fontFamily: 'Poppins',
+        //                   color: textSecondary,
+        //                   fontSize: 12,
+        //                   fontWeight: FontWeight.w400,
+        //                   fontStyle: FontStyle.normal,
+        //                   letterSpacing: 0.12,
+        //                 )),
+        //             Text("Date",
+        //                 style: TextStyle(
+        //                   fontFamily: 'Poppins',
+        //                   color: textSecondary,
+        //                   fontSize: 12,
+        //                   fontWeight: FontWeight.w400,
+        //                   fontStyle: FontStyle.normal,
+        //                   letterSpacing: 0.12,
+        //                 ))
+        //           ],
+        //         )
+        //       ],
+        //     )),
         const Divider(),
         ...transactions.map<Widget>((tx) => Padding(
               padding: const EdgeInsets.symmetric(vertical: 4.0),
-              child: Column(
+              child: allTransactionsItemBuilder(tx, context).paddingSymmetric(vertical: 3, horizontal: 3)/*Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
@@ -650,7 +656,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                     ],
                   )
                 ],
-              ).onTap(() =>TransactionDetailPage(transactionId: tx.transactionID,).launch(context)),
+              ).onTap(() =>TransactionDetailPage(transactionId: tx.transactionID,).launch(context))*/,
             )),
       ],
     );
