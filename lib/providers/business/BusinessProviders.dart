@@ -1902,18 +1902,12 @@ class BusinessProviders extends BaseProvider {
   }
 
   Future<ResponseModel<SalesReportTotalSalesResponse>> getTotalSales({
-    required String startDate,
-    required String endDate,
-    int limit = 10000,
-    int page = 1,
+    required Map<String, dynamic> params,
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
         () => businessRepo.getTotalSales(
-          startDate: startDate,
-          endDate: endDate,
-          limit: limit,
-          page: page,
+          params: params
         ), context);
 
     ResponseModel<SalesReportTotalSalesResponse> finalResponseModel;
@@ -1931,18 +1925,12 @@ class BusinessProviders extends BaseProvider {
   }
 
   Future<ResponseModel<GetProductGrossMarginResponse>> getProductGrossMargin({
-    required String startDate,
-    required String endDate,
-    int limit = 10000,
-    int page = 1,
+    required Map<String, dynamic> params,
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
         () => businessRepo.getProductGrossMargin(
-          startDate: startDate,
-          endDate: endDate,
-          limit: limit,
-          page: page,
+            params:params
         ), context);
 
     ResponseModel<GetProductGrossMarginResponse> finalResponseModel;
@@ -1960,18 +1948,12 @@ class BusinessProviders extends BaseProvider {
   }
 
   Future<ResponseModel<OpeningClosingResponse>> getClosingOpeningReport({
-    required String startDate,
-    required String endDate,
-    int limit = 10000,
-    int page = 1,
+    required Map<String, dynamic> params,
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
         () => businessRepo.getClosingOpeningReport(
-          startDate: startDate,
-          endDate: endDate,
-          limit: limit,
-          page: page,
+            params:params
         ), context);
 
     ResponseModel<OpeningClosingResponse> finalResponseModel;
@@ -1989,18 +1971,12 @@ class BusinessProviders extends BaseProvider {
   }
 
   Future<ResponseModel<VoidApprovedResponse>> getVoidedTRansactionReports({
-    required String startDate,
-    required String endDate,
-    int limit = 10000,
-    int page = 1,
+    required Map<String, dynamic> params,
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
         () => businessRepo.getVoidedTRansactionReports(
-          startDate: startDate,
-          endDate: endDate,
-          limit: limit,
-          page: page,
+            params:params
         ), context);
 
     ResponseModel<VoidApprovedResponse> finalResponseModel;
@@ -2018,18 +1994,12 @@ class BusinessProviders extends BaseProvider {
   }
 
   Future<ResponseModel<QuantitiesSoldResponse>> getTotalQuantitiesSold({
-    required String startDate,
-    required String endDate,
-    int limit = 10000,
-    int page = 1,
+    required Map<String, dynamic> params,
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
         () => businessRepo.getTotalQuantitiesSold(
-          startDate: startDate,
-          endDate: endDate,
-          limit: limit,
-          page: page,
+          params: params,
         ), context);
 
     ResponseModel<QuantitiesSoldResponse> finalResponseModel;
@@ -2047,18 +2017,12 @@ class BusinessProviders extends BaseProvider {
   }
 
   Future<ResponseModel<GetTotalSalesResponse>> getTotalSalesReport({
-    required String startDate,
-    required String endDate,
-    int limit = 10000,
-    int page = 1,
+    required Map<String, dynamic> params,
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
         () => businessRepo.getTotalSalesReport(
-          startDate: startDate,
-          endDate: endDate,
-          limit: limit,
-          page: page,
+            params:params
         ), context);
 
     ResponseModel<GetTotalSalesResponse> finalResponseModel;
@@ -2076,18 +2040,12 @@ class BusinessProviders extends BaseProvider {
   }
 
   Future<ResponseModel<ProductTotalCostResponse>> getProductTotalCost({
-    required String startDate,
-    required String endDate,
-    required int limit,
-    required int page,
+    required Map<String, dynamic> params,
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
         () => businessRepo.getProductTotalCost(
-          startDate: startDate,
-          endDate: endDate,
-          limit: limit,
-          page: page,
+            params:params
         ), context);
 
     ResponseModel<ProductTotalCostResponse> finalResponseModel;

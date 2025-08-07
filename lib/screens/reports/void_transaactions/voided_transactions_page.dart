@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -16,6 +18,7 @@ import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/screens/widget/common/date_range_filter_bottom_sheet.dart';
+import 'package:zed_nano/screens/widget/common/searchview.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
@@ -38,6 +41,11 @@ class _VoidedTransactionsPageState extends State<VoidedTransactionsPage> {
 
   late PaginationController<VoidApprovedTransaction> _paginationController;
 
+  String _searchTerm = "";
+
+  Timer? _debounceTimer;
+
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
@@ -57,11 +65,17 @@ class _VoidedTransactionsPageState extends State<VoidedTransactionsPage> {
     final dateRange = DateRangeUtil.getDateRange(_selectedRangeLabel);
     final startDate = dateRange.values.first.removeTimezoneOffset;
     final endDate = dateRange.values.last.removeTimezoneOffset;
+
+    Map<String, dynamic> params = {
+      'startDate': startDate,
+      'endDate': endDate,
+      'page': page,
+      'limit': limit,
+      'searchValue': _searchTerm,
+    };
+
     final response = await getBusinessProvider(context).getVoidedTRansactionReports(
-        page: page,
-        limit: limit,
-        startDate: startDate,
-        endDate: endDate,
+        params: params,
         context: context
     );
 
@@ -92,7 +106,20 @@ class _VoidedTransactionsPageState extends State<VoidedTransactionsPage> {
   @override
   void dispose() {
     _paginationController.dispose();
+    _searchController.dispose();
+    _debounceTimer?.cancel();
     super.dispose();
+  }
+
+
+  void _debounceSearch(String value) {
+    if (_debounceTimer?.isActive ?? false) _debounceTimer!.cancel();
+    _debounceTimer = Timer(const Duration(milliseconds: 500), () {
+      setState(() {
+        _searchTerm = value;
+      });
+      _paginationController.refresh();
+    });
   }
 
   @override
@@ -134,7 +161,7 @@ class _VoidedTransactionsPageState extends State<VoidedTransactionsPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
+        const Text(
           'Void Transactions Report.',
           style: TextStyle(
             color: textPrimary,
@@ -144,7 +171,7 @@ class _VoidedTransactionsPageState extends State<VoidedTransactionsPage> {
           ),
         ),
         const SizedBox(height: 8),
-        Text(
+        const Text(
           'A complete payment history in your business.',
           style: TextStyle(
             color: textSecondary,
@@ -153,6 +180,12 @@ class _VoidedTransactionsPageState extends State<VoidedTransactionsPage> {
             fontSize: 12,
           ),
         ),
+        const SizedBox(height: 16),
+        buildSearchBar(
+            controller: _searchController,
+            onChanged: _debounceSearch,
+            horizontalPadding:5
+        )
       ],
     );
   }
@@ -172,7 +205,7 @@ class _VoidedTransactionsPageState extends State<VoidedTransactionsPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
+        const Text(
           'Summary',
           style: TextStyle(
             color: textPrimary,
@@ -192,7 +225,7 @@ class _VoidedTransactionsPageState extends State<VoidedTransactionsPage> {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(
+                const Icon(
                   Icons.filter_list,
                   size: 16,
                   color: textSecondary,
@@ -200,7 +233,7 @@ class _VoidedTransactionsPageState extends State<VoidedTransactionsPage> {
                 const SizedBox(width: 8),
                 Text(
                   (_selectedRangeLabel ?? 'Filter').toDisplayLabel,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: textPrimary,
                     fontWeight: FontWeight.w400,
                     fontFamily: 'Poppins',
@@ -208,7 +241,7 @@ class _VoidedTransactionsPageState extends State<VoidedTransactionsPage> {
                   ),
                 ),
                 const SizedBox(width: 8),
-                Icon(
+                const Icon(
                   Icons.keyboard_arrow_right,
                   size: 16,
                   color: textSecondary,
@@ -284,7 +317,7 @@ class _VoidedTransactionsPageState extends State<VoidedTransactionsPage> {
           const SizedBox(height: 16),
           Text(
             title,
-            style: TextStyle(
+            style: const TextStyle(
               color: textSecondary,
               fontWeight: FontWeight.w400,
               fontFamily: 'Poppins',
@@ -294,7 +327,7 @@ class _VoidedTransactionsPageState extends State<VoidedTransactionsPage> {
           const SizedBox(height: 8),
           Text(
             value,
-            style: TextStyle(
+            style: const TextStyle(
               color: textPrimary,
               fontWeight: FontWeight.w600,
               fontFamily: 'Poppins',
@@ -310,7 +343,7 @@ class _VoidedTransactionsPageState extends State<VoidedTransactionsPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
+        const Text(
           'Transactions',
           style: TextStyle(
             color: textPrimary,
@@ -506,7 +539,7 @@ class _VoidedTransactionsPageState extends State<VoidedTransactionsPage> {
       children: [
         Text(
           label,
-          style: TextStyle(
+          style: const TextStyle(
             color: textSecondary,
             fontWeight: FontWeight.w400,
             fontFamily: 'Poppins',
@@ -516,7 +549,7 @@ class _VoidedTransactionsPageState extends State<VoidedTransactionsPage> {
         const SizedBox(height: 4),
         Text(
           value,
-          style: TextStyle(
+          style: const TextStyle(
             color: textPrimary,
             fontWeight: FontWeight.w400,
             fontFamily: 'Poppins',

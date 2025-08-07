@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -14,6 +16,7 @@ import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/screens/widget/common/date_range_filter_bottom_sheet.dart';
+import 'package:zed_nano/screens/widget/common/searchview.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
@@ -33,6 +36,12 @@ class _OpeningClosingReportPageState extends State<OpeningClosingReportPage> {
   bool _isLoading = false;
   String _selectedRangeLabel = 'this_month';
   OpeningClosingResponse? _summaryData;
+  final TextEditingController _searchController = TextEditingController();
+
+
+  String _searchTerm = "";
+
+  Timer? _debounceTimer;
 
   late PaginationController<OpeningClosingData> _paginationController;
 
@@ -55,14 +64,29 @@ class _OpeningClosingReportPageState extends State<OpeningClosingReportPage> {
     final dateRange = DateRangeUtil.getDateRange(_selectedRangeLabel);
     final startDate = dateRange.values.first.removeTimezoneOffset;
     final endDate = dateRange.values.last.removeTimezoneOffset;
+
+    Map<String, dynamic> params = {
+      'startDate': startDate,
+      'endDate': endDate,
+      'page': page,
+      'limit': limit,
+      'searchValue': _searchTerm,
+    };
     final response = await getBusinessProvider(context).getClosingOpeningReport(
-        page: page,
-        limit: limit,
-        startDate: startDate,
-        endDate: endDate,
+        params:params,
         context: context
     );
     return response.data?.data ?? [];
+  }
+
+  void _debounceSearch(String value) {
+    if (_debounceTimer?.isActive ?? false) _debounceTimer!.cancel();
+    _debounceTimer = Timer(const Duration(milliseconds: 500), () {
+      setState(() {
+        _searchTerm = value;
+      });
+      _paginationController.refresh();
+    });
   }
 
   void _showDateRangeFilter() {
@@ -85,6 +109,8 @@ class _OpeningClosingReportPageState extends State<OpeningClosingReportPage> {
   @override
   void dispose() {
     _paginationController.dispose();
+    _searchController.dispose();
+    _debounceTimer?.cancel();
     super.dispose();
   }
 
@@ -124,10 +150,10 @@ class _OpeningClosingReportPageState extends State<OpeningClosingReportPage> {
   }
 
   Widget _buildHeader() {
-    return const Column(
+    return  Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
+        const Text(
           'Opening & Closing Stock Report.',
           style: TextStyle(
             color: textPrimary,
@@ -136,8 +162,8 @@ class _OpeningClosingReportPageState extends State<OpeningClosingReportPage> {
             fontSize: 28,
           ),
         ),
-        SizedBox(height: 8),
-        Text(
+        const SizedBox(height: 8),
+        const Text(
           'An overview of stock performance.',
           style: TextStyle(
             color: textSecondary,
@@ -146,6 +172,12 @@ class _OpeningClosingReportPageState extends State<OpeningClosingReportPage> {
             fontSize: 12,
           ),
         ),
+        const SizedBox(height: 16),
+        buildSearchBar(
+            controller: _searchController,
+            onChanged: _debounceSearch,
+            horizontalPadding:5
+        )
       ],
     );
   }

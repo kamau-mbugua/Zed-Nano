@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -12,6 +14,7 @@ import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/screens/widget/common/date_range_filter_bottom_sheet.dart';
+import 'package:zed_nano/screens/widget/common/searchview.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
@@ -35,6 +38,11 @@ class _TotalSalesPageState extends State<TotalSalesPage> {
 
   late PaginationController<GetTotalSalesData> _paginationController;
 
+  String _searchTerm = "";
+
+  Timer? _debounceTimer;
+
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
@@ -54,11 +62,17 @@ class _TotalSalesPageState extends State<TotalSalesPage> {
     final dateRange = DateRangeUtil.getDateRange(_selectedRangeLabel);
     final startDate = dateRange.values.first.removeTimezoneOffset;
     final endDate = dateRange.values.last.removeTimezoneOffset;
+
+    Map<String, dynamic> params = {
+      'startDate': startDate,
+      'endDate': endDate,
+      'page': page,
+      'limit': limit,
+      'searchValue': _searchTerm,
+    };
+
     final response = await getBusinessProvider(context).getTotalSalesReport(
-        page: page,
-        limit: limit,
-        startDate: startDate,
-        endDate: endDate,
+        params: params,
         context: context
     );
     setState(() {
@@ -84,9 +98,21 @@ class _TotalSalesPageState extends State<TotalSalesPage> {
     );
   }
 
+  void _debounceSearch(String value) {
+    if (_debounceTimer?.isActive ?? false) _debounceTimer!.cancel();
+    _debounceTimer = Timer(const Duration(milliseconds: 500), () {
+      setState(() {
+        _searchTerm = value;
+      });
+      _paginationController.refresh();
+    });
+  }
+
   @override
   void dispose() {
     _paginationController.dispose();
+    _searchController.dispose();
+    _debounceTimer?.cancel();
     super.dispose();
   }
 
@@ -126,10 +152,10 @@ class _TotalSalesPageState extends State<TotalSalesPage> {
   }
 
   Widget _buildHeader() {
-    return const Column(
+    return  Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
+        const Text(
           'Total Sales',
           style: TextStyle(
             color: textPrimary,
@@ -138,8 +164,8 @@ class _TotalSalesPageState extends State<TotalSalesPage> {
             fontSize: 28,
           ),
         ),
-        SizedBox(height: 8),
-        Text(
+        const SizedBox(height: 8),
+        const Text(
           'Detailed report on the total sales.',
           style: TextStyle(
             color: textSecondary,
@@ -148,6 +174,12 @@ class _TotalSalesPageState extends State<TotalSalesPage> {
             fontSize: 12,
           ),
         ),
+        const SizedBox(height: 16),
+        buildSearchBar(
+            controller: _searchController,
+            onChanged: _debounceSearch,
+            horizontalPadding:5
+        )
       ],
     );
   }
@@ -187,7 +219,7 @@ class _TotalSalesPageState extends State<TotalSalesPage> {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(
+                const Icon(
                   Icons.filter_list,
                   size: 16,
                   color: textSecondary,
@@ -195,7 +227,7 @@ class _TotalSalesPageState extends State<TotalSalesPage> {
                 const SizedBox(width: 8),
                 Text(
                   (_selectedRangeLabel ?? 'Filter').toDisplayLabel,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: textPrimary,
                     fontWeight: FontWeight.w400,
                     fontFamily: 'Poppins',
@@ -203,7 +235,7 @@ class _TotalSalesPageState extends State<TotalSalesPage> {
                   ),
                 ),
                 const SizedBox(width: 8),
-                Icon(
+                const Icon(
                   Icons.keyboard_arrow_right,
                   size: 16,
                   color: textSecondary,

@@ -106,6 +106,11 @@ extension StringValidationExtensions on String {
     }
   }
 
+  //remove time from date time
+  String get removeTime {
+    return this.split('T')[0];
+  }
+
   //remove + from phone number
   String get removePlus {
     return this.replaceAll('+', '');

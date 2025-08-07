@@ -78,7 +78,7 @@ Widget buildCategoryCard(ProductCategoryData category) {
             ),
             const SizedBox(width: 8),
             Text(
-              '${category.subCategories?.length ?? 0} Products',
+              '${category.noOfProducts ?? 0} Products',
               style: const TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w600,

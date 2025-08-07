@@ -49,6 +49,7 @@ class ProductCategoryData {
   final String? dateUpdated;
   final String? updatedAt;
   final int? v;
+  final int? noOfProducts;
   final String? imagePath;
   final String? thumbailImagePath;
   final String? modifiedByName;
@@ -70,6 +71,7 @@ class ProductCategoryData {
     this.dateUpdated,
     this.updatedAt,
     this.v,
+    this.noOfProducts,
     this.imagePath,
     this.thumbailImagePath,
     this.modifiedByName,
@@ -93,6 +95,7 @@ class ProductCategoryData {
       dateUpdated: json['dateUpdated'] as String?,
       updatedAt: json['updatedAt'] as String?,
       v: json['__v'] as int?,
+      noOfProducts: json['noOfProducts'] as int?,
       imagePath: json['imagePath'] as String?,
       thumbailImagePath: json['thumbailImagePath'] as String?,
       modifiedByName: json['modifiedByName'] as String?,
@@ -117,6 +120,7 @@ class ProductCategoryData {
       'dateUpdated': dateUpdated,
       'updatedAt': updatedAt,
       '__v': v,
+      'noOfProducts': noOfProducts,
       'imagePath': imagePath,
       'thumbailImagePath': thumbailImagePath,
       'modifiedByName': modifiedByName,

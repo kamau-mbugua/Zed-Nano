@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -11,6 +13,7 @@ import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/screens/widget/common/date_range_filter_bottom_sheet.dart';
+import 'package:zed_nano/screens/widget/common/searchview.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
@@ -35,6 +38,12 @@ class _QuantitiesSoldPageState extends State<QuantitiesSoldPage> {
   late PaginationController<QuantitiesSoldData> _paginationController;
 
 
+  String _searchTerm = "";
+
+  Timer? _debounceTimer;
+
+  final TextEditingController _searchController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -53,11 +62,17 @@ class _QuantitiesSoldPageState extends State<QuantitiesSoldPage> {
     final dateRange = DateRangeUtil.getDateRange(_selectedRangeLabel);
     final startDate = dateRange.values.first.removeTimezoneOffset;
     final endDate = dateRange.values.last.removeTimezoneOffset;
+
+    Map<String, dynamic> params = {
+      'startDate': startDate,
+      'endDate': endDate,
+      'page': page,
+      'limit': limit,
+      'searchValue': _searchTerm,
+    };
+
     final response = await getBusinessProvider(context).getTotalQuantitiesSold(
-        page: page,
-        limit: limit,
-        startDate: startDate,
-        endDate: endDate,
+        params: params,
         context: context
     );
     setState(() {
@@ -83,9 +98,20 @@ class _QuantitiesSoldPageState extends State<QuantitiesSoldPage> {
     );
   }
 
+  void _debounceSearch(String value) {
+    if (_debounceTimer?.isActive ?? false) _debounceTimer!.cancel();
+    _debounceTimer = Timer(const Duration(milliseconds: 500), () {
+      setState(() {
+        _searchTerm = value;
+      });
+      _paginationController.refresh();
+    });
+  }
   @override
   void dispose() {
     _paginationController.dispose();
+    _searchController.dispose();
+    _debounceTimer?.cancel();
     super.dispose();
   }
 
@@ -147,6 +173,12 @@ class _QuantitiesSoldPageState extends State<QuantitiesSoldPage> {
             fontSize: 12,
           ),
         ),
+        const SizedBox(height: 16),
+        buildSearchBar(
+            controller: _searchController,
+            onChanged: _debounceSearch,
+            horizontalPadding:5
+        )
       ],
     );
   }

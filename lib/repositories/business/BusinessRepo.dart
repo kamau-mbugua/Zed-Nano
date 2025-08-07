@@ -1046,7 +1046,7 @@ class BusinessRepo{
   Future<ApiResponse> changeStatus({required String customerNumber, required String status}) async {
     try {
 
-      var data = {
+      final data = {
         'status': status,
       };
 
@@ -1061,7 +1061,7 @@ class BusinessRepo{
 
   Future<ApiResponse> getUserProfile() async {
     try {
-      var data = {};
+      final data = {};
 
       final response = await dioClient!.post('${AppConstants.getUserProfile}', data: data);
       return ApiResponse.withSuccess(response);
@@ -1122,15 +1122,19 @@ class BusinessRepo{
   }
 
   Future<ApiResponse> getTotalSales({
-    required String startDate,
-    required String endDate,
-    int limit = 10000,
-    int page = 1,
+    required Map<String, dynamic> params,
   }) async {
     try {
+
+      final data = {
+        'searchValue': params['searchValue'],
+      };
+
+      params.remove('searchValue');
+
       final response = await dioClient!.post(
-        '${AppConstants.getTotalSales}?limit=$limit&page=$page&startDate=$startDate&endDate=$endDate',
-        data: {},
+        '${AppConstants.getTotalSales}',
+        data: data, queryParameters: params,
       );
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -1139,15 +1143,19 @@ class BusinessRepo{
   }
 
   Future<ApiResponse> getProductGrossMargin({
-    required String startDate,
-    required String endDate,
-    int limit = 10000,
-    int page = 1,
+    required Map<String, dynamic> params,
   }) async {
     try {
+      final data = {
+        'searchValue': params['searchValue'],
+      };
+
+      //remove searchValue from params
+      params.remove('searchValue');
+
       final response = await dioClient!.post(
-        '${AppConstants.getProductGrossMargin}?limit=$limit&page=$page&startDate=$startDate&endDate=$endDate',
-        data: {},
+        '${AppConstants.getProductGrossMargin}',
+        data: data, queryParameters: params,
       );
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -1156,14 +1164,11 @@ class BusinessRepo{
   }
 
   Future<ApiResponse> getClosingOpeningReport({
-    required String startDate,
-    required String endDate,
-    int limit = 10000,
-    int page = 1,
+    required Map<String, dynamic> params,
   }) async {
     try {
       final response = await dioClient!.get(
-        '${AppConstants.getClosingOpeningReport}?limit=$limit&page=$page&startDate=$startDate&endDate=$endDate',
+        '${AppConstants.getClosingOpeningReport}', queryParameters: params,
       );
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -1172,14 +1177,11 @@ class BusinessRepo{
   }
 
   Future<ApiResponse> getVoidedTRansactionReports({
-    required String startDate,
-    required String endDate,
-    int limit = 10000,
-    int page = 1,
+    required Map<String, dynamic> params,
   }) async {
     try {
       final response = await dioClient!.get(
-        '${AppConstants.getVoidedTRansactionReports}?limit=$limit&page=$page&startDate=$startDate&endDate=$endDate',
+        '${AppConstants.getVoidedTRansactionReports}', queryParameters: params,
       );
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -1188,15 +1190,18 @@ class BusinessRepo{
   }
 
   Future<ApiResponse> getTotalQuantitiesSold({
-    required String startDate,
-    required String endDate,
-    int limit = 10000,
-    int page = 1,
+    required Map<String, dynamic> params,
   }) async {
     try {
+      final data = {
+        'searchValue': params['searchValue'],
+      };
+
+      params.remove('searchValue');
+
       final response = await dioClient!.post(
-        '${AppConstants.getTotalQuantitiesSold}?limit=$limit&page=$page&startDate=$startDate&endDate=$endDate',
-        data: {},
+        '${AppConstants.getTotalQuantitiesSold}',
+        data: data, queryParameters: params,
       );
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -1205,15 +1210,20 @@ class BusinessRepo{
   }
 
   Future<ApiResponse> getTotalSalesReport({
-    required String startDate,
-    required String endDate,
-    int limit = 10000,
-    int page = 1,
+    required Map<String, dynamic> params,
+
   }) async {
     try {
+      final data = {
+        'searchValue': params['searchValue'],
+      };
+
+      params.remove('searchValue');
+
+
       final response = await dioClient!.post(
-        '${AppConstants.getTotalSalesReport}?limit=$limit&page=$page&startDate=$startDate&endDate=$endDate',
-        data: {},
+        '${AppConstants.getTotalSalesReport}',
+        data: data , queryParameters: params,
       );
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -1222,15 +1232,20 @@ class BusinessRepo{
   }
 
   Future<ApiResponse> getProductTotalCost({
-    required String startDate,
-    required String endDate,
-    int limit = 10000,
-    int page = 1,
+    required Map<String, dynamic> params,
   }) async {
     try {
+      final data = {
+        'searchValue': params['searchValue'],
+      };
+
+      params.remove('searchValue');
+
+
       final response = await dioClient!.post(
-        '${AppConstants.getProductTotalCost}?limit=$limit&page=$page&startDate=$startDate&endDate=$endDate',
-        data: {},
+        '${AppConstants.getProductTotalCost}',
+        data: data,
+        queryParameters: params,
       );
       return ApiResponse.withSuccess(response);
     } catch (e) {

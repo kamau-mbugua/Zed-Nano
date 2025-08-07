@@ -285,7 +285,7 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    '$productCount ${categoryData?.productService?.toLowerCase() == 'service' ? 'Service' : 'Product'}',
+                    '${categoryData?.noOfProducts ?? 0} ${categoryData?.productService?.toLowerCase() == 'service' ? 'Service' : 'Product'}',
                     style: const TextStyle(
                       color: textSecondary,
                       fontWeight: FontWeight.w400,

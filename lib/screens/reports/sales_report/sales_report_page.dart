@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -14,6 +16,7 @@ import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/screens/widget/common/date_range_filter_bottom_sheet.dart';
+import 'package:zed_nano/screens/widget/common/searchview.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
@@ -38,6 +41,13 @@ class _SalesReportPageState extends State<SalesReportPage> {
   late PaginationController<SalesReportTotalSalesData> _paginationController;
 
 
+  String _searchTerm = "";
+
+  Timer? _debounceTimer;
+
+  final TextEditingController _searchController = TextEditingController();
+
+
   @override
   void initState() {
     super.initState();
@@ -57,11 +67,17 @@ class _SalesReportPageState extends State<SalesReportPage> {
     final dateRange = DateRangeUtil.getDateRange(_selectedRangeLabel);
     final startDate = dateRange.values.first.removeTimezoneOffset;
     final endDate = dateRange.values.last.removeTimezoneOffset;
+
+    Map<String, dynamic> params = {
+      'startDate': startDate,
+      'endDate': endDate,
+      'page': page,
+      'limit': limit,
+      'searchValue': _searchTerm,
+    };
+
     final response = await getBusinessProvider(context).getTotalSales(
-        page: page,
-        limit: limit,
-        startDate: startDate,
-        endDate: endDate,
+        params:params,
         context: context
     );
     return response.data?.data ?? [];
@@ -109,6 +125,16 @@ class _SalesReportPageState extends State<SalesReportPage> {
     );
   }
 
+  void _debounceSearch(String value) {
+    if (_debounceTimer?.isActive ?? false) _debounceTimer!.cancel();
+    _debounceTimer = Timer(const Duration(milliseconds: 500), () {
+      setState(() {
+        _searchTerm = value;
+      });
+      _paginationController.refresh();
+    });
+  }
+
   @override
   void dispose() {
     _paginationController.dispose();
@@ -154,7 +180,7 @@ class _SalesReportPageState extends State<SalesReportPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
+        const Text(
           'Sales Report',
           style: TextStyle(
             color: textPrimary,
@@ -164,7 +190,7 @@ class _SalesReportPageState extends State<SalesReportPage> {
           ),
         ),
         const SizedBox(height: 8),
-        Text(
+        const Text(
           'An overview of sales performance.',
           style: TextStyle(
             color: textSecondary,
@@ -173,6 +199,12 @@ class _SalesReportPageState extends State<SalesReportPage> {
             fontSize: 12,
           ),
         ),
+        const SizedBox(height: 16),
+        buildSearchBar(
+            controller: _searchController,
+            onChanged: _debounceSearch,
+            horizontalPadding:5
+        )
       ],
     );
   }
@@ -192,7 +224,7 @@ class _SalesReportPageState extends State<SalesReportPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
+        const Text(
           'Summary',
           style: TextStyle(
             color: textPrimary,
@@ -212,7 +244,7 @@ class _SalesReportPageState extends State<SalesReportPage> {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(
+                const Icon(
                   Icons.filter_list,
                   size: 16,
                   color: textSecondary,
@@ -220,7 +252,7 @@ class _SalesReportPageState extends State<SalesReportPage> {
                 const SizedBox(width: 8),
                 Text(
                   (_selectedRangeLabel ?? 'Filter').toDisplayLabel,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: textPrimary,
                     fontWeight: FontWeight.w400,
                     fontFamily: 'Poppins',
@@ -228,7 +260,7 @@ class _SalesReportPageState extends State<SalesReportPage> {
                   ),
                 ),
                 const SizedBox(width: 8),
-                Icon(
+                const Icon(
                   Icons.keyboard_arrow_right,
                   size: 16,
                   color: textSecondary,
@@ -254,7 +286,7 @@ class _SalesReportPageState extends State<SalesReportPage> {
                 iconColor: emailBlue,
                 backgroundColor: lightGreyColor,
               ).onTap(
-                  ()=> QuantitiesSoldPage().launch(context)
+                  ()=> const QuantitiesSoldPage().launch(context)
               ) ,
             ),
             const SizedBox(width: 16),
@@ -266,7 +298,7 @@ class _SalesReportPageState extends State<SalesReportPage> {
                 iconColor: successTextColor,
                 backgroundColor: lightGreenColor,
               ).onTap(
-                  () => TotalSalesPage().launch(context)
+                  () => const TotalSalesPage().launch(context)
               ),
             ),
           ],
@@ -282,7 +314,7 @@ class _SalesReportPageState extends State<SalesReportPage> {
                 iconColor: primaryOrangeTextColor,
                 backgroundColor: lightOrange,
               ).onTap(
-                      ()=> TotalCostOfGoodsPage().launch(context)
+                      ()=> const TotalCostOfGoodsPage().launch(context)
               ) ,
             ),
             const SizedBox(width: 16),
@@ -294,7 +326,7 @@ class _SalesReportPageState extends State<SalesReportPage> {
                 iconColor: primaryBlueTextColor,
                 backgroundColor: lightBlueColor,
               ).onTap(
-                      () => GrossMarginPage().launch(context)
+                      () => const GrossMarginPage().launch(context)
               ),
             ),
           ],
@@ -358,7 +390,7 @@ class _SalesReportPageState extends State<SalesReportPage> {
           const SizedBox(height: 16),
           Text(
             title,
-            style: TextStyle(
+            style: const TextStyle(
               color: textSecondary,
               fontWeight: FontWeight.w400,
               fontFamily: 'Poppins',
@@ -368,7 +400,7 @@ class _SalesReportPageState extends State<SalesReportPage> {
           const SizedBox(height: 8),
           Text(
             value,
-            style: TextStyle(
+            style: const TextStyle(
               color: textPrimary,
               fontWeight: FontWeight.w600,
               fontFamily: 'Poppins',
@@ -384,7 +416,7 @@ class _SalesReportPageState extends State<SalesReportPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
+        const Text(
           'Recent Sales',
           style: TextStyle(
             color: textPrimary,
@@ -456,7 +488,7 @@ class _SalesReportPageState extends State<SalesReportPage> {
                 children: [
                   Text(
                     sale.productName ?? 'Unknown Product',
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: textPrimary,
                       fontWeight: FontWeight.w400,
                       fontFamily: 'Poppins',
@@ -465,7 +497,7 @@ class _SalesReportPageState extends State<SalesReportPage> {
                   ),
                   Text(
                     'KES ${(sale.totalSales?.formatCurrency() ?? 0)}',
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: textPrimary,
                       fontWeight: FontWeight.w600,
                       fontFamily: 'Poppins',
@@ -498,7 +530,7 @@ class _SalesReportPageState extends State<SalesReportPage> {
       children: [
         Text(
           label,
-          style: TextStyle(
+          style: const TextStyle(
             color: textSecondary,
             fontWeight: FontWeight.w400,
             fontFamily: 'Poppins',
@@ -508,7 +540,7 @@ class _SalesReportPageState extends State<SalesReportPage> {
         const SizedBox(height: 4),
         Text(
           value,
-          style: TextStyle(
+          style: const TextStyle(
             color: textPrimary,
             fontWeight: FontWeight.w400,
             fontFamily: 'Poppins',
