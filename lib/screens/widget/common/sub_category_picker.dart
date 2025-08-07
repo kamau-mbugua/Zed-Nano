@@ -1,6 +1,7 @@
 import 'package:csc_picker_plus/dropdown_with_search.dart';
 import 'package:flutter/material.dart';
 import 'package:csc_picker_plus/csc_picker_plus.dart'; // Assuming your package is locally or pub.dev installed
+import 'package:zed_nano/screens/widget/common/custom_dropdown_with_search.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
 
@@ -24,7 +25,7 @@ class SubCategoryPicker extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 48, // Fixed height to match StyledTextField
-      child: DropdownWithSearch<String>(
+      child: CustomDropdownWithSearch<String>(
         title: label,
         placeHolder: "Search $label",
         items: options,

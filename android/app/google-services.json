@@ -7,6 +7,42 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:251853629051:android:909a4f5e9741d0e0a364de",
+        "android_client_info": {
+          "package_name": "com.rbs.zednano"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "251853629051-4v7vu75n1dgl5ki71q3im59mgtj034ta.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJNKCAeWTN-h7hJq9ohuGzkEudPiP3CkA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "251853629051-4v7vu75n1dgl5ki71q3im59mgtj034ta.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "251853629051-diii87arv8vr5t0ec0n5enatg28cbcbd.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.riverbank.zed-payments"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:251853629051:android:87de3f71fae1f865a364de",
         "android_client_info": {
           "package_name": "com.rbs.zednano.dev"

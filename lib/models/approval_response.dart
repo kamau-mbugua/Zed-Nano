@@ -1,4 +1,3 @@
-import 'approval_data.dart';
 
 class ApprovalResponse {
   final String? status;

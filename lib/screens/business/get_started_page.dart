@@ -53,11 +53,7 @@ class _GetStartedPageState extends State<GetStartedPage> {
 
   void goSkip() async {
     try {
-      // Pop the current screen
-      Navigator.pop(context);
-      
-      // Get the ViewModel and handle the skip operation
-      _initializeBusinessSetupAfterCreation(context);
+     _initializeBusinessSetupAfterCreation(context);
     } catch (e) {
       logger.e('Error in goSkip: $e');
     }

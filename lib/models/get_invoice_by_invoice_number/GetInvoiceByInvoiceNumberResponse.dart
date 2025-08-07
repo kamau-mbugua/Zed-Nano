@@ -1,4 +1,3 @@
-import 'package:zed_nano/models/order_payment_status/OrderDetailResponse.dart';
 
 class GetInvoiceByInvoiceNumberResponse {
   final String? status;

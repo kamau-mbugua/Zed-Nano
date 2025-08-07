@@ -87,15 +87,10 @@ class AuthenticatedAppProviders extends BaseProvider {
       //   'userEmail': loginResponse?.email ?? ''
       // });
 
-      await RouterHelper.navigateTo(
-        context,
-        AppRoutes.setPinRoute,                 //  <-- note: use the actual route string
-        arguments: {
-          'oldPin': userPin ?? '',
-          'userEmail': loginResponse?.email ?? '',
-        },
-      );
-      return ResponseModel<LoginResponse>(false, "New Pin, Please Change your Pin!");
+
+      // return ResponseModel<LoginResponse>(false, "New Pin, Please Change your Pin!");
+      return ResponseModel<LoginResponse>(true, 'New Pin, Please Change your Pin!', loginResponse);
+
     }
   }
 

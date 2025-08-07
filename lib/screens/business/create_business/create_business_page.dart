@@ -265,7 +265,7 @@ class _CreateBusinessPageState extends State<CreateBusinessPage> {
                 .paddingSymmetric(horizontal: 16),
             5.height,
             SubCategoryPicker(
-              label: 'Select BusinessCategory',
+              label: 'Business Category',
               options: businessCategory
                   ?.where((category) => ![
                         'SACCO(MICRO FINANCE)',

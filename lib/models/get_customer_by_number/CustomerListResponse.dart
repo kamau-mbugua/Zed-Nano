@@ -1,4 +1,3 @@
-import 'package:zed_nano/models/customers_list/CustomerListResponse.dart';
 
 class GetCustomerByNumberResponse {
   final String status;

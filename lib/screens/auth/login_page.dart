@@ -7,6 +7,7 @@ import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/providers/auth/authenticated_app_providers.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/routes/routes.dart';
+import 'package:zed_nano/routes/routes_helper.dart';
 import 'package:zed_nano/screens/auth/forget_password_screen.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/auth/input_fields.dart';
@@ -414,15 +415,36 @@ class _LoginPageState extends State<LoginPage> {
     final authProvider = getAuthProvider(context);
     final response = await authProvider.login(requestData: loginData, context: context);
     if (response.isSuccess) {
-      final userName = authProvider.userDetails?.name ??
-          authProvider.loginResponse?.username ??
-          "User";
-      showCustomToast('Welcome back $userName!', isError: false);
-      
-      // Initialize business setup after successful login
-      await _initializeBusinessSetupAfterLogin(context);
-      
-      Navigator.of(context).pushReplacementNamed(AppRoutes.getHomeMainPageRoute());
+
+      if (response?.data?.state?.toLowerCase() != 'new') {
+        final userName = authProvider.userDetails?.name ??
+            authProvider.loginResponse?.username ??
+            "User";
+        showCustomToast('Welcome back $userName!', isError: false);
+
+        // Initialize business setup after successful login
+        await _initializeBusinessSetupAfterLogin(context);
+
+        Navigator.of(context).pushReplacementNamed(AppRoutes.getHomeMainPageRoute());
+      }else{
+        showCustomToast('${response.message}');
+
+
+        await RouterHelper.navigateTo(
+          context,
+          AppRoutes.setPinRoute,                 //  <-- note: use the actual route string
+          arguments: {
+            'oldPin': loginData['userPin'],
+            'userEmail': response?.data?.email ?? '',
+          },
+        ).then((value) {
+          passwordController.clear();
+          phonePasswordController.clear();
+        });
+      }
+
+
+
     } else {
       logger.d(response.message);
       showCustomToast('${response.message}!');

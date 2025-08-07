@@ -32,15 +32,16 @@ if (keystorePropertiesFile.exists()) {
 android {
     namespace "com.rbs.zednano"
     compileSdkVersion flutter.compileSdkVersion
+    buildToolsVersion "35.0.1"
     ndkVersion flutter.ndkVersion
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8
+        jvmTarget = '17'
     }
 
     sourceSets {
@@ -56,7 +57,28 @@ android {
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        
+        // Enable multidex for large apps
+        multiDexEnabled true
+        
+        // Vector drawable support
+        vectorDrawables.useSupportLibrary = true
     }
+
+    // Bundle configuration for app size optimization (temporarily disabled)
+    /*
+    bundle {
+        language {
+            enableSplit = true
+        }
+        density {
+            enableSplit = true
+        }
+        abi {
+            enableSplit = true
+        }
+    }
+    */
 
     signingConfigs {
         if (System.getenv("ANDROID_KEYSTORE_PATH")) {
@@ -98,11 +120,39 @@ android {
     buildTypes {
         release {
             signingConfig signingConfigs.release
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt')
+            // Temporarily disable R8 for compatibility
+            minifyEnabled false
+            shrinkResources false
+            // proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            
+            // Additional optimizations
+            debuggable false
+            jniDebuggable false
+            renderscriptDebuggable false
+            zipAlignEnabled true
         }
         debug {
             signingConfig signingConfigs.debug
+            // Keep debug builds fast
+            minifyEnabled false
+            shrinkResources false
+        }
+    }
+
+    // Custom output file naming
+    applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            def flavor = variant.flavorName
+            def buildType = variant.buildType.name
+            def versionName = variant.versionName
+            def versionCode = variant.versionCode
+            if (output.outputFile.name.endsWith(".apk")) {
+                def fileName = "ZN_${flavor}_${buildType}_v${versionName}_${versionCode}.apk"
+                outputFileName = fileName
+            } else if (output.outputFile.name.endsWith(".aab")) {
+                def fileName = "ZN_${flavor}_${buildType}_v${versionName}_${versionCode}.aab"
+                outputFileName = fileName
+            }
         }
     }
 }
@@ -113,4 +163,5 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.1.0"
+    implementation 'androidx.multidex:multidex:2.0.1'
 }

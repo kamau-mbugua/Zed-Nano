@@ -7,11 +7,11 @@ environment:
   sdk: ^3.5.0
 
 dependencies:
-  animations: ^2.0.11
-  bootstrap_icons: ^1.11.3
+#  animations: ^2.0.11
+#  bootstrap_icons: ^1.11.3
   cached_network_image: ^3.4.1
-  card_swiper: ^3.0.1
-  carousel_slider: ^5.1.1
+#  card_swiper: ^3.0.1
+#  carousel_slider: ^5.1.1
   clarity_flutter: ^1.0.0
   cloud_firestore: ^6.0.0
   connectivity_plus: ^6.1.4
@@ -26,38 +26,38 @@ dependencies:
   firebase_crashlytics: ^5.0.0
   firebase_messaging: ^16.0.0
   firebase_storage: ^13.0.0
-  fl_chart: ^1.0.0
+#  fl_chart: ^1.0.0
   fluro: ^2.0.5
   flutter:
     sdk: flutter
-  flutter_app_loading_indicator: ^0.0.3
-  flutter_facebook_auth: ^7.1.1
+#  flutter_app_loading_indicator: ^0.0.3
+  flutter_facebook_auth: ^7.1.2
   flutter_localizations:
     sdk: flutter
-  flutter_slidable: ^4.0.0
-  flutter_staggered_grid_view: ^0.7.0
+#  flutter_slidable: ^4.0.0
+#  flutter_staggered_grid_view: ^0.7.0
   flutter_svg: ^2.2.0
   get_it: ^8.0.3
   gif: ^2.3.0
   google_fonts: ^6.2.1
-  google_places_autocomplete_text_field: ^1.1.0
+#  google_places_autocomplete_text_field: ^1.1.0
   google_sign_in: ^7.1.1
   http: ^1.1.0
   iconsax: ^0.0.8
   image_picker: ^1.1.2
   infinite_scroll_pagination: 4.1.0
   intl: ^0.20.2
-  local_auth: ^2.3.0
+#  local_auth: ^2.3.0
   logger: ^2.5.0
-  lottie: ^3.3.1
+#  lottie: ^3.3.1
   nb_utils: ^7.1.4
   package_info_plus: ^8.3.0
   permission_handler: ^12.0.0+1
   provider: ^6.1.5
   shared_preferences: ^2.5.3
-  simple_animations: ^5.2.0
-  smooth_page_indicator: ^1.2.1
-  the_apple_sign_in: ^1.1.1
+#  simple_animations: ^5.2.0
+#  smooth_page_indicator: ^1.2.1
+#  the_apple_sign_in: ^1.1.1
   url_launcher: ^6.3.1
   web_socket_channel: ^3.0.3
   webview_flutter: ^4.4.2
