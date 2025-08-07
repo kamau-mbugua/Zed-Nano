@@ -28,6 +28,7 @@ class SocialAuthService {
       final user = userCredential.user;
 
       if (user == null) {
+        logger.e('Google sign-up failed: UserCredential.user is null');
         showCustomToast('Google sign-up failed. Please try again.', isError: true);
         return null;
       }
@@ -35,11 +36,19 @@ class SocialAuthService {
       // Get Firebase ID token
       final firebaseIdToken = await user.getIdToken();
       logger.i('Successfully signed up with Google');
-      logger.i('Firebase ID token: $firebaseIdToken');
+      logger.i('Firebase ID token: ${firebaseIdToken != null ? "✓ Present" : "✗ Missing"}');
       logger.i('User ID: ${user.uid}');
-      logger.i('User email: ${user.email}');
-      logger.i('User display name: ${user.displayName}');
-      logger.i('User photo URL: ${user.photoURL}');
+      logger.i('User email: ${user.email ?? "NULL - This is the problem!"}');
+      logger.i('User display name: ${user.displayName ?? "NULL"}');
+      logger.i('User photo URL: ${user.photoURL ?? "NULL"}');
+      logger.i('Email verified: ${user.emailVerified}');
+
+      // Check if email is null and handle it
+      if (user.email == null || user.email!.isEmpty) {
+        logger.e('Critical: User email is null or empty after Google sign-in');
+        showCustomToast('Unable to get email from Google account. Please try again or use a different sign-in method.', isError: true);
+        return null;
+      }
 
       return {
         'firebaseIdToken': firebaseIdToken,

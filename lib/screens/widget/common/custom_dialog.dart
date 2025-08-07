@@ -46,7 +46,7 @@ Future<T?> showCustomDialog<T>({
       onPositivePressed: onPositivePressed,
       titleColor: titleColor,
       subtitleColor: subtitleColor,
-      positiveButtonColor: positiveButtonColor,
+      positiveButtonColor: positiveButtonColor ?? appThemePrimary,
       negativeButtonColor: negativeButtonColor,
       icon: icon,
     ),

@@ -196,20 +196,21 @@ class FirebaseService {
   /// Signs in with Google
   Future<UserCredential> signInWithGoogle() async {
     try {
+      // Ensure Google Sign-In is initialized (v7 requirement)
       if (!_isGoogleSignInInitialized) {
         await _googleSignIn.initialize();
         _isGoogleSignInInitialized = true;
       }
 
-      // Trigger the authentication flow using v7 API
+      // Use authenticate() method for v7 API
       final GoogleSignInAccount googleUser = await _googleSignIn.authenticate(
         scopeHint: ['email', 'profile'],
       );
 
-      // Obtain the auth details from the request (now synchronous in v7)
+      // Get authentication tokens (only idToken available directly)
       final GoogleSignInAuthentication googleAuth = googleUser.authentication;
 
-      // Get authorization for Firebase scopes
+      // Get authorization for Firebase scopes to obtain accessToken
       final authClient = _googleSignIn.authorizationClient;
       final authorization = await authClient.authorizationForScopes(['email', 'profile']);
 
@@ -224,7 +225,20 @@ class FirebaseService {
       );
 
       // Once signed in, return the UserCredential
-      return await auth.signInWithCredential(credential);
+      final UserCredential userCredential = await auth.signInWithCredential(credential);
+
+      // Log user details for debugging
+      final user = userCredential.user;
+      if (user != null) {
+        logger.i('Google Sign-In Success:');
+        logger.i('User ID: ${user.uid}');
+        logger.i('User email: ${user.email}');
+        logger.i('User display name: ${user.displayName}');
+        logger.i('User photo URL: ${user.photoURL}');
+        logger.i('Email verified: ${user.emailVerified}');
+      }
+
+      return userCredential;
     } catch (e) {
       logger.e('Google sign-in error: $e');
       rethrow;
@@ -247,10 +261,10 @@ class FirebaseService {
   /// Signs in with Twitter
   Future<UserCredential> signInWithTwitter() async {
     final OAuthProvider twitterProvider = OAuthProvider('twitter.com');
-    
+
     // You can add additional scopes if needed
     twitterProvider.addScope('email');
-    
+
     return await auth.signInWithProvider(twitterProvider);
   }
 }

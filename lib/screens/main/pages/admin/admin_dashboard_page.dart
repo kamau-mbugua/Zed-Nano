@@ -632,6 +632,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
           name: item?.transationType ?? '',
           currency: item?.currency ?? '',
           amount: item?.amount ?? 0,
+          transactionsCount: item?.numberOfTransactions?.toString() ?? "0",
           percentage: item?.percentageOfTotal?.toDouble() ?? 0,
           color: getBarColorActive(item?.transationType ?? ''),
           backgroundColor: getBarColorReminder(item?.transationType ?? ''),

@@ -135,7 +135,7 @@ class _VoidedTransactionsPageState extends State<VoidedTransactionsPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Opening & Closing Stock Report.',
+          'Void Transactions Report.',
           style: TextStyle(
             color: textPrimary,
             fontWeight: FontWeight.w600,
@@ -145,7 +145,7 @@ class _VoidedTransactionsPageState extends State<VoidedTransactionsPage> {
         ),
         const SizedBox(height: 8),
         Text(
-          'An overview of stock performance.',
+          'A complete payment history in your business.',
           style: TextStyle(
             color: textSecondary,
             fontWeight: FontWeight.w400,

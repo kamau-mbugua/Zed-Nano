@@ -191,7 +191,7 @@ class _AddKCBPaymentPageState extends State<AddKCBPaymentPage> {
                 showAppBar: false,
               );
             },
-          ),
+          ).paddingSymmetric(vertical: 10),
           24.height,
         ]);
   }

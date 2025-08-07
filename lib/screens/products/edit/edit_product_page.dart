@@ -151,7 +151,7 @@ class _EditProductPageState extends State<EditProductPage> {
       'businessNumber': businessDetails?.businessNumber
     });
 
-    final urlPart = '?serviceId=$serviceId';
+    final urlPart = '?serviceId=${_productData?.productId}';
 
     await context
         .read<BusinessProviders>()
@@ -324,7 +324,7 @@ class _EditProductPageState extends State<EditProductPage> {
                   showCustomToast('Please enter product buying price amount', isError: true);
                   return;
                 }
-                if(unitOfMeasure == null){
+                if(unitOfMeasure == null && selectedProductService?.toLowerCase() != 'service'){
                   showCustomToast('Select unit of measure', isError: true);
                   return;
                 }
@@ -382,7 +382,8 @@ class _EditProductPageState extends State<EditProductPage> {
               final selectedCat = value;
               setState(() {
                 selectedCategory = selectedCat;
-                selectedProductService = selectedCat;
+                productService = productCategoryDataList?.firstWhere((element) => element.categoryName == selectedCategory).productService;
+                selectedProductService = productCategoryDataList?.firstWhere((element) => element.categoryName == selectedCategory).productService;
               });
             },
           ),

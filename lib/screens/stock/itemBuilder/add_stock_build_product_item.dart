@@ -256,11 +256,11 @@ Widget _buildProductDetails({
                 width: 15,
                 height: 15,
               ),
-              const Text(' Edit',
+              const Text(' Take stock',
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     color: textPrimary,
-                    fontSize: 12,
+                    fontSize: 10,
                     fontWeight: FontWeight.w600,
                     fontStyle: FontStyle.normal,
                     letterSpacing: 0.12,

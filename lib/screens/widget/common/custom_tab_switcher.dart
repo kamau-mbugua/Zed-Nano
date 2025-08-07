@@ -179,10 +179,12 @@ class _SwipeableTabSwitcherState extends State<SwipeableTabSwitcher>
     );
     _tabController.addListener(() {
       if (_tabController.indexIsChanging) return;
-      setState(() {
-        selectedTab = _tabController.index;
-      });
-      widget.onTabChanged?.call(_tabController.index);
+      if (_tabController.index != selectedTab) {
+        setState(() {
+          selectedTab = _tabController.index;
+        });
+        widget.onTabChanged?.call(_tabController.index);
+      }
     });
   }
 
@@ -200,9 +202,11 @@ class _SwipeableTabSwitcherState extends State<SwipeableTabSwitcher>
           tabs: widget.tabs,
           selectedIndex: selectedTab,
           onTabSelected: (index) {
-            setState(() => selectedTab = index);
-            _tabController.animateTo(index);
-            widget.onTabChanged?.call(index);
+            if (index != selectedTab) {
+              setState(() => selectedTab = index);
+              _tabController.animateTo(index);
+              widget.onTabChanged?.call(index);
+            }
           },
           height: widget.height,
           padding: widget.padding,

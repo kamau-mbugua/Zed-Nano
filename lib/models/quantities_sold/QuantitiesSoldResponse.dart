@@ -22,8 +22,8 @@ class QuantitiesSoldResponse {
               .map((item) => QuantitiesSoldData.fromJson(item as Map<String, dynamic>))
               .toList()
           : null,
-        quantityInStockTotal: json['quantityInStockTotal'] as double?,
-        quantitiesSoldTotals: json['quantitiesSoldTotals'] as double?,
+        quantityInStockTotal: (json['quantityInStockTotal'] as num?)?.toDouble(),
+        quantitiesSoldTotals: (json['quantitiesSoldTotals']as num?)?.toDouble(),
     );
   }
 

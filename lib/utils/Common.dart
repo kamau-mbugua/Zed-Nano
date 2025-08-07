@@ -409,6 +409,7 @@ Widget buildSalesSummaryRow({
   required String name,
   required String currency,
   required num amount,
+  required String transactionsCount,
   required double percentage,
   required Color backgroundColor,
   Color color = Colors.green,
@@ -421,14 +422,29 @@ Widget buildSalesSummaryRow({
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(name,
-                style: const TextStyle(
-                  fontFamily: 'Poppins',
-                  color: textPrimary,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  fontStyle: FontStyle.normal,
-                )),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(name,
+                    style: const TextStyle(
+                      fontFamily: 'Poppins',
+                      color: textPrimary,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      fontStyle: FontStyle.normal,
+                    )),
+                5.height,
+                Text("${transactionsCount} Transaction(s)",
+                    style: const TextStyle(
+                      fontFamily: 'Poppins',
+                      color: textSecondary,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                      fontStyle: FontStyle.normal,
+                      letterSpacing: 0.12,
+                    ))
+              ],
+            ),
             Text("$currency ${amount.formatCurrency()}",
                 style: const TextStyle(
                   fontFamily: 'Poppins',

@@ -25,8 +25,8 @@ class ProductTotalCostResponse {
               .toList()
           : null,
       currency: json['currency'] as String?,
-        quantitiesSoldTotals: json['quantitiesSoldTotals'] as double?,
-        totalSales: json['totalSales'] as double?,
+        quantitiesSoldTotals: (json['quantitiesSoldTotals'] as num?)?.toDouble(),
+        totalSales: (json['totalSales'] as num?)?.toDouble(),
     );
   }
 
@@ -61,12 +61,12 @@ class ProductTotalCostData {
 
   factory ProductTotalCostData.fromJson(Map<String, dynamic> json) {
     return ProductTotalCostData(
-      totalSales: _parseDouble(json['totalSales']),
-      quantitySold: _parseDouble(json['quantitySold']),
+      totalSales: (json['totalSales'] as num?)?.toDouble(),
+      quantitySold: (json['quantitySold'] as num?)?.toDouble(),
       productName: json['productName'] as String?,
-      sellingPrice: _parseDouble(json['sellingPrice']),
-      buyingPrice: _parseDouble(json['buyingPrice']),
-      totalCost: _parseDouble(json['totalCost']),
+      sellingPrice: (json['sellingPrice'] as num?)?.toDouble(),
+      buyingPrice: (json['buyingPrice'] as num?)?.toDouble(),
+      totalCost: (json['totalCost'] as num?)?.toDouble(),
       imageUrl: json['imageUrl'] as String?,
     );
   }
@@ -83,12 +83,4 @@ class ProductTotalCostData {
     };
   }
 
-  // Helper method to safely parse numbers to double
-  static double? _parseDouble(dynamic value) {
-    if (value == null) return null;
-    if (value is double) return value;
-    if (value is int) return value.toDouble();
-    if (value is String) return double.tryParse(value);
-    return null;
-  }
 }

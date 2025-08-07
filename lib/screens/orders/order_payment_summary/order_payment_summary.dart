@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/models/get_invoice_by_invoice_number/GetInvoiceByInvoiceNumberResponse.dart';
 import 'package:zed_nano/models/get_invoice_receipt_payment_methods_no_login/GetInvoiceReceiptPaymentMethodsNoLoginResponse.dart';
 import 'package:zed_nano/models/order_payment_status/OrderDetailResponse.dart';
@@ -50,14 +51,17 @@ class _OrderPaymentSummaryState extends State<OrderPaymentSummary> {
           .getOrderPaymentStatus(requestData: requestData, context: context);
 
       if (response.isSuccess) {
-        setState(() {
-          orderDetail = response.data?.order;
-          orderTransactionTotals = response.data?.transactionsList;
-        });
+        if (mounted) {
+          setState(() {
+            orderDetail = response.data?.order;
+            orderTransactionTotals = response.data?.transactionsList;
+          });
+        }
       } else {
         showCustomToast(response.message ?? 'Failed to load product details');
       }
     } catch (e) {
+      logger.e('OrderPaymentSummary getOrderPaymentStatus $e');
       showCustomToast('Failed to load Order details');
     }
   }
@@ -74,9 +78,11 @@ class _OrderPaymentSummaryState extends State<OrderPaymentSummary> {
       await getBusinessProvider(context).getInvoiceByInvoiceNumber(requestData: requestData, context: context);
 
       if (response.isSuccess) {
-        setState(() {
-          getInvoiceByInvoiceNumberResponse = response.data?.data;
-        });
+        if (mounted) {
+          setState(() {
+            getInvoiceByInvoiceNumberResponse = response.data?.data;
+          });
+        }
         if ((response.data?.data?.invoiceStatus?.toLowerCase() == 'paid') || response.data?.data?.invoiceStatus?.toLowerCase() == 'partially paid') {
           await getInvoiceReceiptPaymentMethodsNoLogin();
         }
@@ -84,6 +90,7 @@ class _OrderPaymentSummaryState extends State<OrderPaymentSummary> {
         showCustomToast(response.message ?? 'Failed to load product details');
       }
     } catch (e) {
+      logger.e('OrderPaymentSummary getInvoiceByInvoiceNumber $e');
       showCustomToast('Failed to load Invoice details');
     }
   }
@@ -99,13 +106,17 @@ class _OrderPaymentSummaryState extends State<OrderPaymentSummary> {
       await getBusinessProvider(context).getInvoiceReceiptPaymentMethodsNoLogin(requestData: requestData, context: context);
 
       if (response.isSuccess) {
-        setState(() {
-          paymentReceipt = response.data?.data;
-        });
+        if (mounted) {
+          setState(() {
+            paymentReceipt = response.data?.data;
+          });
+        }
       } else {
         showCustomToast(response.message ?? 'Failed to load product details');
       }
     } catch (e) {
+      logger.e('OrderPaymentSummary getInvoiceReceiptPaymentMethodsNoLogin $e');
+
       showCustomToast('Failed to load Invoice details');
     }
   }
