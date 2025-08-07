@@ -14,7 +14,8 @@ import 'package:zed_nano/screens/widget/common/custom_tab_switcher.dart';
 import 'package:zed_nano/utils/Colors.dart';
 
 class InvoicesListMainPage extends StatefulWidget {
-  const InvoicesListMainPage({Key? key}) : super(key: key);
+  int? initialTabIndex;
+  InvoicesListMainPage({Key? key, this.initialTabIndex = 0}) : super(key: key);
 
   @override
   _InvoicesListMainPageState createState() => _InvoicesListMainPageState();
@@ -58,6 +59,7 @@ class _InvoicesListMainPageState extends State<InvoicesListMainPage> {
                 successTextColor,        // Paid border color
                 colorBackground,        // Cancelled border color
               ],
+              initialIndex: widget.initialTabIndex ?? 0,
             ),
           ),
         ],

@@ -4,6 +4,10 @@ import 'package:provider/provider.dart';
 import 'package:zed_nano/models/sales_dashboard/SalesDashboardResponse.dart';
 import 'package:zed_nano/providers/business/BusinessProviders.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
+import 'package:zed_nano/screens/invoices/invoices_list_main_page.dart';
+import 'package:zed_nano/screens/orders/orders_list_main_page.dart';
+import 'package:zed_nano/screens/reports/sales_report/sub_reports/quantities_sold_page.dart';
+import 'package:zed_nano/screens/reports/sales_report/sub_reports/total_sales_page.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/screens/widget/common/date_range_filter_bottom_sheet.dart';
@@ -282,7 +286,7 @@ class _POSPagesScreenState extends State<POSPagesScreen> {
                     'KES ${_formatNumber(_dashboardData?.keyMetrics?.totalSales ?? 0)}',
                 subtitle:
                     '${_dashboardData?.keyMetrics?.totalTransactions ?? 0} Transactions',
-              ),
+              ).onTap(()=> TotalSalesPage().launch(context)),
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -293,7 +297,7 @@ class _POSPagesScreenState extends State<POSPagesScreen> {
                 value:
                     '${_formatNumber(_dashboardData?.keyMetrics?.quantitiesSold ?? 0)}',
                 subtitle: 'Today',
-              ),
+              ).onTap(()=> QuantitiesSoldPage().launch(context)),
             ),
           ],
         ),
@@ -532,6 +536,11 @@ class _POSPagesScreenState extends State<POSPagesScreen> {
                 amount:
                     'KES ${_formatNumber(_dashboardData?.orderSummary?.unpaid?.total ?? 0)}',
                 statusColor: googleRed,
+                onTap: () {
+                  OrdersListMainPage(
+                    initialTabIndex: 0, // Unpaid tab
+                  ).launch(context);
+                },
               ),
             ),
             const SizedBox(width: 8),
@@ -543,6 +552,11 @@ class _POSPagesScreenState extends State<POSPagesScreen> {
                 amount:
                     'KES ${_formatNumber(_dashboardData?.orderSummary?.partial?.total ?? 0)}',
                 statusColor: primaryOrangeTextColor,
+                onTap: () {
+                  OrdersListMainPage(
+                    initialTabIndex: 1, // Partially Paid tab
+                  ).launch(context);
+                },
               ),
             ),
             const SizedBox(width: 8),
@@ -554,6 +568,11 @@ class _POSPagesScreenState extends State<POSPagesScreen> {
                 amount:
                     'KES ${_formatNumber(_dashboardData?.orderSummary?.paid?.total ?? 0)}',
                 statusColor: successTextColor,
+                onTap: () {
+                  OrdersListMainPage(
+                    initialTabIndex: 2, // Paid tab
+                  ).launch(context);
+                },
               ),
             ),
           ],
@@ -586,6 +605,11 @@ class _POSPagesScreenState extends State<POSPagesScreen> {
                 amount:
                     'KES ${_formatNumber(_dashboardData?.invoiceSummary?.unpaid?.total ?? 0)}',
                 statusColor: googleRed,
+                onTap: () {
+                  InvoicesListMainPage(
+                    initialTabIndex: 0, // Unpaid tab
+                  ).launch(context);
+                },
               ),
             ),
             const SizedBox(width: 8),
@@ -597,6 +621,11 @@ class _POSPagesScreenState extends State<POSPagesScreen> {
                 amount:
                     'KES ${_formatNumber(_dashboardData?.invoiceSummary?.partial?.total ?? 0)}',
                 statusColor: primaryOrangeTextColor,
+                onTap: () {
+                  InvoicesListMainPage(
+                    initialTabIndex: 1, // Partially Paid tab
+                  ).launch(context);
+                },
               ),
             ),
             const SizedBox(width: 8),
@@ -608,6 +637,11 @@ class _POSPagesScreenState extends State<POSPagesScreen> {
                 amount:
                     'KES ${_formatNumber(_dashboardData?.invoiceSummary?.paid?.total ?? 0)}',
                 statusColor: successTextColor,
+                onTap: () {
+                  InvoicesListMainPage(
+                    initialTabIndex: 2, // Paid tab
+                  ).launch(context);
+                },
               ),
             ),
           ],
@@ -621,54 +655,58 @@ class _POSPagesScreenState extends State<POSPagesScreen> {
     required String status,
     required String amount,
     required Color statusColor,
+    VoidCallback? onTap,
   }) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            count,
-            style: const TextStyle(
-              color: textPrimary,
-              fontWeight: FontWeight.w400,
-              fontFamily: "Poppins",
-              fontSize: 18,
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.1),
+              spreadRadius: 1,
+              blurRadius: 4,
+              offset: const Offset(0, 2),
             ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            status,
-            style: TextStyle(
-              color: statusColor,
-              fontWeight: FontWeight.w600,
-              fontFamily: "Poppins",
-              fontSize: 12,
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              count,
+              style: const TextStyle(
+                color: textPrimary,
+                fontWeight: FontWeight.w400,
+                fontFamily: "Poppins",
+                fontSize: 18,
+              ),
             ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            amount,
-            style: const TextStyle(
-              color: textPrimary,
-              fontWeight: FontWeight.w400,
-              fontFamily: "Poppins",
-              fontSize: 12,
+            const SizedBox(height: 8),
+            Text(
+              status,
+              style: TextStyle(
+                color: statusColor,
+                fontWeight: FontWeight.w600,
+                fontFamily: "Poppins",
+                fontSize: 12,
+              ),
             ),
-          ),
-        ],
+            const SizedBox(height: 4),
+            Text(
+              amount,
+              style: const TextStyle(
+                color: textPrimary,
+                fontWeight: FontWeight.w400,
+                fontFamily: "Poppins",
+                fontSize: 12,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

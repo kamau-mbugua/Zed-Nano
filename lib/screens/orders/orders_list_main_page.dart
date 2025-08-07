@@ -11,7 +11,8 @@ import 'package:zed_nano/utils/Colors.dart';
 
 class OrdersListMainPage extends StatefulWidget {
   bool? showAppBar;
-  OrdersListMainPage({Key? key, this.showAppBar = true}) : super(key: key);
+  int? initialTabIndex;
+  OrdersListMainPage({Key? key, this.showAppBar = true, this.initialTabIndex = 0}) : super(key: key);
 
   @override
   _OrdersListMainPageState createState() => _OrdersListMainPageState();
@@ -56,6 +57,7 @@ class _OrdersListMainPageState extends State<OrdersListMainPage> {
                 successTextColor,        // Paid border color
                 colorBackground,        // Cancelled border color
               ],
+              initialIndex: widget.initialTabIndex ?? 0,
             ),
           ),
         ],

@@ -15,6 +15,11 @@ import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/routes/routes.dart';
 import 'package:zed_nano/screens/business/get_started_page.dart';
 import 'package:zed_nano/screens/business/bottomsheets/setup_bottom_sheet.dart';
+import 'package:zed_nano/screens/customers/customers_list_page.dart';
+import 'package:zed_nano/screens/reports/sales_report/sales_report_page.dart';
+import 'package:zed_nano/screens/reports/sales_report/sub_reports/quantities_sold_page.dart';
+import 'package:zed_nano/screens/reports/sales_report/sub_reports/total_sales_page.dart';
+import 'package:zed_nano/screens/reports/transaction_detail/transaction_detail_page.dart';
 import 'package:zed_nano/screens/sell/sell_stepper_page.dart';
 import 'package:zed_nano/screens/widget/common/bottom_sheet_helper.dart';
 import 'package:zed_nano/screens/widget/common/custom_app_bar.dart';
@@ -39,7 +44,6 @@ class AdminDashboardPage extends StatefulWidget {
 }
 
 class _AdminDashboardPageState extends State<AdminDashboardPage> {
-
   LoginResponse? loginResponse;
   BranchStoreSummaryResponse? branchStoreSummaryResponse;
   BranchTransactionByDateResponse? branchTransactionByDateResponse;
@@ -67,7 +71,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
 
   // Track last refresh time to detect changes
   DateTime? _lastRefreshTime;
-  
+
   // Add a debounce flag to prevent multiple rapid fetches
   bool _isFetching = false;
   Timer? _debounceTimer;
@@ -77,7 +81,8 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
     super.initState();
     loginResponse = getAuthProvider(context).loginResponse;
     businessName = getBusinessDetails(context)?.businessName;
-    WorkflowViewModel viewModel = Provider.of<WorkflowViewModel>(context, listen: false);
+    WorkflowViewModel viewModel =
+        Provider.of<WorkflowViewModel>(context, listen: false);
 
     _dateRange = DateRangeUtil.getDateRange(_selectedRangeLabel);
 
@@ -87,47 +92,47 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    
+
     // Don't proceed if we're already fetching data
     if (_isFetching) return;
-    
+
     // Get refresh view model - LISTEN to changes
     final refreshViewModel = Provider.of<RefreshViewModel>(context);
-    
+
     bool shouldRefresh = false;
-    
+
     // Check if there's been a refresh since we last checked
-    if (_lastRefreshTime != refreshViewModel.lastRefreshed && 
+    if (_lastRefreshTime != refreshViewModel.lastRefreshed &&
         refreshViewModel.lastRefreshed != null) {
       _lastRefreshTime = refreshViewModel.lastRefreshed;
       logger.w("AdminDashboardPage detected global timestamp change");
       shouldRefresh = true;
     }
-    
+
     // Check if this specific page was refreshed
     if (refreshViewModel.isPageRefreshed('admin_dashboard')) {
       logger.w("AdminDashboardPage detected specific page refresh");
       shouldRefresh = true;
-      
+
       // Schedule the reset for after build completes to avoid setState during build
       Future.microtask(() {
         refreshViewModel.resetPageRefreshStatus('admin_dashboard');
       });
     }
-    
+
     // Only fetch data once if either condition is true
     if (shouldRefresh) {
       _fetchDataWithDebounce();
     }
   }
-  
+
   // New method to fetch data with debouncing
   void _fetchDataWithDebounce() {
     if (_isFetching) return;
-    
+
     _isFetching = true;
     logger.w("AdminDashboardPage starting data fetch");
-    
+
     fetchBranchStoreSummary().then((_) {
       // Reset the fetching flag after a short delay
       Future.delayed(const Duration(milliseconds: 500), () {
@@ -151,8 +156,8 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
       });
     });
   }
-  Future<void> branchStoreSummary() async {
 
+  Future<void> branchStoreSummary() async {
     Map<String, dynamic> requestData = {
       'startDate': _dateRange.values.first.removeTimezoneOffset,
       'endDate': _dateRange.values.last.removeTimezoneOffset,
@@ -161,7 +166,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
 
     await context
         .read<BusinessProviders>()
-        .branchStoreSummary(context: context, requestData:requestData)
+        .branchStoreSummary(context: context, requestData: requestData)
         .then((value) async {
       if (value.isSuccess) {
         if (mounted) {
@@ -174,6 +179,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
       }
     });
   }
+
   Future<void> getBranchTransactionByDate() async {
     Map<String, dynamic> requestData = {
       'startDate': _dateRange.values.first.removeTimezoneOffset,
@@ -183,7 +189,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
     };
     await context
         .read<BusinessProviders>()
-        .getBranchTransactionByDate(context: context, requestData:requestData)
+        .getBranchTransactionByDate(context: context, requestData: requestData)
         .then((value) async {
       if (value.isSuccess) {
         if (mounted) {
@@ -200,13 +206,13 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
   Future<void> viewAllTransactions() async {
     await context
         .read<BusinessProviders>()
-        .viewAllTransactions(context: context,
-        page:1,
-        limit:5,
-        searchValue: '',
-        startDate:_dateRange.values.first.removeTimezoneOffset,
-        endDate: _dateRange.values.last.removeTimezoneOffset
-    )
+        .viewAllTransactions(
+            context: context,
+            page: 1,
+            limit: 5,
+            searchValue: '',
+            startDate: _dateRange.values.first.removeTimezoneOffset,
+            endDate: _dateRange.values.last.removeTimezoneOffset)
         .then((value) async {
       if (value.isSuccess) {
         if (mounted) {
@@ -289,14 +295,19 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                     10.height,
                     _buildTransactionSummaryView(),
                     10.height,
-                    const Text('Sales Summary', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
+                    const Text('Sales Summary',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600, fontSize: 16)),
                     10.height,
                     buildSalesSummaryList(),
                     16.height,
-                    const Text('Recent Sales', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
+                    const Text('Recent Sales',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600, fontSize: 16)),
                     10.height,
                     buildRecentSalesList(),
-                    80.height, // extra space for FAB to float without covering content
+                    80.height,
+                    // extra space for FAB to float without covering content
                   ],
                 ),
               ),
@@ -306,8 +317,9 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
       },
     );
   }
-  Widget _buildTransactionSummaryView(){
-    return    LayoutBuilder(
+
+  Widget _buildTransactionSummaryView() {
+    return LayoutBuilder(
       builder: (context, constraints) {
         // Calculate the width for each card based on available space
         // For 2 cards per row with spacing of 16 between them
@@ -319,19 +331,40 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
           physics: const NeverScrollableScrollPhysics(),
           mainAxisSpacing: 16,
           crossAxisSpacing: 16,
-          childAspectRatio: cardWidth / 120, // Maintain the height of 120
+          childAspectRatio: cardWidth / 120,
+          // Maintain the height of 120
           children: [
-            buildOverviewCard('Total Sales', 'KES ${branchStoreSummaryResponse?.data?.totalSales?.amount?.formatCurrency() ?? '0.00'}', totalSalesIcon, lightGreenColor, width: cardWidth),
-            buildOverviewCard('Products Sold', '${branchStoreSummaryResponse?.data?.soldStock?.businessSoldStockQuantity?? '0.00'}', productIcon, lightGrey, width: cardWidth),
-            buildOverviewCard('Pending Payment', 'KES ${branchStoreSummaryResponse?.data?.unpaidTotals?.totalUnpaid?.formatCurrency()  ?? '0.00'}', pendingPaymentsIcon, lightOrange, width: cardWidth),
-            buildOverviewCard('Customers', '${branchStoreSummaryResponse?.data?.customerCount?.totalCustomers ?? '0.00'}', customerCreatedIcon, lightBlue, width: cardWidth),
+            buildOverviewCard(
+                'Total Sales',
+                'KES ${branchStoreSummaryResponse?.data?.totalSales?.amount?.formatCurrency() ?? '0.00'}',
+                totalSalesIcon,
+                lightGreenColor,
+                width: cardWidth).onTap(()=> TotalSalesPage().launch(context)),
+            buildOverviewCard(
+                'Products Sold',
+                '${branchStoreSummaryResponse?.data?.soldStock?.businessSoldStockQuantity ?? '0.00'}',
+                productIcon,
+                lightGrey,
+                width: cardWidth).onTap(()=> QuantitiesSoldPage().launch(context)),
+            buildOverviewCard(
+                'Pending Payment',
+                'KES ${branchStoreSummaryResponse?.data?.unpaidTotals?.totalUnpaid?.formatCurrency() ?? '0.00'}',
+                pendingPaymentsIcon,
+                lightOrange,
+                width: cardWidth).onTap((){}),
+            buildOverviewCard(
+                'Customers',
+                '${branchStoreSummaryResponse?.data?.customerCount?.totalCustomers ?? '0.00'}',
+                customerCreatedIcon,
+                lightBlue,
+                width: cardWidth).onTap(()=> CustomersListPage().launch(context)),
           ],
         );
       },
     );
   }
 
-  Widget _buildOverviewFilter(WorkflowViewModel viewModel){
+  Widget _buildOverviewFilter(WorkflowViewModel viewModel) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -342,8 +375,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
               fontSize: 14,
               fontWeight: FontWeight.w600,
               fontStyle: FontStyle.normal,
-            )
-        ),
+            )),
         GestureDetector(
           onTap: _showPeriodSelector,
           child: Container(
@@ -384,10 +416,9 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
     );
   }
 
-  Widget _buildSetupSteps(WorkflowViewModel viewModel){
+  Widget _buildSetupSteps(WorkflowViewModel viewModel) {
     return GestureDetector(
       onTap: () async {
-
         if (viewModel.workflowState == null) {
           await viewModel.skipSetup(context);
           return;
@@ -430,28 +461,40 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
     );
   }
 
-  Widget _buildHeader(WorkflowViewModel viewModel){
+  Widget _buildHeader(WorkflowViewModel viewModel) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("Hello ${loginResponse?.username ?? ''}", style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w600, color: darkGreyColor)),
-              const SizedBox(height: 4),
-              const Text('We are glad to have you with us.', style: TextStyle(fontSize: 12, color: textSecondary)),
-            ]),
+        Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text("Hello ${loginResponse?.username ?? ''}",
+              style: const TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.w600,
+                  color: darkGreyColor)),
+          const SizedBox(height: 4),
+          const Text('We are glad to have you with us.',
+              style: TextStyle(fontSize: 12, color: textSecondary)),
+        ]),
         Visibility(
           visible: viewModel.billingPlan?.freeTrialStatus != 'InActive',
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
             decoration: BoxDecoration(
-                border: Border.all(color: accentRed), borderRadius: BorderRadius.circular(6)),
+                border: Border.all(color: accentRed),
+                borderRadius: BorderRadius.circular(6)),
             child: RichText(
               text: TextSpan(
                 children: [
-                  TextSpan(text: '${viewModel.billingPlan?.freeTrialPeriodRemainingdays ?? 0} ', style: const TextStyle(color: accentRed, fontWeight: FontWeight.w600, fontSize: 16)),
-                  const TextSpan(text: 'Trial Left', style: TextStyle(color: accentRed, fontSize: 10)),
+                  TextSpan(
+                      text:
+                          '${viewModel.billingPlan?.freeTrialPeriodRemainingdays ?? 0} ',
+                      style: const TextStyle(
+                          color: accentRed,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16)),
+                  const TextSpan(
+                      text: 'Trial Left',
+                      style: TextStyle(color: accentRed, fontSize: 10)),
                 ],
               ),
             ),
@@ -464,167 +507,164 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
   Widget buildRecentSalesList() {
     final transactions = transactionListResponse?.data ?? [];
     if (transactions.isEmpty) {
-      return buildEmptyCard('Nothing here. For Now!', 'Recent sales will be displayed here.');
+      return buildEmptyCard(
+          'Nothing here. For Now!', 'Recent sales will be displayed here.');
     }
 
     return Column(
       children: [
-    Container(
-    width: context.width(),
-      decoration: BoxDecoration(
-        color: lightGreyColor,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-      child: const Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text("Trans. ID",
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    color: textPrimary,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                    fontStyle: FontStyle.normal,
-
-
-                  )
-              ),
-              Text("Amount",
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    color: textPrimary,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                    fontStyle: FontStyle.normal,
-                  )
-              )
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text("Products",
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    color: textSecondary,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w400,
-                    fontStyle: FontStyle.normal,
-                    letterSpacing: 0.12,
-
-                  )
-              ),
-              Text("Date",
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    color: textSecondary,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w400,
-                    fontStyle: FontStyle.normal,
-                    letterSpacing: 0.12,
-
-                  )
-              )
-            ],
-          )
-        ],
-      )),
+        Container(
+            width: context.width(),
+            decoration: BoxDecoration(
+              color: lightGreyColor,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+            child: const Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("Trans. ID",
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          color: textPrimary,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          fontStyle: FontStyle.normal,
+                        )),
+                    Text("Amount",
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          color: textPrimary,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          fontStyle: FontStyle.normal,
+                        ))
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("Products",
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          color: textSecondary,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                          fontStyle: FontStyle.normal,
+                          letterSpacing: 0.12,
+                        )),
+                    Text("Date",
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          color: textSecondary,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                          fontStyle: FontStyle.normal,
+                          letterSpacing: 0.12,
+                        ))
+                  ],
+                )
+              ],
+            )),
         const Divider(),
         ...transactions.map<Widget>((tx) => Padding(
-          padding: const EdgeInsets.symmetric(vertical: 4.0),
-          child:  Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              padding: const EdgeInsets.symmetric(vertical: 4.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(tx.transactionID ?? '',
-                      style: const TextStyle(
-                        fontFamily: 'Poppins',
-                        color: darkGreyColor,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                        fontStyle: FontStyle.normal,
-                        letterSpacing: 0.12,
-                      )
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(tx.transactionID ?? '',
+                          style: const TextStyle(
+                            fontFamily: 'Poppins',
+                            color: darkGreyColor,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                            fontStyle: FontStyle.normal,
+                            letterSpacing: 0.12,
+                          )),
+                      Text(
+                          '${tx.currency ?? 'KES'} ${tx.transamount?.formatCurrency()}',
+                          style: const TextStyle(
+                            fontFamily: 'Poppins',
+                            color: darkGreyColor,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                            fontStyle: FontStyle.normal,
+                            letterSpacing: 0.12,
+                          ))
+                    ],
                   ),
-                  Text('${tx.currency ?? 'KES'} ${tx.transamount?.formatCurrency()}',
-                      style: const TextStyle(
-                        fontFamily: 'Poppins',
-                        color: darkGreyColor,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                        fontStyle: FontStyle.normal,
-                        letterSpacing: 0.12,
-                      )
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('${tx.items?.length ?? 0}',
+                          style: const TextStyle(
+                            fontFamily: 'Poppins',
+                            color: textSecondary,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                            fontStyle: FontStyle.normal,
+                            letterSpacing: 0.12,
+                          )),
+                      Text(tx.transtime?.toShortDateTime ?? '',
+                          style: const TextStyle(
+                            fontFamily: 'Poppins',
+                            color: textSecondary,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                            fontStyle: FontStyle.normal,
+                            letterSpacing: 0.12,
+                          ))
+                    ],
                   )
                 ],
-              ),
-               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('${tx.items?.length ?? 0}',
-                      style: const TextStyle(
-                        fontFamily: 'Poppins',
-                        color: textSecondary,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                        fontStyle: FontStyle.normal,
-                        letterSpacing: 0.12,
-
-                      )
-                  ),
-                  Text(tx.transtime?.toShortDateTime ?? '',
-                      style: const TextStyle(
-                        fontFamily: 'Poppins',
-                        color: textSecondary,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                        fontStyle: FontStyle.normal,
-                        letterSpacing: 0.12,
-
-                      )
-                  )
-                ],
-              )
-            ],
-          ),
-        )),
+              ).onTap(() =>TransactionDetailPage(transactionId: tx.transactionID,).launch(context)),
+            )),
       ],
     );
   }
+
   Widget buildSalesSummaryList() {
     final summaryList = branchTransactionByDateResponse?.data ?? [];
 
     if (summaryList.isEmpty) {
-      return buildEmptyCard('Nothing here. For Now!', 'Total sales for each payment method will be displayed here.');
+      return buildEmptyCard('Nothing here. For Now!',
+          'Total sales for each payment method will be displayed here.');
     }
 
     // Optionally define color per payment type
     Color getBarColorActive(String type) {
       switch (type.toUpperCase()) {
-        case 'MPESA': return successTextColor;
-        case 'CASH': return primaryBlueTextColor;
-        case 'KCB MPESA': return orangeColor;
-        default: return Colors.teal;
+        case 'MPESA':
+          return successTextColor;
+        case 'CASH':
+          return primaryBlueTextColor;
+        case 'KCB MPESA':
+          return orangeColor;
+        default:
+          return Colors.teal;
       }
     }
+
     // Optionally define color per payment type
     Color getBarColorReminder(String type) {
       switch (type.toUpperCase()) {
-        case 'MPESA': return lightGreenColor;
-        case 'CASH': return lightBlue;
-        case 'KCB MPESA': return lightOrange;
-        default: return Colors.teal;
+        case 'MPESA':
+          return lightGreenColor;
+        case 'CASH':
+          return lightBlue;
+        case 'KCB MPESA':
+          return lightOrange;
+        default:
+          return Colors.teal;
       }
     }
-
-
 
     return Column(
       children: summaryList.map<Widget>((item) {
