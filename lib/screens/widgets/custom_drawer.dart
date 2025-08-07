@@ -12,6 +12,7 @@ import 'package:zed_nano/screens/main/pages/common/report_page.dart';
 import 'package:zed_nano/screens/orders/orders_list_main_page.dart';
 import 'package:zed_nano/screens/payments/list_payments_page.dart';
 import 'package:zed_nano/screens/profile/profile_page.dart';
+import 'package:zed_nano/screens/reports/all_transactions/all_t_ranasctions_page.dart';
 import 'package:zed_nano/screens/stock/view_stock/view_stock_page.dart';
 import 'package:zed_nano/screens/users/users_main_list.dart';
 import 'package:zed_nano/utils/Colors.dart';
@@ -309,12 +310,12 @@ class _CustomDrawerState extends State<CustomDrawer> {
                           ),
                           _buildSubMenuItem(
                             title: 'Receipts',
-                            onTap: () => _navigateTo(context, '/pos'),
+                            onTap: () => AllTRanasctionsPage().launch(context),
                           ),
-                          _buildSubMenuItem(
-                            title: 'Transactions',
-                            onTap: () => _navigateTo(context, '/pos'),
-                          ),
+                          // _buildSubMenuItem(
+                          //   title: 'Transactions',
+                          //   onTap: () => _navigateTo(context, '/pos'),
+                          // ),
                         ],
                       ),
                       _buildMenuItem(

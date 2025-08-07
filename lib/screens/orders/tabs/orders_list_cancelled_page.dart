@@ -7,10 +7,12 @@ import 'package:zed_nano/models/fetchByStatus/OrderResponse.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/customers/itemBuilder/list_customers_transactions_item_builder.dart';
 import 'package:zed_nano/screens/orders/detail/order_detail_page.dart';
+import 'package:zed_nano/screens/widget/common/date_range_filter_bottom_sheet.dart';
 import 'package:zed_nano/screens/widget/common/filter_row_widget.dart';
 import 'package:zed_nano/screens/widget/common/searchview.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
+import 'package:zed_nano/utils/date_range_util.dart';
 import 'package:zed_nano/utils/extensions.dart';
 import 'package:zed_nano/utils/pagination_controller.dart';
 
@@ -29,6 +31,9 @@ class _OrdersListCancelledPageState extends State<OrdersListCancelledPage> {
   bool _isInitialized = false;
   Timer? _debounceTimer;
   OrderResponse? orderResponse;
+
+  String _selectedRangeLabel = 'this_month';
+
 
   @override
   void initState() {
@@ -49,6 +54,9 @@ class _OrdersListCancelledPageState extends State<OrdersListCancelledPage> {
 
   Future<List<OrderData>> fetchByStatus(
       {required int page, required int limit}) async {
+    final dateRange = DateRangeUtil.getDateRange(_selectedRangeLabel);
+    final startDate = dateRange.values.first.removeTimezoneOffset;
+    final endDate = dateRange.values.last.removeTimezoneOffset;
     final response = await getBusinessProvider(context).fetchByStatus(
       page: page,
       limit: limit,
@@ -56,8 +64,8 @@ class _OrdersListCancelledPageState extends State<OrdersListCancelledPage> {
       context: context,
       customerId: '',
       status: 'cancelled',
-      startDate: '',
-      endDate: '',
+      startDate: startDate,
+      endDate: endDate,
       cashier: '',
     );
     setState(() {
@@ -84,7 +92,22 @@ class _OrdersListCancelledPageState extends State<OrdersListCancelledPage> {
     super.dispose();
   }
 
-
+  void _showDateRangeFilter() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => DateRangeFilterBottomSheet(
+        selectedRangeLabel: _selectedRangeLabel,
+        onRangeSelected: (rangeLabel) {
+          setState(() {
+            _selectedRangeLabel = rangeLabel;
+          });
+          _paginationController.refresh();
+        },
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -211,9 +234,11 @@ class _OrdersListCancelledPageState extends State<OrdersListCancelledPage> {
           child: buildSearchBar(controller: _searchController, onChanged: _debounceSearch),
         ),
         buildFilterButton(
-          text: 'Filters',
+          text:(_selectedRangeLabel ?? 'Filter').toDisplayLabel,
           isActive: false,
-          onTap: () {},
+          onTap: () {
+            _showDateRangeFilter();
+          },
           icon: Icons.filter_list,
           showArrow: true,
         ),

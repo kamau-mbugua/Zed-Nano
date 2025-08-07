@@ -8,10 +8,12 @@ import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/invoices/itemBuilders/invoices_item_builders.dart';
 import 'package:zed_nano/screens/orders/itemBuilder/order_item_builders.dart';
 import 'package:zed_nano/screens/payments/checkout_payment/check_out_payments_page.dart';
+import 'package:zed_nano/screens/widget/common/bottom_sheet_helper.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
+import 'package:zed_nano/utils/Images.dart';
 import 'package:zed_nano/utils/extensions.dart';
 
 class OrderPaymentSummary extends StatefulWidget {
@@ -163,6 +165,7 @@ class _OrderPaymentSummaryState extends State<OrderPaymentSummary> {
         child: Row(
           children: [
             Expanded(
+              flex: 7,
               child: Visibility(
                 child: appButton(
                   text: 'Done',
@@ -171,6 +174,21 @@ class _OrderPaymentSummaryState extends State<OrderPaymentSummary> {
                   },
                   context: context,
                 ),
+              ),
+            ),
+            Expanded(
+              flex: 2,
+              child: appButtonWithIcon(
+                text: '',
+                iconPath: fabMenuIcon,
+                context: context,
+                onTap: () {
+                  BottomSheetHelper.showPrintingOptionsBottomSheet(context,
+                      printOrderInvoiceId: orderDetail?.id)
+                      .then((value) {
+                    finish(context);
+                  });
+                },
               ),
             ),
           ],

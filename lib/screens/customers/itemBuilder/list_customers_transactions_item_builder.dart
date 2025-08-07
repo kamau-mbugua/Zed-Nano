@@ -190,7 +190,7 @@ Widget listCustomersOrdersItemBuilder(OrderData customerTransaction) {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("Served by: ${customerTransaction.servedBy ?? "N/A"}",
+                Text("Served by: ${customerTransaction.servedBy ?? customerTransaction.cashier ?? "N/A"}",
                     style: const TextStyle(
                       fontFamily: 'Poppins',
                       color: textPrimaryColor,

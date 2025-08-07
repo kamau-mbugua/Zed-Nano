@@ -205,7 +205,9 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                       SellStepperPage(
                         initialStep: 2,
                         initialStepData: {'orderId': widget.orderId},
-                      ).launch(context);
+                      ).launch(context).then((value) {
+                        getOrderPaymentStatus();
+                      });
                     }
                   },
                   context: context,

@@ -8,10 +8,13 @@ import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/customers/itemBuilder/list_customers_transactions_item_builder.dart';
 import 'package:zed_nano/screens/invoices/itemBuilders/invoices_item_builders.dart';
 import 'package:zed_nano/screens/orders/detail/order_detail_page.dart';
+import 'package:zed_nano/screens/widget/common/date_range_filter_bottom_sheet.dart';
 import 'package:zed_nano/screens/widget/common/filter_row_widget.dart';
 import 'package:zed_nano/screens/widget/common/searchview.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
+import 'package:zed_nano/utils/date_range_util.dart';
+import 'package:zed_nano/utils/extensions.dart';
 import 'package:zed_nano/utils/pagination_controller.dart';
 
 class InvoicesListCancelledPage extends StatefulWidget {
@@ -29,6 +32,8 @@ class _InvoicesListCancelledPageState extends State<InvoicesListCancelledPage> {
   bool _isInitialized = false;
   Timer? _debounceTimer;
   GetBusinessInvoicesByStatusResponse? getBusinessInvoicesByStatusResponse;
+  String _selectedRangeLabel = 'this_month';
+
 
   @override
   void initState() {
@@ -49,6 +54,9 @@ class _InvoicesListCancelledPageState extends State<InvoicesListCancelledPage> {
 
   Future<List<BusinessInvoice>> fetchByStatus(
       {required int page, required int limit}) async {
+    final dateRange = DateRangeUtil.getDateRange(_selectedRangeLabel);
+    final startDate = dateRange.values.first.removeTimezoneOffset;
+    final endDate = dateRange.values.last.removeTimezoneOffset;
     final response = await getBusinessProvider(context).getBusinessInvoicesByStatus(
       page: page,
       limit: limit,
@@ -56,8 +64,8 @@ class _InvoicesListCancelledPageState extends State<InvoicesListCancelledPage> {
       context: context,
       customerId: '',
       status: 'Cancelled',
-      startDate: '',
-      endDate: '',
+      startDate: startDate,
+      endDate: endDate,
       cashier: '',
     );
     setState(() {
@@ -82,6 +90,23 @@ class _InvoicesListCancelledPageState extends State<InvoicesListCancelledPage> {
     _searchController.dispose();
     _debounceTimer?.cancel();
     super.dispose();
+  }
+
+  void _showDateRangeFilter() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => DateRangeFilterBottomSheet(
+        selectedRangeLabel: _selectedRangeLabel,
+        onRangeSelected: (rangeLabel) {
+          setState(() {
+            _selectedRangeLabel = rangeLabel;
+          });
+          _paginationController.refresh();
+        },
+      ),
+    );
   }
 
 
@@ -208,10 +233,11 @@ class _InvoicesListCancelledPageState extends State<InvoicesListCancelledPage> {
           child: buildSearchBar(controller: _searchController, onChanged: _debounceSearch),
         ),
         buildFilterButton(
-          text: 'Filters',
+          text:(_selectedRangeLabel ?? 'Filter').toDisplayLabel,
           isActive: false,
-          onTap: () {},
-          icon: Icons.filter_list,
+          onTap: () {
+            _showDateRangeFilter();
+          },          icon: Icons.filter_list,
           showArrow: true,
         ),
       ],

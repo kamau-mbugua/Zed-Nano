@@ -121,6 +121,8 @@ class _PrintingOptionsBottomSheetState extends State<PrintingOptionsBottomSheet>
                   await doSendToPos();
                     break;
                   case 'Generate PDF':
+                    showCustomToast('PDF Coming soon', isError: false);
+                    finish(context);
                     break;
                   default:
                     break;

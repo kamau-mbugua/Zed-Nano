@@ -339,21 +339,18 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
             showCustomToast('Payment completed successfully!', isError: false);
 
             Navigator.of(context).pop();
-            
-            await OrderPaymentSummary(orderId: orderDetail?.id).launch(context).then((value) {
-              widget!.onNext!();
-            });
 
-            // if (widget.checkOutType == CheckOutType.Order) {
-            //   await OrderPaymentSummary(orderId: orderDetail?.id).launch(context).then((value) {
-            //     widget!.onNext!();
-            //   });
-            // }else{
-            //   finish(context);
-            //   // await OrderPaymentSummary(orderId: getInvoiceByInvoiceNumberResponse?.invoiceNumber, checkOutType: widget.checkOutType).launch(context).then((value) {
-            //   //   finish(context);
-            //   // });
-            // }
+
+            if (widget.checkOutType == CheckOutType.Order) {
+              await OrderPaymentSummary(orderId: orderDetail?.id, checkOutType: widget.checkOutType).launch(context).then((value) {
+                widget!.onNext!();
+              });
+            }else{
+              // finish(context);
+              await OrderPaymentSummary(orderId: getInvoiceByInvoiceNumberResponse?.invoiceNumber, checkOutType: widget.checkOutType).launch(context).then((value) {
+                finish(context);
+              });
+            }
           },
           sTKPaymentType: STKPaymentType.Mpesa,
           onPaymentError: (errorMessage) {

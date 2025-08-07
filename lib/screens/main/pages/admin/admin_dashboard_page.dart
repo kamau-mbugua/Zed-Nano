@@ -76,6 +76,32 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
   bool _isFetching = false;
   Timer? _debounceTimer;
 
+  static Color _getBarColorActive(String type) {
+    switch (type.toUpperCase()) {
+      case 'MPESA':
+        return successTextColor;
+      case 'CASH':
+        return primaryBlueTextColor;
+      case 'KCB MPESA':
+        return orangeColor;
+      default:
+        return Colors.teal;
+    }
+  }
+
+  static Color _getBarColorReminder(String type) {
+    switch (type.toUpperCase()) {
+      case 'MPESA':
+        return lightGreenColor;
+      case 'CASH':
+        return lightBlue;
+      case 'KCB MPESA':
+        return lightOrange;
+      default:
+        return Colors.teal;
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -638,46 +664,19 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
           'Total sales for each payment method will be displayed here.');
     }
 
-    // Optionally define color per payment type
-    Color getBarColorActive(String type) {
-      switch (type.toUpperCase()) {
-        case 'MPESA':
-          return successTextColor;
-        case 'CASH':
-          return primaryBlueTextColor;
-        case 'KCB MPESA':
-          return orangeColor;
-        default:
-          return Colors.teal;
-      }
-    }
-
-    // Optionally define color per payment type
-    Color getBarColorReminder(String type) {
-      switch (type.toUpperCase()) {
-        case 'MPESA':
-          return lightGreenColor;
-        case 'CASH':
-          return lightBlue;
-        case 'KCB MPESA':
-          return lightOrange;
-        default:
-          return Colors.teal;
-      }
-    }
-
     return Column(
-      children: summaryList.map<Widget>((item) {
-        return buildSalesSummaryRow(
-          name: item?.transationType ?? '',
-          currency: item?.currency ?? '',
-          amount: item?.amount ?? 0,
-          transactionsCount: item?.numberOfTransactions?.toString() ?? "0",
-          percentage: item?.percentageOfTotal?.toDouble() ?? 0,
-          color: getBarColorActive(item?.transationType ?? ''),
-          backgroundColor: getBarColorReminder(item?.transationType ?? ''),
-        );
-      }).toList(),
+      children: [
+        for (final item in summaryList)
+          buildSalesSummaryRow(
+            name: item?.transationType ?? '',
+            currency: item?.currency ?? '',
+            amount: item?.amount ?? 0,
+            transactionsCount: item?.numberOfTransactions?.toString() ?? "0",
+            percentage: item?.percentageOfTotal?.toDouble() ?? 0,
+            color: _getBarColorActive(item?.transationType ?? ''),
+            backgroundColor: _getBarColorReminder(item?.transationType ?? ''),
+          ),
+      ],
     );
   }
 }
