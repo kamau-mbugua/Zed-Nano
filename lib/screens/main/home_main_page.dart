@@ -16,6 +16,7 @@ import 'package:zed_nano/services/business_setup_extensions.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/Images.dart';
+import 'package:zed_nano/viewmodels/CustomerInvoicingViewModel.dart';
 import 'package:zed_nano/viewmodels/WorkflowViewModel.dart';
 
 class HomeMainPage extends StatefulWidget {
@@ -158,7 +159,13 @@ class _HomeMainPageState extends State<HomeMainPage> {
           floatingActionButton: (selectedIndex == 0 || selectedIndex == 2) && workflowViewModel.workflowState == 'COMPLETE'
               ? FloatingActionButton.extended(
                   heroTag: 'home_main_fab',
-                  onPressed: () {
+                  onPressed: () async{
+                    var customerInvoicingViewModel = Provider.of<CustomerInvoicingViewModel>(context, listen: false);
+                    if (customerInvoicingViewModel.customerData != null ) {
+                      customerInvoicingViewModel.clearData();
+                    }
+
+
                     const SellStepperPage().launch(context);
                   },
                   label: const Text('Sell',

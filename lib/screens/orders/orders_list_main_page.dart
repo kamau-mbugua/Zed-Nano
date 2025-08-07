@@ -60,14 +60,17 @@ class _OrdersListMainPageState extends State<OrdersListMainPage> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        heroTag: "orders_list_fab",
-        onPressed: () {
-          const SellStepperPage().launch(context);
-        },
-        label: const Text('Sell', style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white)),
-        icon: const Icon(Icons.lock, color: Colors.white),
-        backgroundColor: appThemePrimary,
+      floatingActionButton: Visibility(
+        visible: (widget.showAppBar ==true),
+        child: FloatingActionButton.extended(
+          heroTag: "orders_list_fab",
+          onPressed: () {
+            const SellStepperPage().launch(context);
+          },
+          label: const Text('Sell', style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white)),
+          icon: const Icon(Icons.lock, color: Colors.white),
+          backgroundColor: appThemePrimary,
+        ),
       ),
     );
   }

@@ -159,12 +159,14 @@ class _MpesaPaymentWaitingScreenState extends State<MpesaPaymentWaitingScreen> {
     if (isSuccess) {
       showCustomToast(message, isError: false);
       widget.onPaymentSuccess?.call();
+      // Don't auto-pop for success case since the callback handles navigation
+      return;
     } else {
       showCustomToast(message, isError: true);
       widget.onPaymentError?.call(message);
     }
 
-    // Close the screen after a short delay
+    // Close the screen after a short delay (only for error cases)
     Future.delayed(const Duration(seconds: 2), () {
       if (mounted) {
         Navigator.of(context).pop();

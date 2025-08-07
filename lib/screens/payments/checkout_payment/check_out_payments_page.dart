@@ -338,6 +338,8 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
           onPaymentSuccess: () async {
             showCustomToast('Payment completed successfully!', isError: false);
 
+            Navigator.of(context).pop();
+            
             await OrderPaymentSummary(orderId: orderDetail?.id).launch(context).then((value) {
               widget!.onNext!();
             });
