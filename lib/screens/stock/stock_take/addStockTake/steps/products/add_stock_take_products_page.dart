@@ -73,6 +73,13 @@ class _AddStockTakeProductsPageState extends State<AddStockTakeProductsPage> {
           categoryId: selectedCategoryId ?? '',
       );
 
+      // Filter to only show items where productService is "Product"
+      final filteredData = (response.data?.data ?? [])
+          .where((item) => item.productService == 'Product')
+          .toList();
+
+      return filteredData;
+
       return response.data?.data ?? [];
     } catch (e) {
       return [];

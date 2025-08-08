@@ -1,0 +1,10 @@
+<svg data-name="Component 99 – 2" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+    <defs>
+        <clipPath id="oujfi9u6ka">
+            <path data-name="Rectangle 4473" transform="translate(-17264 7486)" style="fill:#032541" d="M0 0h24v24H0z"/>
+        </clipPath>
+    </defs>
+    <g style="clip-path:url(#oujfi9u6ka)">
+        <path d="M14.012 17.129a2.871 2.871 0 0 1-2.883-2.883 2.871 2.871 0 0 1 2.883-2.883 2.871 2.871 0 0 1 2.883 2.883 2.871 2.871 0 0 1-2.883 2.883zm-7.688 3.363a1.435 1.435 0 0 1-1.441-1.441v-9.61A1.435 1.435 0 0 1 6.324 8H21.7a1.435 1.435 0 0 1 1.441 1.441v9.609a1.435 1.435 0 0 1-1.441 1.442zm2.4-1.441H19.3a2.379 2.379 0 0 1 2.4-2.4v-4.8a2.379 2.379 0 0 1-2.4-2.4H8.727a2.379 2.379 0 0 1-2.4 2.4v4.8a2.379 2.379 0 0 1 2.4 2.4zm11.531 4.324H3.441A1.435 1.435 0 0 1 2 21.934V10.883h1.441v11.051h16.817zM6.324 19.051z" transform="translate(-1 -4)" style="fill:#032541" data-name="Mask Group 17865"/>
+    </g>
+</svg>

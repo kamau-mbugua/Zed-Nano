@@ -9,7 +9,6 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/firebase_options.dart';
@@ -36,9 +35,6 @@ class FirebaseService {
   // Google Sign In instance
   final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
   bool _isGoogleSignInInitialized = false;
-
-  // Facebook Auth instance
-  final FacebookAuth _facebookAuth = FacebookAuth.instance;
 
   /// Initializes Firebase services
   Future<void> initialize() async {
@@ -91,13 +87,19 @@ class FirebaseService {
   Future<void> _configureMessaging() async {
     // Request permission for notifications (iOS)
     final settings = await messaging.requestPermission(
-      
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
     );
 
     logger.i('User granted notification permission: ${settings.authorizationStatus}');
 
     // Get FCM token
-    final  token = await messaging.getToken();
+    final token = await messaging.getToken();
     logger.i('FCM Token: $token');
 
     // Listen for token refreshes
@@ -239,19 +241,6 @@ class FirebaseService {
     } catch (e) {
       logger.e('Google sign-in error: $e');
       rethrow;
-    }
-  }
-
-  /// Signs in with Facebook
-  Future<UserCredential> signInWithFacebook() async {
-    final result = await _facebookAuth.login();
-
-    if (result.status == LoginStatus.success) {
-      final credential = FacebookAuthProvider.credential(result.accessToken!.tokenString);
-
-      return auth.signInWithCredential(credential);
-    } else {
-      throw Exception('Failed to sign in with Facebook');
     }
   }
 

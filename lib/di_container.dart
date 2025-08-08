@@ -11,12 +11,15 @@ import 'package:zed_nano/repositories/SplashRepo.dart';
 import 'package:zed_nano/repositories/auth/AuthenticatedRepo.dart';
 import 'package:zed_nano/repositories/business/BusinessRepo.dart';
 import 'package:zed_nano/services/firebase_service.dart';
+import 'package:zed_nano/services/push_notification_service.dart';
 
 final sl = GetIt.instance;
 
 Future<void> init() async {
   // Firebase Service
   sl..registerLazySingleton(FirebaseService.new)
+  // Push Notification Service
+  ..registerLazySingleton(PushNotificationService.new)
 
   // Core
   ..registerLazySingleton(() => DioClient(AppConstants.baseUrl, sl(), loggingInterceptor: sl(), sharedPreferences: sl()))

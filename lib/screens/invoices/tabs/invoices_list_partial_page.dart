@@ -62,7 +62,7 @@ class _InvoicesListPartialPageState extends State<InvoicesListPartialPage> {
       searchValue: _searchTerm,
       context: context,
       customerId: '',
-      status: 'Partially Paid',
+      status: 'partial_and_unpaid',
       startDate: startDate,
       endDate: endDate,
       cashier: '',

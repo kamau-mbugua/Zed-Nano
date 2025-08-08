@@ -31,22 +31,21 @@ build_apk() {
     # Get version info
     get_version_info
     
-    # Define paths
+    # Define paths for universal APK only
     local original_path="build/app/outputs/flutter-apk/app-$flavor-$build_type.apk"
-    local new_name="ZN_${flavor}_${build_type}_v${VERSION_NAME}_${VERSION_CODE}.apk"
+    local new_name="ZN_${flavor}_${build_type}_universal_v${VERSION_NAME}_${VERSION_CODE}.apk"
     local new_path="build/app/outputs/flutter-apk/$new_name"
     
     # Rename the file
     if [ -f "$original_path" ]; then
         mv "$original_path" "$new_path"
-        echo "✅ APK renamed to: $new_name"
-        echo "📍 Location: $new_path"
         
-        # Show file size
+        # Show file info
         local size=$(du -h "$new_path" | cut -f1)
-        echo "📦 Size: $size"
+        echo "✅ $new_name ($size)"
+        echo "📍 Location: $new_path"
     else
-        echo "❌ Original APK not found: $original_path"
+        echo "❌ APK not found: $original_path"
         return 1
     fi
 }

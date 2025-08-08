@@ -26,12 +26,12 @@ dependencies:
   firebase_crashlytics: ^5.0.0
   firebase_messaging: ^16.0.0
   firebase_storage: ^13.0.0
+  flutter_local_notifications: ^18.0.1
 #  fl_chart: ^1.0.0
   fluro: ^2.0.5
   flutter:
     sdk: flutter
 #  flutter_app_loading_indicator: ^0.0.3
-  flutter_facebook_auth: ^7.1.2
   flutter_localizations:
     sdk: flutter
 #  flutter_slidable: ^4.0.0
@@ -55,9 +55,6 @@ dependencies:
   permission_handler: ^12.0.0+1
   provider: ^6.1.5
   shared_preferences: ^2.5.3
-#  simple_animations: ^5.2.0
-#  smooth_page_indicator: ^1.2.1
-#  the_apple_sign_in: ^1.1.1
   url_launcher: ^6.3.1
   web_socket_channel: ^3.0.3
   webview_flutter: ^4.4.2

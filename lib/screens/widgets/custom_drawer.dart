@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:zed_nano/providers/auth/authenticated_app_providers.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/routes/routes.dart';
+import 'package:zed_nano/screens/about/about_zed_page.dart';
 import 'package:zed_nano/screens/approvals/approvals_main_page.dart';
 import 'package:zed_nano/screens/business/get_started_page.dart';
 import 'package:zed_nano/screens/customers/customers_list_page.dart';
@@ -167,6 +168,11 @@ class _CustomDrawerState extends State<CustomDrawer> {
                           iconPath: createBusinessIcon,
                           onTap: () => const GetStartedPage().launch(context),
                         ),
+                        _buildMenuItem(
+                          title: 'About Us',
+                          iconPath: aboutUsIcon,
+                          onTap: () => const AboutZedPage().launch(context),
+                        ),
                       ],
                     );
                   }
@@ -198,6 +204,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         ],
                       ),
                     );
+
                   }
                   // For Merchant and Owner - full menu based on workflow state
                   else if (isMerchantOrOwner) {
@@ -341,7 +348,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         ),
                         _buildMenuItem(
                           title: 'Payment',
-                          iconPath: usersIcon,
+                          iconPath: salesIcon,
                           onTap: () => const AddPaymentMethodScreen(isWorkFlow: false)
                               .launch(context),
                         ),
@@ -360,13 +367,16 @@ class _CustomDrawerState extends State<CustomDrawer> {
                           iconPath: reportsSideMenuIcon,
                           onTap: () => ReportPage(isShowAppBar: true,).launch(context),
                         ),
-                        _buildMenuItem(
-                          title: 'Settings',
-                          iconPath: settingsIcon,
-                          onTap: () => _navigateTo(context, '/settings'),
-                        ),
                       ]);
                     }
+
+                    menuItems.addAll([
+                      _buildMenuItem(
+                        title: 'About Us',
+                        iconPath: aboutUsIcon,
+                        onTap: () => const AboutZedPage().launch(context),
+                      ),
+                    ]);
                   }
 
                   return ListView(

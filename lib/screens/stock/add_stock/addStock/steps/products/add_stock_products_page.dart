@@ -74,7 +74,12 @@ class _AddStockProductsPageState extends State<AddStockProductsPage> {
           showStockDashboard:false,
       );
 
-      return response.data?.data ?? [];
+      // Filter to only show items where productService is "Product"
+      final filteredData = (response.data?.data ?? [])
+          .where((item) => item.productService == 'Product')
+          .toList();
+
+      return filteredData;
     } catch (e) {
       return [];
     }

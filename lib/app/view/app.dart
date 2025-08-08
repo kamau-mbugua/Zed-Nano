@@ -5,6 +5,7 @@ import 'package:zed_nano/app/app_config.dart';
 import 'package:zed_nano/routes/routes.dart';
 import 'package:zed_nano/routes/routes_helper.dart';
 import 'package:zed_nano/utils/Colors.dart';
+import 'package:zed_nano/widgets/notification_handler.dart';
 
 class App extends StatefulWidget {
 
@@ -24,30 +25,32 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: AppConfig.appName,
-      theme: ThemeData(
-        appBarTheme: AppBarTheme(
-          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+    return NotificationHandler(
+      child: MaterialApp(
+        title: AppConfig.appName,
+        theme: ThemeData(
+          appBarTheme: AppBarTheme(
+            backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+          ),
+          useMaterial3: true,
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: appThemePrimary,
+            surfaceTint: Colors.transparent,   // disables tint everywhere
+          ),
         ),
-        useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: appThemePrimary,
-          surfaceTint: Colors.transparent,   // disables tint everywhere
-        ),
+        // localizationsDelegates: AppLocalizations.localizationsDelegates,
+        // supportedLocales: AppLocalizations.supportedLocales,
+        initialRoute: AppRoutes.splashRoute,
+        debugShowCheckedModeBanner: false,
+        onGenerateRoute: RouterHelper.router.generator,
+        scrollBehavior: const MaterialScrollBehavior().copyWith(dragDevices: {
+          PointerDeviceKind.mouse,
+          PointerDeviceKind.touch,
+          PointerDeviceKind.stylus,
+          PointerDeviceKind.unknown,
+        },),
+        navigatorKey: widget.navigatorKey,
       ),
-      // localizationsDelegates: AppLocalizations.localizationsDelegates,
-      // supportedLocales: AppLocalizations.supportedLocales,
-      initialRoute: AppRoutes.splashRoute,
-      debugShowCheckedModeBanner: false,
-      onGenerateRoute: RouterHelper.router.generator,
-      scrollBehavior: const MaterialScrollBehavior().copyWith(dragDevices: {
-        PointerDeviceKind.mouse,
-        PointerDeviceKind.touch,
-        PointerDeviceKind.stylus,
-        PointerDeviceKind.unknown,
-      },),
-      navigatorKey: widget.navigatorKey,
     );
   }
 }

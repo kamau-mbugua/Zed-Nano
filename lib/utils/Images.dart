@@ -69,3 +69,4 @@ const resetPinIcon = 'assets/icons/resetPinIcon.svg';
 const deleteAccount = 'assets/icons/deleteAccount.svg';
 const moneyInIcon = 'assets/icons/moneyInIcon.svg';
 const voidedTransactionsIcon = 'assets/icons/voidedTransactionsIcon.svg';
+const aboutUsIcon = 'assets/icons/aboutUsIcon.svg';

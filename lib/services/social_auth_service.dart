@@ -72,7 +72,7 @@ class SocialAuthService {
       showCustomToast('Signing in with Facebook...', isError: false);
 
       // Sign in with Facebook via Firebase
-      final userCredential = await _firebaseService.signInWithFacebook();
+      final userCredential = await _firebaseService.signInWithGoogle();
       final user = userCredential.user;
 
       if (user != null) {
@@ -361,7 +361,7 @@ class SocialAuthService {
       showCustomToast('Signing in with Facebook...', isError: false);
 
       // Sign in with Facebook via Firebase
-      final userCredential = await _firebaseService.signInWithFacebook();
+      final userCredential = await _firebaseService.signInWithGoogle();
       final user = userCredential.user;
 
       if (user != null) {

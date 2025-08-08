@@ -15,6 +15,7 @@ import 'package:zed_nano/providers/common/SplashProvider.dart';
 import 'package:zed_nano/providers/common/theme_provider.dart';
 import 'package:zed_nano/services/business_setup_service.dart';
 import 'package:zed_nano/services/firebase_service.dart';
+import 'package:zed_nano/services/push_notification_service.dart';
 import 'package:zed_nano/utils/app_loading.dart';
 import 'package:zed_nano/utils/permission_service.dart';
 import 'package:zed_nano/viewmodels/CustomerInvoicingViewModel.dart';
@@ -75,6 +76,15 @@ Future<void> initializeApp(Flavor flavor) async {
   } catch (e) {
     logger.e('Failed to initialize Firebase: $e');
     // Continue app initialization even if Firebase fails
+  }
+  
+  // Initialize Push Notifications
+  try {
+    await PushNotificationService().initialize();
+    logger.i('Push Notification Service initialized successfully');
+  } catch (e) {
+    logger.e('Failed to initialize Push Notification Service: $e');
+    // Continue app initialization even if push notifications fail
   }
   
   // Configure Clarity for analytics

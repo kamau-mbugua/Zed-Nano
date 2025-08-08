@@ -35,7 +35,60 @@ _*Zed Nano works on iOS, Android, Web, and Windows._
 
 ---
 
-## Running Tests 🧪
+## Building APKs and AABs 🏗️
+
+Use the custom build script to generate APKs and AABs with proper naming conventions:
+
+```sh
+# Make script executable (first time only)
+$ chmod +x build_and_rename.sh
+
+# Build Development APK (Release)
+$ ./build_and_rename.sh dev-apk
+# Output: ZN_development_release_v1.0.0_1.apk
+
+# Build Development APK (Debug)
+$ ./build_and_rename.sh dev-debug-apk
+# Output: ZN_development_debug_v1.0.0_1.apk
+
+# Build Development AAB (Release)
+$ ./build_and_rename.sh dev-aab
+# Output: ZN_development_release_v1.0.0_1.aab
+
+# Build Staging APK (Release)
+$ ./build_and_rename.sh staging-apk
+# Output: ZN_staging_release_v1.0.0_1.apk
+
+# Build Staging AAB (Release)
+$ ./build_and_rename.sh staging-aab
+# Output: ZN_staging_release_v1.0.0_1.aab
+
+# Build Production APK (Release)
+$ ./build_and_rename.sh prod-apk
+# Output: ZN_production_release_v1.0.0_1.apk
+
+# Build Production AAB (Release)
+$ ./build_and_rename.sh prod-aab
+# Output: ZN_production_release_v1.0.0_1.aab
+```
+
+### Build Script Features:
+- **Custom Naming**: Automatically renames output files with format `ZN_{flavor}_{buildType}_v{version}_{code}`
+- **Version Detection**: Reads version from `pubspec.yaml`
+- **File Size Display**: Shows output file size and location
+- **Error Handling**: Validates build success before renaming
+- **Multiple Formats**: Supports both APK and AAB generation
+
+### Flavor Configuration:
+| Flavor | App ID | API Endpoint |
+|--------|--------|--------------|
+| Development | `com.rbs.zednano.dev` | `https://api.dev.zed.business/` |
+| Staging | `com.rbs.zednano.uat` | `https://zed.api.swerri.io/` |
+| Production | `com.rbs.zednano` | `https://api.portal.zed.business/` |
+
+---
+
+## Running Tests 
 
 To run all unit and widget tests use the following command:
 
@@ -55,51 +108,7 @@ $ open coverage/index.html
 
 ---
 
-## Building APKs 🔨
-
-To build APKs for different flavors, use the following commands:
-
-### Debug APKs (for testing)
-```sh
-# Development
-$ flutter build apk --flavor development --target lib/main_development.dart
-
-# Staging
-$ flutter build apk --flavor staging --target lib/main_staging.dart
-
-# Production
-$ flutter build apk --flavor production --target lib/main_production.dart
-```
-
-### Release APKs (for distribution)
-```sh
-# Development
-$ flutter build apk --flavor development --target lib/main_development.dart --release
-
-# Staging
-$ flutter build apk --flavor staging --target lib/main_staging.dart --release
-
-# Production
-$ flutter build apk --flavor production --target lib/main_production.dart --release
-```
-
-### App Bundles (for Play Store)
-```sh
-# Development
-$ flutter build appbundle --flavor development --target lib/main_development.dart --release
-
-# Staging
-$ flutter build appbundle --flavor staging --target lib/main_staging.dart --release
-
-# Production
-$ flutter build appbundle --flavor production --target lib/main_production.dart --release
-```
-
-**Output Location:** APKs will be generated in `build/app/outputs/flutter-apk/`
-
----
-
-## Working with Translations 🌐
+## Working with Translations 
 
 This project relies on [flutter_localizations][flutter_localizations_link] and follows the [official internationalization guide for Flutter][internationalization_link].
 
