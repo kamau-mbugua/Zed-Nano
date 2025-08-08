@@ -8,9 +8,9 @@ extension StringValidationExtensions on String {
     return emailRegex.hasMatch(this);
   }
 
-  /// Check if the string is a valid phone number (digits only, length 7–15)
+  /// Check if the string is a valid phone number (9 or 10 digits only)
   bool get isValidPhoneNumber {
-    final phoneRegex = RegExp(r'^\+?\d{7,15}$');
+    final phoneRegex = RegExp(r'^\+?\d{9,10}$');
     return phoneRegex.hasMatch(this);
   }
 

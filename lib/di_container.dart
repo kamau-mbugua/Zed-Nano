@@ -4,9 +4,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zed_nano/contants/AppConstants.dart';
 import 'package:zed_nano/networking/datasource/remote/dio/dio_client.dart';
 import 'package:zed_nano/networking/datasource/remote/dio/logging_interceptor.dart';
+import 'package:zed_nano/providers/auth/authenticated_app_providers.dart';
 import 'package:zed_nano/providers/business/BusinessProviders.dart';
 import 'package:zed_nano/providers/common/SplashProvider.dart';
-import 'package:zed_nano/providers/auth/authenticated_app_providers.dart';
 import 'package:zed_nano/repositories/auth/AuthenticatedRepo.dart';
 import 'package:zed_nano/repositories/SplashRepo.dart';
 import 'package:zed_nano/repositories/business/BusinessRepo.dart';
@@ -47,6 +47,4 @@ Future<void> init() async {
   //
   // //ViewModel
   // sl.registerFactory(() => PaymentViewModel());
-
-
 }

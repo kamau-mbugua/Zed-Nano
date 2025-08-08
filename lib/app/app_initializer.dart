@@ -9,10 +9,10 @@ import 'package:provider/provider.dart';
 import 'package:zed_nano/app/app.dart';
 import 'package:zed_nano/app/app_config.dart';
 import 'package:zed_nano/di_container.dart' as di;
+import 'package:zed_nano/providers/auth/authenticated_app_providers.dart';
 import 'package:zed_nano/providers/business/BusinessProviders.dart';
 import 'package:zed_nano/providers/cart/CartViewModel.dart';
 import 'package:zed_nano/providers/common/SplashProvider.dart';
-import 'package:zed_nano/providers/auth/authenticated_app_providers.dart';
 import 'package:zed_nano/providers/common/theme_provider.dart';
 import 'package:zed_nano/viewmodels/CustomerInvoicingViewModel.dart';
 import 'package:zed_nano/viewmodels/RefreshViewModel.dart';
@@ -95,9 +95,9 @@ Future<void> initializeApp(Flavor flavor) async {
     app: MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => di.sl<AuthenticatedAppProviders>()),
+        ChangeNotifierProvider(create: (context) => di.sl<BusinessProviders>()),
         ChangeNotifierProvider(create: (context) => di.sl<SplashProvider>()),
         ChangeNotifierProvider(create: (context) => di.sl<ThemeProvider>()),
-        ChangeNotifierProvider(create: (context) => di.sl<BusinessProviders>()),
         ChangeNotifierProvider(create: (_) => WorkflowViewModel()),
         ChangeNotifierProvider(create: (_) => RefreshViewModel()),
         ChangeNotifierProvider(create: (_) => CartViewModel()),

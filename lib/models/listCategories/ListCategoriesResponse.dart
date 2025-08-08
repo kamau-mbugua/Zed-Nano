@@ -95,7 +95,7 @@ class ProductCategoryData {
       dateUpdated: json['dateUpdated'] as String?,
       updatedAt: json['updatedAt'] as String?,
       v: json['__v'] as int?,
-      noOfProducts: json['noOfProducts'] as int?,
+      noOfProducts: json['productCount'] as int?,
       imagePath: json['imagePath'] as String?,
       thumbailImagePath: json['thumbailImagePath'] as String?,
       modifiedByName: json['modifiedByName'] as String?,

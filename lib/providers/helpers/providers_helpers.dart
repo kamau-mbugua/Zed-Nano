@@ -39,6 +39,20 @@ extension ProviderApiHelpers on BaseProvider {
     Future<ApiResponse> Function() apiFunction,
     BuildContext context,
   ) async {
+    // Add authentication check specifically for BusinessProviders
+    if (this is BusinessProviders) {
+      try {
+        final authProvider = getAuthProvider(context);
+        if (!authProvider.isLoggedIn) {
+          logger.w('BusinessProviders: API call blocked - user not authenticated');
+          return ResponseModel(true, 'Please Login/Register');
+        }
+      } catch (e) {
+        logger.e('BusinessProviders: Authentication check failed: $e');
+        return ResponseModel(false, 'Authentication check failed');
+      }
+    }
+
     final result = await performApiCall(() async {
       final apiResponse = await apiFunction();
      /* logger.d(

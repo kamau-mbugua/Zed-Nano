@@ -1,7 +1,7 @@
 class CreateBillingInvoiceResponse {
   final String? status;
   final String? message;
-  final int? amount;
+  final double? amount;
   final String? invoiceNumber;
   final String? businessNumber;
   final String? invoiceId;
@@ -27,14 +27,14 @@ class CreateBillingInvoiceResponse {
     return CreateBillingInvoiceResponse(
       status: json['status'] as String?,
       message: json['message'] as String?,
-      amount: json['amount'] as int?,
+      amount: (json['amount'] as num?)?.toDouble(),
       invoiceNumber: json['invoiceNumber'] as String?,
       businessNumber: json['businessNumber'] as String?,
       invoiceId: json['invoiceId'] as String?,
       invoiceStatus: json['invoiceStatus'] as String?,
       billingPeriod: json['billingPeriod'] as String?,
       billingPlanName: json['billingPlanName'] as String?,
-      freeTrialDays: json['freeTrialDays'] as int?,
+      freeTrialDays: (json['freeTrialDays'] as num?)?.toInt(),
     );
   }
 

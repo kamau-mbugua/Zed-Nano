@@ -113,7 +113,10 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
 
     _dateRange = DateRangeUtil.getDateRange(_selectedRangeLabel);
 
-    fetchBranchStoreSummary();
+    if (getAuthProvider(context).isLoggedIn) {
+      fetchBranchStoreSummary();
+    }
+
   }
 
   @override

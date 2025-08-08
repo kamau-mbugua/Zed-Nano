@@ -45,7 +45,7 @@ class AuthenticatedAppProviders extends BaseProvider {
     _token = authenticatedRepo.getUserToken();
     _loginResponse = authenticatedRepo.getLoginResponse();
     _userDetails = authenticatedRepo.getUserData();
-    _businessDetails = (await authenticatedRepo.getBusinessDetails())!;
+    _businessDetails = (await authenticatedRepo.getBusinessDetails());
     notifyListeners();
   }
 

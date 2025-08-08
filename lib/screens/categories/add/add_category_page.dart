@@ -391,6 +391,12 @@ class _NewCategoryPageState extends State<NewCategoryPage> {
                 showCustomToast('Please enter category name');
                 return;
               }
+
+              if (!categoryDescription.isValidInput) {
+                setState(() {
+                  descriptionController.text = 'No Category Description';
+                });
+              }
               await _createCategory();
             },
             context: context),

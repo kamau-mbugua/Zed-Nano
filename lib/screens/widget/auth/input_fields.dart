@@ -22,6 +22,7 @@ class StyledTextField extends StatelessWidget {
   final bool showCounter;
   final String prefixText;
   final bool isActive;
+  final TextInputType? keyboardType;
 
   const StyledTextField({
     Key? key,
@@ -39,10 +40,38 @@ class StyledTextField extends StatelessWidget {
     this.showCounter = false,
     this.prefixText = '',
     this.isActive = true,
+    this.keyboardType,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    // Determine keyboard type - use number keyboard for password PIN fields
+    TextInputType inputType;
+    if (keyboardType != null) {
+      inputType = keyboardType!;
+    } else if (isPassword && textFieldType == TextFieldType.PASSWORD && maxLength == 4) {
+      // For PIN fields (password with 4 character limit), use number keyboard
+      inputType = TextInputType.number;
+    } else {
+      // Use default keyboard type based on textFieldType
+      switch (textFieldType) {
+        case TextFieldType.EMAIL:
+          inputType = TextInputType.emailAddress;
+          break;
+        case TextFieldType.PHONE:
+          inputType = TextInputType.phone;
+          break;
+        case TextFieldType.NUMBER:
+          inputType = TextInputType.number;
+          break;
+        case TextFieldType.MULTILINE:
+          inputType = TextInputType.multiline;
+          break;
+        default:
+          inputType = TextInputType.text;
+      }
+    }
+
     return Container(
       // Only apply fixed height for single-line text fields
       height: textFieldType == TextFieldType.MULTILINE ? null : 50, // Fixed height as per user preference (56px)
@@ -56,6 +85,7 @@ class StyledTextField extends StatelessWidget {
         controller: controller,
         focus: focusNode,
         textFieldType: textFieldType,
+        keyboardType: inputType, // Set the keyboard type
         onChanged: isActive ? onChanged : null,
         enabled: isActive,
         maxLines: textFieldType == TextFieldType.MULTILINE ? null : 1, // Use null for multiline to allow unlimited lines

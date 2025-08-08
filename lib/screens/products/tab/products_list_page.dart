@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:nb_utils/nb_utils.dart';
 import 'dart:async';
 import 'package:zed_nano/models/listCategories/ListCategoriesResponse.dart';
 import 'package:zed_nano/models/listProducts/ListProductsResponse.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/routes/routes.dart';
+import 'package:zed_nano/screens/products/add/add_product_page.dart';
 import 'package:zed_nano/screens/widget/common/categories_widget.dart';
 import 'package:zed_nano/screens/widget/common/searchview.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
@@ -81,7 +83,15 @@ class _ProductsListPageState extends State<ProductsListPage> {
       backgroundColor: Colors.white,
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
-          await Navigator.pushNamed(context, AppRoutes.getNewProductWithParamRoutes('true')).then((value) {
+          // await Navigator.pushNamed(context, AppRoutes.getNewProductWithParamRoutes('true')).then((value) {
+          //   _paginationController.refresh();
+          // });
+
+          await const AddProductScreen(
+            doNotUpdate: true,
+            selectedCategory: '',
+            productService: 'Product',
+          ).launch(context).then((value) {
             _paginationController.refresh();
           });
 

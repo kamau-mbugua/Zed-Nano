@@ -315,6 +315,12 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   return;
                 }
 
+                if (!productDescription.isValidInput) {
+                  setState(() {
+                    productDescription = 'No Product Description';
+                  });
+                }
+
                 var requestData = <String, dynamic>{};
                 requestData['productCategory'] = categoryId;
                 requestData['productName'] = prodctName;

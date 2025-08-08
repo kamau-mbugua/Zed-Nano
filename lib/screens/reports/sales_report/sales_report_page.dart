@@ -17,6 +17,7 @@ import 'package:zed_nano/screens/widget/common/common_widgets.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/screens/widget/common/date_range_filter_bottom_sheet.dart';
 import 'package:zed_nano/screens/widget/common/searchview.dart';
+import 'package:zed_nano/services/business_setup_extensions.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
@@ -309,7 +310,7 @@ class _SalesReportPageState extends State<SalesReportPage> {
             Expanded(
               child: _buildSummaryCard(
                 title: 'Total Cost of\nGoods Sold',
-                value: _summaryData?.totalCostOfGoodsSold?.toStringAsFixed(0) ?? '0',
+                value: "${_summaryData?.currency ?? context.businessCurrency} ${_summaryData?.totalCostOfGoodsSold?.toStringAsFixed(0) ?? '0'}",
                 icon: moneyInIcon,
                 iconColor: primaryOrangeTextColor,
                 backgroundColor: lightOrange,

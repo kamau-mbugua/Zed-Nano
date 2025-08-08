@@ -256,36 +256,39 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
         8.height,
-        Container(
-          width: double.infinity,
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          child: Row(
-            children: [
-              Checkbox(
-                value: _rememberMe,
-                onChanged: (value) {
-                  setState(() {
-                    _rememberMe = value ?? false;
-                  });
-                },
-              ),
-              Text(
-                "Remember me",
-                style: TextStyle(color: Colors.black54, fontSize: 14),
-              ),
-              Spacer(),
-              TextButton(
-                onPressed: () {
-                  Navigator.pushNamed(
-                      context, AppRoutes.getForgetPinRoutePageRoute());
-                },
-                child: Text("Forgot Pin?",  style: boldTextStyle(
-                  size: 14,
-                  color: appThemePrimary,
-                  fontFamily: "Poppins",
-                )),
-              ),
-            ],
+        Visibility(
+          visible: true,
+          child: Container(
+            width: double.infinity,
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              children: [
+                // Checkbox(
+                //   value: _rememberMe,
+                //   onChanged: (value) {
+                //     setState(() {
+                //       _rememberMe = value ?? false;
+                //     });
+                //   },
+                // ),
+                // Text(
+                //   "Remember me",
+                //   style: TextStyle(color: Colors.black54, fontSize: 14),
+                // ),
+                Expanded(child: Spacer()),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pushNamed(
+                        context, AppRoutes.getForgetPinRoutePageRoute());
+                  },
+                  child: Text("Forgot Pin?",  style: boldTextStyle(
+                    size: 14,
+                    color: appThemePrimary,
+                    fontFamily: "Poppins",
+                  )),
+                ),
+              ],
+            ),
           ),
         ),
       ],
@@ -324,19 +327,19 @@ class _LoginPageState extends State<LoginPage> {
           padding: EdgeInsets.symmetric(horizontal: 16),
           child: Row(
             children: [
-              Checkbox(
-                value: _rememberMe,
-                onChanged: (value) {
-                  setState(() {
-                    _rememberMe = value ?? false;
-                  });
-                },
-              ),
-              Text(
-                "Remember me",
-                style: TextStyle(color: Colors.black54, fontSize: 14),
-              ),
-              Spacer(),
+              // Checkbox(
+              //   value: _rememberMe,
+              //   onChanged: (value) {
+              //     setState(() {
+              //       _rememberMe = value ?? false;
+              //     });
+              //   },
+              // ),
+              // Text(
+              //   "Remember me",
+              //   style: TextStyle(color: Colors.black54, fontSize: 14),
+              // ),
+              Expanded(child: Spacer()),
               TextButton(
                 onPressed: () {
                   Navigator.pushNamed(
@@ -386,7 +389,7 @@ class _LoginPageState extends State<LoginPage> {
     var pass = phonePasswordController.text.trim();
     // Extract phone number (remove formatting)
     String phoneNumber = "$phoneCode$phone";
-    if (phone.isEmpty || !phoneNumber.isValidPhoneNumber) {
+    if (!phone.isValidPhoneNumber) {
       showCustomToast('Please enter phone number');
       return;
     }

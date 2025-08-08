@@ -14,8 +14,9 @@ import 'package:zed_nano/screens/widget/common/custom_tab_switcher.dart';
 import 'package:zed_nano/utils/Colors.dart';
 
 class InvoicesListMainPage extends StatefulWidget {
+  bool isHideAppBar;
   int? initialTabIndex;
-  InvoicesListMainPage({Key? key, this.initialTabIndex = 0}) : super(key: key);
+  InvoicesListMainPage({Key? key, this.initialTabIndex = 0, this.isHideAppBar = false}) : super(key: key);
 
   @override
   _InvoicesListMainPageState createState() => _InvoicesListMainPageState();
@@ -26,7 +27,7 @@ class _InvoicesListMainPageState extends State<InvoicesListMainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AuthAppBar(
+      appBar: widget.isHideAppBar ? null : AuthAppBar(
           title: 'Invoices'
       ),
       body: Column(
@@ -64,22 +65,25 @@ class _InvoicesListMainPageState extends State<InvoicesListMainPage> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        heroTag: "invoices_list_fab",
-        onPressed: () async {
-          // AddUserPage().launch(context);
-          SellStepperPage(stepType: SellStepType.Invoice,).launch(context);
+      floatingActionButton: Visibility(
+        visible: widget.isHideAppBar == false,
+        child: FloatingActionButton.extended(
+          heroTag: "invoices_list_fab",
+          onPressed: () async {
+            // AddUserPage().launch(context);
+            SellStepperPage(stepType: SellStepType.Invoice,).launch(context);
 
-        },
-        backgroundColor: const Color(0xFF032541),
-        icon: const Icon(Icons.add, size: 20, color: Colors.white),
-        label: const Text(
-          'Create',
-          style: TextStyle(
-            fontFamily: 'Poppins',
-            fontWeight: FontWeight.w600,
-            fontSize: 12,
-            color: Colors.white,
+          },
+          backgroundColor: const Color(0xFF032541),
+          icon: const Icon(Icons.add, size: 20, color: Colors.white),
+          label: const Text(
+            'Create',
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w600,
+              fontSize: 12,
+              color: Colors.white,
+            ),
           ),
         ),
       ),
