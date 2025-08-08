@@ -174,177 +174,200 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
                   // Progressive menu based on workflow state
                   final workflowState = viewModel.workflowState?.toLowerCase();
+                  final userRole = authProvider?.businessDetails?.group?.toLowerCase();
                   List<Widget> menuItems = [];
 
-                  // Show Businesses section for basic and billing states
-                  if (workflowState == 'basic' || workflowState == 'billing') {
+                  // Role-based menu restrictions
+                  final isCashierOrSupervisor = userRole == 'cashier' || userRole == 'supervisor';
+                  final isMerchantOrOwner = userRole == 'merchant' || userRole == 'owner';
+
+                  // For Cashier and Supervisor - limited menu
+                  if (isCashierOrSupervisor) {
                     menuItems.add(
-                      _buildExpandableMenuItem(
-                        title: 'Businesses',
-                        iconPath: businessesIcon,
-                        children: [
-                          _buildSubMenuItem(
-                            title: 'My Businesses',
-                            onTap: () => _navigateTo(context,
-                                AppRoutes.getBusinessProfileScreenRoute()),
-                          ),
-                        ],
-                      ),
-                    );
-                  }
-
-                  // Show Inventory section for category and product states
-                  if (workflowState == 'category' || workflowState == 'product') {
-                    menuItems.addAll([
-                      _buildExpandableMenuItem(
-                        title: 'Businesses',
-                        iconPath: businessesIcon,
-                        children: [
-                          _buildSubMenuItem(
-                            title: 'My Businesses',
-                            onTap: () => _navigateTo(context,
-                                AppRoutes.getBusinessProfileScreenRoute()),
-                          ),
-                        ],
-                      ),
-                      _buildExpandableMenuItem(
-                        title: 'Inventory',
-                        iconPath: inventoryIcon,
-                        children: [
-                          _buildSubMenuItem(
-                            title: 'Categories',
-                            onTap: () => _navigateTo(
-                                context, AppRoutes.getListCategoriesRoute()),
-                          ),
-                          _buildSubMenuItem(
-                            title: 'Products and Services',
-                            onTap: () => _navigateTo(context,
-                                AppRoutes.getListProductsAndServicesRoute()),
-                          ),
-                        ],
-                      ),
-                    ]);
-                  }
-
-                  // Show complete menu for COMPLETE state
-                  if (workflowState == 'complete') {
-                    menuItems.addAll([
-                      _buildExpandableMenuItem(
-                        title: 'Businesses',
-                        iconPath: businessesIcon,
-                        children: [
-                          _buildSubMenuItem(
-                            title: 'My Businesses',
-                            onTap: () => _navigateTo(context,
-                                AppRoutes.getBusinessProfileScreenRoute()),
-                          ),
-                        ],
-                      ),
-                      _buildExpandableMenuItem(
-                        title: 'Inventory',
-                        iconPath: inventoryIcon,
-                        children: [
-                          _buildSubMenuItem(
-                            title: 'Categories',
-                            onTap: () => _navigateTo(
-                                context, AppRoutes.getListCategoriesRoute()),
-                          ),
-                          _buildSubMenuItem(
-                            title: 'Products and Services',
-                            onTap: () => _navigateTo(context,
-                                AppRoutes.getListProductsAndServicesRoute()),
-                          ),
-                        ],
-                      ),
-                      _buildExpandableMenuItem(
-                        title: 'Stock Management',
-                        iconPath: stockManagementIcon,
-                        children: [
-                          _buildSubMenuItem(
-                              title: 'View Stock',
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const ViewStockPage()),
-                                );
-                              }),
-                          _buildSubMenuItem(
-                            title: 'Add Stock',
-                            onTap: () {
-                              Navigator.pushNamed(
-                                  context,
-                                  AppRoutes
-                                      .getAddStockBatchTabsPageScreenRoute());
-                            },
-                          ),
-                          _buildSubMenuItem(
-                            title: 'Stock Take',
-                            onTap: () {
-                              Navigator.pushNamed(
-                                  context,
-                                  AppRoutes
-                                      .getAddStockTakeBatchTabsPageScreenRoute());
-                            },
-                          ),
-                        ],
-                      ),
                       _buildExpandableMenuItem(
                         title: 'Sales',
                         iconPath: salesSideMenuIcon,
                         children: [
                           _buildSubMenuItem(
-                            title: 'Customers',
-                            onTap: () =>
-                                const CustomersListPage().launch(context),
-                          ),
-                          _buildSubMenuItem(
                             title: 'Invoices',
-                            onTap: () =>
-                                InvoicesListMainPage().launch(context),
+                            onTap: () => InvoicesListMainPage().launch(context),
                           ),
                           _buildSubMenuItem(
                             title: 'Orders',
                             onTap: () => OrdersListMainPage().launch(context),
                           ),
-                          _buildSubMenuItem(
-                            title: 'Receipts',
-                            onTap: () => AllTRanasctionsPage().launch(context),
-                          ),
-                          // _buildSubMenuItem(
-                          //   title: 'Transactions',
-                          //   onTap: () => _navigateTo(context, '/pos'),
-                          // ),
                         ],
                       ),
-                      _buildMenuItem(
-                        title: 'Payment',
-                        iconPath: usersIcon,
-                        onTap: () => AddPaymentMethodScreen(isWorkFlow: false)
-                            .launch(context),
-                      ),
-                      _buildMenuItem(
-                        title: 'Users',
-                        iconPath: usersIcon,
-                        onTap: () => const UsersMainList().launch(context),
-                      ),
-                      _buildMenuItem(
-                        title: 'Approvals',
-                        iconPath: approvalsIcon,
-                        onTap: () => ApprovalsMainPage().launch(context),
-                      ),
-                      _buildMenuItem(
-                        title: 'Reports',
-                        iconPath: reportsSideMenuIcon,
-                        onTap: () => ReportPage(isShowAppBar: true,).launch(context),
-                      ),
-                      _buildMenuItem(
-                        title: 'Settings',
-                        iconPath: settingsIcon,
-                        onTap: () => _navigateTo(context, '/settings'),
-                      ),
-                    ]);
+                    );
+                  }
+                  // For Merchant and Owner - full menu based on workflow state
+                  else if (isMerchantOrOwner) {
+                    // Show Businesses section for basic and billing states
+                    if (workflowState == 'basic' || workflowState == 'billing') {
+                      menuItems.add(
+                        _buildExpandableMenuItem(
+                          title: 'Businesses',
+                          iconPath: businessesIcon,
+                          children: [
+                            _buildSubMenuItem(
+                              title: 'My Businesses',
+                              onTap: () => _navigateTo(context,
+                                  AppRoutes.getBusinessProfileScreenRoute()),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+
+                    // Show Inventory section for category and product states
+                    if (workflowState == 'category' || workflowState == 'product') {
+                      menuItems.addAll([
+                        _buildExpandableMenuItem(
+                          title: 'Businesses',
+                          iconPath: businessesIcon,
+                          children: [
+                            _buildSubMenuItem(
+                              title: 'My Businesses',
+                              onTap: () => _navigateTo(context,
+                                  AppRoutes.getBusinessProfileScreenRoute()),
+                            ),
+                          ],
+                        ),
+                        _buildExpandableMenuItem(
+                          title: 'Inventory',
+                          iconPath: inventoryIcon,
+                          children: [
+                            _buildSubMenuItem(
+                              title: 'Categories',
+                              onTap: () => _navigateTo(
+                                  context, AppRoutes.getListCategoriesRoute()),
+                            ),
+                            _buildSubMenuItem(
+                              title: 'Products and Services',
+                              onTap: () => _navigateTo(context,
+                                  AppRoutes.getListProductsAndServicesRoute()),
+                            ),
+                          ],
+                        ),
+                      ]);
+                    }
+
+                    // Show complete menu for COMPLETE state
+                    if (workflowState == 'complete') {
+                      menuItems.addAll([
+                        _buildExpandableMenuItem(
+                          title: 'Businesses',
+                          iconPath: businessesIcon,
+                          children: [
+                            _buildSubMenuItem(
+                              title: 'My Businesses',
+                              onTap: () => _navigateTo(context,
+                                  AppRoutes.getBusinessProfileScreenRoute()),
+                            ),
+                          ],
+                        ),
+                        _buildExpandableMenuItem(
+                          title: 'Inventory',
+                          iconPath: inventoryIcon,
+                          children: [
+                            _buildSubMenuItem(
+                              title: 'Categories',
+                              onTap: () => _navigateTo(
+                                  context, AppRoutes.getListCategoriesRoute()),
+                            ),
+                            _buildSubMenuItem(
+                              title: 'Products and Services',
+                              onTap: () => _navigateTo(context,
+                                  AppRoutes.getListProductsAndServicesRoute()),
+                            ),
+                          ],
+                        ),
+                        _buildExpandableMenuItem(
+                          title: 'Stock Management',
+                          iconPath: stockManagementIcon,
+                          children: [
+                            _buildSubMenuItem(
+                                title: 'View Stock',
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const ViewStockPage()),
+                                  );
+                                }),
+                            _buildSubMenuItem(
+                              title: 'Add Stock',
+                              onTap: () {
+                                Navigator.pushNamed(
+                                    context,
+                                    AppRoutes
+                                        .getAddStockBatchTabsPageScreenRoute());
+                              },
+                            ),
+                            _buildSubMenuItem(
+                              title: 'Stock Take',
+                              onTap: () {
+                                Navigator.pushNamed(
+                                    context,
+                                    AppRoutes
+                                        .getAddStockTakeBatchTabsPageScreenRoute());
+                              },
+                            ),
+                          ],
+                        ),
+                        _buildExpandableMenuItem(
+                          title: 'Sales',
+                          iconPath: salesSideMenuIcon,
+                          children: [
+                            _buildSubMenuItem(
+                              title: 'Customers',
+                              onTap: () =>
+                                  const CustomersListPage().launch(context),
+                            ),
+                            _buildSubMenuItem(
+                              title: 'Invoices',
+                              onTap: () =>
+                                  InvoicesListMainPage().launch(context),
+                            ),
+                            _buildSubMenuItem(
+                              title: 'Orders',
+                              onTap: () => OrdersListMainPage().launch(context),
+                            ),
+                            _buildSubMenuItem(
+                              title: 'Receipts',
+                              onTap: () => AllTRanasctionsPage().launch(context),
+                            ),
+                          ],
+                        ),
+                        _buildMenuItem(
+                          title: 'Payment',
+                          iconPath: usersIcon,
+                          onTap: () => AddPaymentMethodScreen(isWorkFlow: false)
+                              .launch(context),
+                        ),
+                        _buildMenuItem(
+                          title: 'Users',
+                          iconPath: usersIcon,
+                          onTap: () => const UsersMainList().launch(context),
+                        ),
+                        _buildMenuItem(
+                          title: 'Approvals',
+                          iconPath: approvalsIcon,
+                          onTap: () => ApprovalsMainPage().launch(context),
+                        ),
+                        _buildMenuItem(
+                          title: 'Reports',
+                          iconPath: reportsSideMenuIcon,
+                          onTap: () => ReportPage(isShowAppBar: true,).launch(context),
+                        ),
+                        _buildMenuItem(
+                          title: 'Settings',
+                          iconPath: settingsIcon,
+                          onTap: () => _navigateTo(context, '/settings'),
+                        ),
+                      ]);
+                    }
                   }
 
                   return ListView(

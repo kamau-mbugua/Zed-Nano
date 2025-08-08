@@ -9,11 +9,13 @@ class CustomDashboardAppBar extends StatelessWidget implements PreferredSizeWidg
   const CustomDashboardAppBar({
     super.key,
     this.title = 'Business Dashboard',
+    this.userRole = '',
     this.onMenuTap,
     this.onProfileTap,
   });
 
   final String title;
+  final String userRole;
   final VoidCallback? onMenuTap;
   final VoidCallback? onProfileTap;
 
@@ -34,13 +36,26 @@ class CustomDashboardAppBar extends StatelessWidget implements PreferredSizeWidg
           colorFilter: const ColorFilter.mode(darkGreyColor, BlendMode.srcIn),
         ),
       ),
-      title: Text(
-        title,
-        style: const TextStyle(
-          fontSize: 14,
-          fontWeight: FontWeight.w400,
-          color: darkGreyColor,
-        ),
+      title: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w400,
+              color: darkGreyColor,
+            ),
+          ),
+          Text(
+            userRole,
+            style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w400,
+              color: darkGreyColor,
+            ),
+          ),
+        ],
       ),
       actions: [
         IconButton(

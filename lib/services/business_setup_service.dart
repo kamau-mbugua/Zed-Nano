@@ -217,6 +217,16 @@ class BusinessSetupService extends ChangeNotifier {
     }
     return 'Business';
   }
+  /// Get business display name (fallback to business number if name is empty)
+  String getUserRoleName() {
+    if (_businessDetails?.group?.isNotEmpty == true) {
+      return _businessDetails!.group!;
+    }
+    if (_businessDetails?.businessNumber?.isNotEmpty == true) {
+      return _businessDetails!.businessNumber!;
+    }
+    return '';
+  }
 
   /// Safe method to call notifyListeners that avoids calling during build phase
   void _safeNotifyListeners() {

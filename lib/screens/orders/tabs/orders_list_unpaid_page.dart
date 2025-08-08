@@ -9,6 +9,7 @@ import 'package:zed_nano/screens/customers/itemBuilder/list_customers_transactio
 import 'package:zed_nano/screens/widget/common/date_range_filter_bottom_sheet.dart';
 import 'package:zed_nano/screens/widget/common/filter_row_widget.dart';
 import 'package:zed_nano/screens/widget/common/searchview.dart';
+import 'package:zed_nano/services/business_setup_extensions.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
 import 'package:zed_nano/utils/date_range_util.dart';
@@ -183,7 +184,7 @@ class _OrdersListUnpaidPageState extends State<OrdersListUnpaidPage> {
 
                       )
                   ),
-                  Text("${orderResponse?.orderSummary?.currency ?? 'KES'} ${orderResponse?.total?.formatCurrency() ?? 0.0}",
+                  Text("${orderResponse?.orderSummary?.currency ?? context.businessCurrency} ${orderResponse?.total?.formatCurrency() ?? 0.0}",
                       style: const TextStyle(
                         fontFamily: 'Poppins',
                         color: errorColors,

@@ -18,7 +18,8 @@ extension BusinessSetupContext on BuildContext {
   
   /// Get business display name
   String get businessDisplayName => businessSetup.getBusinessDisplayName();
-  
+  String get businessUserRole => businessSetup.getUserRoleName();
+
   /// Get business currency
   String get businessCurrency => businessSetup.getBusinessCurrency();
   

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 import 'package:zed_nano/app/app_initializer.dart';
+import 'package:zed_nano/providers/auth/authenticated_app_providers.dart';
+import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/main/pages/admin/admin_dashboard_page.dart';
 import 'package:zed_nano/screens/main/pages/common/p_o_s_pages.dart';
 import 'package:zed_nano/screens/main/pages/common/report_page.dart';
@@ -58,11 +60,21 @@ class _HomeMainPageState extends State<HomeMainPage> {
   
 
   List<Widget> _buildScreens() {
-    // Wrap each screen in a ScrollView to make RefreshIndicator work
+    final authProvider = getAuthProvider(context);
+    final userRole = authProvider?.businessDetails?.group?.toLowerCase();
+    
+    // For Cashier and Supervisor, only show Orders screen
+    if (userRole == 'cashier' || userRole == 'supervisor') {
+      return [
+        _buildScrollableScreen(OrdersListMainPage(showAppBar: false)),
+      ];
+    }
+    
+    // For Merchant and Owner, show all screens
     return [
       _buildScrollableScreen(const AdminDashboardPage()),
       _buildScrollableScreen(const POSPagesScreen()),
-      _buildScrollableScreen( OrdersListMainPage(showAppBar: false,)),
+      _buildScrollableScreen(OrdersListMainPage(showAppBar: false)),
       _buildScrollableScreen(ReportPage()),
     ];
   }
@@ -86,6 +98,15 @@ class _HomeMainPageState extends State<HomeMainPage> {
   }
 
   Widget _buildBottomNavigationBar() {
+    final authProvider = getAuthProvider(context);
+    final userRole = authProvider?.businessDetails?.group?.toLowerCase();
+    
+    // For Cashier and Supervisor, don't show bottom navigation since there's only one screen
+    if (userRole == 'cashier' || userRole == 'supervisor') {
+      return const SizedBox.shrink(); // Hide bottom navigation completely
+    }
+    
+    // For Merchant and Owner, show all tabs
     final adminNavItems = <BottomNavigationBarItem>[
       NavBarItem.create(
         label: 'Home',
@@ -143,6 +164,7 @@ class _HomeMainPageState extends State<HomeMainPage> {
           ),
           appBar: CustomDashboardAppBar(
             title: context.businessDisplayName,
+              userRole: context.businessUserRole,
             onProfileTap: () =>const ProfilePage().launch(context),
           ),
           body: RefreshIndicator(
