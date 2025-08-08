@@ -1,7 +1,4 @@
 class GetVariablePriceStatusResponse {
-  final String? status;
-  final String? message;
-  final List<VariablePriceStatus>? data;
 
   GetVariablePriceStatusResponse({
     this.status,
@@ -18,6 +15,9 @@ class GetVariablePriceStatusResponse {
           .toList(),
     );
   }
+  final String? status;
+  final String? message;
+  final List<VariablePriceStatus>? data;
 
   Map<String, dynamic> toJson() {
     return {
@@ -29,11 +29,6 @@ class GetVariablePriceStatusResponse {
 }
 
 class VariablePriceStatus {
-  final String? id;
-  final String? priceStatusName;
-  final String? createdAt;
-  final String? updatedAt;
-  final int? v;
 
   VariablePriceStatus({
     this.id,
@@ -52,6 +47,11 @@ class VariablePriceStatus {
       v: json['__v'] as int?,
     );
   }
+  final String? id;
+  final String? priceStatusName;
+  final String? createdAt;
+  final String? updatedAt;
+  final int? v;
 
   Map<String, dynamic> toJson() {
     return {

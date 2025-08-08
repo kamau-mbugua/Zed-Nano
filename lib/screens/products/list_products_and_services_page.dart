@@ -5,7 +5,7 @@ import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/custom_tab_switcher.dart';
 
 class ListProductsAndServicesPage extends StatefulWidget {
-  const ListProductsAndServicesPage({Key? key}) : super(key: key);
+  const ListProductsAndServicesPage({super.key});
 
   @override
   State<ListProductsAndServicesPage> createState() => _ListProductsAndServicesPageState();
@@ -16,13 +16,13 @@ class _ListProductsAndServicesPageState extends State<ListProductsAndServicesPag
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AuthAppBar(title: "Products & Services"),
+      appBar: const AuthAppBar(title: 'Products & Services'),
       body: Column(
         children: [
           const SizedBox(height: 24),
           Expanded(
             child: SwipeableTabSwitcher(
-              tabs: const ["Product", "Service"],
+              tabs: const ['Product', 'Service'],
               children: const [
                 ProductsListPage(),
                 ServiceListPage(),
@@ -34,7 +34,7 @@ class _ListProductsAndServicesPageState extends State<ListProductsAndServicesPag
             ),
           ),
         ],
-      )
+      ),
     );
   }
 }

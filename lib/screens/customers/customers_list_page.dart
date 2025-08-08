@@ -9,7 +9,7 @@ import 'package:zed_nano/screens/widget/common/custom_tab_switcher.dart';
 import 'package:zed_nano/utils/Colors.dart';
 
 class CustomersListPage extends StatefulWidget {
-  const CustomersListPage({Key? key}) : super(key: key);
+  const CustomersListPage({super.key});
 
   @override
   _CustomersListPageState createState() => _CustomersListPageState();
@@ -20,8 +20,8 @@ class _CustomersListPageState extends State<CustomersListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AuthAppBar(
-        title: 'Customers'
+      appBar: const AuthAppBar(
+        title: 'Customers',
       ),
       body: Column(
         children: [
@@ -29,11 +29,6 @@ class _CustomersListPageState extends State<CustomersListPage> {
           Expanded(
             child: SwipeableTabSwitcher(
               tabs: const ['Active', 'Pending', 'Suspended'],
-              children: const [
-                ApprovedCustomersListPage(),
-                PendingCustomersListPage(),
-                SuspendedCustomersListPage(),
-              ],
               selectedTabColors: const [
                 successTextColor,      // Active tab color
                 primaryOrangeTextColor,     // Pending tab color
@@ -49,14 +44,19 @@ class _CustomersListPageState extends State<CustomersListPage> {
                 primaryOrangeTextColor,     // Pending border color
                 colorBackground,        // Suspended border color
               ],
+              children: const [
+                ApprovedCustomersListPage(),
+                PendingCustomersListPage(),
+                SuspendedCustomersListPage(),
+              ],
             ),
           ),
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
-        heroTag: "customers_list_fab",
+        heroTag: 'customers_list_fab',
         onPressed: () async {
-          AddCustomers().launch(context);
+          const AddCustomers().launch(context);
         },
         backgroundColor: const Color(0xFF032541),
         icon: const Icon(Icons.add, size: 20, color: Colors.white),

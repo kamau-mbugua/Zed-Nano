@@ -1,9 +1,6 @@
 import 'package:zed_nano/models/listProducts/ListProductsResponse.dart';
 
 class FindProductsResponse {
-  final String? status;
-  final String? message;
-  final ProductData? data;
 
   FindProductsResponse({
     this.status,
@@ -20,6 +17,9 @@ class FindProductsResponse {
           : ProductData.fromJson(json['data'] as Map<String, dynamic>),
     );
   }
+  final String? status;
+  final String? message;
+  final ProductData? data;
 
   Map<String, dynamic> toJson() {
     return {

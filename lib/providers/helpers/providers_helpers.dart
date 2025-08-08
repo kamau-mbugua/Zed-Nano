@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
+import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/models/business/BusinessDetails.dart';
 import 'package:zed_nano/models/posLoginVersion2/login_response.dart';
 import 'package:zed_nano/networking/base/api_helpers.dart';
 import 'package:zed_nano/networking/base/api_response.dart';
 import 'package:zed_nano/networking/models/response_model.dart';
 import 'package:zed_nano/providers/auth/authenticated_app_providers.dart';
-import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/providers/base/base_provider.dart';
 import 'package:zed_nano/providers/business/BusinessProviders.dart';
 import 'package:zed_nano/viewmodels/WorkflowViewModel.dart';
@@ -28,7 +28,7 @@ BusinessProviders getBusinessProvider(BuildContext context,{bool listen = false}
 }
 
 WorkflowViewModel getWorkflowViewModel(BuildContext context,{bool listen = false}) {
-  return Provider.of<WorkflowViewModel>(context, listen: listen);;
+  return Provider.of<WorkflowViewModel>(context, listen: listen);
 }
 
 extension ProviderApiHelpers on BaseProvider {
@@ -59,7 +59,7 @@ extension ProviderApiHelpers on BaseProvider {
           'performApiCallWithHandling API Response: \\n              \\u{1F4AC} data: \\${apiResponse.data} | success: \\${apiResponse.isSuccess}');*/
       final responseModel = await handleApiResponse(apiResponse);
       return responseModel;
-    }, context);
+    }, context,);
     return result ??
         ResponseModel(false, error?.userMessage ?? 'An unknown error occurred');
   }

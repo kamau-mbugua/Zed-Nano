@@ -98,15 +98,6 @@ class AddStockViewModel with ChangeNotifier {
 
 // CartItem model
 class AddStockCartItem {
-  final double oldStock;
-  final String category;
-  final double buyingPrice;
-  final double sellingPrice;
-  final double quantity;
-  final String productId;
-  final String productName;
-  final String imagePath;
-  final String currency;
 
 
   AddStockCartItem({
@@ -120,6 +111,15 @@ class AddStockCartItem {
     required this.imagePath,
     required this.currency,
   });
+  final double oldStock;
+  final String category;
+  final double buyingPrice;
+  final double sellingPrice;
+  final double quantity;
+  final String productId;
+  final String productName;
+  final String imagePath;
+  final String currency;
 
   double get total => quantity + oldStock;
 

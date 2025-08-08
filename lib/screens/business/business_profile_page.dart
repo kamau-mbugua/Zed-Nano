@@ -1,28 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:zed_nano/contants/AppConstants.dart';
 import 'package:zed_nano/models/get_business_info/BusinessInfoResponse.dart';
 import 'package:zed_nano/models/get_token_after_invite/GetTokenAfterInviteResponse.dart';
-import 'package:zed_nano/models/listsubscribed_billing_plans/SubscribedBillingPlansResponse.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/routes/routes.dart';
-import 'package:zed_nano/screens/business/edit/edit_business_page.dart';
 import 'package:zed_nano/screens/business/get_started_page.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/extensions.dart';
-import 'package:zed_nano/viewmodels/WorkflowViewModel.dart';
 
 class BusinessProfilePage extends StatefulWidget {
+
+  const BusinessProfilePage(
+      {required this.businessData, super.key, this.onRefreshRequest,});
   final BusinessInfoData businessData;
   final Future<void> Function()? onRefreshRequest;
-
-  BusinessProfilePage(
-      {Key? key, required this.businessData, this.onRefreshRequest})
-      : super(key: key);
 
   @override
   State<BusinessProfilePage> createState() => _BusinessProfilePageState();
@@ -66,7 +60,7 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AuthAppBar(
+      appBar: const AuthAppBar(
         title: 'Business Profile',
       ),
       body: RefreshIndicator(
@@ -109,7 +103,7 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
                   color: textPrimary,
                   fontWeight: FontWeight.w600,
                   fontFamily: 'Poppins',
-                  fontSize: 28.0,
+                  fontSize: 28,
                 ),
               ),
               const SizedBox(height: 12),
@@ -121,7 +115,7 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
                       color: textSecondary,
                       fontWeight: FontWeight.w400,
                       fontFamily: 'Poppins',
-                      fontSize: 12.0,
+                      fontSize: 12,
                     ),
                   ),
                   const Text(
@@ -130,7 +124,7 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
                       color: textSecondary,
                       fontWeight: FontWeight.w400,
                       fontFamily: 'Poppins',
-                      fontSize: 12.0,
+                      fontSize: 12,
                     ),
                   ),
                   Text(
@@ -139,7 +133,7 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
                       color: textSecondary,
                       fontWeight: FontWeight.w400,
                       fontFamily: 'Poppins',
-                      fontSize: 12.0,
+                      fontSize: 12,
                     ),
                   ),
                 ],
@@ -153,7 +147,7 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
                   color: textSecondary,
                   fontWeight: FontWeight.w400,
                   fontFamily: 'Poppins',
-                  fontSize: 12.0,
+                  fontSize: 12,
                 ),
               ),
             ],
@@ -172,13 +166,13 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
             ),
           ),
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8),
             child: ClipRRect(
                 borderRadius: BorderRadius.circular(12),
                 child: rfCommonCachedNetworkImage(
-                  '${AppConstants.baseUrl}staticimages/logos/${widget.businessData?.businessLogo}',
+                  '${AppConstants.baseUrl}staticimages/logos/${widget.businessData.businessLogo}',
                   fit: BoxFit.fill,
-                )),
+                ),),
           ),
         ),
       ],
@@ -194,14 +188,14 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Padding(
-              padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 0.0),
+              padding: EdgeInsets.symmetric(vertical: 8),
               child: Text(
                 'Subscription',
                 style: TextStyle(
                   color: textPrimary,
                   fontWeight: FontWeight.w600,
                   fontFamily: 'Poppins',
-                  fontSize: 14.0,
+                  fontSize: 14,
                 ),
               ),
             ),
@@ -216,14 +210,14 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
                   color: accentRed, // highlightHighlightDarkest
                   fontWeight: FontWeight.w600,
                   fontFamily: 'Poppins',
-                  fontSize: 12.0,
+                  fontSize: 12,
                 ),
               ),
             ),
           ],
         ),
         const SizedBox(height: 8),
-        if ((widget.businessData?.businessBillingDetails?.nanoSubscription
+        if ((widget.businessData.businessBillingDetails?.nanoSubscription
                         ?.freeTrialStatus ==
                     'Active') ==
                 true) Row(
@@ -238,34 +232,34 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
                           color: darkGreyColor, // neutralDarkDarkest
                           fontWeight: FontWeight.w400,
                           fontFamily: 'Poppins',
-                          fontSize: 14.0,
+                          fontSize: 14,
                         ),
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        'Due in:  ${widget.businessData?.businessBillingDetails?.nanoSubscription?.freeTrialPeriodRemainingdays}',
+                        'Due in:  ${widget.businessData.businessBillingDetails?.nanoSubscription?.freeTrialPeriodRemainingdays}',
                         style: const TextStyle(
                           color: textSecondary, // neutralDarkLight
                           fontWeight: FontWeight.w400,
                           fontFamily: 'Poppins',
-                          fontSize: 12.0,
+                          fontSize: 12,
                         ),
                       ),
                     ],
                   ),
                   Text(
-                    widget.businessData?.businessBillingDetails?.nanoSubscription?.isActiveBillingPackage ==
+                    widget.businessData.businessBillingDetails?.nanoSubscription?.isActiveBillingPackage ==
                             true
                         ? 'Active'
                         : 'Inactive',
                     style: TextStyle(
-                      color: widget.businessData?.businessBillingDetails?.nanoSubscription?.isActiveBillingPackage ==
+                      color: widget.businessData.businessBillingDetails?.nanoSubscription?.isActiveBillingPackage ==
                               true
                           ? successTextColor
                           : Colors.orange[700],
                       fontWeight: FontWeight.w400,
                       fontFamily: 'Poppins',
-                      fontSize: 18.0,
+                      fontSize: 18,
                     ),
                   ),
                 ],
@@ -276,34 +270,34 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '${widget.businessData?.businessBillingDetails?.nanoSubscription?.data?[0]?.billingPeriodName ?? ''} Subscription',
+                        '${widget.businessData.businessBillingDetails?.nanoSubscription?.data?[0].billingPeriodName ?? ''} Subscription',
                         style: const TextStyle(
                           color: darkGreyColor, // neutralDarkDarkest
                           fontWeight: FontWeight.w400,
                           fontFamily: 'Poppins',
-                          fontSize: 14.0,
+                          fontSize: 14,
                         ),
                       ),
                       const SizedBox(height: 4),
                       Row(
                         children: [
                           Text(
-                            '${widget.businessData.localCurrency ?? 'KES'} ${widget.businessData?.businessBillingDetails?.nanoSubscription?.data?[0]?.totalBillingPlanAmount?.formatCurrency() ?? '0'}',
+                            '${widget.businessData.localCurrency ?? 'KES'} ${widget.businessData.businessBillingDetails?.nanoSubscription?.data?[0].totalBillingPlanAmount?.formatCurrency() ?? '0'}',
                             style: const TextStyle(
                               color: textSecondary, // neutralDarkLight
                               fontWeight: FontWeight.w400,
                               fontFamily: 'Poppins',
-                              fontSize: 12.0,
+                              fontSize: 12,
                             ),
                           ),
                           const SizedBox(width: 8),
                           Text(
-                            '. Due: ${widget.businessData?.businessBillingDetails?.nanoSubscription?.data?[0]?.dueDate?.toFormattedDate()}',
+                            '. Due: ${widget.businessData.businessBillingDetails?.nanoSubscription?.data?[0].dueDate?.toFormattedDate()}',
                             style: const TextStyle(
                               color: textSecondary, // neutralDarkLight
                               fontWeight: FontWeight.w400,
                               fontFamily: 'Poppins',
-                              fontSize: 12.0,
+                              fontSize: 12,
                             ),
                           ),
                         ],
@@ -311,18 +305,18 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
                     ],
                   ),
                   Text(
-                    widget.businessData?.businessBillingDetails?.nanoSubscription?.isActiveBillingPackage ==
+                    widget.businessData.businessBillingDetails?.nanoSubscription?.isActiveBillingPackage ==
                             true
                         ? 'Active'
                         : 'Inactive',
                     style: TextStyle(
-                      color: widget.businessData?.businessBillingDetails?.nanoSubscription?.isActiveBillingPackage ==
+                      color: widget.businessData.businessBillingDetails?.nanoSubscription?.isActiveBillingPackage ==
                               true
                           ? successTextColor
                           : Colors.orange[700],
                       fontWeight: FontWeight.w400,
                       fontFamily: 'Poppins',
-                      fontSize: 18.0,
+                      fontSize: 18,
                     ),
                   ),
                 ],
@@ -334,36 +328,36 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
 
   Widget _buildBusinessDetailsSection() {
     // Business details items with dynamic data
-    final List<Map<String, String>> details = [
+    final details = <Map<String, String>>[
       {
         'title': 'Business Name',
         'value': widget.businessData.businessName ?? 'N/A',
-        'color': 'dark'
+        'color': 'dark',
       },
       {
         'title': 'Phone Number',
         'value': widget.businessData.businessOwnerPhone ?? 'N/A',
-        'color': 'medium'
+        'color': 'medium',
       },
       {
         'title': 'Email Address',
         'value': widget.businessData.businessOwnerEmail ?? 'N/A',
-        'color': 'medium'
+        'color': 'medium',
       },
       {
         'title': 'Location',
         'value': widget.businessData.businessOwnerAddress ?? 'N/A',
-        'color': 'dark'
+        'color': 'dark',
       },
       {
         'title': 'Directors/Owners',
         'value': widget.businessData.businessOwnerName ?? 'N/A',
-        'color': 'medium'
+        'color': 'medium',
       },
       {
         'title': 'Currency',
         'value': widget.businessData.localCurrency ?? 'KES',
-        'color': 'medium'
+        'color': 'medium',
       },
     ];
 
@@ -375,21 +369,21 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Padding(
-              padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
+              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
               child: Text(
                 'Business Details',
                 style: TextStyle(
                   color: textPrimary,
                   fontWeight: FontWeight.w600,
                   fontFamily: 'Poppins',
-                  fontSize: 14.0,
+                  fontSize: 14,
                 ),
               ),
             ),
             GestureDetector(
               onTap: () {
                 Navigator.pushNamed(
-                        context, AppRoutes.getEditBusinessScreenRoute())
+                        context, AppRoutes.getEditBusinessScreenRoute(),)
                     .then((_) {
                   if (widget.onRefreshRequest != null) {
                     widget.onRefreshRequest!();
@@ -402,7 +396,7 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
                   color: accentRed, // highlightHighlightDarkest
                   fontWeight: FontWeight.w600,
                   fontFamily: 'Poppins',
-                  fontSize: 12.0,
+                  fontSize: 12,
                 ),
               ),
             ),
@@ -414,7 +408,7 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
         ...details
             .map((item) => Padding(
                   padding: const EdgeInsets.symmetric(
-                      vertical: 12.0, horizontal: 8.0),
+                      vertical: 12, horizontal: 8,),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -425,7 +419,7 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
                           color: Colors.black45, // neutralDarkLightest
                           fontWeight: FontWeight.w400,
                           fontFamily: 'Poppins',
-                          fontSize: 14.0,
+                          fontSize: 14,
                         ),
                       ),
                       Flexible(
@@ -436,14 +430,14 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
                             color: darkGreyColor, // neutralDarkMedium
                             fontWeight: FontWeight.w400,
                             fontFamily: 'Poppins',
-                            fontSize: 14.0,
+                            fontSize: 14,
                           ),
                         ),
                       ),
                     ],
                   ),
-                ))
-            .toList(),
+                ),)
+            ,
       ],
     );
   }

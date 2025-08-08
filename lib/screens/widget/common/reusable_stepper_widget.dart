@@ -10,6 +10,24 @@ import 'package:zed_nano/utils/Colors.dart';
 /// - Flexible step content
 /// - Consistent styling
 class ReusableStepperWidget extends StatefulWidget {
+
+  const ReusableStepperWidget({
+    required this.steps, super.key,
+    this.initialStep = 0,
+    this.onStepChanged,
+    this.onCompleted,
+    this.onCancelled,
+    this.backgroundColor,
+    this.activeStepColor,
+    this.inactiveStepColor,
+    this.contentPadding,
+    this.indicatorPadding,
+    this.indicatorHeight,
+    this.showStepNumbers = false,
+    this.stepTitles,
+    this.stepData,
+    this.onStepDataChanged,
+  });
   /// List of step pages/widgets to display
   final List<Widget> steps;
   
@@ -52,25 +70,6 @@ class ReusableStepperWidget extends StatefulWidget {
 
   /// Callback when step data changes
   final Function(Map<String, dynamic>)? onStepDataChanged;
-
-  const ReusableStepperWidget({
-    Key? key,
-    required this.steps,
-    this.initialStep = 0,
-    this.onStepChanged,
-    this.onCompleted,
-    this.onCancelled,
-    this.backgroundColor,
-    this.activeStepColor,
-    this.inactiveStepColor,
-    this.contentPadding,
-    this.indicatorPadding,
-    this.indicatorHeight,
-    this.showStepNumbers = false,
-    this.stepTitles,
-    this.stepData,
-    this.onStepDataChanged,
-  }) : super(key: key);
 
   @override
   State<ReusableStepperWidget> createState() => _ReusableStepperWidgetState();
@@ -143,7 +142,7 @@ class _ReusableStepperWidgetState extends State<ReusableStepperWidget> {
         final isActive = index <= currentStep;
         return Expanded(
           child: Container(
-            margin: const EdgeInsets.symmetric(horizontal: 4.0),
+            margin: const EdgeInsets.symmetric(horizontal: 4),
             height: widget.indicatorHeight ?? 5,
             decoration: BoxDecoration(
               color: isActive 
@@ -220,7 +219,7 @@ class _ReusableStepperWidgetState extends State<ReusableStepperWidget> {
           children: [
             const SizedBox(height: 20),
             Padding(
-              padding: widget.indicatorPadding ?? const EdgeInsets.symmetric(horizontal: 16.0),
+              padding: widget.indicatorPadding ?? const EdgeInsets.symmetric(horizontal: 16),
               child: widget.showStepNumbers 
                 ? _buildNumberedIndicator()
                 : _buildProgressIndicator(),
@@ -228,9 +227,8 @@ class _ReusableStepperWidgetState extends State<ReusableStepperWidget> {
             const SizedBox(height: 16),
             Expanded(
               child: Padding(
-                padding: widget.contentPadding ?? const EdgeInsets.symmetric(horizontal: 16.0),
+                padding: widget.contentPadding ?? const EdgeInsets.symmetric(horizontal: 16),
                 child: _StepperContent(
-                  child: widget.steps[currentStep],
                   onNext: goToNextStep,
                   onPrevious: goToPreviousStep,
                   onGoToStep: goToStep,
@@ -239,6 +237,7 @@ class _ReusableStepperWidgetState extends State<ReusableStepperWidget> {
                   totalSteps: widget.steps.length,
                   stepData: _stepData,
                   updateStepData: updateStepData,
+                  child: widget.steps[currentStep],
                 ),
               ),
             ),
@@ -251,17 +250,9 @@ class _ReusableStepperWidgetState extends State<ReusableStepperWidget> {
 
 /// Wrapper widget that provides stepper context to child widgets
 class _StepperContent extends InheritedWidget {
-  final VoidCallback onNext;
-  final VoidCallback onPrevious;
-  final Function(int) onGoToStep;
-  final int currentStep;
-  final int totalSteps;
-  final VoidCallback skipAndClose;
-  final Map<String, dynamic> stepData;
-  final Function(Map<String, dynamic>) updateStepData;
 
   const _StepperContent({
-    required Widget child,
+    required super.child,
     required this.onNext,
     required this.onPrevious,
     required this.onGoToStep,
@@ -270,7 +261,15 @@ class _StepperContent extends InheritedWidget {
     required this.skipAndClose,
     required this.stepData,
     required this.updateStepData,
-  }) : super(child: child);
+  });
+  final VoidCallback onNext;
+  final VoidCallback onPrevious;
+  final Function(int) onGoToStep;
+  final int currentStep;
+  final int totalSteps;
+  final VoidCallback skipAndClose;
+  final Map<String, dynamic> stepData;
+  final Function(Map<String, dynamic>) updateStepData;
 
   static _StepperContent? of(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<_StepperContent>();

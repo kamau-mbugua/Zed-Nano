@@ -19,27 +19,22 @@ class DateRangeUtil {
       case 'today':
         start = DateTime(now.year, now.month, now.day, 0, 0, 0, 0, now.timeZoneOffset.inMilliseconds ~/ 1000 ~/ 60);
         end = now;
-        break;
       case 'this_week':
         final weekday = now.weekday;
         start = DateTime(now.year, now.month, now.day - (weekday - 1), 0, 0, 0, 0, now.timeZoneOffset.inMilliseconds ~/ 1000 ~/ 60);
         end = now;
-        break;
       case 'this_month':
         start = DateTime(now.year, now.month, 1, 0, 0, 0, 0, now.timeZoneOffset.inMilliseconds ~/ 1000 ~/ 60);
         end = now;
-        break;
       case 'this_year':
         start = DateTime(now.year, 1, 1, 0, 0, 0, 0, now.timeZoneOffset.inMilliseconds ~/ 1000 ~/ 60);
         end = now;
-        break;
       case 'custom':
         if (customStart == null || customEnd == null) {
           throw ArgumentError('For custom range, provide customStart and customEnd');
         }
         start = customStart;
         end = customEnd;
-        break;
       default:
         throw ArgumentError('Unsupported label: $label');
     }
@@ -52,9 +47,9 @@ class DateRangeUtil {
 
   /// Formats a DateTime to 'yyyy-MM-ddTHH:mm:ss+03:00' (ISO8601 with offset)
   static String _formatDateWithOffset(DateTime dt) {
-    final String ymd = DateFormat('yyyy-MM-dd').format(dt);
-    final String hms = DateFormat('HH:mm:ss').format(dt);
-    final String offset = _formatOffset(dt.timeZoneOffset);
+    final ymd = DateFormat('yyyy-MM-dd').format(dt);
+    final hms = DateFormat('HH:mm:ss').format(dt);
+    final offset = _formatOffset(dt.timeZoneOffset);
     return '$ymd' 'T' '$hms$offset';
   }
 

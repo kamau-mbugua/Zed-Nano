@@ -1,24 +1,5 @@
 /// Model class for login response data
 class LoginResponse {
-  final String? status;
-  final String? statusCapital;
-  final String? message;
-  final bool? is2FAEnabled;
-  final String? partnerbusinessType;
-  final String? token;
-  final String? group;
-  final String? username;
-  final String? email;
-  final String? state;
-  final String? businessName;
-  final String? userId;
-  final String? branchId;
-  final String? customerClassification;
-  final String? defaultBusinessId;
-  final String? businessNumber;
-  final String? localCurrency;
-  final String? businessCategory;
-  final LoginResponseData? data;
 
   LoginResponse({
     this.status,
@@ -67,6 +48,25 @@ class LoginResponse {
           : null,
     );
   }
+  final String? status;
+  final String? statusCapital;
+  final String? message;
+  final bool? is2FAEnabled;
+  final String? partnerbusinessType;
+  final String? token;
+  final String? group;
+  final String? username;
+  final String? email;
+  final String? state;
+  final String? businessName;
+  final String? userId;
+  final String? branchId;
+  final String? customerClassification;
+  final String? defaultBusinessId;
+  final String? businessNumber;
+  final String? localCurrency;
+  final String? businessCategory;
+  final LoginResponseData? data;
 
   Map<String, dynamic> toJson() {
     return {
@@ -95,10 +95,6 @@ class LoginResponse {
 
 /// Data class for the data field in login response
 class LoginResponseData {
-  final LoginUserDetails? userDetails;
-  final bool? passwordExpired;
-  final bool? reset;
-  final TokenDetails? tokenDetails;
 
   LoginResponseData({
     this.userDetails,
@@ -119,6 +115,10 @@ class LoginResponseData {
           : null,
     );
   }
+  final LoginUserDetails? userDetails;
+  final bool? passwordExpired;
+  final bool? reset;
+  final TokenDetails? tokenDetails;
 
   Map<String, dynamic> toJson() {
     return {
@@ -132,13 +132,6 @@ class LoginResponseData {
 
 /// User details from login response
 class LoginUserDetails {
-  final String? phoneNumber;
-  final String? name;
-  final int? institutionId;
-  final String? institution;
-  final int? shopId;
-  final String? id;
-  final String? usertype;
 
   LoginUserDetails({
     this.phoneNumber,
@@ -161,6 +154,13 @@ class LoginUserDetails {
       usertype: json['usertype'] as String?,
     );
   }
+  final String? phoneNumber;
+  final String? name;
+  final int? institutionId;
+  final String? institution;
+  final int? shopId;
+  final String? id;
+  final String? usertype;
 
   Map<String, dynamic> toJson() {
     return {
@@ -177,8 +177,6 @@ class LoginUserDetails {
 
 /// Token details from login response
 class TokenDetails {
-  final String? accessToken;
-  final String? expiry;
 
   TokenDetails({
     this.accessToken,
@@ -191,6 +189,8 @@ class TokenDetails {
       expiry: json['expiry'] as String?,
     );
   }
+  final String? accessToken;
+  final String? expiry;
 
   Map<String, dynamic> toJson() {
     return {

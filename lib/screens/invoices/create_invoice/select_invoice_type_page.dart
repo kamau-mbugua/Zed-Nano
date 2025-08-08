@@ -13,9 +13,9 @@ import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/viewmodels/CustomerInvoicingViewModel.dart';
 
 class SelectInvoiceTypePage extends StatefulWidget {
+  const SelectInvoiceTypePage({required this.onNext, required this.onPrevious, super.key});
   final VoidCallback onNext;
   final VoidCallback onPrevious;
-  SelectInvoiceTypePage({Key? key, required this.onNext, required this.onPrevious}) : super(key: key);
 
   @override
   _SelectInvoiceTypePageState createState() => _SelectInvoiceTypePageState();
@@ -24,7 +24,7 @@ class SelectInvoiceTypePage extends StatefulWidget {
 class _SelectInvoiceTypePageState extends State<SelectInvoiceTypePage> {
 
   List<String> invoiceTypes = ['One-Off', 'Recurring'];
-  var selectedIinvoiceTypes = 'One-Off';
+  String selectedIinvoiceTypes = 'One-Off';
   List<String> recurrencyTypes = ['Daily', 'Weekly', 'Monthly', 'Quarterly' ,'Yearly'];
   String? selectedRecurrencyType;
 
@@ -49,7 +49,7 @@ class _SelectInvoiceTypePageState extends State<SelectInvoiceTypePage> {
           _selectInvoiceType(),
           16.height,
           _buildReccurency(),
-          _buildPurchaseOrder()
+          _buildPurchaseOrder(),
 
         ],
       ).paddingSymmetric(horizontal: 18),
@@ -70,7 +70,7 @@ class _SelectInvoiceTypePageState extends State<SelectInvoiceTypePage> {
               fontSize: 12,
               fontWeight: FontWeight.w600,
               fontStyle: FontStyle.normal,
-            )
+            ),
         ),
         const SizedBox(height: 8),
         SubCategoryPicker(
@@ -93,7 +93,7 @@ class _SelectInvoiceTypePageState extends State<SelectInvoiceTypePage> {
 
   Widget _selectInvoiceType() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 0),
+      padding: const EdgeInsets.symmetric(),
       child: SelectionChipsWidget(
         title: 'Invoice Type',
         options: invoiceTypes,
@@ -108,7 +108,7 @@ class _SelectInvoiceTypePageState extends State<SelectInvoiceTypePage> {
   }
 
   Widget _buildSubmitButton(){
-    var customerInvoicingViewModel = Provider.of<CustomerInvoicingViewModel>(context);
+    final customerInvoicingViewModel = Provider.of<CustomerInvoicingViewModel>(context);
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -147,7 +147,7 @@ class _SelectInvoiceTypePageState extends State<SelectInvoiceTypePage> {
   }
 
   Widget _selectCustomer() {
-    var customerInvoicingViewModel = Provider.of<CustomerInvoicingViewModel>(context);
+    final customerInvoicingViewModel = Provider.of<CustomerInvoicingViewModel>(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -158,7 +158,7 @@ class _SelectInvoiceTypePageState extends State<SelectInvoiceTypePage> {
               fontSize: 12,
               fontWeight: FontWeight.w600,
               fontStyle: FontStyle.normal,
-            )
+            ),
         ),
         FilterRowWidget(
             leftButtonText: customerInvoicingViewModel.customerData?.customerName ?? 'Select Customer',

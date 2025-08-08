@@ -1,7 +1,6 @@
 import 'package:zed_nano/models/listsubscribed_billing_plans/SubscribedBillingPlansResponse.dart';
 
 class GetTokenAfterInviteResponse {
-  final Data? data;
 
   GetTokenAfterInviteResponse({this.data});
 
@@ -12,6 +11,7 @@ class GetTokenAfterInviteResponse {
           : null,
     );
   }
+  final Data? data;
 
   Map<String, dynamic> toJson() {
     return {
@@ -21,14 +21,6 @@ class GetTokenAfterInviteResponse {
 }
 
 class Data {
-  final String? token;
-  final String? group;
-  final String? userName;
-  final String? email;
-  final String? storeName;
-  final bool? packagePaidStatus;
-  final String? workflowState;
-  final BusinessBillingDetails? businessBillingDetails;
 
   Data({
     this.token,
@@ -55,6 +47,14 @@ class Data {
           : null,
     );
   }
+  final String? token;
+  final String? group;
+  final String? userName;
+  final String? email;
+  final String? storeName;
+  final bool? packagePaidStatus;
+  final String? workflowState;
+  final BusinessBillingDetails? businessBillingDetails;
 
   Map<String, dynamic> toJson() {
     return {
@@ -71,14 +71,6 @@ class Data {
 }
 
 class NanoSubscription {
-  final List<SubscribedBillingBillingPlan>? data;
-  final String? freeTrialStatus;
-  final String? freeTrialPlanName;
-  final String? freeTrialEndTime;
-  final bool? isFreeTrialTried;
-  final bool? isFreeTrialEnded;
-  final bool? isActiveBillingPackage;
-  final String? freeTrialPeriodRemainingdays;
 
   NanoSubscription({
     this.data,
@@ -105,6 +97,14 @@ class NanoSubscription {
       freeTrialPeriodRemainingdays: json['freeTrialPeriodRemainingdays'] as String?,
     );
   }
+  final List<SubscribedBillingBillingPlan>? data;
+  final String? freeTrialStatus;
+  final String? freeTrialPlanName;
+  final String? freeTrialEndTime;
+  final bool? isFreeTrialTried;
+  final bool? isFreeTrialEnded;
+  final bool? isActiveBillingPackage;
+  final String? freeTrialPeriodRemainingdays;
 
   Map<String, dynamic> toJson() {
     return {
@@ -121,15 +121,6 @@ class NanoSubscription {
 }
 
 class BusinessBillingDetails {
-  final String? subscriptionPlanName;
-  final String? subscriptionType;
-  final String? billingStatus;
-  final String? billingDueDate;
-  final int? billingRemainingDays;
-  final String? billingPeriodName;
-  final List<BillableFeature>? billableFeatures;
-  final String? billingType;
-  final NanoSubscription? nanoSubscription;
 
   BusinessBillingDetails({
     this.subscriptionPlanName,
@@ -160,6 +151,15 @@ class BusinessBillingDetails {
           : null,
     );
   }
+  final String? subscriptionPlanName;
+  final String? subscriptionType;
+  final String? billingStatus;
+  final String? billingDueDate;
+  final int? billingRemainingDays;
+  final String? billingPeriodName;
+  final List<BillableFeature>? billableFeatures;
+  final String? billingType;
+  final NanoSubscription? nanoSubscription;
 
   Map<String, dynamic> toJson() {
     return {
@@ -177,8 +177,6 @@ class BusinessBillingDetails {
 }
 
 class BillableFeature {
-  final String? id;
-  final String? slug;
 
   BillableFeature({
     this.id,
@@ -191,6 +189,8 @@ class BillableFeature {
       slug: json['slug'] as String?,
     );
   }
+  final String? id;
+  final String? slug;
 
   Map<String, dynamic> toJson() {
     return {

@@ -1,29 +1,26 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:provider/provider.dart';
-import 'package:dio/dio.dart';
 import 'package:zed_nano/models/get_all_activeStock/GetAllActiveStockResponse.dart';
 import 'package:zed_nano/models/listCategories/ListCategoriesResponse.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
+import 'package:zed_nano/routes/routes.dart';
 import 'package:zed_nano/screens/sell/select_category_page.dart';
 import 'package:zed_nano/screens/stock/itemBuilder/build_stock_item.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/screens/widget/common/filter_row_widget.dart';
 import 'package:zed_nano/screens/widget/common/searchview.dart';
-import 'package:zed_nano/utils/pagination_controller.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
-import '../../../utils/Images.dart';
-import 'package:zed_nano/routes/routes.dart';
+import 'package:zed_nano/utils/Images.dart';
+import 'package:zed_nano/utils/pagination_controller.dart';
 
 class ViewStockPage extends StatefulWidget {
-  const ViewStockPage({Key? key}) : super(key: key);
+  const ViewStockPage({super.key});
 
   @override
   _ViewStockPageState createState() => _ViewStockPageState();
@@ -31,7 +28,7 @@ class ViewStockPage extends StatefulWidget {
 
 class _ViewStockPageState extends State<ViewStockPage> {
   late PaginationController<ActiveStockProduct> _paginationController;
-  int _activeStatusFilter = -1; // -1: All, 0: Low Stock, 1: Out of Stock
+  final int _activeStatusFilter = -1; // -1: All, 0: Low Stock, 1: Out of Stock
   
   String _searchTerm = '';
   String? selectedCategoryId;
@@ -44,16 +41,16 @@ class _ViewStockPageState extends State<ViewStockPage> {
   int lowStockCount = 0;
   int outOfStockCount = 0;
 
-  String _selectedCategory = 'All';
-  String _sortOrder = 'A-Z';
-  TextEditingController _searchController = TextEditingController();
+  final String _selectedCategory = 'All';
+  final String _sortOrder = 'A-Z';
+  final TextEditingController _searchController = TextEditingController();
 
   List<ActiveStockProduct> products = [];
   TextEditingController searchController = TextEditingController();
 
   Timer? _debounceTimer;
   
-  bool _isLoading = true;
+  final bool _isLoading = true;
   StockStatusSummary? _summary;
 
   ProductCategoryData? categoryData;
@@ -82,7 +79,7 @@ class _ViewStockPageState extends State<ViewStockPage> {
   }
 
   Future<List<ActiveStockProduct>> getAllActiveStock(
-      {required int page, required int limit}) async {
+      {required int page, required int limit,}) async {
     try {
       final response = await getBusinessProvider(context).getAllActiveStock(
           page: page,
@@ -90,7 +87,7 @@ class _ViewStockPageState extends State<ViewStockPage> {
           searchValue: _searchTerm,
           context: context,
           categoryId: selectedCategoryId ?? '',
-          showStockDashboard:true
+          showStockDashboard:true,
       );
 
       setState(() {
@@ -144,7 +141,7 @@ class _ViewStockPageState extends State<ViewStockPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar:  AuthAppBar(title: 'View Stock'),
+      appBar:  const AuthAppBar(title: 'View Stock'),
       body: Column(
         children: [
           _buildStatusSummary(),
@@ -205,7 +202,7 @@ class _ViewStockPageState extends State<ViewStockPage> {
               },
               isActive: _activeStatusFilter == 1,
             ),
-          )
+          ),
         ],
       ),
     );
@@ -232,12 +229,10 @@ class _ViewStockPageState extends State<ViewStockPage> {
           borderRadius: BorderRadius.circular(16),
         ),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             1.height,
             Row(
-              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 SvgPicture.asset(
                   iconPath,
@@ -266,9 +261,9 @@ class _ViewStockPageState extends State<ViewStockPage> {
                     fontWeight: FontWeight.w600,
                     fontFamily: 'Poppins',
                     fontStyle:  FontStyle.normal,
-                    fontSize: 14.0
+                    fontSize: 14,
                 ),
-                textAlign: TextAlign.left
+                textAlign: TextAlign.left,
             ),
             1.height,
           ],
@@ -295,7 +290,7 @@ class _ViewStockPageState extends State<ViewStockPage> {
         });
       },
       showRightButtonArrow: false,
-      showRightButton: false
+      showRightButton: false,
     );
   }
   Widget _buildStockList() {

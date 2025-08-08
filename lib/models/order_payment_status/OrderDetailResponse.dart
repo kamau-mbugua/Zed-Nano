@@ -1,8 +1,4 @@
 class OrderDetailResponse {
-  final String? status;
-  final OrderDetailData? data;
-  final OrderDetail? order;
-  final List<OrderTransactionTotals>? transactionsList;
 
   OrderDetailResponse({
     this.status,
@@ -20,15 +16,13 @@ class OrderDetailResponse {
           ?.map((e) => OrderTransactionTotals.fromJson(e as Map<String, dynamic>))
           .toList(),    );
   }
+  final String? status;
+  final OrderDetailData? data;
+  final OrderDetail? order;
+  final List<OrderTransactionTotals>? transactionsList;
 }
 
 class OrderTransactionTotals {
-  final String? transactionType;
-  final String? transactionId;
-  final String? transactionDate;
-  final String? currency;
-  final String? receiptId;
-  final double? amount;
 
   OrderTransactionTotals({
     this.transactionType,
@@ -49,16 +43,15 @@ class OrderTransactionTotals {
       amount: (json['total'] as num?)?.toDouble(),
     );
   }
+  final String? transactionType;
+  final String? transactionId;
+  final String? transactionDate;
+  final String? currency;
+  final String? receiptId;
+  final double? amount;
 }
 
 class OrderDetailData {
-  final double? billAmount;
-  final double? totalPaid;
-  final String? cashier;
-  final String? pushyTransactionId;
-  final String? orderTable;
-  final bool? paid;
-  final double? deficit;
 
   OrderDetailData({
     this.billAmount,
@@ -81,67 +74,16 @@ class OrderDetailData {
       deficit: (json['deficit'] as num?)?.toDouble(),
     );
   }
+  final double? billAmount;
+  final double? totalPaid;
+  final String? cashier;
+  final String? pushyTransactionId;
+  final String? orderTable;
+  final bool? paid;
+  final double? deficit;
 }
 
 class OrderDetail {
-  final String? id;
-  final double? transamount;
-  final String? transtime;
-  final String? businessId;
-  final String? serialNo;
-  final String? cashier;
-  final String? customerName;
-  final String? pushTransactionId;
-  final String? orderTable;
-  final String? status;
-  final String? userId;
-  final bool? duplicate;
-  final List<OrderItem>? items;
-  final double? vat;
-  final double? subTotal;
-  final String? parentOrderId;
-  final String? branchId;
-  final String? businessIdString;
-  final bool? multiOrderImplementation;
-  final String? customerId;
-  final String? customerPaymentType;
-  final String? customerType;
-  final String? orderType;
-  final double? balance;
-  final double? customerBalance;
-  final double? discountAmount;
-  final double? discountPercent;
-  final String? storeId;
-  final bool? orderFullfilled;
-  final List<dynamic>? stkOrderList;
-  final String? stkOrderId;
-  final bool? zedPayItOrder;
-  final String? orderStatus;
-  final String? orderNumberSequence;
-  final String? orderNumber;
-  final int? numberOfReprints;
-  final bool? isOrderPreorder;
-  final double? cardPresentCharge;
-  final String? isStudentSponsoredOrder;
-  final String? creditNoteStatus;
-  final bool? isZedCreditNote;
-  final bool? isKraInvoice;
-  final List<dynamic>? remainingItems;
-  final List<dynamic>? partialPayments;
-  final List<dynamic>? reprintHistory;
-  final String? createdAt;
-  final String? updatedAt;
-  final int? v;
-  final List<dynamic>? childOrders;
-  final bool? isChild;
-  final String? customerPhone;
-  final String? customerEmail;
-  final String? transactionId;
-  final String? insuranceCompanyName;
-  final bool? superVisorCanDoReturn;
-  final String? branchName;
-  final String? transactionStatus;
-  final String? currency;
 
   OrderDetail({
     this.id,
@@ -268,25 +210,67 @@ class OrderDetail {
       currency: json['currency'] as String?,
     );
   }
+  final String? id;
+  final double? transamount;
+  final String? transtime;
+  final String? businessId;
+  final String? serialNo;
+  final String? cashier;
+  final String? customerName;
+  final String? pushTransactionId;
+  final String? orderTable;
+  final String? status;
+  final String? userId;
+  final bool? duplicate;
+  final List<OrderItem>? items;
+  final double? vat;
+  final double? subTotal;
+  final String? parentOrderId;
+  final String? branchId;
+  final String? businessIdString;
+  final bool? multiOrderImplementation;
+  final String? customerId;
+  final String? customerPaymentType;
+  final String? customerType;
+  final String? orderType;
+  final double? balance;
+  final double? customerBalance;
+  final double? discountAmount;
+  final double? discountPercent;
+  final String? storeId;
+  final bool? orderFullfilled;
+  final List<dynamic>? stkOrderList;
+  final String? stkOrderId;
+  final bool? zedPayItOrder;
+  final String? orderStatus;
+  final String? orderNumberSequence;
+  final String? orderNumber;
+  final int? numberOfReprints;
+  final bool? isOrderPreorder;
+  final double? cardPresentCharge;
+  final String? isStudentSponsoredOrder;
+  final String? creditNoteStatus;
+  final bool? isZedCreditNote;
+  final bool? isKraInvoice;
+  final List<dynamic>? remainingItems;
+  final List<dynamic>? partialPayments;
+  final List<dynamic>? reprintHistory;
+  final String? createdAt;
+  final String? updatedAt;
+  final int? v;
+  final List<dynamic>? childOrders;
+  final bool? isChild;
+  final String? customerPhone;
+  final String? customerEmail;
+  final String? transactionId;
+  final String? insuranceCompanyName;
+  final bool? superVisorCanDoReturn;
+  final String? branchName;
+  final String? transactionStatus;
+  final String? currency;
 }
 
 class OrderItem {
-  final double? itemAmount;
-  final String? itemCategory;
-  final int? itemCount;
-  final String? itemName;
-  final String? orderNote;
-  final String? reciptNumber;
-  final double? totalAmount;
-  final String? productId;
-  final String? id;
-  final String? status;
-  final double? discount;
-  final String? pumpId;
-  final String? beneficiary;
-  final String? mileage;
-  final String? imagePath;
-  final String? currency;
 
   OrderItem({
     this.itemAmount,
@@ -327,6 +311,22 @@ class OrderItem {
       currency: json['currency'] as String?,
     );
   }
+  final double? itemAmount;
+  final String? itemCategory;
+  final int? itemCount;
+  final String? itemName;
+  final String? orderNote;
+  final String? reciptNumber;
+  final double? totalAmount;
+  final String? productId;
+  final String? id;
+  final String? status;
+  final double? discount;
+  final String? pumpId;
+  final String? beneficiary;
+  final String? mileage;
+  final String? imagePath;
+  final String? currency;
 
   Map<String, dynamic> toJson() {
     return {

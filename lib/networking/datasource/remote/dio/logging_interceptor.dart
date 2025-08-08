@@ -2,16 +2,16 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 
-import '../../../../utils/logger.dart';
+import 'package:zed_nano/utils/logger.dart';
 
 class LoggingInterceptor extends InterceptorsWrapper {
   int maxCharactersPerLine = 200;
 
   void logLong(String message) {
-    const int chunkSize = 1000;
-    int len = message.length;
-    for (int i = 0; i < len; i += chunkSize) {
-      print('${message.substring(i, i + chunkSize > len ? len : i + chunkSize)}');
+    const chunkSize = 1000;
+    final len = message.length;
+    for (var i = 0; i < len; i += chunkSize) {
+      print(message.substring(i, i + chunkSize > len ? len : i + chunkSize));
     }
   }
 
@@ -85,11 +85,11 @@ class LoggingInterceptor extends InterceptorsWrapper {
   }
 
   @override
-  Future onError(DioError err, ErrorInterceptorHandler handler) async {
-    logger.i("ERROR[${err.response?.statusCode}] => PATH: ${err.requestOptions.path} \n"
-        "MESSAGE: ${err.message}\n"
-        "WHOLE ERROR: ${err.toString()}\n"
-        "DATA: ${err.response?.data}");
+  Future onError(DioException err, ErrorInterceptorHandler handler) async {
+    logger.i('ERROR[${err.response?.statusCode}] => PATH: ${err.requestOptions.path} \n'
+        'MESSAGE: ${err.message}\n'
+        'WHOLE ERROR: $err\n'
+        'DATA: ${err.response?.data}');
     return super.onError(err, handler);
   }
 }

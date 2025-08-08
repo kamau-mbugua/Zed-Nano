@@ -1,6 +1,4 @@
 class SalesDashboardResponse {
-  final String? status;
-  final SalesDashboardData? data;
 
   SalesDashboardResponse({
     this.status,
@@ -15,6 +13,8 @@ class SalesDashboardResponse {
           : null,
     );
   }
+  final String? status;
+  final SalesDashboardData? data;
 
   Map<String, dynamic> toJson() {
     return {
@@ -27,10 +27,6 @@ class SalesDashboardResponse {
 }
 
 class SalesDashboardData {
-  final KeyMetrics? keyMetrics;
-  final OrderSummary? orderSummary;
-  final InvoiceSummary? invoiceSummary;
-  final SalesTrend? salesTrend;
 
   SalesDashboardData({
     this.keyMetrics,
@@ -55,6 +51,10 @@ class SalesDashboardData {
           : null,
     );
   }
+  final KeyMetrics? keyMetrics;
+  final OrderSummary? orderSummary;
+  final InvoiceSummary? invoiceSummary;
+  final SalesTrend? salesTrend;
 
   Map<String, dynamic> toJson() {
     return {
@@ -67,9 +67,6 @@ class SalesDashboardData {
 }
 
 class KeyMetrics {
-  final double? totalSales;
-  final int? totalTransactions;
-  final double? quantitiesSold;
 
   KeyMetrics({
     this.totalSales,
@@ -84,6 +81,9 @@ class KeyMetrics {
       quantitiesSold: (json['quantitiesSold'] as num?)?.toDouble(),
     );
   }
+  final double? totalSales;
+  final int? totalTransactions;
+  final double? quantitiesSold;
 
   Map<String, dynamic> toJson() {
     return {
@@ -95,9 +95,6 @@ class KeyMetrics {
 }
 
 class OrderSummary {
-  final SummaryItem? unpaid;
-  final SummaryItem? paid;
-  final SummaryItem? partial;
 
   OrderSummary({
     this.unpaid,
@@ -118,6 +115,9 @@ class OrderSummary {
           : null,
     );
   }
+  final SummaryItem? unpaid;
+  final SummaryItem? paid;
+  final SummaryItem? partial;
 
   Map<String, dynamic> toJson() {
     return {
@@ -129,9 +129,6 @@ class OrderSummary {
 }
 
 class InvoiceSummary {
-  final SummaryItem? unpaid;
-  final SummaryItem? paid;
-  final SummaryItem? partial;
 
   InvoiceSummary({
     this.unpaid,
@@ -152,6 +149,9 @@ class InvoiceSummary {
           : null,
     );
   }
+  final SummaryItem? unpaid;
+  final SummaryItem? paid;
+  final SummaryItem? partial;
 
   Map<String, dynamic> toJson() {
     return {
@@ -163,8 +163,6 @@ class InvoiceSummary {
 }
 
 class SummaryItem {
-  final double? total;
-  final int? transactions;
 
   SummaryItem({
     this.total,
@@ -177,6 +175,8 @@ class SummaryItem {
       transactions: (json['transactions'] as num?)?.toInt(),
     );
   }
+  final double? total;
+  final int? transactions;
 
   Map<String, dynamic> toJson() {
     return {
@@ -187,18 +187,6 @@ class SummaryItem {
 }
 
 class SalesTrend {
-  final MonthData? jan;
-  final MonthData? feb;
-  final MonthData? mar;
-  final MonthData? apr;
-  final MonthData? may;
-  final MonthData? jun;
-  final MonthData? jul;
-  final MonthData? aug;
-  final MonthData? sep;
-  final MonthData? oct;
-  final MonthData? nov;
-  final MonthData? dec;
 
   SalesTrend({
     this.jan,
@@ -255,6 +243,18 @@ class SalesTrend {
           : null,
     );
   }
+  final MonthData? jan;
+  final MonthData? feb;
+  final MonthData? mar;
+  final MonthData? apr;
+  final MonthData? may;
+  final MonthData? jun;
+  final MonthData? jul;
+  final MonthData? aug;
+  final MonthData? sep;
+  final MonthData? oct;
+  final MonthData? nov;
+  final MonthData? dec;
 
   Map<String, dynamic> toJson() {
     return {
@@ -296,8 +296,6 @@ class SalesTrend {
 }
 
 class MonthData {
-  final double? totalSales;
-  final int? totalTransactions;
 
   MonthData({
     this.totalSales,
@@ -310,6 +308,8 @@ class MonthData {
       totalTransactions: (json['totalTransactions'] as num?)?.toInt(),
     );
   }
+  final double? totalSales;
+  final int? totalTransactions;
 
   Map<String, dynamic> toJson() {
     return {

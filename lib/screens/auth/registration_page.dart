@@ -1,26 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/routes/routes.dart';
-import 'package:zed_nano/screens/common/common_webview_page.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/auth/input_fields.dart';
 import 'package:zed_nano/screens/widget/auth/social_buttons.dart';
 import 'package:zed_nano/screens/widget/auth/terms_checkbox.dart';
-import 'package:zed_nano/screens/widget/common/common_widgets.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/screens/widget/common/heading.dart';
 import 'package:zed_nano/services/social_auth_service.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/Images.dart';
-import 'package:country_code_picker/country_code_picker.dart';
 import 'package:zed_nano/utils/extensions.dart';
 
 class RegistrationPage extends StatefulWidget {
-  const RegistrationPage({Key? key}) : super(key: key);
+  const RegistrationPage({super.key});
 
   @override
   State<RegistrationPage> createState() => _RegistrationPageState();
@@ -50,7 +46,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
   Map<String, dynamic> signUpUserData = {};
 
   Future<void> _doUserSignup(
-      Map<String, dynamic> loginData, BuildContext context) async {
+      Map<String, dynamic> loginData, BuildContext context,) async {
     final authProvider = getAuthProvider(context);
     final response =
         await authProvider.register(requestData: loginData, context: context);
@@ -64,7 +60,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
   }
 
   void _showPhoneNumberDialog(BuildContext context, Map<String, dynamic> userData) {
-    final TextEditingController phoneController = TextEditingController();
+    final phoneController = TextEditingController();
     
     showDialog(
       context: context,
@@ -153,7 +149,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: colorWhite,
-      appBar: AuthAppBar(
+      appBar: const AuthAppBar(
         title: 'Get Started',
       ),
       body: SingleChildScrollView(
@@ -179,7 +175,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
             ),
             24.height,
             appButton(
-                    text: "Create Account",
+                    text: 'Create Account',
                     onTap: () async {
 
                       if (signUpUserData.isEmpty) {
@@ -189,7 +185,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       }
 
                     },
-                    context: context)
+                    context: context,)
                 .paddingSymmetric(horizontal: 16),
             16.height,
             _signInRow(),
@@ -204,12 +200,12 @@ class _RegistrationPageState extends State<RegistrationPage> {
 
 
       // Regular email registration flow
-      var firstName = firstNameController.text;
-      var lastName = lastNameController.text;
-      var name = nameController.text;
-      var email = emailController.text;
-      var phoneNumber = phoneNumberController.text;
-      var countryCode = countryCodeController.text;
+      final firstName = firstNameController.text;
+      final lastName = lastNameController.text;
+      final name = nameController.text;
+      final email = emailController.text;
+      final phoneNumber = phoneNumberController.text;
+      final countryCode = countryCodeController.text;
 
       if (!firstName.isValidInput) {
         showCustomToast('Please enter first name');
@@ -236,21 +232,21 @@ class _RegistrationPageState extends State<RegistrationPage> {
         return;
       }
 
-      var phoneNumberWithCode = "$countryCode$phoneNumber";
+      final phoneNumberWithCode = '$countryCode$phoneNumber';
 
-      Map<String, dynamic> data = {
+      final data = <String, dynamic>{
         'firstName': firstName,
         'secondName': lastName,
         'userName': name,
         'userEmail': email,
         'userPhone': phoneNumberWithCode,
-        'isCreatedViaNano':true
+        'isCreatedViaNano':true,
       };
 
       await _doUserSignup(data, context);
     } else {
       showCustomToast(
-          'Please accept the terms and conditions');
+          'Please accept the terms and conditions',);
     }
   }
 
@@ -259,24 +255,24 @@ class _RegistrationPageState extends State<RegistrationPage> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          "Already have an account? ",
+          'Already have an account? ',
           style: secondaryTextStyle(
             size: 14,
             color: getBodyColor(),
-            fontFamily: "Poppins",
+            fontFamily: 'Poppins',
           ),
         ),
         TextButton(
           onPressed: () {
             Navigator.pushNamed(
-                context, AppRoutes.getLoggingPageRoute());
+                context, AppRoutes.getLoggingPageRoute(),);
           },
           child: Text(
             'Sign In',
             style: boldTextStyle(
               size: 14,
               color: appThemePrimary,
-              fontFamily: "Poppins",
+              fontFamily: 'Poppins',
             ),
           ),
         ),
@@ -290,12 +286,12 @@ class _RegistrationPageState extends State<RegistrationPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Continue With",
+          Text('Continue With',
               style: secondaryTextStyle(
                   size: 12,
                   weight: FontWeight.w600,
                   color: getBodyColor(),
-                  fontFamily: "Poppins"))
+                  fontFamily: 'Poppins',),)
               .paddingSymmetric(horizontal: 16),
           16.height,
           Visibility(
@@ -362,12 +358,12 @@ class _RegistrationPageState extends State<RegistrationPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(signUpUserData.isNotEmpty ? "Provide More Details" : "Or Personal Details",
+        Text(signUpUserData.isNotEmpty ? 'Provide More Details' : 'Or Personal Details',
             style: secondaryTextStyle(
                 size: 12,
                 weight: FontWeight.w500,
                 color: getBodyColor(),
-                fontFamily: "Poppins"))
+                fontFamily: 'Poppins',),)
             .paddingSymmetric(horizontal: 16),
         16.height,
         NameFieldsRow(
@@ -379,30 +375,30 @@ class _RegistrationPageState extends State<RegistrationPage> {
         ),
         16.height,
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: StyledTextField(
             controller: nameController,
             focusNode: nameFocus,
             nextFocus: emailFocus,
             textFieldType: TextFieldType.NAME,
-            hintText: "User Name",
+            hintText: 'User Name',
           ),
         ),
         16.height,
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: StyledTextField(
             controller: emailController,
             focusNode: emailFocus,
             nextFocus: phoneNumberFocus,
             textFieldType: TextFieldType.EMAIL,
-            hintText: "Email Address",
+            hintText: 'Email Address',
             isActive: signUpUserData.isEmpty, // Make non-editable when data from Google Sign-In
           ),
         ),
         16.height,
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: PhoneInputField(
             controller: phoneNumberController,
             focusNode: phoneNumberFocus,

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/models/get_all_activeStock/GetAllActiveStockResponse.dart';
-import 'package:zed_nano/models/listProducts/ListProductsResponse.dart';
 import 'package:zed_nano/models/listStockTake/GetActiveStockTakeResponse.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
 import 'package:zed_nano/utils/Colors.dart';
@@ -15,8 +14,8 @@ Widget addStockBuildProductItem({
   required int quantity,
   required VoidCallback onTap,
 }) {
-  final bool isSelected = quantity > 0;
-  final int totalPrice = product.productPrice! * quantity;
+  final isSelected = quantity > 0;
+  final totalPrice = product.productPrice! * quantity;
 
 
   Color statusColor;
@@ -26,11 +25,9 @@ Widget addStockBuildProductItem({
     case 'LOW_STOCK':
       statusColor = warning;
       statusText = 'Low stock: ${product.inStockQuantity} items left';
-      break;
     case 'OUT_OF_STOCK':
       statusColor = errorColors;
       statusText = 'Out of stock';
-      break;
     case 'IN_STOCK':
     default:
       statusColor = successTextColor;
@@ -109,7 +106,7 @@ Widget addStockBuildProductItem({
                         color: Colors.grey.shade500,
                       ),
                     ),
-                    Text('$statusText',
+                    Text(statusText,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           color: statusColor,
@@ -154,7 +151,7 @@ Widget addStockTakeBuildProductItem({
   required int variance,
   required VoidCallback onTap,
 }) {
-  final bool isSelected = quantity > 0;
+  final isSelected = quantity > 0;
 
   return Container(
     margin: const EdgeInsets.only(left: 16, right: 16, bottom: 8),

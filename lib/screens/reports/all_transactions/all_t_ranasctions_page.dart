@@ -3,11 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:zed_nano/models/fetchByStatus/OrderResponse.dart';
-import 'package:zed_nano/models/savePushy/CreateOrderResponse.dart';
 import 'package:zed_nano/models/viewAllTransactions/TransactionListResponse.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
-import 'package:zed_nano/screens/customers/itemBuilder/list_customers_transactions_item_builder.dart';
 import 'package:zed_nano/screens/reports/itemBuilders/all_transactions_item_builder.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
@@ -23,7 +20,7 @@ import 'package:zed_nano/utils/extensions.dart';
 import 'package:zed_nano/utils/pagination_controller.dart';
 
 class AllTRanasctionsPage extends StatefulWidget {
-  const AllTRanasctionsPage({Key? key}) : super(key: key);
+  const AllTRanasctionsPage({super.key});
 
   @override
   _AllTRanasctionsPageState createState() => _AllTRanasctionsPageState();
@@ -33,8 +30,8 @@ class _AllTRanasctionsPageState extends State<AllTRanasctionsPage> {
   late PaginationController<ViewTransactionData> _paginationController;
   final TextEditingController _searchController = TextEditingController();
 
-  String _searchTerm = "";
-  bool _isInitialized = false;
+  String _searchTerm = '';
+  final bool _isInitialized = false;
   Timer? _debounceTimer;
   TransactionListResponse? transactionListResponse;
 
@@ -59,7 +56,7 @@ class _AllTRanasctionsPageState extends State<AllTRanasctionsPage> {
   }
 
   Future<List<ViewTransactionData>> viewAllTransactions(
-      {required int page, required int limit}) async {
+      {required int page, required int limit,}) async {
     final dateRange = DateRangeUtil.getDateRange(_selectedRangeLabel);
     final startDate = dateRange.values.first.removeTimezoneOffset;
     final endDate = dateRange.values.last.removeTimezoneOffset;
@@ -116,7 +113,7 @@ class _AllTRanasctionsPageState extends State<AllTRanasctionsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: colorBackground,
-      appBar: AuthAppBar(title: 'All Transactions'),
+      appBar: const AuthAppBar(title: 'All Transactions'),
       body: Column(
         children: [
           _buildSearchAndFilter(),
@@ -134,7 +131,7 @@ class _AllTRanasctionsPageState extends State<AllTRanasctionsPage> {
     return     Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("Summary",
+        const Text('Summary',
             style: TextStyle(
               fontFamily: 'Poppins',
               color: Color(0xff000000),
@@ -143,7 +140,7 @@ class _AllTRanasctionsPageState extends State<AllTRanasctionsPage> {
               fontStyle: FontStyle.normal,
 
 
-            )
+            ),
         ),
         Row(
           children: [
@@ -154,7 +151,7 @@ class _AllTRanasctionsPageState extends State<AllTRanasctionsPage> {
                 title: 'Quantity Sold',
                 value:
                 'KES ${transactionListResponse?.total?.formatCurrency() ?? 0}',
-                subtitle: ''
+                subtitle: '',
               ),
             ),
             const SizedBox(width: 12),
@@ -203,14 +200,14 @@ class _AllTRanasctionsPageState extends State<AllTRanasctionsPage> {
               width: 24,
               color: iconColor,
               fit: BoxFit.contain,
-              radius: 0),
+              radius: 0,),
           const SizedBox(height: 12),
           Text(
             title,
             style: const TextStyle(
               color: textSecondary,
               fontWeight: FontWeight.w400,
-              fontFamily: "Poppins",
+              fontFamily: 'Poppins',
               fontSize: 12,
             ),
           ),
@@ -220,7 +217,7 @@ class _AllTRanasctionsPageState extends State<AllTRanasctionsPage> {
             style: const TextStyle(
               color: textPrimary,
               fontWeight: FontWeight.w600,
-              fontFamily: "Poppins",
+              fontFamily: 'Poppins',
               fontSize: 14,
             ),
           ),
@@ -230,7 +227,7 @@ class _AllTRanasctionsPageState extends State<AllTRanasctionsPage> {
             style: const TextStyle(
               color: textSecondary,
               fontWeight: FontWeight.w400,
-              fontFamily: "Poppins",
+              fontFamily: 'Poppins',
               fontSize: 10,
             ),
           ),
@@ -256,7 +253,7 @@ class _AllTRanasctionsPageState extends State<AllTRanasctionsPage> {
                 gifPath: emptyListGif,
                 title: "It's empty, over here.",
                 subtitle:
-                "No Transactions in your business, yet! Add to view them here.",
+                'No Transactions in your business, yet! Add to view them here.',
               ),
             ),
           ),
@@ -280,17 +277,14 @@ class _AllTRanasctionsPageState extends State<AllTRanasctionsPage> {
               child: buildSearchBar(
                   controller: _searchController,
                   onChanged: _debounceSearch,
-                  horizontalPadding:5
+                  horizontalPadding:5,
               ),
             ),
             buildFilterButton(
               text:(_selectedRangeLabel ?? 'Filter').toDisplayLabel,
               isActive: false,
-              onTap: () {
-                _showDateRangeFilter();
-              },
+              onTap: _showDateRangeFilter,
               icon: Icons.filter_list,
-              showArrow: true,
             ),
           ],
         ),

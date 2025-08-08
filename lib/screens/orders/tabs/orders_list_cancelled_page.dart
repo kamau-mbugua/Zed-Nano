@@ -6,7 +6,6 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/models/fetchByStatus/OrderResponse.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/customers/itemBuilder/list_customers_transactions_item_builder.dart';
-import 'package:zed_nano/screens/orders/detail/order_detail_page.dart';
 import 'package:zed_nano/screens/widget/common/date_range_filter_bottom_sheet.dart';
 import 'package:zed_nano/screens/widget/common/filter_row_widget.dart';
 import 'package:zed_nano/screens/widget/common/searchview.dart';
@@ -17,7 +16,7 @@ import 'package:zed_nano/utils/extensions.dart';
 import 'package:zed_nano/utils/pagination_controller.dart';
 
 class OrdersListCancelledPage extends StatefulWidget {
-  const OrdersListCancelledPage({Key? key}) : super(key: key);
+  const OrdersListCancelledPage({super.key});
 
   @override
   _OrdersListCancelledPageState createState() => _OrdersListCancelledPageState();
@@ -27,8 +26,8 @@ class _OrdersListCancelledPageState extends State<OrdersListCancelledPage> {
   late PaginationController<OrderData> _paginationController;
   final TextEditingController _searchController = TextEditingController();
 
-  String _searchTerm = "";
-  bool _isInitialized = false;
+  String _searchTerm = '';
+  final bool _isInitialized = false;
   Timer? _debounceTimer;
   OrderResponse? orderResponse;
 
@@ -53,7 +52,7 @@ class _OrdersListCancelledPageState extends State<OrdersListCancelledPage> {
   }
 
   Future<List<OrderData>> fetchByStatus(
-      {required int page, required int limit}) async {
+      {required int page, required int limit,}) async {
     final dateRange = DateRangeUtil.getDateRange(_selectedRangeLabel);
     final startDate = dateRange.values.first.removeTimezoneOffset;
     final endDate = dateRange.values.last.removeTimezoneOffset;
@@ -135,7 +134,7 @@ class _OrdersListCancelledPageState extends State<OrdersListCancelledPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text("Order Count",
+                  const Text('Order Count',
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         color: textPrimary,
@@ -144,19 +143,19 @@ class _OrdersListCancelledPageState extends State<OrdersListCancelledPage> {
                         fontStyle: FontStyle.normal,
                         letterSpacing: 0.12,
 
-                      )
+                      ),
                   ),
-                  Text("${orderResponse?.count ?? 0}",
+                  Text('${orderResponse?.count ?? 0}',
                       style: const TextStyle(
                         fontFamily: 'Poppins',
                         color: highlightMainLight,
                         fontSize: 18,
                         fontWeight: FontWeight.w400,
                         fontStyle: FontStyle.normal,
-                      )
-                  )
+                      ),
+                  ),
                 ],
-              )
+              ),
           ),
         ),
         16.width,
@@ -172,7 +171,7 @@ class _OrdersListCancelledPageState extends State<OrdersListCancelledPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text("Order Amount",
+                  const Text('Order Amount',
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         color: textPrimary,
@@ -181,7 +180,7 @@ class _OrdersListCancelledPageState extends State<OrdersListCancelledPage> {
                         fontStyle: FontStyle.normal,
                         letterSpacing: 0.12,
 
-                      )
+                      ),
                   ),
                   Text("${orderResponse?.orderSummary?.currency ?? 'KES'} ${orderResponse?.total?.formatCurrency() ?? 0.0}",
                       style: const TextStyle(
@@ -190,10 +189,10 @@ class _OrdersListCancelledPageState extends State<OrdersListCancelledPage> {
                         fontSize: 18,
                         fontWeight: FontWeight.w400,
                         fontStyle: FontStyle.normal,
-                      )
-                  )
+                      ),
+                  ),
                 ],
-              )
+              ),
           ),
         ),
       ],
@@ -217,7 +216,7 @@ class _OrdersListCancelledPageState extends State<OrdersListCancelledPage> {
                 gifPath: emptyListGif,
                 title: "It's empty, over here.",
                 subtitle:
-                "No Cancelled orders in your business, yet! Add to view them here.",
+                'No Cancelled orders in your business, yet! Add to view them here.',
               ),
             ),
           ),
@@ -236,11 +235,8 @@ class _OrdersListCancelledPageState extends State<OrdersListCancelledPage> {
         buildFilterButton(
           text:(_selectedRangeLabel ?? 'Filter').toDisplayLabel,
           isActive: false,
-          onTap: () {
-            _showDateRangeFilter();
-          },
+          onTap: _showDateRangeFilter,
           icon: Icons.filter_list,
-          showArrow: true,
         ),
       ],
     );

@@ -7,7 +7,7 @@ Future<ResponseModel> handleApiResponse(ApiResponse apiResponse) async {
     try {
       // Get data from improved ApiResponse
       final responseData = apiResponse.data;
-      Map<String, dynamic> data = castMap(responseData);
+      final data = castMap(responseData);
       final dataMessage = data['message'] ?? 'Success';
       
       // Handle success response

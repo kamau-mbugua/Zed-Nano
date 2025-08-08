@@ -1,23 +1,14 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zed_nano/contants/AppConstants.dart';
-
-import '../../../../utils/logger.dart';
-import 'TokenRefreshInterceptor.dart';
-import 'logging_interceptor.dart';
+import 'package:zed_nano/networking/datasource/remote/dio/logging_interceptor.dart';
+import 'package:zed_nano/utils/logger.dart';
 
 class DioClient {
-  final String baseUrl;
-  final LoggingInterceptor loggingInterceptor;
-  final SharedPreferences sharedPreferences;
-  // TokenRefreshInterceptor? tokenRefreshInterceptor;
-
-  Dio? dio;
-  String? token;
 
   DioClient(this.baseUrl,
       Dio? dioC, {
@@ -29,6 +20,13 @@ class DioClient {
     updateHeader(dioC: dioC);
 
   }
+  final String baseUrl;
+  final LoggingInterceptor loggingInterceptor;
+  final SharedPreferences sharedPreferences;
+  // TokenRefreshInterceptor? tokenRefreshInterceptor;
+
+  Dio? dio;
+  String? token;
 
   Future<void> updateHeader({String? getToken, Dio? dioC})async {
     dio = dioC ?? Dio();
@@ -42,7 +40,7 @@ class DioClient {
         'Content-Type': 'application/json; charset=UTF-8',
         // Use API-Key style authentication header as required by backend
         if ((getToken ?? token).toString().isNotEmpty)
-          'X-Authorization': (getToken ?? token)!,
+          'X-Authorization': (getToken ?? token),
 
       };
 
@@ -62,7 +60,7 @@ class DioClient {
     try {
       // await   _logRequest(uri, queryParameters: queryParameters);
 
-      var response = await dio!.get(
+      final response = await dio!.get(
         uri,
         queryParameters: queryParameters,
         cancelToken: cancelToken,
@@ -73,7 +71,7 @@ class DioClient {
     } on SocketException catch (e) {
       throw SocketException(e.toString());
     } on FormatException catch (_) {
-      throw const FormatException("Unable to process the data");
+      throw const FormatException('Unable to process the data');
     } catch (e) {
       rethrow;
     }
@@ -99,10 +97,10 @@ class DioClient {
     logLong('RESPONSE RESPONSE: $jsonDecode($response)');
   }
 
-  void logLong(String message, {String tag = "💡"}) {
-    const int chunkSize = 1000;
-    int len = message.length;
-    for (int i = 0; i < len; i += chunkSize) {
+  void logLong(String message, {String tag = '💡'}) {
+    const chunkSize = 1000;
+    final len = message.length;
+    for (var i = 0; i < len; i += chunkSize) {
       print('$tag ${message.substring(i, i + chunkSize > len ? len : i + chunkSize)}');
     }
   }
@@ -118,7 +116,7 @@ class DioClient {
     try {
       //await _logRequest(uri, queryParameters: queryParameters);
 
-      var response = await dio!.post(
+      final response = await dio!.post(
         uri,
         data: data,
         queryParameters: queryParameters,
@@ -130,9 +128,9 @@ class DioClient {
       //await _logResponse(uri, queryParameters: queryParameters, data: data, response: response.data);
       return response;
     } on FormatException catch (_) {
-      throw const FormatException("Unable to process the data");
+      throw const FormatException('Unable to process the data');
     } catch (e) {
-      debugPrint('apiCall ==> url=> $uri \nparams---> $queryParameters\nheader=> ${dio!.options.headers} \nerror=> ${e.toString()}');
+      debugPrint('apiCall ==> url=> $uri \nparams---> $queryParameters\nheader=> ${dio!.options.headers} \nerror=> $e');
       rethrow;
     }
   }
@@ -147,7 +145,7 @@ class DioClient {
     //await _logRequest(uri, queryParameters: queryParameters);
 
     try {
-      var response = await dio!.put(
+      final response = await dio!.put(
         uri,
         data: data,
         queryParameters: queryParameters,
@@ -161,7 +159,7 @@ class DioClient {
       return response;
 
     } on FormatException catch (_) {
-      throw const FormatException("Unable to process the data");
+      throw const FormatException('Unable to process the data');
     } catch (e) {
       rethrow;
     }
@@ -174,7 +172,7 @@ class DioClient {
   }) async {
     //await _logRequest(uri, queryParameters: queryParameters);
     try {
-      var response = await dio!.delete(
+      final response = await dio!.delete(
         uri,
         data: data,
         queryParameters: queryParameters,
@@ -184,7 +182,7 @@ class DioClient {
 
       return response;
     } on FormatException catch (_) {
-      throw const FormatException("Unable to process the data");
+      throw const FormatException('Unable to process the data');
     } catch (e) {
       rethrow;
     }

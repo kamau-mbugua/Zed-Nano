@@ -1,8 +1,5 @@
 
 class ApprovalResponse {
-  final String? status;
-  final String? message;
-  final ApprovalListData? data;
 
   ApprovalResponse({
     this.status,
@@ -19,6 +16,9 @@ class ApprovalResponse {
           : null,
     );
   }
+  final String? status;
+  final String? message;
+  final ApprovalListData? data;
 
   Map<String, dynamic> toJson() {
     return {
@@ -50,11 +50,6 @@ class ApprovalResponse {
 }
 
 class ApprovalListData {
-  final int? addStockCount;
-  final int? stockTakeCount;
-  final int? stockTransferCount;
-  final int? customersCount;
-  final int? usersCount;
 
   ApprovalListData({
     this.addStockCount,
@@ -73,6 +68,11 @@ class ApprovalListData {
       usersCount: json['usersCount'] as int?,
     );
   }
+  final int? addStockCount;
+  final int? stockTakeCount;
+  final int? stockTransferCount;
+  final int? customersCount;
+  final int? usersCount;
 
   Map<String, dynamic> toJson() {
     return {
@@ -106,7 +106,7 @@ class ApprovalListData {
       stockTakeCount,
       stockTransferCount,
       customersCount,
-      usersCount
+      usersCount,
   );
 }
 

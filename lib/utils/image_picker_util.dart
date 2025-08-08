@@ -1,6 +1,7 @@
 import 'dart:io';
-import 'package:image_picker/image_picker.dart';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 
 class ImagePickerUtil {
@@ -15,7 +16,7 @@ class ImagePickerUtil {
     Function(String)? onError,
   }) async {
     try {
-      final XFile? pickedFile = await _picker.pickImage(
+      final pickedFile = await _picker.pickImage(
         source: ImageSource.gallery,
         maxWidth: maxWidth ?? 800,
         maxHeight: maxHeight ?? 800,
@@ -30,7 +31,7 @@ class ImagePickerUtil {
         onError('Error picking image: $e');
       } else if (context != null) {
         showCustomToast(
-            'Error picking image: $e');
+            'Error picking image: $e',);
       }
     }
     return null;
@@ -45,13 +46,13 @@ class ImagePickerUtil {
     Function(String)? onError,
   }) async {
     try {
-      final List<XFile>? pickedFiles = await _picker.pickMultiImage(
+      final pickedFiles = await _picker.pickMultiImage(
         maxWidth: maxWidth ?? 800,
         maxHeight: maxHeight ?? 800,
         imageQuality: imageQuality ?? 80,
       );
 
-      if (pickedFiles != null && pickedFiles.isNotEmpty) {
+      if (pickedFiles.isNotEmpty) {
         return pickedFiles.map((file) => File(file.path)).toList();
       }
     } catch (e) {
@@ -59,7 +60,7 @@ class ImagePickerUtil {
         onError('Error picking images: $e');
       } else if (context != null) {
         showCustomToast(
-            'Error picking image: $e');
+            'Error picking image: $e',);
       }
     }
     return null;
@@ -74,7 +75,7 @@ class ImagePickerUtil {
     Function(String)? onError,
   }) async {
     try {
-      final XFile? pickedFile = await _picker.pickImage(
+      final pickedFile = await _picker.pickImage(
         source: ImageSource.camera,
         maxWidth: maxWidth ?? 800,
         maxHeight: maxHeight ?? 800,
@@ -89,7 +90,7 @@ class ImagePickerUtil {
         onError('Error taking photo: $e');
       } else if (context != null) {
         showCustomToast(
-            'Error picking image: $e');
+            'Error picking image: $e',);
       }
     }
     return null;

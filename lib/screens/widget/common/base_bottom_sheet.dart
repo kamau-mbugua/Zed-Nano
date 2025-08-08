@@ -4,6 +4,19 @@ import 'package:nb_utils/nb_utils.dart';
 /// A base bottom sheet widget that can be extended for various use cases.
 /// This widget provides a consistent structure for bottom sheets in the app.
 class BaseBottomSheet extends StatelessWidget {
+
+  const BaseBottomSheet({
+    required this.title, required this.bodyContent, super.key,
+    this.showCloseButton = true,
+    this.initialChildSize = 0.9,
+    this.minChildSize = 0.5,
+    this.maxChildSize = 1.0,
+    this.headerContent,
+    this.contentPadding = const EdgeInsets.symmetric(horizontal: 16),
+    this.backgroundColor = Colors.white,
+    this.borderRadius = const BorderRadius.vertical(top: Radius.circular(20)),
+    this.onClose,
+  });
   /// Title displayed at the top of the bottom sheet
   final String title;
   
@@ -36,21 +49,6 @@ class BaseBottomSheet extends StatelessWidget {
   
   /// Callback when close button is pressed
   final VoidCallback? onClose;
-
-  const BaseBottomSheet({
-    Key? key,
-    required this.title,
-    this.showCloseButton = true,
-    this.initialChildSize = 0.9,
-    this.minChildSize = 0.5,
-    this.maxChildSize = 1.0,
-    this.headerContent,
-    required this.bodyContent,
-    this.contentPadding = const EdgeInsets.symmetric(horizontal: 16),
-    this.backgroundColor = Colors.white,
-    this.borderRadius = const BorderRadius.vertical(top: Radius.circular(20)),
-    this.onClose,
-  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

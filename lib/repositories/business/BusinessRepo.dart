@@ -5,15 +5,15 @@ import 'package:zed_nano/networking/datasource/remote/dio/dio_client.dart';
 import 'package:zed_nano/networking/datasource/remote/exception/api_error_handler.dart';
 
 class BusinessRepo{
-  final DioClient? dioClient;
 
   BusinessRepo({this.dioClient});
+  final DioClient? dioClient;
 
 
   Future<ApiResponse> getBusinessInfo({required Map<String, dynamic> requestData}) async {
     try {
       final response =
-      await dioClient!.post('${AppConstants.getBusinessInfo}', data: requestData);
+      await dioClient!.post(AppConstants.getBusinessInfo, data: requestData);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -24,7 +24,7 @@ class BusinessRepo{
   Future<ApiResponse> doPushStk({required Map<String, dynamic> requestData}) async {
     try {
       final response =
-      await dioClient!.post('${AppConstants.doPushStk}', data: requestData);
+      await dioClient!.post(AppConstants.doPushStk, data: requestData);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -34,7 +34,7 @@ class BusinessRepo{
   Future<ApiResponse> doInitiateKcbStkPush({required Map<String, dynamic> requestData}) async {
     try {
       final response =
-      await dioClient!.post('${AppConstants.initiateKcbStkPush}', data: requestData);
+      await dioClient!.post(AppConstants.initiateKcbStkPush, data: requestData);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -44,7 +44,7 @@ class BusinessRepo{
   Future<ApiResponse> resendInvoice({required Map<String, dynamic> requestData}) async {
     try {
       final response =
-      await dioClient!.get('${AppConstants.resendInvoice}', queryParameters: requestData);
+      await dioClient!.get(AppConstants.resendInvoice, queryParameters: requestData);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -55,7 +55,7 @@ class BusinessRepo{
   Future<ApiResponse> shareInvoice({required Map<String, dynamic> requestData}) async {
     try {
       final response =
-      await dioClient!.get('${AppConstants.shareInvoice}', queryParameters: requestData);
+      await dioClient!.get(AppConstants.shareInvoice, queryParameters: requestData);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -66,7 +66,7 @@ class BusinessRepo{
   Future<ApiResponse> activateFreeTrialPlan({required Map<String, dynamic> requestData}) async {
     try {
       final response =
-      await dioClient!.post('${AppConstants.activateFreeTrialPlan}', data: requestData);
+      await dioClient!.post(AppConstants.activateFreeTrialPlan, data: requestData);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -77,7 +77,7 @@ class BusinessRepo{
   Future<ApiResponse> createCategory({required Map<String, dynamic> requestData}) async {
     try {
       final response =
-      await dioClient!.post('${AppConstants.createCategory}', data: requestData);
+      await dioClient!.post(AppConstants.createCategory, data: requestData);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -98,7 +98,7 @@ class BusinessRepo{
   Future<ApiResponse> createProduct({required Map<String, dynamic> requestData}) async {
     try {
       final response =
-      await dioClient!.post('${AppConstants.createProduct}', data: requestData);
+      await dioClient!.post(AppConstants.createProduct, data: requestData);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -108,7 +108,7 @@ class BusinessRepo{
   Future<ApiResponse> createCustomer({required Map<String, dynamic> requestData}) async {
     try {
       final response =
-      await dioClient!.post('${AppConstants.createCustomer}', data: requestData);
+      await dioClient!.post(AppConstants.createCustomer, data: requestData);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -118,7 +118,7 @@ class BusinessRepo{
   Future<ApiResponse> addNewUser({required Map<String, dynamic> requestData}) async {
     try {
       final response =
-      await dioClient!.post('${AppConstants.addNewUser}', data: requestData);
+      await dioClient!.post(AppConstants.addNewUser, data: requestData);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -128,7 +128,7 @@ class BusinessRepo{
   Future<ApiResponse> getBusinessRoles({required Map<String, dynamic> requestData}) async {
     try {
       final response =
-      await dioClient!.post('${AppConstants.getBusinessRoles}', data: requestData);
+      await dioClient!.post(AppConstants.getBusinessRoles, data: requestData);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -138,7 +138,7 @@ class BusinessRepo{
   Future<ApiResponse> createOrder({required Map<String, dynamic> requestData}) async {
     try {
       final response =
-      await dioClient!.post('${AppConstants.createOrder}', data: requestData);
+      await dioClient!.post(AppConstants.createOrder, data: requestData);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -148,7 +148,7 @@ class BusinessRepo{
   Future<ApiResponse> sendInvoice({required Map<String, dynamic> requestData}) async {
     try {
       final response =
-      await dioClient!.post('${AppConstants.sendInvoice}', data: requestData);
+      await dioClient!.post(AppConstants.sendInvoice, data: requestData);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -158,7 +158,7 @@ class BusinessRepo{
   Future<ApiResponse> createBillingInvoice({required Map<String, dynamic> requestData}) async {
     try {
       final response =
-      await dioClient!.post('${AppConstants.createBillingInvoice}', data: requestData);
+      await dioClient!.post(AppConstants.createBillingInvoice, data: requestData);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -178,7 +178,7 @@ class BusinessRepo{
   Future<ApiResponse> addStockRequest({required Map<String, dynamic> requestData}) async {
     try {
       final response =
-      await dioClient!.post('${AppConstants.addStockRequest}', data: requestData);
+      await dioClient!.post(AppConstants.addStockRequest, data: requestData);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -188,7 +188,7 @@ class BusinessRepo{
   Future<ApiResponse> updateStockItem({required List<Map<String, dynamic>> requestData}) async {
     try {
       final response =
-      await dioClient!.post('${AppConstants.updateStockItem}', data: requestData);
+      await dioClient!.post(AppConstants.updateStockItem, data: requestData);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -198,7 +198,7 @@ class BusinessRepo{
   Future<ApiResponse> enableSettleInvoiceStatus({required Map<String, dynamic> requestData}) async {
     try {
       final response =
-      await dioClient!.post('${AppConstants.enableSettleInvoiceStatus}', data: requestData);
+      await dioClient!.post(AppConstants.enableSettleInvoiceStatus, data: requestData);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -208,7 +208,7 @@ class BusinessRepo{
   Future<ApiResponse> addKCBPayment({required Map<String, dynamic> requestData}) async {
     try {
       final response =
-      await dioClient!.post('${AppConstants.addKCBPayment}', data: requestData);
+      await dioClient!.post(AppConstants.addKCBPayment, data: requestData);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -218,7 +218,7 @@ class BusinessRepo{
   Future<ApiResponse> addMPESAPayment({required Map<String, dynamic> requestData}) async {
     try {
       final response =
-      await dioClient!.post('${AppConstants.addMPESAPayment}', data: requestData);
+      await dioClient!.post(AppConstants.addMPESAPayment, data: requestData);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -228,7 +228,7 @@ class BusinessRepo{
   Future<ApiResponse> updateBusinessSetupStatus({required Map<String, dynamic> requestData}) async {
     try {
       final response =
-      await dioClient!.post('${AppConstants.updateBusinessSetupStatus}', data: requestData);
+      await dioClient!.post(AppConstants.updateBusinessSetupStatus, data: requestData);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -238,7 +238,7 @@ class BusinessRepo{
   Future<ApiResponse> approveSelectedStockTake({required Map<String, dynamic> requestData}) async {
     try {
       final response =
-      await dioClient!.post('${AppConstants.approveSelectedStockTake}', data: requestData);
+      await dioClient!.post(AppConstants.approveSelectedStockTake, data: requestData);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -248,7 +248,7 @@ class BusinessRepo{
   Future<ApiResponse> approveMultipleAddStockBatches({required Map<String, dynamic> requestData}) async {
     try {
       final response =
-      await dioClient!.post('${AppConstants.approveMultipleAddStockBatches}', data: requestData);
+      await dioClient!.post(AppConstants.approveMultipleAddStockBatches, data: requestData);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -258,7 +258,7 @@ class BusinessRepo{
   Future<ApiResponse> branchStoreSummary({required Map<String, dynamic> requestData}) async {
     try {
       final response =
-      await dioClient!.post('${AppConstants.branchStoreSummary}', data: requestData);
+      await dioClient!.post(AppConstants.branchStoreSummary, data: requestData);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -268,7 +268,7 @@ class BusinessRepo{
   Future<ApiResponse> getbusinessMetrics({required Map<String, dynamic> requestData}) async {
     try {
       final response =
-      await dioClient!.get('${AppConstants.getbusinessMetrics}', queryParameters: requestData);
+      await dioClient!.get(AppConstants.getbusinessMetrics, queryParameters: requestData);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -278,7 +278,7 @@ class BusinessRepo{
   Future<ApiResponse> getSalesByDay({required Map<String, dynamic> requestData}) async {
     try {
       final response =
-      await dioClient!.post('${AppConstants.getSalesByDay}', data: requestData);
+      await dioClient!.post(AppConstants.getSalesByDay, data: requestData);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -324,7 +324,7 @@ class BusinessRepo{
   Future<ApiResponse> getPaymentMethodsWithStatus() async {
     try {
       final response =
-      await dioClient!.get('${AppConstants.getPaymentMethodsWithStatus}');
+      await dioClient!.get(AppConstants.getPaymentMethodsWithStatus);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -713,7 +713,7 @@ class BusinessRepo{
       final response = await dioClient!.post(
         AppConstants.getAddStockProductsBatch,
         queryParameters: queryParams,
-        data: requestData
+        data: requestData,
       );
 
       return ApiResponse.withSuccess(response);
@@ -738,7 +738,7 @@ class BusinessRepo{
       final response = await dioClient!.post(
         AppConstants.getAddStockPendingProductsBatch,
         queryParameters: queryParams,
-        data: requestData
+        data: requestData,
       );
 
       return ApiResponse.withSuccess(response);
@@ -750,7 +750,7 @@ class BusinessRepo{
   Future<ApiResponse> getSetupStatus() async {
     try {
       final response =
-      await dioClient!.get('${AppConstants.getSetupStatus}');
+      await dioClient!.get(AppConstants.getSetupStatus);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -760,7 +760,7 @@ class BusinessRepo{
   Future<ApiResponse> listSubscribedBillingPlans() async {
     try {
       final response =
-      await dioClient!.get('${AppConstants.listSubscribedBillingPlans}');
+      await dioClient!.get(AppConstants.listSubscribedBillingPlans);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -770,7 +770,7 @@ class BusinessRepo{
   Future<ApiResponse> listBusinessCategory() async {
     try {
       final response =
-      await dioClient!.get('${AppConstants.listBusinessCategory}');
+      await dioClient!.get(AppConstants.listBusinessCategory);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -780,7 +780,7 @@ class BusinessRepo{
   Future<ApiResponse> getBusinessPlanPackages() async {
     try {
       final response =
-      await dioClient!.get('${AppConstants.getBusinessPlanPackages}');
+      await dioClient!.get(AppConstants.getBusinessPlanPackages);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -790,7 +790,7 @@ class BusinessRepo{
   Future<ApiResponse> getUnitOfMeasure() async {
     try {
       final response =
-      await dioClient!.get('${AppConstants.getUnitOfMeasure}');
+      await dioClient!.get(AppConstants.getUnitOfMeasure);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -800,7 +800,7 @@ class BusinessRepo{
   Future<ApiResponse> getVariablePriceStatus() async {
     try {
       final response =
-      await dioClient!.get('${AppConstants.getVariablePriceStatus}');
+      await dioClient!.get(AppConstants.getVariablePriceStatus);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -878,7 +878,7 @@ class BusinessRepo{
   Future<ApiResponse> getOrderPaymentStatus({required Map<String, dynamic> requestData}) async {
     try {
       final response =
-      await dioClient!.post('${AppConstants.getOrderPaymentStatus}', data: requestData);
+      await dioClient!.post(AppConstants.getOrderPaymentStatus, data: requestData);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -889,7 +889,7 @@ class BusinessRepo{
   Future<ApiResponse> voidTransaction({required Map<String, dynamic> requestData}) async {
     try {
       final response =
-      await dioClient!.post('${AppConstants.voidTransaction}', data: requestData);
+      await dioClient!.post(AppConstants.voidTransaction, data: requestData);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -900,7 +900,7 @@ class BusinessRepo{
   Future<ApiResponse> getTransactionByTransactionId({required Map<String, dynamic> requestData}) async {
     try {
       final response =
-      await dioClient!.get('${AppConstants.getTransactionByTransactionId}', queryParameters: requestData);
+      await dioClient!.get(AppConstants.getTransactionByTransactionId, queryParameters: requestData);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -911,7 +911,7 @@ class BusinessRepo{
   Future<ApiResponse> getApprovalByStatus({required Map<String, dynamic> requestData}) async {
     try {
       final response =
-      await dioClient!.get('${AppConstants.getApprovalByStatus}', queryParameters: requestData);
+      await dioClient!.get(AppConstants.getApprovalByStatus, queryParameters: requestData);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -922,7 +922,7 @@ class BusinessRepo{
   Future<ApiResponse> getInvoiceByInvoiceNumber({required Map<String, dynamic> requestData}) async {
     try {
       final response =
-      await dioClient!.get('${AppConstants.getInvoiceByInvoiceNumber}',queryParameters: requestData);
+      await dioClient!.get(AppConstants.getInvoiceByInvoiceNumber,queryParameters: requestData);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -933,7 +933,7 @@ class BusinessRepo{
   Future<ApiResponse> getInvoiceReceiptPaymentMethodsNoLogin({required Map<String, dynamic> requestData}) async {
     try {
       final response =
-      await dioClient!.get('${AppConstants.getInvoiceReceiptPaymentMethodsNoLogin}',queryParameters: requestData);
+      await dioClient!.get(AppConstants.getInvoiceReceiptPaymentMethodsNoLogin,queryParameters: requestData);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -944,7 +944,7 @@ class BusinessRepo{
   Future<ApiResponse> doSendToPos({required Map<String, dynamic> requestData}) async {
     try {
       final response =
-      await dioClient!.post('${AppConstants.doSendToPos}', data: requestData);
+      await dioClient!.post(AppConstants.doSendToPos, data: requestData);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -955,7 +955,7 @@ class BusinessRepo{
   Future<ApiResponse> getBranchTerminals() async {
     try {
       final response =
-      await dioClient!.get('${AppConstants.getBranchTerminals}');
+      await dioClient!.get(AppConstants.getBranchTerminals);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -966,7 +966,7 @@ class BusinessRepo{
   Future<ApiResponse> getPaymentMethodsStatusNoAuth({required Map<String, dynamic> requestData}) async {
     try {
       final response =
-      await dioClient!.post('${AppConstants.getPaymentMethodsStatusNoAuth}', data: requestData);
+      await dioClient!.post(AppConstants.getPaymentMethodsStatusNoAuth, data: requestData);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -978,7 +978,7 @@ class BusinessRepo{
   Future<ApiResponse> doCashPayment({required Map<String, dynamic> requestData}) async {
     try {
       final response =
-      await dioClient!.post('${AppConstants.doCashPayment}', data: requestData);
+      await dioClient!.post(AppConstants.doCashPayment, data: requestData);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -989,7 +989,7 @@ class BusinessRepo{
   Future<ApiResponse> doCashPaymentInvoice({required Map<String, dynamic> requestData}) async {
     try {
       final response =
-      await dioClient!.post('${AppConstants.doCashPaymentInvoice}', data: requestData);
+      await dioClient!.post(AppConstants.doCashPaymentInvoice, data: requestData);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -1063,7 +1063,7 @@ class BusinessRepo{
     try {
       final data = {};
 
-      final response = await dioClient!.post('${AppConstants.getUserProfile}', data: data);
+      final response = await dioClient!.post(AppConstants.getUserProfile, data: data);
       return ApiResponse.withSuccess(response);
     } catch (e) {
       return ApiResponse.withError(ApiErrorHandler.handleError(e));
@@ -1081,7 +1081,7 @@ class BusinessRepo{
 
   Future<ApiResponse> deleteUserAccount({required Map<String, dynamic> requestData}) async {
     try {
-      final response = await dioClient!.delete('${AppConstants.deleteUserAccount}', data: requestData);
+      final response = await dioClient!.delete(AppConstants.deleteUserAccount, data: requestData);
       return ApiResponse.withSuccess(response);
     } catch (e) {
       return ApiResponse.withError(ApiErrorHandler.handleError(e));
@@ -1090,7 +1090,7 @@ class BusinessRepo{
 
   Future<ApiResponse> resetUserPin({required Map<String, dynamic> requestData}) async {
     try {
-      final response = await dioClient!.put('${AppConstants.resetUserPin}', data: requestData);
+      final response = await dioClient!.put(AppConstants.resetUserPin, data: requestData);
       return ApiResponse.withSuccess(response);
     } catch (e) {
       return ApiResponse.withError(ApiErrorHandler.handleError(e));
@@ -1133,7 +1133,7 @@ class BusinessRepo{
       params.remove('searchValue');
 
       final response = await dioClient!.post(
-        '${AppConstants.getTotalSales}',
+        AppConstants.getTotalSales,
         data: data, queryParameters: params,
       );
       return ApiResponse.withSuccess(response);
@@ -1154,7 +1154,7 @@ class BusinessRepo{
       params.remove('searchValue');
 
       final response = await dioClient!.post(
-        '${AppConstants.getProductGrossMargin}',
+        AppConstants.getProductGrossMargin,
         data: data, queryParameters: params,
       );
       return ApiResponse.withSuccess(response);
@@ -1168,7 +1168,7 @@ class BusinessRepo{
   }) async {
     try {
       final response = await dioClient!.get(
-        '${AppConstants.getClosingOpeningReport}', queryParameters: params,
+        AppConstants.getClosingOpeningReport, queryParameters: params,
       );
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -1181,7 +1181,7 @@ class BusinessRepo{
   }) async {
     try {
       final response = await dioClient!.get(
-        '${AppConstants.getVoidedTRansactionReports}', queryParameters: params,
+        AppConstants.getVoidedTRansactionReports, queryParameters: params,
       );
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -1200,7 +1200,7 @@ class BusinessRepo{
       params.remove('searchValue');
 
       final response = await dioClient!.post(
-        '${AppConstants.getTotalQuantitiesSold}',
+        AppConstants.getTotalQuantitiesSold,
         data: data, queryParameters: params,
       );
       return ApiResponse.withSuccess(response);
@@ -1222,7 +1222,7 @@ class BusinessRepo{
 
 
       final response = await dioClient!.post(
-        '${AppConstants.getTotalSalesReport}',
+        AppConstants.getTotalSalesReport,
         data: data , queryParameters: params,
       );
       return ApiResponse.withSuccess(response);
@@ -1243,7 +1243,7 @@ class BusinessRepo{
 
 
       final response = await dioClient!.post(
-        '${AppConstants.getProductTotalCost}',
+        AppConstants.getProductTotalCost,
         data: data,
         queryParameters: params,
       );

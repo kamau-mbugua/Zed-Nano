@@ -1,23 +1,27 @@
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
-import 'package:logger/logger.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/firebase_options.dart';
-import 'package:device_info_plus/device_info_plus.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
-import 'dart:io';
 
 /// A service class that handles Firebase initialization and provides
 /// access to Firebase services throughout the app.
 class FirebaseService {
+
+  // Singleton pattern
+  factory FirebaseService() => _instance;
+
+  FirebaseService._internal();
   static final FirebaseService _instance = FirebaseService._internal();
   bool _initialized = false;
 
@@ -35,11 +39,6 @@ class FirebaseService {
 
   // Facebook Auth instance
   final FacebookAuth _facebookAuth = FacebookAuth.instance;
-
-  // Singleton pattern
-  factory FirebaseService() => _instance;
-
-  FirebaseService._internal();
 
   /// Initializes Firebase services
   Future<void> initialize() async {
@@ -91,16 +90,14 @@ class FirebaseService {
   /// Configures Firebase Cloud Messaging
   Future<void> _configureMessaging() async {
     // Request permission for notifications (iOS)
-    NotificationSettings settings = await messaging.requestPermission(
-      alert: true,
-      badge: true,
-      sound: true,
+    final settings = await messaging.requestPermission(
+      
     );
 
     logger.i('User granted notification permission: ${settings.authorizationStatus}');
 
     // Get FCM token
-    String? token = await messaging.getToken();
+    final  token = await messaging.getToken();
     logger.i('FCM Token: $token');
 
     // Listen for token refreshes
@@ -203,12 +200,12 @@ class FirebaseService {
       }
 
       // Use authenticate() method for v7 API
-      final GoogleSignInAccount googleUser = await _googleSignIn.authenticate(
+      final googleUser = await _googleSignIn.authenticate(
         scopeHint: ['email', 'profile'],
       );
 
       // Get authentication tokens (only idToken available directly)
-      final GoogleSignInAuthentication googleAuth = googleUser.authentication;
+      final googleAuth = googleUser.authentication;
 
       // Get authorization for Firebase scopes to obtain accessToken
       final authClient = _googleSignIn.authorizationClient;
@@ -219,13 +216,13 @@ class FirebaseService {
       }
 
       // Create a new credential
-      final OAuthCredential credential = GoogleAuthProvider.credential(
+      final credential = GoogleAuthProvider.credential(
         accessToken: authorization!.accessToken,
         idToken: googleAuth.idToken,
       );
 
       // Once signed in, return the UserCredential
-      final UserCredential userCredential = await auth.signInWithCredential(credential);
+      final userCredential = await auth.signInWithCredential(credential);
 
       // Log user details for debugging
       final user = userCredential.user;
@@ -247,12 +244,12 @@ class FirebaseService {
 
   /// Signs in with Facebook
   Future<UserCredential> signInWithFacebook() async {
-    final LoginResult result = await _facebookAuth.login();
+    final result = await _facebookAuth.login();
 
     if (result.status == LoginStatus.success) {
-      final OAuthCredential credential = FacebookAuthProvider.credential(result.accessToken!.tokenString);
+      final credential = FacebookAuthProvider.credential(result.accessToken!.tokenString);
 
-      return await auth.signInWithCredential(credential);
+      return auth.signInWithCredential(credential);
     } else {
       throw Exception('Failed to sign in with Facebook');
     }
@@ -260,11 +257,11 @@ class FirebaseService {
 
   /// Signs in with Twitter
   Future<UserCredential> signInWithTwitter() async {
-    final OAuthProvider twitterProvider = OAuthProvider('twitter.com');
+    final twitterProvider = OAuthProvider('twitter.com');
 
     // You can add additional scopes if needed
     twitterProvider.addScope('email');
 
-    return await auth.signInWithProvider(twitterProvider);
+    return auth.signInWithProvider(twitterProvider);
   }
 }

@@ -1,35 +1,32 @@
 import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:path/path.dart' as p;
 import 'package:provider/provider.dart';
 import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/contants/AppConstants.dart';
 import 'package:zed_nano/models/get_business_info/BusinessInfoResponse.dart';
 import 'package:zed_nano/models/listBusinessCategory/ListBusinessCategoryResponse.dart';
-import 'package:zed_nano/providers/auth/authenticated_app_providers.dart';
 import 'package:zed_nano/providers/business/BusinessProviders.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/auth/input_fields.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
-import 'package:zed_nano/screens/widget/common/heading.dart';
 import 'package:zed_nano/screens/widget/common/location_picker_field.dart';
 import 'package:zed_nano/screens/widget/common/sub_category_picker.dart';
 import 'package:zed_nano/screens/widget/country_currency_picker.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
-import 'package:zed_nano/utils/Images.dart';
 import 'package:zed_nano/utils/extensions.dart';
 import 'package:zed_nano/utils/image_picker_util.dart';
-import 'package:path/path.dart' as p;
-import 'package:http_parser/http_parser.dart';
 
 class EditBusinessPage extends StatefulWidget {
-  const EditBusinessPage({Key? key}) : super(key: key);
+  const EditBusinessPage({super.key});
 
   @override
   State<EditBusinessPage> createState() => _EditBusinessPageState();
@@ -80,8 +77,8 @@ class _EditBusinessPageState extends State<EditBusinessPage> {
   Future<void> _fetchBusinessProfile() async {
     final businessId = getBusinessDetails(context)?.businessId;
 
-    final Map<String, dynamic> businessData = {
-      'businessId': businessId
+    final businessData = <String, dynamic>{
+      'businessId': businessId,
     };
     await context
         .read<BusinessProviders>()
@@ -200,18 +197,18 @@ class _EditBusinessPageState extends State<EditBusinessPage> {
         filename: p.basename(_logoImage!.path),
         contentType: MediaType('image', 'jpeg'), // or png
       ),
-      'businessNumber': getBusinessDetails(context)?.businessNumber
+      'businessNumber': getBusinessDetails(context)?.businessNumber,
     });
 
     final urlPart = '?businessId=${getBusinessDetails(context)?.businessNumber}';
 
     await context
         .read<BusinessProviders>()
-        .uploadProductCategoryImage(context: context, formData: formData!, urlPart:urlPart)
+        .uploadProductCategoryImage(context: context, formData: formData, urlPart:urlPart)
         .then((value) async {
       if (value.isSuccess) {
         showCustomToast(value.message ?? 'Business logo uploaded successfully',
-            isError: false);
+            isError: false,);
         Navigator.pop(context);
       } else {
         showCustomToast(value.message ?? 'Something went wrong');
@@ -251,7 +248,7 @@ class _EditBusinessPageState extends State<EditBusinessPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AuthAppBar(
+      appBar: const AuthAppBar(
         title: 'Edit Business',
       ),
       body: SingleChildScrollView(
@@ -260,13 +257,13 @@ class _EditBusinessPageState extends State<EditBusinessPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text('Business Name',
-                style: const TextStyle(
-                    color: const Color(0xff2f3036),
+                style: TextStyle(
+                    color: Color(0xff2f3036),
                     fontWeight: FontWeight.w600,
                     fontFamily: 'Poppins',
                     fontStyle: FontStyle.normal,
-                    fontSize: 12.0),
-                textAlign: TextAlign.left)
+                    fontSize: 12,),
+                textAlign: TextAlign.left,)
                 .paddingSymmetric(horizontal: 16),
             5.height,
             StyledTextField(
@@ -283,8 +280,8 @@ class _EditBusinessPageState extends State<EditBusinessPage> {
                     fontWeight: FontWeight.w600,
                     fontFamily: 'Poppins',
                     fontStyle: FontStyle.normal,
-                    fontSize: 12.0),
-                textAlign: TextAlign.left)
+                    fontSize: 12,),
+                textAlign: TextAlign.left,)
                 .paddingSymmetric(horizontal: 16),
             5.height,
             SubCategoryPicker(
@@ -307,8 +304,8 @@ class _EditBusinessPageState extends State<EditBusinessPage> {
                     fontWeight: FontWeight.w600,
                     fontFamily: 'Poppins',
                     fontStyle: FontStyle.normal,
-                    fontSize: 12.0),
-                textAlign: TextAlign.left)
+                    fontSize: 12,),
+                textAlign: TextAlign.left,)
                 .paddingSymmetric(horizontal: 16),
             5.height,
             PhoneInputField(
@@ -324,8 +321,8 @@ class _EditBusinessPageState extends State<EditBusinessPage> {
                     fontWeight: FontWeight.w600,
                     fontFamily: 'Poppins',
                     fontStyle: FontStyle.normal,
-                    fontSize: 12.0),
-                textAlign: TextAlign.left)
+                    fontSize: 12,),
+                textAlign: TextAlign.left,)
                 .paddingSymmetric(horizontal: 16),
             5.height,
             StyledTextField(
@@ -342,14 +339,13 @@ class _EditBusinessPageState extends State<EditBusinessPage> {
                     fontWeight: FontWeight.w600,
                     fontFamily: 'Poppins',
                     fontStyle: FontStyle.normal,
-                    fontSize: 12.0),
-                textAlign: TextAlign.left)
+                    fontSize: 12,),
+                textAlign: TextAlign.left,)
                 .paddingSymmetric(horizontal: 16),
             5.height,
             LocationPickerField(
               controller: locationController,
               focusNode: _locationFocusNode,
-              label: 'Location',
               onLocationSelected: (location) {
                 setState(() {
                   _selectedLocation = location;
@@ -363,8 +359,8 @@ class _EditBusinessPageState extends State<EditBusinessPage> {
                     fontWeight: FontWeight.w600,
                     fontFamily: 'Poppins',
                     fontStyle: FontStyle.normal,
-                    fontSize: 12.0),
-                textAlign: TextAlign.left)
+                    fontSize: 12,),
+                textAlign: TextAlign.left,)
                 .paddingSymmetric(horizontal: 16),
             5.height,
             Row(
@@ -373,7 +369,6 @@ class _EditBusinessPageState extends State<EditBusinessPage> {
                 Expanded(
                   flex: selectedCurrency != null ? 3 : 1,
                   child: CountryCurrencyPicker(
-                    hintText: 'Select Country',
                     onSelect: (countryName, currencyCode) {
                       setState(() {
                         selectedCountry = countryName;
@@ -424,7 +419,6 @@ class _EditBusinessPageState extends State<EditBusinessPage> {
             Row(
               children: [
                 Expanded(
-                  flex: 1,
                   child: InkWell(
                     onTap: _pickImage,
                     borderRadius: BorderRadius.circular(12),
@@ -476,20 +470,19 @@ class _EditBusinessPageState extends State<EditBusinessPage> {
                 ),
                 12.width,
                 const Expanded(
-                  flex: 1,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text('Business Logo',
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              fontFamily: 'Poppins')),
+                              fontFamily: 'Poppins',),),
                       Text(
                         'Format: .png or .jpg\nMin. size: 350px by 180px\nMax. file size: 1MB',
                         style: TextStyle(
                             fontSize: 12,
                             color: Colors.grey,
-                            fontFamily: 'Poppins'),
+                            fontFamily: 'Poppins',),
                       ),
                     ],
                   ),
@@ -500,7 +493,7 @@ class _EditBusinessPageState extends State<EditBusinessPage> {
             appButton(
                 text: 'Next',
                 onTap: updateBusiness,
-                context: context)
+                context: context,)
                 .paddingSymmetric(horizontal: 16),
 
           ],

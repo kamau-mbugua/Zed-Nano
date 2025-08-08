@@ -14,13 +14,12 @@ import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
 import 'package:zed_nano/utils/Images.dart';
-import 'package:zed_nano/utils/extensions.dart';
 
 class OrderPaymentSummary extends StatefulWidget {
+
+  OrderPaymentSummary({required this.orderId, super.key, this.checkOutType = CheckOutType.Order});
   String? orderId;
   CheckOutType? checkOutType;
-
-  OrderPaymentSummary({Key? key, required this.orderId, this.checkOutType = CheckOutType.Order}) : super(key: key);
 
   @override
   _OrderPaymentSummaryState createState() => _OrderPaymentSummaryState();
@@ -46,7 +45,7 @@ class _OrderPaymentSummaryState extends State<OrderPaymentSummary> {
   }
 
   Future<void> getOrderPaymentStatus() async {
-    Map<String, dynamic> requestData = {'pushyTransactionId': widget.orderId};
+    final requestData = <String, dynamic>{'pushyTransactionId': widget.orderId};
 
     try {
       final response = await getBusinessProvider(context)
@@ -69,7 +68,7 @@ class _OrderPaymentSummaryState extends State<OrderPaymentSummary> {
   }
 
   Future<void> getInvoiceByInvoiceNumber() async {
-    Map<String, dynamic> requestData = {
+    final requestData = <String, dynamic>{
       'invoiceNumber': widget.orderId,
       'businessNumber': getBusinessDetails(context)?.businessNumber,
       'purchaseOrderNumber': '',
@@ -98,7 +97,7 @@ class _OrderPaymentSummaryState extends State<OrderPaymentSummary> {
   }
 
   Future<void> getInvoiceReceiptPaymentMethodsNoLogin() async {
-    Map<String, dynamic> requestData = {
+    final requestData = <String, dynamic>{
       'invoiceNumber': widget.orderId,
       'businessNumber': getBusinessDetails(context)?.businessNumber,
     };
@@ -184,7 +183,7 @@ class _OrderPaymentSummaryState extends State<OrderPaymentSummary> {
                 context: context,
                 onTap: () {
                   BottomSheetHelper.showPrintingOptionsBottomSheet(context,
-                      printOrderInvoiceId: orderDetail?.id)
+                      printOrderInvoiceId: orderDetail?.id,)
                       .then((value) {
                     finish(context);
                   });
@@ -200,7 +199,6 @@ class _OrderPaymentSummaryState extends State<OrderPaymentSummary> {
   Widget _buildOrderSummary() {
     return  widget.checkOutType == CheckOutType.Order ? Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         const Text('Summary',
             style: TextStyle(
@@ -209,7 +207,7 @@ class _OrderPaymentSummaryState extends State<OrderPaymentSummary> {
               fontSize: 14,
               fontWeight: FontWeight.w600,
               fontStyle: FontStyle.normal,
-            )),
+            ),),
         Container(
             width: context.width(),
             decoration: BoxDecoration(
@@ -232,8 +230,8 @@ class _OrderPaymentSummaryState extends State<OrderPaymentSummary> {
                           fontWeight: FontWeight.w400,
                           fontStyle: FontStyle.normal,
                           letterSpacing: 0.12,
-                        )),
-                    Text("${orderDetail?.orderNumber}",
+                        ),),
+                    Text('${orderDetail?.orderNumber}',
                         style: const TextStyle(
                           fontFamily: 'Poppins',
                           color: textSecondary,
@@ -241,7 +239,7 @@ class _OrderPaymentSummaryState extends State<OrderPaymentSummary> {
                           fontWeight: FontWeight.w400,
                           fontStyle: FontStyle.normal,
                           letterSpacing: 0.12,
-                        ))
+                        ),),
                   ],
                 ).paddingSymmetric(vertical: 8),
                 Row(
@@ -255,8 +253,8 @@ class _OrderPaymentSummaryState extends State<OrderPaymentSummary> {
                           fontWeight: FontWeight.w400,
                           fontStyle: FontStyle.normal,
                           letterSpacing: 0.12,
-                        )),
-                    Text("${orderDetail?.items?.length}",
+                        ),),
+                    Text('${orderDetail?.items?.length}',
                         style: const TextStyle(
                           fontFamily: 'Poppins',
                           color: textSecondary,
@@ -264,15 +262,14 @@ class _OrderPaymentSummaryState extends State<OrderPaymentSummary> {
                           fontWeight: FontWeight.w400,
                           fontStyle: FontStyle.normal,
                           letterSpacing: 0.12,
-                        ))
+                        ),),
                   ],
                 ).paddingSymmetric(vertical: 8),
               ],
-            )),
+            ),),
       ],
     ):Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         const Text('Summary',
             style: TextStyle(
@@ -281,7 +278,7 @@ class _OrderPaymentSummaryState extends State<OrderPaymentSummary> {
               fontSize: 14,
               fontWeight: FontWeight.w600,
               fontStyle: FontStyle.normal,
-            )),
+            ),),
         Container(
             width: context.width(),
             decoration: BoxDecoration(
@@ -304,8 +301,8 @@ class _OrderPaymentSummaryState extends State<OrderPaymentSummary> {
                           fontWeight: FontWeight.w400,
                           fontStyle: FontStyle.normal,
                           letterSpacing: 0.12,
-                        )),
-                    Text("${getInvoiceByInvoiceNumberResponse?.invoiceNumber}",
+                        ),),
+                    Text('${getInvoiceByInvoiceNumberResponse?.invoiceNumber}',
                         style: const TextStyle(
                           fontFamily: 'Poppins',
                           color: textSecondary,
@@ -313,7 +310,7 @@ class _OrderPaymentSummaryState extends State<OrderPaymentSummary> {
                           fontWeight: FontWeight.w400,
                           fontStyle: FontStyle.normal,
                           letterSpacing: 0.12,
-                        ))
+                        ),),
                   ],
                 ).paddingSymmetric(vertical: 8),
                 Row(
@@ -327,8 +324,8 @@ class _OrderPaymentSummaryState extends State<OrderPaymentSummary> {
                           fontWeight: FontWeight.w400,
                           fontStyle: FontStyle.normal,
                           letterSpacing: 0.12,
-                        )),
-                    Text("${getInvoiceByInvoiceNumberResponse?.items?.length}",
+                        ),),
+                    Text('${getInvoiceByInvoiceNumberResponse?.items?.length}',
                         style: const TextStyle(
                           fontFamily: 'Poppins',
                           color: textSecondary,
@@ -336,11 +333,11 @@ class _OrderPaymentSummaryState extends State<OrderPaymentSummary> {
                           fontWeight: FontWeight.w400,
                           fontStyle: FontStyle.normal,
                           letterSpacing: 0.12,
-                        ))
+                        ),),
                   ],
                 ).paddingSymmetric(vertical: 8),
               ],
-            )),
+            ),),
       ],
     );
   }
@@ -362,7 +359,6 @@ class _OrderPaymentSummaryState extends State<OrderPaymentSummary> {
     final invoiceItems = paymentReceipt ?? [];
     return widget.checkOutType == CheckOutType.Order ? Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           const Text('Payment Summary',
               style: TextStyle(
@@ -371,7 +367,7 @@ class _OrderPaymentSummaryState extends State<OrderPaymentSummary> {
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
                 fontStyle: FontStyle.normal,
-              )),
+              ),),
           8.height,
           if (cartItems.isEmpty)
             const Center(
@@ -386,7 +382,7 @@ class _OrderPaymentSummaryState extends State<OrderPaymentSummary> {
             ListView.separated(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              padding: const EdgeInsets.symmetric(horizontal: 0),
+              padding: const EdgeInsets.symmetric(),
               itemCount: cartItems.length,
               separatorBuilder: (context, index) => const Divider(
                 height: 0.5,
@@ -397,10 +393,9 @@ class _OrderPaymentSummaryState extends State<OrderPaymentSummary> {
                 return buildOrderPaymentSummary(item: item, context: context);
               },
             ),
-        ]).paddingSymmetric(vertical: 16)
+        ],).paddingSymmetric(vertical: 16)
         : Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           const Text('Payment Summary',
               style: TextStyle(
@@ -409,7 +404,7 @@ class _OrderPaymentSummaryState extends State<OrderPaymentSummary> {
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
                 fontStyle: FontStyle.normal,
-              )
+              ),
           ),
           8.height,
           if (invoiceItems.isEmpty) const Center(
@@ -422,18 +417,18 @@ class _OrderPaymentSummaryState extends State<OrderPaymentSummary> {
           ) else ListView.separated(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            padding: const EdgeInsets.symmetric(horizontal: 0),
+            padding: const EdgeInsets.symmetric(),
             itemCount: invoiceItems.length,
             separatorBuilder: (context, index) => const Divider(height: 0.5, color: innactiveBorderCart,),
             itemBuilder: (context, index) {
               final item = invoiceItems[index];
               return buildInvoicePaymentSummary(
                   item: item,
-                  context: context
+                  context: context,
               );
             },
           ),
-        ]
+        ],
     ).paddingSymmetric(vertical: 16);
 
   }

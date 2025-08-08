@@ -5,21 +5,17 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/models/get_approved_add_stock_batches_by_branch/GetBatchesListResponse.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
-import 'package:zed_nano/screens/stock/add_stock/addStock/add_stock_parent_page.dart';
-import 'package:zed_nano/screens/stock/add_stock/view_stock_batch_detail.dart';
 import 'package:zed_nano/screens/stock/itemBuilder/build_batch_item.dart';
 import 'package:zed_nano/screens/stock/stock_take/addStockTake/add_stock_take_parent_page.dart';
-import 'package:zed_nano/screens/stock/stock_take/addStockTake/steps/products/add_stock_take_products_page.dart';
 import 'package:zed_nano/screens/stock/stock_take/view_stock__take_batch_detail.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/screens/widget/common/searchview.dart';
-import 'package:zed_nano/screens/widget/common/stepper_usage_examples.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
 import 'package:zed_nano/utils/pagination_controller.dart';
 
 class StockTakeApprovedBatchPage extends StatefulWidget {
-  const StockTakeApprovedBatchPage({Key? key}) : super(key: key);
+  const StockTakeApprovedBatchPage({super.key});
 
   @override
   _StockTakeApprovedBatchPageState createState() =>
@@ -27,7 +23,7 @@ class StockTakeApprovedBatchPage extends StatefulWidget {
 }
 
 class _StockTakeApprovedBatchPageState extends State<StockTakeApprovedBatchPage> {
-  TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
   Timer? _debounceTimer;
   String _searchTerm = '';
   late PaginationController<BatchData> _paginationController;
@@ -51,7 +47,7 @@ class _StockTakeApprovedBatchPageState extends State<StockTakeApprovedBatchPage>
 
 
   Future<List<BatchData>> getApprovedBatchesByBranch(
-      {required int page, required int limit}) async {
+      {required int page, required int limit,}) async {
     try {
       final response = await getBusinessProvider(context).getApprovedBatchesByBranch(
           page: page,
@@ -104,7 +100,7 @@ class _StockTakeApprovedBatchPageState extends State<StockTakeApprovedBatchPage>
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          const AddStockTakeParentPage(initialStep:0).launch(context);
+          const AddStockTakeParentPage().launch(context);
 
         },
         label: const Text('Stock Take', style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white)),
@@ -125,9 +121,9 @@ class _StockTakeApprovedBatchPageState extends State<StockTakeApprovedBatchPage>
         itemBuilder: (context, item, index) {
           return buildBatchItem(item, onTap: () {
             ViewStockTakeBatchDetail(
-                batchId: item?.batchId ?? '',
+                batchId: item.batchId ?? '',
             ).launch(context);
-          },isStockTake: true);;
+          },isStockTake: true,);
         },
         firstPageProgressIndicatorBuilder: (_) => const SizedBox(),
         newPageProgressIndicatorBuilder: (_) => const SizedBox(),

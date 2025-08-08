@@ -1,15 +1,13 @@
-import 'package:flutter/material.dart';
 import 'dart:async';
+
+import 'package:flutter/material.dart';
 import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
-import 'package:zed_nano/services/websocket_service.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/screens/widget/common/fading_circular_progress.dart';
+import 'package:zed_nano/services/websocket_service.dart';
 
 class ActivatingTrialScreen extends StatefulWidget {
-  final String? invoiceNumber;
-  final VoidCallback? onActivationComplete;
-  final Function(String)? onActivationError;
 
   const ActivatingTrialScreen({
     super.key,
@@ -17,6 +15,9 @@ class ActivatingTrialScreen extends StatefulWidget {
     this.onActivationComplete,
     this.onActivationError,
   });
+  final String? invoiceNumber;
+  final VoidCallback? onActivationComplete;
+  final Function(String)? onActivationError;
 
   @override
   State<ActivatingTrialScreen> createState() => _ActivatingTrialScreenState();
@@ -69,13 +70,11 @@ class _ActivatingTrialScreenState extends State<ActivatingTrialScreen> {
         setState(() {
           _statusMessage = 'Activating your trial plan...';
         });
-        break;
         
       case 'setting_up':
         setState(() {
           _statusMessage = 'Setting up your business...';
         });
-        break;
         
       case 'success':
       case 'activated':
@@ -88,7 +87,6 @@ class _ActivatingTrialScreenState extends State<ActivatingTrialScreen> {
         Future.delayed(const Duration(seconds: 2), () {
           widget.onActivationComplete?.call();
         });
-        break;
         
       case 'error':
       case 'failed':
@@ -96,9 +94,8 @@ class _ActivatingTrialScreenState extends State<ActivatingTrialScreen> {
         setState(() {
           _statusMessage = 'Activation failed. Please try again.';
         });
-        showCustomToast(errorMessage, isError: true);
+        showCustomToast(errorMessage);
         widget.onActivationError?.call(errorMessage);
-        break;
         
       default:
         if (wsResponse.statusMessage != null) {
@@ -106,7 +103,6 @@ class _ActivatingTrialScreenState extends State<ActivatingTrialScreen> {
             _statusMessage = wsResponse.statusMessage!;
           });
         }
-        break;
     }
   }
 
@@ -148,12 +144,7 @@ class _ActivatingTrialScreenState extends State<ActivatingTrialScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const FadingCircularProgress(
-                    width: 140,
-                    height: 140,
-                    color: Color(0xff032541),
-                    backgroundColor: Color(0xffe8edf1),
-                    strokeWidth: 10,
-                    duration: Duration(seconds: 2),
+                    
                   ),
                   const SizedBox(height: 40),
                   const Text(
@@ -168,7 +159,7 @@ class _ActivatingTrialScreenState extends State<ActivatingTrialScreen> {
                   ),
                   const SizedBox(height: 24),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 48.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 48),
                     child: Text(
                       _statusMessage,
                       textAlign: TextAlign.center,

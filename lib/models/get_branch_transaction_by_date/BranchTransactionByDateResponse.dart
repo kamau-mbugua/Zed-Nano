@@ -1,7 +1,4 @@
 class BranchTransactionByDateResponse {
-  final int? total;
-  final String? currency;
-  final List<TransactionBreakdown>? data;
 
   BranchTransactionByDateResponse({
     this.total,
@@ -18,14 +15,12 @@ class BranchTransactionByDateResponse {
           .toList(),
     );
   }
+  final int? total;
+  final String? currency;
+  final List<TransactionBreakdown>? data;
 }
 
 class TransactionBreakdown {
-  final String? transationType;
-  final String? currency;
-  final int? amount;
-  final double? percentageOfTotal;
-  final int? numberOfTransactions;
 
   TransactionBreakdown({
     this.transationType,
@@ -44,4 +39,9 @@ class TransactionBreakdown {
       numberOfTransactions: json['numberOfTransactions'] as int?,
     );
   }
+  final String? transationType;
+  final String? currency;
+  final int? amount;
+  final double? percentageOfTotal;
+  final int? numberOfTransactions;
 }

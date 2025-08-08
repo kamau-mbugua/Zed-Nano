@@ -4,9 +4,9 @@ import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
 
 class SalesByDaySummaryPage extends StatefulWidget {
+  SalesByDaySummaryPage({required this.startDate, required this.endDate, super.key});
   String startDate;
   String endDate;
-  SalesByDaySummaryPage({Key? key, required this.startDate, required this.endDate}) : super(key: key);
 
   @override
   _SalesByDaySummaryPageState createState() => _SalesByDaySummaryPageState();
@@ -63,7 +63,7 @@ class _SalesByDaySummaryPageState extends State<SalesByDaySummaryPage> {
       gifPath: successGif,
       title: 'Report Request Received Successfully',
       subtitle: 'Your Sales Report By Day from ${widget.startDate} to ${widget.endDate} has been received and will be sent to your email address.',
-        textAlign: TextAlign.center
+        textAlign: TextAlign.center,
     );
   }
 }

@@ -1,33 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:zed_nano/screens/widget/common/reusable_stepper_widget.dart';
 import 'package:zed_nano/screens/widget/common/stepper_step_page.dart';
-import 'package:zed_nano/utils/Colors.dart';
 
 /// Example implementations showing different ways to use the ReusableStepperWidget
 
 // Example 1: Basic stepper with simple steps
 class BasicStepperExample extends StatelessWidget {
+  const BasicStepperExample({super.key});
+
   @override
   Widget build(BuildContext context) {
     return ReusableStepperWidget(
-      steps: [
+      steps: const [
         StepperStepPage(
-          title: "Step 1",
-          subtitle: "Enter your basic information",
+          title: 'Step 1',
+          subtitle: 'Enter your basic information',
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 TextField(
                   decoration: InputDecoration(
-                    labelText: "Name",
+                    labelText: 'Name',
                     border: OutlineInputBorder(),
                   ),
                 ),
                 SizedBox(height: 16),
                 TextField(
                   decoration: InputDecoration(
-                    labelText: "Email",
+                    labelText: 'Email',
                     border: OutlineInputBorder(),
                   ),
                 ),
@@ -36,11 +37,11 @@ class BasicStepperExample extends StatelessWidget {
           ),
         ),
         StepperStepPage(
-          title: "Step 2",
-          subtitle: "Review your information",
+          title: 'Step 2',
+          subtitle: 'Review your information',
           child: Center(
             child: Text(
-              "Review your details here",
+              'Review your details here',
               style: TextStyle(fontSize: 18),
             ),
           ),
@@ -48,11 +49,11 @@ class BasicStepperExample extends StatelessWidget {
       ],
       onCompleted: () {
         // Handle completion
-        print("Stepper completed!");
+        print('Stepper completed!');
       },
       onCancelled: () {
         // Handle cancellation
-        print("Stepper cancelled!");
+        print('Stepper cancelled!');
       },
     );
   }
@@ -60,54 +61,56 @@ class BasicStepperExample extends StatelessWidget {
 
 // Example 2: Numbered stepper with custom styling
 class NumberedStepperExample extends StatelessWidget {
+  const NumberedStepperExample({super.key});
+
   @override
   Widget build(BuildContext context) {
     return ReusableStepperWidget(
       showStepNumbers: true,
       stepTitles: const [
-        "Personal Info",
-        "Address",
-        "Confirmation",
+        'Personal Info',
+        'Address',
+        'Confirmation',
       ],
       activeStepColor: Colors.blue,
       inactiveStepColor: Colors.grey[300],
       steps: [
         StepperStepPage(
-          title: "Personal Information",
+          title: 'Personal Information',
           child: _buildPersonalInfoForm(),
         ),
         StepperStepPage(
-          title: "Address Details",
+          title: 'Address Details',
           child: _buildAddressForm(),
         ),
         StepperStepPage(
-          title: "Confirmation",
+          title: 'Confirmation',
+          nextButtonText: 'Submit',
           child: _buildConfirmationView(),
-          nextButtonText: "Submit",
         ),
       ],
       onStepChanged: (step) {
-        print("Moved to step: $step");
+        print('Moved to step: $step');
       },
       onCompleted: () {
-        print("Form submitted!");
+        print('Form submitted!');
       },
     );
   }
 
   Widget _buildPersonalInfoForm() {
-    return Column(
+    return const Column(
       children: [
         TextField(
           decoration: InputDecoration(
-            labelText: "First Name",
+            labelText: 'First Name',
             border: OutlineInputBorder(),
           ),
         ),
         SizedBox(height: 16),
         TextField(
           decoration: InputDecoration(
-            labelText: "Last Name",
+            labelText: 'Last Name',
             border: OutlineInputBorder(),
           ),
         ),
@@ -116,18 +119,18 @@ class NumberedStepperExample extends StatelessWidget {
   }
 
   Widget _buildAddressForm() {
-    return Column(
+    return const Column(
       children: [
         TextField(
           decoration: InputDecoration(
-            labelText: "Street Address",
+            labelText: 'Street Address',
             border: OutlineInputBorder(),
           ),
         ),
         SizedBox(height: 16),
         TextField(
           decoration: InputDecoration(
-            labelText: "City",
+            labelText: 'City',
             border: OutlineInputBorder(),
           ),
         ),
@@ -136,14 +139,14 @@ class NumberedStepperExample extends StatelessWidget {
   }
 
   Widget _buildConfirmationView() {
-    return Center(
+    return const Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(Icons.check_circle, size: 64, color: Colors.green),
           SizedBox(height: 16),
           Text(
-            "Please review your information",
+            'Please review your information',
             style: TextStyle(fontSize: 18),
           ),
         ],
@@ -154,6 +157,8 @@ class NumberedStepperExample extends StatelessWidget {
 
 // Example 3: Custom step page with validation
 class CustomStepExample extends StatefulWidget {
+  const CustomStepExample({super.key});
+
   @override
   _CustomStepExampleState createState() => _CustomStepExampleState();
 }
@@ -166,8 +171,8 @@ class _CustomStepExampleState extends State<CustomStepExample> {
   @override
   Widget build(BuildContext context) {
     return StepperStepPage(
-      title: "Enter Your Name",
-      subtitle: "This information is required to proceed",
+      title: 'Enter Your Name',
+      subtitle: 'This information is required to proceed',
       canProceed: () => _formKey.currentState?.validate() ?? false,
       nextButtonEnabled: _name.isNotEmpty,
       isLoading: _isLoading,
@@ -177,10 +182,10 @@ class _CustomStepExampleState extends State<CustomStepExample> {
         child: Column(
           children: [
             TextFormField(
-              decoration: InputDecoration(
-                labelText: "Full Name *",
+              decoration: const InputDecoration(
+                labelText: 'Full Name *',
                 border: OutlineInputBorder(),
-                helperText: "Enter your full name as it appears on your ID",
+                helperText: 'Enter your full name as it appears on your ID',
               ),
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -197,9 +202,9 @@ class _CustomStepExampleState extends State<CustomStepExample> {
                 });
               },
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Container(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: Colors.blue[50],
                 borderRadius: BorderRadius.circular(8),
@@ -207,11 +212,11 @@ class _CustomStepExampleState extends State<CustomStepExample> {
               ),
               child: Row(
                 children: [
-                  Icon(Icons.info, color: Colors.blue),
-                  SizedBox(width: 12),
+                  const Icon(Icons.info, color: Colors.blue),
+                  const SizedBox(width: 12),
                   Expanded(
                     child: Text(
-                      "Your name will be used for identification purposes",
+                      'Your name will be used for identification purposes',
                       style: TextStyle(color: Colors.blue[800]),
                     ),
                   ),
@@ -224,14 +229,14 @@ class _CustomStepExampleState extends State<CustomStepExample> {
     );
   }
 
-  void _handleNext() async {
+  Future<void> _handleNext() async {
     if (_formKey.currentState?.validate() ?? false) {
       setState(() {
         _isLoading = true;
       });
       
       // Simulate API call
-      await Future.delayed(Duration(seconds: 2));
+      await Future.delayed(const Duration(seconds: 2));
       
       setState(() {
         _isLoading = false;
@@ -245,13 +250,14 @@ class _CustomStepExampleState extends State<CustomStepExample> {
 
 // Example 4: Stepper with custom buttons and actions
 class CustomButtonStepperExample extends StatelessWidget {
+  const CustomButtonStepperExample({super.key});
+
   @override
   Widget build(BuildContext context) {
     return ReusableStepperWidget(
       steps: [
         StepperStepPage(
-          title: "Choose Options",
-          child: _buildOptionsView(),
+          title: 'Choose Options',
           customNextButton: _buildCustomNextButton(context),
           additionalActions: [
             TextButton.icon(
@@ -259,20 +265,20 @@ class CustomButtonStepperExample extends StatelessWidget {
                 // Skip action
                 StepperController.goToStep(context, 2);
               },
-              icon: Icon(Icons.skip_next),
-              label: Text("Skip this step"),
+              icon: const Icon(Icons.skip_next),
+              label: const Text('Skip this step'),
             ),
           ],
+          child: _buildOptionsView(),
         ),
         StepperStepPage(
-          title: "Upload Files",
-          child: _buildUploadView(),
+          title: 'Upload Files',
           showPreviousButton: false, // Hide previous button
           customNextButton: _buildUploadButton(context),
+          child: _buildUploadView(),
         ),
         StepperStepPage(
-          title: "Complete",
-          child: _buildCompleteView(),
+          title: 'Complete',
           showNextButton: false, // Hide next button
           customPreviousButton: _buildCustomBackButton(context),
           additionalActions: [
@@ -283,10 +289,11 @@ class CustomButtonStepperExample extends StatelessWidget {
                   // Custom completion action
                   Navigator.of(context).pop();
                 },
-                child: Text("Finish"),
+                child: const Text('Finish'),
               ),
             ),
           ],
+          child: _buildCompleteView(),
         ),
       ],
     );
@@ -296,12 +303,12 @@ class CustomButtonStepperExample extends StatelessWidget {
     return Column(
       children: [
         CheckboxListTile(
-          title: Text("Option 1"),
+          title: const Text('Option 1'),
           value: true,
           onChanged: (value) {},
         ),
         CheckboxListTile(
-          title: Text("Option 2"),
+          title: const Text('Option 2'),
           value: false,
           onChanged: (value) {},
         ),
@@ -310,26 +317,26 @@ class CustomButtonStepperExample extends StatelessWidget {
   }
 
   Widget _buildUploadView() {
-    return Center(
+    return const Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(Icons.cloud_upload, size: 64),
           SizedBox(height: 16),
-          Text("Drag and drop files here"),
+          Text('Drag and drop files here'),
         ],
       ),
     );
   }
 
   Widget _buildCompleteView() {
-    return Center(
+    return const Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(Icons.check_circle, size: 64, color: Colors.green),
           SizedBox(height: 16),
-          Text("All done!", style: TextStyle(fontSize: 24)),
+          Text('All done!', style: TextStyle(fontSize: 24)),
         ],
       ),
     );
@@ -341,8 +348,8 @@ class CustomButtonStepperExample extends StatelessWidget {
       height: 48,
       child: ElevatedButton.icon(
         onPressed: () => StepperController.nextStep(context),
-        icon: Icon(Icons.arrow_forward),
-        label: Text("Continue"),
+        icon: const Icon(Icons.arrow_forward),
+        label: const Text('Continue'),
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.green,
           foregroundColor: Colors.white,
@@ -357,8 +364,8 @@ class CustomButtonStepperExample extends StatelessWidget {
       height: 48,
       child: ElevatedButton.icon(
         onPressed: () => StepperController.nextStep(context),
-        icon: Icon(Icons.upload),
-        label: Text("Upload & Continue"),
+        icon: const Icon(Icons.upload),
+        label: const Text('Upload & Continue'),
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.orange,
           foregroundColor: Colors.white,
@@ -373,8 +380,8 @@ class CustomButtonStepperExample extends StatelessWidget {
       height: 48,
       child: OutlinedButton.icon(
         onPressed: () => StepperController.previousStep(context),
-        icon: Icon(Icons.arrow_back),
-        label: Text("Go Back"),
+        icon: const Icon(Icons.arrow_back),
+        label: const Text('Go Back'),
       ),
     );
   }

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:zed_nano/models/customers_list/CustomerListResponse.dart';
 import 'package:zed_nano/models/listUsers/ListUsersResponse.dart';
-import 'package:zed_nano/screens/customers/details/customer_details_page.dart';
 import 'package:zed_nano/screens/users/detail/user_details_page.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
 import 'package:zed_nano/utils/Colors.dart';
@@ -18,13 +16,12 @@ Widget listUsersItemBuilder(ListUserData customer) {
       child: Container(
         margin: const EdgeInsets.only(bottom: 10),
         padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: Colors.white,
         ),
         child: Column(
           children: [
             Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
                   decoration: BoxDecoration(
@@ -36,7 +33,7 @@ Widget listUsersItemBuilder(ListUserData customer) {
                       fit: BoxFit.cover,
                       height: 30,
                       width: 30,
-                      radius: 8
+                      radius: 8,
                   ),
                 ),
 
@@ -52,7 +49,7 @@ Widget listUsersItemBuilder(ListUserData customer) {
                             fontSize: 16,
                             fontWeight: FontWeight.w400,
                             fontStyle: FontStyle.normal,
-                          )
+                          ),
                       ),
                       const SizedBox(height: 4),
                       Row(
@@ -76,9 +73,9 @@ Widget listUsersItemBuilder(ListUserData customer) {
                                   fontWeight: FontWeight.w400,
                                   fontFamily: 'Poppins',
                                   fontStyle:  FontStyle.normal,
-                                  fontSize: 10.0
+                                  fontSize: 10,
                               ),
-                              textAlign: TextAlign.left
+                              textAlign: TextAlign.left,
                           ),
                           Text('${customer.userRole}',
                               style: const TextStyle(
@@ -87,10 +84,10 @@ Widget listUsersItemBuilder(ListUserData customer) {
                                 fontSize: 10,
                                 fontWeight: FontWeight.w600,
                                 fontStyle: FontStyle.normal,
-                              )
-                          )
+                              ),
+                          ),
                         ],
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -100,8 +97,8 @@ Widget listUsersItemBuilder(ListUserData customer) {
                     fit: BoxFit.fitHeight,
                     height: 10,
                     width: 10,
-                    radius: 8
-                )
+                    radius: 8,
+                ),
               ],
             ),
             16.height,

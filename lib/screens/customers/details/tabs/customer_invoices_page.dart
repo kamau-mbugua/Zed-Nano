@@ -11,8 +11,8 @@ import 'package:zed_nano/utils/GifsImages.dart';
 import 'package:zed_nano/utils/pagination_controller.dart';
 
 class CustomerInvoicesPage extends StatefulWidget {
+  CustomerInvoicesPage({required this.customerId, super.key});
   String customerId;
-  CustomerInvoicesPage({Key? key, required this.customerId}) : super(key: key);
 
   @override
   _CustomerInvoicesPageState createState() => _CustomerInvoicesPageState();
@@ -22,8 +22,8 @@ class _CustomerInvoicesPageState extends State<CustomerInvoicesPage> {
   late PaginationController<CustomerInvoiceData> _paginationController;
   final TextEditingController _searchController = TextEditingController();
 
-  String _searchTerm = "";
-  bool _isInitialized = false;
+  String _searchTerm = '';
+  final bool _isInitialized = false;
   Timer? _debounceTimer;
 
   @override
@@ -44,13 +44,13 @@ class _CustomerInvoicesPageState extends State<CustomerInvoicesPage> {
   }
 
   Future<List<CustomerInvoiceData>> getCustomerInvoices(
-      {required int page, required int limit}) async {
+      {required int page, required int limit,}) async {
     final response = await getBusinessProvider(context).getCustomerInvoices(
         page: page,
         limit: limit,
         searchValue: _searchTerm,
         context: context,
-        customerId: widget.customerId);
+        customerId: widget.customerId,);
     return response.data?.data ?? [];
   }
 
@@ -86,7 +86,7 @@ class _CustomerInvoicesPageState extends State<CustomerInvoicesPage> {
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
                   fontStyle: FontStyle.normal,
-                )
+                ),
             ),
             Text('View All',
                 style: TextStyle(
@@ -95,8 +95,8 @@ class _CustomerInvoicesPageState extends State<CustomerInvoicesPage> {
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
                   fontStyle: FontStyle.normal,
-                )
-            )
+                ),
+            ),
           ],
         ),
         Expanded(
@@ -113,7 +113,7 @@ class _CustomerInvoicesPageState extends State<CustomerInvoicesPage> {
                   gifPath: emptyListGif,
                   title: "It's empty, over here.",
                   subtitle:
-                  "No Invoices in your business, yet! Add to view them here.",
+                  'No Invoices in your business, yet! Add to view them here.',
                 ),
               ),
             ),

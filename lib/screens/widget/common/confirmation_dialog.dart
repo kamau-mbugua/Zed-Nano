@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-import '../../../../routes/routes.dart';
-import '../../../../utils/dimensions.dart';
-import '../../../../utils/styles.dart';
+import 'package:zed_nano/utils/dimensions.dart';
+import 'package:zed_nano/utils/styles.dart';
 
 class ConfirmationDialog extends StatelessWidget {
+
+  const ConfirmationDialog({
+    required this.title, required this.message, required this.icon, required this.positiveText, required this.negativeText, required this.onPositive, super.key,
+    this.onNegative,
+    this.iconColor,
+    this.isLoading = false,
+  });
   final String title;
   final String message;
   final IconData icon;
@@ -15,19 +20,6 @@ class ConfirmationDialog extends StatelessWidget {
   final VoidCallback? onNegative;
   final Color? iconColor;
   final bool isLoading;
-
-  const ConfirmationDialog({
-    Key? key,
-    required this.title,
-    required this.message,
-    required this.icon,
-    required this.positiveText,
-    required this.negativeText,
-    required this.onPositive,
-    this.onNegative,
-    this.iconColor,
-    this.isLoading = false,
-  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +45,7 @@ class ConfirmationDialog extends StatelessWidget {
             ),
           ),
           Container(height: 0.5, color: Theme.of(context).hintColor),
-          !isLoading ? Row(children: [
+          if (!isLoading) Row(children: [
             Expanded(child: InkWell(
               onTap: onPositive,
               child: Container(
@@ -62,7 +54,7 @@ class ConfirmationDialog extends StatelessWidget {
                 decoration: const BoxDecoration(borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10))),
                 child: Text(positiveText, style: rubikBold.copyWith(color: Theme.of(context).primaryColor)),
               ),
-            )),
+            ),),
             Expanded(child: InkWell(
               onTap: onNegative ?? () => Navigator.pop(context),
               child: Container(
@@ -74,12 +66,12 @@ class ConfirmationDialog extends StatelessWidget {
                 ),
                 child: Text(negativeText, style: rubikBold.copyWith(color: Colors.white)),
               ),
-            )),
-          ]) : Padding(
+            ),),
+          ],) else Padding(
             padding: const EdgeInsets.all(Dimensions.paddingSizeSmall),
             child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor)),
           ),
-        ]),
+        ],),
       ),
     );
   }
@@ -87,16 +79,16 @@ class ConfirmationDialog extends StatelessWidget {
 
 // For backward compatibility
 class SignOutConfirmationDialog extends StatelessWidget {
-  const SignOutConfirmationDialog({Key? key}) : super(key: key);
+  const SignOutConfirmationDialog({super.key});
 
   @override
   Widget build(BuildContext context) {
     return ConfirmationDialog(
-      title: "Sign Out",
-      message: "Are you sure you want to sign out?",
+      title: 'Sign Out',
+      message: 'Are you sure you want to sign out?',
       icon: Icons.error_outline,
-      positiveText: "YES",
-      negativeText: "NO",
+      positiveText: 'YES',
+      negativeText: 'NO',
       onPositive: () {
         // Provider.of<AuthenticatedAppProviders>(context, listen: false)
         //     .clearSharedData()

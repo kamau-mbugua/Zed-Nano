@@ -1,24 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:zed_nano/models/customers_list/CustomerListResponse.dart';
 import 'package:zed_nano/models/getZedPayItUserById/GetZedPayItUserByIdResponse.dart';
-import 'package:zed_nano/models/get_customer_by_number/CustomerListResponse.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
-import 'package:zed_nano/screens/customers/details/customer_items_main_page.dart';
-import 'package:zed_nano/screens/sell/sell_page.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
-import 'package:zed_nano/screens/widget/common/bottom_sheet_helper.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
 import 'package:zed_nano/screens/widget/common/custom_dialog.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Images.dart';
 import 'package:zed_nano/utils/extensions.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class UserDetailsPage extends StatefulWidget {
+  UserDetailsPage({super.key, this.customerID});
   String? customerID;
-  UserDetailsPage({Key? key, this.customerID}) : super(key: key);
 
   @override
   _UserDetailsPageState createState() => _UserDetailsPageState();
@@ -57,7 +51,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
   Future<void> activateCustomer() async {
     try {
       final response =
-      await getBusinessProvider(context).changeStatus(customerNumber: widget.customerID!, status:"ACTIVE", context: context);
+      await getBusinessProvider(context).changeStatus(customerNumber: widget.customerID!, status:'ACTIVE', context: context);
 
       if (response.isSuccess) {
         showCustomToast(response.message, isError: false);
@@ -72,7 +66,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
   Future<void> suspendCustomer() async {
     try {
       final response =
-      await getBusinessProvider(context).changeStatus(customerNumber: widget.customerID!, status: "SUSPENDED", context: context);
+      await getBusinessProvider(context).changeStatus(customerNumber: widget.customerID!, status: 'SUSPENDED', context: context);
 
       if (response.isSuccess) {
         showCustomToast(response.message, isError: false);
@@ -91,7 +85,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
       context: context,
       title: 'Suspend User?',
       subtitle:
-      "Are you sure you want to suspend ${_cusomerData?.firstName}?",
+      'Are you sure you want to suspend ${_cusomerData?.firstName}?',
       negativeButtonText: 'Cancel',
       positiveButtonText: 'Suspend',
       onNegativePressed: () => Navigator.pop(context),
@@ -107,7 +101,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
       context: context,
       title: 'Unsuspend User?',
       subtitle:
-      "Are you sure you want to unsuspend ${_cusomerData?.firstName}? You’ll be able to create invoices and place orders for this customer.",
+      'Are you sure you want to unsuspend ${_cusomerData?.firstName}? You’ll be able to create invoices and place orders for this customer.',
       negativeButtonText: 'Cancel',
       positiveButtonText: 'Unsuspend',
       onNegativePressed: () => Navigator.pop(context),
@@ -124,7 +118,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
       context: context,
       title: 'Activate User?',
       subtitle:
-      "Are you sure you want to activate ${_cusomerData?.firstName}?",
+      'Are you sure you want to activate ${_cusomerData?.firstName}?',
       negativeButtonText: 'Cancel',
       positiveButtonText: 'Activate',
       onNegativePressed: () => Navigator.pop(context),
@@ -144,25 +138,25 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
         actions: [
           TextButton(
             onPressed: () {
-              if (_cusomerData?.userStatus?.toLowerCase() == 'active') {
+              if (_cusomerData?.userStatus.toLowerCase() == 'active') {
                 _showSuspendCustomerBottomSheet();
                 return;
               }
-              if (_cusomerData?.userStatus?.toLowerCase() == 'suspended') {
+              if (_cusomerData?.userStatus.toLowerCase() == 'suspended') {
                 _showAwaitingCustomerBottomSheet();
                 return;
               }
-              if (_cusomerData?.userStatus?.toLowerCase() == 'Awaiting') {
+              if (_cusomerData?.userStatus.toLowerCase() == 'Awaiting') {
                 _showAwaitingCustomerBottomSheet();
                 return;
               }
             },
             child:  Text(
-              _cusomerData?.userStatus?.toLowerCase() == 'active'
+              _cusomerData?.userStatus.toLowerCase() == 'active'
                   ? 'Suspend'
-                  : _cusomerData?.userStatus?.toLowerCase() == 'suspended'
+                  : _cusomerData?.userStatus.toLowerCase() == 'suspended'
                   ? 'Restore'
-                  : _cusomerData?.userStatus?.toLowerCase() == 'Awaiting'
+                  : _cusomerData?.userStatus.toLowerCase() == 'Awaiting'
                   ? 'Activate' : '',
               style: const TextStyle(
                 color: accentRed,
@@ -198,7 +192,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
       width: context.width(),
       margin: const EdgeInsets.only(right: 8),
       padding: const EdgeInsets.symmetric(
-          horizontal: 12, vertical: 12),
+          horizontal: 12, vertical: 12,),
       decoration: BoxDecoration(
         color: Colors.grey[100],
         borderRadius: BorderRadius.circular(8),
@@ -206,7 +200,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Text("Role",
+          const Text('Role',
               style: TextStyle(
                 fontFamily: 'Poppins',
                 color: textSecondary,
@@ -215,17 +209,17 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                 fontStyle: FontStyle.normal,
                 letterSpacing: 0.12,
 
-              )
+              ),
           ),
-          Text(_cusomerData?.userRole ?? "N/A",
+          Text(_cusomerData?.userRole ?? 'N/A',
               style: const TextStyle(
                 fontFamily: 'Poppins',
                 color: textPrimary,
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
                 fontStyle: FontStyle.normal,
-              )
-          )
+              ),
+          ),
         ],
       ),
     );
@@ -235,7 +229,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
     return Container(
       margin: const EdgeInsets.only(right: 8),
       padding: const EdgeInsets.symmetric(
-          horizontal: 12, vertical: 6),
+          horizontal: 12, vertical: 6,),
       decoration: BoxDecoration(
         color: Colors.grey[100],
         borderRadius: BorderRadius.circular(8),
@@ -251,14 +245,14 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
             child: Row(
               children: [
                 const Expanded(
-                  child: Text("User Details",
+                  child: Text('User Details',
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         color: textPrimaryColor,
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
                         fontStyle: FontStyle.normal,
-                      )
+                      ),
                   ),
                 ),
                 rfCommonCachedNetworkImage(
@@ -266,7 +260,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                     fit: BoxFit.cover,
                     height: 15,
                     width: 15,
-                    radius: 8
+                    radius: 8,
                 ),
               ],
             ).paddingSymmetric(vertical: 10),
@@ -279,10 +273,10 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                       fit: BoxFit.cover,
                       height: 15,
                       width: 15,
-                      radius: 8
+                      radius: 8,
                   ),
                   6.width,
-                  Text("${_cusomerData?.userPhone ?? 'N/A'}",
+                  Text(_cusomerData?.userPhone ?? 'N/A',
                       style: const TextStyle(
                         fontFamily: 'Poppins',
                         color: textSecondary,
@@ -291,9 +285,9 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                         fontStyle: FontStyle.normal,
                         letterSpacing: 0.12,
 
-                      )
-                  )
-                ]
+                      ),
+                  ),
+                ],
             ).paddingSymmetric(vertical: 10),
             Row(
                 children: [
@@ -302,10 +296,10 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                       fit: BoxFit.cover,
                       height: 15,
                       width: 15,
-                      radius: 0
+                      radius: 0,
                   ),
                   6.width,
-                  Text("${_cusomerData?.userEmail ?? 'N/A'}",
+                  Text(_cusomerData?.userEmail ?? 'N/A',
                       style: const TextStyle(
                         fontFamily: 'Poppins',
                         color: textSecondary,
@@ -314,9 +308,9 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                         fontStyle: FontStyle.normal,
                         letterSpacing: 0.12,
 
-                      )
-                  )
-                ]
+                      ),
+                  ),
+                ],
             ).paddingSymmetric(vertical: 10),
             Row(
                 children: [
@@ -325,11 +319,11 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                       fit: BoxFit.cover,
                       height: 15,
                       width: 15,
-                      radius: 0
+                      radius: 0,
                   ),
                   6.width,
                   Expanded(
-                    child: Text("${_cusomerData?.userName ?? 'N/A'}",
+                    child: Text(_cusomerData?.userName ?? 'N/A',
                         style: const TextStyle(
                           fontFamily: 'Poppins',
                           color: textSecondary,
@@ -337,10 +331,10 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                           fontWeight: FontWeight.w400,
                           fontStyle: FontStyle.normal,
                           letterSpacing: 0.12,
-                        )
+                        ),
                     ),
-                  )
-                ]
+                  ),
+                ],
             ).paddingSymmetric(vertical: 10),
           ],
         ],
@@ -362,7 +356,7 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
               fit: BoxFit.cover,
               height: 40,
               width: 40,
-              radius: 8
+              radius: 8,
           ),
         ).paddingSymmetric(vertical: 10),
         Row(
@@ -371,14 +365,14 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("${_cusomerData?.fullName ?? 'N/A'}",
+                    Text(_cusomerData?.fullName ?? 'N/A',
                         style: const TextStyle(
                           fontFamily: 'Poppins',
                           color: textPrimaryColor,
                           fontSize: 28,
                           fontWeight: FontWeight.w400,
                           fontStyle: FontStyle.normal,
-                        )
+                        ),
                     ).paddingSymmetric(vertical: 10),
                     Row(
                         children: [
@@ -387,11 +381,11 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                               fit: BoxFit.fitHeight,
                               height: 20,
                               width: 20,
-                              radius: 0
+                              radius: 0,
                           ),
 
                           10.width,
-                          Text("Created on ${_cusomerData?.dateAdded?.toFormattedDate() ?? 'N/A'}",
+                          Text("Created on ${_cusomerData?.dateAdded.toFormattedDate() ?? 'N/A'}",
                               style: const TextStyle(
                                 fontFamily: 'Poppins',
                                 color: textSecondary,
@@ -400,11 +394,11 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
                                 fontStyle: FontStyle.normal,
                                 letterSpacing: 0.12,
 
-                              )
-                          )
-                        ]
-                    ).paddingSymmetric(vertical: 10)
-                  ]
+                              ),
+                          ),
+                        ],
+                    ).paddingSymmetric(vertical: 10),
+                  ],
               ),
             ),
 
@@ -416,32 +410,32 @@ class _UserDetailsPageState extends State<UserDetailsPage> {
               Container(
                 margin: const EdgeInsets.only(right: 8),
                 padding: const EdgeInsets.symmetric(
-                    horizontal: 12, vertical: 6),
+                    horizontal: 12, vertical: 6,),
                 decoration: BoxDecoration(
-                  color: _cusomerData?.userStatus?.toLowerCase() == "active"
+                  color: _cusomerData?.userStatus.toLowerCase() == 'active'
                       ?lightGreenColor
-                      : _cusomerData?.userStatus?.toLowerCase() == "pending"
+                      : _cusomerData?.userStatus.toLowerCase() == 'pending'
                       ?lightOrange
                       :primaryYellowTextColor,
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: Text(_cusomerData?.userStatus?.toLowerCase() ?? "",
+                child: Text(_cusomerData?.userStatus.toLowerCase() ?? '',
                     style: TextStyle(
                       fontFamily: 'Poppins',
-                      color: _cusomerData?.userStatus?.toLowerCase() == "active"
+                      color: _cusomerData?.userStatus.toLowerCase() == 'active'
                           ? successTextColor
-                          : _cusomerData?.userStatus?.toLowerCase() == "pending"
+                          : _cusomerData?.userStatus.toLowerCase() == 'pending'
                           ? primaryOrangeTextColor
                           : googleRed,
                       fontSize: 10,
                       fontWeight: FontWeight.w600,
                       fontStyle: FontStyle.normal,
-                    )
+                    ),
                 ),
               ).paddingSymmetric(vertical: 10),
 
-            ]
-        )
+            ],
+        ),
 
       ],
     );

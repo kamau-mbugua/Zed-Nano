@@ -1,24 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/models/approval_data.dart';
-import 'package:zed_nano/models/approval_response.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/approvals/add_stock/add_stock_approval_approved.dart';
 import 'package:zed_nano/screens/approvals/customers/customers_approved_approval_page.dart';
 import 'package:zed_nano/screens/approvals/itemBuilders/approval_types.dart';
-import 'package:zed_nano/screens/approvals/stock_take/stock_take_approval.dart';
 import 'package:zed_nano/screens/approvals/stock_take/stock_take_approval_approved.dart';
 import 'package:zed_nano/screens/approvals/users/add_users_approved_approval_page.dart';
-import 'package:zed_nano/screens/widget/common/common_widgets.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/screens/widget/common/heading.dart';
-import 'package:zed_nano/utils/Colors.dart';
-import 'package:zed_nano/utils/Images.dart';
 
 class ApprovedApprovalsPage extends StatefulWidget {
-  String? getStatus;
 
-  ApprovedApprovalsPage({Key? key, this.getStatus}) : super(key: key);
+  ApprovedApprovalsPage({super.key, this.getStatus});
+  String? getStatus;
 
   @override
   _ApprovedApprovalsPageState createState() => _ApprovedApprovalsPageState();
@@ -37,7 +32,7 @@ class _ApprovedApprovalsPageState extends State<ApprovedApprovalsPage> {
   }
 
   Future<void> getApprovalByStatus() async {
-    Map<String, dynamic> requestData = {'status': widget.getStatus};
+    final requestData = <String, dynamic>{'status': widget.getStatus};
 
     try {
       final response = await getBusinessProvider(context)
@@ -45,19 +40,19 @@ class _ApprovedApprovalsPageState extends State<ApprovedApprovalsPage> {
 
       if (response.isSuccess) {
         setState(() {
-          ApprovalListData? approvalListData = response.data?.data;
+          final approvalListData = response.data?.data;
           approvalData = [
             ApprovalData(
                 name: 'Stock Take',
-                count: approvalListData?.stockTakeCount.toString()),
+                count: approvalListData?.stockTakeCount.toString(),),
             ApprovalData(
                 name: 'Add Stock',
-                count: approvalListData?.addStockCount.toString()),
+                count: approvalListData?.addStockCount.toString(),),
             ApprovalData(
-                name: 'Users', count: approvalListData?.usersCount.toString()),
+                name: 'Users', count: approvalListData?.usersCount.toString(),),
             ApprovalData(
                 name: 'Customers',
-                count: approvalListData?.customersCount.toString()),
+                count: approvalListData?.customersCount.toString(),),
           ];
         });
       } else {
@@ -78,7 +73,6 @@ class _ApprovedApprovalsPageState extends State<ApprovedApprovalsPage> {
         },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             headings(
               label: 'Select Category',
@@ -110,16 +104,16 @@ class _ApprovedApprovalsPageState extends State<ApprovedApprovalsPage> {
             widget.getStatus ?? '',
             onTap: () {
               if (approvalData?[index].name == 'Stock Take') {
-                StockTakeApprovalApproved().launch(context);
+                const StockTakeApprovalApproved().launch(context);
               }
               if (approvalData?[index].name == 'Add Stock') {
-                AddStockApprovalApproved().launch(context);
+                const AddStockApprovalApproved().launch(context);
               }
               if (approvalData?[index].name == 'Users') {
-                AddUsersApprovedApprovalPageState().launch(context);
+                const AddUsersApprovedApprovalPageState().launch(context);
               }
               if (approvalData?[index].name == 'Customers') {
-                CustomersApprovedApprovalPageState().launch(context);
+                const CustomersApprovedApprovalPageState().launch(context);
               }
             },
           );

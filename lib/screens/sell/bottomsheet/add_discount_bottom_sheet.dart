@@ -12,10 +12,9 @@ import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
 
 class AddDiscountBottomSheet extends StatefulWidget {
-  ProductData? productData;
 
-  AddDiscountBottomSheet({Key? key, required this.productData})
-      : super(key: key);
+  AddDiscountBottomSheet({required this.productData, super.key});
+  ProductData? productData;
 
   @override
   State<AddDiscountBottomSheet> createState() => _AddDiscountBottomSheetState();
@@ -35,13 +34,13 @@ class _AddDiscountBottomSheetState extends State<AddDiscountBottomSheet> {
   String selectedDiscountType = 'Fixed';
   
   // Discount calculation variables
-  double discountAmount = 0.0;
-  double finalPrice = 0.0;
+  double discountAmount = 0;
+  double finalPrice = 0;
 
   Timer? _debounce;
 
   void onDecrease(
-      int quantity, CartViewModel cartViewModel, ProductData product) {
+      int quantity, CartViewModel cartViewModel, ProductData product,) {
     if (quantity > 0) {
       if (quantity == 1) {
         cartViewModel.removeItem(product.id ?? '');
@@ -54,7 +53,7 @@ class _AddDiscountBottomSheetState extends State<AddDiscountBottomSheet> {
   }
 
   void onIncrease(
-      int quantity, CartViewModel cartViewModel, ProductData product) {
+      int quantity, CartViewModel cartViewModel, ProductData product,) {
     if (quantity == 0) {
       cartViewModel.addItem(
         product.id ?? '',
@@ -63,7 +62,7 @@ class _AddDiscountBottomSheetState extends State<AddDiscountBottomSheet> {
         product.imagePath ?? '',
         product.currency ?? '',
         product.productCategory ?? '',
-        0.0,
+        0,
       );
       onQuantityChange(1);
     } else {
@@ -72,7 +71,7 @@ class _AddDiscountBottomSheetState extends State<AddDiscountBottomSheet> {
     }
   }
 
-  void calculateDiscount(String value) async {
+  Future<void> calculateDiscount(String value) async {
     if (_debounce?.isActive ?? false) _debounce?.cancel();
     _debounce = Timer(const Duration(milliseconds: 500), () async {
       final cartViewModel = Provider.of<CartViewModel>(context, listen: false);
@@ -150,7 +149,7 @@ class _AddDiscountBottomSheetState extends State<AddDiscountBottomSheet> {
   }
 
   @override
-  dispose() {
+  void dispose() {
     discountController.dispose();
     discountFocusNode.dispose();
     _debounce?.cancel();
@@ -164,8 +163,6 @@ class _AddDiscountBottomSheetState extends State<AddDiscountBottomSheet> {
     return BaseBottomSheet(
       title: 'Add Discount to Product',
       initialChildSize: 0.8,
-      minChildSize: 0.5,
-      maxChildSize: 1.0,
       bodyContent: Column(
         children: [
           addProductHeader(),
@@ -193,7 +190,6 @@ class _AddDiscountBottomSheetState extends State<AddDiscountBottomSheet> {
         color: lightGreenColor,
         border: Border.all(
           color: mintColors,
-          width: 1,
         ),
         borderRadius: BorderRadius.circular(10),
       ),
@@ -203,21 +199,21 @@ class _AddDiscountBottomSheetState extends State<AddDiscountBottomSheet> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text("Original Price:",
+              const Text('Original Price:',
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     color: successTextColor,
                     fontSize: 12,
                     fontWeight: FontWeight.w400,
-                  )
+                  ),
               ),
-              Text("$currency ${originalPrice.toStringAsFixed(2)}",
+              Text('$currency ${originalPrice.toStringAsFixed(2)}',
                   style: const TextStyle(
                     fontFamily: 'Poppins',
                     color: successTextColor,
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
-                  )
+                  ),
               ),
             ],
           ),
@@ -226,21 +222,21 @@ class _AddDiscountBottomSheetState extends State<AddDiscountBottomSheet> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text("Discount:",
+                const Text('Discount:',
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       color: successTextColor,
                       fontSize: 12,
                       fontWeight: FontWeight.w400,
-                    )
+                    ),
                 ),
-                Text("- $currency ${discountAmount.toStringAsFixed(2)}",
+                Text('- $currency ${discountAmount.toStringAsFixed(2)}',
                     style: const TextStyle(
                       fontFamily: 'Poppins',
                       color: errorColors,
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
-                    )
+                    ),
                 ),
               ],
             ),
@@ -250,21 +246,21 @@ class _AddDiscountBottomSheetState extends State<AddDiscountBottomSheet> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text("Final Price:",
+                const Text('Final Price:',
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       color: successTextColor,
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
-                    )
+                    ),
                 ),
-                Text("$currency ${finalPrice.toStringAsFixed(2)}",
+                Text('$currency ${finalPrice.toStringAsFixed(2)}',
                     style: const TextStyle(
                       fontFamily: 'Poppins',
                       color: successTextColor,
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
-                    )
+                    ),
                 ),
               ],
             ),
@@ -273,25 +269,25 @@ class _AddDiscountBottomSheetState extends State<AddDiscountBottomSheet> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text("Final Price:",
+                const Text('Final Price:',
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       color: successTextColor,
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
-                    )
+                    ),
                 ),
-                Text("$currency ${originalPrice.toStringAsFixed(2)}",
+                Text('$currency ${originalPrice.toStringAsFixed(2)}',
                     style: const TextStyle(
                       fontFamily: 'Poppins',
                       color: successTextColor,
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
-                    )
+                    ),
                 ),
               ],
             ),
-          ]
+          ],
         ],
       ),
     ).paddingSymmetric(vertical: 16);
@@ -306,8 +302,8 @@ class _AddDiscountBottomSheetState extends State<AddDiscountBottomSheet> {
           style: TextStyle(
             color: Color(0xff2f3036),
             fontWeight: FontWeight.w500,
-            fontFamily: "Poppins",
-            fontSize: 14.0,
+            fontFamily: 'Poppins',
+            fontSize: 14,
           ),
         ),
         8.height,
@@ -329,7 +325,6 @@ class _AddDiscountBottomSheetState extends State<AddDiscountBottomSheet> {
                   color: isSelected ? const Color(0xfff2f4f5) : const Color(0xfffcfcfc),
                   border: Border.all(
                     color: isSelected ? const Color(0xff032541) : const Color(0xffc5c6cc),
-                    width: 1,
                   ),
                   borderRadius: BorderRadius.circular(16),
                 ),
@@ -338,9 +333,9 @@ class _AddDiscountBottomSheetState extends State<AddDiscountBottomSheet> {
                   style: TextStyle(
                     color: isSelected ? const Color(0xff032541) : const Color(0xff8f9098),
                     fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                    fontFamily: "Poppins",
+                    fontFamily: 'Poppins',
                     fontStyle: FontStyle.normal,
-                    fontSize: 12.0,
+                    fontSize: 12,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -367,7 +362,7 @@ class _AddDiscountBottomSheetState extends State<AddDiscountBottomSheet> {
           onChanged: (value) {
             calculateDiscount(value);
           },
-        )
+        ),
       ],
     );
   }
@@ -377,7 +372,7 @@ class _AddDiscountBottomSheetState extends State<AddDiscountBottomSheet> {
     final cartItem = cartViewModel.findItem(widget.productData?.id ?? '');
     final quantity = cartItem?.quantity ?? 0;
     final discount = cartItem?.discount ?? 0;
-    final bool isSelected = quantity > 0;
+    final isSelected = quantity > 0;
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16),
@@ -388,7 +383,7 @@ class _AddDiscountBottomSheetState extends State<AddDiscountBottomSheet> {
           InkWell(
             onTap:() =>  onDecrease(quantity, cartViewModel, widget.productData!),
             onLongPress:() => {
-            cartViewModel.removeItem(widget.productData?.id ?? '')
+            cartViewModel.removeItem(widget.productData?.id ?? ''),
             },
             child: Container(
               width: 60,
@@ -414,7 +409,6 @@ class _AddDiscountBottomSheetState extends State<AddDiscountBottomSheet> {
             alignment: Alignment.center,
             decoration: BoxDecoration(
               color: lightGreyColor,
-              shape: BoxShape.rectangle,
               borderRadius: BorderRadius.circular(8),
             ),
             child: TextFormField(
@@ -444,13 +438,13 @@ class _AddDiscountBottomSheetState extends State<AddDiscountBottomSheet> {
                       widget.productData?.imagePath ?? '',
                       widget.productData?.currency ?? '',
                       widget.productData?.productCategory ?? '',
-                      0.0,
+                      0,
                       quantity: newQuantity,
                     );
                   } else {
                     // Update existing item
                     cartViewModel.updateQuantity(
-                        widget.productData?.id ?? '', newQuantity);
+                        widget.productData?.id ?? '', newQuantity,);
                   }
                 } else if (value.isEmpty) {
                   // Don't remove item if field is just empty (user might be typing)
@@ -495,18 +489,18 @@ class _AddDiscountBottomSheetState extends State<AddDiscountBottomSheet> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("${widget.productData?.productName}",
+              Text('${widget.productData?.productName}',
                   style: const TextStyle(
                     fontFamily: 'Poppins',
                     color: textPrimary,
                     fontSize: 28,
                     fontWeight: FontWeight.w600,
                     fontStyle: FontStyle.normal,
-                  )
+                  ),
               ),
               Row(
                 children: [
-                  Text("${widget.productData?.productCategory}",
+                  Text('${widget.productData?.productCategory}',
                       style: const TextStyle(
                         fontFamily: 'Poppins',
                         color: textSecondary,
@@ -515,7 +509,7 @@ class _AddDiscountBottomSheetState extends State<AddDiscountBottomSheet> {
                         fontStyle: FontStyle.normal,
                         letterSpacing: 0.12,
 
-                      )
+                      ),
                   ),
                   Text(
                     ' · ',
@@ -525,7 +519,7 @@ class _AddDiscountBottomSheetState extends State<AddDiscountBottomSheet> {
                       color: Colors.grey.shade500,
                     ),
                   ),
-                  new Text("Selling Price: ${widget.productData?.currency} ${widget.productData?.productPrice}",
+                  Text('Selling Price: ${widget.productData?.currency} ${widget.productData?.productPrice}',
                       style: const TextStyle(
                         fontFamily: 'Poppins',
                         color: textSecondary,
@@ -534,10 +528,10 @@ class _AddDiscountBottomSheetState extends State<AddDiscountBottomSheet> {
                         fontStyle: FontStyle.normal,
                         letterSpacing: 0.12,
 
-                      )
-                  )
+                      ),
+                  ),
                 ],
-              )
+              ),
             ],
           ),
         ),
@@ -559,20 +553,20 @@ class _AddDiscountBottomSheetState extends State<AddDiscountBottomSheet> {
           children: [
             Expanded(
               child: outlineButton(
-                  text: "Cancel",
+                  text: 'Cancel',
                   onTap: () => Navigator.pop(context),
                   context: context,
                   borderColor: googleRed,
-                  textColor: googleRed),
+                  textColor: googleRed,),
             ),
             const SizedBox(width: 16),
             Expanded(
-              child: appButton(text: "Add", onTap: () {
+              child: appButton(text: 'Add', onTap: () {
                 final cartItem = cartViewModel.findItem(widget.productData?.id ?? '');
                 final quantity = cartItem?.quantity ?? 1;
 
                 if (quantity <= 0) {
-                  showCustomToast("Please enter a valid quantity.");
+                  showCustomToast('Please enter a valid quantity.');
                   return;
                 }
                 if (discountAmount <= 0) {
@@ -582,10 +576,10 @@ class _AddDiscountBottomSheetState extends State<AddDiscountBottomSheet> {
                 cartViewModel.updateDiscount(widget.productData?.id, discountAmount, quantity);
                 showCustomToast("A discount of ${selectedDiscountType == 'Fixed' ? '${widget.productData?.currency ?? 'KES'} $discountAmount' : '$discountAmount%'} has been applied to ${widget.productData?.productName ?? ''}.", isError: false);
                 Navigator.pop(context);
-              }, context: context),
+              }, context: context,),
             ),
           ],
-        )
+        ),
       ],
     );
   }

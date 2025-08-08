@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
 import 'dart:math' as math;
+
+import 'package:flutter/material.dart';
 
 /// A customizable fading circular progress indicator widget.
 /// 
@@ -7,6 +8,20 @@ import 'dart:math' as math;
 /// similar to a conic gradient animation. It can be customized with different
 /// colors, sizes, and can optionally include a shadow effect.
 class FadingCircularProgress extends StatefulWidget {
+
+  const FadingCircularProgress({
+    super.key,
+    this.width = 140,
+    this.height = 140,
+    this.color = const Color(0xff032541),
+    this.backgroundColor = const Color(0xffe8edf1),
+    this.strokeWidth = 10,
+    this.duration = const Duration(seconds: 2),
+    this.showShadow = false,
+    this.shadowColor,
+    this.shadowBlurRadius = 10,
+    this.shadowOffset = const Offset(0, 4),
+  });
   /// The width of the progress indicator.
   final double width;
   
@@ -36,20 +51,6 @@ class FadingCircularProgress extends StatefulWidget {
   
   /// The offset of the shadow, if enabled.
   final Offset shadowOffset;
-
-  const FadingCircularProgress({
-    Key? key,
-    this.width = 140,
-    this.height = 140,
-    this.color = const Color(0xff032541),
-    this.backgroundColor = const Color(0xffe8edf1),
-    this.strokeWidth = 10,
-    this.duration = const Duration(seconds: 2),
-    this.showShadow = false,
-    this.shadowColor,
-    this.shadowBlurRadius = 10,
-    this.shadowOffset = const Offset(0, 4),
-  }) : super(key: key);
 
   @override
   State<FadingCircularProgress> createState() => _FadingCircularProgressState();
@@ -101,14 +102,6 @@ class _FadingCircularProgressState extends State<FadingCircularProgress> with Si
 
 /// Custom painter for the fading circular progress indicator.
 class FadingCircularProgressPainter extends CustomPainter {
-  final double progress;
-  final Color color;
-  final Color backgroundColor;
-  final double strokeWidth;
-  final bool showShadow;
-  final Color shadowColor;
-  final double shadowBlurRadius;
-  final Offset shadowOffset;
 
   FadingCircularProgressPainter({
     required this.progress,
@@ -120,6 +113,14 @@ class FadingCircularProgressPainter extends CustomPainter {
     required this.shadowBlurRadius,
     required this.shadowOffset,
   });
+  final double progress;
+  final Color color;
+  final Color backgroundColor;
+  final double strokeWidth;
+  final bool showShadow;
+  final Color shadowColor;
+  final double shadowBlurRadius;
+  final Offset shadowOffset;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -139,13 +140,10 @@ class FadingCircularProgressPainter extends CustomPainter {
     
     // Create a shader that transitions from transparent to solid color
     final gradient = SweepGradient(
-      center: Alignment.center,
-      startAngle: 0,
-      endAngle: math.pi * 2,
       tileMode: TileMode.repeated,
       colors: [
-        color.withOpacity(0.0),
-        color.withOpacity(0.0),
+        color.withOpacity(0),
+        color.withOpacity(0),
         color,
       ],
       stops: const [0.0, 0.0001, 1.0],

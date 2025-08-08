@@ -4,8 +4,8 @@ import 'package:zed_nano/repositories/SplashRepo.dart';
 
 
 class SplashProvider extends ChangeNotifier {
-  final SplashRepo? splashRepo;
   SplashProvider({required this.splashRepo});
+  final SplashRepo? splashRepo;
 
 
   Future<bool> initSharedData() {

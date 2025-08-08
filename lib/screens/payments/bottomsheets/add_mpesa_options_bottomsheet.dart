@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/routes/routes.dart';
 import 'package:zed_nano/screens/widget/common/base_bottom_sheet.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
@@ -20,8 +19,6 @@ class AddMpesaOptionsBottomsheet extends StatelessWidget {
     return BaseBottomSheet(
       title: 'Setup Options',
       initialChildSize: 0.5,
-      minChildSize: 0.5,
-      maxChildSize: 1.0,
       headerContent:  const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -55,14 +52,14 @@ class AddMpesaOptionsBottomsheet extends StatelessWidget {
               steps: steps,
               onTab: (index) async {
                 //get the step name
-                String stepName = steps[index as int];
+                final stepName = steps[index as int];
                 switch (stepName) {
                   case 'I have MPESA Paybill Number.':
                     Navigator.pop(context); // Close the bottom sheet first
-                    await Navigator.pushNamed(context, AppRoutes.getNewAddMPESAPaymentParamRoute('MPESAPAYBILL'));                    break;
+                    await Navigator.pushNamed(context, AppRoutes.getNewAddMPESAPaymentParamRoute('MPESAPAYBILL'));
                   case 'I have MPESA Till Number.':
                     Navigator.pop(context); // Close the bottom sheet first
-                    await Navigator.pushNamed(context, AppRoutes.getNewAddMPESAPaymentParamRoute('MPESATILL'));                    break;
+                    await Navigator.pushNamed(context, AppRoutes.getNewAddMPESAPaymentParamRoute('MPESATILL'));
                   default:
                     break;
                 }

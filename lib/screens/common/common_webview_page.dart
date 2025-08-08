@@ -1,26 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:zed_nano/app/app_initializer.dart';
-import 'package:zed_nano/contants/AppConstants.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 
 class CommonWebViewPage extends StatefulWidget {
-  final String url;
-  final String? title;
-  final bool showAppBar;
-  final VoidCallback? onPageFinished;
-  final Function(String)? onUrlChanged;
-  final VoidCallback? onBack;
 
   const CommonWebViewPage({
-    super.key,
-    required this.url,
+    required this.url, super.key,
     this.title,
     this.showAppBar = true,
     this.onPageFinished,
     this.onUrlChanged,
     this.onBack,
   });
+  final String url;
+  final String? title;
+  final bool showAppBar;
+  final VoidCallback? onPageFinished;
+  final Function(String)? onUrlChanged;
+  final VoidCallback? onBack;
 
   @override
   State<CommonWebViewPage> createState() => _CommonWebViewPageState();
@@ -104,7 +102,7 @@ class _CommonWebViewPageState extends State<CommonWebViewPage> {
         actions: [
           if (isLoading)
             const Padding(
-              padding: EdgeInsets.all(16.0),
+              padding: EdgeInsets.all(16),
               child: SizedBox(
                 width: 20,
                 height: 20,

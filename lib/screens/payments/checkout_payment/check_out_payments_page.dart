@@ -22,12 +22,12 @@ enum CheckOutType{
 }
 
 class CheckOutPaymentsPage extends StatefulWidget {
+
+  CheckOutPaymentsPage({super.key, this.onNext,  this.onPrevious, this.orderId, this.checkOutType = CheckOutType.Order});
   final VoidCallback? onNext;
   final VoidCallback? onPrevious;
   String? orderId;
   CheckOutType? checkOutType;
-
-  CheckOutPaymentsPage({Key? key, this.onNext,  this.onPrevious, this.orderId, this.checkOutType = CheckOutType.Order}) : super(key: key);
 
   @override
   _CheckOutPaymentsPageState createState() => _CheckOutPaymentsPageState();
@@ -67,7 +67,7 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
   }
 
   Future<void> getInvoiceByInvoiceNumber() async {
-    Map<String, dynamic> requestData = {
+    final requestData = <String, dynamic>{
       'invoiceNumber': widget.orderId,
       'businessNumber': getBusinessDetails(context)?.businessNumber,
       'purchaseOrderNumber': '',
@@ -94,7 +94,7 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
   }
 
   Future<void> getInvoiceReceiptPaymentMethodsNoLogin() async {
-    Map<String, dynamic> requestData = {
+    final requestData = <String, dynamic>{
       'invoiceNumber': widget.orderId,
       'businessNumber': getBusinessDetails(context)?.businessNumber,
     };
@@ -117,7 +117,7 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
 
   Future<void> getOrderPaymentStatus() async {
     final requestData = <String, dynamic>{
-      'pushyTransactionId': widget.orderId
+      'pushyTransactionId': widget.orderId,
     };
 
     try {
@@ -144,7 +144,7 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
 
   Future<void> getPaymentMethodsStatusNoAuth() async {
     final requestData = <String, dynamic>{
-      'businessNumber': getBusinessDetails(context)?.businessNumber
+      'businessNumber': getBusinessDetails(context)?.businessNumber,
     };
 
     try {
@@ -176,7 +176,7 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
       'paymentChanel': 'Mobile',
       'transamount': textToDouble(amountToPayController.text) ?? orderDetailData?.deficit,
       'pushyTransactionId': orderId,
-      'transactionType': 'Cash Payment'
+      'transactionType': 'Cash Payment',
     };
 
     try {
@@ -185,7 +185,7 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
 
       if (response.isSuccess) {
         showCustomToast(response.message, isError: false);
-        widget!.onNext!();
+        widget.onNext!();
         await OrderPaymentSummary(orderId: orderDetail?.id).launch(context);
       } else {
         showCustomToast(response.message);
@@ -197,7 +197,7 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
   }
 
   Future<void> doCashPaymentInvoice() async {
-    String currentDateTime = DateFormatter.getCurrentShortDateTime();
+    final currentDateTime = DateFormatter.getCurrentShortDateTime();
 
     final requestData = <String, dynamic>{
       'paymentChanel': 'Mobile',
@@ -205,7 +205,7 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
       'invoiceNumber': getInvoiceByInvoiceNumberResponse?.invoiceNumber,
       'paymentMethod': 'Cash Payment',
       'businessNumber': getBusinessDetails(context)?.businessNumber,
-      'referenceNo':currentDateTime
+      'referenceNo':currentDateTime,
     };
 
     try {
@@ -236,7 +236,7 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
         'orderIds': orderId,
         'businessId': getBusinessDetails(context)?.businessId,
         'phone': phoneNumber,
-        'type': 'order'
+        'type': 'order',
       };
     }else {
       requestData = <String, dynamic>{
@@ -254,7 +254,7 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
       await getBusinessProvider(context).doPushStk(requestData: requestData, context: context);
       if (response.isSuccess) {
         showCustomToast(response.message, isError: false);
-        var stkResponse = response.data;
+        final stkResponse = response.data;
         await handleStkPushWebsocket(stkResponse, requestData, STKPaymentType.Mpesa);
       } else {
         showCustomToast(response.message ?? 'Failed to load product details');
@@ -273,7 +273,7 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
         'orderIds': orderId,
         'businessId': getBusinessDetails(context)?.businessId,
         'phone': phoneNumber,
-        'type': 'order'
+        'type': 'order',
       };
     }else{
       requestData = <String, dynamic>{
@@ -281,7 +281,7 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
         'amount': textToDouble(amountToPayController.text) ?? getInvoiceByInvoiceNumberResponse?.invoiceBalance,
         'orderID': getInvoiceByInvoiceNumberResponse?.invoiceNumber,
         'phone': phoneNumber,
-        'type':'invoice'
+        'type':'invoice',
       };
     }
 
@@ -291,7 +291,7 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
       await getBusinessProvider(context).doInitiateKcbStkPush(requestData: requestData, context: context);
       if (response.isSuccess) {
         showCustomToast(response.message, isError: false);
-        var stkResponse = response.data;
+        final stkResponse = response.data;
         await handleStkPushWebsocket(stkResponse, requestData, STKPaymentType.KCB);
       } else {
         showCustomToast(response.message ?? 'Failed to load product details');
@@ -308,7 +308,7 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
       'paymentChanel': 'Mobile',
       'transamount': orderDetailData?.deficit,
       'pushyTransactionId': orderDetail?.id,
-      'transactionType': 'Cash Payment'
+      'transactionType': 'Cash Payment',
     };
 
     // try {
@@ -343,7 +343,7 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
 
             if (widget.checkOutType == CheckOutType.Order) {
               await OrderPaymentSummary(orderId: orderDetail?.id, checkOutType: widget.checkOutType).launch(context).then((value) {
-                widget!.onNext!();
+                widget.onNext!();
               });
             }else{
               // finish(context);
@@ -353,11 +353,9 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
             }
           },
           sTKPaymentType: STKPaymentType.Mpesa,
-          onPaymentError: (errorMessage) {
-            showCustomToast(errorMessage, isError: true);
-          },
+          onPaymentError: showCustomToast,
           onCancel: () {
-            showCustomToast('Payment cancelled', isError: true);
+            showCustomToast('Payment cancelled');
           },
         ),
       ),
@@ -446,7 +444,7 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
   Widget _buildPaymentMethodList() {
     // Filter to only include specific payment methods
     final allowedMethods = ['cash', 'mpesa', 'kcbBankPaybill', 'card'];
-    final filteredMethods = paymentMethods.where((method) => allowedMethods.contains(method)).toList();
+    final filteredMethods = paymentMethods.where(allowedMethods.contains).toList();
     
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -470,7 +468,7 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
           controller: amountToPayController,
         ),
         8.height,
-        ...filteredMethods.map((method) => _buildPaymentOption(method)).toList(),
+        ...filteredMethods.map(_buildPaymentOption),
       ],
     );
   }
@@ -551,7 +549,7 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
               //   codeController: countryCodeController,
               //   maxLength: 10,
               // ).paddingSymmetric(horizontal: 2),
-            ]
+            ],
           ],
         ),
       ),
@@ -578,7 +576,7 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
                   fontStyle: FontStyle.normal,
-                )
+                ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -592,9 +590,9 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
                       fontStyle: FontStyle.normal,
                       letterSpacing: 0.12,
 
-                    )
+                    ),
                 ),
-                Text("${getInvoiceByInvoiceNumberResponse?.invoiceNumber ?? 'N/A'}",
+                Text(getInvoiceByInvoiceNumberResponse?.invoiceNumber ?? 'N/A',
                     style: const TextStyle(
                       fontFamily: 'Poppins',
                       color: textSecondary,
@@ -602,8 +600,8 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
                       fontWeight: FontWeight.w400,
                       fontStyle: FontStyle.normal,
                       letterSpacing: 0.12,
-                    )
-                )
+                    ),
+                ),
               ],
             ).paddingSymmetric(vertical: 8),
             Row(
@@ -618,7 +616,7 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
                       fontStyle: FontStyle.normal,
                       letterSpacing: 0.12,
 
-                    )
+                    ),
                 ),
                 Text("${getInvoiceByInvoiceNumberResponse?.currency ?? ''} ${getInvoiceByInvoiceNumberResponse?.invoiceBalance?.formatCurrency() ?? '0'}",
                     style: const TextStyle(
@@ -628,8 +626,8 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
                       fontWeight: FontWeight.w400,
                       fontStyle: FontStyle.normal,
                       letterSpacing: 0.12,
-                    )
-                )
+                    ),
+                ),
               ],
             ).paddingSymmetric(vertical: 8),
             Row(
@@ -644,7 +642,7 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
                       fontStyle: FontStyle.normal,
                       letterSpacing: 0.12,
 
-                    )
+                    ),
                 ),
                 Text('${getInvoiceByInvoiceNumberResponse?.items?.length ?? 0}',
                     style: const TextStyle(
@@ -654,12 +652,12 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
                       fontWeight: FontWeight.w400,
                       fontStyle: FontStyle.normal,
                       letterSpacing: 0.12,
-                    )
-                )
+                    ),
+                ),
               ],
             ).paddingSymmetric(vertical: 8),
           ],
-        )
+        ),
     ) : Container(
         width: context.width(),
         decoration: BoxDecoration(
@@ -678,7 +676,7 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
                   fontStyle: FontStyle.normal,
-                )
+                ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -692,9 +690,9 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
                       fontStyle: FontStyle.normal,
                       letterSpacing: 0.12,
 
-                    )
+                    ),
                 ),
-                Text("${orderDetail?.orderNumber ?? 'N/A'}",
+                Text(orderDetail?.orderNumber ?? 'N/A',
                     style: const TextStyle(
                       fontFamily: 'Poppins',
                       color: textSecondary,
@@ -702,8 +700,8 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
                       fontWeight: FontWeight.w400,
                       fontStyle: FontStyle.normal,
                       letterSpacing: 0.12,
-                    )
-                )
+                    ),
+                ),
               ],
             ).paddingSymmetric(vertical: 8),
             Row(
@@ -718,7 +716,7 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
                       fontStyle: FontStyle.normal,
                       letterSpacing: 0.12,
 
-                    )
+                    ),
                 ),
                 Text("${orderDetail?.currency ?? ''} ${orderDetailData?.deficit?.formatCurrency() ?? '0'}",
                     style: const TextStyle(
@@ -728,8 +726,8 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
                       fontWeight: FontWeight.w400,
                       fontStyle: FontStyle.normal,
                       letterSpacing: 0.12,
-                    )
-                )
+                    ),
+                ),
               ],
             ).paddingSymmetric(vertical: 8),
             Row(
@@ -744,7 +742,7 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
                       fontStyle: FontStyle.normal,
                       letterSpacing: 0.12,
 
-                    )
+                    ),
                 ),
                 Text('${orderDetail?.items?.length ?? 0}',
                     style: const TextStyle(
@@ -754,12 +752,12 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
                       fontWeight: FontWeight.w400,
                       fontStyle: FontStyle.normal,
                       letterSpacing: 0.12,
-                    )
-                )
+                    ),
+                ),
               ],
             ).paddingSymmetric(vertical: 8),
           ],
-        ));
+        ),);
   }
   PreferredSizeWidget _buildAppBar() {
     return AuthAppBar(

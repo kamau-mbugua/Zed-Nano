@@ -5,17 +5,15 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/models/customerTransactions/CustomerTransactionsResponse.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
-import 'package:zed_nano/screens/customers/itemBuilder/list_customers_item_builder.dart';
 import 'package:zed_nano/screens/customers/itemBuilder/list_customers_transactions_item_builder.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
 import 'package:zed_nano/utils/pagination_controller.dart';
 
 class CustomerTransactionsPage extends StatefulWidget {
-  String customerID;
 
-  CustomerTransactionsPage({Key? key, required this.customerID})
-      : super(key: key);
+  CustomerTransactionsPage({required this.customerID, super.key});
+  String customerID;
 
   @override
   _CustomerTransactionsPageState createState() =>
@@ -26,8 +24,8 @@ class _CustomerTransactionsPageState extends State<CustomerTransactionsPage> {
   late PaginationController<CustomerTransaction> _paginationController;
   final TextEditingController _searchController = TextEditingController();
 
-  String _searchTerm = "";
-  bool _isInitialized = false;
+  String _searchTerm = '';
+  final bool _isInitialized = false;
   Timer? _debounceTimer;
 
   @override
@@ -48,13 +46,13 @@ class _CustomerTransactionsPageState extends State<CustomerTransactionsPage> {
   }
 
   Future<List<CustomerTransaction>> getCustomerTransactions(
-      {required int page, required int limit}) async {
+      {required int page, required int limit,}) async {
     final response = await getBusinessProvider(context).getCustomerTransactions(
         page: page,
         limit: limit,
         searchValue: _searchTerm,
         context: context,
-        customerId: widget.customerID);
+        customerId: widget.customerID,);
     return response.data?.transaction ?? [];
   }
 
@@ -90,7 +88,7 @@ class _CustomerTransactionsPageState extends State<CustomerTransactionsPage> {
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
                   fontStyle: FontStyle.normal,
-                )),
+                ),),
             Text('View All',
                 style: TextStyle(
                   fontFamily: 'Poppins',
@@ -98,7 +96,7 @@ class _CustomerTransactionsPageState extends State<CustomerTransactionsPage> {
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
                   fontStyle: FontStyle.normal,
-                ))
+                ),),
           ],
         ),
         Expanded(
@@ -115,7 +113,7 @@ class _CustomerTransactionsPageState extends State<CustomerTransactionsPage> {
                   gifPath: emptyListGif,
                   title: "It's empty, over here.",
                   subtitle:
-                      "No Customers in your business, yet! Add to view them here.",
+                      'No Customers in your business, yet! Add to view them here.',
                 ),
               ),
             ),

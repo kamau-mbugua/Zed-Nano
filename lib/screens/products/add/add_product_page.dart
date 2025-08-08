@@ -2,13 +2,14 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:path/path.dart' as p;
 import 'package:provider/provider.dart';
 import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/models/business/BusinessDetails.dart';
 import 'package:zed_nano/models/getVariablePriceStatus/GetVariablePriceStatusResponse.dart';
 import 'package:zed_nano/models/listCategories/ListCategoriesResponse.dart';
-import 'package:zed_nano/models/unitofmeasure/UnitOfMeasureResponse.dart';
 import 'package:zed_nano/providers/business/BusinessProviders.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/routes/routes.dart';
@@ -21,21 +22,18 @@ import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/extensions.dart';
 import 'package:zed_nano/utils/image_picker_util.dart';
 import 'package:zed_nano/viewmodels/WorkflowViewModel.dart';
-import 'package:path/path.dart' as p;
-import 'package:http_parser/http_parser.dart';
 
 
 class AddProductScreen extends StatefulWidget {
-  final bool doNotUpdate;
-  final String? selectedCategory;
-  final String? productService;
   
   const AddProductScreen({
-    super.key, 
-    required this.doNotUpdate,
+    required this.doNotUpdate, super.key,
     this.selectedCategory,
     this.productService,
   });
+  final bool doNotUpdate;
+  final String? selectedCategory;
+  final String? productService;
 
   @override
   State<AddProductScreen> createState() => _AddProductScreenState();
@@ -108,7 +106,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
         .then((value) {
       if (value.isSuccess) {
         showCustomToast(value.message ?? 'Product created successfully',
-            isError: false);
+            isError: false,);
         if (_logoImage != null) {
           _uploadBusinessLogo(value.data?.productId);
         } else {
@@ -134,18 +132,18 @@ class _AddProductScreenState extends State<AddProductScreen> {
         filename: p.basename(_logoImage!.path),
         contentType: MediaType('image', 'jpeg'), // or png
       ),
-      'businessNumber': businessDetails?.businessNumber
+      'businessNumber': businessDetails?.businessNumber,
     });
 
     final urlPart = '?serviceId=$serviceId';
 
     await context
         .read<BusinessProviders>()
-        .uploadProductCategoryImage(context: context, formData: formData!, urlPart:urlPart)
+        .uploadProductCategoryImage(context: context, formData: formData, urlPart:urlPart)
         .then((value) async {
       if (value.isSuccess) {
         showCustomToast(value.message ?? 'Image uploaded successfully',
-            isError: false);
+            isError: false,);
             
         // Check if we were called from CategoryDetailPage (if selectedCategory is set)
         if (widget.selectedCategory != null) {
@@ -190,7 +188,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
             page: 1, 
             limit: 10000, 
             searchValue: '', 
-            productService: productService ?? '')
+            productService: productService ?? '',)
         .then((value) async {
       if (value.isSuccess) {
         setState(() {
@@ -199,7 +197,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
           // If we have a selectedCategory from the arguments, validate it exists in the loaded categories
           if (widget.selectedCategory != null) {
             final categoryExists = productCategoryDataList?.any(
-                (category) => category.categoryName == widget.selectedCategory) ?? false;
+                (category) => category.categoryName == widget.selectedCategory,) ?? false;
                 
             if (categoryExists) {
               selectedCategory = widget.selectedCategory;
@@ -259,7 +257,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar:  AuthAppBar(title: 'Add Product or Service'),
+      appBar:  const AuthAppBar(title: 'Add Product or Service'),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: ListView(
@@ -276,42 +274,42 @@ class _AddProductScreenState extends State<AddProductScreen> {
               text:  selectedProductService?.toLowerCase() != 'service' ? 'New Product' : 'New Service',
               context: context,
               onTap: () {
-                var categoryId = selectedCategory;
-                var prodctName = productNameController.text;
-                var productAmount = productAmountController.text;
-                var productRestock = productRestockController.text;
+                final categoryId = selectedCategory;
+                final prodctName = productNameController.text;
+                final productAmount = productAmountController.text;
+                final productRestock = productRestockController.text;
                 var productDescription = productDescriptionController.text;
-                var productService =  selectedProductService;
-                var unitOfMeasure =  selectedUnitOfMeasure;
-                var priceStatus =  selectedPriceStatus;
-                var buyingPrice =  buyingPriceController.text;
+                final productService =  selectedProductService;
+                final unitOfMeasure =  selectedUnitOfMeasure;
+                final priceStatus =  selectedPriceStatus;
+                final buyingPrice =  buyingPriceController.text;
 
                 if(categoryId == null){
-                  showCustomToast('Please select category', isError: true);
+                  showCustomToast('Please select category');
                   return;
                 }
                 if(productService == null){
-                  showCustomToast('Please select category', isError: true);
+                  showCustomToast('Please select category');
                   return;
                 }
                 if(!prodctName.isValidInput){
-                  showCustomToast('Please enter product name', isError: true);
+                  showCustomToast('Please enter product name');
                   return;
                 }
                 if(!productAmount.isValidInput){
-                  showCustomToast('Please enter product selling price amount', isError: true);
+                  showCustomToast('Please enter product selling price amount');
                   return;
                 }
                 if(!buyingPrice.isValidInput && selectedProductService?.toLowerCase() != 'service'){
-                  showCustomToast('Please enter product buying price amount', isError: true);
+                  showCustomToast('Please enter product buying price amount');
                   return;
                 }
                 if(unitOfMeasure == null && selectedProductService?.toLowerCase() != 'service'){
-                  showCustomToast('Select unit of measure', isError: true);
+                  showCustomToast('Select unit of measure');
                   return;
                 }
                 if(priceStatus == null){
-                  showCustomToast('Select price status', isError: true);
+                  showCustomToast('Select price status');
                   return;
                 }
 
@@ -321,7 +319,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   });
                 }
 
-                var requestData = <String, dynamic>{};
+                final requestData = <String, dynamic>{};
                 requestData['productCategory'] = categoryId;
                 requestData['productName'] = prodctName;
                 requestData['productPrice'] = productAmount;
@@ -424,7 +422,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
         ),
         16.height,
         Visibility(
-          visible: true,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -480,20 +477,19 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("This is weighted product."),
+                    Text('This is weighted product.'),
                     Text(
-                      "Product price will adjust based on weight when sold.",
+                      'Product price will adjust based on weight when sold.',
                       style: TextStyle(fontSize: 10, color: Colors.grey),
-                    )
+                    ),
                   ],
                 ),
-              )
+              ),
             ],
           ),
         ],
         16.height,
-        selectedProductService?.toLowerCase() != 'service' ?
-        Column(
+        if (selectedProductService?.toLowerCase() != 'service') Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
@@ -595,8 +591,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
               ),
             ),
           ],
-        ):
-            Column(
+        ) else Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
@@ -622,7 +617,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
 
         const SizedBox(height: 24),
-      ]);
+      ],);
   }
   Widget _uploadImage() {
     return GestureDetector(
@@ -645,7 +640,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 fit: BoxFit.cover,
               ),
             ) :  const Icon(Icons.image,
-                size: 28, color: Color(0xFF8A8D9F)),
+                size: 28, color: Color(0xFF8A8D9F),),
           ),
           const SizedBox(width: 16),
           const Column(
@@ -684,7 +679,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 ),
               ),
             ],
-          )
+          ),
         ],
       ),
     );

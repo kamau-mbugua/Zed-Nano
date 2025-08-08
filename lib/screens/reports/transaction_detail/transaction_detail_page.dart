@@ -2,26 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/models/by-transaction-id/TransactionDetailResponse.dart';
-import 'package:zed_nano/models/order_payment_status/OrderDetailResponse.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/orders/itemBuilder/order_item_builders.dart';
 import 'package:zed_nano/screens/orders/void_transaction/void_order_transaction_page.dart';
-import 'package:zed_nano/screens/payments/checkout_payment/check_out_payments_page.dart';
-import 'package:zed_nano/screens/sell/sell_stepper_page.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
-import 'package:zed_nano/screens/widget/common/bottom_sheet_helper.dart';
-import 'package:zed_nano/screens/widget/common/custom_dialog.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
-import 'package:zed_nano/utils/Images.dart';
 import 'package:zed_nano/utils/extensions.dart';
 
 class TransactionDetailPage extends StatefulWidget {
-  String? transactionId;
 
-  TransactionDetailPage({Key? key, this.transactionId}) : super(key: key);
+  TransactionDetailPage({super.key, this.transactionId});
+  String? transactionId;
 
   @override
   _TransactionDetailPageState createState() => _TransactionDetailPageState();
@@ -40,12 +34,12 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
   }
 
   Future<void> getOrderPaymentStatus() async {
-    Map<String, dynamic> requestData = {'transactionId': widget.transactionId};
+    final requestData = <String, dynamic>{'transactionId': widget.transactionId};
 
     try {
       final response = await getBusinessProvider(context)
           .getTransactionByTransactionId(
-              requestData: requestData, context: context);
+              requestData: requestData, context: context,);
 
       if (response.isSuccess) {
         setState(() {
@@ -133,7 +127,6 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
   Widget _buildServedBy() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         const Text('Served By',
             style: TextStyle(
@@ -142,7 +135,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
               fontSize: 14,
               fontWeight: FontWeight.w600,
               fontStyle: FontStyle.normal,
-            )),
+            ),),
         Container(
             width: context.width(),
             decoration: BoxDecoration(
@@ -154,7 +147,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("${byTransactionIdDetailResponse?.data?.cashier ?? 'N/A'}",
+                Text(byTransactionIdDetailResponse?.data?.cashier ?? 'N/A',
                     style: const TextStyle(
                       fontFamily: 'Poppins',
                       color: textSecondary,
@@ -162,9 +155,9 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                       fontWeight: FontWeight.w400,
                       fontStyle: FontStyle.normal,
                       letterSpacing: 0.12,
-                    ))
+                    ),),
               ],
-            )),
+            ),),
       ],
     );
   }
@@ -172,7 +165,6 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
   Widget _buildOrderSummary() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         const Text('Summary',
             style: TextStyle(
@@ -181,7 +173,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
               fontSize: 14,
               fontWeight: FontWeight.w600,
               fontStyle: FontStyle.normal,
-            )),
+            ),),
         Container(
             width: context.width(),
             decoration: BoxDecoration(
@@ -204,9 +196,9 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                           fontWeight: FontWeight.w400,
                           fontStyle: FontStyle.normal,
                           letterSpacing: 0.12,
-                        )),
+                        ),),
                     Text(
-                        "${byTransactionIdDetailResponse?.data?.createdAt?.toFormattedDateTime() ?? 'N/A'}",
+                        byTransactionIdDetailResponse?.data?.createdAt?.toFormattedDateTime() ?? 'N/A',
                         style: const TextStyle(
                           fontFamily: 'Poppins',
                           color: textSecondary,
@@ -214,7 +206,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                           fontWeight: FontWeight.w400,
                           fontStyle: FontStyle.normal,
                           letterSpacing: 0.12,
-                        ))
+                        ),),
                   ],
                 ).paddingSymmetric(vertical: 8),
                 Row(
@@ -228,7 +220,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                           fontWeight: FontWeight.w400,
                           fontStyle: FontStyle.normal,
                           letterSpacing: 0.12,
-                        )),
+                        ),),
                     Text(
                         "${byTransactionIdDetailResponse?.currency ?? 'KES'} ${byTransactionIdDetailResponse?.data?.subTotal?.formatCurrency() ?? 'N/A'}",
                         style: const TextStyle(
@@ -238,7 +230,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                           fontWeight: FontWeight.w400,
                           fontStyle: FontStyle.normal,
                           letterSpacing: 0.12,
-                        ))
+                        ),),
                   ],
                 ).paddingSymmetric(vertical: 8),
                 Row(
@@ -252,7 +244,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                           fontWeight: FontWeight.w400,
                           fontStyle: FontStyle.normal,
                           letterSpacing: 0.12,
-                        )),
+                        ),),
                     Text(
                         "${byTransactionIdDetailResponse?.currency ?? 'KES'} ${byTransactionIdDetailResponse?.data?.discountAmount?.formatCurrency() ?? 'N/A'}",
                         style: const TextStyle(
@@ -262,7 +254,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                           fontWeight: FontWeight.w400,
                           fontStyle: FontStyle.normal,
                           letterSpacing: 0.12,
-                        ))
+                        ),),
                   ],
                 ).paddingSymmetric(vertical: 8),
                 Row(
@@ -275,7 +267,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
                           fontStyle: FontStyle.normal,
-                        )),
+                        ),),
                     Text(
                         "${byTransactionIdDetailResponse?.currency ?? 'KES'} ${byTransactionIdDetailResponse?.data?.transamount?.formatCurrency() ?? 'N/A'}",
                         style: const TextStyle(
@@ -284,11 +276,11 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
                           fontStyle: FontStyle.normal,
-                        )),
+                        ),),
                   ],
                 ).paddingSymmetric(vertical: 10),
               ],
-            )),
+            ),),
       ],
     );
   }
@@ -297,7 +289,6 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
     final cartItems = byTransactionIdDetailResponse?.data?.items ?? [];
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           const Text('Transaction Items',
               style: TextStyle(
@@ -306,7 +297,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
                 fontStyle: FontStyle.normal,
-              )),
+              ),),
           8.height,
           if (cartItems.isEmpty)
             const Center(
@@ -321,7 +312,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
             ListView.separated(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              padding: const EdgeInsets.symmetric(horizontal: 0),
+              padding: const EdgeInsets.symmetric(),
               itemCount: cartItems.length,
               separatorBuilder: (context, index) => const Divider(
                 height: 0.5,
@@ -332,7 +323,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                 return buildTransactionItem(item: item);
               },
             ),
-        ]).paddingSymmetric(vertical: 16);
+        ],).paddingSymmetric(vertical: 16);
   }
 
   Widget _buildSummary() {
@@ -359,23 +350,22 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                         fontWeight: FontWeight.w400,
                         fontStyle: FontStyle.normal,
                         letterSpacing: 0.15,
-                      )),
+                      ),),
                   6.height,
                   Text(
-                      "${byTransactionIdDetailResponse?.data?.transactionID ?? 'N/A'}",
+                      byTransactionIdDetailResponse?.data?.transactionID ?? 'N/A',
                       style: const TextStyle(
                         fontFamily: 'Poppins',
                         color: textPrimary,
                         fontSize: 15,
                         fontWeight: FontWeight.w400,
                         fontStyle: FontStyle.normal,
-                      ))
+                      ),),
                 ],
-              )),
+              ),),
         ),
         8.width,
         Expanded(
-          flex: 1,
           child: Container(
               height: 85,
               decoration: BoxDecoration(
@@ -395,7 +385,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                         fontWeight: FontWeight.w400,
                         fontStyle: FontStyle.normal,
                         letterSpacing: 0.15,
-                      )),
+                      ),),
                   6.height,
                   Text(
                       '${byTransactionIdDetailResponse?.data?.items?.length ?? 0}',
@@ -405,9 +395,9 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                         fontSize: 18,
                         fontWeight: FontWeight.w400,
                         fontStyle: FontStyle.normal,
-                      ))
+                      ),),
                 ],
-              )),
+              ),),
         ),
         8.width,
         Expanded(
@@ -431,7 +421,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                         fontWeight: FontWeight.w400,
                         fontStyle: FontStyle.normal,
                         letterSpacing: 0.12,
-                      )),
+                      ),),
                   6.height,
                   Text(
                       "${byTransactionIdDetailResponse?.currency ?? 'KES'} ${byTransactionIdDetailResponse?.data?.transamount?.formatCurrency() ?? 'N/A'}",
@@ -441,9 +431,9 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                         fontStyle: FontStyle.normal,
-                      ))
+                      ),),
                 ],
-              )),
+              ),),
         ),
       ],
     ).paddingSymmetric(vertical: 16);
@@ -477,7 +467,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                         fontSize: 10,
                         fontWeight: FontWeight.w600,
                         fontStyle: FontStyle.normal,
-                      )),
+                      ),),
                 ),
               ],
             ),
@@ -507,7 +497,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                         fontSize: 10,
                         fontWeight: FontWeight.w600,
                         fontStyle: FontStyle.normal,
-                      )),
+                      ),),
                 ),
               ],
             ),
@@ -537,7 +527,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                         fontSize: 10,
                         fontWeight: FontWeight.w600,
                         fontStyle: FontStyle.normal,
-                      )),
+                      ),),
                 ),
               ],
             ),
@@ -556,9 +546,9 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                   fontWeight: FontWeight.w600,
                   fontStyle: FontStyle.normal,
                   letterSpacing: 0.09,
-                )),
+                ),),
             Container(
-              margin: const EdgeInsets.only(right: 0),
+              margin: const EdgeInsets.only(),
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
                 color: lightGreenColor,
@@ -573,16 +563,16 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                     fontSize: 10,
                     fontWeight: FontWeight.w600,
                     fontStyle: FontStyle.normal,
-                  )),
+                  ),),
             ),
           ],
-        )
+        ),
       ],
     );
   }
 
   PreferredSizeWidget _buildAppBar() {
-    return AuthAppBar(
+    return const AuthAppBar(
       title: 'View Transaction',
     );
   }

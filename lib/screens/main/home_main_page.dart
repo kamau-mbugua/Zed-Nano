@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 import 'package:zed_nano/app/app_initializer.dart';
-import 'package:zed_nano/providers/auth/authenticated_app_providers.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/invoices/invoices_list_main_page.dart';
 import 'package:zed_nano/screens/main/pages/admin/admin_dashboard_page.dart';
 import 'package:zed_nano/screens/main/pages/common/p_o_s_pages.dart';
-import 'package:zed_nano/screens/main/pages/common/report_page.dart';
 import 'package:zed_nano/screens/main/welcome_setup_screen.dart';
 import 'package:zed_nano/screens/orders/orders_list_main_page.dart';
 import 'package:zed_nano/screens/profile/profile_page.dart';
@@ -52,7 +50,7 @@ class _HomeMainPageState extends State<HomeMainPage> {
     try {
       // Add any refresh logic here in the future
       await Future.delayed(
-          const Duration(seconds: 1)); // Simulate a network call
+          const Duration(seconds: 1),); // Simulate a network call
     } catch (e) {
       // Handle any errors
     }
@@ -60,7 +58,7 @@ class _HomeMainPageState extends State<HomeMainPage> {
 
   List<Widget> _buildScreens() {
     final authProvider = getAuthProvider(context);
-    final userRole = authProvider?.businessDetails?.group?.toLowerCase();
+    final userRole = authProvider.businessDetails?.group?.toLowerCase();
 
     // For Cashier and Supervisor, only show Orders screen
     if (userRole == 'cashier' || userRole == 'supervisor') {
@@ -98,7 +96,7 @@ class _HomeMainPageState extends State<HomeMainPage> {
 
   Widget _buildBottomNavigationBar() {
     final authProvider = getAuthProvider(context);
-    final userRole = authProvider?.businessDetails?.group?.toLowerCase();
+    final userRole = authProvider.businessDetails?.group?.toLowerCase();
 
     // For Cashier and Supervisor, don't show bottom navigation since there's only one screen
     if (userRole == 'cashier' || userRole == 'supervisor') {
@@ -147,7 +145,7 @@ class _HomeMainPageState extends State<HomeMainPage> {
       builder: (context, workflowViewModel, _) {
         // Debug logging
         logger.i(
-            'HomeMainPage - WorkflowViewModel.showBusinessSetup: ${workflowViewModel.showBusinessSetup}');
+            'HomeMainPage - WorkflowViewModel.showBusinessSetup: ${workflowViewModel.showBusinessSetup}',);
 
         // Show business setup screen if required
         if (workflowViewModel.showBusinessSetup) {
@@ -184,9 +182,9 @@ class _HomeMainPageState extends State<HomeMainPage> {
               ? FloatingActionButton.extended(
                   heroTag: 'home_main_fab',
                   onPressed: () async {
-                    var customerInvoicingViewModel =
+                    final customerInvoicingViewModel =
                         Provider.of<CustomerInvoicingViewModel>(context,
-                            listen: false);
+                            listen: false,);
                     if (customerInvoicingViewModel.customerData != null) {
                       customerInvoicingViewModel.clearData();
                     }
@@ -195,7 +193,7 @@ class _HomeMainPageState extends State<HomeMainPage> {
                   },
                   label: const Text('Sell',
                       style: TextStyle(
-                          fontWeight: FontWeight.w600, color: Colors.white)),
+                          fontWeight: FontWeight.w600, color: Colors.white,),),
                   icon: const Icon(Icons.shopping_cart, color: Colors.white),
                   backgroundColor: appThemePrimary,
                 )
@@ -203,14 +201,14 @@ class _HomeMainPageState extends State<HomeMainPage> {
                   ? FloatingActionButton.extended(
                       heroTag: 'invoices_main_fab',
                       onPressed: () async {
-                        SellStepperPage(
+                        const SellStepperPage(
                           stepType: SellStepType.Invoice,
                         ).launch(context);
                       },
                       label: const Text('Create',
                           style: TextStyle(
                               fontWeight: FontWeight.w600,
-                              color: Colors.white)),
+                              color: Colors.white,),),
                       icon:
                           const Icon(Icons.add, size: 20, color: Colors.white),
                       backgroundColor: appThemePrimary,

@@ -1,11 +1,4 @@
 class OpeningClosingResponse {
-  final String? message;
-  final List<OpeningClosingData>? data;
-  final int? pageNumber;
-  final int? totalItems;
-  final int? totalPages;
-  final double? totalOpeningStock;
-  final double? totalClosingStock;
 
   OpeningClosingResponse({
     this.message,
@@ -32,6 +25,13 @@ class OpeningClosingResponse {
       totalClosingStock: _parseDouble(json['totalClosingStock']),
     );
   }
+  final String? message;
+  final List<OpeningClosingData>? data;
+  final int? pageNumber;
+  final int? totalItems;
+  final int? totalPages;
+  final double? totalOpeningStock;
+  final double? totalClosingStock;
 
   Map<String, dynamic> toJson() {
     return {
@@ -56,16 +56,6 @@ class OpeningClosingResponse {
 }
 
 class OpeningClosingData {
-  final String? productId;
-  final String? productName;
-  final String? variationKey;
-  final String? variationKeyId;
-  final double? openingStock;
-  final double? quantitySold;
-  final double? closingStock;
-  final double? quantityReceived;
-  final double? quantityVariance;
-  final String? imageUrl;
 
   OpeningClosingData({
     this.productId,
@@ -94,6 +84,16 @@ class OpeningClosingData {
       imageUrl: json['imageUrl'] as String?,
     );
   }
+  final String? productId;
+  final String? productName;
+  final String? variationKey;
+  final String? variationKeyId;
+  final double? openingStock;
+  final double? quantitySold;
+  final double? closingStock;
+  final double? quantityReceived;
+  final double? quantityVariance;
+  final String? imageUrl;
 
   Map<String, dynamic> toJson() {
     return {

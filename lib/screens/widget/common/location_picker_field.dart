@@ -7,6 +7,21 @@ import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/logger.dart';
 
 class LocationPickerField extends StatefulWidget {
+
+  const LocationPickerField({
+    required this.controller, super.key,
+    this.apiKey = 'AIzaSyA1i-fE9PcTl1dvC06vhpy7AR_C6c90lTU',
+    this.focusNode,
+    this.nextFocus,
+    this.label = 'Location',
+    this.countries = const ['ke', 'ug', 'tz'],
+    this.debounceTime = 200,
+    this.minInputLength = 2,
+    this.onLocationSelected,
+    this.textStyle,
+    this.labelStyle,
+    this.height = 48,
+  });
   final FocusNode? focusNode;
   final FocusNode? nextFocus;
   final TextEditingController controller;
@@ -19,22 +34,6 @@ class LocationPickerField extends StatefulWidget {
   final TextStyle? textStyle;
   final TextStyle? labelStyle;
   final double height;
-
-  const LocationPickerField({
-    Key? key,
-    required this.controller,
-    this.apiKey = 'AIzaSyA1i-fE9PcTl1dvC06vhpy7AR_C6c90lTU',
-    this.focusNode,
-    this.nextFocus,
-    this.label = 'Location',
-    this.countries = const ['ke', 'ug', 'tz'],
-    this.debounceTime = 200,
-    this.minInputLength = 2,
-    this.onLocationSelected,
-    this.textStyle,
-    this.labelStyle,
-    this.height = 48,
-  }) : super(key: key);
 
   @override
   State<LocationPickerField> createState() => _LocationPickerFieldState();
@@ -93,7 +92,7 @@ class _LocationPickerFieldState extends State<LocationPickerField> {
     });
 
     try {
-      final String url = 'https://maps.googleapis.com/maps/api/place/autocomplete/json'
+      final url = 'https://maps.googleapis.com/maps/api/place/autocomplete/json'
           '?input=${Uri.encodeComponent(input)}'
           '&key=${widget.apiKey}'
           '&components=${widget.countries.map((c) => 'country:$c').join('|')}';
@@ -107,7 +106,7 @@ class _LocationPickerFieldState extends State<LocationPickerField> {
         if (predictionsData != null) {
           final predictions = predictionsData
               .cast<Map<String, dynamic>>()
-              .map((p) => PlacePrediction.fromJson(p))
+              .map(PlacePrediction.fromJson)
               .toList();
           
           setState(() {
@@ -149,7 +148,7 @@ class _LocationPickerFieldState extends State<LocationPickerField> {
   }
 
   OverlayEntry _createOverlayEntry() {
-    final renderBox = context.findRenderObject() as RenderBox;
+    final renderBox = context.findRenderObject()! as RenderBox;
     final size = renderBox.size;
     final offset = renderBox.localToGlobal(Offset.zero);
 
@@ -161,9 +160,9 @@ class _LocationPickerFieldState extends State<LocationPickerField> {
         child: CompositedTransformFollower(
           link: _layerLink,
           showWhenUnlinked: false,
-          offset: Offset(0.0, size.height + 5.0),
+          offset: Offset(0, size.height + 5.0),
           child: Material(
-            elevation: 4.0,
+            elevation: 4,
             borderRadius: BorderRadius.circular(8),
             child: Container(
               constraints: const BoxConstraints(maxHeight: 200),
@@ -263,7 +262,6 @@ class _LocationPickerFieldState extends State<LocationPickerField> {
           focus: widget.focusNode,
           textFieldType: TextFieldType.OTHER,
           enabled: true,
-          readOnly: false,
           onChanged: (value) {
             print('LocationPickerField: onChanged called with: "$value"'); // Debug log
             // This will trigger _onTextChanged through the controller listener
@@ -276,8 +274,8 @@ class _LocationPickerFieldState extends State<LocationPickerField> {
             hintStyle: const TextStyle(
               color: Color(0xff8f9098),
               fontWeight: FontWeight.w400,
-              fontFamily: "Poppins",
-              fontSize: 14.0,
+              fontFamily: 'Poppins',
+              fontSize: 14,
             ),
             contentPadding: const EdgeInsets.symmetric(
               vertical: 16,
@@ -285,7 +283,7 @@ class _LocationPickerFieldState extends State<LocationPickerField> {
             ),
             suffixIcon: _isLoading
                 ? const Padding(
-                    padding: EdgeInsets.all(12.0),
+                    padding: EdgeInsets.all(12),
                     child: SizedBox(
                       width: 20,
                       height: 20,
@@ -315,8 +313,6 @@ class _LocationPickerFieldState extends State<LocationPickerField> {
 }
 
 class PlacePrediction {
-  final String placeId;
-  final String description;
 
   PlacePrediction({
     required this.placeId,
@@ -329,4 +325,6 @@ class PlacePrediction {
       description: json['description']?.toString() ?? '',
     );
   }
+  final String placeId;
+  final String description;
 }

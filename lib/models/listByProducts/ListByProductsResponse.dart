@@ -1,10 +1,6 @@
 import 'package:zed_nano/models/listProducts/ListProductsResponse.dart';
 
 class ListByProductsResponse {
-  final String? status;
-  final String? message;
-  final int? count;
-  final List<ProductData>? data;
 
   ListByProductsResponse({
     this.status,
@@ -23,6 +19,10 @@ class ListByProductsResponse {
           .toList(),
     );
   }
+  final String? status;
+  final String? message;
+  final int? count;
+  final List<ProductData>? data;
 
   Map<String, dynamic> toJson() {
     return {

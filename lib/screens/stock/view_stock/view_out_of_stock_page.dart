@@ -1,12 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:provider/provider.dart';
-import 'package:dio/dio.dart';
 import 'package:zed_nano/models/get_all_activeStock/GetAllActiveStockResponse.dart';
 import 'package:zed_nano/models/listCategories/ListCategoriesResponse.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
@@ -16,13 +12,11 @@ import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/screens/widget/common/filter_row_widget.dart';
 import 'package:zed_nano/screens/widget/common/searchview.dart';
-import 'package:zed_nano/utils/pagination_controller.dart';
-import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
-import '../../../utils/Images.dart';
+import 'package:zed_nano/utils/pagination_controller.dart';
 
 class ViewOutOfStockPage extends StatefulWidget {
-  const ViewOutOfStockPage({Key? key}) : super(key: key);
+  const ViewOutOfStockPage({super.key});
 
   @override
   _ViewOutOfStockPageState createState() => _ViewOutOfStockPageState();
@@ -30,7 +24,7 @@ class ViewOutOfStockPage extends StatefulWidget {
 
 class _ViewOutOfStockPageState extends State<ViewOutOfStockPage> {
   late PaginationController<ActiveStockProduct> _paginationController;
-  int _activeStatusFilter = -1; // -1: All, 0: Low Stock, 1: Out of Stock
+  final int _activeStatusFilter = -1; // -1: All, 0: Low Stock, 1: Out of Stock
 
   String _searchTerm = '';
   String? selectedCategoryId;
@@ -43,16 +37,16 @@ class _ViewOutOfStockPageState extends State<ViewOutOfStockPage> {
   int lowStockCount = 0;
   int outOfStockCount = 0;
 
-  String _selectedCategory = 'All';
-  String _sortOrder = 'A-Z';
-  TextEditingController _searchController = TextEditingController();
+  final String _selectedCategory = 'All';
+  final String _sortOrder = 'A-Z';
+  final TextEditingController _searchController = TextEditingController();
 
   List<ActiveStockProduct> products = [];
   TextEditingController searchController = TextEditingController();
 
   Timer? _debounceTimer;
 
-  bool _isLoading = true;
+  final bool _isLoading = true;
   StockStatusSummary? _summary;
 
   ProductCategoryData? categoryData;
@@ -81,7 +75,7 @@ class _ViewOutOfStockPageState extends State<ViewOutOfStockPage> {
   }
 
   Future<List<ActiveStockProduct>> getAllActiveStock(
-      {required int page, required int limit}) async {
+      {required int page, required int limit,}) async {
     try {
       final response = await getBusinessProvider(context).getAllActiveStock(
           page: page,
@@ -89,7 +83,7 @@ class _ViewOutOfStockPageState extends State<ViewOutOfStockPage> {
           searchValue: _searchTerm,
           context: context,
           categoryId: selectedCategoryId ?? '',
-          showStockDashboard:true
+          showStockDashboard:true,
       );
 
       setState(() {
@@ -143,7 +137,7 @@ class _ViewOutOfStockPageState extends State<ViewOutOfStockPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar:  AuthAppBar(title: 'Out of Stock'),
+      appBar:  const AuthAppBar(title: 'Out of Stock'),
       body: Column(
         children: [
           _buildSearchBar(),

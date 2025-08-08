@@ -3,13 +3,6 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class BusinessDetails {
-  final String? businessId;
-  final String? businessNumber;
-  final String? group;
-  final String? branchId;
-  final String? localCurrency;
-  final String? businessCategory;
-  final String? businessName;
 
   BusinessDetails({
     required this.businessId,
@@ -21,18 +14,6 @@ class BusinessDetails {
     required this.businessName,
   });
 
-  Map<String, dynamic> toJson() {
-    return {
-      'businessId': businessId,
-      'businessNumber': businessNumber,
-      'group': group,
-      'branchId': branchId,
-      'localCurrency': localCurrency,
-      'businessCategory': businessCategory,
-      'businessName': businessName,
-    };
-  }
-
   factory BusinessDetails.fromJson(Map<String, dynamic> json) {
     return BusinessDetails(
       businessId: json['businessId'] as String?,
@@ -43,6 +24,25 @@ class BusinessDetails {
       businessCategory: json['businessCategory'] as String?,
       businessName: json['businessName'] as String?,
     );
+  }
+  final String? businessId;
+  final String? businessNumber;
+  final String? group;
+  final String? branchId;
+  final String? localCurrency;
+  final String? businessCategory;
+  final String? businessName;
+
+  Map<String, dynamic> toJson() {
+    return {
+      'businessId': businessId,
+      'businessNumber': businessNumber,
+      'group': group,
+      'branchId': branchId,
+      'localCurrency': localCurrency,
+      'businessCategory': businessCategory,
+      'businessName': businessName,
+    };
   }
 
   String get json => jsonEncode(toJson());

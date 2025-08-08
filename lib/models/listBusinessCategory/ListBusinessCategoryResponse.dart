@@ -1,7 +1,4 @@
 class ListBusinessCategoryResponse {
-  final String? status;
-  final String? message;
-  final List<BusinessCategory>? categories;
 
   ListBusinessCategoryResponse({
     this.status,
@@ -18,6 +15,9 @@ class ListBusinessCategoryResponse {
           .toList(),
     );
   }
+  final String? status;
+  final String? message;
+  final List<BusinessCategory>? categories;
 
   Map<String, dynamic> toJson() {
     return {
@@ -29,16 +29,6 @@ class ListBusinessCategoryResponse {
 }
 
 class BusinessCategory {
-  final String? id;
-  final String? categoryId;
-  final String? categoryName;
-  final String? categoryDescription;
-  final String? categoryStatus;
-  final String? dateCreated;
-  final String? createdBy;
-  final String? createdAt;
-  final String? updatedAt;
-  final int? v;
 
   BusinessCategory({
     this.id,
@@ -67,6 +57,16 @@ class BusinessCategory {
       v: json['__v'] as int?,
     );
   }
+  final String? id;
+  final String? categoryId;
+  final String? categoryName;
+  final String? categoryDescription;
+  final String? categoryStatus;
+  final String? dateCreated;
+  final String? createdBy;
+  final String? createdAt;
+  final String? updatedAt;
+  final int? v;
 
   Map<String, dynamic> toJson() {
     return {

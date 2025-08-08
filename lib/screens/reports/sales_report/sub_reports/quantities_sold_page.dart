@@ -3,19 +3,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:provider/provider.dart';
-import 'package:zed_nano/contants/AppConstants.dart';
 import 'package:zed_nano/models/quantities_sold/QuantitiesSoldResponse.dart';
-import 'package:zed_nano/models/sales_report/SalesReportResponse.dart';
-import 'package:zed_nano/providers/business/BusinessProviders.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
-import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/screens/widget/common/date_range_filter_bottom_sheet.dart';
 import 'package:zed_nano/screens/widget/common/searchview.dart';
 import 'package:zed_nano/utils/Colors.dart';
-import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
 import 'package:zed_nano/utils/Images.dart';
 import 'package:zed_nano/utils/date_range_util.dart';
@@ -23,22 +17,22 @@ import 'package:zed_nano/utils/extensions.dart';
 import 'package:zed_nano/utils/pagination_controller.dart';
 
 class QuantitiesSoldPage extends StatefulWidget {
-  const QuantitiesSoldPage({Key? key}) : super(key: key);
+  const QuantitiesSoldPage({super.key});
 
   @override
   State<QuantitiesSoldPage> createState() => _QuantitiesSoldPageState();
 }
 
 class _QuantitiesSoldPageState extends State<QuantitiesSoldPage> {
-  bool _isLoading = false;
+  final bool _isLoading = false;
   String _selectedRangeLabel = 'this_month';
   QuantitiesSoldResponse? _summaryData;
-  List<QuantitiesSoldData> _recentSales = [];
+  final List<QuantitiesSoldData> _recentSales = [];
 
   late PaginationController<QuantitiesSoldData> _paginationController;
 
 
-  String _searchTerm = "";
+  String _searchTerm = '';
 
   Timer? _debounceTimer;
 
@@ -63,7 +57,7 @@ class _QuantitiesSoldPageState extends State<QuantitiesSoldPage> {
     final startDate = dateRange.values.first.removeTimezoneOffset;
     final endDate = dateRange.values.last.removeTimezoneOffset;
 
-    Map<String, dynamic> params = {
+    final params = <String, dynamic>{
       'startDate': startDate,
       'endDate': endDate,
       'page': page,
@@ -73,7 +67,7 @@ class _QuantitiesSoldPageState extends State<QuantitiesSoldPage> {
 
     final response = await getBusinessProvider(context).getTotalQuantitiesSold(
         params: params,
-        context: context
+        context: context,
     );
     setState(() {
       _summaryData = response.data;
@@ -119,7 +113,7 @@ class _QuantitiesSoldPageState extends State<QuantitiesSoldPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: colorBackground,
-      appBar: AuthAppBar(title: 'Reports'),
+      appBar: const AuthAppBar(title: 'Reports'),
       body: RefreshIndicator(
         onRefresh: _refreshData,
         child: Column(
@@ -154,7 +148,7 @@ class _QuantitiesSoldPageState extends State<QuantitiesSoldPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
+        const Text(
           'Quantities Sold',
           style: TextStyle(
             color: textPrimary,
@@ -164,7 +158,7 @@ class _QuantitiesSoldPageState extends State<QuantitiesSoldPage> {
           ),
         ),
         const SizedBox(height: 8),
-        Text(
+        const Text(
           'Detailed report on the quantities sold.',
           style: TextStyle(
             color: textSecondary,
@@ -177,8 +171,8 @@ class _QuantitiesSoldPageState extends State<QuantitiesSoldPage> {
         buildSearchBar(
             controller: _searchController,
             onChanged: _debounceSearch,
-            horizontalPadding:5
-        )
+            horizontalPadding:5,
+        ),
       ],
     );
   }
@@ -198,7 +192,7 @@ class _QuantitiesSoldPageState extends State<QuantitiesSoldPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
+        const Text(
           'Summary',
           style: TextStyle(
             color: textPrimary,
@@ -218,7 +212,7 @@ class _QuantitiesSoldPageState extends State<QuantitiesSoldPage> {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(
+                const Icon(
                   Icons.filter_list,
                   size: 16,
                   color: textSecondary,
@@ -226,7 +220,7 @@ class _QuantitiesSoldPageState extends State<QuantitiesSoldPage> {
                 const SizedBox(width: 8),
                 Text(
                   (_selectedRangeLabel ?? 'Filter').toDisplayLabel,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: textPrimary,
                     fontWeight: FontWeight.w400,
                     fontFamily: 'Poppins',
@@ -234,7 +228,7 @@ class _QuantitiesSoldPageState extends State<QuantitiesSoldPage> {
                   ),
                 ),
                 const SizedBox(width: 8),
-                Icon(
+                const Icon(
                   Icons.keyboard_arrow_right,
                   size: 16,
                   color: textSecondary,
@@ -265,7 +259,7 @@ class _QuantitiesSoldPageState extends State<QuantitiesSoldPage> {
             Expanded(
               child: _buildSummaryCard(
                 title: 'Quantity Instock',
-                value: '${(_summaryData?.quantityInStockTotal ?? 0)}',
+                value: '${_summaryData?.quantityInStockTotal ?? 0}',
                 icon: outOfStockIcon,
                 iconColor: successTextColor,
                 backgroundColor: lightGreenColor,
@@ -304,12 +298,12 @@ class _QuantitiesSoldPageState extends State<QuantitiesSoldPage> {
               icon,
               width: 25,
               height: 25,
-              color: iconColor,radius: 0
+              color: iconColor,radius: 0,
           ),
           const SizedBox(height: 16),
           Text(
             title,
-            style: TextStyle(
+            style: const TextStyle(
               color: textSecondary,
               fontWeight: FontWeight.w400,
               fontFamily: 'Poppins',
@@ -319,7 +313,7 @@ class _QuantitiesSoldPageState extends State<QuantitiesSoldPage> {
           const SizedBox(height: 8),
           Text(
             value,
-            style: TextStyle(
+            style: const TextStyle(
               color: textPrimary,
               fontWeight: FontWeight.w600,
               fontFamily: 'Poppins',
@@ -335,7 +329,7 @@ class _QuantitiesSoldPageState extends State<QuantitiesSoldPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
+        const Text(
           'Items',
           style: TextStyle(
             color: textPrimary,
@@ -363,7 +357,7 @@ class _QuantitiesSoldPageState extends State<QuantitiesSoldPage> {
                 child: CompactGifDisplayWidget(
                   gifPath: emptyListGif,
                   title: "It's empty, over here.",
-                  subtitle: "No recent sales in your business, yet! Add to view them here.",
+                  subtitle: 'No recent sales in your business, yet! Add to view them here.',
                 ),
               ),
             ),
@@ -387,7 +381,7 @@ class _QuantitiesSoldPageState extends State<QuantitiesSoldPage> {
               sale.imageUrl ?? '',
               width: 25,
               height: 25
-              ,radius: 0
+              ,radius: 0,
           ),
         ),
         const SizedBox(width: 16),
@@ -398,7 +392,7 @@ class _QuantitiesSoldPageState extends State<QuantitiesSoldPage> {
             children: [
               Text(
                 sale.productName ?? 'Unknown Product',
-                style: TextStyle(
+                style: const TextStyle(
                   color: textPrimary,
                   fontWeight: FontWeight.w400,
                   fontFamily: 'Poppins',
@@ -410,7 +404,7 @@ class _QuantitiesSoldPageState extends State<QuantitiesSoldPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   _buildProductDetail('Qty Sold:', sale.quantitySold?.toStringAsFixed(0) ?? '0'),
-                  _buildProductDetail('Instock:', 'KES ${(sale.inStock ?? 0)}'),
+                  _buildProductDetail('Instock:', 'KES ${sale.inStock ?? 0}'),
                 ],
               ),
             ],
@@ -426,7 +420,7 @@ class _QuantitiesSoldPageState extends State<QuantitiesSoldPage> {
       children: [
         Text(
           label,
-          style: TextStyle(
+          style: const TextStyle(
             color: textSecondary,
             fontWeight: FontWeight.w400,
             fontFamily: 'Poppins',
@@ -436,7 +430,7 @@ class _QuantitiesSoldPageState extends State<QuantitiesSoldPage> {
         const SizedBox(height: 4),
         Text(
           value,
-          style: TextStyle(
+          style: const TextStyle(
             color: textPrimary,
             fontWeight: FontWeight.w400,
             fontFamily: 'Poppins',

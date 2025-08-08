@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:zed_nano/models/findProduct/FindProductResponse.dart';
 import 'package:zed_nano/models/listProducts/ListProductsResponse.dart';
 import 'package:zed_nano/providers/business/BusinessProviders.dart';
-import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/routes/routes.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
@@ -11,13 +9,12 @@ import 'package:zed_nano/screens/widget/common/custom_dialog.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
-import 'package:zed_nano/utils/dimensions.dart';
 import 'package:zed_nano/utils/extensions.dart';
 
 class ProductDetailPage extends StatefulWidget {
-  final String? productId;
 
-  const ProductDetailPage({Key? key, this.productId}) : super(key: key);
+  const ProductDetailPage({super.key, this.productId});
+  final String? productId;
 
   @override
   State<ProductDetailPage> createState() => _ProductDetailPageState();
@@ -102,8 +99,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         title: 'View ${_productData?.productService?.toLowerCase() != 'service' ? 'Product' : 'Service'}',
         actions: [
           TextButton(
-            child: const Text('Delete', style: TextStyle(color: accentRed)),
             onPressed: _deleteCategory,
+            child: const Text('Delete', style: TextStyle(color: accentRed)),
           ),
         ],
       ),
@@ -115,26 +112,26 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   Widget _buildProductDetailContent() {
     return SingleChildScrollView(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             _buildProductHeader(),
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
             _buildDescriptionSection(
               topTitleString: 'Description',
               bottomSubtitle: _productData?.productDescription ??
                   'Description not available',
             ),
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
             _buildTwoColumnSection(
               leftTitle: 'Price Type',
               leftSubtitle: _productData?.priceStatus ?? 'N/A',
               rightTitle: _productData?.productService?.toLowerCase() != 'service' ? 'Unit of Measure' : 'Price',
               rightSubtitle: _productData?.productService?.toLowerCase() != 'service' ? _productData?.unitOfMeasure ?? 'Kilogram (kg)' : '${_productData?.currency ?? 'KES'} ${_productData?.productPrice?.formatCurrency() ?? '0'}',
             ),
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
             Visibility(
               visible: _productData?.productService?.toLowerCase() != 'service',
               child: _buildTwoColumnSection(
@@ -146,7 +143,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     '${_productData?.currency ?? 'KES'} ${_productData?.buyingPrice ?? '200'}',
               ),
             ),
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
             Visibility(
               visible: _productData?.productService?.toLowerCase() != 'service',
               child: _buildTwoColumnSection(
@@ -185,28 +182,28 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               fit: BoxFit.cover,
           ),
         ),
-        SizedBox(width: 16),
+        const SizedBox(width: 16),
         // Product name and category
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               _productData?.productName ?? '${_productData?.productService?.toLowerCase() != 'service' ? 'Product' : 'Service'} Name',
-              style: TextStyle(
+              style: const TextStyle(
                 color: textPrimary,
                 fontWeight: FontWeight.w600,
                 fontFamily: 'Poppins',
-                fontSize: 28.0,
+                fontSize: 28,
               ),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Text(
               _productData?.productCategory ?? 'N/A',
-              style: TextStyle(
+              style: const TextStyle(
                 color: textSecondary,
                 fontWeight: FontWeight.w400,
                 fontFamily: 'Poppins',
-                fontSize: 12.0,
+                fontSize: 12,
               ),
             ),
           ],
@@ -235,21 +232,21 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         children: [
           Text(
             topTitleString,
-            style: TextStyle(
+            style: const TextStyle(
               color: textPrimary,
               fontWeight: FontWeight.w600,
               fontFamily: 'Poppins',
-              fontSize: 14.0,
+              fontSize: 14,
             ),
           ),
-          SizedBox(height: 5),
+          const SizedBox(height: 5),
           Text(
             bottomSubtitle,
-            style: TextStyle(
+            style: const TextStyle(
               color: textSecondary,
               fontWeight: FontWeight.w400,
               fontFamily: 'Poppins',
-              fontSize: 12.0,
+              fontSize: 12,
             ),
           ),
         ],
@@ -272,7 +269,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             bottomSubtitle: rightSubtitle,
           ),
         ),
-        SizedBox(width: 15),
+        const SizedBox(width: 15),
         // Right column
         Expanded(
           child: _buildDescriptionSection(
@@ -300,8 +297,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
       ),
       child: outlineButton(
           text: 'Edit ${_productData?.productService?.toLowerCase() != 'service' ? 'Product' : 'Service'}',
-          onTap: () => _navigateToEditProduct(),
-          context: context),
+          onTap: _navigateToEditProduct,
+          context: context,),
     );
   }
 }

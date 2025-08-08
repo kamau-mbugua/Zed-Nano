@@ -2,23 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 import 'package:zed_nano/app/app_initializer.dart';
-import 'package:zed_nano/models/product_model.dart';
-import 'package:zed_nano/providers/cart/CartViewModel.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/stock/itemBuilder/preview_add_stock_item.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/utils/Colors.dart';
-import 'package:zed_nano/screens/widget/common/common_widgets.dart';
-import 'package:zed_nano/screens/widget/common/searchview.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
 import 'package:zed_nano/viewmodels/add_stock_viewmodel.dart';
 
 class AddStockPreviewPage extends StatefulWidget {
+  const AddStockPreviewPage({required this.onNext, required this.onPrevious, super.key});
   final VoidCallback onNext;
   final VoidCallback onPrevious;
-  const AddStockPreviewPage({Key? key, required this.onNext, required this.onPrevious}) : super(key: key);
 
   @override
   State<AddStockPreviewPage> createState() => _AddStockPreviewPageState();
@@ -37,7 +33,7 @@ class _AddStockPreviewPageState extends State<AddStockPreviewPage> {
   Widget build(BuildContext context) {
     final cartViewModel = Provider.of<AddStockViewModel>(context);
     final cartItems = cartViewModel.items;
-    final totalAmount = 0.0;
+    const totalAmount = 0.0;
     final itemCount = cartViewModel.itemCount;
 
     return Scaffold(
@@ -67,7 +63,7 @@ class _AddStockPreviewPageState extends State<AddStockPreviewPage> {
         children: [
           Container(
             width: context.width(),
-              margin: const EdgeInsets.only(left: 0, right: 0, bottom: 8),
+              margin: const EdgeInsets.only(bottom: 8),
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: cardBackgroundColor,
@@ -83,11 +79,11 @@ class _AddStockPreviewPageState extends State<AddStockPreviewPage> {
                         fontSize: 18,
                         fontWeight: FontWeight.w400,
                         fontStyle: FontStyle.normal,
-                      )
+                      ),
                   ),
 
                 ],
-              )
+              ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -128,8 +124,8 @@ class _AddStockPreviewPageState extends State<AddStockPreviewPage> {
                       fontWeight: FontWeight.w400,
                       fontStyle: FontStyle.normal,
                       letterSpacing: 0.12,
-                    )
-                )
+                    ),
+                ),
               ],
             ),
           ),
@@ -181,17 +177,17 @@ class _AddStockPreviewPageState extends State<AddStockPreviewPage> {
                     height: 56,
                     child: appButton(text: 'Submit Batch', onTap: (){
 
-                      var payload = {
+                      final payload = {
                         'supplierId': '',
                         'warehouseId':'',
-                        'products': cartViewModel.items.map((item) => item.toJson()).toList()
+                        'products': cartViewModel.items.map((item) => item.toJson()).toList(),
                       };
 
                       logger.d(payload);
 
                       getBusinessProvider(context).addStockRequest(
                           requestData: payload,
-                          context: context
+                          context: context,
                       ).then((value) {
                         if(value.isSuccess){
                           cartViewModel.clear();
@@ -202,7 +198,7 @@ class _AddStockPreviewPageState extends State<AddStockPreviewPage> {
                         }
                       });
 
-                    }, context: context)
+                    }, context: context,),
                 ),
               ],
             ),

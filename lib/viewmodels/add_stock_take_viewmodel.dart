@@ -82,11 +82,6 @@ class AddStockTakeViewModel with ChangeNotifier {
 
 // CartItem model
 class AddStockTakeCartItem {
-  final double expectedQuantity;
-  final double quantity;
-  final String productId;
-  final String productName;
-  final String imagePath;
 
 
   AddStockTakeCartItem({
@@ -96,6 +91,11 @@ class AddStockTakeCartItem {
     required this.imagePath,
     required this.expectedQuantity,
   });
+  final double expectedQuantity;
+  final double quantity;
+  final String productId;
+  final String productName;
+  final String imagePath;
 
   double get variation => quantity - expectedQuantity;
 

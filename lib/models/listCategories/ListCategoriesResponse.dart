@@ -1,8 +1,4 @@
 class ListCategoriesResponse {
-  final String? status;
-  final String? message;
-  final List<ProductCategoryData>? data;
-  final int? count;
 
   ListCategoriesResponse({
     this.status,
@@ -21,6 +17,10 @@ class ListCategoriesResponse {
       count: json['count'] as int?,
     );
   }
+  final String? status;
+  final String? message;
+  final List<ProductCategoryData>? data;
+  final int? count;
 
   Map<String, dynamic> toJson() {
     return {
@@ -33,26 +33,6 @@ class ListCategoriesResponse {
 }
 
 class ProductCategoryData {
-  final String? id;
-  final String? businessID;
-  final String? categoryCode;
-  final String? categoryName;
-  final String? categoryDescription;
-  final String? productService;
-  final bool? subCategory;
-  final List<dynamic>? subCategories;
-  final String? dateCreated;
-  final String? categoryState;
-  final String? createdAt;
-  final String? createdBy;
-  final String? modifiedAt;
-  final String? dateUpdated;
-  final String? updatedAt;
-  final int? v;
-  final int? noOfProducts;
-  final String? imagePath;
-  final String? thumbailImagePath;
-  final String? modifiedByName;
 
   ProductCategoryData({
     this.id,
@@ -101,6 +81,26 @@ class ProductCategoryData {
       modifiedByName: json['modifiedByName'] as String?,
     );
   }
+  final String? id;
+  final String? businessID;
+  final String? categoryCode;
+  final String? categoryName;
+  final String? categoryDescription;
+  final String? productService;
+  final bool? subCategory;
+  final List<dynamic>? subCategories;
+  final String? dateCreated;
+  final String? categoryState;
+  final String? createdAt;
+  final String? createdBy;
+  final String? modifiedAt;
+  final String? dateUpdated;
+  final String? updatedAt;
+  final int? v;
+  final int? noOfProducts;
+  final String? imagePath;
+  final String? thumbailImagePath;
+  final String? modifiedByName;
 
   Map<String, dynamic> toJson() {
     return {

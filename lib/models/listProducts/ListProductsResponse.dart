@@ -1,8 +1,4 @@
 class ListProductsResponse {
-  final String? status;
-  final String? message;
-  final int? count;
-  final List<ProductData>? data;
 
   ListProductsResponse({
     this.status,
@@ -21,6 +17,10 @@ class ListProductsResponse {
           .toList(),
     );
   }
+  final String? status;
+  final String? message;
+  final int? count;
+  final List<ProductData>? data;
 
   Map<String, dynamic> toJson() {
     return {
@@ -33,47 +33,6 @@ class ListProductsResponse {
 }
 
 class ProductData {
-  final String? businessID;
-  final String? productCode;
-  final String? productCategory;
-  final String? productService;
-  final String? productDescription;
-  final int? reorderLevel;
-  final String? createdAt;
-  final String? createdBy;
-  final String? priceStatus;
-  final String? unitOfMeasure;
-  final String? serviceType;
-  final bool? isWeightedProduct;
-  final bool? consumable;
-  final bool? requireSettlement;
-  final List<dynamic>? settlements;
-  final bool? isRawMaterial;
-  final List<dynamic>? additionalImages;
-  final bool? saccoCollects;
-  final bool? canBeBookedOnline;
-  final List<dynamic>? additionalServices;
-  final String? updatedAt;
-  final int? v;
-  final String? id;
-  final String? productId;
-  final String? variationKeyId;
-  final String? productName;
-  final String? productState;
-  final num? buyingPrice;
-  final int? productPrice;
-  final num? discountedPrice;
-  final String? variationKey;
-  final String? variantCode;
-  final String? currency;
-  final String? createdByName;
-  final String? modifiedBy;
-  final String? modifiedByName;
-  final String? accountId;
-  final String? glAccountName;
-  final String? imagePath;
-  final String? thumbailImagePath;
-  final double? quantityInStock;
 
   ProductData({
     this.businessID,
@@ -164,6 +123,47 @@ class ProductData {
       quantityInStock: (json['quantityInStock'] as num?)?.toDouble(),
     );
   }
+  final String? businessID;
+  final String? productCode;
+  final String? productCategory;
+  final String? productService;
+  final String? productDescription;
+  final int? reorderLevel;
+  final String? createdAt;
+  final String? createdBy;
+  final String? priceStatus;
+  final String? unitOfMeasure;
+  final String? serviceType;
+  final bool? isWeightedProduct;
+  final bool? consumable;
+  final bool? requireSettlement;
+  final List<dynamic>? settlements;
+  final bool? isRawMaterial;
+  final List<dynamic>? additionalImages;
+  final bool? saccoCollects;
+  final bool? canBeBookedOnline;
+  final List<dynamic>? additionalServices;
+  final String? updatedAt;
+  final int? v;
+  final String? id;
+  final String? productId;
+  final String? variationKeyId;
+  final String? productName;
+  final String? productState;
+  final num? buyingPrice;
+  final int? productPrice;
+  final num? discountedPrice;
+  final String? variationKey;
+  final String? variantCode;
+  final String? currency;
+  final String? createdByName;
+  final String? modifiedBy;
+  final String? modifiedByName;
+  final String? accountId;
+  final String? glAccountName;
+  final String? imagePath;
+  final String? thumbailImagePath;
+  final double? quantityInStock;
 
   Map<String, dynamic> toJson() {
     return {

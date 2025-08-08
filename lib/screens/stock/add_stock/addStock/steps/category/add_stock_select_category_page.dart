@@ -6,7 +6,6 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/models/listCategories/ListCategoriesResponse.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
-import 'package:zed_nano/screens/widget/common/common_widgets.dart';
 import 'package:zed_nano/screens/widget/common/heading.dart';
 import 'package:zed_nano/screens/widget/common/searchview.dart';
 import 'package:zed_nano/utils/Colors.dart';
@@ -14,10 +13,10 @@ import 'package:zed_nano/utils/GifsImages.dart';
 import 'package:zed_nano/utils/pagination_controller.dart';
 
 class AddStockSelectCategoryPage extends StatefulWidget {
+
+  const AddStockSelectCategoryPage({required this.onNext, required this.onPrevious, super.key});
   final VoidCallback onNext;
   final VoidCallback onPrevious;
-
-  const AddStockSelectCategoryPage({Key? key, required this.onNext, required this.onPrevious}) : super(key: key);
 
   @override
   State<AddStockSelectCategoryPage> createState() => _AddStockSelectCategoryPageState();
@@ -29,7 +28,7 @@ class _AddStockSelectCategoryPageState extends State<AddStockSelectCategoryPage>
   String searchQuery = '';
   TextEditingController searchController = TextEditingController();
   late PaginationController<ProductCategoryData> _paginationController;
-  String _searchTerm = "";
+  String _searchTerm = '';
   bool _isInitialized = false;
   Timer? _debounceTimer;
   String? selectedCategoryId;
@@ -77,11 +76,11 @@ class _AddStockSelectCategoryPageState extends State<AddStockSelectCategoryPage>
         limit: limit,
         searchValue: _searchTerm,
         context: context,
-        productService: 'Product'
+        productService: 'Product',
     );
 
     // Create a list with "All Categories" as the first item
-    List<ProductCategoryData> categoriesList = [];
+    final categoriesList = <ProductCategoryData>[];
 
     // Only add "All Categories" on the first page
     if (page == 1) {
@@ -90,7 +89,7 @@ class _AddStockSelectCategoryPageState extends State<AddStockSelectCategoryPage>
             id: '',
             categoryName: 'All Categories',
             imagePath: '',
-          )
+          ),
       );
     }
 
@@ -105,7 +104,7 @@ class _AddStockSelectCategoryPageState extends State<AddStockSelectCategoryPage>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar:  AuthAppBar(title: 'Select Category'),
+      appBar:  const AuthAppBar(title: 'Select Category'),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -139,7 +138,7 @@ class _AddStockSelectCategoryPageState extends State<AddStockSelectCategoryPage>
                     child: CompactGifDisplayWidget(
                       gifPath: emptyListGif,
                       title: "It's empty, over here.",
-                      subtitle: "No product categories in your business, yet! Add to view them here.",
+                      subtitle: 'No product categories in your business, yet! Add to view them here.',
                     ),
                   ),
                 ),
@@ -194,7 +193,7 @@ class _AddStockSelectCategoryPageState extends State<AddStockSelectCategoryPage>
 
   Widget _buildCategoryItem(ProductCategoryData category) {
     // Track if this category is selected
-    bool isSelected = selectedCategoryId == category.id;
+    final isSelected = selectedCategoryId == category.id;
 
     return InkWell(
       onTap: () {
@@ -220,8 +219,8 @@ class _AddStockSelectCategoryPageState extends State<AddStockSelectCategoryPage>
               style: const TextStyle(
                 color: darkGreyColor, // #1f2024
                 fontWeight: FontWeight.w400,
-                fontFamily: "Poppins",
-                fontSize: 14.0,
+                fontFamily: 'Poppins',
+                fontSize: 14,
               ),
             ),
             const Spacer(),

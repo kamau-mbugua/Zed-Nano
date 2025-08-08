@@ -13,7 +13,7 @@ import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Images.dart';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({Key? key}) : super(key: key);
+  const ProfilePage({super.key});
 
   @override
   _ProfilePageState createState() => _ProfilePageState();
@@ -70,9 +70,7 @@ class _ProfilePageState extends State<ProfilePage> {
         title: 'Profile',
         actions: [
           TextButton(
-            onPressed: () {
-              _navigateToEditProfile();
-            },
+            onPressed: _navigateToEditProfile,
             child: const Text(
               'Edit',
               style: TextStyle(
@@ -247,10 +245,7 @@ class _ProfilePageState extends State<ProfilePage> {
           iconColor: googleRed,
           title: 'Delete Account',
           subtitle: 'Permanently delete your account and all associated data.',
-          onTap: () {
-            // _showDeleteAccountDialog();
-            _confirmDeleteUserAccount();
-          },
+          onTap: _confirmDeleteUserAccount,
         ),
       ],
     );
@@ -266,7 +261,7 @@ class _ProfilePageState extends State<ProfilePage> {
       positiveButtonColor: googleRed,
       onPositivePressed: () async {
         Navigator.pop(context);
-        await DeleteUserAccountPage().launch(context);
+        await const DeleteUserAccountPage().launch(context);
       },
     );
   }
@@ -343,7 +338,6 @@ class _ProfilePageState extends State<ProfilePage> {
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: iconColor == googleRed ? googleRed.withOpacity(0.2) : primaryOrangeTextColor.withOpacity(0.2),
-            width: 1,
           ),
         ),
         child: Row(
@@ -360,7 +354,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 color: iconColor,
                 width: 15,
                 height: 15,
-                radius: 0
+                radius: 0,
               ),
             ),
             16.width,
@@ -439,7 +433,6 @@ class _ProfilePageState extends State<ProfilePage> {
                   borderRadius: BorderRadius.circular(8),
                   border: Border.all(
                     color: googleRed.withOpacity(0.3),
-                    width: 1,
                   ),
                 ),
                 child: const Column(
@@ -508,7 +501,7 @@ class _ProfilePageState extends State<ProfilePage> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        final TextEditingController confirmController = TextEditingController();
+        final confirmController = TextEditingController();
         
         return AlertDialog(
           shape: RoundedRectangleBorder(
@@ -557,14 +550,12 @@ class _ProfilePageState extends State<ProfilePage> {
                     borderRadius: BorderRadius.circular(8),
                     borderSide: BorderSide(
                       color: Colors.grey.shade300,
-                      width: 1,
                     ),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
                     borderSide: BorderSide(
                       color: Colors.grey.shade300,
-                      width: 1,
                     ),
                   ),
                   focusedBorder: OutlineInputBorder(

@@ -9,14 +9,13 @@ import 'package:zed_nano/screens/customers/itemBuilder/list_customers_transactio
 import 'package:zed_nano/screens/widget/common/base_bottom_sheet.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
 import 'package:zed_nano/screens/widget/common/filter_row_widget.dart';
-import 'package:zed_nano/screens/widget/common/sub_category_picker.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
 import 'package:zed_nano/utils/pagination_controller.dart';
 
 class CustomerOrdersPages extends StatefulWidget {
+  CustomerOrdersPages({required this.customerId, super.key});
   String customerId;
-  CustomerOrdersPages({Key? key, required this.customerId}) : super(key: key);
 
   @override
   _CustomerOrdersPagesState createState() => _CustomerOrdersPagesState();
@@ -30,8 +29,8 @@ class _CustomerOrdersPagesState extends State<CustomerOrdersPages> {
   late PaginationController<OrderData> _paginationController;
   final TextEditingController _searchController = TextEditingController();
 
-  String _searchTerm = "";
-  bool _isInitialized = false;
+  String _searchTerm = '';
+  final bool _isInitialized = false;
   Timer? _debounceTimer;
 
   @override
@@ -52,7 +51,7 @@ class _CustomerOrdersPagesState extends State<CustomerOrdersPages> {
   }
 
   Future<List<OrderData>> fetchByStatus(
-      {required int page, required int limit}) async {
+      {required int page, required int limit,}) async {
     final response = await getBusinessProvider(context).fetchByStatus(
         page: page,
         limit: limit,
@@ -101,7 +100,7 @@ class _CustomerOrdersPagesState extends State<CustomerOrdersPages> {
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
                   fontStyle: FontStyle.normal,
-                )
+                ),
             ),
             Text('View All',
                 style: TextStyle(
@@ -110,8 +109,8 @@ class _CustomerOrdersPagesState extends State<CustomerOrdersPages> {
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
                   fontStyle: FontStyle.normal,
-                )
-            )
+                ),
+            ),
           ],
         ),
         _showFiltersRow(),
@@ -129,7 +128,7 @@ class _CustomerOrdersPagesState extends State<CustomerOrdersPages> {
                   gifPath: emptyListGif,
                   title: "It's empty, over here.",
                   subtitle:
-                  "No ${selectedStatus} orders in your business, yet! Add to view them here.",
+                  'No $selectedStatus orders in your business, yet! Add to view them here.',
                 ),
               ),
             ),
@@ -141,7 +140,7 @@ class _CustomerOrdersPagesState extends State<CustomerOrdersPages> {
 
   Widget _showFiltersRow() {
     return  buildFilterButton(
-      text: "Displaying",
+      text: 'Displaying',
       isActive: false,
       onTap: () {
         showModalBottomSheet(
@@ -155,7 +154,7 @@ class _CustomerOrdersPagesState extends State<CustomerOrdersPages> {
       showTrailingText: true,
       trailingWidget: Text(
         selectedStatus.isEmpty ? 'All Orders' : selectedStatus,
-        style: TextStyle(
+        style: const TextStyle(
           fontSize: 14,
           color: Color(0xff2f3036),
           fontWeight: FontWeight.w500,
@@ -168,8 +167,6 @@ class _CustomerOrdersPagesState extends State<CustomerOrdersPages> {
     return BaseBottomSheet(
       title: 'Order Status',
       initialChildSize: 0.5,
-      minChildSize: 0.5,
-      maxChildSize: 1.0,
       headerContent:  const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -195,7 +192,7 @@ class _CustomerOrdersPagesState extends State<CustomerOrdersPages> {
               onTab: (index) {
 
                 //get the step name
-                String stepName = orderStatus[index as int];
+                final stepName = orderStatus[index as int];
 
                 Navigator.pop(context);
                 setState(() {

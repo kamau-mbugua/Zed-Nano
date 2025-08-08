@@ -3,24 +3,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:provider/provider.dart';
-import 'package:zed_nano/contants/AppConstants.dart';
-import 'package:zed_nano/models/get_product_gross_margin/GetProductGrossMarginResponse.dart';
-import 'package:zed_nano/models/opening_closing/OpeningClosingResponse.dart';
-import 'package:zed_nano/models/sales_report/SalesReportResponse.dart';
 import 'package:zed_nano/models/void-approved/VoidApprovedResponse.dart';
-import 'package:zed_nano/providers/business/BusinessProviders.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
-import 'package:zed_nano/screens/reports/sales_report/sub_reports/quantities_sold_page.dart';
-import 'package:zed_nano/screens/reports/sales_report/sub_reports/total_sales_page.dart';
 import 'package:zed_nano/screens/reports/transaction_detail/transaction_detail_page.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
-import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/screens/widget/common/date_range_filter_bottom_sheet.dart';
 import 'package:zed_nano/screens/widget/common/searchview.dart';
 import 'package:zed_nano/utils/Colors.dart';
-import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
 import 'package:zed_nano/utils/Images.dart';
 import 'package:zed_nano/utils/date_range_util.dart';
@@ -28,20 +18,20 @@ import 'package:zed_nano/utils/extensions.dart';
 import 'package:zed_nano/utils/pagination_controller.dart';
 
 class VoidedTransactionsPage extends StatefulWidget {
-  const VoidedTransactionsPage({Key? key}) : super(key: key);
+  const VoidedTransactionsPage({super.key});
 
   @override
   State<VoidedTransactionsPage> createState() => _VoidedTransactionsPageState();
 }
 
 class _VoidedTransactionsPageState extends State<VoidedTransactionsPage> {
-  bool _isLoading = false;
+  final bool _isLoading = false;
   String _selectedRangeLabel = 'this_month';
   VoidApprovedResponse? _summaryData;
 
   late PaginationController<VoidApprovedTransaction> _paginationController;
 
-  String _searchTerm = "";
+  String _searchTerm = '';
 
   Timer? _debounceTimer;
 
@@ -66,7 +56,7 @@ class _VoidedTransactionsPageState extends State<VoidedTransactionsPage> {
     final startDate = dateRange.values.first.removeTimezoneOffset;
     final endDate = dateRange.values.last.removeTimezoneOffset;
 
-    Map<String, dynamic> params = {
+    final params = <String, dynamic>{
       'startDate': startDate,
       'endDate': endDate,
       'page': page,
@@ -76,7 +66,7 @@ class _VoidedTransactionsPageState extends State<VoidedTransactionsPage> {
 
     final response = await getBusinessProvider(context).getVoidedTRansactionReports(
         params: params,
-        context: context
+        context: context,
     );
 
     setState(() {
@@ -126,7 +116,7 @@ class _VoidedTransactionsPageState extends State<VoidedTransactionsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: colorBackground,
-      appBar: AuthAppBar(title: 'Reports'),
+      appBar: const AuthAppBar(title: 'Reports'),
       body: RefreshIndicator(
         onRefresh: _refreshData,
         child: Column(
@@ -184,8 +174,8 @@ class _VoidedTransactionsPageState extends State<VoidedTransactionsPage> {
         buildSearchBar(
             controller: _searchController,
             onChanged: _debounceSearch,
-            horizontalPadding:5
-        )
+            horizontalPadding:5,
+        ),
       ],
     );
   }
@@ -272,7 +262,7 @@ class _VoidedTransactionsPageState extends State<VoidedTransactionsPage> {
             Expanded(
               child: _buildSummaryCard(
                 title: 'Total Amount Voided',
-                value: 'KES ${(_summaryData?.totalAmount?.formatCurrency() ?? 0)}',
+                value: 'KES ${_summaryData?.totalAmount?.formatCurrency() ?? 0}',
                 icon: voidedTransactionsIcon,
                 iconColor: googleRed,
                 backgroundColor: lightGreenColor,
@@ -312,7 +302,7 @@ class _VoidedTransactionsPageState extends State<VoidedTransactionsPage> {
               icon,
               width: 25,
               height: 25,
-              color: iconColor,radius: 0
+              color: iconColor,radius: 0,
           ),
           const SizedBox(height: 16),
           Text(
@@ -371,7 +361,7 @@ class _VoidedTransactionsPageState extends State<VoidedTransactionsPage> {
                 child: CompactGifDisplayWidget(
                   gifPath: emptyListGif,
                   title: "It's empty, over here.",
-                  subtitle: "No recent voids in your business, yet! Add to view them here.",
+                  subtitle: 'No recent voids in your business, yet! Add to view them here.',
                 ),
               ),
             ),
@@ -386,10 +376,10 @@ class _VoidedTransactionsPageState extends State<VoidedTransactionsPage> {
         TransactionDetailPage(transactionId: item.transactionID,).launch(context);
       },
       child: Container(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             color: cardBackgroundColor,
-            borderRadius: BorderRadius.circular(8.0),
+            borderRadius: BorderRadius.circular(8),
             // boxShadow: [
             //   BoxShadow(
             //     color: Colors.grey.withOpacity(0.3),
@@ -403,7 +393,7 @@ class _VoidedTransactionsPageState extends State<VoidedTransactionsPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               rfCommonCachedNetworkImage(customerTransactionsIcon,
-                  height: 14, width: 14, radius: 0, color: successTextColor),
+                  height: 14, width: 14, radius: 0, color: successTextColor,),
               10.width,
               Expanded(
                 child: Column(
@@ -414,16 +404,16 @@ class _VoidedTransactionsPageState extends State<VoidedTransactionsPage> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(item.transactionID ?? "",
+                            Text(item.transactionID ?? '',
                                 style: const TextStyle(
                                   fontFamily: 'Poppins',
                                   color: textPrimary,
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
                                   fontStyle: FontStyle.normal,
-                                )
+                                ),
                             ),
-                            Text(item.dateVoided?.toFormattedDateTime() ?? "",
+                            Text(item.dateVoided?.toFormattedDateTime() ?? '',
                                 style: const TextStyle(
                                   fontFamily: 'Poppins',
                                   color: textSecondary,
@@ -432,8 +422,8 @@ class _VoidedTransactionsPageState extends State<VoidedTransactionsPage> {
                                   fontStyle: FontStyle.normal,
                                   letterSpacing: 0.15,
 
-                                )
-                            )
+                                ),
+                            ),
                           ],
                         ),
                         Column(
@@ -446,19 +436,19 @@ class _VoidedTransactionsPageState extends State<VoidedTransactionsPage> {
                                   fontSize: 14,
                                   fontWeight: FontWeight.w400,
                                   fontStyle: FontStyle.normal,
-                                )
+                                ),
                             ),
-                            Text("${item.transactionType ?? ""}",
+                            Text(item.transactionType ?? '',
                                 style: const TextStyle(
                                   fontFamily: 'Poppins',
                                   color: textSecondary,
                                   fontSize: 10,
                                   fontWeight: FontWeight.w600,
                                   fontStyle: FontStyle.normal,
-                                )
-                            )
+                                ),
+                            ),
                           ],
-                        )
+                        ),
                       ],
                     ),
                     Divider(
@@ -471,7 +461,7 @@ class _VoidedTransactionsPageState extends State<VoidedTransactionsPage> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text("Completed By:",
+                            const Text('Completed By:',
                                 style: TextStyle(
                                   fontFamily: 'Poppins',
                                   color: textSecondary,
@@ -480,9 +470,9 @@ class _VoidedTransactionsPageState extends State<VoidedTransactionsPage> {
                                   fontStyle: FontStyle.normal,
                                   letterSpacing: 0.15,
 
-                                )
+                                ),
                             ),
-                            Text("${item.voidedBy ?? ""}",
+                            Text(item.voidedBy ?? '',
                                 style: const TextStyle(
                                   fontFamily: 'Poppins',
                                   color: textPrimary,
@@ -491,14 +481,14 @@ class _VoidedTransactionsPageState extends State<VoidedTransactionsPage> {
                                   fontStyle: FontStyle.normal,
                                   letterSpacing: 0.12,
 
-                                )
-                            )
+                                ),
+                            ),
                           ],
                         ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            const Text("Requested By:",
+                            const Text('Requested By:',
                                 style: TextStyle(
                                   fontFamily: 'Poppins',
                                   color: textSecondary,
@@ -507,9 +497,9 @@ class _VoidedTransactionsPageState extends State<VoidedTransactionsPage> {
                                   fontStyle: FontStyle.normal,
                                   letterSpacing: 0.15,
 
-                                )
+                                ),
                             ),
-                            Text("${item.voidRequestedBy ?? "N/A"}",
+                            Text(item.voidRequestedBy ?? 'N/A',
                                 style: const TextStyle(
                                   fontFamily: 'Poppins',
                                   color: textPrimary,
@@ -518,17 +508,17 @@ class _VoidedTransactionsPageState extends State<VoidedTransactionsPage> {
                                   fontStyle: FontStyle.normal,
                                   letterSpacing: 0.12,
 
-                                )
-                            )
+                                ),
+                            ),
                           ],
-                        )
+                        ),
                       ],
-                    )
+                    ),
                   ],
                 ),
-              )
+              ),
             ],
-          )),
+          ),),
     );
   }
 

@@ -3,8 +3,9 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:nb_utils/nb_utils.dart' hide lightGrey;
+import 'package:path/path.dart' as p;
 import 'package:provider/provider.dart';
 import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/models/business/BusinessDetails.dart';
@@ -21,12 +22,10 @@ import 'package:zed_nano/utils/Images.dart';
 import 'package:zed_nano/utils/extensions.dart';
 import 'package:zed_nano/utils/image_picker_util.dart';
 import 'package:zed_nano/viewmodels/WorkflowViewModel.dart';
-import 'package:path/path.dart' as p;
-import 'package:http_parser/http_parser.dart';
 
 class NewCategoryPage extends StatefulWidget {
+  const NewCategoryPage({required this.doNotUpdate, super.key});
   final bool doNotUpdate;
-  NewCategoryPage({super.key, required this.doNotUpdate});
 
   @override
   State<NewCategoryPage> createState() => _NewCategoryPageState();
@@ -86,7 +85,7 @@ class _NewCategoryPageState extends State<NewCategoryPage> {
         .then((value) {
       if (value.isSuccess) {
         showCustomToast(value.message ?? 'Category created successfully',
-            isError: false);
+            isError: false,);
         if (_logoImage != null) {
           _uploadBusinessLogo(value.data?.data?.id);
         } else {
@@ -105,18 +104,18 @@ class _NewCategoryPageState extends State<NewCategoryPage> {
         filename: p.basename(_logoImage!.path),
         contentType: MediaType('image', 'jpeg'), // or png
       ),
-      'businessNumber': businessDetails?.businessNumber
+      'businessNumber': businessDetails?.businessNumber,
     });
 
     final urlPart = '?categoryId=$categoryId';
 
     await context
         .read<BusinessProviders>()
-        .uploadProductCategoryImage(context: context, formData: formData!, urlPart:urlPart)
+        .uploadProductCategoryImage(context: context, formData: formData, urlPart:urlPart)
         .then((value) async {
       if (value.isSuccess) {
         showCustomToast(value.message ?? 'Business logo uploaded successfully',
-            isError: false);
+            isError: false,);
         refresh();
       } else {
         showCustomToast(value.message ?? 'Something went wrong');
@@ -143,7 +142,7 @@ class _NewCategoryPageState extends State<NewCategoryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AuthAppBar(title: 'Create a Category'),
+      appBar: const AuthAppBar(title: 'Create a Category'),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -187,7 +186,6 @@ class _NewCategoryPageState extends State<NewCategoryPage> {
               ),
               const SizedBox(height: 8),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   GestureDetector(
                     onTap: () => setState(() => isProduct = true),
@@ -287,7 +285,6 @@ class _NewCategoryPageState extends State<NewCategoryPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
-                    flex: 1,
                     child: InkWell(
                       onTap: _pickImage,
                       borderRadius: BorderRadius.circular(12),
@@ -311,7 +308,7 @@ class _NewCategoryPageState extends State<NewCategoryPage> {
                                       ),
                                     )
                                   : SvgPicture.asset(imagePlaceholder,
-                                      fit: BoxFit.cover),
+                                      fit: BoxFit.cover,),
                             ),
                             Positioned(
                               right: 4,
@@ -372,7 +369,7 @@ class _NewCategoryPageState extends State<NewCategoryPage> {
                         ),
                       ],
                     ),
-                  )
+                  ),
                 ],
               ),
               const SizedBox(height: 32),
@@ -399,7 +396,7 @@ class _NewCategoryPageState extends State<NewCategoryPage> {
               }
               await _createCategory();
             },
-            context: context),
+            context: context,),
       ),
     );
   }

@@ -1,7 +1,4 @@
 class PaymentMethodsResponse {
-  final String? status;
-  final String? message;
-  final List<PaymentMethod>? data;
 
   PaymentMethodsResponse({
     this.status,
@@ -18,12 +15,11 @@ class PaymentMethodsResponse {
           .toList(),
     );
   }
+  final String? status;
+  final String? message;
+  final List<PaymentMethod>? data;
 }
 class PaymentMethod {
-  final String? name;
-  final bool? status;
-  final bool? bankdepositStatus;
-  final List<PaymentOption>? paymentOptions;
 
   PaymentMethod({
     this.name,
@@ -42,12 +38,12 @@ class PaymentMethod {
           .toList(),
     );
   }
+  final String? name;
+  final bool? status;
+  final bool? bankdepositStatus;
+  final List<PaymentOption>? paymentOptions;
 }
 class PaymentOption {
-  final String? name;
-  final List<BankPayment>? kcb;
-  final List<BankPayment>? equity;
-  final List<BankPayment>? coOperative;
 
   PaymentOption({
     this.name,
@@ -70,12 +66,13 @@ class PaymentOption {
           .toList(),
     );
   }
+  final String? name;
+  final List<BankPayment>? kcb;
+  final List<BankPayment>? equity;
+  final List<BankPayment>? coOperative;
 }
 
 class BankPayment {
-  final String? name;
-  final bool? status;
-  final int? count;
 
   BankPayment({
     this.name,
@@ -90,4 +87,7 @@ class BankPayment {
       count: json['count'] as int?,
     );
   }
+  final String? name;
+  final bool? status;
+  final int? count;
 }

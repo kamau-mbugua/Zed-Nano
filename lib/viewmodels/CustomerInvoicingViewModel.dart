@@ -43,10 +43,6 @@ class CustomerInvoicingViewModel extends ChangeNotifier {
 
 
 class InvoiceDetailItem {
-  final String type;
-  final String frequency;
-  final String purchaseOrderNumber;
-  final String customerId;
 
   InvoiceDetailItem({
     required this.type,
@@ -63,6 +59,10 @@ class InvoiceDetailItem {
       customerId: json['customerId'] as String? ?? '',
     );
   }
+  final String type;
+  final String frequency;
+  final String purchaseOrderNumber;
+  final String customerId;
 
 
   Map<String, dynamic> toJson() {
@@ -70,7 +70,7 @@ class InvoiceDetailItem {
       'type': type,
       'frequency': frequency,
       'purchaseOrderNumber': purchaseOrderNumber,
-      'customerId': customerId
+      'customerId': customerId,
     };
   }
 }

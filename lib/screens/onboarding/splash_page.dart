@@ -16,7 +16,7 @@ import 'package:zed_nano/utils/Images.dart';
 import 'package:zed_nano/viewmodels/WorkflowViewModel.dart';
 
 class SplashPage extends StatefulWidget {
-  const SplashPage({Key? key}) : super(key: key);
+  const SplashPage({super.key});
 
   @override
   _SplashPageState createState() => _SplashPageState();
@@ -44,10 +44,10 @@ class _SplashPageState extends State<SplashPage> {
 
   void _initiState() {
     Connectivity().onConnectivityChanged.listen((List<ConnectivityResult> result) {
-      final bool isNotConnected = result.isEmpty ||
+      final isNotConnected = result.isEmpty ||
           (result.every((res) => res == ConnectivityResult.none));
       if (isNotConnected) {
-        showCustomToast('No internet connection', isError: true);
+        showCustomToast('No internet connection');
       }
     });
 

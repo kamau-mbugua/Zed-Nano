@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/screens/reports/all_transactions/all_t_ranasctions_page.dart';
 import 'package:zed_nano/screens/reports/opening_closing_report/opening_closing_report_page.dart';
+import 'package:zed_nano/screens/reports/sales_by_day/sales_report_by_day_page.dart';
 import 'package:zed_nano/screens/reports/sales_report/sales_report_page.dart';
 import 'package:zed_nano/screens/reports/void_transaactions/voided_transactions_page.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
+import 'package:zed_nano/screens/widget/common/common_widgets.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Images.dart';
-import 'package:zed_nano/screens/widget/common/common_widgets.dart';
-import 'package:zed_nano/screens/reports/sales_by_day/sales_report_by_day_page.dart';
 
 class ReportPage extends StatefulWidget {
+  ReportPage({super.key, this.isShowAppBar = false});
   bool isShowAppBar;
-  ReportPage({Key? key, this.isShowAppBar = false}) : super(key: key);
 
   @override
   State<ReportPage> createState() => _ReportPageState();
@@ -57,7 +57,7 @@ class _ReportPageState extends State<ReportPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: colorBackground,
-      appBar: !(widget.isShowAppBar) ? null : AuthAppBar(title: 'Reports'),
+      appBar: !widget.isShowAppBar ? null : const AuthAppBar(title: 'Reports'),
       body: SafeArea(
         child: RefreshIndicator(
           onRefresh: () async {
@@ -95,7 +95,7 @@ class _ReportPageState extends State<ReportPage> {
           style: TextStyle(
             color: textPrimary,
             fontWeight: FontWeight.w600,
-            fontFamily: "Poppins",
+            fontFamily: 'Poppins',
             fontSize: 28,
           ),
         ),
@@ -105,7 +105,7 @@ class _ReportPageState extends State<ReportPage> {
           style: TextStyle(
             color: textSecondary,
             fontWeight: FontWeight.w400,
-            fontFamily: "Poppins",
+            fontFamily: 'Poppins',
             fontSize: 12,
           ),
         ),
@@ -176,7 +176,7 @@ class _ReportPageState extends State<ReportPage> {
                       style: const TextStyle(
                         color: textPrimary,
                         fontWeight: FontWeight.w600,
-                        fontFamily: "Poppins",
+                        fontFamily: 'Poppins',
                         fontSize: 14,
                       ),
                     ),
@@ -186,7 +186,7 @@ class _ReportPageState extends State<ReportPage> {
                       style: const TextStyle(
                         color: textSecondary,
                         fontWeight: FontWeight.w400,
-                        fontFamily: "Poppins",
+                        fontFamily: 'Poppins',
                         fontSize: 12,
                       ),
                       maxLines: 2,
@@ -212,29 +212,20 @@ class _ReportPageState extends State<ReportPage> {
     switch (reportType.title) {
       case 'Sales Report':
         const SalesReportPage().launch(context);
-        break;
       case 'Sales Report By Day':
         const SalesReportByDayPage().launch(context);
-        break;
       case 'Opening and Closing Stock Report':
         const OpeningClosingReportPage().launch(context);
-        break;
       case 'All Transactions Report':
-        AllTRanasctionsPage().launch(context);
-        break;
+        const AllTRanasctionsPage().launch(context);
       case 'Void Transactions Report':
-        VoidedTransactionsPage().launch(context);
-        break;
+        const VoidedTransactionsPage().launch(context);
     }
   }
 }
 
 // Data model for report types
 class ReportType {
-  final String icon;
-  final Color iconColor;
-  final String title;
-  final String description;
 
   const ReportType({
     required this.icon,
@@ -242,4 +233,8 @@ class ReportType {
     required this.title,
     required this.description,
   });
+  final String icon;
+  final Color iconColor;
+  final String title;
+  final String description;
 }

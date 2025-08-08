@@ -4,6 +4,15 @@ import 'package:zed_nano/screens/widget/common/base_bottom_sheet.dart';
 /// A confirmation bottom sheet that can be used for confirming actions
 /// with options to confirm or cancel.
 class ConfirmationBottomSheet extends StatelessWidget {
+
+  const ConfirmationBottomSheet({
+    required this.title, required this.message, required this.onConfirm, super.key,
+    this.confirmText = 'Confirm',
+    this.cancelText = 'Cancel',
+    this.confirmColor = const Color(0xffe86339),
+    this.cancelColor = const Color(0xff71727a),
+    this.icon,
+  });
   /// The title of the confirmation dialog
   final String title;
   
@@ -28,18 +37,6 @@ class ConfirmationBottomSheet extends StatelessWidget {
   /// Optional icon to display above the message
   final Widget? icon;
 
-  const ConfirmationBottomSheet({
-    Key? key,
-    required this.title,
-    required this.message,
-    this.confirmText = 'Confirm',
-    this.cancelText = 'Cancel',
-    this.confirmColor = const Color(0xffe86339),
-    this.cancelColor = const Color(0xff71727a),
-    required this.onConfirm,
-    this.icon,
-  }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return BaseBottomSheet(
@@ -51,7 +48,7 @@ class ConfirmationBottomSheet extends StatelessWidget {
         children: [
           if (icon != null) ...[
             const SizedBox(height: 20),
-            Center(child: icon!),
+            Center(child: icon),
             const SizedBox(height: 20),
           ],
           Text(

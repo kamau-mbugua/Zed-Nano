@@ -1,7 +1,4 @@
 class SalesReportSummaryResponse {
-  final String? status;
-  final String? message;
-  final SalesReportSummaryData? data;
 
   SalesReportSummaryResponse({
     this.status,
@@ -16,6 +13,9 @@ class SalesReportSummaryResponse {
       data: json['data'] != null ? SalesReportSummaryData.fromJson(json['data'] as Map<String, dynamic>) : null,
     );
   }
+  final String? status;
+  final String? message;
+  final SalesReportSummaryData? data;
 
   Map<String, dynamic> toJson() {
     return {
@@ -27,12 +27,6 @@ class SalesReportSummaryResponse {
 }
 
 class SalesReportSummaryData {
-  final double? soldQuantity;
-  final double? totalSales;
-  final double? totalDiscount;
-  final double? totalCostOfGoodsSold;
-  final double? grossMargin;
-  final String? currency;
 
   SalesReportSummaryData({
     this.soldQuantity,
@@ -53,6 +47,12 @@ class SalesReportSummaryData {
       currency: json['currency'] as String?,
     );
   }
+  final double? soldQuantity;
+  final double? totalSales;
+  final double? totalDiscount;
+  final double? totalCostOfGoodsSold;
+  final double? grossMargin;
+  final String? currency;
 
   Map<String, dynamic> toJson() {
     return {
@@ -67,9 +67,6 @@ class SalesReportSummaryData {
 }
 
 class SalesReportTotalSalesResponse {
-  final String? status;
-  final String? message;
-  final List<SalesReportTotalSalesData>? data;
 
   SalesReportTotalSalesResponse({
     this.status,
@@ -86,6 +83,9 @@ class SalesReportTotalSalesResponse {
           : null,
     );
   }
+  final String? status;
+  final String? message;
+  final List<SalesReportTotalSalesData>? data;
 
   Map<String, dynamic> toJson() {
     return {
@@ -97,12 +97,6 @@ class SalesReportTotalSalesResponse {
 }
 
 class SalesReportTotalSalesData {
-  final double? totalSales;
-  final double? quantitySold;
-  final double? discount;
-  final String? productName;
-  final double? sellingPrice;
-  final String? imageUrl;
 
   SalesReportTotalSalesData({
     this.totalSales,
@@ -123,6 +117,12 @@ class SalesReportTotalSalesData {
       imageUrl: json['imageUrl'] as String?,
     );
   }
+  final double? totalSales;
+  final double? quantitySold;
+  final double? discount;
+  final String? productName;
+  final double? sellingPrice;
+  final String? imageUrl;
 
   Map<String, dynamic> toJson() {
     return {

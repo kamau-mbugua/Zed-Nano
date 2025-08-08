@@ -1,5 +1,4 @@
 class BranchTerminalsResponse {
-  final List<BranchTerminalsData>? data;
 
   BranchTerminalsResponse({
     this.data,
@@ -12,6 +11,7 @@ class BranchTerminalsResponse {
           .toList(),
     );
   }
+  final List<BranchTerminalsData>? data;
 
   Map<String, dynamic> toJson() {
     return {
@@ -21,39 +21,6 @@ class BranchTerminalsResponse {
 }
 
 class BranchTerminalsData {
-  final String? alias;
-  final String? approvedBy;
-  final String? branchCode;
-  final String? branchId;
-  final String? branchName;
-  final String? businessID;
-  final String? businessName;
-  final String? createdAt;
-  final String? createdBy;
-  final String? dateCreated;
-  final String? dateDeactivated;
-  final String? dateModified;
-  final String? deAssignedBy;
-  final String? deactivationCode;
-  final String? deactivationDescription;
-  final String? deviceModel;
-  final String? equitel;
-  final String? id;
-  final String? modifiedBy;
-  final bool? payIt;
-  final String? paybill;
-  final String? pushyToken;
-  final String? requestedBy;
-  final String? storeId;
-  final String? terminalSerialNumber;
-  final String? terminalStatus;
-  final String? till;
-  final String? tillPaybill;
-  final String? transferredBy;
-  final String? updatedAt;
-  final String? userId;
-  final int? v;
-  final String? vooma;
 
   BranchTerminalsData({
     this.alias,
@@ -128,6 +95,39 @@ class BranchTerminalsData {
       vooma: json['Vooma'] as String?,
     );
   }
+  final String? alias;
+  final String? approvedBy;
+  final String? branchCode;
+  final String? branchId;
+  final String? branchName;
+  final String? businessID;
+  final String? businessName;
+  final String? createdAt;
+  final String? createdBy;
+  final String? dateCreated;
+  final String? dateDeactivated;
+  final String? dateModified;
+  final String? deAssignedBy;
+  final String? deactivationCode;
+  final String? deactivationDescription;
+  final String? deviceModel;
+  final String? equitel;
+  final String? id;
+  final String? modifiedBy;
+  final bool? payIt;
+  final String? paybill;
+  final String? pushyToken;
+  final String? requestedBy;
+  final String? storeId;
+  final String? terminalSerialNumber;
+  final String? terminalStatus;
+  final String? till;
+  final String? tillPaybill;
+  final String? transferredBy;
+  final String? updatedAt;
+  final String? userId;
+  final int? v;
+  final String? vooma;
 
   Map<String, dynamic> toJson() {
     return {

@@ -2,6 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:zed_nano/utils/Colors.dart';
 
 class SelectionChipsWidget extends StatelessWidget {
+
+  const SelectionChipsWidget({
+    required this.title, required this.options, required this.selectedOption, required this.onSelectionChanged, super.key,
+    this.crossAxisAlignment = CrossAxisAlignment.start,
+    this.spacing = 8.0,
+    this.chipSpacing = 8.0,
+    this.titleStyle,
+    this.selectedTextStyle,
+    this.unselectedTextStyle,
+    this.selectedBackgroundColor,
+    this.unselectedBackgroundColor,
+    this.selectedBorderColor,
+    this.unselectedBorderColor,
+    this.chipPadding,
+    this.borderRadius,
+  });
   final String title;
   final List<String> options;
   final String selectedOption;
@@ -19,26 +35,6 @@ class SelectionChipsWidget extends StatelessWidget {
   final EdgeInsets? chipPadding;
   final double? borderRadius;
 
-  const SelectionChipsWidget({
-    Key? key,
-    required this.title,
-    required this.options,
-    required this.selectedOption,
-    required this.onSelectionChanged,
-    this.crossAxisAlignment = CrossAxisAlignment.start,
-    this.spacing = 8.0,
-    this.chipSpacing = 8.0,
-    this.titleStyle,
-    this.selectedTextStyle,
-    this.unselectedTextStyle,
-    this.selectedBackgroundColor,
-    this.unselectedBackgroundColor,
-    this.selectedBorderColor,
-    this.unselectedBorderColor,
-    this.chipPadding,
-    this.borderRadius,
-  }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -49,8 +45,8 @@ class SelectionChipsWidget extends StatelessWidget {
           style: titleStyle ?? const TextStyle(
             color: Color(0xff2f3036),
             fontWeight: FontWeight.w500,
-            fontFamily: "Poppins",
-            fontSize: 14.0,
+            fontFamily: 'Poppins',
+            fontSize: 14,
           ),
         ),
         SizedBox(height: spacing),
@@ -71,7 +67,6 @@ class SelectionChipsWidget extends StatelessWidget {
                     color: isSelected 
                         ? (selectedBorderColor ?? const Color(0xff032541))
                         : (unselectedBorderColor ?? const Color(0xffc5c6cc)),
-                    width: 1,
                   ),
                   borderRadius: BorderRadius.circular(borderRadius ?? 16),
                 ),
@@ -81,14 +76,14 @@ class SelectionChipsWidget extends StatelessWidget {
                       ? (selectedTextStyle ?? const TextStyle(
                           color: Color(0xff032541),
                           fontWeight: FontWeight.w600,
-                          fontFamily: "Poppins",
-                          fontSize: 12.0,
+                          fontFamily: 'Poppins',
+                          fontSize: 12,
                         ))
                       : (unselectedTextStyle ?? const TextStyle(
                           color: Color(0xff8f9098),
                           fontWeight: FontWeight.w400,
-                          fontFamily: "Poppins",
-                          fontSize: 12.0,
+                          fontFamily: 'Poppins',
+                          fontSize: 12,
                         )),
                   textAlign: TextAlign.center,
                 ),
@@ -170,14 +165,14 @@ extension SelectionChipsWidgetExtensions on SelectionChipsWidget {
       selectedTextStyle: const TextStyle(
         color: Color(0xff032541),
         fontWeight: FontWeight.w600,
-        fontFamily: "Poppins",
-        fontSize: 12.0,
+        fontFamily: 'Poppins',
+        fontSize: 12,
       ),
       unselectedTextStyle: TextStyle(
         color: Colors.grey.shade600,
         fontWeight: FontWeight.w400,
-        fontFamily: "Poppins",
-        fontSize: 12.0,
+        fontFamily: 'Poppins',
+        fontSize: 12,
       ),
     );
   }

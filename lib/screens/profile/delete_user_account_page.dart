@@ -11,7 +11,7 @@ import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
 
 class DeleteUserAccountPage extends StatefulWidget {
-  const DeleteUserAccountPage({Key? key}) : super(key: key);
+  const DeleteUserAccountPage({super.key});
 
   @override
   _DeleteUserAccountPageState createState() => _DeleteUserAccountPageState();
@@ -36,7 +36,7 @@ class _DeleteUserAccountPageState extends State<DeleteUserAccountPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AuthAppBar(title: 'Delete Account'),
+      appBar: const AuthAppBar(title: 'Delete Account'),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -66,7 +66,7 @@ class _DeleteUserAccountPageState extends State<DeleteUserAccountPage> {
           ),
         ),
         const SizedBox(height: 16),
-        ..._listReasons.map((option) => _buildDurationOption(option)),
+        ..._listReasons.map(_buildDurationOption),
         if (_listReasons == 'Other') ...[
           const SizedBox(height: 24),
         ],
@@ -94,7 +94,6 @@ class _DeleteUserAccountPageState extends State<DeleteUserAccountPage> {
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
               color:  Colors.grey.shade300,
-              width:  1,
             ),
           ),
           child: Row(
@@ -157,7 +156,7 @@ class _DeleteUserAccountPageState extends State<DeleteUserAccountPage> {
                 child: appButton(
                   text: 'Delete Account',
                   onTap: () async {
-                    Map<String, dynamic> requestData = {
+                    final requestData = <String, dynamic>{
                       'reasons': _selectedReason,
                     };
                     final response = await getBusinessProvider(context).deleteUserAccount(

@@ -43,7 +43,7 @@ class AppLoading {
       builder: (context) => Material(
         color: _backgroundColor,
         child: Center(
-          child: Container(
+          child: SizedBox(
             width: 120,
             height: 120,
             // decoration: BoxDecoration(
@@ -64,7 +64,6 @@ class AppLoading {
                 color: _loaderColor ?? const Color(0xff032541),
                 backgroundColor: Colors.grey.shade200,
                 strokeWidth: _strokeWidth ?? 5,
-                showShadow: false,
               ),
             ),
           ),

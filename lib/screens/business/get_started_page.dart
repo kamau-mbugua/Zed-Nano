@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:zed_nano/app/app_initializer.dart';
-import 'package:zed_nano/providers/helpers/providers_helpers.dart';
+import 'package:zed_nano/models/createbillingInvoice/CreateBillingInvoiceResponse.dart';
 import 'package:zed_nano/routes/routes.dart';
 import 'package:zed_nano/screens/business/create_business/business_created_preview_page.dart';
 import 'package:zed_nano/screens/business/create_business/create_business_page.dart';
@@ -10,18 +10,17 @@ import 'package:zed_nano/screens/business/subscription/subscription_payment_page
 import 'package:zed_nano/screens/business/wifget/stepper_indicator.dart';
 import 'package:zed_nano/services/business_setup_extensions.dart';
 import 'package:zed_nano/utils/Colors.dart';
-import 'package:zed_nano/models/createbillingInvoice/CreateBillingInvoiceResponse.dart';
 import 'package:zed_nano/viewmodels/WorkflowViewModel.dart';
 
 class GetStartedPage extends StatefulWidget {
-  final int initialStep;
-  final bool isExistingPlan;
 
   const GetStartedPage({
-    Key? key,
+    super.key,
     this.initialStep = 0,
     this.isExistingPlan = false,
-  }) : super(key: key);
+  });
+  final int initialStep;
+  final bool isExistingPlan;
 
   @override
   State<GetStartedPage> createState() => _GetStartedPageState();
@@ -51,7 +50,7 @@ class _GetStartedPageState extends State<GetStartedPage> {
     });
   }
 
-  void goSkip() async {
+  Future<void> goSkip() async {
     try {
      _initializeBusinessSetupAfterCreation(context);
     } catch (e) {
@@ -96,13 +95,13 @@ class _GetStartedPageState extends State<GetStartedPage> {
           children: [
             const SizedBox(height: 20),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: StepperIndicator(currentStep: stepNumber, totalSteps: 4),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: StepperIndicator(currentStep: stepNumber),
             ),
             const SizedBox(height: 16),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: pages[stepNumber],
               ),
             ),

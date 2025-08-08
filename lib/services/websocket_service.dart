@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:web_socket_channel/web_socket_channel.dart';
+
 import 'package:web_socket_channel/status.dart' as status;
+import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/contants/AppConstants.dart';
-import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 
 enum StkCallbackStatus {
   initial,
@@ -16,11 +16,6 @@ enum StkCallbackStatus {
 }
 
 class WsResponse {
-  final String? status;
-  final String? statusMessage;
-  final String? invoiceNumber;
-  final String? amount;
-  final String? transactionId;
 
   WsResponse({
     this.status,
@@ -39,9 +34,19 @@ class WsResponse {
       transactionId: json['transactionId']?.toString(),
     );
   }
+  final String? status;
+  final String? statusMessage;
+  final String? invoiceNumber;
+  final String? amount;
+  final String? transactionId;
 }
 
 class WebSocketService {
+
+  WebSocketService() {
+    _messageController = StreamController<WsResponse>.broadcast();
+    _connectionController = StreamController<bool>.broadcast();
+  }
   WebSocketChannel? _channel;
   StreamController<WsResponse>? _messageController;
   StreamController<bool>? _connectionController;
@@ -51,11 +56,6 @@ class WebSocketService {
   Stream<WsResponse> get messageStream => _messageController!.stream;
   Stream<bool> get connectionStream => _connectionController!.stream;
   bool get isConnected => _isConnected;
-
-  WebSocketService() {
-    _messageController = StreamController<WsResponse>.broadcast();
-    _connectionController = StreamController<bool>.broadcast();
-  }
 
   Future<void> connect(String invoiceNumber, {String? userToken}) async {
     try {
@@ -70,7 +70,6 @@ class WebSocketService {
       final uri = Uri.parse(websocketUrl);
       _channel = WebSocketChannel.connect(
         uri,
-        protocols: null,
       );
 
       // Send authentication token as first message
@@ -81,9 +80,7 @@ class WebSocketService {
 
       // Listen to messages
       _channel!.stream.listen(
-            (message) {
-          _handleMessage(message);
-        },
+            _handleMessage,
         onError: (error) {
           logger.e('WebSocket error: $error');
           _handleDisconnection();

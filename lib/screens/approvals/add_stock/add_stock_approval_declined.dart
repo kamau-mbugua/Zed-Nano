@@ -16,18 +16,18 @@ import 'package:zed_nano/utils/GifsImages.dart';
 import 'package:zed_nano/utils/pagination_controller.dart';
 
 class AddStockApprovalDeclined extends StatefulWidget {
-  const AddStockApprovalDeclined({Key? key}) : super(key: key);
+  const AddStockApprovalDeclined({super.key});
 
   @override
   _AddStockApprovalDeclinedState createState() => _AddStockApprovalDeclinedState();
 }
 
 class _AddStockApprovalDeclinedState extends State<AddStockApprovalDeclined> {
-  TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
   Timer? _debounceTimer;
   String _searchTerm = '';
   late PaginationController<BatchData> _paginationController;
-  Set<String> _selectedItems = {}; // Add this to track selected items
+  final Set<String> _selectedItems = {}; // Add this to track selected items
 
   @override
   void initState() {
@@ -48,7 +48,7 @@ class _AddStockApprovalDeclinedState extends State<AddStockApprovalDeclined> {
 
 
   Future<List<BatchData>> getPendingBatchesByBranch(
-      {required int page, required int limit}) async {
+      {required int page, required int limit,}) async {
     try {
       final response = await getBusinessProvider(context).getAddStockCancelledBatchesByBranch(
         page: page,
@@ -66,7 +66,7 @@ class _AddStockApprovalDeclinedState extends State<AddStockApprovalDeclined> {
 
 
   Future<void> _approveSelectedStockTake(
-      {required Map<String, dynamic> requestData}) async {
+      {required Map<String, dynamic> requestData,}) async {
     try {
       await getBusinessProvider(context).approveSelectedStockTake(
         requestData: requestData,
@@ -108,7 +108,7 @@ class _AddStockApprovalDeclinedState extends State<AddStockApprovalDeclined> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AuthAppBar(title: 'Add Stock Declined'),
+      appBar: const AuthAppBar(title: 'Add Stock Declined'),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -155,11 +155,11 @@ class _AddStockApprovalDeclinedState extends State<AddStockApprovalDeclined> {
               child: Visibility(
                 visible: _selectedItems.isNotEmpty,
                 child: appButton(
-                  text: "Approve Selected",
+                  text: 'Approve Selected',
                   onTap: () {
-                    Map<String, dynamic> requestData = {
-                      "listBatchIds": _selectedItems,
-                      "status": "APPROVED"
+                    final requestData = <String, dynamic>{
+                      'listBatchIds': _selectedItems,
+                      'status': 'APPROVED',
                     };
                     _approveSelectedStockTake(requestData:requestData);
                   },
@@ -186,11 +186,11 @@ class _AddStockApprovalDeclinedState extends State<AddStockApprovalDeclined> {
           return stockTakeItemBuilder(item,
               onTap: () {
                 ViewStockTakeBatchDetail(
-                  batchId: item?.batchId ?? '',
+                  batchId: item.batchId ?? '',
                 ).launch(context);
               },
               context: context,
-              isSelected: _selectedItems.contains(item.id));
+              isSelected: _selectedItems.contains(item.id),);
         },
         firstPageProgressIndicatorBuilder: (_) => const SizedBox(),
         newPageProgressIndicatorBuilder: (_) => const SizedBox(),

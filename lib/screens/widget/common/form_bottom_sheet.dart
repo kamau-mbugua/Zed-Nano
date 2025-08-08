@@ -4,6 +4,13 @@ import 'package:zed_nano/screens/widget/common/base_bottom_sheet.dart';
 /// A form bottom sheet that can be used for collecting user input.
 /// This bottom sheet provides a consistent layout for forms with a submit button.
 class FormBottomSheet extends StatelessWidget {
+
+  const FormBottomSheet({
+    required this.title, required this.formFields, required this.submitButtonText, required this.onSubmit, super.key,
+    this.submitButtonColor = const Color(0xffe86339),
+    this.isSubmitting = false,
+    this.subtitle,
+  });
   /// The title of the form
   final String title;
   
@@ -25,23 +32,10 @@ class FormBottomSheet extends StatelessWidget {
   /// Optional subtitle or description text
   final String? subtitle;
 
-  const FormBottomSheet({
-    Key? key,
-    required this.title,
-    required this.formFields,
-    required this.submitButtonText,
-    this.submitButtonColor = const Color(0xffe86339),
-    required this.onSubmit,
-    this.isSubmitting = false,
-    this.subtitle,
-  }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return BaseBottomSheet(
       title: title,
-      initialChildSize: 0.9,
-      minChildSize: 0.5,
       headerContent: subtitle != null
           ? Text(
               subtitle!,
@@ -65,7 +59,7 @@ class FormBottomSheet extends StatelessWidget {
                   ...formFields.map((field) => Padding(
                         padding: const EdgeInsets.only(bottom: 16),
                         child: field,
-                      )),
+                      ),),
                 ],
               ),
             ),

@@ -2,19 +2,15 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:zed_nano/models/customers_list/CustomerListResponse.dart';
-import 'package:zed_nano/models/listCategories/ListCategoriesResponse.dart';
 import 'package:zed_nano/models/listUsers/ListUsersResponse.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
-import 'package:zed_nano/screens/customers/itemBuilder/list_customers_item_builder.dart';
 import 'package:zed_nano/screens/users/itemBuilders/users_itme_builders.dart';
-import 'package:zed_nano/screens/widget/common/categories_widget.dart';
 import 'package:zed_nano/screens/widget/common/searchview.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
 import 'package:zed_nano/utils/pagination_controller.dart';
 
 class ActiveUserListPage extends StatefulWidget {
-  const ActiveUserListPage({Key? key}) : super(key: key);
+  const ActiveUserListPage({super.key});
 
   @override
   State<ActiveUserListPage> createState() => _ActiveUserListPageState();
@@ -24,7 +20,7 @@ class _ActiveUserListPageState extends State<ActiveUserListPage> {
 
   late PaginationController<ListUserData> _paginationController;
   final TextEditingController _searchController = TextEditingController();
-  String _searchTerm = "";
+  String _searchTerm = '';
   bool _isInitialized = false;
   Timer? _debounceTimer;
 
@@ -106,15 +102,15 @@ class _ActiveUserListPageState extends State<ActiveUserListPage> {
                         child: CompactGifDisplayWidget(
                           gifPath: emptyListGif,
                           title: "It's empty, over here.",
-                          subtitle: "No Users in your business, yet! Add to view them here.",
+                          subtitle: 'No Users in your business, yet! Add to view them here.',
                         ),
                       ),
                     ),
                   ),
                 ),
-              ]
+              ],
           ),
-        )
+        ),
     );
   }
 }

@@ -54,6 +54,19 @@ Future<T?> showCustomDialog<T>({
 }
 
 class CustomDialog extends StatelessWidget {
+
+  const CustomDialog({
+    required this.title, required this.subtitle, super.key,
+    this.negativeButtonText,
+    this.positiveButtonText,
+    this.onNegativePressed,
+    this.onPositivePressed,
+    this.titleColor,
+    this.subtitleColor,
+    this.positiveButtonColor,
+    this.negativeButtonColor,
+    this.icon,
+  });
   final String title;
   final String subtitle;
   final String? negativeButtonText;
@@ -66,25 +79,10 @@ class CustomDialog extends StatelessWidget {
   final Color? negativeButtonColor;
   final Widget? icon;
 
-  const CustomDialog({
-    Key? key,
-    required this.title,
-    required this.subtitle,
-    this.negativeButtonText,
-    this.positiveButtonText,
-    this.onNegativePressed,
-    this.onPositivePressed,
-    this.titleColor,
-    this.subtitleColor,
-    this.positiveButtonColor,
-    this.negativeButtonColor,
-    this.icon,
-  }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       elevation: 0,
       backgroundColor: colorBackground,
       child: _buildDialogContent(context),
@@ -96,12 +94,10 @@ class CustomDialog extends StatelessWidget {
       padding: const EdgeInsets.all(24), // Increased padding to match Zeplin (16px outer + 8px inner)
       decoration: BoxDecoration(
         color: Colors.white,
-        shape: BoxShape.rectangle,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center, // Center content
         children: [
           // Optional Icon
           if (icon != null) ...[
@@ -116,13 +112,13 @@ class CustomDialog extends StatelessWidget {
               color: darkGreyColor,
               fontWeight: FontWeight.w600,
               fontStyle: FontStyle.normal,
-              fontSize: 16.0
-            )
+              fontSize: 16,
+            ),
           ),
 
           const SizedBox(height: 16), // Match the spacing in Zeplin
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0), // Add horizontal padding for text
+            padding: const EdgeInsets.symmetric(horizontal: 8), // Add horizontal padding for text
             child: Text(
               subtitle,
               textAlign: TextAlign.center,
@@ -132,7 +128,7 @@ class CustomDialog extends StatelessWidget {
                 fontSize: 12,
                 fontWeight: FontWeight.w400,
                 fontStyle: FontStyle.normal,
-              )
+              ),
             ),
           ),
           const SizedBox(height: 32), // Match the spacing to buttons in Zeplin
@@ -145,7 +141,7 @@ class CustomDialog extends StatelessWidget {
                   child: outlineButton(
                     text: negativeButtonText ?? 'Cancel',
                     onTap: onNegativePressed ?? () => Navigator.of(context).pop(),
-                    context: context
+                    context: context,
                   ),
                 ),
 
@@ -160,7 +156,7 @@ class CustomDialog extends StatelessWidget {
                     text: positiveButtonText ?? 'Confirm',
                     onTap: onPositivePressed ?? () => Navigator.of(context).pop(true),
                     context: context,
-                      buttonColor: positiveButtonColor
+                      buttonColor: positiveButtonColor,
                   ),
                 ),
             ],

@@ -17,11 +17,11 @@ Widget buildProductItem({
   required VoidCallback onIncreaseLongPress,
   required VoidCallback onAddDiscount,
 }) {
-  final bool isSelected = quantity > 0;
-  final int totalPrice = product.productPrice! * quantity;
+  final isSelected = quantity > 0;
+  final totalPrice = product.productPrice! * quantity;
 
   return Container(
-    margin: const EdgeInsets.only(left: 0, right: 0, bottom: 8),
+    margin: const EdgeInsets.only(bottom: 8),
     padding: const EdgeInsets.all(10),
     decoration: BoxDecoration(
       color: Colors.white,
@@ -92,7 +92,7 @@ Widget buildProductItem({
             16.width,
             Visibility(
               visible: discount > 0,
-              child: Text("-${product.currency} ${discount.round()} Off",
+              child: Text('-${product.currency} ${discount.round()} Off',
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     color: discount > 0
@@ -102,21 +102,21 @@ Widget buildProductItem({
                     fontWeight:
                     isSelected ? FontWeight.w600 : FontWeight.w400,
                     fontStyle: FontStyle.normal,
-                  )),
+                  ),),
             ),
 
             // Quantity controls
           ],
         ),
         8.height,
-        Text("Qty: ${product.quantityInStock ?? 0} ",
-              style: TextStyle(
+        Text('Qty: ${product.quantityInStock ?? 0} ',
+              style: const TextStyle(
                 fontFamily: 'Poppins',
                 color: textPrimary,
                 fontSize: 10,
                 fontWeight: FontWeight.w600,
                 fontStyle: FontStyle.normal,
-              )
+              ),
           ),
         10.height,
         Row(
@@ -152,7 +152,6 @@ Widget buildProductItem({
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                       color: lightGreyColor,
-                      shape: BoxShape.rectangle,
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: TextFormField(
@@ -182,13 +181,13 @@ Widget buildProductItem({
                               product.imagePath ?? '',
                               product.currency ?? '',
                               product.productCategory ?? '',
-                              0.0,
+                              0,
                               quantity: newQuantity,
                             );
                           } else {
                             // Update existing item
                             cartViewModel.updateQuantity(
-                                product.id ?? '', newQuantity);
+                                product.id ?? '', newQuantity,);
                           }
                         } else if (value.isEmpty) {
                           // Don't remove item if field is just empty (user might be typing)
@@ -252,12 +251,12 @@ Widget buildProductItem({
                               fontSize: 10,
                               fontWeight: FontWeight.w600,
                               fontStyle: FontStyle.normal,
-                            )),
+                            ),),
                       ],
                     ),
                   ),
                   16.width,
-                  Text("${product.currency} ${totalPrice.round()}",
+                  Text('${product.currency} $totalPrice',
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         color: isSelected
@@ -267,10 +266,10 @@ Widget buildProductItem({
                         fontWeight:
                         isSelected ? FontWeight.w600 : FontWeight.w400,
                         fontStyle: FontStyle.normal,
-                      )),
+                      ),),
                 ],
               ),
-            )
+            ),
           ],
         ),
         // Column(

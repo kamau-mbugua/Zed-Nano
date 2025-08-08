@@ -3,7 +3,6 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/models/get_approved_add_stock_batches_by_branch/GetBatchesListResponse.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
 import 'package:zed_nano/utils/Colors.dart';
-import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/Images.dart';
 import 'package:zed_nano/utils/extensions.dart';
 
@@ -13,11 +12,11 @@ Widget stockTakeItemBuilder(BatchData batch,
     VoidCallback? onDecline,
     VoidCallback? onTap,
     bool isSelected = false,
-    BuildContext? context}) {
+    BuildContext? context,}) {
   return GestureDetector(
     onTap: onTap,
     child: Container(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: cardBackgroundColor,
         borderRadius: BorderRadius.circular(12),
@@ -48,29 +47,29 @@ Widget stockTakeItemBuilder(BatchData batch,
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
                                 fontStyle: FontStyle.normal,
-                              )),
-                        )
+                              ),),
+                        ),
                       ],
                     ),
                     8.height,
                     // Subtitle
                     Text(
                         batch.status == 'APPROVED' || batch.status == 'DECLINED'
-                            ? 'Approved on ${batch?.dateCreated?.toFormattedDate()}'
-                            : 'Requested on:  ${batch?.dateCreated?.toFormattedDate()}',
+                            ? 'Approved on ${batch.dateCreated?.toFormattedDate()}'
+                            : 'Requested on:  ${batch.dateCreated?.toFormattedDate()}',
                         style: const TextStyle(
                             color: textSecondary,
                             fontWeight: FontWeight.w400,
                             fontFamily: 'Poppins',
                             fontStyle: FontStyle.normal,
-                            fontSize: 10.0),
-                        textAlign: TextAlign.left)
+                            fontSize: 10,),
+                        textAlign: TextAlign.left,),
                   ],
                 ),
               ),
               if (batch.status == 'APPROVED' || batch.status == 'DECLINED')
                 Container(
-                  margin: const EdgeInsets.only(right: 0),
+                  margin: const EdgeInsets.only(),
                   padding:
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
@@ -88,7 +87,7 @@ Widget stockTakeItemBuilder(BatchData batch,
                         fontSize: 10,
                         fontWeight: FontWeight.w600,
                         fontStyle: FontStyle.normal,
-                      )),
+                      ),),
                 )
               else
                 Checkbox(
@@ -117,8 +116,8 @@ Widget stockTakeItemBuilder(BatchData batch,
                         fontWeight: FontWeight.w400,
                         fontStyle: FontStyle.normal,
                         letterSpacing: 0.15,
-                      )),
-                  Text('${batch.createdByName ?? 'N/A'}',
+                      ),),
+                  Text(batch.createdByName ?? 'N/A',
                       style: const TextStyle(
                         fontFamily: 'Poppins',
                         color: textPrimary,
@@ -126,7 +125,7 @@ Widget stockTakeItemBuilder(BatchData batch,
                         fontWeight: FontWeight.w400,
                         fontStyle: FontStyle.normal,
                         letterSpacing: 0.12,
-                      ))
+                      ),),
                 ],
               ),
               Column(
@@ -140,7 +139,7 @@ Widget stockTakeItemBuilder(BatchData batch,
                         fontWeight: FontWeight.w400,
                         fontStyle: FontStyle.normal,
                         letterSpacing: 0.15,
-                      )),
+                      ),),
                   8.height,
                   Text(batch.productCount.toString() ?? 'N/A',
                       style: const TextStyle(
@@ -150,7 +149,7 @@ Widget stockTakeItemBuilder(BatchData batch,
                         fontWeight: FontWeight.w400,
                         fontStyle: FontStyle.normal,
                         letterSpacing: 0.12,
-                      ))
+                      ),),
                 ],
               ),
             ],
@@ -176,9 +175,8 @@ Widget stockTakeItemBuilder(BatchData batch,
                         ),
                       ),
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
+                          horizontal: 16, vertical: 8,),
                       child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           rfCommonCachedNetworkImage(
@@ -195,10 +193,10 @@ Widget stockTakeItemBuilder(BatchData batch,
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
                                 fontStyle: FontStyle.normal,
-                              )),
+                              ),),
                         ],
-                      )),
-                )),
+                      ),),
+                ),),
                 const SizedBox(width: 12), // Add spacing between buttons
                 Expanded(
                     child: GestureDetector(
@@ -212,9 +210,8 @@ Widget stockTakeItemBuilder(BatchData batch,
                         ),
                       ),
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
+                          horizontal: 16, vertical: 8,),
                       child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           rfCommonCachedNetworkImage(
@@ -231,10 +228,10 @@ Widget stockTakeItemBuilder(BatchData batch,
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
                                 fontStyle: FontStyle.normal,
-                              )),
+                              ),),
                         ],
-                      )),
-                )),
+                      ),),
+                ),),
               ],
             ),
         ],

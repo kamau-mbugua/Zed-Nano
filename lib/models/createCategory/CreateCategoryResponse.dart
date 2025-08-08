@@ -1,9 +1,6 @@
 import 'package:zed_nano/models/listCategories/ListCategoriesResponse.dart';
 
 class CreateCategoryResponse {
-  final String? status;
-  final String? message;
-  final ProductCategoryData? data;
 
   CreateCategoryResponse({
     this.status,
@@ -20,6 +17,9 @@ class CreateCategoryResponse {
           : null,
     );
   }
+  final String? status;
+  final String? message;
+  final ProductCategoryData? data;
 
   Map<String, dynamic> toJson() {
     return {

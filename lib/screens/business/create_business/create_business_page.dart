@@ -1,9 +1,12 @@
 import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:path/path.dart' as p;
 import 'package:provider/provider.dart';
 import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/models/listBusinessCategory/ListBusinessCategoryResponse.dart';
@@ -22,14 +25,12 @@ import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/Images.dart';
 import 'package:zed_nano/utils/extensions.dart';
 import 'package:zed_nano/utils/image_picker_util.dart';
-import 'package:path/path.dart' as p;
-import 'package:http_parser/http_parser.dart';
 import 'package:zed_nano/viewmodels/WorkflowViewModel.dart';
 
 class CreateBusinessPage extends StatefulWidget {
-  final VoidCallback onNext;
 
-  const CreateBusinessPage({Key? key, required this.onNext}) : super(key: key);
+  const CreateBusinessPage({required this.onNext, super.key});
+  final VoidCallback onNext;
 
   @override
   State<CreateBusinessPage> createState() => _CreateBusinessPageState();
@@ -102,7 +103,7 @@ class _CreateBusinessPageState extends State<CreateBusinessPage> {
     await context
         .read<AuthenticatedAppProviders>()
         .createBusiness(
-        requestData: businessData, context: context)
+        requestData: businessData, context: context,)
         .then((value) async {
       if (value.isSuccess) {
         showCustomToast(
@@ -118,7 +119,7 @@ class _CreateBusinessPageState extends State<CreateBusinessPage> {
         }
       } else {
         showCustomToast(
-            value.message ?? 'Something went wrong');
+            value.message ?? 'Something went wrong',);
       }
     });
   }
@@ -158,18 +159,18 @@ class _CreateBusinessPageState extends State<CreateBusinessPage> {
         filename: p.basename(_logoImage!.path),
         contentType: MediaType('image', 'jpeg'), // or png
       ),
-      'businessNumber': businessNumber
+      'businessNumber': businessNumber,
     });
 
-    final urlPart = '?businessId=${businessNumber}';
+    final urlPart = '?businessId=$businessNumber';
 
     await context
         .read<BusinessProviders>()
-        .uploadProductCategoryImage(context: context, formData: formData!, urlPart:urlPart)
+        .uploadProductCategoryImage(context: context, formData: formData, urlPart:urlPart)
         .then((value) async {
       if (value.isSuccess) {
         showCustomToast(value.message ?? 'Business logo uploaded successfully',
-            isError: false);
+            isError: false,);
         widget.onNext();
         // await _fetchGetTokenAfterInvite();
       } else {
@@ -188,7 +189,7 @@ class _CreateBusinessPageState extends State<CreateBusinessPage> {
         widget.onNext();
       } else {
         showCustomToast(
-            value.message ?? 'Something went wrong');
+            value.message ?? 'Something went wrong',);
       }
     });
   }
@@ -224,7 +225,7 @@ class _CreateBusinessPageState extends State<CreateBusinessPage> {
             color: Color(0xff1f2024),
             fontWeight: FontWeight.w500,
             fontFamily: 'Poppins',
-            fontSize: 16.0,
+            fontSize: 16,
           ),
         ),
       ),
@@ -237,13 +238,13 @@ class _CreateBusinessPageState extends State<CreateBusinessPage> {
               subLabel: 'Enter your business details to continue.',
             ),
             const Text('Business Name',
-                    style: const TextStyle(
-                        color: const Color(0xff2f3036),
+                    style: TextStyle(
+                        color: Color(0xff2f3036),
                         fontWeight: FontWeight.w600,
                         fontFamily: 'Poppins',
                         fontStyle: FontStyle.normal,
-                        fontSize: 12.0),
-                    textAlign: TextAlign.left)
+                        fontSize: 12,),
+                    textAlign: TextAlign.left,)
                 .paddingSymmetric(horizontal: 16),
             5.height,
             StyledTextField(
@@ -260,8 +261,8 @@ class _CreateBusinessPageState extends State<CreateBusinessPage> {
                         fontWeight: FontWeight.w600,
                         fontFamily: 'Poppins',
                         fontStyle: FontStyle.normal,
-                        fontSize: 12.0),
-                    textAlign: TextAlign.left)
+                        fontSize: 12,),
+                    textAlign: TextAlign.left,)
                 .paddingSymmetric(horizontal: 16),
             5.height,
             SubCategoryPicker(
@@ -274,8 +275,8 @@ class _CreateBusinessPageState extends State<CreateBusinessPage> {
                         'Transport',
                         'School/University/College',
                         'Events',
-                        'Service station (Gas station)'
-                      ].contains(category.categoryName))
+                        'Service station (Gas station)',
+                      ].contains(category.categoryName),)
                   .map((e) => e.categoryName ?? '')
                   .toList() ??
                   [],
@@ -294,8 +295,8 @@ class _CreateBusinessPageState extends State<CreateBusinessPage> {
                         fontWeight: FontWeight.w600,
                         fontFamily: 'Poppins',
                         fontStyle: FontStyle.normal,
-                        fontSize: 12.0),
-                    textAlign: TextAlign.left)
+                        fontSize: 12,),
+                    textAlign: TextAlign.left,)
                 .paddingSymmetric(horizontal: 16),
             5.height,
             PhoneInputField(
@@ -311,8 +312,8 @@ class _CreateBusinessPageState extends State<CreateBusinessPage> {
                         fontWeight: FontWeight.w600,
                         fontFamily: 'Poppins',
                         fontStyle: FontStyle.normal,
-                        fontSize: 12.0),
-                    textAlign: TextAlign.left)
+                        fontSize: 12,),
+                    textAlign: TextAlign.left,)
                 .paddingSymmetric(horizontal: 16),
             5.height,
             StyledTextField(
@@ -329,14 +330,13 @@ class _CreateBusinessPageState extends State<CreateBusinessPage> {
                         fontWeight: FontWeight.w600,
                         fontFamily: 'Poppins',
                         fontStyle: FontStyle.normal,
-                        fontSize: 12.0),
-                    textAlign: TextAlign.left)
+                        fontSize: 12,),
+                    textAlign: TextAlign.left,)
                 .paddingSymmetric(horizontal: 16),
             5.height,
             LocationPickerField(
               controller: locationController,
               focusNode: _locationFocusNode,
-              label: 'Location',
               onLocationSelected: (location) {
                 setState(() {
                   _selectedLocation = location;
@@ -350,8 +350,8 @@ class _CreateBusinessPageState extends State<CreateBusinessPage> {
                         fontWeight: FontWeight.w600,
                         fontFamily: 'Poppins',
                         fontStyle: FontStyle.normal,
-                        fontSize: 12.0),
-                    textAlign: TextAlign.left)
+                        fontSize: 12,),
+                    textAlign: TextAlign.left,)
                 .paddingSymmetric(horizontal: 16),
             5.height,
             Row(
@@ -360,7 +360,6 @@ class _CreateBusinessPageState extends State<CreateBusinessPage> {
                 Expanded(
                   flex: selectedCurrency != null ? 3 : 1,
                   child: CountryCurrencyPicker(
-                    hintText: 'Select Country',
                     onSelect: (countryName, currencyCode) {
                       setState(() {
                         selectedCountry = countryName;
@@ -411,7 +410,6 @@ class _CreateBusinessPageState extends State<CreateBusinessPage> {
             Row(
               children: [
                 Expanded(
-                  flex: 1,
                   child: InkWell(
                     onTap: _pickImage,
                     borderRadius: BorderRadius.circular(12),
@@ -435,7 +433,7 @@ class _CreateBusinessPageState extends State<CreateBusinessPage> {
                                     ),
                                   )
                                 : SvgPicture.asset(zedColoredIcon,
-                                    fit: BoxFit.cover),
+                                    fit: BoxFit.cover,),
                           ),
                           Positioned(
                             right: 4,
@@ -459,20 +457,19 @@ class _CreateBusinessPageState extends State<CreateBusinessPage> {
                 ),
                 12.width,
                 const Expanded(
-                  flex: 1,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text('Business Logo',
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              fontFamily: 'Poppins')),
+                              fontFamily: 'Poppins',),),
                       Text(
                         'Format: .png or .jpg\nMin. size: 350px by 180px\nMax. file size: 1MB',
                         style: TextStyle(
                             fontSize: 12,
                             color: Colors.grey,
-                            fontFamily: 'Poppins'),
+                            fontFamily: 'Poppins',),
                       ),
                     ],
                   ),
@@ -483,14 +480,14 @@ class _CreateBusinessPageState extends State<CreateBusinessPage> {
             appButton(
                     text: 'Next',
                     onTap: () async {
-                      var businessName = businessNameController.text;
-                      var businessCategory = selectedCategory;
-                      var businessOwnerAddress = locationController.text;
-                      var businessOwnerPhone = phoneNumberController.text;
-                      var phoneCode = codeNumberController.text;
-                      var businessOwnerEmail = emailController.text;
-                      var country = selectedCountry;
-                      var currency = selectedCurrency;
+                      final businessName = businessNameController.text;
+                      final businessCategory = selectedCategory;
+                      final businessOwnerAddress = locationController.text;
+                      final businessOwnerPhone = phoneNumberController.text;
+                      final phoneCode = codeNumberController.text;
+                      final businessOwnerEmail = emailController.text;
+                      final country = selectedCountry;
+                      final currency = selectedCurrency;
 
                       if (!businessName.isValidInput) {
                         showCustomToast('Please enter business name');
@@ -524,9 +521,9 @@ class _CreateBusinessPageState extends State<CreateBusinessPage> {
                         return;
                       }
 
-                      var phoneNumber = '$phoneCode$businessOwnerPhone';
+                      final phoneNumber = '$phoneCode$businessOwnerPhone';
 
-                      var businessOwnerName = await getAuthProvider(context).userDetails?.name;
+                      final businessOwnerName = getAuthProvider(context).userDetails?.name;
 
                       final businessData = <String, dynamic>{
                         'businessName': businessName,
@@ -537,14 +534,14 @@ class _CreateBusinessPageState extends State<CreateBusinessPage> {
                         'country': country,
                         'currency': currency,
                         'businessOwnerName': businessOwnerName,
-                        'isNanoBusiness': true
+                        'isNanoBusiness': true,
                       };
                       logger.d(businessData);
 
                       _handleCreateBusiness(businessData, context);
 
                     },
-                    context: context)
+                    context: context,)
                 .paddingSymmetric(horizontal: 16),
             16.height,
           ],

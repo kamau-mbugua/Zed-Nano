@@ -12,9 +12,9 @@ import 'package:zed_nano/utils/Images.dart';
 import 'package:zed_nano/utils/extensions.dart';
 
 class EditProfilePage extends StatefulWidget {
-  final ProfileData? profileData;
 
-  const EditProfilePage({Key? key, this.profileData}) : super(key: key);
+  const EditProfilePage({super.key, this.profileData});
+  final ProfileData? profileData;
 
   @override
   _EditProfilePageState createState() => _EditProfilePageState();
@@ -59,7 +59,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: colorBackground,
-      appBar: AuthAppBar(
+      appBar: const AuthAppBar(
         title: 'Edit Profile',
       ),
       body: Form(
@@ -203,7 +203,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   return null;
                 },
               ),
-            )
+            ),
           ],
         ),
 
@@ -290,13 +290,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(label,
-            style: TextStyle(
+            style: const TextStyle(
               fontFamily: 'Poppins',
               color: textPrimary,
               fontSize: 12,
               fontWeight: FontWeight.w600,
               fontStyle: FontStyle.normal,
-            )
+            ),
         ),
         8.height,
         TextFormField(
@@ -321,14 +321,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
               borderRadius: BorderRadius.circular(8),
               borderSide: BorderSide(
                 color: Colors.grey.shade300,
-                width: 1,
               ),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: BorderSide(
                 color: Colors.grey.shade300,
-                width: 1,
               ),
             ),
             focusedBorder: OutlineInputBorder(
@@ -342,7 +340,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
               borderRadius: BorderRadius.circular(8),
               borderSide: const BorderSide(
                 color: googleRed,
-                width: 1,
               ),
             ),
             focusedErrorBorder: OutlineInputBorder(
@@ -396,7 +393,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         'userPhone': _phoneController.text.trim(),
         'id': getAuthProvider(context).loginResponse?.userId,
         'modifiedAtBy': getAuthProvider(context).loginResponse?.username,
-        'modifiedAt': '$timestamp'
+        'modifiedAt': timestamp,
       };
 
       final response = await getBusinessProvider(context).updateUserProfile(

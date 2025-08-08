@@ -1,6 +1,4 @@
 class ProfileResponse {
-  final String? status;
-  final ProfileData? data;
 
   ProfileResponse({
     this.status,
@@ -15,14 +13,11 @@ class ProfileResponse {
           : null,
     );
   }
+  final String? status;
+  final ProfileData? data;
 }
 
 class ProfileData {
-  final String? firstName;
-  final String? secondName;
-  final String? userName;
-  final String? email;
-  final String? phoneNumber;
 
   ProfileData({
     this.firstName,
@@ -41,6 +36,11 @@ class ProfileData {
       phoneNumber: json['phone_number'] as String?,
     );
   }
+  final String? firstName;
+  final String? secondName;
+  final String? userName;
+  final String? email;
+  final String? phoneNumber;
 
   String get fullName => '${firstName ?? ''} ${secondName ?? ''}'.trim();
   String get displayUserName => '@${userName ?? ''}';

@@ -5,20 +5,19 @@ import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/models/business/BusinessDetails.dart';
 import 'package:zed_nano/providers/business/BusinessProviders.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
-import 'package:zed_nano/screens/common/common_webview_page.dart';
-import 'package:zed_nano/screens/widget/auth/terms_checkbox.dart';
-import 'package:zed_nano/viewmodels/payment_view_model.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/auth/input_fields.dart';
+import 'package:zed_nano/screens/widget/auth/terms_checkbox.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/screens/widget/common/heading.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/extensions.dart';
+import 'package:zed_nano/viewmodels/payment_view_model.dart';
 
 
 class AddMpesaPaymentPage extends StatefulWidget {
+  const AddMpesaPaymentPage({required this.mpesaAccountType, super.key});
   final String mpesaAccountType;
-  const AddMpesaPaymentPage({super.key, required this.mpesaAccountType});
 
   @override
   State<AddMpesaPaymentPage> createState() => _AddMpesaPaymentPageState();
@@ -53,7 +52,7 @@ class _AddMpesaPaymentPageState extends State<AddMpesaPaymentPage> {
         .then((value) {
       if (value.isSuccess) {
         showCustomToast(value.message,
-            isError: false);
+            isError: false,);
         PaymentViewModel().setNeedsRefresh(true);
         Navigator.pop(context); // Return to the previous screen
       } else {
@@ -105,7 +104,7 @@ class _AddMpesaPaymentPageState extends State<AddMpesaPaymentPage> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar:  AuthAppBar(title: 'Add Payment Method'),
+      appBar:  const AuthAppBar(title: 'Add Payment Method'),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: ListView(
@@ -136,50 +135,50 @@ class _AddMpesaPaymentPageState extends State<AddMpesaPaymentPage> {
 
 
                 if (!businessName.isValidInput) {
-                  showCustomToast("Please provide a valid $itemName business Name",);
+                  showCustomToast('Please provide a valid $itemName business Name',);
                   return;
                 }
 
                 if (!accountReference.isValidInput) {
-                  showCustomToast("Please provide a valid $itemName number",);
+                  showCustomToast('Please provide a valid $itemName number',);
                   return;
                 }
 
                 if(widget.mpesaAccountType == 'MPESATILL'){
                   if (!storeNumber.isValidInput) {
-                    showCustomToast("Please provide a valid $itemName store number",);
+                    showCustomToast('Please provide a valid $itemName store number',);
                     return;
                   }
 
                   if (!storeNumber.isValidInput) {
-                    showCustomToast("Please provide a valid $itemName store number",);
+                    showCustomToast('Please provide a valid $itemName store number',);
                     return;
                   }
 
                   if (!hoNumber.isValidInput) {
-                    showCustomToast("Please provide a valid $itemName HO number",);
+                    showCustomToast('Please provide a valid $itemName HO number',);
                     return;
                   }
                 }
 
 
                 if (!consumerSecret.isValidInput) {
-                  showCustomToast("Please provide a valid $itemName consumer secret",);
+                  showCustomToast('Please provide a valid $itemName consumer secret',);
                   return;
                 }
 
                 if (!consumerKey.isValidInput) {
-                  showCustomToast("Please provide a valid $itemName consumer key",);
+                  showCustomToast('Please provide a valid $itemName consumer key',);
                   return;
                 }
 
                 if (!passKey.isValidInput) {
-                  showCustomToast("Please provide a valid $itemName pass key",);
+                  showCustomToast('Please provide a valid $itemName pass key',);
                   return;
                 }
 
                 if (!isTermsAndConditionsChecked) {
-                  showCustomToast("Please accept the terms and conditions",);
+                  showCustomToast('Please accept the terms and conditions',);
                   return;
                 }
 
@@ -217,9 +216,9 @@ class _AddMpesaPaymentPageState extends State<AddMpesaPaymentPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Product Name
-          Text(
+          const Text(
             'Business Name',
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w600,
               fontFamily: 'Poppins',
@@ -257,9 +256,9 @@ class _AddMpesaPaymentPageState extends State<AddMpesaPaymentPage> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-          Text(
+          const Text(
             'Store Number',
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w600,
               fontFamily: 'Poppins',
@@ -275,9 +274,9 @@ class _AddMpesaPaymentPageState extends State<AddMpesaPaymentPage> {
             controller: storeNumberController,
           ),
           16.height,
-          Text(
+          const Text(
             'HO Number',
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w600,
               fontFamily: 'Poppins',
@@ -295,9 +294,9 @@ class _AddMpesaPaymentPageState extends State<AddMpesaPaymentPage> {
           ],
           ),
           16.height,
-          Text(
+          const Text(
             'Consumer Secret',
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w600,
               fontFamily: 'Poppins',
@@ -313,9 +312,9 @@ class _AddMpesaPaymentPageState extends State<AddMpesaPaymentPage> {
             controller: consumerSecreteController,
           ),
           16.height,
-          Text(
+          const Text(
             'Consumer Key',
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w600,
               fontFamily: 'Poppins',
@@ -331,9 +330,9 @@ class _AddMpesaPaymentPageState extends State<AddMpesaPaymentPage> {
             controller: consumerKeyController,
           ),
           16.height,
-          Text(
+          const Text(
             'Pass Key',
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w600,
               fontFamily: 'Poppins',
@@ -357,6 +356,6 @@ class _AddMpesaPaymentPageState extends State<AddMpesaPaymentPage> {
             },
           ),
           24.height,
-        ]);
+        ],);
   }
 }

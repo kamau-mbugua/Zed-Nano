@@ -1,6 +1,4 @@
 class ApprovalData {
-  final String? name;
-  final String? count;
 
   ApprovalData({
     this.name,
@@ -13,6 +11,8 @@ class ApprovalData {
       count: json['count'] as String?,
     );
   }
+  final String? name;
+  final String? count;
 
   Map<String, dynamic> toJson() {
     return {

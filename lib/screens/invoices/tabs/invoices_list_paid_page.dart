@@ -5,7 +5,6 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/models/get_business_invoices_by_status/GetBusinessInvoicesByStatusResponse.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
-import 'package:zed_nano/screens/customers/itemBuilder/list_customers_transactions_item_builder.dart';
 import 'package:zed_nano/screens/invoices/itemBuilders/invoices_item_builders.dart';
 import 'package:zed_nano/screens/widget/common/date_range_filter_bottom_sheet.dart';
 import 'package:zed_nano/screens/widget/common/filter_row_widget.dart';
@@ -17,7 +16,7 @@ import 'package:zed_nano/utils/extensions.dart';
 import 'package:zed_nano/utils/pagination_controller.dart';
 
 class InvoicesListPaidPage extends StatefulWidget {
-  const InvoicesListPaidPage({Key? key}) : super(key: key);
+  const InvoicesListPaidPage({super.key});
 
   @override
   _InvoicesListPaidPageState createState() => _InvoicesListPaidPageState();
@@ -27,8 +26,8 @@ class _InvoicesListPaidPageState extends State<InvoicesListPaidPage> {
   late PaginationController<BusinessInvoice> _paginationController;
   final TextEditingController _searchController = TextEditingController();
 
-  String _searchTerm = "";
-  bool _isInitialized = false;
+  String _searchTerm = '';
+  final bool _isInitialized = false;
   Timer? _debounceTimer;
   GetBusinessInvoicesByStatusResponse? getBusinessInvoicesByStatusResponse;
 
@@ -52,7 +51,7 @@ class _InvoicesListPaidPageState extends State<InvoicesListPaidPage> {
   }
 
   Future<List<BusinessInvoice>> fetchByStatus(
-      {required int page, required int limit}) async {
+      {required int page, required int limit,}) async {
     final dateRange = DateRangeUtil.getDateRange(_selectedRangeLabel);
     final startDate = dateRange.values.first.removeTimezoneOffset;
     final endDate = dateRange.values.last.removeTimezoneOffset;
@@ -135,7 +134,7 @@ class _InvoicesListPaidPageState extends State<InvoicesListPaidPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text("Invoices Count",
+                  const Text('Invoices Count',
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         color: textPrimary,
@@ -144,19 +143,19 @@ class _InvoicesListPaidPageState extends State<InvoicesListPaidPage> {
                         fontStyle: FontStyle.normal,
                         letterSpacing: 0.12,
 
-                      )
+                      ),
                   ),
-                  Text("${getBusinessInvoicesByStatusResponse?.invoiceSummary?.orderCount ?? 0}",
+                  Text('${getBusinessInvoicesByStatusResponse?.invoiceSummary?.orderCount ?? 0}',
                       style: const TextStyle(
                         fontFamily: 'Poppins',
                         color: successTextColor,
                         fontSize: 18,
                         fontWeight: FontWeight.w400,
                         fontStyle: FontStyle.normal,
-                      )
-                  )
+                      ),
+                  ),
                 ],
-              )
+              ),
           ),
         ),
         16.width,
@@ -172,7 +171,7 @@ class _InvoicesListPaidPageState extends State<InvoicesListPaidPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text("Total",
+                  const Text('Total',
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         color: textPrimary,
@@ -181,7 +180,7 @@ class _InvoicesListPaidPageState extends State<InvoicesListPaidPage> {
                         fontStyle: FontStyle.normal,
                         letterSpacing: 0.12,
 
-                      )
+                      ),
                   ),
                   Text("${getBusinessInvoicesByStatusResponse?.invoiceSummary?.currency ?? 'KES'} ${getBusinessInvoicesByStatusResponse?.invoiceSummary?.orderTotal ?? 0.0}",
                       style: const TextStyle(
@@ -190,10 +189,10 @@ class _InvoicesListPaidPageState extends State<InvoicesListPaidPage> {
                         fontSize: 18,
                         fontWeight: FontWeight.w400,
                         fontStyle: FontStyle.normal,
-                      )
-                  )
+                      ),
+                  ),
                 ],
-              )
+              ),
           ),
         ),
       ],
@@ -215,7 +214,7 @@ class _InvoicesListPaidPageState extends State<InvoicesListPaidPage> {
               gifPath: emptyListGif,
               title: "It's empty, over here.",
               subtitle:
-              "No Unpaid orders in your business, yet! Add to view them here.",
+              'No Unpaid orders in your business, yet! Add to view them here.',
             ),
           ),
         ),
@@ -233,10 +232,7 @@ class _InvoicesListPaidPageState extends State<InvoicesListPaidPage> {
         buildFilterButton(
           text:(_selectedRangeLabel ?? 'Filter').toDisplayLabel,
           isActive: false,
-          onTap: () {
-            _showDateRangeFilter();
-          },          icon: Icons.filter_list,
-          showArrow: true,
+          onTap: _showDateRangeFilter,          icon: Icons.filter_list,
         ),
       ],
     );

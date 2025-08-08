@@ -17,7 +17,7 @@ import 'package:zed_nano/utils/extensions.dart';
 import 'package:zed_nano/utils/pagination_controller.dart';
 
 class OrdersListUnpaidPage extends StatefulWidget {
-  const OrdersListUnpaidPage({Key? key}) : super(key: key);
+  const OrdersListUnpaidPage({super.key});
 
   @override
   _OrdersListUnpaidPageState createState() => _OrdersListUnpaidPageState();
@@ -27,8 +27,8 @@ class _OrdersListUnpaidPageState extends State<OrdersListUnpaidPage> {
   late PaginationController<OrderData> _paginationController;
   final TextEditingController _searchController = TextEditingController();
 
-  String _searchTerm = "";
-  bool _isInitialized = false;
+  String _searchTerm = '';
+  final bool _isInitialized = false;
   Timer? _debounceTimer;
   OrderResponse? orderResponse;
   String _selectedRangeLabel = 'this_month';
@@ -52,7 +52,7 @@ class _OrdersListUnpaidPageState extends State<OrdersListUnpaidPage> {
   }
 
   Future<List<OrderData>> fetchByStatus(
-      {required int page, required int limit}) async {
+      {required int page, required int limit,}) async {
     final dateRange = DateRangeUtil.getDateRange(_selectedRangeLabel);
     final startDate = dateRange.values.first.removeTimezoneOffset;
     final endDate = dateRange.values.last.removeTimezoneOffset;
@@ -136,7 +136,7 @@ class _OrdersListUnpaidPageState extends State<OrdersListUnpaidPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text("Order Count",
+                const Text('Order Count',
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       color: textPrimary,
@@ -145,19 +145,19 @@ class _OrdersListUnpaidPageState extends State<OrdersListUnpaidPage> {
                       fontStyle: FontStyle.normal,
                       letterSpacing: 0.12,
 
-                    )
+                    ),
                 ),
-                Text("${orderResponse?.count ?? 0}",
+                Text('${orderResponse?.count ?? 0}',
                     style: const TextStyle(
                       fontFamily: 'Poppins',
                       color: errorColors,
                       fontSize: 18,
                       fontWeight: FontWeight.w400,
                       fontStyle: FontStyle.normal,
-                    )
-                )
+                    ),
+                ),
               ],
-            )
+            ),
           ),
         ),
         16.width,
@@ -173,7 +173,7 @@ class _OrdersListUnpaidPageState extends State<OrdersListUnpaidPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text("Order Amount",
+                  const Text('Order Amount',
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         color: textPrimary,
@@ -182,19 +182,19 @@ class _OrdersListUnpaidPageState extends State<OrdersListUnpaidPage> {
                         fontStyle: FontStyle.normal,
                         letterSpacing: 0.12,
 
-                      )
+                      ),
                   ),
-                  Text("${orderResponse?.orderSummary?.currency ?? context.businessCurrency} ${orderResponse?.total?.formatCurrency() ?? 0.0}",
+                  Text('${orderResponse?.orderSummary?.currency ?? context.businessCurrency} ${orderResponse?.total?.formatCurrency() ?? 0.0}',
                       style: const TextStyle(
                         fontFamily: 'Poppins',
                         color: errorColors,
                         fontSize: 18,
                         fontWeight: FontWeight.w400,
                         fontStyle: FontStyle.normal,
-                      )
-                  )
+                      ),
+                  ),
                 ],
-              )
+              ),
           ),
         ),
       ],
@@ -218,7 +218,7 @@ class _OrdersListUnpaidPageState extends State<OrdersListUnpaidPage> {
                 gifPath: emptyListGif,
                 title: "It's empty, over here.",
                 subtitle:
-                "No Unpaid orders in your business, yet! Add to view them here.",
+                'No Unpaid orders in your business, yet! Add to view them here.',
               ),
             ),
           ),
@@ -237,11 +237,8 @@ class _OrdersListUnpaidPageState extends State<OrdersListUnpaidPage> {
         buildFilterButton(
           text:(_selectedRangeLabel ?? 'Filter').toDisplayLabel,
           isActive: false,
-          onTap: () {
-            _showDateRangeFilter();
-          },
+          onTap: _showDateRangeFilter,
           icon: Icons.filter_list,
-          showArrow: true,
         ),
       ],
     );

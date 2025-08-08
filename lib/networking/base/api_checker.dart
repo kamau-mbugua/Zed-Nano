@@ -1,13 +1,12 @@
 import 'package:zed_nano/app/app_initializer.dart';
+import 'package:zed_nano/networking/base/api_response.dart';
+import 'package:zed_nano/networking/base/error_response.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
-
-import 'api_response.dart';
-import 'error_response.dart';
 
 class ApiChecker {
   static void checkApi(ApiResponse apiResponse) {
     try {
-      ErrorResponse error = getError(apiResponse);
+      final error = getError(apiResponse);
 
       if (!error.isSuccess) {
         showCustomSnackBar(error.message ?? 'An error occurred');

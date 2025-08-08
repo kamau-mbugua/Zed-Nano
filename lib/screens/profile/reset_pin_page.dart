@@ -3,13 +3,12 @@ import 'package:flutter/services.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
-import 'package:zed_nano/screens/widget/common/common_widgets.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
 
 class ResetPinPage extends StatefulWidget {
-  const ResetPinPage({Key? key}) : super(key: key);
+  const ResetPinPage({super.key});
 
   @override
   _ResetPinPageState createState() => _ResetPinPageState();
@@ -64,7 +63,7 @@ class _ResetPinPageState extends State<ResetPinPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: colorBackground,
-      appBar: AuthAppBar(title: 'Reset PIN'),
+      appBar: const AuthAppBar(title: 'Reset PIN'),
       body: Form(
         key: _formKey,
         child: SingleChildScrollView(
@@ -258,14 +257,12 @@ class _ResetPinPageState extends State<ResetPinPage> {
               borderRadius: BorderRadius.circular(8),
               borderSide: BorderSide(
                 color: Colors.grey.shade300,
-                width: 1,
               ),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: BorderSide(
                 color: Colors.grey.shade300,
-                width: 1,
               ),
             ),
             focusedBorder: OutlineInputBorder(
@@ -279,7 +276,6 @@ class _ResetPinPageState extends State<ResetPinPage> {
               borderRadius: BorderRadius.circular(8),
               borderSide: const BorderSide(
                 color: googleRed,
-                width: 1,
               ),
             ),
             focusedErrorBorder: OutlineInputBorder(

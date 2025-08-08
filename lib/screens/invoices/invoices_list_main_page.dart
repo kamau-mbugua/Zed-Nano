@@ -4,19 +4,15 @@ import 'package:zed_nano/screens/invoices/tabs/invoices_list_cancelled_page.dart
 import 'package:zed_nano/screens/invoices/tabs/invoices_list_paid_page.dart';
 import 'package:zed_nano/screens/invoices/tabs/invoices_list_partial_page.dart';
 import 'package:zed_nano/screens/invoices/tabs/invoices_list_unpaid_page.dart';
-import 'package:zed_nano/screens/orders/tabs/orders_list_cancelled_page.dart';
-import 'package:zed_nano/screens/orders/tabs/orders_list_paid_page.dart';
-import 'package:zed_nano/screens/orders/tabs/orders_list_partial_page.dart';
-import 'package:zed_nano/screens/orders/tabs/orders_list_unpaid_page.dart';
 import 'package:zed_nano/screens/sell/sell_stepper_page.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/custom_tab_switcher.dart';
 import 'package:zed_nano/utils/Colors.dart';
 
 class InvoicesListMainPage extends StatefulWidget {
+  InvoicesListMainPage({super.key, this.initialTabIndex = 0, this.isHideAppBar = false});
   bool isHideAppBar;
   int? initialTabIndex;
-  InvoicesListMainPage({Key? key, this.initialTabIndex = 0, this.isHideAppBar = false}) : super(key: key);
 
   @override
   _InvoicesListMainPageState createState() => _InvoicesListMainPageState();
@@ -27,8 +23,8 @@ class _InvoicesListMainPageState extends State<InvoicesListMainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: widget.isHideAppBar ? null : AuthAppBar(
-          title: 'Invoices'
+      appBar: widget.isHideAppBar ? null : const AuthAppBar(
+          title: 'Invoices',
       ),
       body: Column(
         children: [
@@ -36,12 +32,6 @@ class _InvoicesListMainPageState extends State<InvoicesListMainPage> {
           Expanded(
             child: SwipeableTabSwitcher(
               tabs: const ['Unpaid', 'Partial', 'Paid', 'Cancelled'],
-              children: const [
-                InvoicesListUnpaidPage(),
-                InvoicesListPartialPage(),
-                InvoicesListPaidPage(),
-                InvoicesListCancelledPage(),
-              ],
               selectedTabColors: const [
                 googleRed,      // Unpaid tab color
                 primaryOrangeTextColor,     // Partial tab color
@@ -61,6 +51,12 @@ class _InvoicesListMainPageState extends State<InvoicesListMainPage> {
                 colorBackground,        // Cancelled border color
               ],
               initialIndex: widget.initialTabIndex ?? 0,
+              children: const [
+                InvoicesListUnpaidPage(),
+                InvoicesListPartialPage(),
+                InvoicesListPaidPage(),
+                InvoicesListCancelledPage(),
+              ],
             ),
           ),
         ],
@@ -68,10 +64,10 @@ class _InvoicesListMainPageState extends State<InvoicesListMainPage> {
       floatingActionButton: Visibility(
         visible: widget.isHideAppBar == false,
         child: FloatingActionButton.extended(
-          heroTag: "invoices_list_fab",
+          heroTag: 'invoices_list_fab',
           onPressed: () async {
             // AddUserPage().launch(context);
-            SellStepperPage(stepType: SellStepType.Invoice,).launch(context);
+            const SellStepperPage(stepType: SellStepType.Invoice,).launch(context);
 
           },
           backgroundColor: const Color(0xFF032541),

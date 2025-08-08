@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/models/approval_data.dart';
 import 'package:zed_nano/models/approval_response.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
@@ -9,16 +8,13 @@ import 'package:zed_nano/screens/approvals/customers/customers_pending_approval_
 import 'package:zed_nano/screens/approvals/itemBuilders/approval_types.dart';
 import 'package:zed_nano/screens/approvals/stock_take/stock_take_approval.dart';
 import 'package:zed_nano/screens/approvals/users/add_users_pending_approval_page.dart';
-import 'package:zed_nano/screens/widget/common/common_widgets.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/screens/widget/common/heading.dart';
-import 'package:zed_nano/utils/Colors.dart';
-import 'package:zed_nano/utils/Images.dart';
 
 class PendingApprovalsPage extends StatefulWidget {
-  String? getStatus;
 
-  PendingApprovalsPage({Key? key, this.getStatus}) : super(key: key);
+  PendingApprovalsPage({super.key, this.getStatus});
+  String? getStatus;
 
   @override
   _PendingApprovalsPageState createState() => _PendingApprovalsPageState();
@@ -40,7 +36,7 @@ class _PendingApprovalsPageState extends State<PendingApprovalsPage> {
   }
 
   Future<void> getApprovalByStatus() async {
-    Map<String, dynamic> requestData = {'status': widget.getStatus};
+    final requestData = <String, dynamic>{'status': widget.getStatus};
 
     try {
       final response = await getBusinessProvider(context)
@@ -48,19 +44,19 @@ class _PendingApprovalsPageState extends State<PendingApprovalsPage> {
 
       if (response.isSuccess) {
         setState(() {
-          ApprovalListData? approvalListData = response.data?.data;
+          final approvalListData = response.data?.data;
           approvalData = [
             ApprovalData(
                 name: 'Stock Take',
-                count: approvalListData?.stockTakeCount.toString()),
+                count: approvalListData?.stockTakeCount.toString(),),
             ApprovalData(
                 name: 'Add Stock',
-                count: approvalListData?.addStockCount.toString()),
+                count: approvalListData?.addStockCount.toString(),),
             ApprovalData(
-                name: 'Users', count: approvalListData?.usersCount.toString()),
+                name: 'Users', count: approvalListData?.usersCount.toString(),),
             ApprovalData(
                 name: 'Customers',
-                count: approvalListData?.customersCount.toString()),
+                count: approvalListData?.customersCount.toString(),),
           ];
         });
       } else {
@@ -81,7 +77,6 @@ class _PendingApprovalsPageState extends State<PendingApprovalsPage> {
         },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             headings(
               label: 'Select Category',
@@ -119,10 +114,10 @@ class _PendingApprovalsPageState extends State<PendingApprovalsPage> {
                 const AddStockApprovalPage().launch(context);
               }
               if (approvalData?[index].name == 'Users') {
-                AddUsersPendingApprovalPage().launch(context);
+                const AddUsersPendingApprovalPage().launch(context);
               }
               if (approvalData?[index].name == 'Customers') {
-                CustomersPendingApprovalPage().launch(context);
+                const CustomersPendingApprovalPage().launch(context);
               }
             },
           );

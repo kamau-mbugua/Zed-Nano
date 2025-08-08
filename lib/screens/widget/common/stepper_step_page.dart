@@ -5,6 +5,24 @@ import 'package:zed_nano/utils/Colors.dart';
 /// Base widget for stepper step pages
 /// Provides common layout and navigation functionality
 class StepperStepPage extends StatelessWidget {
+
+  const StepperStepPage({
+    required this.child, super.key,
+    this.title,
+    this.subtitle,
+    this.nextButtonText,
+    this.previousButtonText,
+    this.showNextButton = true,
+    this.showPreviousButton = true,
+    this.canProceed,
+    this.onNext,
+    this.onPrevious,
+    this.nextButtonEnabled = true,
+    this.isLoading = false,
+    this.customNextButton,
+    this.customPreviousButton,
+    this.additionalActions,
+  });
   /// Main content of the step
   final Widget child;
   
@@ -49,25 +67,6 @@ class StepperStepPage extends StatelessWidget {
   
   /// Additional actions to show in the button row
   final List<Widget>? additionalActions;
-
-  const StepperStepPage({
-    Key? key,
-    required this.child,
-    this.title,
-    this.subtitle,
-    this.nextButtonText,
-    this.previousButtonText,
-    this.showNextButton = true,
-    this.showPreviousButton = true,
-    this.canProceed,
-    this.onNext,
-    this.onPrevious,
-    this.nextButtonEnabled = true,
-    this.isLoading = false,
-    this.customNextButton,
-    this.customPreviousButton,
-    this.additionalActions,
-  }) : super(key: key);
 
   void _handleNext(BuildContext context) {
     if (canProceed != null && !canProceed!()) {
@@ -115,7 +114,7 @@ class StepperStepPage extends StatelessWidget {
               ),
             )
           : Text(
-              nextButtonText ?? (isLastStep ? "Complete" : "Next"),
+              nextButtonText ?? (isLastStep ? 'Complete' : 'Next'),
               style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
@@ -134,13 +133,13 @@ class StepperStepPage extends StatelessWidget {
         onPressed: () => _handlePrevious(context),
         style: OutlinedButton.styleFrom(
           foregroundColor: appThemePrimary,
-          side: BorderSide(color: appThemePrimary),
+          side: const BorderSide(color: appThemePrimary),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
         ),
         child: Text(
-          previousButtonText ?? "Previous",
+          previousButtonText ?? 'Previous',
           style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
@@ -231,20 +230,19 @@ class StepperStepPage extends StatelessWidget {
 
 /// Simplified version for basic step pages
 class SimpleStepperStepPage extends StatelessWidget {
+
+  const SimpleStepperStepPage({
+    required this.child, super.key,
+    this.title,
+    this.onNext,
+    this.onPrevious,
+    this.canProceed = true,
+  });
   final Widget child;
   final String? title;
   final VoidCallback? onNext;
   final VoidCallback? onPrevious;
   final bool canProceed;
-
-  const SimpleStepperStepPage({
-    Key? key,
-    required this.child,
-    this.title,
-    this.onNext,
-    this.onPrevious,
-    this.canProceed = true,
-  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

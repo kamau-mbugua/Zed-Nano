@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -14,8 +13,8 @@ import 'package:zed_nano/utils/extensions.dart';
 import 'package:zed_nano/viewmodels/add_stock_viewmodel.dart';
 
 class AddStockProductBottomSheet extends StatefulWidget {
+  AddStockProductBottomSheet({required this.product, super.key});
   ActiveStockProduct product;
-  AddStockProductBottomSheet({Key? key, required this.product}) : super(key: key);
 
   @override
   _AddStockProductBottomSheetState createState() =>
@@ -55,7 +54,7 @@ class _AddStockProductBottomSheetState
 
   void onStockReceivedChanged(String value) {
     if (value.isNotEmpty) {
-      final int newStockReceived = int.tryParse(value) ?? 0;
+      final newStockReceived = int.tryParse(value) ?? 0;
       setState(() {
         totalStock = newStockReceived + (widget.product.inStockQuantity ?? 0);
       });
@@ -70,7 +69,7 @@ class _AddStockProductBottomSheetState
       ActiveStockProduct product,
       String receivedStock,
       String buyingPrice,
-      String sellingPrice
+      String sellingPrice,
       ) {
    Provider.of<AddStockViewModel>(context, listen: false)
     .addItem(
@@ -78,7 +77,7 @@ class _AddStockProductBottomSheetState
         productId:product.id.toString(),
         productName: product.productName.toString(),
         buyingPrice: double.parse(buyingPrice),
-        oldStock: product?.inStockQuantity?.toDouble() ?? 0.0,
+        oldStock: product.inStockQuantity?.toDouble() ?? 0.0,
         sellingPrice : double.parse(sellingPrice),
         imagePath : product.imagePath.toString(),
         currency : product.currency.toString(),
@@ -101,11 +100,9 @@ class _AddStockProductBottomSheetState
       case 'LOW_STOCK':
         statusColor = warning;
         statusText = 'Low stock: ${product.inStockQuantity} items left';
-        break;
       case 'OUT_OF_STOCK':
         statusColor = errorColors;
         statusText = 'Out of stock';
-        break;
       case 'IN_STOCK':
       default:
         statusColor = successTextColor;
@@ -115,12 +112,10 @@ class _AddStockProductBottomSheetState
     return BaseBottomSheet(
       title: 'Add Stock',
       initialChildSize: 0.8,
-      minChildSize: 0.5,
-      maxChildSize: 1.0,
       headerContent: subtitle != null
-          ? Text(
-        subtitle!,
-        style: const TextStyle(
+          ? const Text(
+        subtitle,
+        style: TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.w400,
           fontFamily: 'Poppins',
@@ -139,13 +134,13 @@ class _AddStockProductBottomSheetState
                   children: [
                     const SizedBox(height: 16),
                     Text(product.productName ?? '',
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontFamily: 'Poppins',
                           color: textPrimary,
                           fontSize: 28,
                           fontWeight: FontWeight.w600,
                           fontStyle: FontStyle.normal,
-                        )
+                        ),
                     ),
                     Row(
                       children: [
@@ -165,15 +160,15 @@ class _AddStockProductBottomSheetState
                             color: Colors.grey.shade500,
                           ),
                         ),
-                        Text('$statusText',
+                        Text(statusText,
                             style: TextStyle(
                               fontFamily: 'Poppins',
                               color: statusColor,
                               fontSize: 10,
                               fontWeight: FontWeight.w600,
                               fontStyle: FontStyle.normal,
-                            )
-                        )
+                            ),
+                        ),
                       ],
                     ),
                   ],
@@ -245,47 +240,46 @@ class _AddStockProductBottomSheetState
           ),
           16.height,
           Container(
-            margin: const EdgeInsets.only(left: 0, right: 0, bottom: 8),
+            margin: const EdgeInsets.only(bottom: 8),
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: lightGreenColor,
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
                 color:successTextColor,
-                width: 1,
               ),
             ),
-            child: Text("New Stock: $totalStock",
-                style: TextStyle(
+            child: Text('New Stock: $totalStock',
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   color: successTextColor,
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
                   fontStyle: FontStyle.normal,
-                )
-            )
+                ),
+            ),
           ),
           16.height,
           Row(
             children: [
               Expanded(
                 child: outlineButton(
-                  text: "Cancel", 
+                  text: 'Cancel', 
                   onTap: () => Navigator.pop(context), 
                   context: context, 
                   borderColor: googleRed, 
-                  textColor: googleRed
+                  textColor: googleRed,
                 ),
               ),
               const SizedBox(width: 16),
               Expanded(
                 child: appButton(
-                  text: "Add", 
+                  text: 'Add', 
                   onTap: () {
                     final receivedStock = stockReceivedController.text;
                     if (!receivedStock.isValidInput) {
                       showCustomToast(
-                        'Please enter valid Stock Received');
+                        'Please enter valid Stock Received',);
                       return;
                     }
 
@@ -293,24 +287,24 @@ class _AddStockProductBottomSheetState
                     final buyingPrice = buyingPriceController.text;
                     if (!buyingPrice.isValidInput) {
                       showCustomToast(
-                        'Please enter valid Buying Price');
+                        'Please enter valid Buying Price',);
                       return;
                     }
 
                     final sellingPrice = sellingPriceController.text;
                     if (!sellingPrice.isValidInput) {
                       showCustomToast(
-                        'Please enter valid Selling Price');
+                        'Please enter valid Selling Price',);
                       return;
                     }
 
                     onAddStockTap(product, receivedStock, buyingPrice, sellingPrice);
                   }, 
-                  context: context
+                  context: context,
                 ),
               ),
             ],
-          )
+          ),
         ],
       ),
     );

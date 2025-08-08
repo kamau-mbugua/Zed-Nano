@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
-import 'package:zed_nano/models/createCategory/CreateCategoryResponse.dart';
 import 'package:zed_nano/models/listCategories/ListCategoriesResponse.dart';
 import 'package:zed_nano/models/listProducts/ListProductsResponse.dart';
 import 'package:zed_nano/providers/business/BusinessProviders.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/routes/routes.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
+import 'package:zed_nano/screens/widget/common/categories_widget.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
 import 'package:zed_nano/screens/widget/common/custom_dialog.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
@@ -16,15 +15,13 @@ import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
 import 'package:zed_nano/utils/pagination_controller.dart';
-import 'package:zed_nano/screens/widget/common/categories_widget.dart';
 
 class CategoryDetailPage extends StatefulWidget {
-  final String categoryId;
   
   const CategoryDetailPage({
-    Key? key,
-    required this.categoryId,
-  }) : super(key: key);
+    required this.categoryId, super.key,
+  });
+  final String categoryId;
 
   @override
   State<CategoryDetailPage> createState() => _CategoryDetailPageState();
@@ -35,7 +32,7 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
   int productCount = 0;
 
   late PaginationController<ProductData> _paginationController;
-  String _searchTerm = "";
+  final String _searchTerm = '';
   bool _isLoading = true;
 
   @override
@@ -62,7 +59,7 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
         limit: limit,
         searchValue: _searchTerm,
         context: context,
-        categoryId: widget.categoryId
+        categoryId: widget.categoryId,
     );
     
     return response.data?.data ?? [];
@@ -70,7 +67,7 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
 
   Future<void> _fetchCategoryDetails() async {
     if (widget.categoryId.isNotEmpty) {
-      final Map<String, dynamic> requestData = {
+      final requestData = <String, dynamic>{
         'categoryId': widget.categoryId,
       };
       
@@ -117,7 +114,7 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
         Navigator.pop(context); // Close dialog
         final businessId = getBusinessDetails(context)?.businessId;
         if (widget.categoryId.isNotEmpty) {
-          final Map<String, dynamic> requestData = {
+          final requestData = <String, dynamic>{
             'categoryState': 'Inactive',
             'categoryId': widget.categoryId,
           };
@@ -144,7 +141,7 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
   void _navigateToEditCategory() {
     Navigator.pushNamed(
         context,
-        AppRoutes.getEditCategoryHRoute(widget.categoryId ?? '')).then((_) {
+        AppRoutes.getEditCategoryHRoute(widget.categoryId ?? ''),).then((_) {
       _fetchCategoryDetails();
     });
   }
@@ -186,8 +183,8 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
         title: 'View Category',
         actions: [
           TextButton(
-            child: const Text('Delete', style: TextStyle(color:accentRed)),
             onPressed: _deleteCategory,
+            child: const Text('Delete', style: TextStyle(color:accentRed)),
           ),
         ],
       ),
@@ -239,7 +236,7 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
                 color: textPrimary,
                 fontWeight: FontWeight.w600,
                 fontFamily: 'Poppins',
-                fontSize: 14.0,
+                fontSize: 14,
               ),
             ),
             GestureDetector(
@@ -250,7 +247,7 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
                   color: accentRed,
                   fontWeight: FontWeight.w600,
                   fontFamily: 'Poppins',
-                  fontSize: 12.0,
+                  fontSize: 12,
                 ),
               ),
             ),
@@ -270,7 +267,7 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
                       color: textPrimary,
                       fontWeight: FontWeight.w600,
                       fontFamily: 'Poppins',
-                      fontSize: 28.0,
+                      fontSize: 28,
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -280,7 +277,7 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
                       color: textSecondary,
                       fontWeight: FontWeight.w400,
                       fontFamily: 'Poppins',
-                      fontSize: 12.0,
+                      fontSize: 12,
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -290,7 +287,7 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
                       color: textSecondary,
                       fontWeight: FontWeight.w400,
                       fontFamily: 'Poppins',
-                      fontSize: 12.0,
+                      fontSize: 12,
                     ),
                   ),
                 ],
@@ -326,7 +323,7 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
         borderRadius: BorderRadius.circular(8),
       ),
       child: rfCommonCachedNetworkImage(
-        '${categoryData?.imagePath ?? ''}',
+        categoryData?.imagePath ?? '',
         fit: BoxFit.cover,
         height: 55,
         width: 55,
@@ -340,22 +337,22 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
       children: [
          Text(
           ' ${categoryData?.productService?.toLowerCase() == 'service' ? 'Service' : 'Product'}',
-          style: TextStyle(
+          style: const TextStyle(
             color: textPrimary,
             fontWeight: FontWeight.w600,
             fontFamily: 'Poppins',
-            fontSize: 14.0,
+            fontSize: 14,
           ),
         ),
         GestureDetector(
           onTap: _navigateToAddProduct,
           child: Text(
             ' ${categoryData?.productService?.toLowerCase() == 'service' ? 'Add Service' : 'Add Product'}',
-            style: TextStyle(
+            style: const TextStyle(
               color: accentRed,
               fontWeight: FontWeight.w600,
               fontFamily: 'Poppins',
-              fontSize: 12.0,
+              fontSize: 12,
             ),
           ),
         ),
@@ -370,13 +367,13 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
         itemBuilder: (context, item, index) {
           return buildProductCard(item);
         },
-        firstPageProgressIndicatorBuilder: (_) => SizedBox(),
-        newPageProgressIndicatorBuilder: (_) => SizedBox(),
+        firstPageProgressIndicatorBuilder: (_) => const SizedBox(),
+        newPageProgressIndicatorBuilder: (_) => const SizedBox(),
         noItemsFoundIndicatorBuilder: (context) => const Center(
           child: CompactGifDisplayWidget(
             gifPath: emptyListGif,
             title: "It's empty, over here.",
-            subtitle: "No products in this category yet! Add to view them here.",
+            subtitle: 'No products in this category yet! Add to view them here.',
           ),
         ),
       ),

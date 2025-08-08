@@ -7,8 +7,8 @@ import 'package:zed_nano/screens/widget/common/common_widgets.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 
 class PrintingOptionsBottomSheet extends StatefulWidget {
+  PrintingOptionsBottomSheet({super.key, this.printOrderInvoiceId});
   String? printOrderInvoiceId;
-  PrintingOptionsBottomSheet({Key? key, this.printOrderInvoiceId}) : super(key: key);
 
   @override
   State<PrintingOptionsBottomSheet> createState() => _PrintingOptionsBottomSheetState();
@@ -62,9 +62,9 @@ class _PrintingOptionsBottomSheetState extends State<PrintingOptionsBottomSheet>
 
   Future<void> doSendToPos() async {
 
-    var requestData = <String, dynamic>{
+    final requestData = <String, dynamic>{
       'pushTransactionId': widget.printOrderInvoiceId,
-      'serialNo': branchTerminalsDataList?.first?.terminalSerialNumber
+      'serialNo': branchTerminalsDataList?.first.terminalSerialNumber,
     };
 
     try {
@@ -88,8 +88,6 @@ class _PrintingOptionsBottomSheetState extends State<PrintingOptionsBottomSheet>
     return BaseBottomSheet(
       title: 'More Actions',
       initialChildSize: 0.5,
-      minChildSize: 0.5,
-      maxChildSize: 1.0,
       headerContent:  const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -114,16 +112,14 @@ class _PrintingOptionsBottomSheetState extends State<PrintingOptionsBottomSheet>
               steps: steps,
               onTab: (index) async {
                 //get the step name
-                String stepName = steps[index as int];
+                final stepName = steps[index as int];
                 switch (stepName) {
                   case 'Send to POS':
                     // Navigator.pushNamed(context, AppRoutes.getNewCategoryRoutes());
                   await doSendToPos();
-                    break;
                   case 'Generate PDF':
                     showCustomToast('PDF Coming soon', isError: false);
                     finish(context);
-                    break;
                   default:
                     break;
                 }

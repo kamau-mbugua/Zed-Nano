@@ -1,31 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:zed_nano/models/createbillingInvoice/CreateBillingInvoiceResponse.dart';
 import 'package:zed_nano/screens/invoices/create_invoice/select_customer_page.dart';
 import 'package:zed_nano/screens/invoices/create_invoice/select_invoice_type_page.dart';
 import 'package:zed_nano/screens/payments/checkout_payment/check_out_payments_page.dart';
 import 'package:zed_nano/screens/sell/cart_preview_page.dart';
 import 'package:zed_nano/screens/sell/sell_page.dart';
-import 'package:zed_nano/screens/stock/add_stock/addStock/steps/preview/add_stock_preview_page.dart';
-import 'package:zed_nano/screens/stock/add_stock/addStock/steps/products/add_stock_products_page.dart';
 import 'package:zed_nano/screens/widget/common/reusable_stepper_widget.dart';
-import 'package:zed_nano/models/createbillingInvoice/CreateBillingInvoiceResponse.dart';
 
 enum SellStepType{
   Order,
   Invoice
 }
 class SellStepperPage extends StatefulWidget {
+
+  const SellStepperPage({
+    super.key,
+    this.initialStep = 0,
+    this.customerId,
+    this.initialStepData,
+    this.stepType = SellStepType.Order,
+  });
   final int initialStep;
   final String? customerId;
   final Map<String, dynamic>? initialStepData;
   final SellStepType stepType;
-
-  const SellStepperPage({
-    Key? key,
-    this.initialStep = 0,
-    this.customerId,
-    this.initialStepData,
-    this.stepType = SellStepType.Order
-  }) : super(key: key);
 
   @override
   State<SellStepperPage> createState() => _SellStepperPageState();
@@ -77,7 +75,7 @@ class _SellStepperPageState extends State<SellStepperPage> {
       stepTitles = const [
         'Sell',
         'Preview',
-        'Checkout'
+        'Checkout',
       ];
       steps =  [
         _SellPageWrapper(),
@@ -143,9 +141,9 @@ class _SelectInvoiceTypePage extends StatelessWidget {
 }
 
 class _CartPreviewPageWrapper extends StatelessWidget {
-  final String? customerId;
   
-  const _CartPreviewPageWrapper({Key? key, this.customerId}) : super(key: key);
+  const _CartPreviewPageWrapper({this.customerId});
+  final String? customerId;
   
   @override
   Widget build(BuildContext context) {
@@ -159,9 +157,9 @@ class _CartPreviewPageWrapper extends StatelessWidget {
 }
 
 class _CheckOutPaymentsPageWrapper extends StatelessWidget {
-  final String? orderId;
   
-  const _CheckOutPaymentsPageWrapper({Key? key, this.orderId}) : super(key: key);
+  const _CheckOutPaymentsPageWrapper({this.orderId});
+  final String? orderId;
   
   @override
   Widget build(BuildContext context) {

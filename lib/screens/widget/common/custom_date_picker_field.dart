@@ -1,8 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/utils/Colors.dart';
 
 class CustomDatePickerField extends StatelessWidget {
+
+  const CustomDatePickerField({
+    required this.label, required this.onDateSelected, super.key,
+    this.selectedDate,
+    this.firstDate,
+    this.lastDate,
+    this.hintText,
+    this.enabled = true,
+    this.prefixIcon,
+    this.borderColor,
+    this.fillColor,
+  });
   final String label;
   final DateTime? selectedDate;
   final Function(DateTime) onDateSelected;
@@ -14,20 +25,6 @@ class CustomDatePickerField extends StatelessWidget {
   final Color? borderColor;
   final Color? fillColor;
 
-  const CustomDatePickerField({
-    Key? key,
-    required this.label,
-    required this.onDateSelected,
-    this.selectedDate,
-    this.firstDate,
-    this.lastDate,
-    this.hintText,
-    this.enabled = true,
-    this.prefixIcon,
-    this.borderColor,
-    this.fillColor,
-  }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -38,7 +35,7 @@ class CustomDatePickerField extends StatelessWidget {
           style: const TextStyle(
             color: textPrimary,
             fontWeight: FontWeight.w600,
-            fontFamily: "Poppins",
+            fontFamily: 'Poppins',
             fontSize: 12,
           ),
         ),
@@ -79,7 +76,7 @@ class CustomDatePickerField extends StatelessWidget {
                             ? (enabled ? textPrimary : Colors.grey.shade500)
                             : textSecondary,
                         fontWeight: FontWeight.w400,
-                        fontFamily: "Poppins",
+                        fontFamily: 'Poppins',
                         fontSize: 14,
                       ),
                     ),
@@ -99,7 +96,7 @@ class CustomDatePickerField extends StatelessWidget {
   }
 
   Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
+    final picked = await showDatePicker(
       context: context,
       initialDate: selectedDate ?? DateTime.now(),
       firstDate: firstDate ?? DateTime(2020),
@@ -109,9 +106,6 @@ class CustomDatePickerField extends StatelessWidget {
           data: Theme.of(context).copyWith(
             colorScheme: const ColorScheme.light(
               primary: appThemePrimary,
-              onPrimary: Colors.white,
-              surface: Colors.white,
-              onSurface: textPrimary,
             ),
             textButtonTheme: TextButtonThemeData(
               style: TextButton.styleFrom(
@@ -152,6 +146,16 @@ class CustomDatePickerField extends StatelessWidget {
 
 // Alternative compact version for inline use
 class CompactDatePickerField extends StatelessWidget {
+
+  const CompactDatePickerField({
+    required this.onDateSelected, super.key,
+    this.selectedDate,
+    this.firstDate,
+    this.lastDate,
+    this.placeholder,
+    this.enabled = true,
+    this.width,
+  });
   final DateTime? selectedDate;
   final Function(DateTime) onDateSelected;
   final DateTime? firstDate;
@@ -159,17 +163,6 @@ class CompactDatePickerField extends StatelessWidget {
   final String? placeholder;
   final bool enabled;
   final double? width;
-
-  const CompactDatePickerField({
-    Key? key,
-    required this.onDateSelected,
-    this.selectedDate,
-    this.firstDate,
-    this.lastDate,
-    this.placeholder,
-    this.enabled = true,
-    this.width,
-  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -202,7 +195,7 @@ class CompactDatePickerField extends StatelessWidget {
                     ? (enabled ? textPrimary : Colors.grey.shade500)
                     : textSecondary,
                 fontWeight: FontWeight.w400,
-                fontFamily: "Poppins",
+                fontFamily: 'Poppins',
                 fontSize: 12,
               ),
             ),
@@ -213,7 +206,7 @@ class CompactDatePickerField extends StatelessWidget {
   }
 
   Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
+    final picked = await showDatePicker(
       context: context,
       initialDate: selectedDate ?? DateTime.now(),
       firstDate: firstDate ?? DateTime(2020),
@@ -223,9 +216,6 @@ class CompactDatePickerField extends StatelessWidget {
           data: Theme.of(context).copyWith(
             colorScheme: const ColorScheme.light(
               primary: appThemePrimary,
-              onPrimary: Colors.white,
-              surface: Colors.white,
-              onSurface: textPrimary,
             ),
             textButtonTheme: TextButtonThemeData(
               style: TextButton.styleFrom(

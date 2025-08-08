@@ -13,10 +13,10 @@ Widget allTransactionsItemBuilder(ViewTransactionData item, BuildContext context
       TransactionDetailPage(transactionId: item.transactionID,).launch(context);
     },
     child: Container(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: cardBackgroundColor,
-          borderRadius: BorderRadius.circular(8.0),
+          borderRadius: BorderRadius.circular(8),
           // boxShadow: [
           //   BoxShadow(
           //     color: Colors.grey.withOpacity(0.3),
@@ -30,7 +30,7 @@ Widget allTransactionsItemBuilder(ViewTransactionData item, BuildContext context
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             rfCommonCachedNetworkImage(customerTransactionsIcon,
-                height: 14, width: 14, radius: 0, color: successTextColor),
+                height: 14, width: 14, radius: 0, color: successTextColor,),
             10.width,
             Expanded(
               child: Column(
@@ -41,16 +41,16 @@ Widget allTransactionsItemBuilder(ViewTransactionData item, BuildContext context
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(item.transactionID ?? "",
+                          Text(item.transactionID ?? '',
                               style: const TextStyle(
                                 fontFamily: 'Poppins',
                                 color: textPrimary,
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
                                 fontStyle: FontStyle.normal,
-                              )
+                              ),
                           ),
-                          Text(item.transtime?.toFormattedDateTime() ?? "",
+                          Text(item.transtime?.toFormattedDateTime() ?? '',
                               style: const TextStyle(
                                 fontFamily: 'Poppins',
                                 color: textSecondary,
@@ -59,8 +59,8 @@ Widget allTransactionsItemBuilder(ViewTransactionData item, BuildContext context
                                 fontStyle: FontStyle.normal,
                                 letterSpacing: 0.15,
 
-                              )
-                          )
+                              ),
+                          ),
                         ],
                       ),
                       Column(
@@ -73,19 +73,19 @@ Widget allTransactionsItemBuilder(ViewTransactionData item, BuildContext context
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
                                 fontStyle: FontStyle.normal,
-                              )
+                              ),
                           ),
-                          Text("${item.transactionType ?? ""}",
+                          Text(item.transactionType ?? '',
                               style: const TextStyle(
                                 fontFamily: 'Poppins',
                                 color: textSecondary,
                                 fontSize: 10,
                                 fontWeight: FontWeight.w600,
                                 fontStyle: FontStyle.normal,
-                              )
-                          )
+                              ),
+                          ),
                         ],
-                      )
+                      ),
                     ],
                   ),
                   Divider(
@@ -98,7 +98,7 @@ Widget allTransactionsItemBuilder(ViewTransactionData item, BuildContext context
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text("Completed By:",
+                          const Text('Completed By:',
                               style: TextStyle(
                                 fontFamily: 'Poppins',
                                 color: textSecondary,
@@ -107,9 +107,9 @@ Widget allTransactionsItemBuilder(ViewTransactionData item, BuildContext context
                                 fontStyle: FontStyle.normal,
                                 letterSpacing: 0.15,
 
-                              )
+                              ),
                           ),
-                          Text("${item.cashier ?? ""}",
+                          Text(item.cashier ?? '',
                               style: const TextStyle(
                                 fontFamily: 'Poppins',
                                 color: textPrimary,
@@ -118,14 +118,14 @@ Widget allTransactionsItemBuilder(ViewTransactionData item, BuildContext context
                                 fontStyle: FontStyle.normal,
                                 letterSpacing: 0.12,
 
-                              )
-                          )
+                              ),
+                          ),
                         ],
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          const Text("Phone Number:",
+                          const Text('Phone Number:',
                               style: TextStyle(
                                 fontFamily: 'Poppins',
                                 color: textSecondary,
@@ -134,9 +134,9 @@ Widget allTransactionsItemBuilder(ViewTransactionData item, BuildContext context
                                 fontStyle: FontStyle.normal,
                                 letterSpacing: 0.15,
 
-                              )
+                              ),
                           ),
-                          Text("${item.customerPhone ?? "N/A"}",
+                          Text(item.customerPhone ?? 'N/A',
                               style: const TextStyle(
                                 fontFamily: 'Poppins',
                                 color: textPrimary,
@@ -145,16 +145,16 @@ Widget allTransactionsItemBuilder(ViewTransactionData item, BuildContext context
                                 fontStyle: FontStyle.normal,
                                 letterSpacing: 0.12,
 
-                              )
-                          )
+                              ),
+                          ),
                         ],
-                      )
+                      ),
                     ],
-                  )
+                  ),
                 ],
               ),
-            )
+            ),
           ],
-        )),
+        ),),
   );
 }

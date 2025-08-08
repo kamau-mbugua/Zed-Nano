@@ -13,9 +13,9 @@ import 'package:zed_nano/utils/extensions.dart';
 import 'package:zed_nano/utils/pagination_controller.dart';
 
 class ViewStockBatchDetail extends StatefulWidget {
-  String batchId;
 
-  ViewStockBatchDetail({Key? key, required this.batchId}) : super(key: key);
+  ViewStockBatchDetail({required this.batchId, super.key});
+  String batchId;
 
   @override
   _ViewStockBatchDetailState createState() => _ViewStockBatchDetailState();
@@ -47,15 +47,15 @@ class _ViewStockBatchDetailState extends State<ViewStockBatchDetail> {
   }
 
   Future<List<StockItem>> getAddStockProductsBatch(
-      {required int page, required int limit}) async {
-    var request = {
+      {required int page, required int limit,}) async {
+    final request = {
       'batchId': widget.batchId,
     };
 
     try {
       final response = await getBusinessProvider(context)
           .getAddStockProductsBatch(
-              page: page, limit: limit, context: context, requestData: request);
+              page: page, limit: limit, context: context, requestData: request,);
 
       setState(() {
         stockBatchDetail = response.data;
@@ -72,7 +72,7 @@ class _ViewStockBatchDetailState extends State<ViewStockBatchDetail> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar:  AuthAppBar(
+      appBar:  const AuthAppBar(
         title: 'Batch Details',
       ),
       body: Column(
@@ -148,7 +148,7 @@ class _ViewStockBatchDetailState extends State<ViewStockBatchDetail> {
                 fontWeight: FontWeight.w400,
                 fontStyle: FontStyle.normal,
                 letterSpacing: 0.12,
-              ))
+              ),),
         ],
       ),
     );
@@ -157,7 +157,7 @@ class _ViewStockBatchDetailState extends State<ViewStockBatchDetail> {
   Widget _createHeader() {
     return Container(
         width: context.width(),
-        margin: const EdgeInsets.only(left: 0, right: 0, bottom: 8),
+        margin: const EdgeInsets.only(bottom: 8),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: cardBackgroundColor,
@@ -177,7 +177,7 @@ class _ViewStockBatchDetailState extends State<ViewStockBatchDetail> {
                       fontSize: 18,
                       fontWeight: FontWeight.w400,
                       fontStyle: FontStyle.normal,
-                    )),
+                    ),),
                 Text(stockBatchDetail?.batchHeader?.stockStatus ?? 'N/A',
                     style: TextStyle(
                       fontFamily: 'Poppins',
@@ -188,7 +188,7 @@ class _ViewStockBatchDetailState extends State<ViewStockBatchDetail> {
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
                       fontStyle: FontStyle.normal,
-                    ))
+                    ),),
               ],
             ),
             if (stockBatchDetail?.batchHeader?.stockStatus == 'APPROVED')
@@ -248,6 +248,6 @@ class _ViewStockBatchDetailState extends State<ViewStockBatchDetail> {
                 ],
               ),
           ],
-        ));
+        ),);
   }
 }

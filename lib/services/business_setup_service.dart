@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart'; // Import Widgets to use WidgetsBinding
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zed_nano/app/app_initializer.dart';
@@ -13,9 +12,9 @@ import 'package:zed_nano/models/business/BusinessDetails.dart';
 /// - Listen to business setup state changes
 /// - Manage business setup flow
 class BusinessSetupService extends ChangeNotifier {
-  static final BusinessSetupService _instance = BusinessSetupService._internal();
   factory BusinessSetupService() => _instance;
   BusinessSetupService._internal();
+  static final BusinessSetupService _instance = BusinessSetupService._internal();
 
   // Private state
   BusinessDetails? _businessDetails;
@@ -272,10 +271,10 @@ class BusinessSetupService extends ChangeNotifier {
 
   /// Get business setup completion percentage
   double getSetupCompletionPercentage() {
-    if (_businessDetails == null) return 0.0;
+    if (_businessDetails == null) return 0;
     
-    int completedFields = 0;
-    const int totalFields = 6;
+    var completedFields = 0;
+    const totalFields = 6;
     
     if (hasValidBusinessNumber()) completedFields++;
     if (hasValidBusinessName()) completedFields++;
@@ -289,7 +288,7 @@ class BusinessSetupService extends ChangeNotifier {
 
   /// Get missing business setup fields
   List<String> getMissingFields() {
-    final List<String> missing = [];
+    final missing = <String>[];
     
     if (!hasValidBusinessNumber()) missing.add('Business Number');
     if (!hasValidBusinessName()) missing.add('Business Name');

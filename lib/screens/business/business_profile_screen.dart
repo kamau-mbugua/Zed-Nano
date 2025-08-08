@@ -3,16 +3,16 @@ import 'package:provider/provider.dart';
 import 'package:zed_nano/models/get_business_info/BusinessInfoResponse.dart';
 import 'package:zed_nano/providers/business/BusinessProviders.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
+import 'package:zed_nano/screens/business/business_profile_page.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
-import 'business_profile_page.dart';
 
 class BusinessProfileScreen extends StatefulWidget {
-  final String? businessId;
   
   const BusinessProfileScreen({
-    Key? key,
+    super.key,
     this.businessId,
-  }) : super(key: key);
+  });
+  final String? businessId;
 
   @override
   State<BusinessProfileScreen> createState() => _BusinessProfileScreenState();
@@ -28,24 +28,24 @@ class _BusinessProfileScreenState extends State<BusinessProfileScreen> {
   }
   
   Future<void> _fetchBusinessProfile() async {
-    var businessId = getBusinessDetails(context)?.businessId;
+    final businessId = getBusinessDetails(context)?.businessId;
 
-    Map<String, dynamic> businessData = {
-      'businessId':businessId
+    final businessData = <String, dynamic>{
+      'businessId':businessId,
     };
     await context
         .read<BusinessProviders>()
         .getBusinessInfo(requestData:businessData,context: context)
         .then((value) async {
       if (value.isSuccess) {
-        var businessInfo = value.data?.data;
+        final businessInfo = value.data?.data;
         setState(() {
           businessInfoData = businessInfo;
         });
 
       } else {
         showCustomToast(
-            value.message ?? 'Something went wrong');
+            value.message ?? 'Something went wrong',);
       }
     });
   }

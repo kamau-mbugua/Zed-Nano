@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class CustomDirectionality extends StatelessWidget {
+  const CustomDirectionality({required this.child, super.key});
   final Widget child;
-  const CustomDirectionality({Key? key,  required this.child}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

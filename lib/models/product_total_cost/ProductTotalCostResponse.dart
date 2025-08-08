@@ -1,10 +1,4 @@
 class ProductTotalCostResponse {
-  final String? status;
-  final String? message;
-  final List<ProductTotalCostData>? data;
-  final String? currency;
-  final double? quantitiesSoldTotals;
-  final double? totalSales;
 
   ProductTotalCostResponse({
     this.status,
@@ -29,6 +23,12 @@ class ProductTotalCostResponse {
         totalSales: (json['totalSales'] as num?)?.toDouble(),
     );
   }
+  final String? status;
+  final String? message;
+  final List<ProductTotalCostData>? data;
+  final String? currency;
+  final double? quantitiesSoldTotals;
+  final double? totalSales;
 
   Map<String, dynamic> toJson() {
     return {
@@ -41,13 +41,6 @@ class ProductTotalCostResponse {
 }
 
 class ProductTotalCostData {
-  final double? totalSales;
-  final double? quantitySold;
-  final String? productName;
-  final double? sellingPrice;
-  final double? buyingPrice;
-  final double? totalCost;
-  final String? imageUrl;
 
   ProductTotalCostData({
     this.totalSales,
@@ -70,6 +63,13 @@ class ProductTotalCostData {
       imageUrl: json['imageUrl'] as String?,
     );
   }
+  final double? totalSales;
+  final double? quantitySold;
+  final String? productName;
+  final double? sellingPrice;
+  final double? buyingPrice;
+  final double? totalCost;
+  final String? imageUrl;
 
   Map<String, dynamic> toJson() {
     return {

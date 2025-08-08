@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:zed_nano/app/app_initializer.dart';
-import 'package:zed_nano/models/get_whatsapp_message_for_invoice/GetWhatsappMessageForInvoiceResponse.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
-import 'package:zed_nano/routes/routes.dart';
 import 'package:zed_nano/screens/widget/common/base_bottom_sheet.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 
 class InvoiceOptionsBottomSheet extends StatefulWidget {
-  String? invoiceNumber;
   InvoiceOptionsBottomSheet({super.key, this.invoiceNumber});
+  String? invoiceNumber;
 
   @override
   State<InvoiceOptionsBottomSheet> createState() => _InvoiceOptionsBottomSheetState();
@@ -21,7 +18,7 @@ class _InvoiceOptionsBottomSheetState extends State<InvoiceOptionsBottomSheet> {
 
 
   Future<void> resendInvoice() async {
-    Map<String, dynamic> requestData = {
+    final requestData = <String, dynamic>{
       'invoiceNumber': widget.invoiceNumber,
     };
 
@@ -41,7 +38,7 @@ class _InvoiceOptionsBottomSheetState extends State<InvoiceOptionsBottomSheet> {
   }
 
   Future<void> shareInvoice() async {
-    Map<String, dynamic> requestData = {
+    final requestData = <String, dynamic>{
       'invoiceNumber': widget.invoiceNumber,
     };
 
@@ -83,8 +80,6 @@ class _InvoiceOptionsBottomSheetState extends State<InvoiceOptionsBottomSheet> {
     return BaseBottomSheet(
       title: 'More Actions',
       initialChildSize: 0.5,
-      minChildSize: 0.5,
-      maxChildSize: 1.0,
       headerContent:  const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -118,15 +113,13 @@ class _InvoiceOptionsBottomSheetState extends State<InvoiceOptionsBottomSheet> {
               steps: steps,
               onTab: (index) async {
                 //get the step name
-                String stepName = steps[index as int];
+                final stepName = steps[index as int];
                 switch (stepName) {
                   case 'Resend invoice to email':
                     await resendInvoice();
-                    break;
                   case 'Share invoice':
                     Navigator.pop(context); // Close the bottom sheet first
                     await shareInvoice(); // Add semicolon here
-                    break;
                   default:
                     break;
                 }

@@ -52,7 +52,7 @@ class CartViewModel with ChangeNotifier {
       String currency,
       String category,
       double discount,
-      {int quantity = 1}) {
+      {int quantity = 1,}) {
     if (_items.containsKey(productId)) {
       // Update existing item quantity
       _items.update(
@@ -122,15 +122,6 @@ class CartViewModel with ChangeNotifier {
 
 // CartItem model
 class CartItem {
-  final String id;
-  final String name;
-  final String category;
-  final double price;
-  final String imagePath;
-
-  final String currency;
-  final int quantity;
-  final double discount;
 
   CartItem({
     required this.id,
@@ -142,6 +133,15 @@ class CartItem {
     required this.currency,
     required this.discount,
   });
+  final String id;
+  final String name;
+  final String category;
+  final double price;
+  final String imagePath;
+
+  final String currency;
+  final int quantity;
+  final double discount;
 
   double get total => (price * quantity) - discount;
 }

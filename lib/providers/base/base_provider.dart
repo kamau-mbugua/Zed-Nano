@@ -96,8 +96,7 @@ class BaseProvider extends ChangeNotifier {
         setError(ErrorResponse(
           statusCode: 0,
           statusMessage: e.toString(),
-          errorType: ErrorType.unknown,
-        ));
+        ),);
       }
       return null;
     } finally {

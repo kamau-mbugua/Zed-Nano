@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 import 'package:zed_nano/contants/AppConstants.dart';
@@ -9,13 +8,11 @@ import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/routes/routes.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
-import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
-import 'package:zed_nano/utils/Images.dart';
 
 class BusinessCreatedPreviewPage extends StatefulWidget {
+  const BusinessCreatedPreviewPage({required this.onNext, super.key});
   final VoidCallback onNext;
-  const BusinessCreatedPreviewPage({Key? key, required this.onNext}) : super(key: key);
 
   @override
   State<BusinessCreatedPreviewPage> createState() => _BusinessCreatedPreviewPageState();
@@ -34,24 +31,24 @@ class _BusinessCreatedPreviewPageState extends State<BusinessCreatedPreviewPage>
 
   Future<void> getBusinessInformation() async {
 
-    var businessId = getBusinessDetails(context)?.businessId;
+    final businessId = getBusinessDetails(context)?.businessId;
 
-    Map<String, dynamic> businessData = {
-      'businessId':businessId
+    final businessData = <String, dynamic>{
+      'businessId':businessId,
     };
     await context
         .read<BusinessProviders>()
         .getBusinessInfo(requestData:businessData,context: context)
         .then((value) async {
       if (value.isSuccess) {
-        var businessInfo = value.data?.data;
+        final businessInfo = value.data?.data;
         setState(() {
           businessInfoData = businessInfo;
         });
 
       } else {
         showCustomToast(
-            value.message ?? 'Something went wrong');
+            value.message ?? 'Something went wrong',);
       }
     });
   }
@@ -73,7 +70,7 @@ class _BusinessCreatedPreviewPageState extends State<BusinessCreatedPreviewPage>
             color: Color(0xff1f2024),
             fontWeight: FontWeight.w500,
             fontFamily: 'Poppins',
-            fontSize: 16.0,
+            fontSize: 16,
           ),
         ),
       ),
@@ -81,29 +78,29 @@ class _BusinessCreatedPreviewPageState extends State<BusinessCreatedPreviewPage>
         child: Stack(
           children: [
             // Header section
-            Positioned(
+            const Positioned(
               top: 16,
               left: 16,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     'Business Summary',
                     style: TextStyle(
                       color: Color(0xff1f2024),
                       fontWeight: FontWeight.w600,
                       fontFamily: 'Poppins',
-                      fontSize: 28.0,
+                      fontSize: 28,
                     ),
                   ),
-                  const SizedBox(height: 4),
-                  const Text(
+                  SizedBox(height: 4),
+                  Text(
                     'A summary of your business information',
                     style: TextStyle(
                       color: Color(0xff71727a),
                       fontWeight: FontWeight.w400,
                       fontFamily: 'Poppins',
-                      fontSize: 12.0,
+                      fontSize: 12,
                     ),
                   ),
                 ],
@@ -181,7 +178,7 @@ class _BusinessCreatedPreviewPageState extends State<BusinessCreatedPreviewPage>
                           getBusinessInformation();
                         });
                       },
-                      context: context
+                      context: context,
                   ).paddingSymmetric(horizontal: 12),
                   10.height,
                   appButton(
@@ -189,7 +186,7 @@ class _BusinessCreatedPreviewPageState extends State<BusinessCreatedPreviewPage>
                       onTap: () {
                         widget.onNext();
                       },
-                      context: context
+                      context: context,
                   ).paddingSymmetric(horizontal: 12),
                 ],
               ),
@@ -212,7 +209,7 @@ class _BusinessCreatedPreviewPageState extends State<BusinessCreatedPreviewPage>
               color: Color(0xff1f2024),
               fontWeight: FontWeight.w400,
               fontFamily: 'Poppins',
-              fontSize: 14.0,
+              fontSize: 14,
             ),
           ),
           const SizedBox(height: 4),
@@ -222,7 +219,7 @@ class _BusinessCreatedPreviewPageState extends State<BusinessCreatedPreviewPage>
               color: Color(0xff71727a),
               fontWeight: FontWeight.w400,
               fontFamily: 'Poppins',
-              fontSize: 12.0,
+              fontSize: 12,
             ),
           ),
         ],
@@ -234,8 +231,8 @@ class _BusinessCreatedPreviewPageState extends State<BusinessCreatedPreviewPage>
     return Container(
       width: double.infinity,
       height: 0.5,
-      decoration: BoxDecoration(
-        color: const Color(0xffd4d6dd),
+      decoration: const BoxDecoration(
+        color: Color(0xffd4d6dd),
       ),
     );
   }

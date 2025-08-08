@@ -5,18 +5,17 @@ import 'package:zed_nano/utils/Common.dart';
 
 /// A reusable app bar for authentication screens with consistent styling
 class AuthAppBar extends StatelessWidget implements PreferredSizeWidget {
+  
+  const AuthAppBar({
+    required this.title, super.key,
+    this.onBackPressed,
+    this.actions,
+    this.elevation = 5,
+  });
   final String title;
   final VoidCallback? onBackPressed;
   final List<Widget>? actions;
   final double elevation;
-  
-  AuthAppBar({
-    Key? key,
-    required this.title,
-    this.onBackPressed,
-    this.actions,
-    this.elevation = 5,
-  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -39,5 +38,5 @@ class AuthAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }

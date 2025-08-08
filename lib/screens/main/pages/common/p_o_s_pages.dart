@@ -3,7 +3,6 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 import 'package:zed_nano/models/sales_dashboard/SalesDashboardResponse.dart';
 import 'package:zed_nano/providers/business/BusinessProviders.dart';
-import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/invoices/invoices_list_main_page.dart';
 import 'package:zed_nano/screens/orders/orders_list_main_page.dart';
 import 'package:zed_nano/screens/reports/sales_report/sub_reports/quantities_sold_page.dart';
@@ -18,7 +17,7 @@ import 'package:zed_nano/utils/date_range_util.dart';
 import 'package:zed_nano/utils/extensions.dart';
 
 class POSPagesScreen extends StatefulWidget {
-  const POSPagesScreen({Key? key}) : super(key: key);
+  const POSPagesScreen({super.key});
 
   @override
   State<POSPagesScreen> createState() => _POSPagesScreenState();
@@ -63,10 +62,10 @@ class _POSPagesScreenState extends State<POSPagesScreen> {
   }
 
   Future<void> branchStoreSummary() async {
-    Map<String, dynamic> requestData = {
+    final requestData = <String, dynamic>{
       'startDate': _dateRange.values.first.removeTimezoneOffset,
       'endDate': _dateRange.values.last.removeTimezoneOffset,
-      'year':defaultYear
+      'year':defaultYear,
     };
 
     await context
@@ -182,7 +181,7 @@ class _POSPagesScreenState extends State<POSPagesScreen> {
               style: TextStyle(
                 color: textPrimary,
                 fontWeight: FontWeight.w600,
-                fontFamily: "Poppins",
+                fontFamily: 'Poppins',
                 fontSize: 28,
               ),
             ),
@@ -192,7 +191,7 @@ class _POSPagesScreenState extends State<POSPagesScreen> {
               style: TextStyle(
                 color: textSecondary,
                 fontWeight: FontWeight.w400,
-                fontFamily: "Poppins",
+                fontFamily: 'Poppins',
                 fontSize: 12,
               ),
             ),
@@ -226,7 +225,7 @@ class _POSPagesScreenState extends State<POSPagesScreen> {
               style: const TextStyle(
                 color: textPrimary,
                 fontWeight: FontWeight.w400,
-                fontFamily: "Poppins",
+                fontFamily: 'Poppins',
                 fontSize: 12,
               ),
             ),
@@ -270,7 +269,7 @@ class _POSPagesScreenState extends State<POSPagesScreen> {
           style: TextStyle(
             color: textPrimary,
             fontWeight: FontWeight.w600,
-            fontFamily: "Poppins",
+            fontFamily: 'Poppins',
             fontSize: 14,
           ),
         ),
@@ -286,7 +285,7 @@ class _POSPagesScreenState extends State<POSPagesScreen> {
                     'KES ${_formatNumber(_dashboardData?.keyMetrics?.totalSales ?? 0)}',
                 subtitle:
                     '${_dashboardData?.keyMetrics?.totalTransactions ?? 0} Transactions',
-              ).onTap(()=> TotalSalesPage().launch(context)),
+              ).onTap(()=> const TotalSalesPage().launch(context)),
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -295,9 +294,9 @@ class _POSPagesScreenState extends State<POSPagesScreen> {
                 iconColor: primaryBlueTextColor,
                 title: 'Quantities Sold',
                 value:
-                    '${_formatNumber(_dashboardData?.keyMetrics?.quantitiesSold ?? 0)}',
+                    _formatNumber(_dashboardData?.keyMetrics?.quantitiesSold ?? 0),
                 subtitle: 'Today',
-              ).onTap(()=> QuantitiesSoldPage().launch(context)),
+              ).onTap(()=> const QuantitiesSoldPage().launch(context)),
             ),
           ],
         ),
@@ -334,14 +333,14 @@ class _POSPagesScreenState extends State<POSPagesScreen> {
               width: 24,
               color: iconColor,
               fit: BoxFit.contain,
-              radius: 0),
+              radius: 0,),
           const SizedBox(height: 12),
           Text(
             title,
             style: const TextStyle(
               color: textSecondary,
               fontWeight: FontWeight.w400,
-              fontFamily: "Poppins",
+              fontFamily: 'Poppins',
               fontSize: 12,
             ),
           ),
@@ -351,7 +350,7 @@ class _POSPagesScreenState extends State<POSPagesScreen> {
             style: const TextStyle(
               color: textPrimary,
               fontWeight: FontWeight.w600,
-              fontFamily: "Poppins",
+              fontFamily: 'Poppins',
               fontSize: 14,
             ),
           ),
@@ -361,7 +360,7 @@ class _POSPagesScreenState extends State<POSPagesScreen> {
             style: const TextStyle(
               color: textSecondary,
               fontWeight: FontWeight.w400,
-              fontFamily: "Poppins",
+              fontFamily: 'Poppins',
               fontSize: 10,
             ),
           ),
@@ -379,7 +378,7 @@ class _POSPagesScreenState extends State<POSPagesScreen> {
           style: TextStyle(
             color: textPrimary,
             fontWeight: FontWeight.w600,
-            fontFamily: "Poppins",
+            fontFamily: 'Poppins',
             fontSize: 14,
           ),
         ),
@@ -416,9 +415,9 @@ class _POSPagesScreenState extends State<POSPagesScreen> {
     final maxSales = monthsData
         .map((e) => e.totalSales ?? 0)
         .reduce((a, b) => a > b ? a : b);
-    final chartHeight = 120.0;
-    final barWidth = 40.0;
-    final barSpacing = 16.0;
+    const chartHeight = 120.0;
+    const barWidth = 40.0;
+    const barSpacing = 16.0;
 
     // Auto-scroll to current month after build
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -477,7 +476,7 @@ class _POSPagesScreenState extends State<POSPagesScreen> {
                         style: const TextStyle(
                           color: highlightMainDark,
                           fontWeight: FontWeight.w600,
-                          fontFamily: "Poppins",
+                          fontFamily: 'Poppins',
                           fontSize: 10,
                         ),
                       ),
@@ -499,7 +498,7 @@ class _POSPagesScreenState extends State<POSPagesScreen> {
                     style: TextStyle(
                       color: isCurrentMonth ? const Color(0xFF17AE7B) : textPrimary,
                       fontWeight: isCurrentMonth ? FontWeight.w600 : FontWeight.w400,
-                      fontFamily: "Poppins",
+                      fontFamily: 'Poppins',
                       fontSize: 10,
                     ),
                   ),
@@ -521,7 +520,7 @@ class _POSPagesScreenState extends State<POSPagesScreen> {
           style: TextStyle(
             color: textPrimary,
             fontWeight: FontWeight.w600,
-            fontFamily: "Poppins",
+            fontFamily: 'Poppins',
             fontSize: 14,
           ),
         ),
@@ -538,7 +537,7 @@ class _POSPagesScreenState extends State<POSPagesScreen> {
                 statusColor: googleRed,
                 onTap: () {
                   OrdersListMainPage(
-                    initialTabIndex: 0, // Unpaid tab
+                    
                   ).launch(context);
                 },
               ),
@@ -590,7 +589,7 @@ class _POSPagesScreenState extends State<POSPagesScreen> {
           style: TextStyle(
             color: textPrimary,
             fontWeight: FontWeight.w600,
-            fontFamily: "Poppins",
+            fontFamily: 'Poppins',
             fontSize: 14,
           ),
         ),
@@ -607,7 +606,7 @@ class _POSPagesScreenState extends State<POSPagesScreen> {
                 statusColor: googleRed,
                 onTap: () {
                   InvoicesListMainPage(
-                    initialTabIndex: 0, // Unpaid tab
+                    
                   ).launch(context);
                 },
               ),
@@ -681,7 +680,7 @@ class _POSPagesScreenState extends State<POSPagesScreen> {
               style: const TextStyle(
                 color: textPrimary,
                 fontWeight: FontWeight.w400,
-                fontFamily: "Poppins",
+                fontFamily: 'Poppins',
                 fontSize: 18,
               ),
             ),
@@ -691,7 +690,7 @@ class _POSPagesScreenState extends State<POSPagesScreen> {
               style: TextStyle(
                 color: statusColor,
                 fontWeight: FontWeight.w600,
-                fontFamily: "Poppins",
+                fontFamily: 'Poppins',
                 fontSize: 12,
               ),
             ),
@@ -701,7 +700,7 @@ class _POSPagesScreenState extends State<POSPagesScreen> {
               style: const TextStyle(
                 color: textPrimary,
                 fontWeight: FontWeight.w400,
-                fontFamily: "Poppins",
+                fontFamily: 'Poppins',
                 fontSize: 12,
               ),
             ),

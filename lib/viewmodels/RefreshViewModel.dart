@@ -6,7 +6,7 @@ import 'package:zed_nano/app/app_initializer.dart';
 class RefreshViewModel with ChangeNotifier {
   bool _isRefreshing = false;
   DateTime? _lastRefreshed;
-  Map<String, bool> _pageRefreshStatus = {};
+  final Map<String, bool> _pageRefreshStatus = {};
 
   /// Whether the app is currently refreshing data
   bool get isRefreshing => _isRefreshing;

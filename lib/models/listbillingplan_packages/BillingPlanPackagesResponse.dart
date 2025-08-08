@@ -1,9 +1,4 @@
 class BillingPlanPackagesResponse {
-  final String? status;
-  final String? message;
-  final List<BillingPlanPackageGroup>? response;
-  final String? businessCategory;
-  final int? noOfFreeTrialDays;
 
   BillingPlanPackagesResponse({
     this.status,
@@ -24,6 +19,11 @@ class BillingPlanPackagesResponse {
       noOfFreeTrialDays: json['noOfFreeTrialDays'] as int?,
     );
   }
+  final String? status;
+  final String? message;
+  final List<BillingPlanPackageGroup>? response;
+  final String? businessCategory;
+  final int? noOfFreeTrialDays;
 
   Map<String, dynamic> toJson() {
     return {
@@ -37,9 +37,6 @@ class BillingPlanPackagesResponse {
 }
 
 class BillingPlanPackageGroup {
-  final String? id;
-  final List<BillingPlan>? plans;
-  final bool? isRecommended;
 
   BillingPlanPackageGroup({
     this.id,
@@ -56,29 +53,20 @@ class BillingPlanPackageGroup {
       isRecommended: json['isRecommended'] as bool,
     );
   }
+  final String? id;
+  final List<BillingPlan>? plans;
+  final bool? isRecommended;
 
   Map<String, dynamic> toJson() {
     return {
       '_id': id,
       'plans': plans?.map((e) => e.toJson()).toList(),
-      'isRecommended': isRecommended
+      'isRecommended': isRecommended,
     };
   }
 }
 
 class BillingPlan {
-  final String? billingPlanName;
-  final String? businessCategory;
-  final int? planSetUpFee;
-  final int? noOfBranches;
-  final int? extraBranchFee;
-  final String? createdBy;
-  final int? nofFreeTrialDays;
-  final String? billingPlanStatus;
-  final List<dynamic>? billableFeatures;
-  final String? packageId;
-  final String? billingPlanPaymentPlanId;
-  final int? billingPeriodAmount;
 
   BillingPlan({
     this.billingPlanName,
@@ -111,6 +99,18 @@ class BillingPlan {
       billingPeriodAmount: json['billingPeriodAmount'] as int?,
     );
   }
+  final String? billingPlanName;
+  final String? businessCategory;
+  final int? planSetUpFee;
+  final int? noOfBranches;
+  final int? extraBranchFee;
+  final String? createdBy;
+  final int? nofFreeTrialDays;
+  final String? billingPlanStatus;
+  final List<dynamic>? billableFeatures;
+  final String? packageId;
+  final String? billingPlanPaymentPlanId;
+  final int? billingPeriodAmount;
 
   Map<String, dynamic> toJson() {
     return {

@@ -1,20 +1,18 @@
-import 'package:flutter/material.dart';
 import 'package:currency_country_picker/currency_country_picker.dart';
-import 'package:nb_utils/nb_utils.dart';
+import 'package:flutter/material.dart';
 
 class CountryCurrencyPicker extends StatefulWidget {
+  
+  const CountryCurrencyPicker({
+    required this.onSelect, super.key,
+    this.initialCountry,
+    this.hintText = 'Select Country',
+    this.showFlag = true,
+  });
   final Function(String countryName, String currencyCode) onSelect;
   final String? initialCountry;
   final String hintText;
   final bool showFlag;
-  
-  const CountryCurrencyPicker({
-    Key? key,
-    required this.onSelect,
-    this.initialCountry,
-    this.hintText = "Select Country",
-    this.showFlag = true,
-  }) : super(key: key);
 
   @override
   State<CountryCurrencyPicker> createState() => _CountryCurrencyPickerState();
@@ -47,12 +45,12 @@ class _CountryCurrencyPickerState extends State<CountryCurrencyPicker> {
             // Add favorite countries to prioritize them at the top of the list
             favorites: <String>['254', '256', '255'], // Kenya, Uganda, Tanzania phone codes
             theme: CountryPickerThemeData(
-              countryCodeTextStyle: TextStyle(
+              countryCodeTextStyle: const TextStyle(
                 fontFamily: 'Poppins', // Poppins font as per user preference
                 fontSize: 14,
                 color: Colors.black87,
               ),
-              titleTextStyle: TextStyle(
+              titleTextStyle: const TextStyle(
                 fontFamily: 'Poppins', // Poppins font as per user preference
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
@@ -60,7 +58,7 @@ class _CountryCurrencyPickerState extends State<CountryCurrencyPicker> {
               ),
               flagSize: 24,
               backgroundColor: Colors.white, // Changed from black to white
-              searchTextStyle: TextStyle(
+              searchTextStyle: const TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 14,
                 color: Colors.black87,
@@ -81,7 +79,7 @@ class _CountryCurrencyPickerState extends State<CountryCurrencyPicker> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                selectedCountry != null ? "$selectedCountry" : widget.hintText,
+                selectedCountry != null ? '$selectedCountry' : widget.hintText,
                 style: TextStyle(
                   fontFamily: 'Poppins', // Poppins font as per user preference
                   fontSize: 14,
@@ -104,7 +102,7 @@ class _CountryCurrencyPickerState extends State<CountryCurrencyPicker> {
               //       ),
               //     ),
               //   ),
-              Icon(Icons.arrow_drop_down, color: Colors.grey),
+              const Icon(Icons.arrow_drop_down, color: Colors.grey),
             ],
           ),
         ),

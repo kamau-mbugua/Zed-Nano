@@ -10,10 +10,9 @@ import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/extensions.dart';
 
 class SetNewPinPage extends StatefulWidget {
+  const SetNewPinPage({super.key, this.oldPin, this.userEmail});
   final String? oldPin;
   final String? userEmail;
-  const SetNewPinPage({Key? key, this.oldPin, this.userEmail})
-      : super(key: key);
 
   @override
   _SetNewPinPageState createState() => _SetNewPinPageState();
@@ -40,10 +39,10 @@ class _SetNewPinPageState extends State<SetNewPinPage> {
   }
 
   Future<void> _handleSetNewPin(
-      Map<String, dynamic> requestBody, BuildContext context) async {
+      Map<String, dynamic> requestBody, BuildContext context,) async {
     final authProvider = getAuthProvider(context);
     final response = await authProvider.resetPinVersion(
-        requestData: requestBody, context: context);
+        requestData: requestBody, context: context,);
     if (response.isSuccess) {
       showCustomToast('New Pin Set, Login with New Pin', isError: false);
       Navigator.of(context).pop();
@@ -56,7 +55,7 @@ class _SetNewPinPageState extends State<SetNewPinPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AuthAppBar(
+      appBar: const AuthAppBar(
         title: 'Set Pin',
       ),
       body: SingleChildScrollView(
@@ -68,14 +67,14 @@ class _SetNewPinPageState extends State<SetNewPinPage> {
               style: boldTextStyle(
                 size: 24,
                 fontFamily: 'Poppins',
-              )).paddingSymmetric(horizontal: 16),
+              ),).paddingSymmetric(horizontal: 16),
           8.height,
           Text('Secure your account with a new PIN.',
                   style: secondaryTextStyle(
                       size: 12,
                       weight: FontWeight.w500,
                       color: getBodyColor(),
-                      fontFamily: 'Poppins'))
+                      fontFamily: 'Poppins',),)
               .paddingSymmetric(horizontal: 16),
           16.height,
           Text('New Pin.',
@@ -83,11 +82,11 @@ class _SetNewPinPageState extends State<SetNewPinPage> {
                       size: 12,
                       weight: FontWeight.w600,
                       color: textPrimary,
-                      fontFamily: 'Poppins'))
+                      fontFamily: 'Poppins',),)
               .paddingSymmetric(horizontal: 16),
           8.height,
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: StyledTextField(
               controller: pinController,
               focusNode: pinFocus,
@@ -104,11 +103,11 @@ class _SetNewPinPageState extends State<SetNewPinPage> {
                       size: 12,
                       weight: FontWeight.w600,
                       color: textPrimary,
-                      fontFamily: 'Poppins'))
+                      fontFamily: 'Poppins',),)
               .paddingSymmetric(horizontal: 16),
           8.height,
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: StyledTextField(
               controller: confirmPinController,
               focusNode: confirmPinFocus,
@@ -122,8 +121,8 @@ class _SetNewPinPageState extends State<SetNewPinPage> {
           appButton(
                   text: 'Set Pin',
                   onTap: () async {
-                    var pin = pinController.text.trim();
-                    var confirmPin = confirmPinController.text.trim();
+                    final pin = pinController.text.trim();
+                    final confirmPin = confirmPinController.text.trim();
                     if (!pin.isValidPin) {
                       showCustomToast('Please enter valid pin');
                       return;
@@ -137,19 +136,19 @@ class _SetNewPinPageState extends State<SetNewPinPage> {
                       return;
                     }
 
-                    Map<String, dynamic> data = {
+                    final data = <String, dynamic>{
                       'userNewPin': pin,
                       'userEmail': widget.userEmail,
-                      'userPin': widget.oldPin
+                      'userPin': widget.oldPin,
                     };
 
                     await _handleSetNewPin(data, context);
                   },
-                  context: context)
+                  context: context,)
               .paddingSymmetric(horizontal: 16),
           16.height,
         ],
-      )),
+      ),),
     );
   }
 }

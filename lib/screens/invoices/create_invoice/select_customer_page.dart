@@ -5,10 +5,8 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 import 'package:zed_nano/models/customers_list/CustomerListResponse.dart';
-import 'package:zed_nano/models/listCategories/ListCategoriesResponse.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
-import 'package:zed_nano/screens/widget/common/common_widgets.dart';
 import 'package:zed_nano/screens/widget/common/heading.dart';
 import 'package:zed_nano/screens/widget/common/searchview.dart';
 import 'package:zed_nano/utils/Colors.dart';
@@ -17,9 +15,9 @@ import 'package:zed_nano/utils/pagination_controller.dart';
 import 'package:zed_nano/viewmodels/CustomerInvoicingViewModel.dart';
 
 class SelectCustomerPage extends StatefulWidget {
+  const SelectCustomerPage({required this.onNext, required this.onPrevious, super.key});
   final VoidCallback onNext;
   final VoidCallback onPrevious;
-  SelectCustomerPage({Key? key , required this.onNext, required this.onPrevious}) : super(key: key);
 
   @override
   State<SelectCustomerPage> createState() => _SelectCustomerPageState();
@@ -31,7 +29,7 @@ class _SelectCustomerPageState extends State<SelectCustomerPage> {
   String searchQuery = '';
   TextEditingController searchController = TextEditingController();
   late PaginationController<Customer> _paginationController;
-  String _searchTerm = "";
+  String _searchTerm = '';
   bool _isInitialized = false;
   Timer? _debounceTimer;
   String? selectedCategoryId;
@@ -89,7 +87,7 @@ class _SelectCustomerPageState extends State<SelectCustomerPage> {
 
   @override
   Widget build(BuildContext context) {
-    var customerInvoicingViewModel = Provider.of<CustomerInvoicingViewModel>(context);
+    final customerInvoicingViewModel = Provider.of<CustomerInvoicingViewModel>(context);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -126,7 +124,7 @@ class _SelectCustomerPageState extends State<SelectCustomerPage> {
                     child: CompactGifDisplayWidget(
                       gifPath: emptyListGif,
                       title: "It's empty, over here.",
-                      subtitle: "No product categories in your business, yet! Add to view them here.",
+                      subtitle: 'No product categories in your business, yet! Add to view them here.',
                     ),
                   ),
                 ),
@@ -143,7 +141,7 @@ class _SelectCustomerPageState extends State<SelectCustomerPage> {
                 if (selectedCategoryId != null) {
                   // Find the selected category from pagination controller
                   final selectedCategory = _paginationController.pagingController.itemList?.firstWhere(
-                        (category) => category.id == selectedCategoryId
+                        (category) => category.id == selectedCategoryId,
                   );
 
                   if (selectedCategory != null) {
@@ -177,7 +175,7 @@ class _SelectCustomerPageState extends State<SelectCustomerPage> {
 
   Widget _buildCategoryItem(Customer category) {
     // Track if this category is selected
-    bool isSelected = selectedCategoryId == category.id;
+    final isSelected = selectedCategoryId == category.id;
 
     return InkWell(
       onTap: () {
@@ -203,8 +201,8 @@ class _SelectCustomerPageState extends State<SelectCustomerPage> {
               style: const TextStyle(
                 color: darkGreyColor, // #1f2024
                 fontWeight: FontWeight.w400,
-                fontFamily: "Poppins",
-                fontSize: 14.0,
+                fontFamily: 'Poppins',
+                fontSize: 14,
               ),
             ),
             const Spacer(),

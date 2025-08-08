@@ -1,8 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:nb_utils/nb_utils.dart' as nb_utils hide Color;
 import 'package:provider/provider.dart';
 import 'package:zed_nano/app/app_initializer.dart';
@@ -12,33 +10,23 @@ import 'package:zed_nano/models/posLoginVersion2/login_response.dart';
 import 'package:zed_nano/models/viewAllTransactions/TransactionListResponse.dart';
 import 'package:zed_nano/providers/business/BusinessProviders.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
-import 'package:zed_nano/routes/routes.dart';
-import 'package:zed_nano/screens/business/get_started_page.dart';
-import 'package:zed_nano/screens/business/bottomsheets/setup_bottom_sheet.dart';
 import 'package:zed_nano/screens/customers/customers_list_page.dart';
 import 'package:zed_nano/screens/reports/itemBuilders/all_transactions_item_builder.dart';
-import 'package:zed_nano/screens/reports/sales_report/sales_report_page.dart';
 import 'package:zed_nano/screens/reports/sales_report/sub_reports/quantities_sold_page.dart';
 import 'package:zed_nano/screens/reports/sales_report/sub_reports/total_sales_page.dart';
-import 'package:zed_nano/screens/reports/transaction_detail/transaction_detail_page.dart';
-import 'package:zed_nano/screens/sell/sell_stepper_page.dart';
 import 'package:zed_nano/screens/widget/common/bottom_sheet_helper.dart';
-import 'package:zed_nano/screens/widget/common/custom_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/screens/widget/common/date_range_filter_bottom_sheet.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/Images.dart';
-import 'package:zed_nano/routes/routes_helper.dart';
-import 'package:zed_nano/screens/widgets/drawer_widget.dart';
+import 'package:zed_nano/utils/date_range_util.dart';
 import 'package:zed_nano/utils/extensions.dart';
 import 'package:zed_nano/viewmodels/RefreshViewModel.dart';
 import 'package:zed_nano/viewmodels/WorkflowViewModel.dart';
-import 'package:zed_nano/utils/date_range_util.dart';
-import 'package:zed_nano/screens/widgets/custom_drawer.dart';
 
 class AdminDashboardPage extends StatefulWidget {
-  const AdminDashboardPage({Key? key}) : super(key: key);
+  const AdminDashboardPage({super.key});
 
   @override
   _AdminDashboardPageState createState() => _AdminDashboardPageState();
@@ -108,7 +96,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
     super.initState();
     loginResponse = getAuthProvider(context).loginResponse;
     businessName = getBusinessDetails(context)?.businessName;
-    WorkflowViewModel viewModel =
+    final viewModel =
         Provider.of<WorkflowViewModel>(context, listen: false);
 
     _dateRange = DateRangeUtil.getDateRange(_selectedRangeLabel);
@@ -129,19 +117,19 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
     // Get refresh view model - LISTEN to changes
     final refreshViewModel = Provider.of<RefreshViewModel>(context);
 
-    bool shouldRefresh = false;
+    var shouldRefresh = false;
 
     // Check if there's been a refresh since we last checked
     if (_lastRefreshTime != refreshViewModel.lastRefreshed &&
         refreshViewModel.lastRefreshed != null) {
       _lastRefreshTime = refreshViewModel.lastRefreshed;
-      logger.w("AdminDashboardPage detected global timestamp change");
+      logger.w('AdminDashboardPage detected global timestamp change');
       shouldRefresh = true;
     }
 
     // Check if this specific page was refreshed
     if (refreshViewModel.isPageRefreshed('admin_dashboard')) {
-      logger.w("AdminDashboardPage detected specific page refresh");
+      logger.w('AdminDashboardPage detected specific page refresh');
       shouldRefresh = true;
 
       // Schedule the reset for after build completes to avoid setState during build
@@ -161,7 +149,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
     if (_isFetching) return;
 
     _isFetching = true;
-    logger.w("AdminDashboardPage starting data fetch");
+    logger.w('AdminDashboardPage starting data fetch');
 
     fetchBranchStoreSummary().then((_) {
       // Reset the fetching flag after a short delay
@@ -169,7 +157,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
         _isFetching = false;
       });
     }).catchError((error) {
-      logger.e("Error fetching branch store summary: $error");
+      logger.e('Error fetching branch store summary: $error');
       _isFetching = false;
     });
   }
@@ -188,10 +176,10 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
   }
 
   Future<void> branchStoreSummary() async {
-    Map<String, dynamic> requestData = {
+    final requestData = <String, dynamic>{
       'startDate': _dateRange.values.first.removeTimezoneOffset,
       'endDate': _dateRange.values.last.removeTimezoneOffset,
-      'branchId': getBusinessDetails(context)?.branchId ?? ''
+      'branchId': getBusinessDetails(context)?.branchId ?? '',
     };
 
     await context
@@ -211,7 +199,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
   }
 
   Future<void> getBranchTransactionByDate() async {
-    Map<String, dynamic> requestData = {
+    final requestData = <String, dynamic>{
       'startDate': _dateRange.values.first.removeTimezoneOffset,
       'endDate': _dateRange.values.last.removeTimezoneOffset,
       'branch_id': getBusinessDetails(context)?.branchId ?? '',
@@ -242,7 +230,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
             limit: 5,
             searchValue: '',
             startDate: _dateRange.values.first.removeTimezoneOffset,
-            endDate: _dateRange.values.last.removeTimezoneOffset)
+            endDate: _dateRange.values.last.removeTimezoneOffset,)
         .then((value) async {
       if (value.isSuccess) {
         if (mounted) {
@@ -268,7 +256,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
       case 'product':
         return 0.8;
       default:
-        return 1.0;
+        return 1;
     }
   }
 
@@ -307,7 +295,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
   Widget build(BuildContext context) {
     return Consumer2<WorkflowViewModel, RefreshViewModel>(
       builder: (context, viewModel, refreshViewModel, _) {
-        return Container(
+        return ColoredBox(
           color: Colors.white, // Add white background
           child: SafeArea(
             child: RefreshIndicator(
@@ -327,16 +315,16 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                     10.height,
                     const Text('Sales Summary',
                         style: TextStyle(
-                            fontWeight: FontWeight.w600, fontSize: 16)),
+                            fontWeight: FontWeight.w600, fontSize: 16,),),
                     10.height,
                     buildSalesSummaryList(),
                     16.height,
-                    Row(
+                    const Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text('Recent Sales',
+                        Text('Recent Sales',
                             style: TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 16)),
+                                fontWeight: FontWeight.w600, fontSize: 16,),),
                       ],
                     ),
                     10.height,
@@ -374,25 +362,25 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                 'KES ${branchStoreSummaryResponse?.data?.totalSales?.amount?.formatCurrency() ?? '0.00'}',
                 totalSalesIcon,
                 lightGreenColor,
-                width: cardWidth).onTap(()=> TotalSalesPage().launch(context)),
+                width: cardWidth,).onTap(()=> const TotalSalesPage().launch(context)),
             buildOverviewCard(
                 'Products Sold',
                 '${branchStoreSummaryResponse?.data?.soldStock?.businessSoldStockQuantity ?? '0.00'}',
                 productIcon,
                 lightGrey,
-                width: cardWidth).onTap(()=> QuantitiesSoldPage().launch(context)),
+                width: cardWidth,).onTap(()=> const QuantitiesSoldPage().launch(context)),
             buildOverviewCard(
                 'Pending Payment',
                 'KES ${branchStoreSummaryResponse?.data?.unpaidTotals?.totalUnpaid?.formatCurrency() ?? '0.00'}',
                 pendingPaymentsIcon,
                 lightOrange,
-                width: cardWidth).onTap((){}),
+                width: cardWidth,).onTap((){}),
             buildOverviewCard(
                 'Customers',
                 '${branchStoreSummaryResponse?.data?.customerCount?.totalCustomers ?? '0.00'}',
                 customerCreatedIcon,
                 lightBlue,
-                width: cardWidth).onTap(()=> CustomersListPage().launch(context)),
+                width: cardWidth,).onTap(()=> const CustomersListPage().launch(context)),
           ],
         );
       },
@@ -403,14 +391,14 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const Text("Overview",
+        const Text('Overview',
             style: TextStyle(
               fontFamily: 'Poppins',
               color: textPrimary,
               fontSize: 14,
               fontWeight: FontWeight.w600,
               fontStyle: FontStyle.normal,
-            )),
+            ),),
         GestureDetector(
           onTap: _showPeriodSelector,
           child: Container(
@@ -433,7 +421,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                   style: const TextStyle(
                     color: textPrimary,
                     fontWeight: FontWeight.w400,
-                    fontFamily: "Poppins",
+                    fontFamily: 'Poppins',
                     fontSize: 12,
                   ),
                 ),
@@ -477,18 +465,18 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
               border: Border.all(color: const Color(0xffffb37c)),
-              borderRadius: BorderRadius.circular(10)),
+              borderRadius: BorderRadius.circular(10),),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text('Complete setting up your business',
-                  style: TextStyle(fontSize: 14, color: darkGreyColor)),
+                  style: TextStyle(fontSize: 14, color: darkGreyColor),),
               CircularProgressIndicator(
                 value: getValue(viewModel),
                 strokeWidth: 5,
                 valueColor: const AlwaysStoppedAnimation(Color(0xffe86339)),
                 backgroundColor: const Color(0xffffb37c),
-              )
+              ),
             ],
           ),
         ),
@@ -505,18 +493,18 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
               style: const TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.w600,
-                  color: darkGreyColor)),
+                  color: darkGreyColor,),),
           const SizedBox(height: 4),
           const Text('We are glad to have you with us.',
-              style: TextStyle(fontSize: 12, color: textSecondary)),
-        ]),
+              style: TextStyle(fontSize: 12, color: textSecondary),),
+        ],),
         Visibility(
           visible: viewModel.billingPlan?.freeTrialStatus != 'InActive',
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
             decoration: BoxDecoration(
                 border: Border.all(color: accentRed),
-                borderRadius: BorderRadius.circular(6)),
+                borderRadius: BorderRadius.circular(6),),
             child: RichText(
               text: TextSpan(
                 children: [
@@ -526,15 +514,15 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                       style: const TextStyle(
                           color: accentRed,
                           fontWeight: FontWeight.w600,
-                          fontSize: 16)),
+                          fontSize: 16,),),
                   const TextSpan(
                       text: 'Trial Left',
-                      style: TextStyle(color: accentRed, fontSize: 10)),
+                      style: TextStyle(color: accentRed, fontSize: 10),),
                 ],
               ),
             ),
           ),
-        )
+        ),
       ],
     );
   }
@@ -543,7 +531,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
     final transactions = transactionListResponse?.data ?? [];
     if (transactions.isEmpty) {
       return buildEmptyCard(
-          'Nothing here. For Now!', 'Recent sales will be displayed here.');
+          'Nothing here. For Now!', 'Recent sales will be displayed here.',);
     }
 
     return Column(
@@ -607,7 +595,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
         //     )),
         const Divider(),
         ...transactions.map<Widget>((tx) => Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4.0),
+              padding: const EdgeInsets.symmetric(vertical: 4),
               child: allTransactionsItemBuilder(tx, context).paddingSymmetric(vertical: 3, horizontal: 3)/*Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -660,7 +648,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                   )
                 ],
               ).onTap(() =>TransactionDetailPage(transactionId: tx.transactionID,).launch(context))*/,
-            )),
+            ),),
       ],
     );
   }
@@ -670,20 +658,20 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
 
     if (summaryList.isEmpty) {
       return buildEmptyCard('Nothing here. For Now!',
-          'Total sales for each payment method will be displayed here.');
+          'Total sales for each payment method will be displayed here.',);
     }
 
     return Column(
       children: [
         for (final item in summaryList)
           buildSalesSummaryRow(
-            name: item?.transationType ?? '',
-            currency: item?.currency ?? '',
-            amount: item?.amount ?? 0,
-            transactionsCount: item?.numberOfTransactions?.toString() ?? "0",
-            percentage: item?.percentageOfTotal?.toDouble() ?? 0,
-            color: _getBarColorActive(item?.transationType ?? ''),
-            backgroundColor: _getBarColorReminder(item?.transationType ?? ''),
+            name: item.transationType ?? '',
+            currency: item.currency ?? '',
+            amount: item.amount ?? 0,
+            transactionsCount: item.numberOfTransactions?.toString() ?? '0',
+            percentage: item.percentageOfTotal ?? 0,
+            color: _getBarColorActive(item.transationType ?? ''),
+            backgroundColor: _getBarColorReminder(item.transationType ?? ''),
           ),
       ],
     );

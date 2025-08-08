@@ -1,15 +1,15 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:zed_nano/app/app_config.dart';
 import 'package:zed_nano/routes/routes.dart';
 import 'package:zed_nano/routes/routes_helper.dart';
 import 'package:zed_nano/utils/Colors.dart';
-import '../app_config.dart';
 
 class App extends StatefulWidget {
-  final GlobalKey<NavigatorState> navigatorKey;
 
-  const App({super.key, required this.navigatorKey});
+  const App({required this.navigatorKey, super.key});
+  final GlobalKey<NavigatorState> navigatorKey;
 
   @override
   State<App> createState() => _AppState();
@@ -45,8 +45,8 @@ class _AppState extends State<App> {
         PointerDeviceKind.mouse,
         PointerDeviceKind.touch,
         PointerDeviceKind.stylus,
-        PointerDeviceKind.unknown
-      }),
+        PointerDeviceKind.unknown,
+      },),
       navigatorKey: widget.navigatorKey,
     );
   }

@@ -15,13 +15,12 @@ Widget listCustomersItemBuilder(Customer customer) {
       child: Container(
         margin: const EdgeInsets.only(bottom: 10),
         padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: Colors.white,
         ),
         child: Column(
           children: [
             Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
                   decoration: BoxDecoration(
@@ -35,7 +34,7 @@ Widget listCustomersItemBuilder(Customer customer) {
                       fit: BoxFit.cover,
                       height: 30,
                       width: 30,
-                      radius: 8
+                      radius: 8,
                   ),
                 ),
 
@@ -44,19 +43,19 @@ Widget listCustomersItemBuilder(Customer customer) {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                       Text('${customer.customerName}',
+                       Text(customer.customerName,
                           style: const TextStyle(
                             fontFamily: 'Poppins',
                             color: textPrimary,
                             fontSize: 16,
                             fontWeight: FontWeight.w400,
                             fontStyle: FontStyle.normal,
-                          )
+                          ),
                       ),
                       const SizedBox(height: 4),
                       Row(
                          children: [
-                           Text('${customer.mobileNumber}',
+                           Text(customer.mobileNumber,
                                style: const TextStyle(
                                  fontFamily: 'Poppins',
                                  color: textSecondary,
@@ -75,21 +74,21 @@ Widget listCustomersItemBuilder(Customer customer) {
                                    fontWeight: FontWeight.w400,
                                    fontFamily: 'Poppins',
                                    fontStyle:  FontStyle.normal,
-                                   fontSize: 10.0
+                                   fontSize: 10,
                                ),
-                               textAlign: TextAlign.left
+                               textAlign: TextAlign.left,
                            ),
-                           Text('${customer.customerType}',
+                           Text(customer.customerType,
                                style: const TextStyle(
                                  fontFamily: 'Poppins',
                                  color: textPrimary,
                                  fontSize: 10,
                                  fontWeight: FontWeight.w600,
                                  fontStyle: FontStyle.normal,
-                               )
-                           )
+                               ),
+                           ),
                          ],
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -99,8 +98,8 @@ Widget listCustomersItemBuilder(Customer customer) {
                     fit: BoxFit.fitHeight,
                     height: 10,
                     width: 10,
-                    radius: 8
-                )
+                    radius: 8,
+                ),
               ],
             ),
             16.height,

@@ -1,9 +1,5 @@
 // CustomerListResponse class to handle the main response structure
 class CustomerListResponse {
-  final String status;
-  final String message;
-  final List<Customer> data;
-  final int count;
 
   CustomerListResponse({
     required this.status,
@@ -22,6 +18,10 @@ class CustomerListResponse {
       count: json['count'] as int,
     );
   }
+  final String status;
+  final String message;
+  final List<Customer> data;
+  final int count;
 
   Map<String, dynamic> toJson() => {
     'Status': status,
@@ -33,27 +33,6 @@ class CustomerListResponse {
 
 // Customer class to handle individual customer data
 class Customer {
-  final String id;
-  final String customerType;
-  final String paymentType;
-  final bool isParentPrimary;
-  final String parentType;
-  final int limit;
-  final int amountReceived;
-  final String status;
-  final List<dynamic> billableItems;
-  final String customerName;
-  final String physicalAddress;
-  final String mobileNumber;
-  final String email;
-  final String? createdByName;
-  final DateTime createdOn;
-  final String userId;
-  final int servicesCount;
-  final List<dynamic> services;
-  final int pendingInvoices;
-  final int pendingAmount;
-  final int numberOfActiveHouses;
 
   Customer({
     required this.id,
@@ -104,6 +83,27 @@ class Customer {
       numberOfActiveHouses: json['numberOfActiveHouses'] as int,
     );
   }
+  final String id;
+  final String customerType;
+  final String paymentType;
+  final bool isParentPrimary;
+  final String parentType;
+  final int limit;
+  final int amountReceived;
+  final String status;
+  final List<dynamic> billableItems;
+  final String customerName;
+  final String physicalAddress;
+  final String mobileNumber;
+  final String email;
+  final String? createdByName;
+  final DateTime createdOn;
+  final String userId;
+  final int servicesCount;
+  final List<dynamic> services;
+  final int pendingInvoices;
+  final int pendingAmount;
+  final int numberOfActiveHouses;
 
   Map<String, dynamic> toJson() => {
     '_id': id,

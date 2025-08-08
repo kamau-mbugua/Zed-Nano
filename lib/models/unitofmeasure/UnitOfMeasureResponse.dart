@@ -1,7 +1,4 @@
 class UnitOfMeasureResponse {
-  final String? status;
-  final String? message;
-  final List<String>? data;
 
   UnitOfMeasureResponse({
     this.status,
@@ -16,6 +13,9 @@ class UnitOfMeasureResponse {
       data: (json['data'] as List<dynamic>?)?.map((e) => e as String).toList(),
     );
   }
+  final String? status;
+  final String? message;
+  final List<String>? data;
 
   Map<String, dynamic> toJson() {
     return {

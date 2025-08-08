@@ -10,13 +10,12 @@ import 'package:zed_nano/screens/stock/add_stock/view_stock_batch_detail.dart';
 import 'package:zed_nano/screens/stock/itemBuilder/build_batch_item.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/screens/widget/common/searchview.dart';
-import 'package:zed_nano/screens/widget/common/stepper_usage_examples.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
 import 'package:zed_nano/utils/pagination_controller.dart';
 
 class AddStockApprovedBatchPage extends StatefulWidget {
-  const AddStockApprovedBatchPage({Key? key}) : super(key: key);
+  const AddStockApprovedBatchPage({super.key});
 
   @override
   _AddStockApprovedBatchPageState createState() =>
@@ -24,7 +23,7 @@ class AddStockApprovedBatchPage extends StatefulWidget {
 }
 
 class _AddStockApprovedBatchPageState extends State<AddStockApprovedBatchPage> {
-  TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
   Timer? _debounceTimer;
   String _searchTerm = '';
   late PaginationController<BatchData> _paginationController;
@@ -48,7 +47,7 @@ class _AddStockApprovedBatchPageState extends State<AddStockApprovedBatchPage> {
 
 
   Future<List<BatchData>> getApprovedAddStockBatchesByBranch(
-      {required int page, required int limit}) async {
+      {required int page, required int limit,}) async {
     try {
       final response = await getBusinessProvider(context).getApprovedAddStockBatchesByBranch(
           page: page,
@@ -101,7 +100,7 @@ class _AddStockApprovedBatchPageState extends State<AddStockApprovedBatchPage> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          const AddStockParentPage(initialStep:0).launch(context);
+          const AddStockParentPage().launch(context);
 
         },
         label: const Text('Add Stock', style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white)),
@@ -122,9 +121,9 @@ class _AddStockApprovedBatchPageState extends State<AddStockApprovedBatchPage> {
         itemBuilder: (context, item, index) {
           return buildBatchItem(item, onTap: () {
             ViewStockBatchDetail(
-                batchId: item?.batchId ?? '',
+                batchId: item.batchId ?? '',
             ).launch(context);
-          });
+          },);
         },
         firstPageProgressIndicatorBuilder: (_) => const SizedBox(),
         newPageProgressIndicatorBuilder: (_) => const SizedBox(),

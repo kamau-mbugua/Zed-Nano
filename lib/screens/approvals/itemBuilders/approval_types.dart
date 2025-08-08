@@ -7,7 +7,7 @@ import 'package:zed_nano/utils/Images.dart';
 Widget createListItem(
     ApprovalData? pendingApproval,
     String getStatus,
-    {VoidCallback? onTap}
+    {VoidCallback? onTap,}
     ) {
   return GestureDetector(
     onTap: onTap,
@@ -47,7 +47,7 @@ Widget createListItem(
                         width: 20,
                       ),
                       const SizedBox(height: 8),
-                      Text(pendingApproval?.name ?? "N/A",
+                      Text(pendingApproval?.name ?? 'N/A',
                           textAlign: TextAlign.start,
                           style: const TextStyle(
                             fontFamily: 'Poppins',
@@ -55,9 +55,9 @@ Widget createListItem(
                             fontSize: 12,
                             fontWeight: FontWeight.w500,
                             fontStyle: FontStyle.normal,
-                          )),
+                          ),),
                     ],
-                  )),
+                  ),),
                   Container(
                     height: 26,
                     width: 26,
@@ -78,20 +78,20 @@ Widget createListItem(
                       ),
                     ),
                     child: Center(
-                      child: Text("${pendingApproval?.count ?? 0}",
-                          style: TextStyle(
+                      child: Text('${pendingApproval?.count ?? 0}',
+                          style: const TextStyle(
                             fontFamily: 'Poppins',
                             color: Colors.white,
                             fontSize: 11,
                             fontWeight: FontWeight.w700,
                             fontStyle: FontStyle.normal,
-                          )),
+                          ),),
                     ),
-                  )
+                  ),
                 ],
-              )
+              ),
             ],
           ),
-        )),
+        ),),
   );
 }

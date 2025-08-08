@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/routes/routes.dart';
-import 'package:zed_nano/screens/business/bottomsheets/product_service_category_bottom_sheet.dart';
 import 'package:zed_nano/screens/business/get_started_page.dart';
 import 'package:zed_nano/screens/widget/common/base_bottom_sheet.dart';
-import 'package:zed_nano/screens/widget/common/bottom_sheet_helper.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
 
 class SetupStepBottomSheet extends StatelessWidget {
-  final String currentStep;
 
-  SetupStepBottomSheet({required this.currentStep});
+  SetupStepBottomSheet({required this.currentStep, super.key});
+  final String currentStep;
 
   final List<String> steps = [
     'Create a Business',
@@ -50,7 +47,7 @@ class SetupStepBottomSheet extends StatelessWidget {
       case 'products':
         return 0.8;
       default:
-        return 1.0;
+        return 1;
     }
   }
 
@@ -60,8 +57,6 @@ class SetupStepBottomSheet extends StatelessWidget {
     return BaseBottomSheet(
       title: 'Complete Setup',
       initialChildSize: 0.6,
-      minChildSize: 0.5,
-      maxChildSize: 1.0,
       headerContent: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -93,7 +88,7 @@ class SetupStepBottomSheet extends StatelessWidget {
             strokeWidth: 5,
             valueColor: const AlwaysStoppedAnimation(Color(0xffe86339)),
             backgroundColor: const Color(0xffffb37c),
-          )
+          ),
         ],
       ),
       bodyContent: SizedBox(
@@ -108,16 +103,14 @@ class SetupStepBottomSheet extends StatelessWidget {
               onTab: (index) async {
                 //get the step name
                 Navigator.pop(context);
-                String stepName = steps[index as int];
+                final stepName = steps[index as int];
                 switch (stepName) {
                   case 'Create a Business':
                     const GetStartedPage(initialStep:1).launch(context);
                     logger.d('Create a Business' );
-                    break;
                   case 'Setup Billing':
                     const GetStartedPage(initialStep:2).launch(context);
                     logger.d('Setup Billing' );
-                    break;
                   case 'Add Categories':
                     logger.d('Add Categories' );
 
@@ -130,22 +123,19 @@ class SetupStepBottomSheet extends StatelessWidget {
                     }
 
                     // BottomSheetHelper.showProductServiceCategoryBottomSheet(context);
-                    break;
                   case 'Add Products and Services':
                     if(index == activeIndex) {
                       // Show the bottom sheet
                       await Navigator.pushNamed(context, AppRoutes.getNewProductWithParamRoutes('false'));
                     }else{
                       Navigator.pushNamed(
-                          context, AppRoutes.getListProductsAndServicesRoute());
+                          context, AppRoutes.getListProductsAndServicesRoute(),);
                     }
 
                     logger.d('Add Products and Services' );
-                    break;
                   case 'Setup Payment Methods':
                     logger.d('Setup Payment Methods' );
                     Navigator.pushNamed(context, AppRoutes.getAddPaymentMethodRoute());
-                    break;
                   default:
                     break;
                 }

@@ -3,21 +3,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:provider/provider.dart';
-import 'package:zed_nano/contants/AppConstants.dart';
 import 'package:zed_nano/models/get_product_gross_margin/GetProductGrossMarginResponse.dart';
-import 'package:zed_nano/models/sales_report/SalesReportResponse.dart';
-import 'package:zed_nano/providers/business/BusinessProviders.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
-import 'package:zed_nano/screens/reports/sales_report/sub_reports/quantities_sold_page.dart';
-import 'package:zed_nano/screens/reports/sales_report/sub_reports/total_sales_page.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
-import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/screens/widget/common/date_range_filter_bottom_sheet.dart';
 import 'package:zed_nano/screens/widget/common/searchview.dart';
 import 'package:zed_nano/utils/Colors.dart';
-import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
 import 'package:zed_nano/utils/Images.dart';
 import 'package:zed_nano/utils/date_range_util.dart';
@@ -25,20 +17,20 @@ import 'package:zed_nano/utils/extensions.dart';
 import 'package:zed_nano/utils/pagination_controller.dart';
 
 class GrossMarginPage extends StatefulWidget {
-  const GrossMarginPage({Key? key}) : super(key: key);
+  const GrossMarginPage({super.key});
 
   @override
   State<GrossMarginPage> createState() => _GrossMarginPageState();
 }
 
 class _GrossMarginPageState extends State<GrossMarginPage> {
-  bool _isLoading = false;
+  final bool _isLoading = false;
   String _selectedRangeLabel = 'today';
   GetProductGrossMarginResponse? _summaryData;
 
   late PaginationController<GetProductGrossMarginData> _paginationController;
 
-  String _searchTerm = "";
+  String _searchTerm = '';
 
   Timer? _debounceTimer;
 
@@ -64,7 +56,7 @@ class _GrossMarginPageState extends State<GrossMarginPage> {
     final startDate = dateRange.values.first.removeTimezoneOffset.removeTime;
     final endDate = dateRange.values.last.removeTimezoneOffset.removeTime;
 
-    Map<String, dynamic> params = {
+    final  params = <String, dynamic>{
       'startDate': startDate,
       'endDate': endDate,
       'page': page,
@@ -74,7 +66,7 @@ class _GrossMarginPageState extends State<GrossMarginPage> {
 
     final response = await getBusinessProvider(context).getProductGrossMargin(
         params: params,
-        context: context
+        context: context,
     );
     return response.data?.data ?? [];
   }
@@ -118,7 +110,7 @@ class _GrossMarginPageState extends State<GrossMarginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: colorBackground,
-      appBar: AuthAppBar(title: 'Reports'),
+      appBar: const AuthAppBar(title: 'Reports'),
       body: RefreshIndicator(
         onRefresh: _refreshData,
         child: Column(
@@ -176,8 +168,8 @@ class _GrossMarginPageState extends State<GrossMarginPage> {
         buildSearchBar(
             controller: _searchController,
             onChanged: _debounceSearch,
-            horizontalPadding:5
-        )
+            horizontalPadding:5,
+        ),
       ],
     );
   }
@@ -264,7 +256,7 @@ class _GrossMarginPageState extends State<GrossMarginPage> {
             Expanded(
               child: _buildSummaryCard(
                 title: 'Total\nSales',
-                value: 'KES ${(_summaryData?.totalSales?.formatCurrency() ?? 0)}',
+                value: 'KES ${_summaryData?.totalSales?.formatCurrency() ?? 0}',
                 icon: outOfStockIcon,
                 iconColor: successTextColor,
                 backgroundColor: lightGreenColor,
@@ -278,7 +270,7 @@ class _GrossMarginPageState extends State<GrossMarginPage> {
             Expanded(
               child: _buildSummaryCard(
                 title: 'Total Cost',
-                value: 'KES ${(_summaryData?.totalCost?.formatCurrency() ?? 0)}',
+                value: 'KES ${_summaryData?.totalCost?.formatCurrency() ?? 0}',
                 icon: moneyInIcon,
                 iconColor: primaryOrangeTextColor,
                 backgroundColor: lightOrange,
@@ -288,7 +280,7 @@ class _GrossMarginPageState extends State<GrossMarginPage> {
             Expanded(
               child: _buildSummaryCard(
                 title: 'Gross\nMargin',
-                value: 'KES ${(_summaryData?.grossMargin?.formatCurrency() ?? 0)}',
+                value: 'KES ${_summaryData?.grossMargin?.formatCurrency() ?? 0}',
                 icon: approvalCustomers,
                 iconColor: primaryBlueTextColor,
                 backgroundColor: lightBlueColor,
@@ -327,7 +319,7 @@ class _GrossMarginPageState extends State<GrossMarginPage> {
               icon,
               width: 25,
               height: 25,
-              color: iconColor,radius: 0
+              color: iconColor,radius: 0,
           ),
           const SizedBox(height: 16),
           Text(
@@ -386,7 +378,7 @@ class _GrossMarginPageState extends State<GrossMarginPage> {
                 child: CompactGifDisplayWidget(
                   gifPath: emptyListGif,
                   title: "It's empty, over here.",
-                  subtitle: "No recent sales in your business, yet! Add to view them here.",
+                  subtitle: 'No recent sales in your business, yet! Add to view them here.',
                 ),
               ),
             ),
@@ -410,7 +402,7 @@ class _GrossMarginPageState extends State<GrossMarginPage> {
               sale.imageUrl ?? '',
               width: 25,
               height: 25
-              ,radius: 0
+              ,radius: 0,
           ),
         ),
         const SizedBox(width: 16),
@@ -433,9 +425,9 @@ class _GrossMarginPageState extends State<GrossMarginPage> {
                 children: [
                   _buildProductDetail('Qty:', sale.quantitySold?.toStringAsFixed(0) ?? '0'),
                   const SizedBox(width: 24),
-                  _buildProductDetail('Selling Price:', 'KES ${(sale.sellingPrice?.formatCurrency() ?? 0)}'),
+                  _buildProductDetail('Selling Price:', 'KES ${sale.sellingPrice?.formatCurrency() ?? 0}'),
                   const SizedBox(width: 24),
-                  _buildProductDetail('Discount:', 'KES ${(sale.discount?.formatCurrency() ?? 0)}'),
+                  _buildProductDetail('Discount:', 'KES ${sale.discount?.formatCurrency() ?? 0}'),
                 ],
               ),
             ],
@@ -443,7 +435,7 @@ class _GrossMarginPageState extends State<GrossMarginPage> {
         ),
         // Total amount
         Text(
-          'KES ${(sale.totalSales?.formatCurrency() ?? 0)}',
+          'KES ${sale.totalSales?.formatCurrency() ?? 0}',
           style: const TextStyle(
             color: textPrimary,
             fontWeight: FontWeight.w600,

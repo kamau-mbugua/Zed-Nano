@@ -2,19 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/models/get_business_roles/GetBusinessRolesResponse.dart';
-import 'package:zed_nano/providers/business/BusinessProviders.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/auth/input_fields.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/screens/widget/common/heading.dart';
-import 'package:zed_nano/screens/widget/common/location_picker_field.dart';
 import 'package:zed_nano/screens/widget/common/sub_category_picker.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/extensions.dart';
 
 class AddUserPage extends StatefulWidget {
-  const AddUserPage({Key? key}) : super(key: key);
+  const AddUserPage({super.key});
 
   @override
   _AddUserPageState createState() => _AddUserPageState();
@@ -86,7 +84,7 @@ class _AddUserPageState extends State<AddUserPage> {
         .then((value) {
       if (value.isSuccess) {
         showCustomToast(value.message ?? 'Customer created successfully',
-            isError: false);
+            isError: false,);
         Navigator.pop(context);
       } else {
         showCustomToast(value.message ?? 'Something went wrong');
@@ -95,7 +93,7 @@ class _AddUserPageState extends State<AddUserPage> {
   }
 
   Future<void> getBusinessRoles() async {
-    Map<String, dynamic> requestData = {};
+    final requestData = <String, dynamic>{};
 
     await getBusinessProvider(context)
         .getBusinessRoles(requestData: requestData, context: context)
@@ -114,7 +112,7 @@ class _AddUserPageState extends State<AddUserPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar:  AuthAppBar(title: 'Add Customers'),
+      appBar:  const AuthAppBar(title: 'Add Customers'),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -151,12 +149,12 @@ class _AddUserPageState extends State<AddUserPage> {
       child: appButton(
         text: 'Add User',
         onTap: () {
-          var firstName = firstNameController.text;
-          var lastName = lastNameController.text;
-          var userName = userNameController.text;
-          var email = emailController.text;
+          final firstName = firstNameController.text;
+          final lastName = lastNameController.text;
+          final userName = userNameController.text;
+          final email = emailController.text;
           var phone = phoneController.text;
-          var location = locationController.text;
+          final location = locationController.text;
 
           if (!firstName.isValidInput) {
             return showCustomToast('Please enter first name');
@@ -176,11 +174,11 @@ class _AddUserPageState extends State<AddUserPage> {
             return showCustomToast('Please enter valid phone number');
           }
 
-          var phoneNumber = phoneController.text;
-          var countryCode = codeController.text;
-          phone = "$countryCode$phoneNumber";
+          final phoneNumber = phoneController.text;
+          final countryCode = codeController.text;
+          phone = '$countryCode$phoneNumber';
 
-          var requestData = {
+          final requestData = {
             'firstName': firstName,
             'secondName': lastName,
             'userEmail': email,
@@ -265,7 +263,7 @@ class _AddUserPageState extends State<AddUserPage> {
       //     });
       //   },
       // ),
-    ]);
+    ],);
   }
 
   Widget _buildInputNameFields() {
@@ -362,7 +360,7 @@ class _AddUserPageState extends State<AddUserPage> {
           label: 'Select Role',
           options: businessRole
               ?.where((role) => ['Cashier', 'Merchant', 'Supervisor', 'Owner']
-                  .contains(role.name))
+                  .contains(role.name),)
               .map((e) => e.name ?? '')
               .toList() ?? [],
           selectedValue: selectedBusinessRole,

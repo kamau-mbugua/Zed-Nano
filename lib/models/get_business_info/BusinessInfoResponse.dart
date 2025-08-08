@@ -1,7 +1,4 @@
 class BusinessInfoResponse {
-  final String? status;
-  final String? message;
-  final BusinessInfoData? data;
 
   BusinessInfoResponse({
     this.status,
@@ -18,6 +15,9 @@ class BusinessInfoResponse {
           : null,
     );
   }
+  final String? status;
+  final String? message;
+  final BusinessInfoData? data;
 
   Map<String, dynamic> toJson() {
     return {
@@ -29,17 +29,6 @@ class BusinessInfoResponse {
 }
 
 class BusinessBillingDetails {
-  final String? planId;
-  final String? customPlanId;
-  final String? subscriptionPlanName;
-  final String? subscriptionType;
-  final String? billingStatus;
-  final String? billingDueDate;
-  final int? billingRemainingDays;
-  final String? billingPeriodName;
-  final List<dynamic>? billableFeatures;
-  final String? billingType;
-  final NanoBusinessSubscription? nanoSubscription;
 
   BusinessBillingDetails({
     this.planId,
@@ -72,6 +61,17 @@ class BusinessBillingDetails {
           : null,
     );
   }
+  final String? planId;
+  final String? customPlanId;
+  final String? subscriptionPlanName;
+  final String? subscriptionType;
+  final String? billingStatus;
+  final String? billingDueDate;
+  final int? billingRemainingDays;
+  final String? billingPeriodName;
+  final List<dynamic>? billableFeatures;
+  final String? billingType;
+  final NanoBusinessSubscription? nanoSubscription;
 
   Map<String, dynamic> toJson() {
     return {
@@ -91,14 +91,6 @@ class BusinessBillingDetails {
 }
 
 class NanoBusinessSubscription {
-  final List<NanoSubscriptionData>? data;
-  final String? freeTrialStatus;
-  final String? freeTrialPlanName;
-  final String? freeTrialEndTime;
-  final bool? isFreeTrialTried;
-  final bool? isFreeTrialEnded;
-  final bool? isActiveBillingPackage;
-  final int? freeTrialPeriodRemainingdays;
 
   NanoBusinessSubscription({
     this.data,
@@ -127,6 +119,14 @@ class NanoBusinessSubscription {
       freeTrialPeriodRemainingdays: json['freeTrialPeriodRemainingdays'] as int?,
     );
   }
+  final List<NanoSubscriptionData>? data;
+  final String? freeTrialStatus;
+  final String? freeTrialPlanName;
+  final String? freeTrialEndTime;
+  final bool? isFreeTrialTried;
+  final bool? isFreeTrialEnded;
+  final bool? isActiveBillingPackage;
+  final int? freeTrialPeriodRemainingdays;
 
   Map<String, dynamic> toJson() {
     return {
@@ -143,17 +143,6 @@ class NanoBusinessSubscription {
 }
 
 class NanoSubscriptionData {
-  final String? planId;
-  final String? planName;
-  final String? planStatus;
-  final String? dateSubscribed;
-  final String? startDate;
-  final String? dueDate;
-  final String? billingPeriodName;
-  final double? totalBillingPlanAmount;
-  final double? planSetUpFee;
-  final bool? isSetUpFeePaid;
-  final double? billingPeriodAmount;
 
   NanoSubscriptionData({
     this.planId,
@@ -184,6 +173,17 @@ class NanoSubscriptionData {
       billingPeriodAmount: _parseDouble(json['billingPeriodAmount']),
     );
   }
+  final String? planId;
+  final String? planName;
+  final String? planStatus;
+  final String? dateSubscribed;
+  final String? startDate;
+  final String? dueDate;
+  final String? billingPeriodName;
+  final double? totalBillingPlanAmount;
+  final double? planSetUpFee;
+  final bool? isSetUpFeePaid;
+  final double? billingPeriodAmount;
 
   Map<String, dynamic> toJson() {
     return {
@@ -214,180 +214,6 @@ class NanoSubscriptionData {
 }
 
 class BusinessInfoData {
-  final bool? isNanoBusiness;
-  final String? id;
-  final String? businessNumber;
-  final String? businessName;
-  final String? businessOwnerName;
-  final String? businessOwnerUserName;
-  final String? businessOwnerEmail;
-  final String? businessOwnerAddress;
-  final String? businessOwnerGroup;
-  final String? businessOwnerPassword;
-  final String? businessCategory;
-  final String? businessCategoryType;
-  final String? passwordStatus;
-  final String? passwordExpiry;
-  final String? businessOwnerPhone;
-  final String? resetRequestTime;
-  final String? businessState;
-  final String? createdAt;
-  final String? createdBy;
-  final String? modifiedAt;
-  final String? schooltypeId;
-  final String? till;
-  final String? paybill;
-  final String? vooma;
-  final String? equitel;
-  final String? deviceCreatedOn;
-  final String? bulkTerminals;
-  final bool? newImplementation;
-  final String? userId;
-  final String? businessLogo;
-  final String? localCurrency;
-  final String? country;
-  final String? branches;
-  final bool? warehouseOn;
-  final bool? mainStoreOn;
-  final bool? secondaryStoreOn;
-  final bool? viewSellingPrice;
-  final String? workflowState;
-  final String? businessType;
-  final bool? paypalStatus;
-  final String? timezone;
-  final String? xeroAccountingEnabled;
-  final String? quickbooksAccountingEnabled;
-  final String? zohoAccountingEnabled;
-  final bool? isOnlineBookingEnabled;
-  final String? sageAccountingEnabled;
-  final bool? bookingConfig;
-  final bool? hasDefaultSchoolDashbaord;
-  final bool? hasConvenienceFee;
-  final int? accountNo;
-  final bool? payablesStatus;
-  final String? transactionMode;
-  final bool? isStudentPurchaseEnabled;
-  final bool? isExpressOrderEnabled;
-  final int? numberOfFingerPrints;
-  final bool? enableCashConfig;
-  final int? enrollFingerPrintQuality;
-  final int? verifyFingerPrintQuality;
-  final bool? viewSummaryBeforePrinting;
-  final bool? enableStartOrder;
-  final bool? enablePOSStartOrder;
-  final bool? enablePosCaptainsOrderOrder;
-  final bool? zpmStartOrderBySelectingCategory;
-  final String? ledgerAccountsAdded;
-  final String? xeroLedgerAccountsAdded;
-  final String? qbLedgerAccountsAdded;
-  final bool? autogenerateStudentNumber;
-  final bool? ecitizenActivationStatus;
-  final String? proformaInvoiceStatus;
-  final bool? shopifyStatus;
-  final bool? recipeEnabled;
-  final String? additionalServicesEnabled;
-  final bool? isDomainUrlSet;
-  final bool? zedPayStatus;
-  final bool? isSettleInvoiceEnabled;
-  final bool? isEvoucherEnabled;
-  final bool? isPumpManagementEnabled;
-  final bool? airtelMoneyStatus;
-  final bool? cardMerchantTypeGeneral;
-  final bool? cardMerchantTypePocketMoney;
-  final bool? reprintStatus;
-  final bool? ecommerceVoucherEnabled;
-  final bool? etimsStatus;
-  final String? freeTrialStatus;
-  final bool? isFreeTrialTried;
-  final bool? isFreeTrialEnded;
-  final bool? isActiveBillingPackage;
-  final String? businessStatusBilling;
-  final String? stockTransferStatus;
-  final int? tockMoveTermsUpdateVersion;
-  final String? stockMoveTermsUpdatedComment;
-  final bool? isKcbAgentEnabled;
-  final bool? enforcedCollectionEnabled;
-  final bool? isStudentWithdrawFundsEnabled;
-  final bool? isQrCodeEnabled;
-  final String? canZedTransferToOutlet;
-  final List<dynamic>? schoolStreams;
-  final List<dynamic>? schoolCourses;
-  final List<dynamic>? courseUnits;
-  final List<dynamic>? kcbDarajaConfigIds;
-  final List<dynamic>? bookAppointment;
-  final List<dynamic>? timeOff;
-  final List<dynamic>? suppliers;
-  final List<dynamic>? payees;
-  final List<dynamic>? departments;
-  final List<dynamic>? unitMovement;
-  final List<dynamic>? noticeOfEviction;
-  final List<dynamic>? bookingTime;
-  final List<dynamic>? paymentModes;
-  final List<dynamic>? cardMerchant;
-  final List<dynamic>? mobileMoney;
-  final List<dynamic>? approveLevelsConfig;
-  final List<dynamic>? fundsTransferAmountRangeConfig;
-  final List<dynamic>? businessFundsTransferConfig;
-  final List<dynamic>? businessAccounts;
-  final List<dynamic>? xeroAccounts;
-  final List<dynamic>? quickbooksAccounts;
-  final List<dynamic>? partners;
-  final List<dynamic>? bankStatementAccounts;
-  final List<dynamic>? pocketMoneyAccounts;
-  final List<dynamic>? prefixPerGrade;
-  final List<dynamic>? listBusinessChanges;
-  final List<dynamic>? schoolSessions;
-  final List<dynamic>? proformaTimelines;
-  final List<dynamic>? routes;
-  final List<dynamic>? productsVariations;
-  final List<dynamic>? productTags;
-  final List<dynamic>? additionalServices;
-  final List<dynamic>? pickUpLocations;
-  final List<dynamic>? shippingRegions;
-  final List<dynamic>? joinBusinessRequests;
-  final List<dynamic>? zedPayConfig;
-  final List<dynamic>? accessBankConfigs;
-  final List<dynamic>? pumps;
-  final List<dynamic>? cardPresentAccounts;
-  final List<dynamic>? cardPresentTerminalConfig;
-  final List<dynamic>? merchantFeeConfig;
-  final List<dynamic>? onlineBookingEvoucher;
-  final List<dynamic>? merchantAccountConfig;
-  final List<dynamic>? merchantSettlement;
-  final List<dynamic>? zpmReconcileConfigs;
-  final List<dynamic>? creditAccountsSupplier;
-  final List<dynamic>? remindersConfig;
-  final List<dynamic>? discounts;
-  final List<dynamic>? subscribedBillingPlans;
-  final List<dynamic>? businessDocuments;
-  final List<dynamic>? outletAccounts;
-  final String? updatedAt;
-  final int? v;
-  final String? cashEnabledBy;
-  final String? cashStatus;
-  final String? dateCashEnabled;
-  final String? updatedBy;
-  final String? updatedComment;
-  final String? sessionToken;
-  final String? businessUsers;
-  final bool? proformStatus;
-  final String? myRole;
-  final int? totalSales;
-  final bool? isPayItYEnabled;
-  final bool? is2factorEnabled;
-  final String? firstName;
-  final String? secondName;
-  final String? userName;
-  final bool? accountingEnabled;
-  final bool? ipsasEnabled;
-  final bool? isTermlyFeePaid;
-  final int? termlyAmount;
-  final bool? enableStudentSponsor;
-  final int? unReadNotificationsCount;
-  final bool? isOpeningClosingStockEnabled;
-  final bool? isStockOrderEnabled;
-  final String? sessionTimeout;
-  final BusinessBillingDetails? businessBillingDetails;
 
   BusinessInfoData({
     this.isNanoBusiness,
@@ -746,6 +572,180 @@ class BusinessInfoData {
           : null,
     );
   }
+  final bool? isNanoBusiness;
+  final String? id;
+  final String? businessNumber;
+  final String? businessName;
+  final String? businessOwnerName;
+  final String? businessOwnerUserName;
+  final String? businessOwnerEmail;
+  final String? businessOwnerAddress;
+  final String? businessOwnerGroup;
+  final String? businessOwnerPassword;
+  final String? businessCategory;
+  final String? businessCategoryType;
+  final String? passwordStatus;
+  final String? passwordExpiry;
+  final String? businessOwnerPhone;
+  final String? resetRequestTime;
+  final String? businessState;
+  final String? createdAt;
+  final String? createdBy;
+  final String? modifiedAt;
+  final String? schooltypeId;
+  final String? till;
+  final String? paybill;
+  final String? vooma;
+  final String? equitel;
+  final String? deviceCreatedOn;
+  final String? bulkTerminals;
+  final bool? newImplementation;
+  final String? userId;
+  final String? businessLogo;
+  final String? localCurrency;
+  final String? country;
+  final String? branches;
+  final bool? warehouseOn;
+  final bool? mainStoreOn;
+  final bool? secondaryStoreOn;
+  final bool? viewSellingPrice;
+  final String? workflowState;
+  final String? businessType;
+  final bool? paypalStatus;
+  final String? timezone;
+  final String? xeroAccountingEnabled;
+  final String? quickbooksAccountingEnabled;
+  final String? zohoAccountingEnabled;
+  final bool? isOnlineBookingEnabled;
+  final String? sageAccountingEnabled;
+  final bool? bookingConfig;
+  final bool? hasDefaultSchoolDashbaord;
+  final bool? hasConvenienceFee;
+  final int? accountNo;
+  final bool? payablesStatus;
+  final String? transactionMode;
+  final bool? isStudentPurchaseEnabled;
+  final bool? isExpressOrderEnabled;
+  final int? numberOfFingerPrints;
+  final bool? enableCashConfig;
+  final int? enrollFingerPrintQuality;
+  final int? verifyFingerPrintQuality;
+  final bool? viewSummaryBeforePrinting;
+  final bool? enableStartOrder;
+  final bool? enablePOSStartOrder;
+  final bool? enablePosCaptainsOrderOrder;
+  final bool? zpmStartOrderBySelectingCategory;
+  final String? ledgerAccountsAdded;
+  final String? xeroLedgerAccountsAdded;
+  final String? qbLedgerAccountsAdded;
+  final bool? autogenerateStudentNumber;
+  final bool? ecitizenActivationStatus;
+  final String? proformaInvoiceStatus;
+  final bool? shopifyStatus;
+  final bool? recipeEnabled;
+  final String? additionalServicesEnabled;
+  final bool? isDomainUrlSet;
+  final bool? zedPayStatus;
+  final bool? isSettleInvoiceEnabled;
+  final bool? isEvoucherEnabled;
+  final bool? isPumpManagementEnabled;
+  final bool? airtelMoneyStatus;
+  final bool? cardMerchantTypeGeneral;
+  final bool? cardMerchantTypePocketMoney;
+  final bool? reprintStatus;
+  final bool? ecommerceVoucherEnabled;
+  final bool? etimsStatus;
+  final String? freeTrialStatus;
+  final bool? isFreeTrialTried;
+  final bool? isFreeTrialEnded;
+  final bool? isActiveBillingPackage;
+  final String? businessStatusBilling;
+  final String? stockTransferStatus;
+  final int? tockMoveTermsUpdateVersion;
+  final String? stockMoveTermsUpdatedComment;
+  final bool? isKcbAgentEnabled;
+  final bool? enforcedCollectionEnabled;
+  final bool? isStudentWithdrawFundsEnabled;
+  final bool? isQrCodeEnabled;
+  final String? canZedTransferToOutlet;
+  final List<dynamic>? schoolStreams;
+  final List<dynamic>? schoolCourses;
+  final List<dynamic>? courseUnits;
+  final List<dynamic>? kcbDarajaConfigIds;
+  final List<dynamic>? bookAppointment;
+  final List<dynamic>? timeOff;
+  final List<dynamic>? suppliers;
+  final List<dynamic>? payees;
+  final List<dynamic>? departments;
+  final List<dynamic>? unitMovement;
+  final List<dynamic>? noticeOfEviction;
+  final List<dynamic>? bookingTime;
+  final List<dynamic>? paymentModes;
+  final List<dynamic>? cardMerchant;
+  final List<dynamic>? mobileMoney;
+  final List<dynamic>? approveLevelsConfig;
+  final List<dynamic>? fundsTransferAmountRangeConfig;
+  final List<dynamic>? businessFundsTransferConfig;
+  final List<dynamic>? businessAccounts;
+  final List<dynamic>? xeroAccounts;
+  final List<dynamic>? quickbooksAccounts;
+  final List<dynamic>? partners;
+  final List<dynamic>? bankStatementAccounts;
+  final List<dynamic>? pocketMoneyAccounts;
+  final List<dynamic>? prefixPerGrade;
+  final List<dynamic>? listBusinessChanges;
+  final List<dynamic>? schoolSessions;
+  final List<dynamic>? proformaTimelines;
+  final List<dynamic>? routes;
+  final List<dynamic>? productsVariations;
+  final List<dynamic>? productTags;
+  final List<dynamic>? additionalServices;
+  final List<dynamic>? pickUpLocations;
+  final List<dynamic>? shippingRegions;
+  final List<dynamic>? joinBusinessRequests;
+  final List<dynamic>? zedPayConfig;
+  final List<dynamic>? accessBankConfigs;
+  final List<dynamic>? pumps;
+  final List<dynamic>? cardPresentAccounts;
+  final List<dynamic>? cardPresentTerminalConfig;
+  final List<dynamic>? merchantFeeConfig;
+  final List<dynamic>? onlineBookingEvoucher;
+  final List<dynamic>? merchantAccountConfig;
+  final List<dynamic>? merchantSettlement;
+  final List<dynamic>? zpmReconcileConfigs;
+  final List<dynamic>? creditAccountsSupplier;
+  final List<dynamic>? remindersConfig;
+  final List<dynamic>? discounts;
+  final List<dynamic>? subscribedBillingPlans;
+  final List<dynamic>? businessDocuments;
+  final List<dynamic>? outletAccounts;
+  final String? updatedAt;
+  final int? v;
+  final String? cashEnabledBy;
+  final String? cashStatus;
+  final String? dateCashEnabled;
+  final String? updatedBy;
+  final String? updatedComment;
+  final String? sessionToken;
+  final String? businessUsers;
+  final bool? proformStatus;
+  final String? myRole;
+  final int? totalSales;
+  final bool? isPayItYEnabled;
+  final bool? is2factorEnabled;
+  final String? firstName;
+  final String? secondName;
+  final String? userName;
+  final bool? accountingEnabled;
+  final bool? ipsasEnabled;
+  final bool? isTermlyFeePaid;
+  final int? termlyAmount;
+  final bool? enableStudentSponsor;
+  final int? unReadNotificationsCount;
+  final bool? isOpeningClosingStockEnabled;
+  final bool? isStockOrderEnabled;
+  final String? sessionTimeout;
+  final BusinessBillingDetails? businessBillingDetails;
 
   Map<String, dynamic> toJson() {
     return {

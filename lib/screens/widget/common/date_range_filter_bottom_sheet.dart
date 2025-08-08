@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/screens/widget/common/base_bottom_sheet.dart';
 import 'package:zed_nano/utils/Colors.dart';
 
 class DateRangeFilterBottomSheet extends StatelessWidget {
-  final String selectedRangeLabel;
-  final Function(String) onRangeSelected;
 
   const DateRangeFilterBottomSheet({
-    Key? key,
-    required this.selectedRangeLabel,
-    required this.onRangeSelected,
-  }) : super(key: key);
+    required this.selectedRangeLabel, required this.onRangeSelected, super.key,
+  });
+  final String selectedRangeLabel;
+  final Function(String) onRangeSelected;
 
   final List<String> _dateRangeOptions = const [
     'today',
@@ -74,7 +71,7 @@ class DateRangeFilterBottomSheet extends StatelessWidget {
             _dateRangeLabels[option] ?? '',
             _dateRangeDescriptions[option] ?? '',
             selectedRangeLabel == option,
-          )),
+          ),),
           const SizedBox(height: 20),
         ],
       ),

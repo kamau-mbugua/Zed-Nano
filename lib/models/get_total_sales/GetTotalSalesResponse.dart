@@ -1,9 +1,4 @@
 class GetTotalSalesResponse {
-  final String? status;
-  final String? message;
-  final double? quantitiesSoldTotals;
-  final double? totalSales;
-  final List<GetTotalSalesData>? data;
 
   GetTotalSalesResponse({
     this.status,
@@ -26,6 +21,11 @@ class GetTotalSalesResponse {
           : null,
     );
   }
+  final String? status;
+  final String? message;
+  final double? quantitiesSoldTotals;
+  final double? totalSales;
+  final List<GetTotalSalesData>? data;
 
   Map<String, dynamic> toJson() {
     return {
@@ -48,12 +48,6 @@ class GetTotalSalesResponse {
 }
 
 class GetTotalSalesData {
-  final double? totalSales;
-  final double? quantitySold;
-  final double? discount;
-  final String? productName;
-  final String? imageUrl;
-  final double? sellingPrice;
 
   GetTotalSalesData({
     this.totalSales,
@@ -74,6 +68,12 @@ class GetTotalSalesData {
       sellingPrice: _parseDouble(json['sellingPrice']),
     );
   }
+  final double? totalSales;
+  final double? quantitySold;
+  final double? discount;
+  final String? productName;
+  final String? imageUrl;
+  final double? sellingPrice;
 
   Map<String, dynamic> toJson() {
     return {

@@ -4,20 +4,19 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
+import 'package:zed_nano/utils/Colors.dart';
+import 'package:zed_nano/utils/Constants.dart';
 import 'package:zed_nano/utils/Images.dart';
 
-import '../../../utils/Colors.dart';
-import '../../../utils/Constants.dart';
-import 'custom_snackbar.dart';
-
 Future<void> launchWhatsApp(String phoneNumber) async {
-  String cleanedPhone = phoneNumber.replaceAll(RegExp(r'[^0-9]'), '');
+  var cleanedPhone = phoneNumber.replaceAll(RegExp('[^0-9]'), '');
   if (!cleanedPhone.startsWith('254')) {
-    cleanedPhone = '254' + cleanedPhone.substring(1);
+    cleanedPhone = '254${cleanedPhone.substring(1)}';
   }
 
-  final whatsappAppUrl = "whatsapp://send?phone=$cleanedPhone";
-  final whatsappWebUrl = "https://wa.me/$cleanedPhone";
+  final whatsappAppUrl = 'whatsapp://send?phone=$cleanedPhone';
+  final whatsappWebUrl = 'https://wa.me/$cleanedPhone';
 
   if (await canLaunchUrl(Uri.parse(whatsappAppUrl))) {
     await launchUrl(Uri.parse(whatsappAppUrl), mode: LaunchMode.externalApplication);
@@ -43,7 +42,7 @@ Decoration shadowWidget(BuildContext context) {
 InputDecoration rfInputDecoration({Widget? suffixIcon, String? hintText, Widget? prefixIcon, bool? showPreFixIcon, String? lableText, bool showLableText = false}) {
   return InputDecoration(
       border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8.0),
+        borderRadius: BorderRadius.circular(8),
         borderSide: BorderSide(color: gray.withOpacity(0.4)),
       ),
       contentPadding: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
@@ -52,21 +51,21 @@ InputDecoration rfInputDecoration({Widget? suffixIcon, String? hintText, Widget?
       labelStyle: secondaryTextStyle(),
       labelText: showLableText.validate() ? lableText! : null,
       focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8.0),
+        borderRadius: BorderRadius.circular(8),
         borderSide: const BorderSide(color: appThemePrimary),
       ),
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8.0),
+        borderRadius: BorderRadius.circular(8),
         borderSide: BorderSide(color: gray.withOpacity(0.4)),
       ),
       errorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8.0),
+        borderRadius: BorderRadius.circular(8),
         borderSide: BorderSide(color: redColor.withOpacity(0.4)),
       ),
       filled: true,
       fillColor: white,
       suffix: suffixIcon.validate(),
-      prefixIcon: showPreFixIcon.validate() ? prefixIcon.validate() : null);
+      prefixIcon: showPreFixIcon.validate() ? prefixIcon.validate() : null,);
 }
 
 
@@ -98,7 +97,7 @@ PreferredSizeWidget commonAppBarWidget(BuildContext context, {String? title,
       shape: roundCornerShape.validate()
           ? const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(bottom: Radius.circular(12)))
           : const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.zero),
+        
       ),
     ),
   );
@@ -114,7 +113,7 @@ Widget rfCommonCachedNetworkImage(
       double? radius,
       Color? color,
       double horizontalMargin = 0,
-      double verticalMargin = 0
+      double verticalMargin = 0,
     }) {
       if(url.isEmptyOrNull){
         return placeHolderWidget(height: height, width: width, fit: fit, alignment: alignment, radius: radius);
@@ -150,7 +149,7 @@ Widget rfCommonCachedNetworkImage(
       url,
       width: width,
       height: height,
-      color: color ?? null,
+      color: color,
       fit: fit ?? BoxFit.cover, alignment: alignment ?? Alignment.center,
     ).cornerRadiusWithClipRRect(radius ?? defaultRadius).paddingSymmetric(horizontal: horizontalMargin, vertical: verticalMargin);
   }   else {
@@ -165,7 +164,7 @@ Widget borderWidget({
   int? activeIndex,
   int? index,
   List<String>? steps,
-  Function(dynamic index)? onTab
+  Function(dynamic index)? onTab,
 }) {
 
   String getIconAsset(int index) {
@@ -215,16 +214,16 @@ Widget borderWidget({
       },
       child: Container(
         padding: const EdgeInsets.symmetric(
-            horizontal: 12, vertical: 12),
+            horizontal: 12, vertical: 12,),
         decoration: BoxDecoration(
             color: getBackgroundColor(index!),
-          border: Border.all(color: getBorderColor(index!)),
+          border: Border.all(color: getBorderColor(index)),
           borderRadius: BorderRadius.circular(8),
         ),
         child: Row(
           children: [
             SvgPicture.asset(
-              getIconAsset(index!),
+              getIconAsset(index),
               width: 20,
               height: 20,
             ),
@@ -250,7 +249,7 @@ Widget arrowListItem({
   int? activeIndex,
   int? index,
   List<String>? steps,
-  Function(dynamic index)? onTab
+  Function(dynamic index)? onTab,
 }) {
 
   return Padding(
@@ -261,7 +260,7 @@ Widget arrowListItem({
       },
       child: Container(
         padding: const EdgeInsets.symmetric(
-            horizontal: 12, vertical: 12),
+            horizontal: 12, vertical: 12,),
         decoration: BoxDecoration(
             color: whiteColor,
           border: Border.all(color: innactiveBorder),
@@ -283,7 +282,7 @@ Widget arrowListItem({
               arrowItem,
               width: 20,
               height: 14,
-              color: darkGreyColor
+              color: darkGreyColor,
             ),
           ],
         ),
@@ -301,7 +300,7 @@ Widget placeHolderWidget({double? height, double? width, BoxFit? fit, AlignmentG
     imagePlaceholder,
     width: width,
     height: height,
-    fit: fit ?? BoxFit.cover, alignment: alignment ?? Alignment.center
+    fit: fit ?? BoxFit.cover, alignment: alignment ?? Alignment.center,
   ).cornerRadiusWithClipRRect(radius ?? defaultRadius);
 
     // Image.asset(imagePlaceholder, height: height, width: width, fit: fit ?? BoxFit.cover, alignment: alignment ?? Alignment.center).cornerRadiusWithClipRRect(radius ?? defaultRadius);
@@ -314,16 +313,17 @@ Future<void> commonLaunchUrl(String address, {LaunchMode launchMode = LaunchMode
 }
 void launchMail(String? url) {
   if (url.validate().isNotEmpty) {
-    commonLaunchUrl('mailto:' + url!, launchMode: LaunchMode.externalApplication);
+    commonLaunchUrl('mailto:${url!}', launchMode: LaunchMode.externalApplication);
   }
 }
 
 void launchCall(String? url) {
   if (url.validate().isNotEmpty) {
-    if (isIOS)
-      commonLaunchUrl('tel://' + url!, launchMode: LaunchMode.externalApplication);
-    else
-      commonLaunchUrl('tel:' + url!, launchMode: LaunchMode.externalApplication);
+    if (isIOS) {
+      commonLaunchUrl('tel://${url!}', launchMode: LaunchMode.externalApplication);
+    } else {
+      commonLaunchUrl('tel:${url!}', launchMode: LaunchMode.externalApplication);
+    }
   }
 }
 

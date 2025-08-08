@@ -1,8 +1,4 @@
 class GetInvoiceReceiptPaymentMethodsNoLoginResponse {
-  final String? status;
-  final String? message;
-  final List<PaymentReceipt>? data;
-  final int? count;
 
   GetInvoiceReceiptPaymentMethodsNoLoginResponse({
     this.status,
@@ -21,6 +17,10 @@ class GetInvoiceReceiptPaymentMethodsNoLoginResponse {
       count: (json['count'] as num?)?.toInt(),
     );
   }
+  final String? status;
+  final String? message;
+  final List<PaymentReceipt>? data;
+  final int? count;
 
   Map<String, dynamic> toJson() {
     return {
@@ -33,12 +33,6 @@ class GetInvoiceReceiptPaymentMethodsNoLoginResponse {
 }
 
 class PaymentReceipt {
-  final String? modeOfPayment;
-  final String? transactionCode;
-  final String? transactionDate;
-  final double? amount;
-  final String? currency;
-  final String? receiptNumber;
 
   PaymentReceipt({
     this.modeOfPayment,
@@ -59,6 +53,12 @@ class PaymentReceipt {
       receiptNumber: json['receiptNumber'] as String?,
     );
   }
+  final String? modeOfPayment;
+  final String? transactionCode;
+  final String? transactionDate;
+  final double? amount;
+  final String? currency;
+  final String? receiptNumber;
 
   Map<String, dynamic> toJson() {
     return {

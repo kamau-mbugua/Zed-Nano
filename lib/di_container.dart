@@ -7,8 +7,8 @@ import 'package:zed_nano/networking/datasource/remote/dio/logging_interceptor.da
 import 'package:zed_nano/providers/auth/authenticated_app_providers.dart';
 import 'package:zed_nano/providers/business/BusinessProviders.dart';
 import 'package:zed_nano/providers/common/SplashProvider.dart';
-import 'package:zed_nano/repositories/auth/AuthenticatedRepo.dart';
 import 'package:zed_nano/repositories/SplashRepo.dart';
+import 'package:zed_nano/repositories/auth/AuthenticatedRepo.dart';
 import 'package:zed_nano/repositories/business/BusinessRepo.dart';
 import 'package:zed_nano/services/firebase_service.dart';
 

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
-import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/providers/business/BusinessProviders.dart';
 import 'package:zed_nano/screens/reports/sales_by_day/sales_by_day_summary_page.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
@@ -11,7 +10,7 @@ import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/date_range_util.dart';
 
 class SalesReportByDayPage extends StatefulWidget {
-  const SalesReportByDayPage({Key? key}) : super(key: key);
+  const SalesReportByDayPage({super.key});
 
   @override
   State<SalesReportByDayPage> createState() => _SalesReportByDayPageState();
@@ -49,7 +48,7 @@ class _SalesReportByDayPageState extends State<SalesReportByDayPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: colorBackground,
-      appBar:AuthAppBar(title: 'Reports'),
+      appBar:const AuthAppBar(title: 'Reports'),
       body: Column(
         children: [
           Expanded(
@@ -81,7 +80,7 @@ class _SalesReportByDayPageState extends State<SalesReportByDayPage> {
           style: TextStyle(
             color: textPrimary,
             fontWeight: FontWeight.w600,
-            fontFamily: "Poppins",
+            fontFamily: 'Poppins',
             fontSize: 28,
           ),
         ),
@@ -91,7 +90,7 @@ class _SalesReportByDayPageState extends State<SalesReportByDayPage> {
           style: TextStyle(
             color: textSecondary,
             fontWeight: FontWeight.w400,
-            fontFamily: "Poppins",
+            fontFamily: 'Poppins',
             fontSize: 12,
           ),
         ),
@@ -108,12 +107,12 @@ class _SalesReportByDayPageState extends State<SalesReportByDayPage> {
           style: TextStyle(
             color: textPrimary,
             fontWeight: FontWeight.w600,
-            fontFamily: "Poppins",
+            fontFamily: 'Poppins',
             fontSize: 14,
           ),
         ),
         const SizedBox(height: 16),
-        ..._durationOptions.map((option) => _buildDurationOption(option)),
+        ..._durationOptions.map(_buildDurationOption),
         if (_selectedDuration == 'custom_date') ...[
           const SizedBox(height: 24),
           _buildCustomDateFields(),
@@ -147,7 +146,6 @@ class _SalesReportByDayPageState extends State<SalesReportByDayPage> {
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
               color:  Colors.grey.shade300,
-              width:  1,
             ),
           ),
           child: Row(
@@ -158,7 +156,7 @@ class _SalesReportByDayPageState extends State<SalesReportByDayPage> {
                 style: TextStyle(
                   color: isSelected ? appThemePrimary : textPrimary,
                   fontWeight: FontWeight.w400,
-                  fontFamily: "Poppins",
+                  fontFamily: 'Poppins',
                   fontSize: 14,
                 ),
               ),
@@ -258,7 +256,7 @@ class _SalesReportByDayPageState extends State<SalesReportByDayPage> {
               'Download Report',
               style: TextStyle(
                 fontWeight: FontWeight.w600,
-                fontFamily: "Poppins",
+                fontFamily: 'Poppins',
                 fontSize: 12,
                 color: Colors.white,
               ),
@@ -269,10 +267,10 @@ class _SalesReportByDayPageState extends State<SalesReportByDayPage> {
     );
   }
 
-  void _downloadReport() async{
-    var startDate = _fromDate != null ? '${_fromDate!.day.toString().padLeft(2, '0')}-${_fromDate!.month.toString().padLeft(2, '0')}-${_fromDate!.year}' : '';
-    var endDate = _toDate != null ? '${_toDate!.day.toString().padLeft(2, '0')}-${_toDate!.month.toString().padLeft(2, '0')}-${_toDate!.year}' : '';
-    final Map<String, dynamic> requestData = {
+  Future<void> _downloadReport() async{
+    final startDate = _fromDate != null ? '${_fromDate!.day.toString().padLeft(2, '0')}-${_fromDate!.month.toString().padLeft(2, '0')}-${_fromDate!.year}' : '';
+    final endDate = _toDate != null ? '${_toDate!.day.toString().padLeft(2, '0')}-${_toDate!.month.toString().padLeft(2, '0')}-${_toDate!.year}' : '';
+    final requestData = <String, dynamic>{
       'StartDate':startDate,
       'EndDate':endDate,
     };

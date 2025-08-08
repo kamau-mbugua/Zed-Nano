@@ -20,8 +20,6 @@ class ProductServiceCategoryBottomSheet extends StatelessWidget {
     return BaseBottomSheet(
       title: 'Products and Services',
       initialChildSize: 0.5,
-      minChildSize: 0.5,
-      maxChildSize: 1.0,
       headerContent:  const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -55,16 +53,14 @@ class ProductServiceCategoryBottomSheet extends StatelessWidget {
               steps: steps,
               onTab: (index) {
                 //get the step name
-                String stepName = steps[index as int];
+                final stepName = steps[index as int];
                 switch (stepName) {
                   case 'Add Products Categories':
                     logger.d('Add Products Categories' );
                     Navigator.pushNamed(context, AppRoutes.getNewCategoryRoutes());
-                    break;
                   case 'Add Services Categories':
                     logger.d('Add Services Categories' );
                     Navigator.pushNamed(context, AppRoutes.getNewCategoryRoutes());
-                    break;
                   default:
                     break;
                 }

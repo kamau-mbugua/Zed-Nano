@@ -2,20 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:zed_nano/app/app_initializer.dart';
 
-class PaginationController<T> extends ChangeNotifier {
-  final Future<List<T>> Function(int page, int pageSize) fetchItems;
-  final int pageSize;
-  int _currentPage = 1;
-  bool _isLoading = false;
-  final List<T> _items = [];
-  final PagingController<int, T> pagingController;
-  bool _isDisposed = false; // Track disposed state
+class PaginationController<T> extends ChangeNotifier { // Track disposed state
   
   PaginationController({required this.fetchItems, this.pageSize = 100})
       : pagingController = PagingController(firstPageKey: 1) {
     // Don't immediately add the listener that triggers fetches
     // We'll do this in a separate method called after widget initialization
   }
+  final Future<List<T>> Function(int page, int pageSize) fetchItems;
+  final int pageSize;
+  int _currentPage = 1;
+  bool _isLoading = false;
+  final List<T> _items = [];
+  final PagingController<int, T> pagingController;
+  bool _isDisposed = false;
 
   // Call this after widget is fully initialized (e.g., in a post-frame callback)
   void initialize() {
@@ -54,14 +54,14 @@ class PaginationController<T> extends ChangeNotifier {
 
     _isLoading = true;
     if (!_isDisposed) {
-      Future.microtask(() => notifyListeners()); // Notify after the current frame
+      Future.microtask(notifyListeners); // Notify after the current frame
     }
 
     try {
       // Check again before starting the network request
       if (_isDisposed) return;
       
-      List<T> newItems = await fetchItems(_currentPage, pageSize);
+      final newItems = await fetchItems(_currentPage, pageSize);
       
       // Check again after the network request completes
       if (_isDisposed) return;
@@ -83,7 +83,7 @@ class PaginationController<T> extends ChangeNotifier {
 
     _isLoading = false;
     if (!_isDisposed) {
-      Future.microtask(() => notifyListeners()); // Notify after the current frame
+      Future.microtask(notifyListeners); // Notify after the current frame
     }
   }
 

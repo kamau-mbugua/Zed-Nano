@@ -6,8 +6,6 @@ import 'package:zed_nano/networking/base/error_response.dart';
 /// 
 /// Used to standardize response handling throughout the app
 class ApiResponse {
-  final Response? response;
-  final dynamic error;
 
   ApiResponse(this.response, this.error);
 
@@ -20,6 +18,8 @@ class ApiResponse {
   ApiResponse.withSuccess(Response responseValue) :
     response = responseValue,
     error = null;
+  final Response? response;
+  final dynamic error;
   
   /// Returns true if this response represents a successful API call
   bool get isSuccess => response != null && error == null && 
@@ -72,7 +72,6 @@ class ApiResponse {
       return ErrorResponse(
         statusCode: response?.statusCode ?? 0,
         statusMessage: error.toString(),
-        errorType: ErrorType.unknown,
       );
     }
   }

@@ -2,22 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/utils/Colors.dart';
-import 'package:zed_nano/utils/Common.dart';
 
 /// A reusable rectangular social login button with icon and label
 class SocialButton extends StatelessWidget {
+
+  const SocialButton({
+    required this.icon, required this.label, required this.onTap, required this.backgroundColor, super.key,
+  });
   final String icon;
   final String label;
   final VoidCallback onTap;
   final Color backgroundColor;
-
-  const SocialButton({
-    Key? key,
-    required this.icon,
-    required this.label,
-    required this.onTap,
-    required this.backgroundColor,
-  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +20,7 @@ class SocialButton extends StatelessWidget {
       onTap: onTap,
       borderRadius: BorderRadius.circular(8),
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
           color: backgroundColor,
           borderRadius: BorderRadius.circular(24),
@@ -34,7 +29,7 @@ class SocialButton extends StatelessWidget {
               color: backgroundColor.withOpacity(0.3),
               spreadRadius: 1,
               blurRadius: 4,
-              offset: Offset(0, 2),
+              offset: const Offset(0, 2),
             ),
           ],
         ),
@@ -53,7 +48,7 @@ class SocialButton extends StatelessWidget {
               style: boldTextStyle(
                 size: 14,
                 color: colorWhite,
-                fontFamily: "Poppins",
+                fontFamily: 'Poppins',
               ),
             ),
           ],
@@ -65,16 +60,13 @@ class SocialButton extends StatelessWidget {
 
 /// A reusable circular social media button with icon
 class CircularSocialButton extends StatelessWidget {
+
+  const CircularSocialButton({
+    required this.icon, required this.onTap, required this.backgroundColor, super.key,
+  });
   final String icon;
   final VoidCallback onTap;
   final Color backgroundColor;
-
-  const CircularSocialButton({
-    Key? key,
-    required this.icon,
-    required this.onTap,
-    required this.backgroundColor,
-  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +74,7 @@ class CircularSocialButton extends StatelessWidget {
       onTap: onTap,
       borderRadius: BorderRadius.circular(50),
       child: Container(
-        padding: EdgeInsets.all(12),
+        padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           color: backgroundColor,
           shape: BoxShape.circle,
@@ -91,7 +83,7 @@ class CircularSocialButton extends StatelessWidget {
               color: backgroundColor.withOpacity(0.3),
               spreadRadius: 1,
               blurRadius: 4,
-              offset: Offset(0, 2),
+              offset: const Offset(0, 2),
             ),
           ],
         ),
@@ -108,26 +100,24 @@ class CircularSocialButton extends StatelessWidget {
 
 /// A horizontal row of social login buttons that scrolls if needed
 class SocialButtonsRow extends StatelessWidget {
-  final List<Widget> buttons;
 
   const SocialButtonsRow({
-    Key? key,
-    required this.buttons,
-  }) : super(key: key);
+    required this.buttons, super.key,
+  });
+  final List<Widget> buttons;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
           children: buttons.map((button) => 
             Padding(
-              padding: EdgeInsets.only(right: 8),
+              padding: const EdgeInsets.only(right: 8),
               child: button,
-            )
+            ),
           ).toList(),
         ),
       ),

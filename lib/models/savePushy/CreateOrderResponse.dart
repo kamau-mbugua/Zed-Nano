@@ -1,7 +1,4 @@
 class CreateOrderResponse {
-  String? status;
-  String? message;
-  TransactionData? data;
 
   CreateOrderResponse({
     this.status,
@@ -14,50 +11,12 @@ class CreateOrderResponse {
     message: json['message'] as String?,
     data: json['data'] != null ? TransactionData.fromJson(json['data'] as Map<String, dynamic>) : null,
   );
+  String? status;
+  String? message;
+  TransactionData? data;
 }
 
 class TransactionData {
-  double? transamount;
-  String? transtime;
-  String? businessId;
-  String? cashier;
-  String? customerName;
-  String? pushTransactionId;
-  String? status;
-  String? userId;
-  bool? duplicate;
-  List<TransactionItem>? items;
-  double? vat;
-  double? subTotal;
-  String? branchId;
-  String? businessIdString;
-  bool? multiOrderImplementation;
-  String? customerPaymentType;
-  double? balance;
-  double? discountAmount;
-  double? discountPercent;
-  String? storeId;
-  bool? orderFullfilled;
-  List<dynamic>? stkOrderList;
-  String? stkOrderId;
-  bool? zedPayItOrder;
-  String? orderStatus;
-  String? orderNumberSequence;
-  String? orderNumber;
-  int? numberOfReprints;
-  bool? isOrderPreorder;
-  double? cardPresentCharge;
-  String? isStudentSponsoredOrder;
-  String? creditNoteStatus;
-  bool? isZedCreditNote;
-  bool? isKraInvoice;
-  String? id;
-  List<dynamic>? remainingItems;
-  List<dynamic>? partialPayments;
-  List<dynamic>? reprintHistory;
-  String? createdAt;
-  String? updatedAt;
-  int? v;
 
   TransactionData({
     this.transamount,
@@ -146,26 +105,50 @@ class TransactionData {
     updatedAt: json['updatedAt'] as String?,
     v: json['__v'] as int?,
   );
+  double? transamount;
+  String? transtime;
+  String? businessId;
+  String? cashier;
+  String? customerName;
+  String? pushTransactionId;
+  String? status;
+  String? userId;
+  bool? duplicate;
+  List<TransactionItem>? items;
+  double? vat;
+  double? subTotal;
+  String? branchId;
+  String? businessIdString;
+  bool? multiOrderImplementation;
+  String? customerPaymentType;
+  double? balance;
+  double? discountAmount;
+  double? discountPercent;
+  String? storeId;
+  bool? orderFullfilled;
+  List<dynamic>? stkOrderList;
+  String? stkOrderId;
+  bool? zedPayItOrder;
+  String? orderStatus;
+  String? orderNumberSequence;
+  String? orderNumber;
+  int? numberOfReprints;
+  bool? isOrderPreorder;
+  double? cardPresentCharge;
+  String? isStudentSponsoredOrder;
+  String? creditNoteStatus;
+  bool? isZedCreditNote;
+  bool? isKraInvoice;
+  String? id;
+  List<dynamic>? remainingItems;
+  List<dynamic>? partialPayments;
+  List<dynamic>? reprintHistory;
+  String? createdAt;
+  String? updatedAt;
+  int? v;
 }
 
 class TransactionItem {
-  double? itemAmount;
-  String? itemName;
-  String? itemCategory;
-  int? itemCount;
-  double? totalAmount;
-  String? productId;
-  String? variationKeyId;
-  String? variationKey;
-  List<String>? tags;
-  double? discountPercent;
-  String? discountType;
-  double? discount;
-  bool? isPreOrder;
-  String? taxTyCd;
-  String? taxType;
-  String? id;
-  List<dynamic>? additionalItems;
 
   TransactionItem({
     this.itemAmount,
@@ -206,4 +189,21 @@ class TransactionItem {
     id: json['_id'] as String?,
     additionalItems: json['additionalItems'] as List<dynamic>?,
   );
+  double? itemAmount;
+  String? itemName;
+  String? itemCategory;
+  int? itemCount;
+  double? totalAmount;
+  String? productId;
+  String? variationKeyId;
+  String? variationKey;
+  List<String>? tags;
+  double? discountPercent;
+  String? discountType;
+  double? discount;
+  bool? isPreOrder;
+  String? taxTyCd;
+  String? taxType;
+  String? id;
+  List<dynamic>? additionalItems;
 }

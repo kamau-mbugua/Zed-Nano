@@ -1,15 +1,4 @@
 class GetAllActiveStockResponse {
-  final String? status;
-  final String? message;
-  final StockStatusSummary? stockStatusSummary;
-  final List<ActiveStockProduct>? data;
-  final List<ActiveStockProduct>? inStockProducts;
-  final List<ActiveStockProduct>? lowStockProducts;
-  final List<ActiveStockProduct>? outOfStockProducts;
-  final int? count;
-  final int? inStockProductsCount;
-  final int? lowStockProductsCount;
-  final int? outOfStockProductsCount;
 
   GetAllActiveStockResponse({
     this.status,
@@ -50,6 +39,17 @@ class GetAllActiveStockResponse {
       outOfStockProductsCount: json['outOfStockProductsCount'] as int?,
     );
   }
+  final String? status;
+  final String? message;
+  final StockStatusSummary? stockStatusSummary;
+  final List<ActiveStockProduct>? data;
+  final List<ActiveStockProduct>? inStockProducts;
+  final List<ActiveStockProduct>? lowStockProducts;
+  final List<ActiveStockProduct>? outOfStockProducts;
+  final int? count;
+  final int? inStockProductsCount;
+  final int? lowStockProductsCount;
+  final int? outOfStockProductsCount;
 
   Map<String, dynamic> toJson() => {
     'Status': status,
@@ -67,48 +67,6 @@ class GetAllActiveStockResponse {
 }
 
 class ActiveStockProduct {
-  final String? businessID;
-  final String? productCategory;
-  final String? productService;
-  final String? productDescription;
-  final String? productState;
-  final String? createdAt;
-  final String? priceStatus;
-  final String? unitOfMeasure;
-  final String? serviceType;
-  final bool? isWeightedProduct;
-  final bool? consumable;
-  final bool? requireSettlement;
-  final List<dynamic>? settlements;
-  final bool? isRawMaterial;
-  final List<dynamic>? additionalImages;
-  final bool? saccoCollects;
-  final bool? canBeBookedOnline;
-  final List<BranchTotal>? branchTotals;
-  final List<StoreTotal>? storeTotals;
-  final List<dynamic>? additionalServices;
-  final String? updatedAt;
-  final int? v;
-  final String? id;
-  final String? productId;
-  final String? variationKeyId;
-  final String? productName;
-  final String? pricingStatus;
-  final int? initialStock;
-  final int? buyingPrice;
-  final int? productPrice;
-  final int? discountedPrice;
-  final String? variationKey;
-  final String? variantCode;
-  final String? currency;
-  final int? inStockQuantity;
-  final int? newStock;
-  final String? status;
-  final int? totalStock;
-  final int? sellingPrice;
-  final String? lastUpdated;
-  final String? stockStatus;
-  final String? imagePath;
 
   ActiveStockProduct({
     this.businessID,
@@ -205,6 +163,48 @@ class ActiveStockProduct {
       imagePath: json['imagePath'] as String?,
     );
   }
+  final String? businessID;
+  final String? productCategory;
+  final String? productService;
+  final String? productDescription;
+  final String? productState;
+  final String? createdAt;
+  final String? priceStatus;
+  final String? unitOfMeasure;
+  final String? serviceType;
+  final bool? isWeightedProduct;
+  final bool? consumable;
+  final bool? requireSettlement;
+  final List<dynamic>? settlements;
+  final bool? isRawMaterial;
+  final List<dynamic>? additionalImages;
+  final bool? saccoCollects;
+  final bool? canBeBookedOnline;
+  final List<BranchTotal>? branchTotals;
+  final List<StoreTotal>? storeTotals;
+  final List<dynamic>? additionalServices;
+  final String? updatedAt;
+  final int? v;
+  final String? id;
+  final String? productId;
+  final String? variationKeyId;
+  final String? productName;
+  final String? pricingStatus;
+  final int? initialStock;
+  final int? buyingPrice;
+  final int? productPrice;
+  final int? discountedPrice;
+  final String? variationKey;
+  final String? variantCode;
+  final String? currency;
+  final int? inStockQuantity;
+  final int? newStock;
+  final String? status;
+  final int? totalStock;
+  final int? sellingPrice;
+  final String? lastUpdated;
+  final String? stockStatus;
+  final String? imagePath;
 
   Map<String, dynamic> toJson() => {
     'businessID': businessID,
@@ -254,12 +254,6 @@ class ActiveStockProduct {
 
 
 class StoreTotal {
-  final String? storeId;
-  final int? total;
-  final bool? doNotCalculate;
-  final String? id;
-  final String? createdAt;
-  final String? updatedAt;
 
   StoreTotal({
     this.storeId,
@@ -280,6 +274,12 @@ class StoreTotal {
       updatedAt: json['updatedAt'] as String?,
     );
   }
+  final String? storeId;
+  final int? total;
+  final bool? doNotCalculate;
+  final String? id;
+  final String? createdAt;
+  final String? updatedAt;
 
   Map<String, dynamic> toJson() => {
     'storeId': storeId,
@@ -291,12 +291,6 @@ class StoreTotal {
   };
 }
 class BranchTotal {
-  final String? branchId;
-  final int? total;
-  final bool? doNotCalculate;
-  final String? id;
-  final String? createdAt;
-  final String? updatedAt;
 
   BranchTotal({
     this.branchId,
@@ -317,6 +311,12 @@ class BranchTotal {
       updatedAt: json['updatedAt'] as String?,
     );
   }
+  final String? branchId;
+  final int? total;
+  final bool? doNotCalculate;
+  final String? id;
+  final String? createdAt;
+  final String? updatedAt;
 
   Map<String, dynamic> toJson() => {
     'branchId': branchId,
@@ -329,8 +329,6 @@ class BranchTotal {
 }
 
 class StockStatusSummary {
-  final int? totalProductsInLowStock;
-  final int? totalProductsOutOfStock;
 
   StockStatusSummary({
     this.totalProductsInLowStock,
@@ -343,6 +341,8 @@ class StockStatusSummary {
       totalProductsOutOfStock: json['totalProductsOutOfStock'] as int?,
     );
   }
+  final int? totalProductsInLowStock;
+  final int? totalProductsOutOfStock;
 
   Map<String, dynamic> toJson() => {
     'totalProductsInLowStock': totalProductsInLowStock,

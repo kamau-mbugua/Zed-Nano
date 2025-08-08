@@ -2,17 +2,16 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:path/path.dart' as p;
 import 'package:provider/provider.dart';
-import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/models/business/BusinessDetails.dart';
 import 'package:zed_nano/models/getVariablePriceStatus/GetVariablePriceStatusResponse.dart';
 import 'package:zed_nano/models/listCategories/ListCategoriesResponse.dart';
 import 'package:zed_nano/models/listProducts/ListProductsResponse.dart';
-import 'package:zed_nano/models/unitofmeasure/UnitOfMeasureResponse.dart';
 import 'package:zed_nano/providers/business/BusinessProviders.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
-import 'package:zed_nano/routes/routes.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/auth/input_fields.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
@@ -22,18 +21,14 @@ import 'package:zed_nano/screens/widget/common/sub_category_picker.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/extensions.dart';
 import 'package:zed_nano/utils/image_picker_util.dart';
-import 'package:zed_nano/viewmodels/WorkflowViewModel.dart';
-import 'package:path/path.dart' as p;
-import 'package:http_parser/http_parser.dart';
 
 
 class EditProductPage extends StatefulWidget {
-  final String? productId;
 
   const EditProductPage({
-    super.key,
-    required this.productId,
+    required this.productId, super.key,
   });
+  final String? productId;
 
   @override
   State<EditProductPage> createState() => _EditProductPageState();
@@ -129,7 +124,7 @@ class _EditProductPageState extends State<EditProductPage> {
         .then((value) {
       if (value.isSuccess) {
         showCustomToast(value.message ?? 'Product updated successfully',
-            isError: false);
+            isError: false,);
         if (_logoImage != null) {
           _uploadBusinessLogo(widget.productId);
         } else {
@@ -148,18 +143,18 @@ class _EditProductPageState extends State<EditProductPage> {
         filename: p.basename(_logoImage!.path),
         contentType: MediaType('image', 'jpeg'), // or png
       ),
-      'businessNumber': businessDetails?.businessNumber
+      'businessNumber': businessDetails?.businessNumber,
     });
 
     final urlPart = '?serviceId=${_productData?.productId}';
 
     await context
         .read<BusinessProviders>()
-        .uploadProductCategoryImage(context: context, formData: formData!, urlPart:urlPart)
+        .uploadProductCategoryImage(context: context, formData: formData, urlPart:urlPart)
         .then((value) async {
       if (value.isSuccess) {
         showCustomToast(value.message ?? 'Image uploaded successfully',
-            isError: false);
+            isError: false,);
         Navigator.pop(context, true); // Pass true to indicate successful creation
 
       } else {
@@ -190,7 +185,7 @@ class _EditProductPageState extends State<EditProductPage> {
         page: 1,
         limit: 10000,
         searchValue: '',
-        productService: productService ?? '')
+        productService: productService ?? '',)
         .then((value) async {
       if (value.isSuccess) {
         setState(() {
@@ -199,7 +194,7 @@ class _EditProductPageState extends State<EditProductPage> {
           // If we have a selectedCategory from the arguments, validate it exists in the loaded categories
           if (selectedCategory != null) {
             final categoryExists = productCategoryDataList?.any(
-                    (category) => category.categoryName == selectedCategory) ?? false;
+                    (category) => category.categoryName == selectedCategory,) ?? false;
 
             if (categoryExists) {
               selectedCategory = selectedCategory;
@@ -259,7 +254,7 @@ class _EditProductPageState extends State<EditProductPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar:  AuthAppBar(title: 'Edit Product or Service'),
+      appBar:  const AuthAppBar(title: 'Edit Product or Service'),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: ListView(
@@ -276,11 +271,11 @@ class _EditProductPageState extends State<EditProductPage> {
               text: 'Save Changes',
               context: context,
               onTap: () {
-                var categoryId = selectedCategory;
-                var prodctName = productNameController.text;
-                var productAmount = productAmountController.text;
-                var productRestock = productRestockController.text;
-                var productDescription = productDescriptionController.text;
+                final categoryId = selectedCategory;
+                final prodctName = productNameController.text;
+                final productAmount = productAmountController.text;
+                final productRestock = productRestockController.text;
+                final productDescription = productDescriptionController.text;
 
                 // Safely find productService or use the existing one
                 String? productService;
@@ -288,7 +283,7 @@ class _EditProductPageState extends State<EditProductPage> {
                   try {
                     final matchingCategory = productCategoryDataList!.firstWhere(
                           (element) => element.categoryName == selectedCategory,
-                      orElse: () => ProductCategoryData(),
+                      orElse: ProductCategoryData.new,
                     );
                     productService = matchingCategory.productService;
                   } catch (e) {
@@ -300,40 +295,40 @@ class _EditProductPageState extends State<EditProductPage> {
                   productService = this.productService;
                 }
 
-                var unitOfMeasure =  selectedUnitOfMeasure;
-                var priceStatus =  selectedPriceStatus;
-                var buyingPrice =  buyingPriceController.text;
+                final unitOfMeasure =  selectedUnitOfMeasure;
+                final priceStatus =  selectedPriceStatus;
+                final buyingPrice =  buyingPriceController.text;
 
                 if(categoryId == null){
-                  showCustomToast('Please select category', isError: true);
+                  showCustomToast('Please select category');
                   return;
                 }
                 if(productService == null){
-                  showCustomToast('Please select category', isError: true);
+                  showCustomToast('Please select category');
                   return;
                 }
                 if(!prodctName.isValidInput){
-                  showCustomToast('Please enter product name', isError: true);
+                  showCustomToast('Please enter product name');
                   return;
                 }
                 if(!productAmount.isValidInput){
-                  showCustomToast('Please enter product selling price amount', isError: true);
+                  showCustomToast('Please enter product selling price amount');
                   return;
                 }
                 if(!buyingPrice.isValidInput){
-                  showCustomToast('Please enter product buying price amount', isError: true);
+                  showCustomToast('Please enter product buying price amount');
                   return;
                 }
                 if(unitOfMeasure == null && selectedProductService?.toLowerCase() != 'service'){
-                  showCustomToast('Select unit of measure', isError: true);
+                  showCustomToast('Select unit of measure');
                   return;
                 }
                 if(priceStatus == null){
-                  showCustomToast('Select price status', isError: true);
+                  showCustomToast('Select price status');
                   return;
                 }
 
-                Map<String, dynamic> requestData = {
+                final requestData = <String, dynamic>{
                   'categoryId': categoryId,
                   'productName': prodctName,
                   'productPrice': productAmount,
@@ -391,7 +386,7 @@ class _EditProductPageState extends State<EditProductPage> {
           // Product Name
            Text(
             '${selectedProductService?.toLowerCase() != 'service' ? 'Product' : 'Service'} Name',
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w600,
               fontFamily: 'Poppins',
@@ -440,7 +435,7 @@ class _EditProductPageState extends State<EditProductPage> {
           16.height,
            Text(
             '${selectedProductService?.toLowerCase() != 'service' ? 'Product' : 'Service'} Price Type',
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w600,
               fontFamily: 'Poppins',
@@ -487,19 +482,18 @@ class _EditProductPageState extends State<EditProductPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("This is weighted product."),
+                      Text('This is weighted product.'),
                       Text(
-                        "Product price will adjust based on weight when sold.",
+                        'Product price will adjust based on weight when sold.',
                         style: TextStyle(fontSize: 10, color: Colors.grey),
-                      )
+                      ),
                     ],
                   ),
-                )
+                ),
               ],
             ),
           ],
-          selectedProductService?.toLowerCase() != 'service' ?
-          Column(
+          if (selectedProductService?.toLowerCase() != 'service') Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
@@ -601,8 +595,7 @@ class _EditProductPageState extends State<EditProductPage> {
                 ),
               ),
             ],
-          ):
-          Column(
+          ) else Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
@@ -627,7 +620,7 @@ class _EditProductPageState extends State<EditProductPage> {
           ),
 
           const SizedBox(height: 24),
-        ]);
+        ],);
   }
   Widget _uploadImage() {
     return GestureDetector(
@@ -695,7 +688,7 @@ class _EditProductPageState extends State<EditProductPage> {
                 ),
               ),
             ],
-          )
+          ),
         ],
       ),
     );

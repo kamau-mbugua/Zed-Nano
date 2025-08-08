@@ -1,10 +1,4 @@
 class VoidApprovedResponse {
-  final String? status;
-  final String? message;
-  final List<VoidApprovedTransaction>? transactions;
-  final String? currency;
-  final int? count;
-  final double? totalAmount;
 
   VoidApprovedResponse({
     this.status,
@@ -29,6 +23,12 @@ class VoidApprovedResponse {
       totalAmount: _parseDouble(json['totalAmount']),
     );
   }
+  final String? status;
+  final String? message;
+  final List<VoidApprovedTransaction>? transactions;
+  final String? currency;
+  final int? count;
+  final double? totalAmount;
 
   Map<String, dynamic> toJson() {
     return {
@@ -66,19 +66,6 @@ class VoidApprovedResponse {
 }
 
 class VoidApprovedTransaction {
-  final String? transactionType;
-  final String? transactionID;
-  final double? transamount;
-  final String? receiptNumber;
-  final String? createdAt;
-  final String? dateVoidRequested;
-  final String? voidComments;
-  final String? voidRequestedBy;
-  final String? voidStatus;
-  final String? dateVoided;
-  final String? voidApproveComments;
-  final String? voidedBy;
-  final String? voidDeclinedBy;
 
   VoidApprovedTransaction({
     this.transactionType,
@@ -113,6 +100,19 @@ class VoidApprovedTransaction {
       voidDeclinedBy: json['voidDeclinedBy'] as String?,
     );
   }
+  final String? transactionType;
+  final String? transactionID;
+  final double? transamount;
+  final String? receiptNumber;
+  final String? createdAt;
+  final String? dateVoidRequested;
+  final String? voidComments;
+  final String? voidRequestedBy;
+  final String? voidStatus;
+  final String? dateVoided;
+  final String? voidApproveComments;
+  final String? voidedBy;
+  final String? voidDeclinedBy;
 
   Map<String, dynamic> toJson() {
     return {

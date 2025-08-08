@@ -106,7 +106,7 @@ class BottomSheetHelper {
   }
 
   static Future<void> showProductServiceCategoryBottomSheet(
-    BuildContext context) {
+    BuildContext context,) {
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -115,7 +115,7 @@ class BottomSheetHelper {
     );
   }
   static Future<void> showAddKcbOptionsBottomsheet(
-    BuildContext context) {
+    BuildContext context,) {
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -124,7 +124,7 @@ class BottomSheetHelper {
     );
   }
   static Future<void> showAddMpesaOptionsBottomsheet(
-    BuildContext context) {
+    BuildContext context,) {
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -138,11 +138,10 @@ class BottomSheetHelper {
     BuildContext context, {
     required String title,
     required String message,
-    String confirmText = 'Confirm',
+    required VoidCallback onConfirm, String confirmText = 'Confirm',
     String cancelText = 'Cancel',
     Color confirmColor = const Color(0xffe86339),
     Color cancelColor = const Color(0xff71727a),
-    required VoidCallback onConfirm,
     Widget? icon,
   }) {
     return showModalBottomSheet(
@@ -168,8 +167,7 @@ class BottomSheetHelper {
     required String title,
     required List<Widget> formFields,
     required String submitButtonText,
-    Color submitButtonColor = const Color(0xffe86339),
-    required VoidCallback onSubmit,
+    required VoidCallback onSubmit, Color submitButtonColor = const Color(0xffe86339),
     bool isSubmitting = false,
     String? subtitle,
   }) {
@@ -193,12 +191,11 @@ class BottomSheetHelper {
   static Future<void> showCustomBottomSheet(
     BuildContext context, {
     required String title,
-    bool showCloseButton = true,
+    required Widget bodyContent, bool showCloseButton = true,
     double initialChildSize = 0.9,
     double minChildSize = 0.5,
     double maxChildSize = 1.0,
     Widget? headerContent,
-    required Widget bodyContent,
     EdgeInsets contentPadding = const EdgeInsets.symmetric(horizontal: 16),
     Color backgroundColor = Colors.white,
     BorderRadius borderRadius = const BorderRadius.vertical(top: Radius.circular(20)),

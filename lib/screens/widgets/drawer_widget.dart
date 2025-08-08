@@ -4,7 +4,7 @@ import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Images.dart';
 
 class DrawerWidget extends StatelessWidget {
-  const DrawerWidget({Key? key}) : super(key: key);
+  const DrawerWidget({super.key});
 
   @override
   Widget build(BuildContext context) {

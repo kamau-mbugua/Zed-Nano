@@ -6,9 +6,9 @@ import 'package:zed_nano/screens/widget/common/custom_tab_switcher.dart';
 import 'package:zed_nano/utils/Colors.dart';
 
 class CustomerItemsMainPage extends StatefulWidget {
-  String? customerID;
 
-  CustomerItemsMainPage({Key? key, this.customerID}) : super(key: key);
+  CustomerItemsMainPage({super.key, this.customerID});
+  String? customerID;
 
   @override
   _CustomerItemsMainPageState createState() => _CustomerItemsMainPageState();
@@ -25,11 +25,6 @@ class _CustomerItemsMainPageState extends State<CustomerItemsMainPage> {
           height: 400, // Fixed height to prevent infinite expansion
           child: SwipeableTabSwitcher(
             tabs: const ['Transactions', 'Invoices', 'Orders'],
-            children: [
-              CustomerTransactionsPage(customerID: widget?.customerID ?? ''),
-              CustomerInvoicesPage(customerId: widget?.customerID ?? ''),
-              CustomerOrdersPages(customerId: widget?.customerID ?? ''),
-            ],
             selectedTabColors: const [
               colorBackground,      // Transactions tab color
               colorBackground,     // Invoices tab color
@@ -44,6 +39,11 @@ class _CustomerItemsMainPageState extends State<CustomerItemsMainPage> {
               colorBackground,      // Transactions border color
               colorBackground,     // Invoices border color
               colorBackground,        // Orders border color
+            ],
+            children: [
+              CustomerTransactionsPage(customerID: widget.customerID ?? ''),
+              CustomerInvoicesPage(customerId: widget.customerID ?? ''),
+              CustomerOrdersPages(customerId: widget.customerID ?? ''),
             ],
           ),
         ),

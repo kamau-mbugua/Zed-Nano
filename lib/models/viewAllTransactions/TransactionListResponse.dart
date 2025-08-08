@@ -1,11 +1,4 @@
 class TransactionListResponse {
-  final String? status;
-  final String? message;
-  final String? currency;
-  final int? total;
-  final int? count;
-  final List<TransactionTotal>? transactionTotals;
-  final List<ViewTransactionData>? data;
 
   TransactionListResponse({
     this.status,
@@ -32,11 +25,16 @@ class TransactionListResponse {
           .toList(),
     );
   }
+  final String? status;
+  final String? message;
+  final String? currency;
+  final int? total;
+  final int? count;
+  final List<TransactionTotal>? transactionTotals;
+  final List<ViewTransactionData>? data;
 }
 
 class TransactionTotal {
-  final String? transactionType;
-  final int? totals;
 
   TransactionTotal({
     this.transactionType,
@@ -49,39 +47,11 @@ class TransactionTotal {
       totals: json['totals'] as int?,
     );
   }
+  final String? transactionType;
+  final int? totals;
 }
 
 class ViewTransactionData {
-  final String? id;
-  final String? businessNo;
-  final String? businessName;
-  final String? transactionType;
-  final String? transtime;
-  final int? transamount;
-  final String? customerPhone;
-  final String? customerFirstName;
-  final String? customerMiddleName;
-  final String? customerSecondName;
-  final String? paybillBalance;
-  final String? requestType;
-  final String? versionCode;
-  final String? cashier;
-  final String? userId;
-  final String? receiptNumber;
-  final List<TransactionItem>? items;
-  final bool? settled;
-  final String? customerId;
-  final int? discountAmount;
-  final int? discountPercent;
-  final String? invoiceId;
-  final String? status;
-  final String? documentType;
-  final String? terminalSerialNumber;
-  final String? serialNo;
-  final String? transactionID;
-  final String? billRefNo;
-  final String? uploadTime;
-  final String? currency;
 
   ViewTransactionData({
     this.id,
@@ -152,29 +122,39 @@ class ViewTransactionData {
       currency: json['currency'] as String?,
     );
   }
+  final String? id;
+  final String? businessNo;
+  final String? businessName;
+  final String? transactionType;
+  final String? transtime;
+  final int? transamount;
+  final String? customerPhone;
+  final String? customerFirstName;
+  final String? customerMiddleName;
+  final String? customerSecondName;
+  final String? paybillBalance;
+  final String? requestType;
+  final String? versionCode;
+  final String? cashier;
+  final String? userId;
+  final String? receiptNumber;
+  final List<TransactionItem>? items;
+  final bool? settled;
+  final String? customerId;
+  final int? discountAmount;
+  final int? discountPercent;
+  final String? invoiceId;
+  final String? status;
+  final String? documentType;
+  final String? terminalSerialNumber;
+  final String? serialNo;
+  final String? transactionID;
+  final String? billRefNo;
+  final String? uploadTime;
+  final String? currency;
 }
 
 class TransactionItem {
-  final double? itemAmount;
-  final String? itemCategory;
-  final double? itemCount;
-  final String? itemName;
-  final String? reciptNumber;
-  final double? totalAmount;
-  final String? productId;
-  final String? orderNote;
-  final String? variationKeyId;
-  final String? variationKey;
-  final List<String>? tags;
-  final double? discountPercent;
-  final String? discountType;
-  final double? discount;
-  final bool? isPreOrder;
-  final String? pumpId;
-  final String? beneficiary;
-  final String? mileage;
-  final String? id;
-  final List<dynamic>? additionalItems;
 
   TransactionItem({
     this.itemAmount,
@@ -223,4 +203,24 @@ class TransactionItem {
       additionalItems: json['additionalItems'] as List<dynamic>?,
     );
   }
+  final double? itemAmount;
+  final String? itemCategory;
+  final double? itemCount;
+  final String? itemName;
+  final String? reciptNumber;
+  final double? totalAmount;
+  final String? productId;
+  final String? orderNote;
+  final String? variationKeyId;
+  final String? variationKey;
+  final List<String>? tags;
+  final double? discountPercent;
+  final String? discountType;
+  final double? discount;
+  final bool? isPreOrder;
+  final String? pumpId;
+  final String? beneficiary;
+  final String? mileage;
+  final String? id;
+  final List<dynamic>? additionalItems;
 }

@@ -17,7 +17,7 @@ Widget headings({
           fontSize: textSizeTitle ?? 28,
           fontWeight: FontWeight.w600,
           fontFamily: 'Poppins',
-          color: Color(0xFF1F2024),
+          color: const Color(0xFF1F2024),
         ),
       ),
       4.height,
@@ -27,10 +27,10 @@ Widget headings({
           fontSize: textSizeSubTitle ?? 12,
           fontWeight: FontWeight.w400,
           fontFamily: 'Poppins',
-          color: Color(0xFF8A8D9F),
+          color: const Color(0xFF8A8D9F),
         ),
       ),
       18.height,
-    ]
+    ],
   );
 }

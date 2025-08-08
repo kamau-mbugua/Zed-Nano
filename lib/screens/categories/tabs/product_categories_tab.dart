@@ -1,6 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'dart:async';
 import 'package:zed_nano/models/listCategories/ListCategoriesResponse.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/routes/routes.dart';
@@ -21,7 +22,7 @@ class _ProductCategoriesTabState extends State<ProductCategoriesTab> {
   // Initialize with default value to avoid LateInitializationError
   late PaginationController<ProductCategoryData> _paginationController;
   final TextEditingController _searchController = TextEditingController();
-  String _searchTerm = "";
+  String _searchTerm = '';
   bool _isInitialized = false;
   Timer? _debounceTimer;
 
@@ -52,7 +53,7 @@ class _ProductCategoriesTabState extends State<ProductCategoriesTab> {
       limit: limit,
       searchValue: _searchTerm,
       context: context,
-      productService: 'Product'
+      productService: 'Product',
     );
     return response.data?.data ?? [];
   }
@@ -124,7 +125,7 @@ class _ProductCategoriesTabState extends State<ProductCategoriesTab> {
                           child: CompactGifDisplayWidget(
                             gifPath: emptyListGif,
                             title: "It's empty, over here.",
-                            subtitle: "No product categories in your business, yet! Add to view them here.",
+                            subtitle: 'No product categories in your business, yet! Add to view them here.',
                           ),
                         ),
                       ),

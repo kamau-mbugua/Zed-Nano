@@ -1,12 +1,11 @@
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'dart:async';
-import 'package:zed_nano/models/listCategories/ListCategoriesResponse.dart';
 import 'package:zed_nano/models/listProducts/ListProductsResponse.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
-import 'package:zed_nano/routes/routes.dart';
 import 'package:zed_nano/screens/products/add/add_product_page.dart';
 import 'package:zed_nano/screens/widget/common/categories_widget.dart';
 import 'package:zed_nano/screens/widget/common/searchview.dart';
@@ -24,7 +23,7 @@ class _ServiceListPageState extends State<ServiceListPage> {
   // Initialize with default value to avoid LateInitializationError
   late PaginationController<ProductData> _paginationController;
   final TextEditingController _searchController = TextEditingController();
-  String _searchTerm = "";
+  String _searchTerm = '';
   bool _isInitialized = false;
   Timer? _debounceTimer;
 
@@ -55,7 +54,7 @@ class _ServiceListPageState extends State<ServiceListPage> {
         limit: limit,
         searchValue: _searchTerm,
         context: context,
-        productService: 'Service'
+        productService: 'Service',
     );
     return response.data?.data ?? [];
   }
@@ -137,7 +136,7 @@ class _ServiceListPageState extends State<ServiceListPage> {
                     child: CompactGifDisplayWidget(
                       gifPath: emptyListGif,
                       title: "It's empty, over here.",
-                      subtitle: "No Service Products in your business, yet! Add to view them here.",
+                      subtitle: 'No Service Products in your business, yet! Add to view them here.',
                     ),
                   ),
                 ),

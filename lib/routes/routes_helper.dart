@@ -13,6 +13,7 @@ import 'package:zed_nano/screens/categories/add/add_category_page.dart';
 import 'package:zed_nano/screens/categories/detail/category_detail_page.dart';
 import 'package:zed_nano/screens/categories/edit/edit_category_page.dart';
 import 'package:zed_nano/screens/categories/list_categories_page.dart';
+import 'package:zed_nano/screens/common/common_webview_page.dart';
 import 'package:zed_nano/screens/main/home_main_page.dart';
 import 'package:zed_nano/screens/onboarding/onboarding_screen.dart';
 import 'package:zed_nano/screens/onboarding/splash_page.dart';
@@ -23,13 +24,11 @@ import 'package:zed_nano/screens/products/add/add_product_page.dart';
 import 'package:zed_nano/screens/products/detail/product_detail_page.dart';
 import 'package:zed_nano/screens/products/edit/edit_product_page.dart';
 import 'package:zed_nano/screens/products/list_products_and_services_page.dart';
-import 'package:zed_nano/screens/sell/sell_page.dart';
 import 'package:zed_nano/screens/stock/add_stock/add_stock_batch_tabs_page.dart';
 import 'package:zed_nano/screens/stock/stock_take/stock_take_batch_tabs_page.dart';
-import 'package:zed_nano/screens/stock/view_stock/view_stock_page.dart';
-import 'package:zed_nano/screens/stock/view_stock/view_out_of_stock_page.dart';
 import 'package:zed_nano/screens/stock/view_stock/view_low_stock_page.dart';
-import 'package:zed_nano/screens/common/common_webview_page.dart';
+import 'package:zed_nano/screens/stock/view_stock/view_out_of_stock_page.dart';
+import 'package:zed_nano/screens/stock/view_stock/view_stock_page.dart';
 
 class RouterHelper {
   static final FluroRouter router = FluroRouter();
@@ -52,7 +51,7 @@ class RouterHelper {
   );
   static final Handler _forgetPinHandler = Handler(
     handlerFunc: (BuildContext? context, Map<String, List<String>> params) =>
-        ResetPinScreen(),
+        const ResetPinScreen(),
   );
   // static final Handler _sellPageHandler = Handler(
   //   handlerFunc: (BuildContext? context, Map<String, List<String>> params) =>
@@ -81,58 +80,58 @@ class RouterHelper {
 
   static final Handler _homeMainHandler = Handler(
     handlerFunc: (BuildContext? context, Map<String, List<String>> params) =>
-        HomeMainPage(),
+        const HomeMainPage(),
   );
   static final Handler _activatingTrialHandler = Handler(
     handlerFunc: (BuildContext? context, Map<String, List<String>> params) =>
-        ActivatingTrialScreen(),
+        const ActivatingTrialScreen(),
   );
   static final Handler _listCategoriesHandler = Handler(
     handlerFunc: (BuildContext? context, Map<String, List<String>> params) =>
-        ListCategoriesPage(),
+        const ListCategoriesPage(),
   );
   static final Handler _listProductsAndServicesHandler = Handler(
     handlerFunc: (BuildContext? context, Map<String, List<String>> params) =>
-        ListProductsAndServicesPage(),
+        const ListProductsAndServicesPage(),
   );
   static final Handler _addPaymentMethodHandler = Handler(
     handlerFunc: (BuildContext? context, Map<String, List<String>> params) =>
-        AddPaymentMethodScreen(),
+        const AddPaymentMethodScreen(),
   );
 
   static final Handler _businessProfileScreenHandler = Handler(
     handlerFunc: (BuildContext? context, Map<String, List<String>> params) =>
-        BusinessProfileScreen(),
+        const BusinessProfileScreen(),
   );
 
   static final Handler _editBusinessPageHandler = Handler(
     handlerFunc: (BuildContext? context, Map<String, List<String>> params) =>
-        EditBusinessPage(),
+        const EditBusinessPage(),
   );
 
   static final Handler _viewLowStockPageHandler = Handler(
     handlerFunc: (BuildContext? context, Map<String, List<String>> params) =>
-        ViewLowStockPage(),
+        const ViewLowStockPage(),
   );
 
   static final Handler _viewOutOfStockPageHandler = Handler(
     handlerFunc: (BuildContext? context, Map<String, List<String>> params) =>
-        ViewOutOfStockPage(),
+        const ViewOutOfStockPage(),
   );
 
   static final Handler _viewStockPageHandler = Handler(
     handlerFunc: (BuildContext? context, Map<String, List<String>> params) =>
-        ViewStockPage(),
+        const ViewStockPage(),
   );
 
   static final Handler _addStockBatchTabsPageHandler = Handler(
     handlerFunc: (BuildContext? context, Map<String, List<String>> params) =>
-        AddStockBatchTabsPage(),
+        const AddStockBatchTabsPage(),
   );
 
   static final Handler _addStockTakeBatchTabsPageHandler = Handler(
     handlerFunc: (BuildContext? context, Map<String, List<String>> params) =>
-        StockTakeBatchTabsPage(),
+        const StockTakeBatchTabsPage(),
   );
 
   static final Handler _categoryDetailHandler = Handler(
@@ -159,7 +158,7 @@ class RouterHelper {
   static final Handler _newCategoryHandler = Handler(
     handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
       // Default route without parameters
-      return NewCategoryPage(
+      return const NewCategoryPage(
         doNotUpdate: true,
       );
     },
@@ -427,7 +426,7 @@ class RouterHelper {
     // Define a not found handler
     router.notFoundHandler = Handler(
       handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
-        return Scaffold(
+        return const Scaffold(
           body: Center(
             child: Text('Route not found'),
           ),
@@ -438,8 +437,8 @@ class RouterHelper {
 
   // Navigate to a route
   static Future navigateTo(BuildContext context, String routeName,
-      {Object? arguments}) {
+      {Object? arguments,}) {
     return router.navigateTo(context, routeName,
-        routeSettings: RouteSettings(arguments: arguments));
+        routeSettings: RouteSettings(arguments: arguments),);
   }
 }

@@ -9,29 +9,24 @@ import 'package:zed_nano/models/listProducts/ListProductsResponse.dart';
 import 'package:zed_nano/models/product_model.dart';
 import 'package:zed_nano/providers/cart/CartViewModel.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
-import 'package:zed_nano/screens/sell/cart_preview_page.dart';
 import 'package:zed_nano/screens/sell/itemBuilders/order_taking_item_builder.dart';
 import 'package:zed_nano/screens/sell/select_category_page.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/bottom_sheet_helper.dart';
-import 'package:zed_nano/screens/widget/common/common_widgets.dart';
+import 'package:zed_nano/screens/widget/common/filter_row_widget.dart';
 import 'package:zed_nano/screens/widget/common/heading.dart';
 import 'package:zed_nano/screens/widget/common/searchview.dart';
-import 'package:zed_nano/screens/widget/common/filter_row_widget.dart';
-import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
-import 'package:zed_nano/utils/Images.dart';
 import 'package:zed_nano/utils/logger.dart';
 import 'package:zed_nano/utils/pagination_controller.dart';
 import 'package:zed_nano/viewmodels/CustomerInvoicingViewModel.dart';
 
 class SellPage extends StatefulWidget {
+
+  const SellPage({required this.onNext, required this.onPrevious, super.key});
   final VoidCallback onNext;
   final VoidCallback onPrevious;
-
-  SellPage({Key? key, required this.onNext, required this.onPrevious})
-      : super(key: key);
 
   @override
   State<SellPage> createState() => _SellPageState();
@@ -44,7 +39,7 @@ class _SellPageState extends State<SellPage> {
   TextEditingController searchController = TextEditingController();
 
   late PaginationController<ProductData> _paginationController;
-  String _searchTerm = "";
+  String _searchTerm = '';
   ProductCategoryData? categoryData;
   Timer? _debounceTimer;
   Timer? _longPressTimer;
@@ -71,13 +66,13 @@ class _SellPageState extends State<SellPage> {
   }
 
   Future<List<ProductData>> getListByProducts(
-      {required int page, required int limit}) async {
+      {required int page, required int limit,}) async {
     final response = await getBusinessProvider(context).getListByProducts(
         page: page,
         limit: limit,
         searchValue: _searchTerm,
         context: context,
-        categoryId: selectedCategoryId ?? '');
+        categoryId: selectedCategoryId ?? '',);
 
     return response.data?.data ?? [];
   }
@@ -119,7 +114,7 @@ class _SellPageState extends State<SellPage> {
   }
 
   void onDecrease(
-      int quantity, CartViewModel cartViewModel, ProductData product) {
+      int quantity, CartViewModel cartViewModel, ProductData product,) {
     if (quantity > 0) {
       if (quantity == 1) {
         cartViewModel.removeItem(product.id ?? '');
@@ -130,7 +125,7 @@ class _SellPageState extends State<SellPage> {
   }
 
   void onIncrease(
-      int quantity, CartViewModel cartViewModel, ProductData product) {
+      int quantity, CartViewModel cartViewModel, ProductData product,) {
     if (quantity == 0) {
       cartViewModel.addItem(
         product.id ?? '',
@@ -139,7 +134,7 @@ class _SellPageState extends State<SellPage> {
         product.imagePath ?? '',
         product.currency ?? '',
         product.productCategory ?? '',
-        0.0,
+        0,
       );
     } else {
       cartViewModel.updateQuantity(product.id ?? '', quantity + 1);
@@ -149,7 +144,7 @@ class _SellPageState extends State<SellPage> {
   @override
   Widget build(BuildContext context) {
     final cartViewModel = Provider.of<CartViewModel>(context);
-    var customerInvoicingViewModel = Provider.of<CustomerInvoicingViewModel>(context);
+    final customerInvoicingViewModel = Provider.of<CustomerInvoicingViewModel>(context);
 
 
     return Scaffold(
@@ -157,7 +152,7 @@ class _SellPageState extends State<SellPage> {
       appBar: AuthAppBar(title:
       customerInvoicingViewModel.customerData != null
           ? 'Create Invoice'
-          : 'Sell', onBackPressed: widget.onPrevious),
+          : 'Sell', onBackPressed: widget.onPrevious,),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -279,7 +274,7 @@ class _SellPageState extends State<SellPage> {
                       product.imagePath ?? '',
                       product.currency ?? '',
                       product.productCategory ?? '',
-                      0.0,
+                      0,
                     );
                   }
                   BottomSheetHelper.showAddDiscountBottomSheet(

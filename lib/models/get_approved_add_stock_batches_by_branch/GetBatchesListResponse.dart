@@ -1,8 +1,4 @@
 class GetBatchesListResponse {
-  final String? status;
-  final String? message;
-  final List<BatchData>? data;
-  final int? count;
 
   GetBatchesListResponse({
     this.status,
@@ -21,6 +17,10 @@ class GetBatchesListResponse {
       count: json['count'] as int?,
     );
   }
+  final String? status;
+  final String? message;
+  final List<BatchData>? data;
+  final int? count;
 
   Map<String, dynamic> toJson() => {
     'Status': status,
@@ -31,19 +31,6 @@ class GetBatchesListResponse {
 }
 
 class BatchData {
-  final String? id;
-  final String? createdBy;
-  final String? status;
-  final String? dateCreated;
-  final String? storeId;
-  final String? batchId;
-  final String? batchNumber;
-  final String? approvedBy;
-  final String? dateApproved;
-  final String? approvedById;
-  final BatchHeader? batchHeader;
-  final String? createdByName;
-  final int? productCount;
 
   BatchData({
     this.id,
@@ -80,6 +67,19 @@ class BatchData {
       productCount: json['productCount'] as int?,
     );
   }
+  final String? id;
+  final String? createdBy;
+  final String? status;
+  final String? dateCreated;
+  final String? storeId;
+  final String? batchId;
+  final String? batchNumber;
+  final String? approvedBy;
+  final String? dateApproved;
+  final String? approvedById;
+  final BatchHeader? batchHeader;
+  final String? createdByName;
+  final int? productCount;
 
   Map<String, dynamic> toJson() => {
     '_id': id,
@@ -99,8 +99,6 @@ class BatchData {
 }
 
 class BatchHeader {
-  final String? to;
-  final String? approvedBy;
 
   BatchHeader({this.to, this.approvedBy});
 
@@ -110,6 +108,8 @@ class BatchHeader {
       approvedBy: json['approvedBy'] as String?,
     );
   }
+  final String? to;
+  final String? approvedBy;
 
   Map<String, dynamic> toJson() => {
     'to': to,

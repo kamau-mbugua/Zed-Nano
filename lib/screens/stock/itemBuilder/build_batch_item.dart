@@ -7,10 +7,10 @@ import 'package:zed_nano/utils/extensions.dart';
 
 Widget buildBatchItem(BatchData batch, {VoidCallback? onTap, bool isStockTake = false}) {
   // Format the approval date
-  String formattedDate = '';
+  var formattedDate = '';
   if (batch.dateApproved != null) {
     try {
-      DateTime date = DateTime.parse(batch.dateApproved!);
+      final date = DateTime.parse(batch.dateApproved!);
       formattedDate = '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year}';
     } catch (e) {
       formattedDate = batch.dateApproved!;
@@ -18,10 +18,10 @@ Widget buildBatchItem(BatchData batch, {VoidCallback? onTap, bool isStockTake = 
   }
 
   // Get supplier name from batch header or use default
-  String supplierName = batch.batchHeader?.to ?? 'Unknown Supplier';
+  final supplierName = batch.batchHeader?.to ?? 'Unknown Supplier';
   
   // Get batch number or use batch ID
-  String batchNumber = batch.batchNumber ?? batch.batchId ?? 'N/A';
+  final batchNumber = batch.batchNumber ?? batch.batchId ?? 'N/A';
 
   return Container(
     margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -38,7 +38,6 @@ Widget buildBatchItem(BatchData batch, {VoidCallback? onTap, bool isStockTake = 
       ],
       border: Border.all(
         color: Colors.grey.withOpacity(0.7),
-        width: 1,
       ),
     ),
     child: Material(
@@ -56,7 +55,6 @@ Widget buildBatchItem(BatchData batch, {VoidCallback? onTap, bool isStockTake = 
                   children: [
 
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         SvgPicture.asset(
                           batch.status != 'APPROVED' ? pendingBatchIcon : batchIcon,
@@ -71,7 +69,7 @@ Widget buildBatchItem(BatchData batch, {VoidCallback? onTap, bool isStockTake = 
                               fontSize: 14,
                               fontWeight: FontWeight.w600,
                               fontStyle: FontStyle.normal,
-                            )
+                            ),
                         ),
                       ],
                     ),
@@ -93,9 +91,8 @@ Widget buildBatchItem(BatchData batch, {VoidCallback? onTap, bool isStockTake = 
                     // Approval date and product count row
                     Row(
                       children: [
-                        batch.status == 'APPROVED'?
-                        Text(
-                          'Approved on: ${batch?.dateApproved?.toFormattedDate()}',
+                        if (batch.status == 'APPROVED') Text(
+                          'Approved on: ${batch.dateApproved?.toFormattedDate()}',
                           style: const TextStyle(
                             fontFamily: 'Poppins',
                             color: textSecondary,
@@ -103,8 +100,8 @@ Widget buildBatchItem(BatchData batch, {VoidCallback? onTap, bool isStockTake = 
                             fontWeight: FontWeight.w400,
                             fontStyle: FontStyle.normal,
                           ),
-                        ):  Text(
-                          'Created on: ${batch?.dateCreated?.toFormattedDate()}',
+                        ) else Text(
+                          'Created on: ${batch.dateCreated?.toFormattedDate()}',
                           style: const TextStyle(
                             fontFamily: 'Poppins',
                             color: textSecondary,
@@ -124,7 +121,7 @@ Widget buildBatchItem(BatchData batch, {VoidCallback? onTap, bool isStockTake = 
                         ),
                         const SizedBox(width: 8),
                         Text(
-                          '${batch?.productCount ?? 0} Products',
+                          '${batch.productCount ?? 0} Products',
                           style: const TextStyle(
                             fontFamily: 'Poppins',
                             color: textPrimary,

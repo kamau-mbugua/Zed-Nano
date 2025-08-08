@@ -1,13 +1,30 @@
+import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/utils/Colors.dart';
-import 'package:country_code_picker/country_code_picker.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/Images.dart';
 
 /// A reusable styled text input field with consistent styling
 class StyledTextField extends StatelessWidget {
+
+  const StyledTextField({
+    required this.textFieldType, required this.hintText, super.key,
+    this.controller,
+    this.focusNode,
+    this.nextFocus,
+    this.onChanged,
+    this.onSubmitted,
+    this.autofocus = false,
+    this.isPassword = false,
+    this.textInputAction,
+    this.maxLength,
+    this.showCounter = false,
+    this.prefixText = '',
+    this.isActive = true,
+    this.keyboardType,
+  });
   final TextFieldType textFieldType;
   final String hintText;
   final TextEditingController? controller;
@@ -24,25 +41,6 @@ class StyledTextField extends StatelessWidget {
   final bool isActive;
   final TextInputType? keyboardType;
 
-  const StyledTextField({
-    Key? key,
-    required this.textFieldType,
-    required this.hintText,
-    this.controller,
-    this.focusNode,
-    this.nextFocus,
-    this.onChanged,
-    this.onSubmitted,
-    this.autofocus = false,
-    this.isPassword = false,
-    this.textInputAction,
-    this.maxLength,
-    this.showCounter = false,
-    this.prefixText = '',
-    this.isActive = true,
-    this.keyboardType,
-  }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     // Determine keyboard type - use number keyboard for password PIN fields
@@ -57,16 +55,12 @@ class StyledTextField extends StatelessWidget {
       switch (textFieldType) {
         case TextFieldType.EMAIL:
           inputType = TextInputType.emailAddress;
-          break;
         case TextFieldType.PHONE:
           inputType = TextInputType.phone;
-          break;
         case TextFieldType.NUMBER:
           inputType = TextInputType.number;
-          break;
         case TextFieldType.MULTILINE:
           inputType = TextInputType.multiline;
-          break;
         default:
           inputType = TextInputType.text;
       }
@@ -116,16 +110,16 @@ class StyledTextField extends StatelessWidget {
           border: InputBorder.none,
           hintText: hintText,
           hintStyle: TextStyle(
-            color: isActive ? Color(0xff8f9098) : Colors.grey.shade400,
+            color: isActive ? const Color(0xff8f9098) : Colors.grey.shade400,
             fontWeight: FontWeight.w400,
-            fontFamily: "Poppins", // Poppins font as per user preference
-            fontSize: 12.0,
+            fontFamily: 'Poppins', // Poppins font as per user preference
+            fontSize: 12,
 
           ),
           contentPadding: EdgeInsets.symmetric(vertical: isPassword ? 15 :0, horizontal: 16),
           counterText: showCounter ? null : '',
           prefix: prefixText.isEmpty ? null : Padding(
-            padding: const EdgeInsets.only(left: 8.0),
+            padding: const EdgeInsets.only(left: 8),
             child: Container(
               key: ValueKey('prefix_$prefixText'),
               padding: const EdgeInsets.all(10),
@@ -133,9 +127,9 @@ class StyledTextField extends StatelessWidget {
                 color: lightGreyColor,
                 borderRadius: BorderRadius.circular(10),
               ),
-              child:Text("$prefixText ", style: boldTextStyle(size: 11)),
+              child:Text('$prefixText ', style: boldTextStyle(size: 11)),
             ),
-          )
+          ),
         ),
       ),
     );
@@ -144,19 +138,9 @@ class StyledTextField extends StatelessWidget {
 
 /// A reusable phone number input field with country code picker
 class PhoneInputField extends StatefulWidget {
-  final TextEditingController? controller;
-  TextEditingController? codeController;
-  final FocusNode? focusNode;
-  final FocusNode? nextFocus;
-  final int? maxLength;
-  final Function(String)? onChanged;
-  final Function(String)? onSubmitted;
-  final Function(CountryCode)? onCountryChanged;
-  final String initialCountryCode;
-  final List<String> favoriteCountries;
 
    PhoneInputField({
-    Key? key,
+    super.key,
     this.controller,
     this.codeController,
     this.focusNode,
@@ -167,7 +151,17 @@ class PhoneInputField extends StatefulWidget {
     this.onCountryChanged,
     this.initialCountryCode = 'KE',
     this.favoriteCountries = const ['+254', 'KE'],
-  }) : super(key: key);
+  });
+  final TextEditingController? controller;
+  TextEditingController? codeController;
+  final FocusNode? focusNode;
+  final FocusNode? nextFocus;
+  final int? maxLength;
+  final Function(String)? onChanged;
+  final Function(String)? onSubmitted;
+  final Function(CountryCode)? onCountryChanged;
+  final String initialCountryCode;
+  final List<String> favoriteCountries;
 
   @override
   State<PhoneInputField> createState() => _PhoneInputFieldState();
@@ -201,7 +195,7 @@ class _PhoneInputFieldState extends State<PhoneInputField> {
         children: [
           Container(
             width: 70, // Fixed width for the country code
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               border: Border(right: BorderSide(color: BodyWhite)),
             ),
             child: CountryCodePicker(
@@ -217,19 +211,15 @@ class _PhoneInputFieldState extends State<PhoneInputField> {
               initialSelection: widget.initialCountryCode,
               favorite: widget.favoriteCountries,
               showFlag: false, // Hide the flag
-              showCountryOnly: false,
-              showOnlyCountryWhenClosed: false,
               alignLeft: true,
-              hideMainText: false,
               showFlagMain: false,
               showFlagDialog: true,
-              hideSearch: false,
               padding: EdgeInsets.zero,
-              textStyle: TextStyle(
+              textStyle: const TextStyle(
                 color: Color(0xff1f2024),
                 fontWeight: FontWeight.w400,
-                fontFamily: "Poppins",
-                fontSize: 14.0,
+                fontFamily: 'Poppins',
+                fontSize: 14,
               ),
             ),
           ),
@@ -249,14 +239,14 @@ class _PhoneInputFieldState extends State<PhoneInputField> {
                 }
               },
               textInputAction: widget.nextFocus != null ? TextInputAction.next : null,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 border: InputBorder.none,
-                hintText: "Phone Number",
+                hintText: 'Phone Number',
                 hintStyle: TextStyle(
                   color: Color(0xff8f9098),
                   fontWeight: FontWeight.w400,
-                  fontFamily: "Poppins",
-                  fontSize: 14.0,
+                  fontFamily: 'Poppins',
+                  fontSize: 14,
                 ),
                 contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 8),
                 counterText: '',
@@ -271,17 +261,9 @@ class _PhoneInputFieldState extends State<PhoneInputField> {
 
 /// A row with two equal-width text fields
 class NameFieldsRow extends StatelessWidget {
-  final TextEditingController? firstNameController;
-  final TextEditingController? lastNameController;
-
-  final FocusNode? firstNameFocusNode;
-  final FocusNode? lastNameFocusNode;
-  final FocusNode? focusNodeComplete;
-  final Function(String)? onFirstNameChanged;
-  final Function(String)? onLastNameChanged;
 
   const NameFieldsRow({
-    Key? key,
+    super.key,
     this.firstNameController,
     this.lastNameController,
     this.onFirstNameChanged,
@@ -292,12 +274,20 @@ class NameFieldsRow extends StatelessWidget {
 
     //FocusNode? focusNode,
 
-  }) : super(key: key);
+  });
+  final TextEditingController? firstNameController;
+  final TextEditingController? lastNameController;
+
+  final FocusNode? firstNameFocusNode;
+  final FocusNode? lastNameFocusNode;
+  final FocusNode? focusNodeComplete;
+  final Function(String)? onFirstNameChanged;
+  final Function(String)? onLastNameChanged;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(
         children: [
           Expanded(
@@ -313,14 +303,14 @@ class NameFieldsRow extends StatelessWidget {
                 onChanged: onFirstNameChanged,
                 focus: firstNameFocusNode,
                 nextFocus: lastNameFocusNode,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   border: InputBorder.none,
-                  hintText: "First Name",
+                  hintText: 'First Name',
                   hintStyle: TextStyle(
                     color: Color(0xff8f9098),
                     fontWeight: FontWeight.w400,
-                    fontFamily: "Poppins",
-                    fontSize: 14.0,
+                    fontFamily: 'Poppins',
+                    fontSize: 14,
                   ),
                   contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 16),
                 ),
@@ -341,14 +331,14 @@ class NameFieldsRow extends StatelessWidget {
                 onChanged: onLastNameChanged,
                 focus: lastNameFocusNode,
                 nextFocus: focusNodeComplete,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   border: InputBorder.none,
-                  hintText: "Last Name",
+                  hintText: 'Last Name',
                   hintStyle: TextStyle(
                     color: Color(0xff8f9098),
                     fontWeight: FontWeight.w400,
-                    fontFamily: "Poppins",
-                    fontSize: 14.0,
+                    fontFamily: 'Poppins',
+                    fontSize: 14,
                   ),
                   contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 16),
                 ),

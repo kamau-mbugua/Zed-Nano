@@ -1,7 +1,4 @@
 class BranchStoreSummaryResponse {
-  final String? status;
-  final String? message;
-  final BranchStoreSummaryData? data;
 
   BranchStoreSummaryResponse({
     this.status,
@@ -18,16 +15,12 @@ class BranchStoreSummaryResponse {
           : null,
     );
   }
+  final String? status;
+  final String? message;
+  final BranchStoreSummaryData? data;
 }
 
 class BranchStoreSummaryData {
-  final TotalSales? totalSales;
-  final BranchInfo? branch;
-  final TotalPosSales? totalPosSales;
-  final TotalInvoicesSales? totalInvoicesSales;
-  final CustomerCount? customerCount;
-  final SoldStock? soldStock;
-  final UnpaidTotals? unpaidTotals;
 
   BranchStoreSummaryData({
     this.totalSales,
@@ -64,12 +57,16 @@ class BranchStoreSummaryData {
           : null,
     );
   }
+  final TotalSales? totalSales;
+  final BranchInfo? branch;
+  final TotalPosSales? totalPosSales;
+  final TotalInvoicesSales? totalInvoicesSales;
+  final CustomerCount? customerCount;
+  final SoldStock? soldStock;
+  final UnpaidTotals? unpaidTotals;
 }
 
 class TotalSales {
-  final int? amount;
-  final String? currency;
-  final int? numberOfTransactions;
 
   TotalSales({
     this.amount,
@@ -84,11 +81,12 @@ class TotalSales {
       numberOfTransactions: json['numberOfTransactions'] as int?,
     );
   }
+  final int? amount;
+  final String? currency;
+  final int? numberOfTransactions;
 }
 
 class BranchInfo {
-  final int? numberOfStores;
-  final int? numberOfStoresUsers;
 
   BranchInfo({
     this.numberOfStores,
@@ -101,11 +99,10 @@ class BranchInfo {
       numberOfStoresUsers: json['numberOfStoresUsers'] as int?,
     );
   }
+  final int? numberOfStores;
+  final int? numberOfStoresUsers;
 }
 class TotalPosSales {
-  final int? posTransactionsAmount;
-  final String? currency;
-  final int? numberOfPosTransactions;
 
   TotalPosSales({
     this.posTransactionsAmount,
@@ -120,11 +117,11 @@ class TotalPosSales {
       numberOfPosTransactions: json['numberOfPosTransactions'] as int?,
     );
   }
+  final int? posTransactionsAmount;
+  final String? currency;
+  final int? numberOfPosTransactions;
 }
 class TotalInvoicesSales {
-  final int? invoiceTransactionsAmount;
-  final String? currency;
-  final int? numberOfInvoiceTransactions;
 
   TotalInvoicesSales({
     this.invoiceTransactionsAmount,
@@ -139,10 +136,12 @@ class TotalInvoicesSales {
       numberOfInvoiceTransactions: json['numberOfInvoiceTransactions'] as int?,
     );
   }
+  final int? invoiceTransactionsAmount;
+  final String? currency;
+  final int? numberOfInvoiceTransactions;
 }
 
 class CustomerCount {
-  final int? totalCustomers;
 
   CustomerCount({this.totalCustomers});
 
@@ -151,10 +150,10 @@ class CustomerCount {
       totalCustomers: json['totalCustomers'] as int?,
     );
   }
+  final int? totalCustomers;
 }
 
 class SoldStock {
-  final int? businessSoldStockQuantity;
 
   SoldStock({this.businessSoldStockQuantity});
 
@@ -163,12 +162,10 @@ class SoldStock {
       businessSoldStockQuantity: json['businessSoldStockQuantity'] as int?,
     );
   }
+  final int? businessSoldStockQuantity;
 }
 
 class UnpaidTotals {
-  final int? totalUnpaidOrders;
-  final int? totalUnpaidInvoices;
-  final int? totalUnpaid;
 
   UnpaidTotals({
     this.totalUnpaidOrders,
@@ -183,4 +180,7 @@ class UnpaidTotals {
       totalUnpaid: json['totalUnpaid'] as int?,
     );
   }
+  final int? totalUnpaidOrders;
+  final int? totalUnpaidInvoices;
+  final int? totalUnpaid;
 }

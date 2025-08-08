@@ -13,7 +13,7 @@ class PermissionService {
     ];
 
     // Request each permission
-    for (var permission in permissions) {
+    for (final permission in permissions) {
       final status = await permission.status;
       if (!status.isGranted) {
         await permission.request();
@@ -23,7 +23,7 @@ class PermissionService {
 
   /// Check if a specific permission is granted
   Future<bool> isPermissionGranted(Permission permission) async {
-    return await permission.isGranted;
+    return permission.isGranted;
   }
 
   /// Open app settings if permissions are permanently denied

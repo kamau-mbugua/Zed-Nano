@@ -1,7 +1,4 @@
 class CreateProductResponse {
-  final String? status;
-  final String? message;
-  final String? productId;
 
   CreateProductResponse({
     this.status,
@@ -16,6 +13,9 @@ class CreateProductResponse {
       productId: json['productId'] as String?,
     );
   }
+  final String? status;
+  final String? message;
+  final String? productId;
 
   Map<String, dynamic> toJson() {
     return {

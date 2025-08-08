@@ -1,10 +1,4 @@
 class ListUsersResponse {
-  final String? status;
-  final String? message;
-  final List<ListUserData>? data;
-  final int? count;
-  final int? page;
-  final int? limit;
 
   ListUsersResponse({
     this.status,
@@ -27,6 +21,12 @@ class ListUsersResponse {
       limit: json['limit'] as int?,
     );
   }
+  final String? status;
+  final String? message;
+  final List<ListUserData>? data;
+  final int? count;
+  final int? page;
+  final int? limit;
 
   Map<String, dynamic> toJson() {
     return {
@@ -41,24 +41,6 @@ class ListUsersResponse {
 }
 
 class ListUserData {
-  final String? id;
-  final String? userId;
-  final String? userRole;
-  final String? userStatus;
-  final String? dateAdded;
-  final String? addedBy;
-  final String? firstName;
-  final String? secondName;
-  final String? userName;
-  final String? userEmail;
-  final String? userPhone;
-  final String? createdAt;
-  final String? updatedAt;
-  final List<UserBranch>? branches;
-  final int? branchCount;
-  final String? storeName;
-  final String? createdByName;
-  final List<dynamic>? assignedModules;
 
   ListUserData({
     this.id,
@@ -105,6 +87,24 @@ class ListUserData {
       assignedModules: json['assignedModules'] as List<dynamic>?,
     );
   }
+  final String? id;
+  final String? userId;
+  final String? userRole;
+  final String? userStatus;
+  final String? dateAdded;
+  final String? addedBy;
+  final String? firstName;
+  final String? secondName;
+  final String? userName;
+  final String? userEmail;
+  final String? userPhone;
+  final String? createdAt;
+  final String? updatedAt;
+  final List<UserBranch>? branches;
+  final int? branchCount;
+  final String? storeName;
+  final String? createdByName;
+  final List<dynamic>? assignedModules;
 
   Map<String, dynamic> toJson() {
     return {
@@ -134,8 +134,6 @@ class ListUserData {
 }
 
 class UserBranch {
-  final String? id;
-  final String? branchName;
 
   UserBranch({
     this.id,
@@ -148,6 +146,8 @@ class UserBranch {
       branchName: json['branchName'] as String?,
     );
   }
+  final String? id;
+  final String? branchName;
 
   Map<String, dynamic> toJson() {
     return {

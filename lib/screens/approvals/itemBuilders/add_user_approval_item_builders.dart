@@ -3,7 +3,6 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/models/listUsers/ListUsersResponse.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
 import 'package:zed_nano/utils/Colors.dart';
-import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/Images.dart';
 import 'package:zed_nano/utils/extensions.dart';
 
@@ -13,11 +12,11 @@ Widget addUsersApprovalItemBuilder(ListUserData batch,
     VoidCallback? onDecline,
     VoidCallback? onTap,
     bool isSelected = false,
-    BuildContext? context}) {
+    BuildContext? context,}) {
   return GestureDetector(
     onTap: onTap,
     child: Container(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: cardBackgroundColor,
         borderRadius: BorderRadius.circular(12),
@@ -42,35 +41,35 @@ Widget addUsersApprovalItemBuilder(ListUserData batch,
                         ),
                         8.width,
                         Expanded(
-                          child: Text('${batch.fullName}',
+                          child: Text(batch.fullName,
                               style: const TextStyle(
                                 fontFamily: 'Poppins',
                                 color: textPrimary,
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
                                 fontStyle: FontStyle.normal,
-                              )),
-                        )
+                              ),),
+                        ),
                       ],
                     ),
                     8.height,
                     // Subtitle
                     Text(
-                        'Created on:  ${batch?.createdAt?.toFormattedDate()}',
+                        'Created on:  ${batch.createdAt?.toFormattedDate()}',
                         style: const TextStyle(
                             color: textSecondary,
                             fontWeight: FontWeight.w400,
                             fontFamily: 'Poppins',
                             fontStyle: FontStyle.normal,
-                            fontSize: 10.0),
-                        textAlign: TextAlign.left)
+                            fontSize: 10,),
+                        textAlign: TextAlign.left,),
                   ],
                 ),
               ),
               Container(
-                margin: const EdgeInsets.only(right: 0),
+                margin: const EdgeInsets.only(),
                 padding: const EdgeInsets.symmetric(
-                    horizontal: 12, vertical: 6),
+                    horizontal: 12, vertical: 6,),
                 decoration: BoxDecoration(
                   color: batch.userStatus == 'ACTIVE'
                       ?lightGreenColor
@@ -86,7 +85,7 @@ Widget addUsersApprovalItemBuilder(ListUserData batch,
                       fontSize: 10,
                       fontWeight: FontWeight.w600,
                       fontStyle: FontStyle.normal,
-                    )
+                    ),
                 ),
               ),
             ],
@@ -98,17 +97,17 @@ Widget addUsersApprovalItemBuilder(ListUserData batch,
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                       'Created by:',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: 'Poppins',
                         color: textSecondary,
                         fontSize: 10,
                         fontWeight: FontWeight.w400,
                         fontStyle: FontStyle.normal,
                         letterSpacing: 0.15,
-                      )),
-                  Text('${batch.createdByName ?? 'N/A'}',
+                      ),),
+                  Text(batch.createdByName ?? 'N/A',
                       style: const TextStyle(
                         fontFamily: 'Poppins',
                         color: textPrimary,
@@ -116,7 +115,7 @@ Widget addUsersApprovalItemBuilder(ListUserData batch,
                         fontWeight: FontWeight.w400,
                         fontStyle: FontStyle.normal,
                         letterSpacing: 0.12,
-                      ))
+                      ),),
                 ],
               ),
               Column(
@@ -130,7 +129,7 @@ Widget addUsersApprovalItemBuilder(ListUserData batch,
                         fontWeight: FontWeight.w400,
                         fontStyle: FontStyle.normal,
                         letterSpacing: 0.15,
-                      )),
+                      ),),
                   8.height,
                   Text(batch.userRole.toString() ?? 'N/A',
                       style: const TextStyle(
@@ -140,7 +139,7 @@ Widget addUsersApprovalItemBuilder(ListUserData batch,
                         fontWeight: FontWeight.w400,
                         fontStyle: FontStyle.normal,
                         letterSpacing: 0.12,
-                      ))
+                      ),),
                 ],
               ),
             ],
@@ -166,9 +165,8 @@ Widget addUsersApprovalItemBuilder(ListUserData batch,
                         ),
                       ),
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
+                          horizontal: 16, vertical: 8,),
                       child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           rfCommonCachedNetworkImage(
@@ -185,10 +183,10 @@ Widget addUsersApprovalItemBuilder(ListUserData batch,
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
                                 fontStyle: FontStyle.normal,
-                              )),
+                              ),),
                         ],
-                      )),
-                )),
+                      ),),
+                ),),
                 const SizedBox(width: 12), // Add spacing between buttons
                 Expanded(
                     child: GestureDetector(
@@ -202,9 +200,8 @@ Widget addUsersApprovalItemBuilder(ListUserData batch,
                         ),
                       ),
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
+                          horizontal: 16, vertical: 8,),
                       child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           rfCommonCachedNetworkImage(
@@ -221,14 +218,14 @@ Widget addUsersApprovalItemBuilder(ListUserData batch,
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
                                 fontStyle: FontStyle.normal,
-                              )),
+                              ),),
                         ],
-                      )),
-                )),
+                      ),),
+                ),),
               ],
             ),
         ],
       ),
-    ).paddingSymmetric(vertical:4)
+    ).paddingSymmetric(vertical:4),
   );
 }

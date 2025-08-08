@@ -5,19 +5,19 @@ import 'package:zed_nano/models/business/BusinessDetails.dart';
 import 'package:zed_nano/providers/business/BusinessProviders.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/common/common_webview_page.dart';
-import 'package:zed_nano/screens/widget/auth/terms_checkbox.dart';
-import 'package:zed_nano/viewmodels/payment_view_model.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/auth/input_fields.dart';
+import 'package:zed_nano/screens/widget/auth/terms_checkbox.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/screens/widget/common/heading.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/extensions.dart';
+import 'package:zed_nano/viewmodels/payment_view_model.dart';
 
 
 class AddKCBPaymentPage extends StatefulWidget {
+  const AddKCBPaymentPage({required this.kcbAccountType, super.key});
   final String kcbAccountType;
-  const AddKCBPaymentPage({super.key, required this.kcbAccountType});
 
   @override
   State<AddKCBPaymentPage> createState() => _AddKCBPaymentPageState();
@@ -47,7 +47,7 @@ class _AddKCBPaymentPageState extends State<AddKCBPaymentPage> {
         .then((value) {
       if (value.isSuccess) {
         showCustomToast(value.message ?? 'Category created successfully',
-            isError: false);
+            isError: false,);
         PaymentViewModel().setNeedsRefresh(true);
         Navigator.pop(context); // Return to the previous screen
       } else {
@@ -89,7 +89,7 @@ class _AddKCBPaymentPageState extends State<AddKCBPaymentPage> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar:  AuthAppBar(title: 'Add Payment Method'),
+      appBar:  const AuthAppBar(title: 'Add Payment Method'),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: ListView(
@@ -111,15 +111,15 @@ class _AddKCBPaymentPageState extends State<AddKCBPaymentPage> {
 
 
                 if(!accountNumber.isValidInput){
-                  showCustomToast('Please Provide a valid $itemName number', isError: true);
+                  showCustomToast('Please Provide a valid $itemName number');
                   return;
                 }
                 if(!accountNumberConfirm.isValidInput){
-                  showCustomToast('', isError: true);
+                  showCustomToast('');
                   return;
                 }
                 if(accountNumber != accountNumberConfirm){
-                  showCustomToast('$itemName number does not match', isError: true);
+                  showCustomToast('$itemName number does not match');
                   return;
                 }
 
@@ -144,7 +144,7 @@ class _AddKCBPaymentPageState extends State<AddKCBPaymentPage> {
         children: [
           // Product Name
           Text(
-            "$itemName Number",
+            '$itemName Number',
             style: const TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w600,
@@ -193,6 +193,6 @@ class _AddKCBPaymentPageState extends State<AddKCBPaymentPage> {
             },
           ).paddingSymmetric(vertical: 10),
           24.height,
-        ]);
+        ],);
   }
 }

@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:clarity_flutter/clarity_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 import 'package:zed_nano/app/app.dart';
@@ -14,15 +13,15 @@ import 'package:zed_nano/providers/business/BusinessProviders.dart';
 import 'package:zed_nano/providers/cart/CartViewModel.dart';
 import 'package:zed_nano/providers/common/SplashProvider.dart';
 import 'package:zed_nano/providers/common/theme_provider.dart';
-import 'package:zed_nano/viewmodels/CustomerInvoicingViewModel.dart';
-import 'package:zed_nano/viewmodels/RefreshViewModel.dart';
-import 'package:zed_nano/viewmodels/WorkflowViewModel.dart';
+import 'package:zed_nano/services/business_setup_service.dart';
 import 'package:zed_nano/services/firebase_service.dart';
 import 'package:zed_nano/utils/app_loading.dart';
 import 'package:zed_nano/utils/permission_service.dart';
+import 'package:zed_nano/viewmodels/CustomerInvoicingViewModel.dart';
+import 'package:zed_nano/viewmodels/RefreshViewModel.dart';
+import 'package:zed_nano/viewmodels/WorkflowViewModel.dart';
 import 'package:zed_nano/viewmodels/add_stock_take_viewmodel.dart';
 import 'package:zed_nano/viewmodels/add_stock_viewmodel.dart';
-import 'package:zed_nano/services/business_setup_service.dart';
 
 // Global navigator key for accessing navigator from anywhere
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -80,7 +79,7 @@ Future<void> initializeApp(Flavor flavor) async {
   
   // Configure Clarity for analytics
   final config = ClarityConfig(
-    projectId: "s2fy2n25wz",
+    projectId: 's2fy2n25wz',
     logLevel: LogLevel.None, // Use LogLevel.Verbose for debugging
   );
 
@@ -109,15 +108,12 @@ Future<void> initializeApp(Flavor flavor) async {
       child: App(navigatorKey: navigatorKey),
     ),
     clarityConfig: config,
-  ));
+  ),);
 
   // Initialize loading AFTER MaterialApp is running
   WidgetsBinding.instance.addPostFrameCallback((_) {
     AppLoading.initialize(
       backgroundColor: Colors.black.withOpacity(0.7),
-      loaderColor: const Color(0xff032541),
-      loaderSize: 60,
-      strokeWidth: 5,
     );
   });
 

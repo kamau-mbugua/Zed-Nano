@@ -1,8 +1,5 @@
 /// Response model for WhatsApp message generation for invoice
 class GetWhatsappMessageForInvoiceResponse {
-  final String? status;
-  final String? message;
-  final String? data;
 
   GetWhatsappMessageForInvoiceResponse({
     this.status,
@@ -17,6 +14,9 @@ class GetWhatsappMessageForInvoiceResponse {
       data: json['data'] as String?,
     );
   }
+  final String? status;
+  final String? message;
+  final String? data;
 
   Map<String, dynamic> toJson() => {
     'Status': status,

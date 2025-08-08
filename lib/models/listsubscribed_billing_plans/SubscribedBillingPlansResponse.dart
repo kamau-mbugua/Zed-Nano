@@ -1,12 +1,4 @@
 class SubscribedBillingPlansResponse {
-  final String? status;
-  final String? message;
-  final List<SubscribedBillingBillingPlan>? data;
-  final String? freeTrialStatus;
-  final bool? isFreeTrialTried;
-  final bool? isFreeTrialEnded;
-  final bool? isActiveBillingPackage;
-  final int? freeTrialPeriodRemainingdays;
 
   SubscribedBillingPlansResponse({
     this.status,
@@ -33,6 +25,14 @@ class SubscribedBillingPlansResponse {
       freeTrialPeriodRemainingdays: json['freeTrialPeriodRemainingdays'] as int?,
     );
   }
+  final String? status;
+  final String? message;
+  final List<SubscribedBillingBillingPlan>? data;
+  final String? freeTrialStatus;
+  final bool? isFreeTrialTried;
+  final bool? isFreeTrialEnded;
+  final bool? isActiveBillingPackage;
+  final int? freeTrialPeriodRemainingdays;
 
   Map<String, dynamic> toJson() {
     return {
@@ -49,16 +49,6 @@ class SubscribedBillingPlansResponse {
 }
 
 class SubscribedBillingBillingPlan {
-  final String? planId;
-  final String? planName;
-  final String? planStatus;
-  final String? dateSubscribed;
-  final String? dueDate;
-  final String? billingPeriodName;
-  final int? totalBillingPlanAmount;
-  final int? planSetUpFee;
-  final bool? isSetUpFeePaid;
-  final int? billingPeriodAmount;
 
   SubscribedBillingBillingPlan({
     this.planId,
@@ -87,6 +77,16 @@ class SubscribedBillingBillingPlan {
       billingPeriodAmount: json['billingPeriodAmount'] as int?,
     );
   }
+  final String? planId;
+  final String? planName;
+  final String? planStatus;
+  final String? dateSubscribed;
+  final String? dueDate;
+  final String? billingPeriodName;
+  final int? totalBillingPlanAmount;
+  final int? planSetUpFee;
+  final bool? isSetUpFeePaid;
+  final int? billingPeriodAmount;
 
   Map<String, dynamic> toJson() {
     return {

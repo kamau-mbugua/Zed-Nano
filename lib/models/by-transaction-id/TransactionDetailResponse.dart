@@ -1,8 +1,4 @@
 class ByTransactionIdDetailResponse {
-  final String? status;
-  final String? message;
-  final ByTransactionIdDetailData? data;
-  final String? currency;
 
   ByTransactionIdDetailResponse({
     this.status,
@@ -21,73 +17,13 @@ class ByTransactionIdDetailResponse {
       currency: json['currency'] as String?,
     );
   }
+  final String? status;
+  final String? message;
+  final ByTransactionIdDetailData? data;
+  final String? currency;
 }
 
 class ByTransactionIdDetailData {
-  final String? id;
-  final String? businessNo;
-  final String? businessName;
-  final String? serialNo;
-  final String? transactionType;
-  final String? transactionID;
-  final String? transtime;
-  final double? transamount;
-  final String? billRefNo;
-  final String? customerPhone;
-  final String? customerFirstName;
-  final String? customerMiddleName;
-  final String? customerSecondName;
-  final String? paybillBalance;
-  final String? requestType;
-  final String? uploadTime;
-  final String? versionCode;
-  final String? versionName;
-  final String? appBuildTime;
-  final String? cashier;
-  final List<dynamic>? pushyTransactionId;
-  final String? userId;
-  final String? receiptNumber;
-  final List<TransactionItem>? items;
-  final bool? settled;
-  final bool? multiOrder;
-  final String? branchId;
-  final String? customerId;
-  final double? discountAmount;
-  final double? discountPercent;
-  final String? invoiceId;
-  final String? billableItemId;
-  final String? status;
-  final String? documentType;
-  final List<dynamic>? invoicesIds;
-  final double? refundAmount;
-  final bool? transferredToSchool;
-  final String? regNo;
-  final bool? approvedTransaction;
-  final List<dynamic>? seatNumbers;
-  final bool? duplicatePrint;
-  final String? terminalSerialNumber;
-  final String? tellerId;
-  final bool? isPreOrder;
-  final String? cardNumber;
-  final String? cardPresentSettlementStatus;
-  final double? cardPresentCharge;
-  final String? isSponsorpayment;
-  final bool? isBillingPayment;
-  final String? transactionCreated;
-  final List<dynamic>? orders;
-  final List<dynamic>? paidOrders;
-  final List<TransactionInvoice>? invoices;
-  final String? createdAt;
-  final String? updatedAt;
-  final double? v;
-  final String? voidRequestedBy;
-  final String? voidedBy;
-  final String? voidDeclinedBy;
-  final String? orderNo;
-  final String? type;
-  final String? voidStatus;
-  final double? subTotal;
-  final double? vat;
 
   ByTransactionIdDetailData({
     this.id,
@@ -228,19 +164,73 @@ class ByTransactionIdDetailData {
       vat: (json['vat'] as num?)?.toDouble(),
     );
   }
+  final String? id;
+  final String? businessNo;
+  final String? businessName;
+  final String? serialNo;
+  final String? transactionType;
+  final String? transactionID;
+  final String? transtime;
+  final double? transamount;
+  final String? billRefNo;
+  final String? customerPhone;
+  final String? customerFirstName;
+  final String? customerMiddleName;
+  final String? customerSecondName;
+  final String? paybillBalance;
+  final String? requestType;
+  final String? uploadTime;
+  final String? versionCode;
+  final String? versionName;
+  final String? appBuildTime;
+  final String? cashier;
+  final List<dynamic>? pushyTransactionId;
+  final String? userId;
+  final String? receiptNumber;
+  final List<TransactionItem>? items;
+  final bool? settled;
+  final bool? multiOrder;
+  final String? branchId;
+  final String? customerId;
+  final double? discountAmount;
+  final double? discountPercent;
+  final String? invoiceId;
+  final String? billableItemId;
+  final String? status;
+  final String? documentType;
+  final List<dynamic>? invoicesIds;
+  final double? refundAmount;
+  final bool? transferredToSchool;
+  final String? regNo;
+  final bool? approvedTransaction;
+  final List<dynamic>? seatNumbers;
+  final bool? duplicatePrint;
+  final String? terminalSerialNumber;
+  final String? tellerId;
+  final bool? isPreOrder;
+  final String? cardNumber;
+  final String? cardPresentSettlementStatus;
+  final double? cardPresentCharge;
+  final String? isSponsorpayment;
+  final bool? isBillingPayment;
+  final String? transactionCreated;
+  final List<dynamic>? orders;
+  final List<dynamic>? paidOrders;
+  final List<TransactionInvoice>? invoices;
+  final String? createdAt;
+  final String? updatedAt;
+  final double? v;
+  final String? voidRequestedBy;
+  final String? voidedBy;
+  final String? voidDeclinedBy;
+  final String? orderNo;
+  final String? type;
+  final String? voidStatus;
+  final double? subTotal;
+  final double? vat;
 }
 
 class TransactionItem {
-  final double? itemAmount;
-  final String? itemCategory;
-  final double? itemCount;
-  final String? itemName;
-  final String? reciptNumber;
-  final double? totalAmount;
-  final String? productId;
-  final String? imagePath;
-  final String? currency;
-  final double? discount;
 
   TransactionItem({
     this.itemAmount,
@@ -270,76 +260,19 @@ class TransactionItem {
 
     );
   }
+  final double? itemAmount;
+  final String? itemCategory;
+  final double? itemCount;
+  final String? itemName;
+  final String? reciptNumber;
+  final double? totalAmount;
+  final String? productId;
+  final String? imagePath;
+  final String? currency;
+  final double? discount;
 }
 
 class TransactionInvoice {
-  final bool? isCustomPlan;
-  final String? customPlanId;
-  final String? id;
-  final String? businessId;
-  final String? businessNumber;
-  final String? branchId;
-  final double? invoiceNumberSequence;
-  final String? invoiceNumber;
-  final String? customerId;
-  final String? createdBy;
-  final String? updatedBy;
-  final String? storeId;
-  final String? invoiceType;
-  final String? invoiceFrequency;
-  final String? invoiceStatus;
-  final String? batchStatus;
-  final double? invoiceBalance;
-  final double? invoiceAmount;
-  final double? invoiceOverPayment;
-  final String? sentTo;
-  final List<InvoiceItem>? items;
-  final String? dueDate;
-  final bool? isOriginal;
-  final bool? retailerInvoice;
-  final bool? distributorInvoice;
-  final bool? invoiceForSupplier;
-  final bool? zedPayItWallet;
-  final String? processStatus;
-  final String? discountName;
-  final String? discountType;
-  final double? discountAmount;
-  final double? discountPercent;
-  final bool? checkInStatus;
-  final String? userId;
-  final String? terminalId;
-  final String? salesOrPurchaseInvoice;
-  final String? accountOwner;
-  final bool? transferMoneyFromZed;
-  final bool? settledByZed;
-  final String? invoiceClassification;
-  final String? regNo;
-  final String? partnerRegion;
-  final String? partnerBranch;
-  final String? tripId;
-  final List<dynamic>? seatNumbers;
-  final String? routeId;
-  final double? cardPresentCharge;
-  final String? isSponsorInvoice;
-  final String? isStudentSponsoredInvoice;
-  final String? sendToSponsor;
-  final bool? isKraInvoice;
-  final String? creditNoteStatus;
-  final bool? isZedCreditNote;
-  final String? purchaseOrderNumber;
-  final bool? isBillingInvoice;
-  final bool? isChangePlan;
-  final bool? isWithdrawal;
-  final List<dynamic>? deletedItems;
-  final List<dynamic>? deletions;
-  final List<InvoicePayment>? payments;
-  final List<dynamic>? sponsoredBillableItems;
-  final List<dynamic>? sponsoredBillableItemsInvoice;
-  final String? createdAt;
-  final String? updatedAt;
-  final double? v;
-  final String? requestReferenceId;
-  final String? paymentId;
 
   TransactionInvoice({
     this.isCustomPlan,
@@ -486,27 +419,76 @@ class TransactionInvoice {
       paymentId: json['paymentId'] as String?,
     );
   }
+  final bool? isCustomPlan;
+  final String? customPlanId;
+  final String? id;
+  final String? businessId;
+  final String? businessNumber;
+  final String? branchId;
+  final double? invoiceNumberSequence;
+  final String? invoiceNumber;
+  final String? customerId;
+  final String? createdBy;
+  final String? updatedBy;
+  final String? storeId;
+  final String? invoiceType;
+  final String? invoiceFrequency;
+  final String? invoiceStatus;
+  final String? batchStatus;
+  final double? invoiceBalance;
+  final double? invoiceAmount;
+  final double? invoiceOverPayment;
+  final String? sentTo;
+  final List<InvoiceItem>? items;
+  final String? dueDate;
+  final bool? isOriginal;
+  final bool? retailerInvoice;
+  final bool? distributorInvoice;
+  final bool? invoiceForSupplier;
+  final bool? zedPayItWallet;
+  final String? processStatus;
+  final String? discountName;
+  final String? discountType;
+  final double? discountAmount;
+  final double? discountPercent;
+  final bool? checkInStatus;
+  final String? userId;
+  final String? terminalId;
+  final String? salesOrPurchaseInvoice;
+  final String? accountOwner;
+  final bool? transferMoneyFromZed;
+  final bool? settledByZed;
+  final String? invoiceClassification;
+  final String? regNo;
+  final String? partnerRegion;
+  final String? partnerBranch;
+  final String? tripId;
+  final List<dynamic>? seatNumbers;
+  final String? routeId;
+  final double? cardPresentCharge;
+  final String? isSponsorInvoice;
+  final String? isStudentSponsoredInvoice;
+  final String? sendToSponsor;
+  final bool? isKraInvoice;
+  final String? creditNoteStatus;
+  final bool? isZedCreditNote;
+  final String? purchaseOrderNumber;
+  final bool? isBillingInvoice;
+  final bool? isChangePlan;
+  final bool? isWithdrawal;
+  final List<dynamic>? deletedItems;
+  final List<dynamic>? deletions;
+  final List<InvoicePayment>? payments;
+  final List<dynamic>? sponsoredBillableItems;
+  final List<dynamic>? sponsoredBillableItemsInvoice;
+  final String? createdAt;
+  final String? updatedAt;
+  final double? v;
+  final String? requestReferenceId;
+  final String? paymentId;
 }
 
 class InvoiceItem {
-  final String? productId;
-  final String? productName;
-  final double? productPrice;
-  final String? productCode;
-  final double? quantity;
-  final String? variationId;
-  final String? pricingId;
-  final String? variationKey;
-  final String? discountType;
-  final double? discountPercent;
-  final double? discount;
-  final String? priceStatus;
-  final String? taxType;
-  final String? taxTyCd;
-  final String? id;
-  final List<dynamic>? deletedDiscount;
-  final String? createdAt;
-  final String? updatedAt;
 
   InvoiceItem({
     this.productId,
@@ -551,18 +533,27 @@ class InvoiceItem {
       updatedAt: json['updatedAt'] as String?,
     );
   }
+  final String? productId;
+  final String? productName;
+  final double? productPrice;
+  final String? productCode;
+  final double? quantity;
+  final String? variationId;
+  final String? pricingId;
+  final String? variationKey;
+  final String? discountType;
+  final double? discountPercent;
+  final double? discount;
+  final String? priceStatus;
+  final String? taxType;
+  final String? taxTyCd;
+  final String? id;
+  final List<dynamic>? deletedDiscount;
+  final String? createdAt;
+  final String? updatedAt;
 }
 
 class InvoicePayment {
-  final String? paymentMethod;
-  final double? paymentAmount;
-  final String? paymentDate;
-  final String? paymentChannel;
-  final String? balance;
-  final String? cardNumber;
-  final String? id;
-  final String? createdAt;
-  final String? updatedAt;
 
   InvoicePayment({
     this.paymentMethod,
@@ -589,4 +580,13 @@ class InvoicePayment {
       updatedAt: json['updatedAt'] as String?,
     );
   }
+  final String? paymentMethod;
+  final double? paymentAmount;
+  final String? paymentDate;
+  final String? paymentChannel;
+  final String? balance;
+  final String? cardNumber;
+  final String? id;
+  final String? createdAt;
+  final String? updatedAt;
 }

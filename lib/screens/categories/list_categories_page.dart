@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:zed_nano/screens/categories/tabs/product_categories_tab.dart';
+import 'package:zed_nano/screens/categories/tabs/service_categories_tab.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
-import 'package:zed_nano/utils/GifsImages.dart';
-import 'tabs/product_categories_tab.dart';
-import 'tabs/service_categories_tab.dart';
 
 class ListCategoriesPage extends StatefulWidget {
   const ListCategoriesPage({super.key});
@@ -18,7 +17,7 @@ class _ListCategoriesPageState extends State<ListCategoriesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar:  AuthAppBar(title: 'Categories'),
+      appBar:  const AuthAppBar(title: 'Categories'),
       body: Column(
         children: [
           const SizedBox(height: 24),
@@ -47,7 +46,7 @@ class _ListCategoriesPageState extends State<ListCategoriesPage> {
                 : const ServiceCategoriesTab(),
           ),
         ],
-      )
+      ),
     );
   }
 

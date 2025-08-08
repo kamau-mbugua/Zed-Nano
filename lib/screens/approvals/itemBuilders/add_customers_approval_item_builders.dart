@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/models/customers_list/CustomerListResponse.dart';
-import 'package:zed_nano/models/listUsers/ListUsersResponse.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
 import 'package:zed_nano/utils/Colors.dart';
-import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/Images.dart';
 import 'package:zed_nano/utils/extensions.dart';
 
@@ -14,11 +12,11 @@ Widget addCustomersApprovalItemBuilder(Customer batch,
     VoidCallback? onDecline,
     VoidCallback? onTap,
     bool isSelected = false,
-    BuildContext? context}) {
+    BuildContext? context,}) {
   return GestureDetector(
     onTap: onTap,
     child: Container(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: cardBackgroundColor,
         borderRadius: BorderRadius.circular(12),
@@ -43,42 +41,42 @@ Widget addCustomersApprovalItemBuilder(Customer batch,
                         ),
                         8.width,
                         Expanded(
-                          child: Text('${batch.customerName}',
+                          child: Text(batch.customerName,
                               style: const TextStyle(
                                 fontFamily: 'Poppins',
                                 color: textPrimary,
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
                                 fontStyle: FontStyle.normal,
-                              )),
-                        )
+                              ),),
+                        ),
                       ],
                     ),
                     8.height,
                     // Subtitle
                     Text(
-                        'Created on:  ${batch?.createdOn?.toFormattedDate()}',
+                        'Created on:  ${batch.createdOn.toFormattedDate()}',
                         style: const TextStyle(
                             color: textSecondary,
                             fontWeight: FontWeight.w400,
                             fontFamily: 'Poppins',
                             fontStyle: FontStyle.normal,
-                            fontSize: 10.0),
-                        textAlign: TextAlign.left)
+                            fontSize: 10,),
+                        textAlign: TextAlign.left,),
                   ],
                 ),
               ),
               Container(
-                margin: const EdgeInsets.only(right: 0),
+                margin: const EdgeInsets.only(),
                 padding: const EdgeInsets.symmetric(
-                    horizontal: 12, vertical: 6),
+                    horizontal: 12, vertical: 6,),
                 decoration: BoxDecoration(
                   color: batch.status == 'Active'
                       ?lightGreenColor
                       :primaryYellowTextColor,
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: Text(batch.status?.toUpperCase() ?? '',
+                child: Text(batch.status.toUpperCase() ?? '',
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       color: batch.status == 'Active'
@@ -87,7 +85,7 @@ Widget addCustomersApprovalItemBuilder(Customer batch,
                       fontSize: 10,
                       fontWeight: FontWeight.w600,
                       fontStyle: FontStyle.normal,
-                    )
+                    ),
                 ),
               ),
             ],
@@ -99,17 +97,17 @@ Widget addCustomersApprovalItemBuilder(Customer batch,
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                       'Created by:',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: 'Poppins',
                         color: textSecondary,
                         fontSize: 10,
                         fontWeight: FontWeight.w400,
                         fontStyle: FontStyle.normal,
                         letterSpacing: 0.15,
-                      )),
-                  Text('${batch.createdByName ?? 'N/A'}',
+                      ),),
+                  Text(batch.createdByName ?? 'N/A',
                       style: const TextStyle(
                         fontFamily: 'Poppins',
                         color: textPrimary,
@@ -117,7 +115,7 @@ Widget addCustomersApprovalItemBuilder(Customer batch,
                         fontWeight: FontWeight.w400,
                         fontStyle: FontStyle.normal,
                         letterSpacing: 0.12,
-                      ))
+                      ),),
                 ],
               ),
               Column(
@@ -131,9 +129,9 @@ Widget addCustomersApprovalItemBuilder(Customer batch,
                         fontWeight: FontWeight.w400,
                         fontStyle: FontStyle.normal,
                         letterSpacing: 0.15,
-                      )),
+                      ),),
                   8.height,
-                  Text(batch.customerType.toString() ?? 'N/A',
+                  Text(batch.customerType ?? 'N/A',
                       style: const TextStyle(
                         fontFamily: 'Poppins',
                         color: textPrimary,
@@ -141,7 +139,7 @@ Widget addCustomersApprovalItemBuilder(Customer batch,
                         fontWeight: FontWeight.w400,
                         fontStyle: FontStyle.normal,
                         letterSpacing: 0.12,
-                      ))
+                      ),),
                 ],
               ),
             ],
@@ -167,9 +165,8 @@ Widget addCustomersApprovalItemBuilder(Customer batch,
                         ),
                       ),
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
+                          horizontal: 16, vertical: 8,),
                       child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           rfCommonCachedNetworkImage(
@@ -186,10 +183,10 @@ Widget addCustomersApprovalItemBuilder(Customer batch,
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
                                 fontStyle: FontStyle.normal,
-                              )),
+                              ),),
                         ],
-                      )),
-                )),
+                      ),),
+                ),),
                 const SizedBox(width: 12), // Add spacing between buttons
                 Expanded(
                     child: GestureDetector(
@@ -203,9 +200,8 @@ Widget addCustomersApprovalItemBuilder(Customer batch,
                         ),
                       ),
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
+                          horizontal: 16, vertical: 8,),
                       child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           rfCommonCachedNetworkImage(
@@ -222,14 +218,14 @@ Widget addCustomersApprovalItemBuilder(Customer batch,
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
                                 fontStyle: FontStyle.normal,
-                              )),
+                              ),),
                         ],
-                      )),
-                )),
+                      ),),
+                ),),
               ],
             ),
         ],
       ),
-    ).paddingSymmetric(vertical:4)
+    ).paddingSymmetric(vertical:4),
   );
 }

@@ -1,10 +1,4 @@
 class CustomerTransactionsResponse {
-  final String? status;
-  final String? message;
-  final double? total;
-  final int? count;
-  final List<CustomerTransaction>? transaction;
-  final num? customerBalance;
 
   CustomerTransactionsResponse({
     this.status,
@@ -29,6 +23,12 @@ class CustomerTransactionsResponse {
       customerBalance: (json['customerBalance'] as num?)?.toDouble(),
     );
   }
+  final String? status;
+  final String? message;
+  final double? total;
+  final int? count;
+  final List<CustomerTransaction>? transaction;
+  final num? customerBalance;
 
   Map<String, dynamic> toJson() => {
     'Status': status,
@@ -41,22 +41,6 @@ class CustomerTransactionsResponse {
 }
 
 class CustomerTransaction {
-  final String? transactionId;
-  final String? transactionNo;
-  final String? transactionTime;
-  final String? servedBy;
-  final double? noOfItems;
-  final String? business;
-  final double? amount;
-  final String? approvedBy;
-  final String? branchName;
-  final String? customerName;
-  final String? currency;
-  final double? customerBalance;
-  final String? status;
-  final double? totalPaid;
-  final double? totalInvoices;
-  final double? totalOrder;
 
   CustomerTransaction({
     this.transactionId,
@@ -97,6 +81,22 @@ class CustomerTransaction {
       totalOrder: (json['totalOrder'] as num?)?.toDouble(),
     );
   }
+  final String? transactionId;
+  final String? transactionNo;
+  final String? transactionTime;
+  final String? servedBy;
+  final double? noOfItems;
+  final String? business;
+  final double? amount;
+  final String? approvedBy;
+  final String? branchName;
+  final String? customerName;
+  final String? currency;
+  final double? customerBalance;
+  final String? status;
+  final double? totalPaid;
+  final double? totalInvoices;
+  final double? totalOrder;
 
   Map<String, dynamic> toJson() => {
     'transactionId': transactionId,

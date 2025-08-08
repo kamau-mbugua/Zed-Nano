@@ -41,14 +41,14 @@ Widget listInvoicesItemBuilder(BusinessInvoice customerTransaction) {
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
                           fontStyle: FontStyle.normal,
-                        )
-                    )
+                        ),
+                    ),
                   ],
                 ),
                 Container(
-                  margin: const EdgeInsets.only(right: 0),
+                  margin: const EdgeInsets.only(),
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 12, vertical: 6),
+                      horizontal: 12, vertical: 6,),
                   decoration: BoxDecoration(
                     color: customerTransaction.invoiceStatus?.toLowerCase() == 'paid'
                         ?lightGreenColor
@@ -68,7 +68,7 @@ Widget listInvoicesItemBuilder(BusinessInvoice customerTransaction) {
                         fontSize: 10,
                         fontWeight: FontWeight.w600,
                         fontStyle: FontStyle.normal,
-                      )
+                      ),
                   ),
                 ),
               ],
@@ -86,7 +86,7 @@ Widget listInvoicesItemBuilder(BusinessInvoice customerTransaction) {
                         fontStyle: FontStyle.normal,
                         letterSpacing: 0.15,
 
-                      )
+                      ),
                   ),
                   Text(customerTransaction.invoiceStatus?.toLowerCase() == 'partially paid' ? 'Balance' : 'Amount',
                       style: const TextStyle(
@@ -96,9 +96,9 @@ Widget listInvoicesItemBuilder(BusinessInvoice customerTransaction) {
                         fontWeight: FontWeight.w400,
                         fontStyle: FontStyle.normal,
                         letterSpacing: 0.15,
-                      )
-                  )
-                ]
+                      ),
+                  ),
+                ],
             ),
             8.height,
             Row(
@@ -112,7 +112,7 @@ Widget listInvoicesItemBuilder(BusinessInvoice customerTransaction) {
                       fontWeight: FontWeight.w400,
                       fontStyle: FontStyle.normal,
                       letterSpacing: 0.15,
-                    )
+                    ),
                 ),
                 Text("${customerTransaction.currency ?? "KES"} ${ customerTransaction.invoiceStatus?.toLowerCase() == 'partially paid' ? customerTransaction.invoiceBalance?.formatCurrency() : customerTransaction.invoiceAmount?.formatCurrency()}",
                     style: TextStyle(
@@ -125,8 +125,8 @@ Widget listInvoicesItemBuilder(BusinessInvoice customerTransaction) {
                       fontWeight: FontWeight.w400,
                       fontStyle: FontStyle.normal,
 
-                    )
-                )
+                    ),
+                ),
               ],
             ),
             const Divider(height: 1, thickness: 0.9),
@@ -156,7 +156,7 @@ Widget buildInvoicePaymentSummary({
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text("Amount paid",
+              const Text('Amount paid',
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     color: textSecondary,
@@ -165,9 +165,9 @@ Widget buildInvoicePaymentSummary({
                     fontStyle: FontStyle.normal,
                     letterSpacing: 0.12,
 
-                  )
+                  ),
               ),
-              Text("${item?.currency ?? 'KES'} ${item?.amount?.formatCurrency() ?? 'N/A'}",
+              Text("${item.currency ?? 'KES'} ${item.amount?.formatCurrency() ?? 'N/A'}",
                   style: const TextStyle(
                     fontFamily: 'Poppins',
                     color: textSecondary,
@@ -175,14 +175,14 @@ Widget buildInvoicePaymentSummary({
                     fontWeight: FontWeight.w400,
                     fontStyle: FontStyle.normal,
                     letterSpacing: 0.12,
-                  )
-              )
+                  ),
+              ),
             ],
           ).paddingSymmetric(vertical: 8),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text("Paid via",
+              const Text('Paid via',
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     color: textSecondary,
@@ -191,9 +191,9 @@ Widget buildInvoicePaymentSummary({
                     fontStyle: FontStyle.normal,
                     letterSpacing: 0.12,
 
-                  )
+                  ),
               ),
-              Text("${item?.modeOfPayment?? 'N/A'}",
+              Text(item.modeOfPayment?? 'N/A',
                   style: const TextStyle(
                     fontFamily: 'Poppins',
                     color: textSecondary,
@@ -201,14 +201,14 @@ Widget buildInvoicePaymentSummary({
                     fontWeight: FontWeight.w400,
                     fontStyle: FontStyle.normal,
                     letterSpacing: 0.12,
-                  )
-              )
+                  ),
+              ),
             ],
           ).paddingSymmetric(vertical: 8),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text("Transaction ID",
+              const Text('Transaction ID',
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     color: textSecondary,
@@ -217,9 +217,9 @@ Widget buildInvoicePaymentSummary({
                     fontStyle: FontStyle.normal,
                     letterSpacing: 0.12,
 
-                  )
+                  ),
               ),
-              Text("${item?.receiptNumber?? 'N/A'}",
+              Text(item.receiptNumber?? 'N/A',
                   style: const TextStyle(
                     fontFamily: 'Poppins',
                     color: textSecondary,
@@ -227,14 +227,14 @@ Widget buildInvoicePaymentSummary({
                     fontWeight: FontWeight.w400,
                     fontStyle: FontStyle.normal,
                     letterSpacing: 0.12,
-                  )
-              )
+                  ),
+              ),
             ],
           ).paddingSymmetric(vertical: 8),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text("Date & Time",
+              const Text('Date & Time',
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     color: textSecondary,
@@ -243,9 +243,9 @@ Widget buildInvoicePaymentSummary({
                     fontStyle: FontStyle.normal,
                     letterSpacing: 0.12,
 
-                  )
+                  ),
               ),
-              Text("${item?.transactionDate?.toFormattedDateTime() ?? 'N/A'}",
+              Text(item.transactionDate?.toFormattedDateTime() ?? 'N/A',
                   style: const TextStyle(
                     fontFamily: 'Poppins',
                     color: textSecondary,
@@ -253,12 +253,12 @@ Widget buildInvoicePaymentSummary({
                     fontWeight: FontWeight.w400,
                     fontStyle: FontStyle.normal,
                     letterSpacing: 0.12,
-                  )
-              )
+                  ),
+              ),
             ],
           ).paddingSymmetric(vertical: 8),
         ],
-      ));
+      ),);
 }
 
 
@@ -266,7 +266,7 @@ Widget buildInvoiceItem({
   required InvoiceDetailItem item,
 }) {
   return Container(
-    margin: const EdgeInsets.only(left: 0, right: 0, bottom: 0),
+    margin: const EdgeInsets.only(),
     padding: const EdgeInsets.all(5),
     decoration: BoxDecoration(
       color: Colors.white,
@@ -302,7 +302,7 @@ Widget buildInvoiceItem({
                   Row(
                     children: [
                       Text(
-                        item?.productCategory ?? 'N/A',
+                        item.productCategory ?? 'N/A',
                         style: TextStyle(
                           fontSize: 12,
                           fontFamily: 'Poppins',
@@ -335,27 +335,27 @@ Widget buildInvoiceItem({
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("x${item.quantity ?? 0}",
+                  Text('x${item.quantity ?? 0}',
                       style: const TextStyle(
                         fontFamily: 'Poppins',
                         color: textPrimary,
                         fontSize: 16,
                         fontWeight: FontWeight.w400,
                         fontStyle: FontStyle.normal,
-                      )
+                      ),
                   ),
                   Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Text("${item.currency ?? 'KES'} ${((item.productPrice ?? 0) * (item.quantity ?? 0))?.formatCurrency()}",
+                        Text("${item.currency ?? 'KES'} ${((item.productPrice ?? 0) * (item.quantity ?? 0)).formatCurrency()}",
                             style: const TextStyle(
                               fontFamily: 'Poppins',
                               color: textPrimary,
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
                               fontStyle: FontStyle.normal,
-                            )
+                            ),
                         ),
                         Text("${item.currency ?? 'KES'} ${item.discount?.formatCurrency()}",
                             style: TextStyle(
@@ -366,15 +366,15 @@ Widget buildInvoiceItem({
                               fontStyle: FontStyle.normal,
                               letterSpacing: 0.15,
 
-                            )
-                        )
+                            ),
+                        ),
 
-                      ]
-                  )
+                      ],
+                  ),
 
                 ],
               ),
-            )
+            ),
           ],
         ),
         Divider(

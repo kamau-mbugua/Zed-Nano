@@ -3,8 +3,8 @@ import 'package:zed_nano/contants/AppConstants.dart';
 
 
 class SplashRepo {
-  final SharedPreferences? sharedPreferences;
   SplashRepo({required this.sharedPreferences});
+  final SharedPreferences? sharedPreferences;
 
   Future<bool> initSharedData() {
     if(!sharedPreferences!.containsKey(AppConstants.onBoardingSkip)) {

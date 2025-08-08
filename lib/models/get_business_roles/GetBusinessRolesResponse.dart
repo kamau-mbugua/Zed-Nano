@@ -1,7 +1,4 @@
 class GetBusinessRolesResponse {
-  final String? status;
-  final String? message;
-  final List<BusinessRole>? data;
 
   GetBusinessRolesResponse({
     this.status,
@@ -18,6 +15,9 @@ class GetBusinessRolesResponse {
           .toList(),
     );
   }
+  final String? status;
+  final String? message;
+  final List<BusinessRole>? data;
 
   Map<String, dynamic> toJson() {
     return {
@@ -29,8 +29,6 @@ class GetBusinessRolesResponse {
 }
 
 class BusinessRole {
-  final String? type;
-  final String? name;
 
   BusinessRole({
     this.type,
@@ -43,6 +41,8 @@ class BusinessRole {
       name: json['name'] as String?,
     );
   }
+  final String? type;
+  final String? name;
 
   Map<String, dynamic> toJson() {
     return {

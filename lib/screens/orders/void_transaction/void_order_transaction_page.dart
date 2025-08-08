@@ -1,23 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:zed_nano/models/order_payment_status/OrderDetailResponse.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
-import 'package:zed_nano/screens/orders/itemBuilder/order_item_builders.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/auth/input_fields.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/screens/widget/common/heading.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
-import 'package:zed_nano/utils/GifsImages.dart';
-import 'package:zed_nano/utils/extensions.dart';
 
 class VoidOrderTransactionPage extends StatefulWidget {
+  VoidOrderTransactionPage({super.key, this.transactionId, this.quantity, this.amount, this.date});
   String? transactionId;
   String? quantity;
   String? amount;
   String? date;
-  VoidOrderTransactionPage({Key? key, this.transactionId, this.quantity, this.amount, this.date}) : super(key: key);
 
   @override
   _VoidOrderTransactionPageState createState() =>
@@ -34,10 +30,10 @@ class _VoidOrderTransactionPageState extends State<VoidOrderTransactionPage> {
   }
 
   Future<void> getOrderPaymentStatus() async {
-    Map<String, dynamic> requestData = {
+    final requestData = <String, dynamic>{
       'comments': reasonController.text,
       'action':'request',
-      'transactionId': widget.transactionId
+      'transactionId': widget.transactionId,
     };
 
     try {
@@ -55,7 +51,7 @@ class _VoidOrderTransactionPageState extends State<VoidOrderTransactionPage> {
   }
 
   @override
-  dispose() {
+  void dispose() {
     reasonController.dispose();
     reasonFocusNode.dispose();
     super.dispose();
@@ -100,7 +96,7 @@ class _VoidOrderTransactionPageState extends State<VoidOrderTransactionPage> {
               fontStyle: FontStyle.normal,
 
 
-            )
+            ),
         ),
         16.height,
         StyledTextField(
@@ -139,7 +135,7 @@ class _VoidOrderTransactionPageState extends State<VoidOrderTransactionPage> {
   }
 
   PreferredSizeWidget _buildAppBar() {
-    return  AuthAppBar(
+    return  const AuthAppBar(
       title: 'Void Transaction',
     );
   }
@@ -162,7 +158,7 @@ class _VoidOrderTransactionPageState extends State<VoidOrderTransactionPage> {
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
                   fontStyle: FontStyle.normal,
-                )
+                ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -176,9 +172,9 @@ class _VoidOrderTransactionPageState extends State<VoidOrderTransactionPage> {
                       fontStyle: FontStyle.normal,
                       letterSpacing: 0.12,
 
-                    )
+                    ),
                 ),
-                Text("${widget.transactionId ?? 'N/A'}",
+                Text(widget.transactionId ?? 'N/A',
                     style: const TextStyle(
                       fontFamily: 'Poppins',
                       color: textSecondary,
@@ -186,8 +182,8 @@ class _VoidOrderTransactionPageState extends State<VoidOrderTransactionPage> {
                       fontWeight: FontWeight.w400,
                       fontStyle: FontStyle.normal,
                       letterSpacing: 0.12,
-                    )
-                )
+                    ),
+                ),
               ],
             ).paddingSymmetric(vertical: 8),
             Row(
@@ -202,7 +198,7 @@ class _VoidOrderTransactionPageState extends State<VoidOrderTransactionPage> {
                       fontStyle: FontStyle.normal,
                       letterSpacing: 0.12,
 
-                    )
+                    ),
                 ),
                 Text('${widget.quantity}',
                     style: const TextStyle(
@@ -212,8 +208,8 @@ class _VoidOrderTransactionPageState extends State<VoidOrderTransactionPage> {
                       fontWeight: FontWeight.w400,
                       fontStyle: FontStyle.normal,
                       letterSpacing: 0.12,
-                    )
-                )
+                    ),
+                ),
               ],
             ).paddingSymmetric(vertical: 8),
             Row(
@@ -228,7 +224,7 @@ class _VoidOrderTransactionPageState extends State<VoidOrderTransactionPage> {
                       fontStyle: FontStyle.normal,
                       letterSpacing: 0.12,
 
-                    )
+                    ),
                 ),
                 Text('KES ${widget.amount}',
                     style: const TextStyle(
@@ -238,8 +234,8 @@ class _VoidOrderTransactionPageState extends State<VoidOrderTransactionPage> {
                       fontWeight: FontWeight.w400,
                       fontStyle: FontStyle.normal,
                       letterSpacing: 0.12,
-                    )
-                )
+                    ),
+                ),
               ],
             ).paddingSymmetric(vertical: 8),
             Row(
@@ -254,7 +250,7 @@ class _VoidOrderTransactionPageState extends State<VoidOrderTransactionPage> {
                       fontStyle: FontStyle.normal,
                       letterSpacing: 0.12,
 
-                    )
+                    ),
                 ),
                 Text('${widget.date}',
                     style: const TextStyle(
@@ -264,11 +260,11 @@ class _VoidOrderTransactionPageState extends State<VoidOrderTransactionPage> {
                       fontWeight: FontWeight.w400,
                       fontStyle: FontStyle.normal,
                       letterSpacing: 0.12,
-                    )
-                )
+                    ),
+                ),
               ],
             ).paddingSymmetric(vertical: 8),
           ],
-        ));
+        ),);
   }
 }

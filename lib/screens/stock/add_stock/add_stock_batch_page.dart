@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AddStockBatchPage extends StatefulWidget {
-  const AddStockBatchPage({Key? key}) : super(key: key);
+  const AddStockBatchPage({super.key});
 
   @override
   _AddStockBatchPageState createState() => _AddStockBatchPageState();

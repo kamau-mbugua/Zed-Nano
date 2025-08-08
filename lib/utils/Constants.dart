@@ -2,7 +2,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 const double AppContainerRadius = 32;
 const double AppCommonRadius = 12;
-const appName = "ZED Nano";
+const appName = 'ZED Nano';
 
 const RFWidgetHeight = 300;
 const bottomNavigationIconSize = 16.0;
@@ -23,4 +23,4 @@ class PostType {
   static String text = 'text';
 }
 
-var FontRoboto = GoogleFonts.roboto().fontFamily;
+String? FontRoboto = GoogleFonts.roboto().fontFamily;

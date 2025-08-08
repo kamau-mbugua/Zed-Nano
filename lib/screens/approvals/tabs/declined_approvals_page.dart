@@ -1,23 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/models/approval_data.dart';
-import 'package:zed_nano/models/approval_response.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/approvals/add_stock/add_stock_approval_declined.dart';
 import 'package:zed_nano/screens/approvals/customers/customers_declined_approval_page.dart';
 import 'package:zed_nano/screens/approvals/itemBuilders/approval_types.dart';
 import 'package:zed_nano/screens/approvals/stock_take/stock_take_approval_declined.dart';
 import 'package:zed_nano/screens/approvals/users/add_users_declined_approval_page.dart';
-import 'package:zed_nano/screens/widget/common/common_widgets.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/screens/widget/common/heading.dart';
-import 'package:zed_nano/utils/Colors.dart';
-import 'package:zed_nano/utils/Images.dart';
 
 class DeclinedApprovalsPage extends StatefulWidget {
-  String? getStatus;
 
-  DeclinedApprovalsPage({Key? key, this.getStatus}) : super(key: key);
+  DeclinedApprovalsPage({super.key, this.getStatus});
+  String? getStatus;
 
   @override
   _DeclinedApprovalsPageState createState() => _DeclinedApprovalsPageState();
@@ -36,7 +32,7 @@ class _DeclinedApprovalsPageState extends State<DeclinedApprovalsPage> {
   }
 
   Future<void> getApprovalByStatus() async {
-    Map<String, dynamic> requestData = {'status': widget.getStatus};
+    final requestData = <String, dynamic>{'status': widget.getStatus};
 
     try {
       final response = await getBusinessProvider(context)
@@ -44,19 +40,19 @@ class _DeclinedApprovalsPageState extends State<DeclinedApprovalsPage> {
 
       if (response.isSuccess) {
         setState(() {
-          ApprovalListData? approvalListData = response.data?.data;
+          final approvalListData = response.data?.data;
           approvalData = [
             ApprovalData(
                 name: 'Stock Take',
-                count: approvalListData?.stockTakeCount.toString()),
+                count: approvalListData?.stockTakeCount.toString(),),
             ApprovalData(
                 name: 'Add Stock',
-                count: approvalListData?.addStockCount.toString()),
+                count: approvalListData?.addStockCount.toString(),),
             ApprovalData(
-                name: 'Users', count: approvalListData?.usersCount.toString()),
+                name: 'Users', count: approvalListData?.usersCount.toString(),),
             ApprovalData(
                 name: 'Customers',
-                count: approvalListData?.customersCount.toString()),
+                count: approvalListData?.customersCount.toString(),),
           ];
         });
       } else {
@@ -77,7 +73,6 @@ class _DeclinedApprovalsPageState extends State<DeclinedApprovalsPage> {
         },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             headings(
               label: 'Select Category',
@@ -109,16 +104,16 @@ class _DeclinedApprovalsPageState extends State<DeclinedApprovalsPage> {
             widget.getStatus ?? '',
             onTap: () {
               if (approvalData?[index].name == 'Stock Take') {
-                StockTakeApprovalDeclined().launch(context);
+                const StockTakeApprovalDeclined().launch(context);
               }
               if (approvalData?[index].name == 'Add Stock') {
-                AddStockApprovalDeclined().launch(context);
+                const AddStockApprovalDeclined().launch(context);
               }
               if (approvalData?[index].name == 'Users') {
-                AddUsersDeclinedApprovalPageState().launch(context);
+                const AddUsersDeclinedApprovalPageState().launch(context);
               }
               if (approvalData?[index].name == 'Customers') {
-                CustomersDeclinedApprovalPageState().launch(context);
+                const CustomersDeclinedApprovalPageState().launch(context);
               }
             },
           );

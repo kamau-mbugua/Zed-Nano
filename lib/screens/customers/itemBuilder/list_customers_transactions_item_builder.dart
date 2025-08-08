@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/models/customerTransactions/CustomerTransactionsResponse.dart';
-import 'package:zed_nano/models/customers_list/CustomerListResponse.dart';
 import 'package:zed_nano/models/fetchByStatus/OrderResponse.dart';
 import 'package:zed_nano/models/get_user_invoices/InvoiceListResponse.dart';
-import 'package:zed_nano/screens/customers/details/customer_details_page.dart';
 import 'package:zed_nano/screens/invoices/detail/invoice_detail_page.dart';
 import 'package:zed_nano/screens/orders/detail/order_detail_page.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
@@ -36,15 +34,15 @@ Widget listCustomersTransactionsItemBuilder(CustomerTransaction customerTransact
                         width: 15,
                     ),
                     8.width,
-                    Text("${customerTransaction.transactionNo ?? ""}",
+                    Text(customerTransaction.transactionNo ?? '',
                         style: const TextStyle(
                           fontFamily: 'Poppins',
                           color: textPrimaryColor,
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
                           fontStyle: FontStyle.normal,
-                        )
-                    )
+                        ),
+                    ),
                   ],
                 ),
                 Text('- ${customerTransaction.currency} ${customerTransaction.amount?.formatCurrency()}',
@@ -55,15 +53,15 @@ Widget listCustomersTransactionsItemBuilder(CustomerTransaction customerTransact
                       fontWeight: FontWeight.w400,
                       fontStyle: FontStyle.normal,
 
-                    )
-                )
+                    ),
+                ),
               ],
             ),
             8.height,
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("${customerTransaction.transactionTime?.toShortDateTime ?? ""}",
+                Text(customerTransaction.transactionTime?.toShortDateTime ?? '',
                     style: const TextStyle(
                       fontFamily: 'Poppins',
                       color: textSecondary,
@@ -72,7 +70,7 @@ Widget listCustomersTransactionsItemBuilder(CustomerTransaction customerTransact
                       fontStyle: FontStyle.normal,
                       letterSpacing: 0.15,
 
-                    )
+                    ),
                 ),
                  Text('Balance: ${customerTransaction.currency} ${customerTransaction.customerBalance?.formatCurrency()}',
                     style: const TextStyle(
@@ -82,9 +80,9 @@ Widget listCustomersTransactionsItemBuilder(CustomerTransaction customerTransact
                       fontWeight: FontWeight.w400,
                       fontStyle: FontStyle.normal,
                       letterSpacing: 0.15,
-                    )
-                )
-              ]
+                    ),
+                ),
+              ],
             ),
             8.height,
 
@@ -127,14 +125,14 @@ Widget listCustomersOrdersItemBuilder(OrderData customerTransaction) {
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
                           fontStyle: FontStyle.normal,
-                        )
-                    )
+                        ),
+                    ),
                   ],
                 ),
                 Container(
-                  margin: const EdgeInsets.only(right: 0),
+                  margin: const EdgeInsets.only(),
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 12, vertical: 6),
+                      horizontal: 12, vertical: 6,),
                   decoration: BoxDecoration(
                     color: customerTransaction.status == 'paid'
                         ?lightGreenColor
@@ -154,7 +152,7 @@ Widget listCustomersOrdersItemBuilder(OrderData customerTransaction) {
                         fontSize: 10,
                         fontWeight: FontWeight.w600,
                         fontStyle: FontStyle.normal,
-                      )
+                      ),
                   ),
                 ),
               ],
@@ -172,7 +170,7 @@ Widget listCustomersOrdersItemBuilder(OrderData customerTransaction) {
                       fontStyle: FontStyle.normal,
                       letterSpacing: 0.15,
 
-                    )
+                    ),
                 ),
                   Text(customerTransaction.status == 'partial' ? 'Balance' : 'Amount',
                     style: const TextStyle(
@@ -182,9 +180,9 @@ Widget listCustomersOrdersItemBuilder(OrderData customerTransaction) {
                       fontWeight: FontWeight.w400,
                       fontStyle: FontStyle.normal,
                       letterSpacing: 0.15,
-                    )
-                )
-              ]
+                    ),
+                ),
+              ],
             ),
             8.height,
             Row(
@@ -198,7 +196,7 @@ Widget listCustomersOrdersItemBuilder(OrderData customerTransaction) {
                       fontWeight: FontWeight.w400,
                       fontStyle: FontStyle.normal,
                       letterSpacing: 0.15,
-                    )
+                    ),
                 ),
                 Text("${customerTransaction.currency ?? "KES"} ${customerTransaction.status == 'partial' ? customerTransaction.deficit?.formatCurrency() : customerTransaction.total?.formatCurrency()}",
                     style: TextStyle(
@@ -211,8 +209,8 @@ Widget listCustomersOrdersItemBuilder(OrderData customerTransaction) {
                       fontWeight: FontWeight.w400,
                       fontStyle: FontStyle.normal,
 
-                    )
-                )
+                    ),
+                ),
               ],
             ),
             const Divider(height: 1, thickness: 0.9),
@@ -226,7 +224,7 @@ Widget listCustomersInvoicesItemBuilder(CustomerInvoiceData customerTransaction)
   return Builder(
     builder: (context) => GestureDetector(
       onTap: () {
-        InvoiceDetailPage(invoiceNumber: customerTransaction?.invoiceNumber).launch(context).then((value) {
+        InvoiceDetailPage(invoiceNumber: customerTransaction.invoiceNumber).launch(context).then((value) {
         });
       },
       child: Container(
@@ -248,21 +246,21 @@ Widget listCustomersInvoicesItemBuilder(CustomerInvoiceData customerTransaction)
                         width: 15,
                     ),
                     8.width,
-                    Text("${customerTransaction.invoiceNumber ?? ""}",
+                    Text(customerTransaction.invoiceNumber ?? '',
                         style: const TextStyle(
                           fontFamily: 'Poppins',
                           color: textPrimaryColor,
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
                           fontStyle: FontStyle.normal,
-                        )
-                    )
+                        ),
+                    ),
                   ],
                 ),
                 Container(
-                  margin: const EdgeInsets.only(right: 0),
+                  margin: const EdgeInsets.only(),
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 12, vertical: 6),
+                      horizontal: 12, vertical: 6,),
                   decoration: BoxDecoration(
                     color: customerTransaction.invoiceStatus == 'Paid'
                         ?lightGreenColor
@@ -282,7 +280,7 @@ Widget listCustomersInvoicesItemBuilder(CustomerInvoiceData customerTransaction)
                         fontSize: 10,
                         fontWeight: FontWeight.w600,
                         fontStyle: FontStyle.normal,
-                      )
+                      ),
                   ),
                 ),
               ],
@@ -300,7 +298,7 @@ Widget listCustomersInvoicesItemBuilder(CustomerInvoiceData customerTransaction)
                       fontStyle: FontStyle.normal,
                       letterSpacing: 0.15,
 
-                    )
+                    ),
                 ),
                  const Text('Amount',
                     style: TextStyle(
@@ -310,9 +308,9 @@ Widget listCustomersInvoicesItemBuilder(CustomerInvoiceData customerTransaction)
                       fontWeight: FontWeight.w400,
                       fontStyle: FontStyle.normal,
                       letterSpacing: 0.15,
-                    )
-                )
-              ]
+                    ),
+                ),
+              ],
             ),
             8.height,
             Row(
@@ -326,7 +324,7 @@ Widget listCustomersInvoicesItemBuilder(CustomerInvoiceData customerTransaction)
                       fontWeight: FontWeight.w400,
                       fontStyle: FontStyle.normal,
                       letterSpacing: 0.15,
-                    )
+                    ),
                 ),
                 Text(customerTransaction.invoiceStatus == 'Paid'
                     ? 'KES ${customerTransaction.invoiceAmount?.formatCurrency()}'
@@ -344,8 +342,8 @@ Widget listCustomersInvoicesItemBuilder(CustomerInvoiceData customerTransaction)
                       fontWeight: FontWeight.w400,
                       fontStyle: FontStyle.normal,
 
-                    )
-                )
+                    ),
+                ),
               ],
             ),
             const Divider(height: 1, thickness: 0.9),

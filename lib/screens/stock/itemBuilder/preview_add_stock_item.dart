@@ -11,7 +11,7 @@ Widget previewAddStockItem({
 
 }) {
   return Container(
-    margin: const EdgeInsets.only(left: 0, right: 0, bottom: 0),
+    margin: const EdgeInsets.only(),
     padding: const EdgeInsets.all(5),
     decoration: BoxDecoration(
       color: Colors.white,
@@ -44,7 +44,7 @@ Widget previewAddStockItem({
               Row(
                 children: [
                   Text(
-                    item?.category ?? '',
+                    item.category ?? '',
                     style: TextStyle(
                       fontSize: 12,
                       fontFamily: 'Poppins',
@@ -77,24 +77,24 @@ Widget previewAddStockItem({
         Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            Text("+${item.quantity} Items",
-                style: TextStyle(
+            Text('+${item.quantity} Items',
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   color: successTextColor,
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
                   fontStyle: FontStyle.normal,
-                )
+                ),
             ),
-            Text("${item.total} Items",
-                style: TextStyle(
+            Text('${item.total} Items',
+                style: const TextStyle(
                   fontFamily: 'Poppins',
                   color: textPrimary,
                   fontSize: 10,
                   fontWeight: FontWeight.w600,
                   fontStyle: FontStyle.normal,
-                )
-            )
+                ),
+            ),
           ],
         ),
 
@@ -102,10 +102,10 @@ Widget previewAddStockItem({
           onTap: () {
             cartViewModel.removeItem(item.productId);
           },
-          child: Container(
+          child: const SizedBox(
             width: 24,
             height: 24,
-            child: const Center(
+            child: Center(
               child: Icon(
                 Icons.remove,
                 color: accentRed,
@@ -126,7 +126,7 @@ Widget previewAddStockTakeItem({
 
 }) {
   return Container(
-    margin: const EdgeInsets.only(left: 0, right: 0, bottom: 0),
+    margin: const EdgeInsets.only(),
     padding: const EdgeInsets.all(5),
     decoration: BoxDecoration(
       color: Colors.white,
@@ -176,7 +176,7 @@ Widget previewAddStockTakeItem({
                   ),
                   Text(
                     'Actual:${item.quantity}',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 12,
                       fontFamily: 'Poppins',
                       color: successTextColor,
@@ -186,8 +186,8 @@ Widget previewAddStockTakeItem({
                   ),
                 ],
               ),
-              Text("Variance: ${item.variation}",
-                  style: TextStyle(
+              Text('Variance: ${item.variation}',
+                  style: const TextStyle(
                     fontFamily: 'Poppins',
                     color: textPrimary,
                     fontSize: 12,
@@ -195,8 +195,8 @@ Widget previewAddStockTakeItem({
                     fontStyle: FontStyle.normal,
 
 
-                  )
-              )
+                  ),
+              ),
             ],
           ),
         ),
@@ -205,10 +205,10 @@ Widget previewAddStockTakeItem({
           onTap: () {
             cartViewModel.removeItem(item.productId);
           },
-          child: Container(
+          child: const SizedBox(
             width: 24,
             height: 24,
-            child: const Center(
+            child: Center(
               child: Icon(
                 Icons.remove,
                 color: accentRed,
@@ -227,7 +227,7 @@ Widget viewBatchProductItem({
   required StockItem item,
 }) {
   return Container(
-    margin: const EdgeInsets.only(left: 0, right: 0, bottom: 0),
+    margin: const EdgeInsets.only(),
     padding: const EdgeInsets.all(5),
     decoration: BoxDecoration(
       color: Colors.white,
@@ -262,7 +262,7 @@ Widget viewBatchProductItem({
                   Row(
                     children: [
                       Text(
-                        item?.category ?? '',
+                        item.category ?? '',
                         style: TextStyle(
                           fontSize: 12,
                           fontFamily: 'Poppins',
@@ -295,24 +295,24 @@ Widget viewBatchProductItem({
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Text("+${item.newQuantity} Items",
-                    style: TextStyle(
+                Text('+${item.newQuantity} Items',
+                    style: const TextStyle(
                       fontFamily: 'Poppins',
                       color: successTextColor,
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
                       fontStyle: FontStyle.normal,
-                    )
+                    ),
                 ),
-                Text("${item.newQuantity} Items",
-                    style: TextStyle(
+                Text('${item.newQuantity} Items',
+                    style: const TextStyle(
                       fontFamily: 'Poppins',
                       color: textPrimary,
                       fontSize: 10,
                       fontWeight: FontWeight.w600,
                       fontStyle: FontStyle.normal,
-                    )
-                )
+                    ),
+                ),
               ],
             ),
           ],
@@ -331,7 +331,7 @@ Widget viewBatchStockTakeProductItem({
   required StockItem item,
 }) {
   return Container(
-    margin: const EdgeInsets.only(left: 0, right: 0, bottom: 0),
+    margin: const EdgeInsets.only(),
     padding: const EdgeInsets.all(5),
     decoration: BoxDecoration(
       color: Colors.white,
@@ -366,7 +366,7 @@ Widget viewBatchStockTakeProductItem({
                   Row(
                     children: [
                       Text(
-                        "Expected: ${item?.expectedQuantity}" ?? 'N/A',
+                        'Expected: ${item.expectedQuantity}' ?? 'N/A',
                         style: TextStyle(
                           fontSize: 12,
                           fontFamily: 'Poppins',
@@ -383,7 +383,7 @@ Widget viewBatchStockTakeProductItem({
                       ),
                       Text(
                         'Actual: ${item.newQuantity}',
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 12,
                           fontFamily: 'Poppins',
                           color: successTextColor,
@@ -399,24 +399,24 @@ Widget viewBatchStockTakeProductItem({
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Text("",
+                const Text('',
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       color: successTextColor,
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
                       fontStyle: FontStyle.normal,
-                    )
+                    ),
                 ),
-                Text("Variance: ${item.variance}",
-                    style: TextStyle(
+                Text('Variance: ${item.variance}',
+                    style: const TextStyle(
                       fontFamily: 'Poppins',
                       color: textPrimary,
                       fontSize: 10,
                       fontWeight: FontWeight.w600,
                       fontStyle: FontStyle.normal,
-                    )
-                )
+                    ),
+                ),
               ],
             ),
           ],

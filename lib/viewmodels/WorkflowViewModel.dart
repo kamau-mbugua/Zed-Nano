@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/models/get_token_after_invite/GetTokenAfterInviteResponse.dart';
-import 'package:zed_nano/models/listsubscribed_billing_plans/SubscribedBillingPlansResponse.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/services/business_setup_service.dart';
@@ -36,11 +35,11 @@ class WorkflowViewModel with ChangeNotifier {
         await businessSetupService.initialize();
       }
       
-      logger.i("WorkflowViewModel - BusinessSetupService.requiresBusinessSetup: ${businessSetupService.requiresBusinessSetup}");
+      logger.i('WorkflowViewModel - BusinessSetupService.requiresBusinessSetup: ${businessSetupService.requiresBusinessSetup}');
       
       // Check if business setup is required using the service
       if (businessSetupService.requiresBusinessSetup) {
-        logger.i("WorkflowViewModel - Business setup required, showing setup screen");
+        logger.i('WorkflowViewModel - Business setup required, showing setup screen');
         _showBusinessSetup = true;
         notifyListeners();
         return;
@@ -63,15 +62,15 @@ class WorkflowViewModel with ChangeNotifier {
             setWorkflowState(response.data?.workflowState);
             _billingPlan =
                 response.data?.businessBillingDetails?.nanoSubscription;
-            logger.i("WorkflowViewModelShowBusinessSetup: ${_billingPlan?.toJson()}");
+            logger.i('WorkflowViewModelShowBusinessSetup: ${_billingPlan?.toJson()}');
             notifyListeners();
           } else {
             showCustomToast(value.message);
-            logger.e("Failed to get token: ${value.message}");
+            logger.e('Failed to get token: ${value.message}');
           }
         });
       } else {
-        logger.i("User is not logged in");
+        logger.i('User is not logged in');
       }
     } catch (e) {
       logger.e('Error in skipSetup: $e');

@@ -10,7 +10,7 @@ Widget buildOrderItem({
   required OrderItem item,
 }) {
   return Container(
-    margin: const EdgeInsets.only(left: 0, right: 0, bottom: 0),
+    margin: const EdgeInsets.only(),
     padding: const EdgeInsets.all(5),
     decoration: BoxDecoration(
       color: Colors.white,
@@ -46,7 +46,7 @@ Widget buildOrderItem({
                   Row(
                     children: [
                       Text(
-                        item?.itemCategory ?? '',
+                        item.itemCategory ?? '',
                         style: TextStyle(
                           fontSize: 12,
                           fontFamily: 'Poppins',
@@ -79,21 +79,21 @@ Widget buildOrderItem({
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("x${item.itemCount ?? 0}",
+                  Text('x${item.itemCount ?? 0}',
                       style: const TextStyle(
                         fontFamily: 'Poppins',
                         color: textPrimary,
                         fontSize: 16,
                         fontWeight: FontWeight.w400,
                         fontStyle: FontStyle.normal,
-                      )
+                      ),
                   ),
                    Column(
                      mainAxisAlignment: MainAxisAlignment.end,
                      crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text("${item.currency ?? 'KES'} ${item.itemAmount?.formatCurrency()}",
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontFamily: 'Poppins',
                             color: textPrimary,
                             fontSize: 12,
@@ -101,7 +101,7 @@ Widget buildOrderItem({
                             fontStyle: FontStyle.normal,
 
 
-                          )
+                          ),
                       ),
                       Text("${item.currency ?? 'KES'} ${item.discount?.formatCurrency()}",
                           style: TextStyle(
@@ -112,15 +112,15 @@ Widget buildOrderItem({
                             fontStyle: FontStyle.normal,
                             letterSpacing: 0.15,
 
-                          )
-                      )
+                          ),
+                      ),
 
-                    ]
-                  )
+                    ],
+                  ),
 
                 ],
               ),
-            )
+            ),
           ],
         ),
         Divider(
@@ -136,7 +136,7 @@ Widget buildTransactionItem({
   required TransactionItem item,
 }) {
   return Container(
-    margin: const EdgeInsets.only(left: 0, right: 0, bottom: 0),
+    margin: const EdgeInsets.only(),
     padding: const EdgeInsets.all(5),
     decoration: BoxDecoration(
       color: Colors.white,
@@ -172,7 +172,7 @@ Widget buildTransactionItem({
                   Row(
                     children: [
                       Text(
-                        item?.itemCategory ?? '',
+                        item.itemCategory ?? '',
                         style: TextStyle(
                           fontSize: 12,
                           fontFamily: 'Poppins',
@@ -205,21 +205,21 @@ Widget buildTransactionItem({
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("x${item.itemCount ?? 0}",
+                  Text('x${item.itemCount ?? 0}',
                       style: const TextStyle(
                         fontFamily: 'Poppins',
                         color: textPrimary,
                         fontSize: 16,
                         fontWeight: FontWeight.w400,
                         fontStyle: FontStyle.normal,
-                      )
+                      ),
                   ),
                    Column(
                      mainAxisAlignment: MainAxisAlignment.end,
                      crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text("${item.currency ?? 'KES'} ${item.itemAmount?.formatCurrency()}",
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontFamily: 'Poppins',
                             color: textPrimary,
                             fontSize: 12,
@@ -227,7 +227,7 @@ Widget buildTransactionItem({
                             fontStyle: FontStyle.normal,
 
 
-                          )
+                          ),
                       ),
                       Text("${item.currency ?? 'KES'} ${item.discount?.formatCurrency() ?? '0.00'}",
                           style: TextStyle(
@@ -238,15 +238,15 @@ Widget buildTransactionItem({
                             fontStyle: FontStyle.normal,
                             letterSpacing: 0.15,
 
-                          )
-                      )
+                          ),
+                      ),
 
-                    ]
-                  )
+                    ],
+                  ),
 
                 ],
               ),
-            )
+            ),
           ],
         ),
         Divider(
@@ -276,7 +276,7 @@ Widget buildOrderPaymentSummary({
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text("Amount paid",
+              const Text('Amount paid',
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     color: textSecondary,
@@ -285,9 +285,9 @@ Widget buildOrderPaymentSummary({
                     fontStyle: FontStyle.normal,
                     letterSpacing: 0.12,
 
-                  )
+                  ),
               ),
-              Text("${item?.currency ?? 'KES'} ${item?.amount?.formatCurrency() ?? 'N/A'}",
+              Text("${item.currency ?? 'KES'} ${item.amount?.formatCurrency() ?? 'N/A'}",
                   style: const TextStyle(
                     fontFamily: 'Poppins',
                     color: textSecondary,
@@ -295,14 +295,14 @@ Widget buildOrderPaymentSummary({
                     fontWeight: FontWeight.w400,
                     fontStyle: FontStyle.normal,
                     letterSpacing: 0.12,
-                  )
-              )
+                  ),
+              ),
             ],
           ).paddingSymmetric(vertical: 8),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text("Paid via",
+              const Text('Paid via',
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     color: textSecondary,
@@ -311,9 +311,9 @@ Widget buildOrderPaymentSummary({
                     fontStyle: FontStyle.normal,
                     letterSpacing: 0.12,
 
-                  )
+                  ),
               ),
-              Text("${item?.transactionType?? 'N/A'}",
+              Text(item.transactionType?? 'N/A',
                   style: const TextStyle(
                     fontFamily: 'Poppins',
                     color: textSecondary,
@@ -321,14 +321,14 @@ Widget buildOrderPaymentSummary({
                     fontWeight: FontWeight.w400,
                     fontStyle: FontStyle.normal,
                     letterSpacing: 0.12,
-                  )
-              )
+                  ),
+              ),
             ],
           ).paddingSymmetric(vertical: 8),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text("Transaction ID",
+              const Text('Transaction ID',
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     color: textSecondary,
@@ -337,9 +337,9 @@ Widget buildOrderPaymentSummary({
                     fontStyle: FontStyle.normal,
                     letterSpacing: 0.12,
 
-                  )
+                  ),
               ),
-              Text("${item?.receiptId?? 'N/A'}",
+              Text(item.receiptId?? 'N/A',
                   style: const TextStyle(
                     fontFamily: 'Poppins',
                     color: textSecondary,
@@ -347,14 +347,14 @@ Widget buildOrderPaymentSummary({
                     fontWeight: FontWeight.w400,
                     fontStyle: FontStyle.normal,
                     letterSpacing: 0.12,
-                  )
-              )
+                  ),
+              ),
             ],
           ).paddingSymmetric(vertical: 8),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text("Date & Time",
+              const Text('Date & Time',
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     color: textSecondary,
@@ -363,9 +363,9 @@ Widget buildOrderPaymentSummary({
                     fontStyle: FontStyle.normal,
                     letterSpacing: 0.12,
 
-                  )
+                  ),
               ),
-              Text("${item?.transactionDate?.toFormattedDateTime() ?? 'N/A'}",
+              Text(item.transactionDate?.toFormattedDateTime() ?? 'N/A',
                   style: const TextStyle(
                     fontFamily: 'Poppins',
                     color: textSecondary,
@@ -373,10 +373,10 @@ Widget buildOrderPaymentSummary({
                     fontWeight: FontWeight.w400,
                     fontStyle: FontStyle.normal,
                     letterSpacing: 0.12,
-                  )
-              )
+                  ),
+              ),
             ],
           ).paddingSymmetric(vertical: 8),
         ],
-      ));
+      ),);
 }

@@ -3,6 +3,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 /// Provider to manage app theme settings
 class ThemeProvider extends ChangeNotifier {
+  
+  // Constructor - loads saved theme mode
+  ThemeProvider() {
+    _loadThemeMode();
+  }
   // Theme mode key in shared preferences
   static const String _themeModeKey = 'theme_mode';
   
@@ -11,11 +16,6 @@ class ThemeProvider extends ChangeNotifier {
   
   // Getter for current theme mode
   ThemeMode get themeMode => _themeMode;
-  
-  // Constructor - loads saved theme mode
-  ThemeProvider() {
-    _loadThemeMode();
-  }
   
   // Load theme mode from shared preferences
   Future<void> _loadThemeMode() async {

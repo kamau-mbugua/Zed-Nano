@@ -5,16 +5,16 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/contants/AppConstants.dart';
 import 'package:zed_nano/models/business/BusinessDetails.dart';
+import 'package:zed_nano/models/posLoginVersion2/login_response.dart';
 import 'package:zed_nano/networking/base/api_response.dart';
 import 'package:zed_nano/networking/datasource/remote/dio/dio_client.dart';
 import 'package:zed_nano/networking/datasource/remote/exception/api_error_handler.dart';
-import 'package:zed_nano/models/posLoginVersion2/login_response.dart';
 
 class AuthenticatedRepo {
-  final DioClient? dioClient;
-  final SharedPreferences? sharedPreferences;
   
   AuthenticatedRepo({required this.dioClient, required this.sharedPreferences});
+  final DioClient? dioClient;
+  final SharedPreferences? sharedPreferences;
 
   /// Save user authentication token
   /// 
@@ -58,7 +58,7 @@ class AuthenticatedRepo {
   /// Save full login response for later use
   Future<void> saveLoginResponse(LoginResponse loginResponse) async {
     try {
-      String loginResponseJson = jsonEncode(loginResponse.toJson());
+      final loginResponseJson = jsonEncode(loginResponse.toJson());
       await sharedPreferences!
           .setString(AppConstants.loginResponse, loginResponseJson);
     } catch (e) {
@@ -76,7 +76,7 @@ class AuthenticatedRepo {
     }
     
     try {
-      String userDataJson = jsonEncode(userData.toJson());
+      final userDataJson = jsonEncode(userData.toJson());
       await sharedPreferences!
           .setString(AppConstants.userDataResponse, userDataJson);
     } catch (e) {
@@ -90,7 +90,7 @@ class AuthenticatedRepo {
   /// Get previously saved login response
   LoginResponse? getLoginResponse() {
     try {
-      String? loginResponseJson =
+      final loginResponseJson =
           sharedPreferences!.getString(AppConstants.loginResponse);
       if (loginResponseJson != null) {
         final decoded = jsonDecode(loginResponseJson);
@@ -116,7 +116,7 @@ class AuthenticatedRepo {
   /// Get previously saved user data
   LoginUserDetails? getUserData() {
     try {
-      String? userDataJson =
+      final userDataJson =
           sharedPreferences!.getString(AppConstants.userDataResponse);
       if (userDataJson != null) {
         final decoded = jsonDecode(userDataJson);
@@ -141,7 +141,7 @@ class AuthenticatedRepo {
 
   /// Get stored authentication token
   String getUserToken() {
-    return sharedPreferences!.getString(AppConstants.token) ?? "";
+    return sharedPreferences!.getString(AppConstants.token) ?? '';
   }
 
   /// Check if user is currently logged in
@@ -175,7 +175,7 @@ class AuthenticatedRepo {
   Future<ApiResponse> login({required Map<String, dynamic> requestData}) async {
     try {
       final response =
-          await dioClient!.post('${AppConstants.login}', data: requestData);
+          await dioClient!.post(AppConstants.login, data: requestData);
       
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -186,7 +186,7 @@ class AuthenticatedRepo {
   Future<ApiResponse> loginByFirebase({required Map<String, dynamic> requestData}) async {
     try {
       final response =
-          await dioClient!.post('${AppConstants.loginByFirebase}', data: requestData);
+          await dioClient!.post(AppConstants.loginByFirebase, data: requestData);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -201,7 +201,7 @@ class AuthenticatedRepo {
   Future<ApiResponse> register({required Map<String, dynamic> requestData}) async {
     try {
       final response =
-          await dioClient!.post('${AppConstants.register}', data: requestData);
+          await dioClient!.post(AppConstants.register, data: requestData);
       
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -211,7 +211,7 @@ class AuthenticatedRepo {
   Future<ApiResponse> registerByFirebase({required Map<String, dynamic> requestData}) async {
     try {
       final response =
-          await dioClient!.post('${AppConstants.registerByFirebase}', data: requestData);
+          await dioClient!.post(AppConstants.registerByFirebase, data: requestData);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -221,7 +221,7 @@ class AuthenticatedRepo {
   Future<ApiResponse> resetPinVersion({required Map<String, dynamic> requestData}) async {
     try {
       final response =
-          await dioClient!.put('${AppConstants.resetPinVersion}', data: requestData);
+          await dioClient!.put(AppConstants.resetPinVersion, data: requestData);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -231,7 +231,7 @@ class AuthenticatedRepo {
   Future<ApiResponse> forgotPin({required Map<String, dynamic> requestData}) async {
     try {
       final response =
-          await dioClient!.post('${AppConstants.forgotPin}', data: requestData);
+          await dioClient!.post(AppConstants.forgotPin, data: requestData);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -241,7 +241,7 @@ class AuthenticatedRepo {
   Future<ApiResponse> getTokenAfterInvite({required Map<String, dynamic> requestData}) async {
     try {
       final response =
-          await dioClient!.post('${AppConstants.getTokenAfterInvite}', data: requestData);
+          await dioClient!.post(AppConstants.getTokenAfterInvite, data: requestData);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -252,7 +252,7 @@ class AuthenticatedRepo {
   Future<ApiResponse> createBusiness({required Map<String, dynamic> requestData}) async {
     try {
       final response =
-      await dioClient!.post('${AppConstants.createBusiness}', data: requestData);
+      await dioClient!.post(AppConstants.createBusiness, data: requestData);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -264,7 +264,7 @@ class AuthenticatedRepo {
   Future<ApiResponse> refreshToken({required String refreshToken}) async {
     try {
       final response = await dioClient!.post(
-        '${AppConstants.refreshToken}',
+        AppConstants.refreshToken,
         data: {'refreshToken': refreshToken},
       );
       return ApiResponse.withSuccess(response);

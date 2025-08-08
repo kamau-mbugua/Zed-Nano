@@ -2,30 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/models/business/BusinessDetails.dart';
+import 'package:zed_nano/models/createbillingInvoice/CreateBillingInvoiceResponse.dart';
 import 'package:zed_nano/models/posLoginVersion2/login_response.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
+import 'package:zed_nano/screens/business/subscription/mpesa_payment_waiting_screen.dart';
+import 'package:zed_nano/screens/business/subscription/webview_payment_page.dart';
 import 'package:zed_nano/screens/widget/auth/input_fields.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/screens/widget/common/heading.dart';
-import 'package:zed_nano/screens/widget/common/sub_category_picker.dart';
-import 'package:zed_nano/screens/widget/payment/card_number_field.dart';
 import 'package:zed_nano/utils/Common.dart';
-import 'package:zed_nano/models/createbillingInvoice/CreateBillingInvoiceResponse.dart';
-import 'package:zed_nano/screens/business/subscription/webview_payment_page.dart';
-import 'package:zed_nano/screens/business/subscription/mpesa_payment_waiting_screen.dart';
 import 'package:zed_nano/utils/extensions.dart';
 
 
 
 class CompleteSubscriptionScreen extends StatefulWidget {
-  final VoidCallback onSkip;
-  final CreateBillingInvoiceResponse? invoiceData;
 
   const CompleteSubscriptionScreen({
-    super.key, 
-    required this.onSkip,
+    required this.onSkip, super.key,
     this.invoiceData,
   });
+  final VoidCallback onSkip;
+  final CreateBillingInvoiceResponse? invoiceData;
 
   @override
   State<CompleteSubscriptionScreen> createState() => _CompleteSubscriptionScreenState();
@@ -69,7 +66,7 @@ class _CompleteSubscriptionScreenState extends State<CompleteSubscriptionScreen>
           businessNumber: businessDetails?.businessNumber ?? '',
           onPaymentComplete: () {
             showCustomToast('Payment completed successfully!', isError: false);
-            widget?.onSkip();
+            widget.onSkip();
           },
           onPaymentCancelled: () {
             Navigator.pop(context);
@@ -83,20 +80,20 @@ class _CompleteSubscriptionScreenState extends State<CompleteSubscriptionScreen>
 
   Future<void> _doMpesaStkPayment(String? phoneNumber) async {
 
-    Map<String, dynamic> data = {
+    final data = <String, dynamic>{
       'phone': phoneNumber,
       'amount': widget.invoiceData?.amount,
-      'orderID': widget.invoiceData?.invoiceNumber
+      'orderID': widget.invoiceData?.invoiceNumber,
     };
 
     try {
       final response = await getBusinessProvider(context).doInitiateKcbStkPush(
         requestData: data, 
-        context: context
+        context: context,
       );
       
       if (response.isSuccess) {
-        var stkResponse = response.data;
+        final stkResponse = response.data;
         await Navigator.push(
           context,
           MaterialPageRoute(
@@ -107,15 +104,13 @@ class _CompleteSubscriptionScreenState extends State<CompleteSubscriptionScreen>
               sTKPaymentType: STKPaymentType.KCB,
               onPaymentSuccess: () {
                 showCustomToast('Payment completed successfully!', isError: false);
-                widget?.onSkip();
+                widget.onSkip();
                 // // Navigate back to parent screens or home
                 // Navigator.of(context).popUntil((route) => route.isFirst);
               },
-              onPaymentError: (errorMessage) {
-                showCustomToast(errorMessage, isError: true);
-              },
+              onPaymentError: showCustomToast,
               onCancel: () {
-                showCustomToast('Payment cancelled', isError: true);
+                showCustomToast('Payment cancelled');
               },
             ),
           ),
@@ -147,7 +142,7 @@ class _CompleteSubscriptionScreenState extends State<CompleteSubscriptionScreen>
             color: Color(0xff1f2024),
             fontWeight: FontWeight.w500,
             fontFamily: 'Poppins',
-            fontSize: 16.0,
+            fontSize: 16,
           ),
         ),
       ),
@@ -181,7 +176,7 @@ class _CompleteSubscriptionScreenState extends State<CompleteSubscriptionScreen>
                               fontSize: 14,
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.w400,
-                              color: Color(0xff1f2024)),
+                              color: Color(0xff1f2024),),
                         ),
                         const SizedBox(height: 4),
                         Text(
@@ -189,9 +184,9 @@ class _CompleteSubscriptionScreenState extends State<CompleteSubscriptionScreen>
                           style: const TextStyle(
                               fontSize: 12,
                               fontFamily: 'Poppins',
-                              color: Color(0xff71727a)),
-                        )
-                      ]),
+                              color: Color(0xff71727a),),
+                        ),
+                      ],),
                   Text(
                     "KES ${widget.invoiceData?.amount?.toString() ?? '1000.00'}",
                     style: const TextStyle(
@@ -200,14 +195,14 @@ class _CompleteSubscriptionScreenState extends State<CompleteSubscriptionScreen>
                       fontFamily: 'Poppins',
                       color: Color(0xff1f2024),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
             const SizedBox(height: 24),
 
             // Expandable Payment Options
-            ...paymentMethods.map((method) => _buildPaymentOption(method)).toList(),
+            ...paymentMethods.map(_buildPaymentOption),
 
             const SizedBox(height: 80),
 
@@ -221,8 +216,8 @@ class _CompleteSubscriptionScreenState extends State<CompleteSubscriptionScreen>
                   if(selectedPayment == 'Credit Card'){
                     _launchWebViewPayment();
                   }else if(selectedPayment == 'MPESA'){
-                    logger.d("phone $phone");
-                    logger.d("selectedCountry $selectedCountry");
+                    logger.d('phone $phone');
+                    logger.d('selectedCountry $selectedCountry');
                     if(!phone.isValidPhoneNumber){
                       showCustomToast('Please enter a valid phone number');
                       return;
@@ -241,7 +236,7 @@ class _CompleteSubscriptionScreenState extends State<CompleteSubscriptionScreen>
                     showCustomToast('Please select a payment method');
                   }
                 },
-                context: context)
+                context: context,)
                 .paddingSymmetric(horizontal: 1),
           ],
         ),
@@ -250,7 +245,7 @@ class _CompleteSubscriptionScreenState extends State<CompleteSubscriptionScreen>
   }
 
   Widget _buildPaymentOption(String method) {
-    final bool selected = selectedPayment == method;
+    final selected = selectedPayment == method;
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -303,7 +298,7 @@ class _CompleteSubscriptionScreenState extends State<CompleteSubscriptionScreen>
                 codeController: countryCodeController,
                 maxLength: 10,
               ).paddingSymmetric(horizontal: 2),
-            ]
+            ],
           ],
         ),
       ),

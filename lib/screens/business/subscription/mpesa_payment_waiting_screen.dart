@@ -1,13 +1,13 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/networking/models/response_model.dart';
-import 'package:zed_nano/screens/widget/common/fading_circular_progress.dart';
+import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
+import 'package:zed_nano/screens/widget/common/fading_circular_progress.dart';
 import 'package:zed_nano/services/websocket_service.dart';
 import 'package:zed_nano/utils/Common.dart';
-import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 
 typedef PaymentCallback = void Function();
 typedef PaymentErrorCallback = void Function(String errorMessage);
@@ -18,6 +18,13 @@ enum STKPaymentType {
 }
 
 class MpesaPaymentWaitingScreen extends StatefulWidget {
+
+  const MpesaPaymentWaitingScreen({
+    required this.invoiceNumber, required this.referenceNumber, required this.paymentData, required this.sTKPaymentType, super.key,
+    this.onPaymentSuccess,
+    this.onPaymentError,
+    this.onCancel,
+  });
   final String invoiceNumber;
   final String referenceNumber;
   final Map<String, dynamic> paymentData;
@@ -25,17 +32,6 @@ class MpesaPaymentWaitingScreen extends StatefulWidget {
   final PaymentErrorCallback? onPaymentError;
   final VoidCallback? onCancel;
   final STKPaymentType? sTKPaymentType;
-
-  const MpesaPaymentWaitingScreen({
-    super.key,
-    required this.invoiceNumber,
-    required this.referenceNumber,
-    required this.paymentData,
-    required this.sTKPaymentType,
-    this.onPaymentSuccess,
-    this.onPaymentError,
-    this.onCancel,
-  });
 
   @override
   State<MpesaPaymentWaitingScreen> createState() =>
@@ -70,9 +66,7 @@ class _MpesaPaymentWaitingScreenState extends State<MpesaPaymentWaitingScreen> {
     });
 
     // Listen to messages
-    _webSocketService!.messageStream.listen((wsResponse) {
-      _handleWebSocketMessage(wsResponse);
-    });
+    _webSocketService!.messageStream.listen(_handleWebSocketMessage);
 
     // Connect to WebSocket
     _webSocketService!.connect(widget.referenceNumber, userToken: _userToken);
@@ -82,7 +76,7 @@ class _MpesaPaymentWaitingScreenState extends State<MpesaPaymentWaitingScreen> {
     if (!mounted) return;
 
     logger.d(
-        'WebSocket message: ${wsResponse.status} - ${wsResponse.statusMessage}');
+        'WebSocket message: ${wsResponse.status} - ${wsResponse.statusMessage}',);
 
     switch (wsResponse.status?.toLowerCase()) {
       case 'initial':
@@ -94,35 +88,30 @@ class _MpesaPaymentWaitingScreenState extends State<MpesaPaymentWaitingScreen> {
           isSuccess: false,
           message: wsResponse.statusMessage ?? 'Payment was cancelled',
         );
-        break;
 
       case 'success':
         _handlePaymentResult(
           isSuccess: true,
           message: 'Payment completed successfully!',
         );
-        break;
 
       case 'timeout':
         _handlePaymentResult(
           isSuccess: false,
           message: wsResponse.statusMessage ?? 'Payment timed out',
         );
-        break;
 
       case 'insufficient':
         _handlePaymentResult(
           isSuccess: false,
           message: wsResponse.statusMessage ?? 'Insufficient funds',
         );
-        break;
 
       case 'wrongpin':
         _handlePaymentResult(
           isSuccess: false,
           message: wsResponse.statusMessage ?? 'Wrong PIN entered',
         );
-        break;
 
       case 'failed':
         // Stop WebSocket but keep screen open for specific error messages
@@ -135,8 +124,7 @@ class _MpesaPaymentWaitingScreenState extends State<MpesaPaymentWaitingScreen> {
             _canResend = true;
             _resendCountdown = 0; // Reset countdown
           });
-          showCustomToast('No response from user. You can try again.',
-              isError: true);
+          showCustomToast('No response from user. You can try again.',);
         } else {
           // For other failed cases, close the screen
           _handlePaymentResult(
@@ -145,15 +133,13 @@ class _MpesaPaymentWaitingScreenState extends State<MpesaPaymentWaitingScreen> {
                 'Payment failed: Invalid initiator information',
           );
         }
-        break;
       default:
         logger.d('Unknown payment status: ${wsResponse.status}');
-        break;
     }
   }
 
   void _handlePaymentResult(
-      {required bool isSuccess, required String message}) {
+      {required bool isSuccess, required String message,}) {
     if (!mounted) return;
 
     if (isSuccess) {
@@ -162,7 +148,7 @@ class _MpesaPaymentWaitingScreenState extends State<MpesaPaymentWaitingScreen> {
       // Don't auto-pop for success case since the callback handles navigation
       return;
     } else {
-      showCustomToast(message, isError: true);
+      showCustomToast(message);
       widget.onPaymentError?.call(message);
     }
 
@@ -218,14 +204,13 @@ class _MpesaPaymentWaitingScreenState extends State<MpesaPaymentWaitingScreen> {
 
       if (response.isSuccess) {
         showCustomToast('You will receive a prompt on your phone',
-            isError: false);
+            isError: false,);
         _startResendCountdown();
       } else {
-        showCustomToast(response.message ?? 'Failed to send payment prompt',
-            isError: true);
+        showCustomToast(response.message ?? 'Failed to send payment prompt',);
       }
     } catch (e) {
-      showCustomToast('Failed to resend payment prompt', isError: true);
+      showCustomToast('Failed to resend payment prompt');
       logger.e('Error resending STK push: $e');
     } finally {
       if (mounted) {
@@ -263,13 +248,13 @@ class _MpesaPaymentWaitingScreenState extends State<MpesaPaymentWaitingScreen> {
             color: Color(0xff1f2024),
             fontWeight: FontWeight.w500,
             fontFamily: 'Poppins',
-            fontSize: 16.0,
+            fontSize: 16,
           ),
         ),
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(24.0),
+          padding: const EdgeInsets.all(24),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -277,10 +262,7 @@ class _MpesaPaymentWaitingScreenState extends State<MpesaPaymentWaitingScreen> {
               const FadingCircularProgress(
                 width: 120,
                 height: 120,
-                color: Color(0xff032541),
-                backgroundColor: Color(0xffe8edf1),
                 strokeWidth: 8,
-                duration: Duration(seconds: 2),
               ),
 
               const SizedBox(height: 40),
@@ -314,7 +296,7 @@ class _MpesaPaymentWaitingScreenState extends State<MpesaPaymentWaitingScreen> {
               // Resend Button or Countdown
               if (_canResend)
                 appButton(
-                    text: "Resend Payment Prompt",
+                    text: 'Resend Payment Prompt',
                     onTap: () async {
                       if (_isLoading) return;
 
@@ -333,7 +315,7 @@ class _MpesaPaymentWaitingScreenState extends State<MpesaPaymentWaitingScreen> {
                       // Resend STK push
                       await _resendSTKPush();
                     },
-                    context: context)
+                    context: context,)
               else
                 Text(
                   'Resend Prompt: $_resendCountdown seconds',
@@ -348,7 +330,7 @@ class _MpesaPaymentWaitingScreenState extends State<MpesaPaymentWaitingScreen> {
               const SizedBox(height: 24),
 
               outlineButton(
-                  text: "Cancel Payment",
+                  text: 'Cancel Payment',
                   onTap: () {
                     // Stop WebSocket but keep screen open
                     setState(() {
@@ -358,7 +340,7 @@ class _MpesaPaymentWaitingScreenState extends State<MpesaPaymentWaitingScreen> {
                     _webSocketService?.close();
                     widget.onCancel?.call();
                   },
-                  context: context)
+                  context: context,),
             ],
           ),
         ),

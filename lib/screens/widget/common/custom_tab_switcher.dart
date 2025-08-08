@@ -1,6 +1,25 @@
 import 'package:flutter/material.dart';
 
 class CustomTabSwitcher extends StatelessWidget {
+
+  const CustomTabSwitcher({
+    required this.tabs, required this.selectedIndex, required this.onTabSelected, super.key,
+    this.height = 40,
+    this.padding = const EdgeInsets.symmetric(horizontal: 16),
+    this.backgroundColor = const Color(0xFFF4F4F5),
+    this.selectedTabColor = Colors.white,
+    this.selectedBorderColor = const Color(0xFFE8E8E8),
+    this.selectedTextColor = const Color(0xFF1F2024),
+    this.unselectedTextColor = const Color(0xFF71727A),
+    this.borderRadius = 12,
+    this.tabBorderRadius = 10,
+    this.fontSize = 12,
+    this.fontWeight = FontWeight.w600,
+    this.fontFamily = 'Poppins',
+    this.selectedTabColors,
+    this.selectedBorderColors,
+    this.selectedTextColors,
+  });
   final List<String> tabs;
   final int selectedIndex;
   final Function(int) onTabSelected;
@@ -19,28 +38,6 @@ class CustomTabSwitcher extends StatelessWidget {
   final List<Color>? selectedTabColors;
   final List<Color>? selectedBorderColors;
   final List<Color>? selectedTextColors;
-
-  const CustomTabSwitcher({
-    Key? key,
-    required this.tabs,
-    required this.selectedIndex,
-    required this.onTabSelected,
-    this.height = 40,
-    this.padding = const EdgeInsets.symmetric(horizontal: 16),
-    this.backgroundColor = const Color(0xFFF4F4F5),
-    this.selectedTabColor = Colors.white,
-    this.selectedBorderColor = const Color(0xFFE8E8E8),
-    this.selectedTextColor = const Color(0xFF1F2024),
-    this.unselectedTextColor = const Color(0xFF71727A),
-    this.borderRadius = 12,
-    this.tabBorderRadius = 10,
-    this.fontSize = 12,
-    this.fontWeight = FontWeight.w600,
-    this.fontFamily = 'Poppins',
-    this.selectedTabColors,
-    this.selectedBorderColors,
-    this.selectedTextColors,
-  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -115,6 +112,27 @@ class CustomTabSwitcher extends StatelessWidget {
 
 /// Enhanced tab switcher with swipe functionality
 class SwipeableTabSwitcher extends StatefulWidget {
+
+  const SwipeableTabSwitcher({
+    required this.tabs, required this.children, super.key,
+    this.initialIndex = 0,
+    this.onTabChanged,
+    this.height = 40,
+    this.padding = const EdgeInsets.symmetric(horizontal: 16),
+    this.backgroundColor = const Color(0xFFF4F4F5),
+    this.selectedTabColor = Colors.white,
+    this.selectedBorderColor = const Color(0xFFE8E8E8),
+    this.selectedTextColor = const Color(0xFF1F2024),
+    this.unselectedTextColor = const Color(0xFF71727A),
+    this.borderRadius = 12,
+    this.tabBorderRadius = 10,
+    this.fontSize = 12,
+    this.fontWeight = FontWeight.w600,
+    this.fontFamily = 'Poppins',
+    this.selectedTabColors,
+    this.selectedBorderColors,
+    this.selectedTextColors,
+  }) : assert(tabs.length == children.length, 'tabs and children must have the same length');
   final List<String> tabs;
   final List<Widget> children;
   final int initialIndex;
@@ -134,30 +152,6 @@ class SwipeableTabSwitcher extends StatefulWidget {
   final List<Color>? selectedTabColors;
   final List<Color>? selectedBorderColors;
   final List<Color>? selectedTextColors;
-
-  const SwipeableTabSwitcher({
-    Key? key,
-    required this.tabs,
-    required this.children,
-    this.initialIndex = 0,
-    this.onTabChanged,
-    this.height = 40,
-    this.padding = const EdgeInsets.symmetric(horizontal: 16),
-    this.backgroundColor = const Color(0xFFF4F4F5),
-    this.selectedTabColor = Colors.white,
-    this.selectedBorderColor = const Color(0xFFE8E8E8),
-    this.selectedTextColor = const Color(0xFF1F2024),
-    this.unselectedTextColor = const Color(0xFF71727A),
-    this.borderRadius = 12,
-    this.tabBorderRadius = 10,
-    this.fontSize = 12,
-    this.fontWeight = FontWeight.w600,
-    this.fontFamily = 'Poppins',
-    this.selectedTabColors,
-    this.selectedBorderColors,
-    this.selectedTextColors,
-  }) : assert(tabs.length == children.length, 'tabs and children must have the same length'),
-       super(key: key);
 
   @override
   State<SwipeableTabSwitcher> createState() => _SwipeableTabSwitcherState();

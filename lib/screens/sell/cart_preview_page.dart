@@ -2,24 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 import 'package:zed_nano/app/app_initializer.dart';
-import 'package:zed_nano/models/product_model.dart';
 import 'package:zed_nano/providers/cart/CartViewModel.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/invoices/detail/invoice_detail_page.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/auth/input_fields.dart';
 import 'package:zed_nano/screens/widget/common/bottom_sheet_helper.dart';
-import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
-import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
-import 'package:zed_nano/screens/widget/common/searchview.dart';
+import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
+import 'package:zed_nano/screens/widget/common/reusable_stepper_widget.dart';
+import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
 import 'package:zed_nano/utils/Images.dart';
 import 'package:zed_nano/utils/extensions.dart';
-import 'package:zed_nano/screens/widget/common/reusable_stepper_widget.dart';
 import 'package:zed_nano/viewmodels/CustomerInvoicingViewModel.dart';
-import 'package:zed_nano/models/generateInvoice/GenerateInvoiceResponse.dart';
 
 //create an enum class for
 // - SaveOrder
@@ -33,11 +30,11 @@ enum CreateOrderOption {
 }
 
 class CartPreviewPage extends StatefulWidget {
+  const CartPreviewPage({required this.onNext, required this.onPrevious, required this.skipAndClose, super.key, this.customerId});
   final String? customerId;
   final VoidCallback onNext;
   final VoidCallback onPrevious;
   final VoidCallback skipAndClose;
-  CartPreviewPage({Key? key, required this.onNext, required this.onPrevious, this.customerId, required this.skipAndClose}) : super(key: key);
 
   @override
   State<CartPreviewPage> createState() => _CartPreviewPageState();
@@ -72,7 +69,7 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
         'productId': item.id,
         // 'reciptNumber': receiptNumber,
         'totalAmount': item.price * item.quantity,
-        'unitOfMeasure': 'Unit'
+        'unitOfMeasure': 'Unit',
       };
     }).toList();
     
@@ -88,11 +85,11 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
 
     await getBusinessProvider(context).createOrder(
         requestData: requestData,
-        context: context)
+        context: context,)
         .then((value) {
       if (value.isSuccess) {
         showCustomToast(value.message ?? 'Customer created successfully',
-            isError: false);
+            isError: false,);
         if (createOrderOption == CreateOrderOption.saveOrder) {
           widget.skipAndClose();
         }
@@ -120,7 +117,7 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
   }
   Future<void> _sendInvoice() async {
     final cartViewModel = Provider.of<CartViewModel>(context, listen: false);
-    var customerInvoicingViewModel = Provider.of<CustomerInvoicingViewModel>(context, listen: false);
+    final customerInvoicingViewModel = Provider.of<CustomerInvoicingViewModel>(context, listen: false);
     final cartItems = cartViewModel.items;
     final List<Map<String, dynamic>> itemsArray = cartItems.map((item) {
       return {
@@ -145,11 +142,11 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
 
     await getBusinessProvider(context).sendInvoice(
         requestData: requestData,
-        context: context)
+        context: context,)
         .then((value) {
       if (value.isSuccess) {
         showCustomToast(value.message ?? 'Invoice Generated successfully',
-            isError: false);
+            isError: false,);
 
         InvoiceDetailPage(invoiceNumber: value.data?.data?.invoiceNumber).launch(context).then((value) {
           widget.onNext();
@@ -167,7 +164,7 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
   @override
   Widget build(BuildContext context) {
     final cartViewModel = Provider.of<CartViewModel>(context);
-    var customerInvoicingViewModel = Provider.of<CustomerInvoicingViewModel>(context);
+    final customerInvoicingViewModel = Provider.of<CustomerInvoicingViewModel>(context);
 
 
     return Scaffold(
@@ -217,7 +214,7 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
                       fontStyle: FontStyle.normal,
                       letterSpacing: 0.12,
 
-                    )
+                    ),
                 ),
                 Text('KES ${subTotalAmount.formatCurrency()}',
                     style: const TextStyle(
@@ -227,8 +224,8 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
                       fontWeight: FontWeight.w400,
                       fontStyle: FontStyle.normal,
                       letterSpacing: 0.12,
-                    )
-                )
+                    ),
+                ),
               ],
             ).paddingSymmetric(vertical: 8),
             Row(
@@ -243,7 +240,7 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
                       fontStyle: FontStyle.normal,
                       letterSpacing: 0.12,
 
-                    )
+                    ),
                 ),
                 Text('KES ${totalDiscount.formatCurrency()}',
                     style: const TextStyle(
@@ -253,8 +250,8 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
                       fontWeight: FontWeight.w400,
                       fontStyle: FontStyle.normal,
                       letterSpacing: 0.12,
-                    )
-                )
+                    ),
+                ),
               ],
             ).paddingSymmetric(vertical: 8),
             Row(
@@ -269,7 +266,7 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
                       fontStyle: FontStyle.normal,
 
 
-                    )
+                    ),
                 ),
                 Text('KES ${totalAmount.formatCurrency()}',
                     style: const TextStyle(
@@ -280,12 +277,12 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
                       fontStyle: FontStyle.normal,
 
 
-                    )
+                    ),
                 ),
               ],
             ).paddingSymmetric(vertical: 10),
           ],
-        )).paddingSymmetric(horizontal: 16);
+        ),).paddingSymmetric(horizontal: 16);
   }
 
   Widget _buildSubmitButton(CartViewModel cartViewModel, CustomerInvoicingViewModel customerInvoicingViewModel) {
@@ -442,7 +439,7 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
               height: 56,
               child: appButton(text: 'Checkout', onTap: (){
                 widget.onNext();
-              }, context: context)
+              }, context: context,),
           ),
         ],
       ),
@@ -520,7 +517,7 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
                 cartViewModel.removeItem(item.id);
               } else {
                 cartViewModel.updateQuantity(
-                    item.id ?? '', item.quantity - 1);
+                    item.id ?? '', item.quantity - 1,);
               }
             }
           },
@@ -529,15 +526,15 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
               cartViewModel.addItem(
                 item.id ?? '',
                 item.name ?? '',
-                item.price.toDouble() ?? 0.0,
+                item.price ?? 0.0,
                 item.imagePath ?? '',
                 item.currency ?? '',
                 item.category ?? '',
-                0.0,
+                0,
               );
             } else {
               cartViewModel.updateQuantity(
-                  item.id ?? '', item.quantity + 1);
+                  item.id ?? '', item.quantity + 1,);
             }
           },);
       },
@@ -558,7 +555,7 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
                 fontWeight: FontWeight.w600,
                 fontStyle: FontStyle.normal,
                 letterSpacing: 0.09,
-              )
+              ),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -571,7 +568,7 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
                     fontWeight: FontWeight.w400,
                     fontStyle: FontStyle.normal,
                     letterSpacing: 0.12,
-                  )
+                  ),
               ),
               Visibility(
                 visible: customerInvoicingViewModel.customerData == null,
@@ -605,7 +602,7 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
                           fontStyle: FontStyle.normal,
-                        )
+                        ),
                     ),
                     Text('Edit',
                         style: TextStyle(
@@ -614,8 +611,8 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
                           fontSize: 10,
                           fontWeight: FontWeight.w600,
                           fontStyle: FontStyle.normal,
-                        )
-                    )
+                        ),
+                    ),
                   ],
                 ),
                 8.height,
@@ -626,7 +623,7 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
                 _buildInvoiceItemsHeader(),
               ],
             ),
-          )
+          ),
         ],
       ),
     );
@@ -636,19 +633,19 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
     return const Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("Items",
+        Text('Items',
             style: TextStyle(
               fontFamily: 'Poppins',
               color: textPrimary,
               fontSize: 14,
               fontWeight: FontWeight.w600,
               fontStyle: FontStyle.normal,
-            )
+            ),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text("Tap on a product to edit.",
+            Text('Tap on a product to edit.',
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   color: textSecondary,
@@ -657,19 +654,19 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
                   fontStyle: FontStyle.normal,
                   letterSpacing: 0.12,
 
-                )
+                ),
             ),
-            Text("Add Item",
+            Text('Add Item',
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   color: googleRed,
                   fontSize: 10,
                   fontWeight: FontWeight.w600,
                   fontStyle: FontStyle.normal,
-                )
-            )
+                ),
+            ),
           ],
-        )
+        ),
       ],
     );
   }
@@ -678,7 +675,7 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
     return Container(
       margin: const EdgeInsets.only(right: 8),
       padding: const EdgeInsets.symmetric(
-          horizontal: 12, vertical: 6),
+          horizontal: 12, vertical: 6,),
       decoration: BoxDecoration(
         color: Colors.grey[100],
         borderRadius: BorderRadius.circular(8),
@@ -701,7 +698,7 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
                         fontStyle: FontStyle.normal,
-                      )
+                      ),
                   ),
                 ),
                 rfCommonCachedNetworkImage(
@@ -709,7 +706,7 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
                     fit: BoxFit.cover,
                     height: 15,
                     width: 15,
-                    radius: 8
+                    radius: 8,
                 ),
               ],
             ).paddingSymmetric(vertical: 10),
@@ -722,10 +719,10 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
                       fit: BoxFit.cover,
                       height: 15,
                       width: 15,
-                      radius: 8
+                      radius: 8,
                   ),
                   6.width,
-                  Text("${customerInvoicingViewModel.customerData?.mobileNumber ?? 'N/A'}",
+                  Text(customerInvoicingViewModel.customerData?.mobileNumber ?? 'N/A',
                       style: const TextStyle(
                         fontFamily: 'Poppins',
                         color: textSecondary,
@@ -734,9 +731,9 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
                         fontStyle: FontStyle.normal,
                         letterSpacing: 0.12,
 
-                      )
-                  )
-                ]
+                      ),
+                  ),
+                ],
             ).paddingSymmetric(vertical: 5),
             Row(
                 children: [
@@ -745,10 +742,10 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
                       fit: BoxFit.cover,
                       height: 15,
                       width: 15,
-                      radius: 0
+                      radius: 0,
                   ),
                   6.width,
-                  Text("${customerInvoicingViewModel.customerData?.email ?? 'N/A'}",
+                  Text(customerInvoicingViewModel.customerData?.email ?? 'N/A',
                       style: const TextStyle(
                         fontFamily: 'Poppins',
                         color: textSecondary,
@@ -757,9 +754,9 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
                         fontStyle: FontStyle.normal,
                         letterSpacing: 0.12,
 
-                      )
-                  )
-                ]
+                      ),
+                  ),
+                ],
             ).paddingSymmetric(vertical: 5),
             Row(
                 children: [
@@ -768,11 +765,11 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
                       fit: BoxFit.cover,
                       height: 15,
                       width: 15,
-                      radius: 0
+                      radius: 0,
                   ),
                   6.width,
                   Expanded(
-                    child: Text("${customerInvoicingViewModel.customerData?.physicalAddress ?? 'N/A'}",
+                    child: Text(customerInvoicingViewModel.customerData?.physicalAddress ?? 'N/A',
                         style: const TextStyle(
                           fontFamily: 'Poppins',
                           color: textSecondary,
@@ -780,10 +777,10 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
                           fontWeight: FontWeight.w400,
                           fontStyle: FontStyle.normal,
                           letterSpacing: 0.12,
-                        )
+                        ),
                     ),
-                  )
-                ]
+                  ),
+                ],
             ).paddingSymmetric(vertical: 5),
           ],
         ],
@@ -806,7 +803,7 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text("Date Issued",
+                  const Text('Date Issued',
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         color: textPrimary,
@@ -815,7 +812,7 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
                         fontStyle: FontStyle.normal,
                         letterSpacing: 0.12,
 
-                      )
+                      ),
                   ),
                   Text(DateFormatter.getCurrentFormattedDate(),
                       style: const TextStyle(
@@ -824,10 +821,10 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
                         fontSize: 11,
                         fontWeight: FontWeight.w400,
                         fontStyle: FontStyle.normal,
-                      )
-                  )
+                      ),
+                  ),
                 ],
-              )
+              ),
           ),
         ),
         16.width,
@@ -842,7 +839,7 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text("Purchase Order No",
+                  const Text('Purchase Order No',
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         color: textPrimary,
@@ -851,7 +848,7 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
                         fontStyle: FontStyle.normal,
                         letterSpacing: 0.12,
 
-                      )
+                      ),
                   ),
                   Text(customerInvoicingViewModel.invoiceDetailItem.purchaseOrderNumber ?? 'N/A',
                       style: const TextStyle(
@@ -860,10 +857,10 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
                         fontSize: 18,
                         fontWeight: FontWeight.w400,
                         fontStyle: FontStyle.normal,
-                      )
-                  )
+                      ),
+                  ),
                 ],
-              )
+              ),
           ),
         ),
       ],
@@ -913,10 +910,10 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
             onTap: () {
               cartViewModel.removeItem(item.id);
             },
-            child: Container(
+            child: const SizedBox(
               width: 24,
               height: 24,
-              child: const Center(
+              child: Center(
                 child: Icon(
                   Icons.remove,
                   color: accentRed,
@@ -992,13 +989,13 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
                       fontSize: 14,
                       fontWeight: FontWeight.w400,
                       fontStyle: FontStyle.normal,
-                    )
+                    ),
                 ),
                 Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Text("${item.currency ?? 'KES'} ${item.price?.formatCurrency()}",
+                      Text("${item.currency ?? 'KES'} ${item.price.formatCurrency()}",
                           style: const TextStyle(
                             fontFamily: 'Poppins',
                             color: textPrimary,
@@ -1007,7 +1004,7 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
                             fontStyle: FontStyle.normal,
 
 
-                          )
+                          ),
                       ),
                       Text("${item.currency ?? 'KES'} ${item.discount.formatCurrency()}",
                           style: TextStyle(
@@ -1018,15 +1015,15 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
                             fontStyle: FontStyle.normal,
                             letterSpacing: 0.15,
 
-                          )
-                      )
+                          ),
+                      ),
 
-                    ]
-                )
+                    ],
+                ),
 
               ],
             ),
-          )
+          ),
         ],
       ),
     ).paddingSymmetric(

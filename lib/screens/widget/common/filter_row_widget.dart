@@ -3,6 +3,16 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/utils/Colors.dart';
 
 class FilterRowWidget extends StatelessWidget {
+
+  const FilterRowWidget({
+    required this.leftButtonText, required this.leftButtonIsActive, required this.leftButtonOnTap, required this.rightButtonText, required this.rightButtonIsActive, required this.rightButtonOnTap, super.key,
+    this.leftButtonIcon,
+    this.showLeftButtonArrow = true,
+    this.showRightButtonArrow = true,
+    this.showLeftButton = true,
+    this.showRightButton = true,
+    this.padding,
+  });
   final String leftButtonText;
   final bool leftButtonIsActive;
   final VoidCallback leftButtonOnTap;
@@ -16,29 +26,13 @@ class FilterRowWidget extends StatelessWidget {
   final bool showRightButton;
   final EdgeInsets? padding;
 
-  const FilterRowWidget({
-    Key? key,
-    required this.leftButtonText,
-    required this.leftButtonIsActive,
-    required this.leftButtonOnTap,
-    required this.rightButtonText,
-    required this.rightButtonIsActive,
-    required this.rightButtonOnTap,
-    this.leftButtonIcon,
-    this.showLeftButtonArrow = true,
-    this.showRightButtonArrow = true,
-    this.showLeftButton = true,
-    this.showRightButton = true,
-    this.padding,
-  }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     // Build list of visible buttons
-    List<Widget> buttons = [];
+    final buttons = <Widget>[];
     
     if (showLeftButton) {
-      Widget leftButton = buildFilterButton(
+      var leftButton = buildFilterButton(
         text: leftButtonText,
         isActive: leftButtonIsActive,
         onTap: leftButtonOnTap,
@@ -55,7 +49,7 @@ class FilterRowWidget extends StatelessWidget {
     }
     
     if (showRightButton) {
-      Widget rightButton = buildFilterButton(
+      var rightButton = buildFilterButton(
         text: rightButtonText,
         isActive: rightButtonIsActive,
         onTap: rightButtonOnTap,
@@ -140,7 +134,7 @@ Widget buildFilterButton({
                   color: isActive ? appThemePrimary : Colors.grey.shade600,
                 ),
               ],
-            )
+            ),
         ],
       ),
     ),

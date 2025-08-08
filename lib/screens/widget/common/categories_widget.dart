@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:zed_nano/models/listCategories/ListCategoriesResponse.dart' show ProductCategoryData;
 import 'package:zed_nano/models/listProducts/ListProductsResponse.dart';
 import 'package:zed_nano/routes/routes.dart';
-import 'package:zed_nano/screens/categories/tabs/product_categories_tab.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
 import 'package:zed_nano/utils/Colors.dart';
 
@@ -13,7 +12,7 @@ Widget buildCategoryCard(ProductCategoryData category) {
         // Navigate to category detail page using context
         Navigator.pushNamed(
           context,
-          AppRoutes.getCategoryDetailRoute(category.id ?? ''));
+          AppRoutes.getCategoryDetailRoute(category.id ?? ''),);
       },
       child: Container(
         margin: const EdgeInsets.only(bottom: 10),
@@ -31,7 +30,6 @@ Widget buildCategoryCard(ProductCategoryData category) {
           ],
         ),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
               width: 55,
@@ -45,7 +43,7 @@ Widget buildCategoryCard(ProductCategoryData category) {
                 fit: BoxFit.fitHeight,
                 height: 55,
                 width: 55,
-                radius: 8
+                radius: 8,
               ),
             ),
 
@@ -117,7 +115,6 @@ Widget buildProductCard(ProductData category) {
             ],
           ),
           child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
                 width: 55,
@@ -131,7 +128,7 @@ Widget buildProductCard(ProductData category) {
                   fit: BoxFit.fitHeight,
                   height: 55,
                   width: 55,
-                    radius: 8
+                    radius: 8,
                 ),
               ),
 

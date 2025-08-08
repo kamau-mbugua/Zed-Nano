@@ -1,7 +1,4 @@
 class GetZedPayItUserByIdResponse {
-  final String status;
-  final String message;
-  final ZedPayItUserData data;
 
   GetZedPayItUserByIdResponse({
     required this.status,
@@ -16,6 +13,9 @@ class GetZedPayItUserByIdResponse {
       data: ZedPayItUserData.fromJson(json['data'] as Map<String, dynamic>? ?? {}),
     );
   }
+  final String status;
+  final String message;
+  final ZedPayItUserData data;
 
   Map<String, dynamic> toJson() {
     return {
@@ -29,17 +29,6 @@ class GetZedPayItUserByIdResponse {
 }
 
 class ZedPayItUserData {
-  final String id;
-  final String userEmail;
-  final String userPhone;
-  final String firstName;
-  final String secondName;
-  final String userName;
-  final String schoolLogoPath;
-  final String userRole;
-  final String dateAdded;
-  final String userStatus;
-  final bool allowedReceiptReprinting;
 
   ZedPayItUserData({
     required this.id,
@@ -70,6 +59,17 @@ class ZedPayItUserData {
       allowedReceiptReprinting: json['allowedReceiptReprinting'] as bool? ?? false,
     );
   }
+  final String id;
+  final String userEmail;
+  final String userPhone;
+  final String firstName;
+  final String secondName;
+  final String userName;
+  final String schoolLogoPath;
+  final String userRole;
+  final String dateAdded;
+  final String userStatus;
+  final bool allowedReceiptReprinting;
 
   Map<String, dynamic> toJson() {
     return {
@@ -88,7 +88,7 @@ class ZedPayItUserData {
   }
 
   /// Get full name by combining first and second name
-  String get fullName => '${firstName} $secondName'.trim();
+  String get fullName => '$firstName $secondName'.trim();
 
   /// Get display name (userName if available, otherwise full name)
   String get displayName => userName.isNotEmpty ? userName : fullName;

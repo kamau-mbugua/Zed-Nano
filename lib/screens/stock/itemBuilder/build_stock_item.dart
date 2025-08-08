@@ -10,11 +10,9 @@ Widget buildStockItem(ActiveStockProduct item) {
     case 'LOW_STOCK':
       statusColor = warning;
       statusText = 'Low stock: ${item.inStockQuantity} items left';
-      break;
     case 'OUT_OF_STOCK':
       statusColor = errorColors;
       statusText = 'Out of stock';
-      break;
     case 'IN_STOCK':
     default:
       statusColor = successTextColor;
@@ -56,7 +54,7 @@ Widget buildStockItem(ActiveStockProduct item) {
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
                           fontStyle: FontStyle.normal,
-                        )
+                        ),
                     ),
                     const SizedBox(height: 4),
                     Row(
@@ -68,9 +66,9 @@ Widget buildStockItem(ActiveStockProduct item) {
                                 fontWeight: FontWeight.w400,
                                 fontFamily: 'Poppins',
                                 fontStyle:  FontStyle.normal,
-                                fontSize: 10.0
+                                fontSize: 10,
                             ),
-                            textAlign: TextAlign.left
+                            textAlign: TextAlign.left,
                         ),
                         Text(' $statusText',
                             style: TextStyle(
@@ -79,8 +77,8 @@ Widget buildStockItem(ActiveStockProduct item) {
                               fontSize: 10,
                               fontWeight: FontWeight.w600,
                               fontStyle: FontStyle.normal,
-                            )
-                        )
+                            ),
+                        ),
                       ],
                     ),
                   ],
@@ -98,8 +96,8 @@ Widget buildStockItem(ActiveStockProduct item) {
                       fontStyle: FontStyle.normal,
                       letterSpacing: 0.12,
 
-                    )
-                )
+                    ),
+                ),
             ),
           ],
         ),

@@ -4,7 +4,7 @@ import 'package:nb_utils/nb_utils.dart';
 extension StringValidationExtensions on String {
   /// Check if the string is a valid email
   bool get isValidEmail {
-    final emailRegex = RegExp(r"^[\w\.\-]+(\+[\w]+)?@[\w\.-]+\.\w+$");
+    final emailRegex = RegExp(r'^[\w\.\-]+(\+[\w]+)?@[\w\.-]+\.\w+$');
     return emailRegex.hasMatch(this);
   }
 
@@ -20,7 +20,7 @@ extension StringValidationExtensions on String {
   }
 
   bool get isValidInput {
-    return this.trim().isNotEmpty;
+    return trim().isNotEmpty;
   }
 
   String get firstName {
@@ -28,7 +28,7 @@ extension StringValidationExtensions on String {
     return trim().split(' ').first;
   }
   bool get isValidFullName {
-    var fullName = this.trim();
+    final fullName = trim();
     return fullName.split(' ').length >= 2 && fullName.replaceAll(' ', '').isAlpha();
   }
 
@@ -61,7 +61,7 @@ extension StringValidationExtensions on String {
 
   String toTitleCaseFromCamel() {
     final spaced = replaceAllMapped(
-      RegExp(r'([a-z])([A-Z])'),
+      RegExp('([a-z])([A-Z])'),
           (match) => '${match.group(1)} ${match.group(2)}',
     );
     return spaced[0].toUpperCase() + spaced.substring(1);
@@ -80,14 +80,14 @@ extension StringValidationExtensions on String {
   /// Example: 2025-07-12T15:14:50+03:00 -> 2025-07-12T15:14:50
   String get removeTimezoneOffset {
     try {
-      if (this.contains('+') || this.contains('-', this.indexOf('T'))) {
+      if (contains('+') || contains('-', indexOf('T'))) {
         // Find the last occurrence of + or - after the T
-        int tIndex = this.indexOf('T');
-        int plusIndex = this.indexOf('+', tIndex);
-        int minusIndex = this.indexOf('-', tIndex);
+        final tIndex = indexOf('T');
+        final plusIndex = indexOf('+', tIndex);
+        final  minusIndex = indexOf('-', tIndex);
         
         // Use the earlier of the two that exists
-        int offsetIndex = -1;
+        var offsetIndex = -1;
         if (plusIndex != -1 && minusIndex != -1) {
           offsetIndex = plusIndex < minusIndex ? plusIndex : minusIndex;
         } else if (plusIndex != -1) {
@@ -97,7 +97,7 @@ extension StringValidationExtensions on String {
         }
         
         if (offsetIndex != -1) {
-          return this.substring(0, offsetIndex);
+          return substring(0, offsetIndex);
         }
       }
       return this;
@@ -108,22 +108,22 @@ extension StringValidationExtensions on String {
 
   //remove time from date time
   String get removeTime {
-    return this.split('T')[0];
+    return split('T')[0];
   }
 
   //remove + from phone number
   String get removePlus {
-    return this.replaceAll('+', '');
+    return replaceAll('+', '');
   }
 
   //check if phonenumber starts with a 0, remove it
   String get removeZero {
-    return this.startsWith('0') ? this.substring(1) : this;
+    return startsWith('0') ? substring(1) : this;
   }
 
   //formatCurrency extension
   String formatCurrency({String locale = 'en_KE'}) {
-    final formatter = NumberFormat("#,##0", locale);
+    final formatter = NumberFormat('#,##0', locale);
     return formatter.format(this);
   }
 }
@@ -131,15 +131,15 @@ extension StringValidationExtensions on String {
 
 extension GreetingExtension on DateTime {
   String get greeting {
-    int hour = this.hour;
+    final hour = this.hour;
     if (hour >= 5 && hour < 12) {
-      return "Morning";
+      return 'Morning';
     } else if (hour >= 12 && hour < 17) {
-      return "Afternoon";
+      return 'Afternoon';
     } else if (hour >= 17 && hour < 21) {
-      return "Evening";
+      return 'Evening';
     } else {
-      return "Hello"; // Late Night fallback
+      return 'Hello'; // Late Night fallback
     }
   }
 }
@@ -241,7 +241,7 @@ extension DateTimeExtensions on DateTime {
 
 extension CurrencyFormatter on num {
   String formatCurrency({String locale = 'en_KE'}) {
-    final formatter = NumberFormat("#,##0", locale);
+    final formatter = NumberFormat('#,##0', locale);
     return formatter.format(this);
   }
 }
@@ -263,7 +263,7 @@ extension DateRangeLabelExtension on String {
     return split('_')
         .map((word) => word.isNotEmpty 
             ? '${word[0].toUpperCase()}${word.substring(1).toLowerCase()}'
-            : word)
+            : word,)
         .join(' ');
   }
 }

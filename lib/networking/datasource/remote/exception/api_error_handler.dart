@@ -10,20 +10,19 @@ class ApiErrorHandler {
   /// Processes errors from API calls and returns a standardized ErrorResponse
   static ErrorResponse handleError(dynamic error) {
     // Create an initial error response
-    ErrorResponse errorResponse = ErrorResponse(
+    var errorResponse = ErrorResponse(
       statusCode: 0,
-      statusMessage: "An unexpected error occurred",
-      errorType: ErrorType.unknown
+      statusMessage: 'An unexpected error occurred',
     );
     
     if (error is DioException) {
       errorResponse = _handleDioError(error);
     } else if (error is SocketException) {
       errorResponse.errorType = ErrorType.network;
-      errorResponse.statusMessage = "No internet connection. Please check your network.";
+      errorResponse.statusMessage = 'No internet connection. Please check your network.';
     } else if (error is FormatException) {
       errorResponse.errorType = ErrorType.parsing;
-      errorResponse.statusMessage = "Data format error. Please try again later.";
+      errorResponse.statusMessage = 'Data format error. Please try again later.';
     } else {
       // Generic error handling
       errorResponse.statusMessage = error.toString();
@@ -41,7 +40,7 @@ class ApiErrorHandler {
   /// Handle Dio-specific errors
   static ErrorResponse _handleDioError(DioException error) {
     // Create a new error response
-    ErrorResponse errorResponse = ErrorResponse();
+    final errorResponse = ErrorResponse();
     
     // Set the status code if available
     errorResponse.statusCode = error.response?.statusCode;
@@ -52,37 +51,32 @@ class ApiErrorHandler {
       case DioExceptionType.sendTimeout:
       case DioExceptionType.receiveTimeout:
         errorResponse.errorType = ErrorType.timeout;
-        errorResponse.statusMessage = "Connection timed out. Please try again.";
-        break;
+        errorResponse.statusMessage = 'Connection timed out. Please try again.';
       case DioExceptionType.badCertificate:
         errorResponse.errorType = ErrorType.security;
-        errorResponse.statusMessage = "Security certificate issue. Please contact support.";
-        break;
+        errorResponse.statusMessage = 'Security certificate issue. Please contact support.';
       case DioExceptionType.connectionError:
         errorResponse.errorType = ErrorType.network;
-        errorResponse.statusMessage = "Connection error. Please check your internet.";
-        break;
+        errorResponse.statusMessage = 'Connection error. Please check your internet.';
       case DioExceptionType.badResponse:
         // Process the response error
         return _handleResponseError(error);
       case DioExceptionType.cancel:
         errorResponse.errorType = ErrorType.unknown;
-        errorResponse.statusMessage = "Request was cancelled";
-        break;
+        errorResponse.statusMessage = 'Request was cancelled';
       case DioExceptionType.unknown:
       default:
         errorResponse.errorType = ErrorType.unknown;
-        errorResponse.statusMessage = "An unknown error occurred";
+        errorResponse.statusMessage = 'An unknown error occurred';
         
         // Log unknown errors with more details for debugging
         if (kDebugMode) {
           logger.e(
-            'Unknown DioError: ${error.toString()}',
+            'Unknown DioError: $error',
             error: error,
             stackTrace: StackTrace.current,
           );
         }
-        break;
     }
     
     return errorResponse;
@@ -92,7 +86,7 @@ class ApiErrorHandler {
   static ErrorResponse _handleResponseError(DioException error) {
     final response = error.response;
     // Create a new error response
-    ErrorResponse errorResponse = ErrorResponse();
+    final errorResponse = ErrorResponse();
     
     // Set status code
     errorResponse.statusCode = response?.statusCode;
@@ -101,27 +95,22 @@ class ApiErrorHandler {
     switch (response?.statusCode) {
       case 401:
         errorResponse.errorType = ErrorType.authentication;
-        errorResponse.statusMessage = "Your session has expired. Please log in again.";
-        break;
+        errorResponse.statusMessage = 'Your session has expired. Please log in again.';
       case 403:
         errorResponse.errorType = ErrorType.authorization;
         errorResponse.statusMessage = "You don't have permission to access this resource.";
-        break;
       case 404:
         errorResponse.errorType = ErrorType.business;
-        errorResponse.statusMessage = "Requested resource was not found.";
-        break;
+        errorResponse.statusMessage = 'Requested resource was not found.';
       case 429:
         errorResponse.errorType = ErrorType.business;
-        errorResponse.statusMessage = "Too many requests. Please try again later.";
-        break;
+        errorResponse.statusMessage = 'Too many requests. Please try again later.';
       case 500:
       case 502:
       case 503:
       case 504:
         errorResponse.errorType = ErrorType.server;
-        errorResponse.statusMessage = "Server error. Our team has been notified.";
-        break;
+        errorResponse.statusMessage = 'Server error. Our team has been notified.';
       default:
         // Try to parse the error response body
         if (response?.data != null) {
@@ -137,7 +126,7 @@ class ApiErrorHandler {
             errorResponse.extraData = parsedResponse.extraData;
           } catch (e) {
             logger.e('Error parsing response body: $e');
-            errorResponse.statusMessage = "Failed to process server response";
+            errorResponse.statusMessage = 'Failed to process server response';
             errorResponse.errorType = ErrorType.parsing;
           }
         }

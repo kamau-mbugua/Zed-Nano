@@ -16,7 +16,7 @@ import 'package:zed_nano/utils/extensions.dart';
 import 'package:zed_nano/utils/pagination_controller.dart';
 
 class OrdersListPaidPage extends StatefulWidget {
-  const OrdersListPaidPage({Key? key}) : super(key: key);
+  const OrdersListPaidPage({super.key});
 
   @override
   _OrdersListPaidPageState createState() => _OrdersListPaidPageState();
@@ -26,8 +26,8 @@ class _OrdersListPaidPageState extends State<OrdersListPaidPage> {
   late PaginationController<OrderData> _paginationController;
   final TextEditingController _searchController = TextEditingController();
 
-  String _searchTerm = "";
-  bool _isInitialized = false;
+  String _searchTerm = '';
+  final bool _isInitialized = false;
   Timer? _debounceTimer;
   OrderResponse? orderResponse;
   String _selectedRangeLabel = 'this_month';
@@ -51,7 +51,7 @@ class _OrdersListPaidPageState extends State<OrdersListPaidPage> {
   }
 
   Future<List<OrderData>> fetchByStatus(
-      {required int page, required int limit}) async {
+      {required int page, required int limit,}) async {
     final dateRange = DateRangeUtil.getDateRange(_selectedRangeLabel);
     final startDate = dateRange.values.first.removeTimezoneOffset;
     final endDate = dateRange.values.last.removeTimezoneOffset;
@@ -134,7 +134,7 @@ class _OrdersListPaidPageState extends State<OrdersListPaidPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text("Order Count",
+                  const Text('Order Count',
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         color: textPrimary,
@@ -143,19 +143,19 @@ class _OrdersListPaidPageState extends State<OrdersListPaidPage> {
                         fontStyle: FontStyle.normal,
                         letterSpacing: 0.12,
 
-                      )
+                      ),
                   ),
-                  Text("${orderResponse?.count ?? 0}",
+                  Text('${orderResponse?.count ?? 0}',
                       style: const TextStyle(
                         fontFamily: 'Poppins',
                         color: successTextColor,
                         fontSize: 18,
                         fontWeight: FontWeight.w400,
                         fontStyle: FontStyle.normal,
-                      )
-                  )
+                      ),
+                  ),
                 ],
-              )
+              ),
           ),
         ),
         16.width,
@@ -171,7 +171,7 @@ class _OrdersListPaidPageState extends State<OrdersListPaidPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text("Order Amount",
+                  const Text('Order Amount',
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         color: textPrimary,
@@ -180,7 +180,7 @@ class _OrdersListPaidPageState extends State<OrdersListPaidPage> {
                         fontStyle: FontStyle.normal,
                         letterSpacing: 0.12,
 
-                      )
+                      ),
                   ),
                   Text("${orderResponse?.orderSummary?.currency ?? 'KES'} ${orderResponse?.total?.formatCurrency() ?? 0.0}",
                       style: const TextStyle(
@@ -189,10 +189,10 @@ class _OrdersListPaidPageState extends State<OrdersListPaidPage> {
                         fontSize: 18,
                         fontWeight: FontWeight.w400,
                         fontStyle: FontStyle.normal,
-                      )
-                  )
+                      ),
+                  ),
                 ],
-              )
+              ),
           ),
         ),
       ],
@@ -216,7 +216,7 @@ class _OrdersListPaidPageState extends State<OrdersListPaidPage> {
                 gifPath: emptyListGif,
                 title: "It's empty, over here.",
                 subtitle:
-                "No Paid orders in your business, yet! Add to view them here.",
+                'No Paid orders in your business, yet! Add to view them here.',
               ),
             ),
           ),
@@ -235,11 +235,8 @@ class _OrdersListPaidPageState extends State<OrdersListPaidPage> {
         buildFilterButton(
           text:(_selectedRangeLabel ?? 'Filter').toDisplayLabel,
           isActive: false,
-          onTap: () {
-            _showDateRangeFilter();
-          },
+          onTap: _showDateRangeFilter,
           icon: Icons.filter_list,
-          showArrow: true,
         ),
       ],
     );

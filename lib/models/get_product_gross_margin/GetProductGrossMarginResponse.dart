@@ -1,13 +1,4 @@
 class GetProductGrossMarginResponse {
-  final String? status;
-  final String? message;
-  final List<GetProductGrossMarginData>? data;
-  final String? currency;
-  final int? count;
-  final double? totalSales;
-  final double? quantitiesSoldTotals;
-  final double? totalCost;
-  final double? grossMargin;
 
   GetProductGrossMarginResponse({
     this.status,
@@ -38,6 +29,15 @@ class GetProductGrossMarginResponse {
       grossMargin: _parseDouble(json['grossMargin']),
     );
   }
+  final String? status;
+  final String? message;
+  final List<GetProductGrossMarginData>? data;
+  final String? currency;
+  final int? count;
+  final double? totalSales;
+  final double? quantitiesSoldTotals;
+  final double? totalCost;
+  final double? grossMargin;
 
   Map<String, dynamic> toJson() {
     return {
@@ -64,16 +64,6 @@ class GetProductGrossMarginResponse {
 }
 
 class GetProductGrossMarginData {
-  final double? totalSales;
-  final double? quantitySold;
-  final double? discount;
-  final String? productId;
-  final double? sellingPrice;
-  final String? productName;
-  final double? buyingPrice;
-  final double? totalCost;
-  final double? grossMargin;
-  final String? imageUrl;
 
   GetProductGrossMarginData({
     this.totalSales,
@@ -102,6 +92,16 @@ class GetProductGrossMarginData {
       imageUrl: json['imageUrl'] as String?,
     );
   }
+  final double? totalSales;
+  final double? quantitySold;
+  final double? discount;
+  final String? productId;
+  final double? sellingPrice;
+  final String? productName;
+  final double? buyingPrice;
+  final double? totalCost;
+  final double? grossMargin;
+  final String? imageUrl;
 
   Map<String, dynamic> toJson() {
     return {
@@ -129,7 +129,7 @@ class GetProductGrossMarginData {
 
   // Helper method to calculate gross margin percentage
   double get grossMarginPercentage {
-    if (totalSales == null || totalSales == 0) return 0.0;
+    if (totalSales == null || totalSales == 0) return 0;
     return ((grossMargin ?? 0) / (totalSales ?? 1)) * 100;
   }
 

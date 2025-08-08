@@ -1,9 +1,4 @@
 class QuantitiesSoldResponse {
-  final String? status;
-  final String? message;
-  final double? quantityInStockTotal;
-  final double? quantitiesSoldTotals;
-  final List<QuantitiesSoldData>? data;
 
   QuantitiesSoldResponse({
     this.status,
@@ -26,6 +21,11 @@ class QuantitiesSoldResponse {
         quantitiesSoldTotals: (json['quantitiesSoldTotals']as num?)?.toDouble(),
     );
   }
+  final String? status;
+  final String? message;
+  final double? quantityInStockTotal;
+  final double? quantitiesSoldTotals;
+  final List<QuantitiesSoldData>? data;
 
   Map<String, dynamic> toJson() {
     return {
@@ -37,12 +37,6 @@ class QuantitiesSoldResponse {
 }
 
 class QuantitiesSoldData {
-  final double? totalSales;
-  final double? quantitySold;
-  final String? productName;
-  final double? sellingPrice;
-  final int? inStock;
-  final String? imageUrl;
 
   QuantitiesSoldData({
     this.totalSales,
@@ -63,6 +57,12 @@ class QuantitiesSoldData {
       imageUrl: json['imageUrl'] as String?,
     );
   }
+  final double? totalSales;
+  final double? quantitySold;
+  final String? productName;
+  final double? sellingPrice;
+  final int? inStock;
+  final String? imageUrl;
 
   Map<String, dynamic> toJson() {
     return {

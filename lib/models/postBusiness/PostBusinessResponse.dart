@@ -1,9 +1,4 @@
 class PostBusinessResponse {
-  final String? status;
-  final String? message;
-  final String? businessId;
-  final String? businessNumber;
-  final PostBusinessData? data;
 
   PostBusinessResponse({
     this.status,
@@ -24,6 +19,11 @@ class PostBusinessResponse {
           : null,
     );
   }
+  final String? status;
+  final String? message;
+  final String? businessId;
+  final String? businessNumber;
+  final PostBusinessData? data;
 
   Map<String, dynamic> toJson() {
     return {
@@ -37,21 +37,6 @@ class PostBusinessResponse {
 }
 
 class PostBusinessData {
-  final String? token;
-  final String? group;
-  final String? defaultBusinessId;
-  final String? businessNumber;
-  final String? businessCategory;
-  final String? username;
-  final String? email;
-  final String? state;
-  final String? branchId;
-  final String? businessName;
-  final String? storeName;
-  final String? localCurrency;
-  final String? xeroAccountingEnabled;
-  final String? quickbooksAccountingEnabled;
-  final String? zohoAccountingEnabled;
 
   PostBusinessData({
     this.token,
@@ -90,6 +75,21 @@ class PostBusinessData {
       zohoAccountingEnabled: json['zohoAccountingEnabled'] as String?,
     );
   }
+  final String? token;
+  final String? group;
+  final String? defaultBusinessId;
+  final String? businessNumber;
+  final String? businessCategory;
+  final String? username;
+  final String? email;
+  final String? state;
+  final String? branchId;
+  final String? businessName;
+  final String? storeName;
+  final String? localCurrency;
+  final String? xeroAccountingEnabled;
+  final String? quickbooksAccountingEnabled;
+  final String? zohoAccountingEnabled;
 
   Map<String, dynamic> toJson() {
     return {

@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
-import 'Colors.dart';
-import 'styles.dart';
-import 'dimensions.dart';
 import 'package:gif/gif.dart';
+import 'package:zed_nano/utils/Colors.dart';
+import 'package:zed_nano/utils/dimensions.dart';
+import 'package:zed_nano/utils/styles.dart';
 
-const emptyListGif = "assets/gifs/emptylist.gif";
-const successGif = "assets/gifs/success.gif";
+const emptyListGif = 'assets/gifs/emptylist.gif';
+const successGif = 'assets/gifs/success.gif';
 
 class GifDisplayWidget extends StatelessWidget {
+
+  const GifDisplayWidget({
+    required this.gifPath, required this.title, required this.subtitle, super.key,
+    this.gifWidth,
+    this.gifHeight,
+    this.padding,
+    this.textAlign,
+  });
   final String gifPath;
   final String title;
   final String subtitle;
@@ -16,17 +24,6 @@ class GifDisplayWidget extends StatelessWidget {
   final EdgeInsets? padding;
   final TextAlign? textAlign;
 
-  const GifDisplayWidget({
-    Key? key,
-    required this.gifPath,
-    required this.title,
-    required this.subtitle,
-    this.gifWidth,
-    this.gifHeight,
-    this.padding,
-    this.textAlign,
-  }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -34,7 +31,6 @@ class GifDisplayWidget extends StatelessWidget {
         padding: padding ?? const EdgeInsets.all(Dimensions.paddingSizeLarge),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             // GIF Image
             Image.asset(
@@ -91,20 +87,17 @@ class GifDisplayWidget extends StatelessWidget {
 
 // Alternative compact version for smaller spaces
 class CompactGifDisplayWidget extends StatelessWidget {
+
+  const CompactGifDisplayWidget({
+    required this.gifPath, required this.title, required this.subtitle, super.key,
+    this.gifSize,
+    this.padding,
+  });
   final String gifPath;
   final String title;
   final String subtitle;
   final double? gifSize;
   final EdgeInsets? padding;
-
-  const CompactGifDisplayWidget({
-    Key? key,
-    required this.gifPath,
-    required this.title,
-    required this.subtitle,
-    this.gifSize,
-    this.padding,
-  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -113,7 +106,6 @@ class CompactGifDisplayWidget extends StatelessWidget {
         padding: padding ?? const EdgeInsets.all(Dimensions.paddingSizeDefault),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
             Gif(
@@ -155,22 +147,19 @@ class CompactGifDisplayWidget extends StatelessWidget {
 
 // Alternative compact version for smaller spaces
 class CompactSuccessGifDisplayWidget extends StatelessWidget {
+
+  const CompactSuccessGifDisplayWidget({
+    required this.gifPath, required this.title, required this.subtitle, super.key,
+    this.gifSize,
+    this.padding,
+    this.textAlign,
+  });
   final String gifPath;
   final String title;
   final String subtitle;
   final double? gifSize;
   final EdgeInsets? padding;
   final TextAlign? textAlign;
-
-  const CompactSuccessGifDisplayWidget({
-    Key? key,
-    required this.gifPath,
-    required this.title,
-    required this.subtitle,
-    this.gifSize,
-    this.padding,
-    this.textAlign,
-  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -179,7 +168,6 @@ class CompactSuccessGifDisplayWidget extends StatelessWidget {
         padding: padding ?? const EdgeInsets.all(Dimensions.paddingSizeDefault),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
             Gif(

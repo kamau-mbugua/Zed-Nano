@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
-import 'package:zed_nano/contants/AppConstants.dart';
 import 'package:zed_nano/models/sales_report/SalesReportResponse.dart';
 import 'package:zed_nano/providers/business/BusinessProviders.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
@@ -19,7 +18,6 @@ import 'package:zed_nano/screens/widget/common/date_range_filter_bottom_sheet.da
 import 'package:zed_nano/screens/widget/common/searchview.dart';
 import 'package:zed_nano/services/business_setup_extensions.dart';
 import 'package:zed_nano/utils/Colors.dart';
-import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
 import 'package:zed_nano/utils/Images.dart';
 import 'package:zed_nano/utils/date_range_util.dart';
@@ -27,7 +25,7 @@ import 'package:zed_nano/utils/extensions.dart';
 import 'package:zed_nano/utils/pagination_controller.dart';
 
 class SalesReportPage extends StatefulWidget {
-  const SalesReportPage({Key? key}) : super(key: key);
+  const SalesReportPage({super.key});
 
   @override
   State<SalesReportPage> createState() => _SalesReportPageState();
@@ -37,12 +35,12 @@ class _SalesReportPageState extends State<SalesReportPage> {
   bool _isLoading = false;
   String _selectedRangeLabel = 'this_month';
   SalesReportSummaryData? _summaryData;
-  List<SalesReportTotalSalesData> _recentSales = [];
+  final List<SalesReportTotalSalesData> _recentSales = [];
 
   late PaginationController<SalesReportTotalSalesData> _paginationController;
 
 
-  String _searchTerm = "";
+  String _searchTerm = '';
 
   Timer? _debounceTimer;
 
@@ -69,7 +67,7 @@ class _SalesReportPageState extends State<SalesReportPage> {
     final startDate = dateRange.values.first.removeTimezoneOffset;
     final endDate = dateRange.values.last.removeTimezoneOffset;
 
-    Map<String, dynamic> params = {
+    final params = <String, dynamic>{
       'startDate': startDate,
       'endDate': endDate,
       'page': page,
@@ -79,7 +77,7 @@ class _SalesReportPageState extends State<SalesReportPage> {
 
     final response = await getBusinessProvider(context).getTotalSales(
         params:params,
-        context: context
+        context: context,
     );
     return response.data?.data ?? [];
   }
@@ -146,7 +144,7 @@ class _SalesReportPageState extends State<SalesReportPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: colorBackground,
-      appBar: AuthAppBar(title: 'Reports'),
+      appBar: const AuthAppBar(title: 'Reports'),
       body: RefreshIndicator(
         onRefresh: _refreshData,
         child: Column(
@@ -204,8 +202,8 @@ class _SalesReportPageState extends State<SalesReportPage> {
         buildSearchBar(
             controller: _searchController,
             onChanged: _debounceSearch,
-            horizontalPadding:5
-        )
+            horizontalPadding:5,
+        ),
       ],
     );
   }
@@ -287,19 +285,19 @@ class _SalesReportPageState extends State<SalesReportPage> {
                 iconColor: emailBlue,
                 backgroundColor: lightGreyColor,
               ).onTap(
-                  ()=> const QuantitiesSoldPage().launch(context)
+                  ()=> const QuantitiesSoldPage().launch(context),
               ) ,
             ),
             const SizedBox(width: 16),
             Expanded(
               child: _buildSummaryCard(
                 title: 'Total\nSales',
-                value: 'KES ${(_summaryData?.totalSales?.formatCurrency() ?? 0)}',
+                value: 'KES ${_summaryData?.totalSales?.formatCurrency() ?? 0}',
                 icon: outOfStockIcon,
                 iconColor: successTextColor,
                 backgroundColor: lightGreenColor,
               ).onTap(
-                  () => const TotalSalesPage().launch(context)
+                  () => const TotalSalesPage().launch(context),
               ),
             ),
           ],
@@ -315,19 +313,19 @@ class _SalesReportPageState extends State<SalesReportPage> {
                 iconColor: primaryOrangeTextColor,
                 backgroundColor: lightOrange,
               ).onTap(
-                      ()=> const TotalCostOfGoodsPage().launch(context)
+                      ()=> const TotalCostOfGoodsPage().launch(context),
               ) ,
             ),
             const SizedBox(width: 16),
             Expanded(
               child: _buildSummaryCard(
                 title: 'Gross\nMargin',
-                value: 'KES ${(_summaryData?.grossMargin?.formatCurrency() ?? 0)}',
+                value: 'KES ${_summaryData?.grossMargin?.formatCurrency() ?? 0}',
                 icon: approvalCustomers,
                 iconColor: primaryBlueTextColor,
                 backgroundColor: lightBlueColor,
               ).onTap(
-                      () => const GrossMarginPage().launch(context)
+                      () => const GrossMarginPage().launch(context),
               ),
             ),
           ],
@@ -386,7 +384,7 @@ class _SalesReportPageState extends State<SalesReportPage> {
             icon,
             width: 25,
             height: 25,
-            color: iconColor,radius: 0
+            color: iconColor,radius: 0,
           ),
           const SizedBox(height: 16),
           Text(
@@ -454,7 +452,7 @@ class _SalesReportPageState extends State<SalesReportPage> {
           child: CompactGifDisplayWidget(
             gifPath: emptyListGif,
             title: "It's empty, over here.",
-            subtitle: "No recent sales in your business, yet! Add to view them here.",
+            subtitle: 'No recent sales in your business, yet! Add to view them here.',
           ),
         ),
       ),
@@ -475,7 +473,7 @@ class _SalesReportPageState extends State<SalesReportPage> {
               sale.imageUrl ?? '',
               width: 25,
               height: 25
-              ,radius: 0
+              ,radius: 0,
           ),
         ),
         const SizedBox(width: 10),
@@ -497,7 +495,7 @@ class _SalesReportPageState extends State<SalesReportPage> {
                     ),
                   ),
                   Text(
-                    'KES ${(sale.totalSales?.formatCurrency() ?? 0)}',
+                    'KES ${sale.totalSales?.formatCurrency() ?? 0}',
                     style: const TextStyle(
                       color: textPrimary,
                       fontWeight: FontWeight.w600,
@@ -512,8 +510,8 @@ class _SalesReportPageState extends State<SalesReportPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   _buildProductDetail('Qty:', sale.quantitySold?.toStringAsFixed(0) ?? '0'),
-                  _buildProductDetail('Selling Price:', 'KES ${(sale.sellingPrice?.formatCurrency() ?? 0)}'),
-                  _buildProductDetail('Discount:', 'KES ${(sale.discount?.formatCurrency() ?? 0)}'),
+                  _buildProductDetail('Selling Price:', 'KES ${sale.sellingPrice?.formatCurrency() ?? 0}'),
+                  _buildProductDetail('Discount:', 'KES ${sale.discount?.formatCurrency() ?? 0}'),
                 ],
               ),
             ],

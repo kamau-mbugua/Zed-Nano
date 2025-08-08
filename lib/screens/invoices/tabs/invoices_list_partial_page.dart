@@ -3,10 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:zed_nano/models/fetchByStatus/OrderResponse.dart';
 import 'package:zed_nano/models/get_business_invoices_by_status/GetBusinessInvoicesByStatusResponse.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
-import 'package:zed_nano/screens/customers/itemBuilder/list_customers_transactions_item_builder.dart';
 import 'package:zed_nano/screens/invoices/itemBuilders/invoices_item_builders.dart';
 import 'package:zed_nano/screens/widget/common/date_range_filter_bottom_sheet.dart';
 import 'package:zed_nano/screens/widget/common/filter_row_widget.dart';
@@ -18,7 +16,7 @@ import 'package:zed_nano/utils/extensions.dart';
 import 'package:zed_nano/utils/pagination_controller.dart';
 
 class InvoicesListPartialPage extends StatefulWidget {
-  const InvoicesListPartialPage({Key? key}) : super(key: key);
+  const InvoicesListPartialPage({super.key});
 
   @override
   _InvoicesListPartialPageState createState() => _InvoicesListPartialPageState();
@@ -28,8 +26,8 @@ class _InvoicesListPartialPageState extends State<InvoicesListPartialPage> {
   late PaginationController<BusinessInvoice> _paginationController;
   final TextEditingController _searchController = TextEditingController();
 
-  String _searchTerm = "";
-  bool _isInitialized = false;
+  String _searchTerm = '';
+  final bool _isInitialized = false;
   Timer? _debounceTimer;
   GetBusinessInvoicesByStatusResponse? getBusinessInvoicesByStatusResponse;
 
@@ -54,7 +52,7 @@ class _InvoicesListPartialPageState extends State<InvoicesListPartialPage> {
   }
 
   Future<List<BusinessInvoice>> fetchByStatus(
-      {required int page, required int limit}) async {
+      {required int page, required int limit,}) async {
     final dateRange = DateRangeUtil.getDateRange(_selectedRangeLabel);
     final startDate = dateRange.values.first.removeTimezoneOffset;
     final endDate = dateRange.values.last.removeTimezoneOffset;
@@ -137,7 +135,7 @@ class _InvoicesListPartialPageState extends State<InvoicesListPartialPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text("Invoices Count",
+                  const Text('Invoices Count',
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         color: textPrimary,
@@ -146,19 +144,19 @@ class _InvoicesListPartialPageState extends State<InvoicesListPartialPage> {
                         fontStyle: FontStyle.normal,
                         letterSpacing: 0.12,
 
-                      )
+                      ),
                   ),
-                  Text("${getBusinessInvoicesByStatusResponse?.invoiceSummary?.orderCount ?? 0}",
+                  Text('${getBusinessInvoicesByStatusResponse?.invoiceSummary?.orderCount ?? 0}',
                       style: const TextStyle(
                         fontFamily: 'Poppins',
                         color: primaryOrangeTextColor,
                         fontSize: 18,
                         fontWeight: FontWeight.w400,
                         fontStyle: FontStyle.normal,
-                      )
-                  )
+                      ),
+                  ),
                 ],
-              )
+              ),
           ),
         ),
         16.width,
@@ -174,7 +172,7 @@ class _InvoicesListPartialPageState extends State<InvoicesListPartialPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text("Total",
+                  const Text('Total',
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         color: textPrimary,
@@ -183,7 +181,7 @@ class _InvoicesListPartialPageState extends State<InvoicesListPartialPage> {
                         fontStyle: FontStyle.normal,
                         letterSpacing: 0.12,
 
-                      )
+                      ),
                   ),
                   Text("${getBusinessInvoicesByStatusResponse?.invoiceSummary?.currency ?? 'KES'} ${getBusinessInvoicesByStatusResponse?.invoiceSummary?.orderTotal ?? 0.0}",
                       style: const TextStyle(
@@ -192,10 +190,10 @@ class _InvoicesListPartialPageState extends State<InvoicesListPartialPage> {
                         fontSize: 18,
                         fontWeight: FontWeight.w400,
                         fontStyle: FontStyle.normal,
-                      )
-                  )
+                      ),
+                  ),
                 ],
-              )
+              ),
           ),
         ),
       ],
@@ -217,7 +215,7 @@ class _InvoicesListPartialPageState extends State<InvoicesListPartialPage> {
               gifPath: emptyListGif,
               title: "It's empty, over here.",
               subtitle:
-              "No Unpaid orders in your business, yet! Add to view them here.",
+              'No Unpaid orders in your business, yet! Add to view them here.',
             ),
           ),
         ),
@@ -235,11 +233,8 @@ class _InvoicesListPartialPageState extends State<InvoicesListPartialPage> {
         buildFilterButton(
           text:(_selectedRangeLabel ?? 'Filter').toDisplayLabel,
           isActive: false,
-          onTap: () {
-            _showDateRangeFilter();
-          },
+          onTap: _showDateRangeFilter,
           icon: Icons.filter_list,
-          showArrow: true,
         ),
       ],
     );

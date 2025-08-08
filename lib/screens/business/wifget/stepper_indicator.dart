@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 
 class StepperIndicator extends StatelessWidget {
-  final int currentStep;
-  final int totalSteps;
 
   const StepperIndicator({
-    Key? key,
-    required this.currentStep,
+    required this.currentStep, super.key,
     this.totalSteps = 4,
-  }) : super(key: key);
+  });
+  final int currentStep;
+  final int totalSteps;
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +16,7 @@ class StepperIndicator extends StatelessWidget {
         final isActive = index <= currentStep;
         return Expanded(
           child: Container(
-            margin: const EdgeInsets.symmetric(horizontal: 4.0),
+            margin: const EdgeInsets.symmetric(horizontal: 4),
             height: 5,
             decoration: BoxDecoration(
               color: isActive ? const Color(0xff00c382) : const Color(0xffe4e4ed),

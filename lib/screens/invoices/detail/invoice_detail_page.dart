@@ -2,13 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/models/get_invoice_by_invoice_number/GetInvoiceByInvoiceNumberResponse.dart';
 import 'package:zed_nano/models/get_invoice_receipt_payment_methods_no_login/GetInvoiceReceiptPaymentMethodsNoLoginResponse.dart';
-import 'package:zed_nano/models/order_payment_status/OrderDetailResponse.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/invoices/itemBuilders/invoices_item_builders.dart';
-import 'package:zed_nano/screens/orders/itemBuilder/order_item_builders.dart';
-import 'package:zed_nano/screens/orders/void_transaction/void_order_transaction_page.dart';
 import 'package:zed_nano/screens/payments/checkout_payment/check_out_payments_page.dart';
-import 'package:zed_nano/screens/sell/sell_stepper_page.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/bottom_sheet_helper.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
@@ -22,9 +18,9 @@ import 'package:zed_nano/utils/Images.dart';
 import 'package:zed_nano/utils/extensions.dart';
 
 class InvoiceDetailPage extends StatefulWidget {
-  String? invoiceNumber;
 
-  InvoiceDetailPage({Key? key, this.invoiceNumber}) : super(key: key);
+  InvoiceDetailPage({super.key, this.invoiceNumber});
+  String? invoiceNumber;
 
   @override
   _InvoiceDetailPageState createState() => _InvoiceDetailPageState();
@@ -48,7 +44,7 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
   }
 
   Future<void> getInvoiceByInvoiceNumber() async {
-    Map<String, dynamic> requestData = {
+    final requestData = <String, dynamic>{
       'invoiceNumber': widget.invoiceNumber,
       'businessNumber': getBusinessDetails(context)?.businessNumber,
       'purchaseOrderNumber': '',
@@ -74,7 +70,7 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
   }
 
   Future<void> getInvoiceReceiptPaymentMethodsNoLogin() async {
-    Map<String, dynamic> requestData = {
+    final requestData = <String, dynamic>{
       'invoiceNumber': widget.invoiceNumber,
       'businessNumber': getBusinessDetails(context)?.businessNumber,
     };
@@ -145,7 +141,7 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
               _buildCustomerDetails(),
               _buildInvoiceItems(),
               // _buildNaration(),
-              getInvoiceByInvoiceNumberResponse?.invoiceStatus?.toLowerCase() == 'paid' ? _buildPaymentMethod() : Container(),
+              if (getInvoiceByInvoiceNumberResponse?.invoiceStatus?.toLowerCase() == 'paid') _buildPaymentMethod() else Container(),
               _buildInvoiceSummary(),
               // _buildServedBy(),
             ],
@@ -160,7 +156,7 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
     return Container(
       margin: const EdgeInsets.only(right: 8),
       padding: const EdgeInsets.symmetric(
-          horizontal: 12, vertical: 6),
+          horizontal: 12, vertical: 6,),
       decoration: BoxDecoration(
         color: Colors.grey[100],
         borderRadius: BorderRadius.circular(8),
@@ -183,7 +179,7 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
                         fontStyle: FontStyle.normal,
-                      )
+                      ),
                   ),
                 ),
                 rfCommonCachedNetworkImage(
@@ -191,7 +187,7 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
                     fit: BoxFit.cover,
                     height: 15,
                     width: 15,
-                    radius: 8
+                    radius: 8,
                 ),
               ],
             ).paddingSymmetric(vertical: 10),
@@ -204,11 +200,11 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
                       fit: BoxFit.cover,
                       height: 15,
                       width: 15,
-                      radius: 8
+                      radius: 8,
                   ),
                   6.width,
-                  Text("${getInvoiceByInvoiceNumberResponse?.customerPhoneNumber ?? 'N/A'}",
-                      style: TextStyle(
+                  Text(getInvoiceByInvoiceNumberResponse?.customerPhoneNumber ?? 'N/A',
+                      style: const TextStyle(
                         fontFamily: 'Poppins',
                         color: textSecondary,
                         fontSize: 12,
@@ -216,9 +212,9 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
                         fontStyle: FontStyle.normal,
                         letterSpacing: 0.12,
 
-                      )
-                  )
-                ]
+                      ),
+                  ),
+                ],
             ).paddingSymmetric(vertical: 5),
             Row(
                 children: [
@@ -227,11 +223,11 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
                       fit: BoxFit.cover,
                       height: 15,
                       width: 15,
-                      radius: 0
+                      radius: 0,
                   ),
                   6.width,
-                  Text("${getInvoiceByInvoiceNumberResponse?.sentTo ?? 'N/A'}",
-                      style: TextStyle(
+                  Text(getInvoiceByInvoiceNumberResponse?.sentTo ?? 'N/A',
+                      style: const TextStyle(
                         fontFamily: 'Poppins',
                         color: textSecondary,
                         fontSize: 12,
@@ -239,9 +235,9 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
                         fontStyle: FontStyle.normal,
                         letterSpacing: 0.12,
 
-                      )
-                  )
-                ]
+                      ),
+                  ),
+                ],
             ).paddingSymmetric(vertical: 5),
             Row(
                 children: [
@@ -250,11 +246,11 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
                       fit: BoxFit.cover,
                       height: 15,
                       width: 15,
-                      radius: 0
+                      radius: 0,
                   ),
                   6.width,
                   Expanded(
-                    child: Text("${getInvoiceByInvoiceNumberResponse?.businessLocation ?? 'N/A'}",
+                    child: Text(getInvoiceByInvoiceNumberResponse?.businessLocation ?? 'N/A',
                         style: const TextStyle(
                           fontFamily: 'Poppins',
                           color: textSecondary,
@@ -262,10 +258,10 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
                           fontWeight: FontWeight.w400,
                           fontStyle: FontStyle.normal,
                           letterSpacing: 0.12,
-                        )
+                        ),
                     ),
-                  )
-                ]
+                  ),
+                ],
             ).paddingSymmetric(vertical: 5),
           ],
         ],
@@ -278,7 +274,6 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
     final cartItems = paymentReceipt ?? [];
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           const Text('Payment Summary',
               style: TextStyle(
@@ -287,7 +282,7 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
                 fontStyle: FontStyle.normal,
-              )
+              ),
           ),
           8.height,
           if (cartItems.isEmpty) const Center(
@@ -300,18 +295,18 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
           ) else ListView.separated(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            padding: const EdgeInsets.symmetric(horizontal: 0),
+            padding: const EdgeInsets.symmetric(),
             itemCount: cartItems.length,
             separatorBuilder: (context, index) => const Divider(height: 0.5, color: innactiveBorderCart,),
             itemBuilder: (context, index) {
               final item = cartItems[index];
               return buildInvoicePaymentSummary(
                   item: item,
-                  context: context
+                  context: context,
               );
             },
           ),
-        ]
+        ],
     ).paddingSymmetric(vertical: 16);
   }
 
@@ -387,7 +382,6 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
   Widget _buildServedBy(){
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         const Text('Served By',
             style: TextStyle(
@@ -396,7 +390,7 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
               fontSize: 14,
               fontWeight: FontWeight.w600,
               fontStyle: FontStyle.normal,
-            )
+            ),
         ),
         Container(
             width: context.width(),
@@ -405,12 +399,12 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
               borderRadius: BorderRadius.circular(8),
             ),
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-            child: Column(
+            child: const Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("${/*getInvoiceByInvoiceNumberResponse?.cashier ??*/ 'N/A'}",
-                    style: const TextStyle(
+                Text('N/A',
+                    style: TextStyle(
                       fontFamily: 'Poppins',
                       color: textSecondary,
                       fontSize: 12,
@@ -418,10 +412,10 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
                       fontStyle: FontStyle.normal,
                       letterSpacing: 0.12,
 
-                    )
-                )
+                    ),
+                ),
               ],
-            )),
+            ),),
       ],
     );
   }
@@ -429,7 +423,6 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
   Widget _buildInvoiceSummary() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         const Text('Summary',
             style: TextStyle(
@@ -438,7 +431,7 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
               fontSize: 14,
               fontWeight: FontWeight.w600,
               fontStyle: FontStyle.normal,
-            )
+            ),
         ),
         Container(
           width: context.width(),
@@ -463,9 +456,9 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
                           fontStyle: FontStyle.normal,
                           letterSpacing: 0.12,
 
-                        )
+                        ),
                     ),
-                    Text("${getInvoiceByInvoiceNumberResponse?.createdAt?.toFormattedDateTime() ?? 'N/A'}",
+                    Text(getInvoiceByInvoiceNumberResponse?.createdAt?.toFormattedDateTime() ?? 'N/A',
                         style: const TextStyle(
                           fontFamily: 'Poppins',
                           color: textSecondary,
@@ -473,8 +466,8 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
                           fontWeight: FontWeight.w400,
                           fontStyle: FontStyle.normal,
                           letterSpacing: 0.12,
-                        )
-                    )
+                        ),
+                    ),
                   ],
                 ).paddingSymmetric(vertical: 8),
                 Row(
@@ -489,7 +482,7 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
                           fontStyle: FontStyle.normal,
                           letterSpacing: 0.12,
 
-                        )
+                        ),
                     ),
                     Text("${getInvoiceByInvoiceNumberResponse?.currency ?? 'KES'} ${getInvoiceByInvoiceNumberResponse?.invoiceAmount?.formatCurrency() ?? 'N/A'}",
                         style: const TextStyle(
@@ -499,8 +492,8 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
                           fontWeight: FontWeight.w400,
                           fontStyle: FontStyle.normal,
                           letterSpacing: 0.12,
-                        )
-                    )
+                        ),
+                    ),
                   ],
                 ).paddingSymmetric(vertical: 8),
                 Row(
@@ -515,7 +508,7 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
                           fontStyle: FontStyle.normal,
                           letterSpacing: 0.12,
 
-                        )
+                        ),
                     ),
                     Text("${getInvoiceByInvoiceNumberResponse?.currency ?? 'KES'} ${getInvoiceByInvoiceNumberResponse?.invoiceDiscountAmount?.formatCurrency() ?? 'N/A'}",
                         style: const TextStyle(
@@ -525,14 +518,14 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
                           fontWeight: FontWeight.w400,
                           fontStyle: FontStyle.normal,
                           letterSpacing: 0.12,
-                        )
-                    )
+                        ),
+                    ),
                   ],
                 ).paddingSymmetric(vertical: 8),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Total',
+                    const Text('Total',
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           color: textPrimary,
@@ -541,10 +534,10 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
                           fontStyle: FontStyle.normal,
 
 
-                        )
+                        ),
                     ),
                     Text("${getInvoiceByInvoiceNumberResponse?.currency ?? 'KES'} ${getInvoiceByInvoiceNumberResponse?.total?.formatCurrency() ?? 'N/A'}",
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontFamily: 'Poppins',
                           color: textPrimary,
                           fontSize: 14,
@@ -552,19 +545,18 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
                           fontStyle: FontStyle.normal,
 
 
-                        )
+                        ),
                     ),
                   ],
                 ).paddingSymmetric(vertical: 10),
               ],
-            )),
+            ),),
       ],
     );
   }
   Widget _buildNaration() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         const Text('Narration',
             style: TextStyle(
@@ -573,7 +565,7 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
               fontSize: 14,
               fontWeight: FontWeight.w600,
               fontStyle: FontStyle.normal,
-            )
+            ),
         ),
         Container(
           width: context.width(),
@@ -582,12 +574,12 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
               borderRadius: BorderRadius.circular(8),
             ),
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-            child: Column(
+            child: const Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("${/*getInvoiceByInvoiceNumberResponse?.orderTable ??*/ 'N/A'}",
-                    style: const TextStyle(
+                Text('N/A',
+                    style: TextStyle(
                       fontFamily: 'Poppins',
                       color: textSecondary,
                       fontSize: 12,
@@ -595,10 +587,10 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
                       fontStyle: FontStyle.normal,
                       letterSpacing: 0.12,
 
-                    )
-                )
+                    ),
+                ),
               ],
-            )),
+            ),),
       ],
     );
   }
@@ -607,7 +599,6 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
     final cartItems = getInvoiceByInvoiceNumberResponse?.items ?? [];
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           const Text('Invoice Items',
               style: TextStyle(
@@ -616,7 +607,7 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
                 fontStyle: FontStyle.normal,
-              )
+              ),
           ),
           8.height,
           if (cartItems.isEmpty) const Center(
@@ -629,16 +620,16 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
           ) else ListView.separated(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            padding: const EdgeInsets.symmetric(horizontal: 0),
+            padding: const EdgeInsets.symmetric(),
             itemCount: cartItems.length,
             separatorBuilder: (context, index) => const Divider(height: 0.5, color: innactiveBorderCart,),
             itemBuilder: (context, index) {
               final item = cartItems[index];
               return buildInvoiceItem(
-                  item: item);
+                  item: item,);
             },
           ),
-        ]
+        ],
     ).paddingSymmetric(vertical: 16);
   }
 
@@ -666,7 +657,7 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
                         fontWeight: FontWeight.w400,
                         fontStyle: FontStyle.normal,
                         letterSpacing: 0.15,
-                      )),
+                      ),),
                   6.height,
                   Text("#${getInvoiceByInvoiceNumberResponse?.invoiceNumber ?? 'N/A'}",
                       style: const TextStyle(
@@ -675,13 +666,12 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
                         fontSize: 16,
                         fontWeight: FontWeight.w400,
                         fontStyle: FontStyle.normal,
-                      ))
+                      ),),
                 ],
-              )),
+              ),),
         ),
         8.width,
         Expanded(
-          flex: 1,
           child: Container(
               height: 85,
               decoration: BoxDecoration(
@@ -701,7 +691,7 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
                         fontWeight: FontWeight.w400,
                         fontStyle: FontStyle.normal,
                         letterSpacing: 0.15,
-                      )),
+                      ),),
                   6.height,
                   Text('${getInvoiceByInvoiceNumberResponse?.items?.length ?? 0}',
                       style: const TextStyle(
@@ -710,9 +700,9 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
                         fontSize: 18,
                         fontWeight: FontWeight.w400,
                         fontStyle: FontStyle.normal,
-                      ))
+                      ),),
                 ],
-              )),
+              ),),
         ),
         8.width,
         Expanded(
@@ -740,7 +730,7 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
                         fontWeight: FontWeight.w400,
                         fontStyle: FontStyle.normal,
                         letterSpacing: 0.12,
-                      )),
+                      ),),
                   6.height,
                   Text("${getInvoiceByInvoiceNumberResponse?.currency ?? 'KES'} ${getInvoiceByInvoiceNumberResponse?.invoiceAmount?.formatCurrency() ?? 'N/A'}",
                       style: TextStyle(
@@ -753,9 +743,9 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                         fontStyle: FontStyle.normal,
-                      ))
+                      ),),
                 ],
-              )),
+              ),),
         ),
       ],
     ).paddingSymmetric(vertical: 16);
@@ -780,9 +770,9 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
                   fontWeight: FontWeight.w600,
                   fontStyle: FontStyle.normal,
                   letterSpacing: 0.09,
-                )),
+                ),),
             Container(
-              margin: const EdgeInsets.only(right: 0),
+              margin: const EdgeInsets.only(),
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
                 color: getInvoiceByInvoiceNumberResponse?.invoiceStatus?.toLowerCase() == 'paid'
@@ -803,16 +793,16 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
                     fontSize: 10,
                     fontWeight: FontWeight.w600,
                     fontStyle: FontStyle.normal,
-                  )),
+                  ),),
             ),
           ],
-        )
+        ),
       ],
     );
   }
 
   PreferredSizeWidget _buildAppBar() {
-    return AuthAppBar(
+    return const AuthAppBar(
       title: 'View Invoice',
       // actions: [
       //   if (getInvoiceByInvoiceNumberResponse?.invoiceStatus?.toLowerCase() == 'unpaid') TextButton(

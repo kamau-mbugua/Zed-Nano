@@ -6,7 +6,6 @@ import 'package:zed_nano/screens/business/get_started_page.dart';
 import 'package:zed_nano/screens/widget/common/custom_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/feature_card.dart';
 import 'package:zed_nano/screens/widgets/custom_drawer.dart';
-import 'package:zed_nano/screens/widgets/drawer_widget.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/Images.dart';
 
@@ -34,17 +33,17 @@ class _WelcomeSetupScreenState extends State<WelcomeSetupScreen> {
       drawer: CustomDrawer(
         onClose: () => Navigator.pop(context),
       ),
-      appBar: CustomDashboardAppBar(title:'',),
+      appBar: const CustomDashboardAppBar(title:'',),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Header Greeting
               Text(
                 'Hello ${loginResponse?.username ?? ''}',
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.w600,
                   color: Color(0xff1f2024),
@@ -159,9 +158,9 @@ class _WelcomeSetupScreenState extends State<WelcomeSetupScreen> {
               appButton(
                   text: 'Create Your Business Today!',
                   onTap: (){
-                    GetStartedPage().launch(context);
+                    const GetStartedPage().launch(context);
                   },
-                  context: context
+                  context: context,
               ),
               16.height,
               Visibility(
@@ -170,7 +169,7 @@ class _WelcomeSetupScreenState extends State<WelcomeSetupScreen> {
                     text: 'Join a Business',
                     onTap: (){
                     },
-                    context: context
+                    context: context,
                 ),
               ),
             ],

@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/routes/routes.dart';
+import 'package:zed_nano/screens/widget/common/highlighted_rich_text.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/Images.dart';
-import 'package:zed_nano/screens/widget/common/highlighted_rich_text.dart';
 
 class OnboardingScreen extends StatefulWidget {
-  const OnboardingScreen({Key? key}) : super(key: key);
+  const OnboardingScreen({super.key});
 
   @override
   _OnboardingScreenState createState() => _OnboardingScreenState();
@@ -33,13 +33,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   width: context.width(),
                   height: imageHeight,
                   fit: BoxFit.cover,
-                  usePlaceholderIfUrlEmpty: true,
                   radius: 0,
                 ),
                 
                 // Content section
                 Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.all(16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -65,7 +64,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         text: 'Sign In',
                         onTap: () async {
                           await Navigator.pushNamed(
-                              context, AppRoutes.getLoggingPageRoute());
+                              context, AppRoutes.getLoggingPageRoute(),);
                         },
                       ),
                       18.height,
@@ -74,7 +73,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         text: 'Get Started',
                         onTap: () async {
                           await Navigator.pushNamed(
-                              context, AppRoutes.getUserRegistrationPageRoute());
+                              context, AppRoutes.getUserRegistrationPageRoute(),);
                           },
                       ),
                       16.height, // Bottom padding

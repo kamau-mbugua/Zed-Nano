@@ -9,6 +9,8 @@ import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/extensions.dart';
 
 class ResetPinScreen extends StatefulWidget {
+  const ResetPinScreen({super.key});
+
   @override
   _ResetPinScreenState createState() => _ResetPinScreenState();
 }
@@ -20,10 +22,10 @@ class _ResetPinScreenState extends State<ResetPinScreen> {
   final emailController = TextEditingController();
 
   Future<void> _handleForgotPin(
-      Map<String, dynamic> requestBody, BuildContext context) async {
+      Map<String, dynamic> requestBody, BuildContext context,) async {
     final authProvider = getAuthProvider(context);
     final response = await authProvider.forgotPin(
-        requestData: requestBody, context: context);
+        requestData: requestBody, context: context,);
     if (response.isSuccess) {
       showCustomToast('${response.message}!', isError: false);
       Navigator.of(context).pop();
@@ -45,7 +47,7 @@ class _ResetPinScreenState extends State<ResetPinScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AuthAppBar(
+      appBar: const AuthAppBar(
         title: 'Forgot PIN',
       ),
       body: SafeArea(
@@ -143,7 +145,7 @@ class _ResetPinScreenState extends State<ResetPinScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: PhoneInputField(
-                  controller: phoneController, codeController: codeController),
+                  controller: phoneController, codeController: codeController,),
             ),
           ] else ...[
             const Text(
@@ -157,7 +159,7 @@ class _ResetPinScreenState extends State<ResetPinScreen> {
             ).paddingSymmetric(horizontal: 10),
             8.height,
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               child: StyledTextField(
                 controller: emailController,
                 textFieldType: TextFieldType.EMAIL,
@@ -179,7 +181,7 @@ class _ResetPinScreenState extends State<ResetPinScreen> {
 
                       final phone = phoneController.text.trim();
                       final phoneCode = codeController.text.trim();
-                      final phoneNumber = "$phoneCode$phone";
+                      final phoneNumber = '$phoneCode$phone';
                       requestBody = {'phoneNumber': phoneNumber};
                     } else {
                       if (!emailController.text.isValidEmail) {
@@ -191,9 +193,9 @@ class _ResetPinScreenState extends State<ResetPinScreen> {
 
                     await _handleForgotPin(requestBody, context);
                   },
-                  context: context)
+                  context: context,)
               .paddingSymmetric(horizontal: 10),
-        ]),
+        ],),
       ),
     );
   }

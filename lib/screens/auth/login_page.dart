@@ -1,18 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:zed_nano/app/app_initializer.dart';
-import 'package:zed_nano/providers/auth/authenticated_app_providers.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/routes/routes.dart';
 import 'package:zed_nano/routes/routes_helper.dart';
-import 'package:zed_nano/screens/auth/forget_password_screen.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/auth/input_fields.dart';
 import 'package:zed_nano/screens/widget/auth/social_buttons.dart';
-import 'package:zed_nano/screens/widget/common/common_widgets.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/services/business_setup_extensions.dart';
 import 'package:zed_nano/services/firebase_service.dart';
@@ -20,12 +15,11 @@ import 'package:zed_nano/services/social_auth_service.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/Images.dart';
-import 'package:zed_nano/viewmodels/WorkflowViewModel.dart';
-import 'package:country_code_picker/country_code_picker.dart';
 import 'package:zed_nano/utils/extensions.dart';
+import 'package:zed_nano/viewmodels/WorkflowViewModel.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  const LoginPage({super.key});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -54,7 +48,7 @@ class _LoginPageState extends State<LoginPage> {
 
   final FocusNode phoneFocus = FocusNode();
 
-  bool _rememberMe = false;
+  final bool _rememberMe = false;
 
   @override
   void initState() {
@@ -87,7 +81,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: colorWhite,
-      appBar: AuthAppBar(
+      appBar: const AuthAppBar(
         title: 'Sign In',
       ),
       body: Form(
@@ -99,15 +93,15 @@ class _LoginPageState extends State<LoginPage> {
               Text('Welcome Back',
                   style: boldTextStyle(
                     size: 24,
-                    fontFamily: "Poppins",
-                  )).paddingSymmetric(horizontal: 16),
+                    fontFamily: 'Poppins',
+                  ),).paddingSymmetric(horizontal: 16),
               8.height,
-              Text("Sign in to continue to your account.",
+              Text('Sign in to continue to your account.',
                   style: secondaryTextStyle(
                       size: 12,
                       weight: FontWeight.w500,
                       color: getBodyColor(),
-                      fontFamily: "Poppins"))
+                      fontFamily: 'Poppins',),)
                   .paddingSymmetric(horizontal: 16),
               16.height,
               SocialButtonsRow(
@@ -174,7 +168,7 @@ class _LoginPageState extends State<LoginPage> {
                       size: 12,
                       weight: FontWeight.w500,
                       color: getBodyColor(),
-                      fontFamily: "Poppins"))
+                      fontFamily: 'Poppins',),)
                   .paddingSymmetric(horizontal: 16),
               16.height,
               // Show different input fields based on login method
@@ -184,7 +178,7 @@ class _LoginPageState extends State<LoginPage> {
                 _buildPhoneLoginForm(),
               16.height,
               appButton(
-                text: "Sign In",
+                text: 'Sign In',
                 onTap: () {
                   if (isEmailLoginActive) {
                     _handleEmailLogin(context);
@@ -203,21 +197,21 @@ class _LoginPageState extends State<LoginPage> {
                     style: secondaryTextStyle(
                       size: 14,
                       color: getBodyColor(),
-                      fontFamily: "Poppins",
+                      fontFamily: 'Poppins',
                     ),
                   ),
                   TextButton(
                     onPressed: () {
                       // Navigate to login page
                       Navigator.pushNamed(
-                          context, AppRoutes.getUserRegistrationPageRoute());
+                          context, AppRoutes.getUserRegistrationPageRoute(),);
                     },
                     child: Text(
                       'Create Account',
                       style: boldTextStyle(
                         size: 14,
                         color: appThemePrimary,
-                        fontFamily: "Poppins",
+                        fontFamily: 'Poppins',
                       ),
                     ),
                   ),
@@ -234,33 +228,32 @@ class _LoginPageState extends State<LoginPage> {
     return Column(
       children: [
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: StyledTextField(
             controller: emailController,
             focusNode: emailFocus,
             nextFocus: passwordFocus,
             textFieldType: TextFieldType.EMAIL,
-            hintText: "Email Address",
+            hintText: 'Email Address',
           ),
         ),
         16.height,
         Container(
           width: double.infinity,
-          padding: EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: StyledTextField(
             controller: passwordController,
             focusNode: passwordFocus,
             textFieldType: TextFieldType.PASSWORD,
-            hintText: "Pin",
+            hintText: 'Pin',
             isPassword: true,
           ),
         ),
         8.height,
         Visibility(
-          visible: true,
           child: Container(
             width: double.infinity,
-            padding: EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(
               children: [
                 // Checkbox(
@@ -275,17 +268,17 @@ class _LoginPageState extends State<LoginPage> {
                 //   "Remember me",
                 //   style: TextStyle(color: Colors.black54, fontSize: 14),
                 // ),
-                Expanded(child: Spacer()),
+                const Expanded(child: Spacer()),
                 TextButton(
                   onPressed: () {
                     Navigator.pushNamed(
-                        context, AppRoutes.getForgetPinRoutePageRoute());
+                        context, AppRoutes.getForgetPinRoutePageRoute(),);
                   },
-                  child: Text("Forgot Pin?",  style: boldTextStyle(
+                  child: Text('Forgot Pin?',  style: boldTextStyle(
                     size: 14,
                     color: appThemePrimary,
-                    fontFamily: "Poppins",
-                  )),
+                    fontFamily: 'Poppins',
+                  ),),
                 ),
               ],
             ),
@@ -299,7 +292,7 @@ class _LoginPageState extends State<LoginPage> {
     return Column(
       children: [
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: PhoneInputField(
             controller: phoneController,
             codeController:codeController,
@@ -311,12 +304,12 @@ class _LoginPageState extends State<LoginPage> {
         16.height,
         Container(
           width: double.infinity,
-          padding: EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: StyledTextField(
             controller: phonePasswordController,
             focusNode: phonePasswordFocus,
             textFieldType: TextFieldType.PASSWORD,
-            hintText: "Pin",
+            hintText: 'Pin',
             isPassword: true,
             maxLength: 4,
           ),
@@ -324,7 +317,7 @@ class _LoginPageState extends State<LoginPage> {
         8.height,
         Container(
           width: double.infinity,
-          padding: EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Row(
             children: [
               // Checkbox(
@@ -339,17 +332,17 @@ class _LoginPageState extends State<LoginPage> {
               //   "Remember me",
               //   style: TextStyle(color: Colors.black54, fontSize: 14),
               // ),
-              Expanded(child: Spacer()),
+              const Expanded(child: Spacer()),
               TextButton(
                 onPressed: () {
                   Navigator.pushNamed(
-                      context, AppRoutes.getForgetPinRoutePageRoute());
+                      context, AppRoutes.getForgetPinRoutePageRoute(),);
                 },
-                child: Text("Forgot Pin?",  style: boldTextStyle(
+                child: Text('Forgot Pin?',  style: boldTextStyle(
                   size: 14,
                   color: appThemePrimary,
-                  fontFamily: "Poppins",
-                )),
+                  fontFamily: 'Poppins',
+                ),),
               ),
             ],
           ),
@@ -360,8 +353,8 @@ class _LoginPageState extends State<LoginPage> {
 
   // Login with email and password
   Future<void> _handleEmailLogin(BuildContext context) async {
-    var email = emailController.text.trim();
-    var pass = passwordController.text.trim();
+    final email = emailController.text.trim();
+    final pass = passwordController.text.trim();
     if ( !email.isValidEmail) {
       showCustomToast('Please enter phone number');
       return;
@@ -370,10 +363,10 @@ class _LoginPageState extends State<LoginPage> {
       showCustomToast('Please enter valid pin');
       return;
     }
-    final Map<String, dynamic> loginData = {
+    final loginData = <String, dynamic>{
       'email': email,
       'userPin': pass,
-      'isCreatedViaNano':true
+      'isCreatedViaNano':true,
     };
     logger.d(loginData);
 
@@ -384,11 +377,11 @@ class _LoginPageState extends State<LoginPage> {
   // Login with phone number and password
   Future<void> _handlePhoneLogin(BuildContext context) async {
 
-    var phone = phoneController.text.trim();
-    var phoneCode = codeController.text.trim();
-    var pass = phonePasswordController.text.trim();
+    final phone = phoneController.text.trim();
+    final phoneCode = codeController.text.trim();
+    final pass = phonePasswordController.text.trim();
     // Extract phone number (remove formatting)
-    String phoneNumber = "$phoneCode$phone";
+    final phoneNumber = '$phoneCode$phone';
     if (!phone.isValidPhoneNumber) {
       showCustomToast('Please enter phone number');
       return;
@@ -397,10 +390,10 @@ class _LoginPageState extends State<LoginPage> {
       showCustomToast('Please enter valid pin');
       return;
     }
-    final Map<String, dynamic> loginData = {
+    final loginData = <String, dynamic>{
       'userPhone': phoneNumber,
       'userPin': pass,
-      'isCreatedViaNano':true
+      'isCreatedViaNano':true,
     };
     logger.d(loginData);
 
@@ -419,10 +412,10 @@ class _LoginPageState extends State<LoginPage> {
     final response = await authProvider.login(requestData: loginData, context: context);
     if (response.isSuccess) {
 
-      if (response?.data?.state?.toLowerCase() != 'new') {
+      if (response.data?.state?.toLowerCase() != 'new') {
         final userName = authProvider.userDetails?.name ??
             authProvider.loginResponse?.username ??
-            "User";
+            'User';
         showCustomToast('Welcome back $userName!', isError: false);
 
         // Initialize business setup after successful login
@@ -438,7 +431,7 @@ class _LoginPageState extends State<LoginPage> {
           AppRoutes.setPinRoute,                 //  <-- note: use the actual route string
           arguments: {
             'oldPin': loginData['userPin'],
-            'userEmail': response?.data?.email ?? '',
+            'userEmail': response.data?.email ?? '',
           },
         ).then((value) {
           passwordController.clear();

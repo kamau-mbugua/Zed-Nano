@@ -1,19 +1,18 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
+import 'package:zed_nano/routes/routes.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/services/business_setup_extensions.dart';
 import 'package:zed_nano/services/firebase_service.dart';
-import 'package:zed_nano/routes/routes.dart';
 import 'package:zed_nano/viewmodels/WorkflowViewModel.dart';
 
 /// Service class for handling social authentication (Google, Facebook, Twitter)
 class SocialAuthService {
-  static final SocialAuthService _instance = SocialAuthService._internal();
   factory SocialAuthService() => _instance;
   SocialAuthService._internal();
+  static final SocialAuthService _instance = SocialAuthService._internal();
 
   final FirebaseService _firebaseService = FirebaseService();
 
@@ -29,7 +28,7 @@ class SocialAuthService {
 
       if (user == null) {
         logger.e('Google sign-up failed: UserCredential.user is null');
-        showCustomToast('Google sign-up failed. Please try again.', isError: true);
+        showCustomToast('Google sign-up failed. Please try again.');
         return null;
       }
 
@@ -46,7 +45,7 @@ class SocialAuthService {
       // Check if email is null and handle it
       if (user.email == null || user.email!.isEmpty) {
         logger.e('Critical: User email is null or empty after Google sign-in');
-        showCustomToast('Unable to get email from Google account. Please try again or use a different sign-in method.', isError: true);
+        showCustomToast('Unable to get email from Google account. Please try again or use a different sign-in method.');
         return null;
       }
 
@@ -61,7 +60,7 @@ class SocialAuthService {
 
     } catch (e) {
       logger.e('Google sign-up error: $e');
-      showCustomToast('Google sign-up failed: ${e.toString()}', isError: true);
+      showCustomToast('Google sign-up failed: $e');
       return null;
     }
   }
@@ -73,12 +72,12 @@ class SocialAuthService {
       showCustomToast('Signing in with Facebook...', isError: false);
 
       // Sign in with Facebook via Firebase
-      final UserCredential userCredential = await _firebaseService.signInWithFacebook();
-      final User? user = userCredential.user;
+      final userCredential = await _firebaseService.signInWithFacebook();
+      final user = userCredential.user;
 
       if (user != null) {
         // Get Firebase ID token
-        final String? firebaseIdToken = await user.getIdToken();
+        final firebaseIdToken = await user.getIdToken();
         
         if (firebaseIdToken != null) {
           // Check if email is verified for Facebook
@@ -104,7 +103,7 @@ class SocialAuthService {
       }
     } catch (e) {
       logger.e('Facebook sign up error: $e');
-      showCustomToast('Failed to sign in with Facebook: ${e.toString()}');
+      showCustomToast('Failed to sign in with Facebook: $e');
     }
   }
 
@@ -115,12 +114,12 @@ class SocialAuthService {
       showCustomToast('Signing in with Twitter...', isError: false);
 
       // Sign in with Twitter via Firebase
-      final UserCredential userCredential = await _firebaseService.signInWithTwitter();
-      final User? user = userCredential.user;
+      final userCredential = await _firebaseService.signInWithTwitter();
+      final user = userCredential.user;
 
       if (user != null) {
         // Get Firebase ID token
-        final String? firebaseIdToken = await user.getIdToken();
+        final firebaseIdToken = await user.getIdToken();
         
         if (firebaseIdToken != null) {
           // Call your backend API for Firebase signup
@@ -140,7 +139,7 @@ class SocialAuthService {
       }
     } catch (e) {
       logger.e('Twitter sign up error: $e');
-      showCustomToast('Failed to sign in with Twitter: ${e.toString()}');
+      showCustomToast('Failed to sign in with Twitter: $e');
     }
   }
 
@@ -158,7 +157,7 @@ class SocialAuthService {
       final authProvider = getAuthProvider(context);
 
       // Prepare payload similar to your Kotlin implementation
-      final Map<String, dynamic> payload = {
+      final payload = <String, dynamic>{
         'firebaseIdToken': firebaseIdToken,
       };
 
@@ -196,7 +195,7 @@ class SocialAuthService {
       }
     } catch (e) {
       logger.e('Firebase signup error: $e');
-      showCustomToast('Registration failed: ${e.toString()}');
+      showCustomToast('Registration failed: $e');
     }
   }
 
@@ -214,7 +213,7 @@ class SocialAuthService {
       final deviceId = await firebaseService.getDeviceId();
 
       // Prepare payload similar to your Kotlin implementation
-      final Map<String, dynamic> payload = {
+      final payload = <String, dynamic>{
         'firebaseIdToken': firebaseIdToken,
       };
 
@@ -236,7 +235,7 @@ class SocialAuthService {
       if (response.isSuccess) {
         final userName = authProvider.userDetails?.name ??
             authProvider.loginResponse?.username ??
-            "User";
+            'User';
         showCustomToast('Welcome back $userName!', isError: false);
 
         // Initialize business setup after successful social login
@@ -249,7 +248,7 @@ class SocialAuthService {
       }
     } catch (e) {
       logger.e('Firebase login error: $e');
-      showCustomToast('Login failed: ${e.toString()}');
+      showCustomToast('Login failed: $e');
     }
   }
 
@@ -328,12 +327,12 @@ class SocialAuthService {
       showCustomToast('Signing in with Google...', isError: false);
 
       // Sign in with Google via Firebase
-      final UserCredential userCredential = await _firebaseService.signInWithGoogle();
-      final User? user = userCredential.user;
+      final userCredential = await _firebaseService.signInWithGoogle();
+      final user = userCredential.user;
 
       if (user != null) {
         // Get Firebase ID token
-        final String? firebaseIdToken = await user.getIdToken();
+        final firebaseIdToken = await user.getIdToken();
         
         if (firebaseIdToken != null) {
           // Call your backend API for Firebase login
@@ -351,7 +350,7 @@ class SocialAuthService {
       }
     } catch (e) {
       logger.e('Google sign in error: $e');
-      showCustomToast('Failed to sign in with Google: ${e.toString()}');
+      showCustomToast('Failed to sign in with Google: $e');
     }
   }
 
@@ -362,12 +361,12 @@ class SocialAuthService {
       showCustomToast('Signing in with Facebook...', isError: false);
 
       // Sign in with Facebook via Firebase
-      final UserCredential userCredential = await _firebaseService.signInWithFacebook();
-      final User? user = userCredential.user;
+      final userCredential = await _firebaseService.signInWithFacebook();
+      final user = userCredential.user;
 
       if (user != null) {
         // Get Firebase ID token
-        final String? firebaseIdToken = await user.getIdToken();
+        final firebaseIdToken = await user.getIdToken();
         
         if (firebaseIdToken != null) {
           // Check if email is verified for Facebook
@@ -391,7 +390,7 @@ class SocialAuthService {
       }
     } catch (e) {
       logger.e('Facebook sign in error: $e');
-      showCustomToast('Failed to sign in with Facebook: ${e.toString()}');
+      showCustomToast('Failed to sign in with Facebook: $e');
     }
   }
 
@@ -402,12 +401,12 @@ class SocialAuthService {
       showCustomToast('Signing in with Twitter...', isError: false);
 
       // Sign in with Twitter via Firebase
-      final UserCredential userCredential = await _firebaseService.signInWithTwitter();
-      final User? user = userCredential.user;
+      final userCredential = await _firebaseService.signInWithTwitter();
+      final user = userCredential.user;
 
       if (user != null) {
         // Get Firebase ID token
-        final String? firebaseIdToken = await user.getIdToken();
+        final firebaseIdToken = await user.getIdToken();
         
         if (firebaseIdToken != null) {
           // Call your backend API for Firebase login
@@ -425,7 +424,7 @@ class SocialAuthService {
       }
     } catch (e) {
       logger.e('Twitter sign in error: $e');
-      showCustomToast('Failed to sign in with Twitter: ${e.toString()}');
+      showCustomToast('Failed to sign in with Twitter: $e');
     }
   }
 
@@ -463,7 +462,7 @@ class SocialAuthService {
 
     } catch (e) {
       logger.e('Complete Google registration error: $e');
-      showCustomToast('Registration failed: ${e.toString()}', isError: true);
+      showCustomToast('Registration failed: $e');
     }
   }
 }

@@ -1,7 +1,4 @@
 class CommonResponse {
-  final String? status;
-  final String? statusCapital;
-  final String? message;
 
   CommonResponse({
     this.status,
@@ -16,6 +13,9 @@ class CommonResponse {
       message: json['message'] as String?,
     );
   }
+  final String? status;
+  final String? statusCapital;
+  final String? message;
 
   Map<String, dynamic> toJson() {
     return {

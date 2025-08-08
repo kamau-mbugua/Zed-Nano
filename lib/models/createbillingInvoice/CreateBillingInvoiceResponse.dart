@@ -1,14 +1,4 @@
 class CreateBillingInvoiceResponse {
-  final String? status;
-  final String? message;
-  final double? amount;
-  final String? invoiceNumber;
-  final String? businessNumber;
-  final String? invoiceId;
-  final String? invoiceStatus;
-  final String? billingPeriod;
-  final String? billingPlanName;
-  final int? freeTrialDays;
 
   CreateBillingInvoiceResponse({
     this.status,
@@ -37,6 +27,16 @@ class CreateBillingInvoiceResponse {
       freeTrialDays: (json['freeTrialDays'] as num?)?.toInt(),
     );
   }
+  final String? status;
+  final String? message;
+  final double? amount;
+  final String? invoiceNumber;
+  final String? businessNumber;
+  final String? invoiceId;
+  final String? invoiceStatus;
+  final String? billingPeriod;
+  final String? billingPlanName;
+  final int? freeTrialDays;
 
   Map<String, dynamic> toJson() {
     return {

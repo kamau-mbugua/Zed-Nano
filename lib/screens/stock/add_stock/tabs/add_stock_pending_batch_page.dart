@@ -15,7 +15,7 @@ import 'package:zed_nano/utils/GifsImages.dart';
 import 'package:zed_nano/utils/pagination_controller.dart';
 
 class AddStockPendingBatchPage extends StatefulWidget {
-  const AddStockPendingBatchPage({Key? key}) : super(key: key);
+  const AddStockPendingBatchPage({super.key});
 
   @override
   _AddStockPendingBatchPageState createState() =>
@@ -23,7 +23,7 @@ class AddStockPendingBatchPage extends StatefulWidget {
 }
 
 class _AddStockPendingBatchPageState extends State<AddStockPendingBatchPage> {
-  TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
   Timer? _debounceTimer;
   String _searchTerm = '';
   late PaginationController<BatchData> _paginationController;
@@ -47,7 +47,7 @@ class _AddStockPendingBatchPageState extends State<AddStockPendingBatchPage> {
 
 
   Future<List<BatchData>> getPendingAddStockBatchesByBranch(
-      {required int page, required int limit}) async {
+      {required int page, required int limit,}) async {
     try {
       final response = await getBusinessProvider(context).getPendingAddStockBatchesByBranch(
         page: page,
@@ -100,7 +100,7 @@ class _AddStockPendingBatchPageState extends State<AddStockPendingBatchPage> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          const AddStockParentPage(initialStep:0).launch(context);
+          const AddStockParentPage().launch(context);
         },
         label: const Text('Add Stock', style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white)),
         icon: const Icon(Icons.add, color: Colors.white),
@@ -120,9 +120,9 @@ class _AddStockPendingBatchPageState extends State<AddStockPendingBatchPage> {
         itemBuilder: (context, item, index) {
           return buildBatchItem(item, onTap: () {
             ViewStockBatchDetail(
-              batchId: item?.batchId ?? '',
+              batchId: item.batchId ?? '',
             ).launch(context);
-          });
+          },);
         },
         firstPageProgressIndicatorBuilder: (_) => const SizedBox(),
         newPageProgressIndicatorBuilder: (_) => const SizedBox(),

@@ -1,7 +1,4 @@
 class PushStkResponse {
-  final PushStkData? data;
-  final String? status;
-  final String? message;
 
   PushStkResponse({
     this.data,
@@ -18,6 +15,9 @@ class PushStkResponse {
       message: json['message'] as String?,
     );
   }
+  final PushStkData? data;
+  final String? status;
+  final String? message;
 
   Map<String, dynamic> toJson() {
     return {
@@ -29,10 +29,6 @@ class PushStkResponse {
 }
 
 class PushStkData {
-  final int? status;
-  final String? id;
-  final String? stkOrderId;
-  final String? requestReferenceId;
 
   PushStkData({
     this.status,
@@ -49,6 +45,10 @@ class PushStkData {
       requestReferenceId: json['requestReferenceId'] as String?,
     );
   }
+  final int? status;
+  final String? id;
+  final String? stkOrderId;
+  final String? requestReferenceId;
 
   Map<String, dynamic> toJson() {
     return {

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:zed_nano/models/customers_list/CustomerListResponse.dart';
 import 'package:zed_nano/models/get_customer_by_number/CustomerListResponse.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/customers/details/customer_items_main_page.dart';
-import 'package:zed_nano/screens/sell/sell_page.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/bottom_sheet_helper.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
@@ -13,11 +12,10 @@ import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Images.dart';
 import 'package:zed_nano/utils/extensions.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class CustomerDetailsPage extends StatefulWidget {
+  CustomerDetailsPage({super.key, this.customerID});
   String? customerID;
-  CustomerDetailsPage({Key? key, this.customerID}) : super(key: key);
 
   @override
   _CustomerDetailsPageState createState() => _CustomerDetailsPageState();
@@ -91,7 +89,7 @@ class _CustomerDetailsPageState extends State<CustomerDetailsPage> {
       context: context,
       title: 'Suspend Customer?',
       subtitle:
-      "Are you sure you want to suspend ${_cusomerData?.firstName}?",
+      'Are you sure you want to suspend ${_cusomerData?.firstName}?',
       negativeButtonText: 'Cancel',
       positiveButtonText: 'Suspend',
       onNegativePressed: () => Navigator.pop(context),
@@ -107,7 +105,7 @@ class _CustomerDetailsPageState extends State<CustomerDetailsPage> {
       context: context,
       title: 'Unsuspend Customer??',
       subtitle:
-      "Are you sure you want to unsuspend ${_cusomerData?.firstName}? You’ll be able to create invoices and place orders for this customer.",
+      'Are you sure you want to unsuspend ${_cusomerData?.firstName}? You’ll be able to create invoices and place orders for this customer.',
       negativeButtonText: 'Cancel',
       positiveButtonText: 'Unsuspend',
       onNegativePressed: () => Navigator.pop(context),
@@ -124,7 +122,7 @@ class _CustomerDetailsPageState extends State<CustomerDetailsPage> {
       context: context,
       title: 'Activate Customer?',
       subtitle:
-      "Are you sure you want to activate ${_cusomerData?.firstName}?",
+      'Are you sure you want to activate ${_cusomerData?.firstName}?',
       negativeButtonText: 'Cancel',
       positiveButtonText: 'Activate',
       onNegativePressed: () => Navigator.pop(context),
@@ -164,7 +162,7 @@ class _CustomerDetailsPageState extends State<CustomerDetailsPage> {
                 ? 'Restore'
                 : _cusomerData?.status == 'Awaiting'
                 ? 'Activate' : '',
-            style: TextStyle(
+            style: const TextStyle(
               color: accentRed,
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w500,
@@ -217,19 +215,19 @@ class _CustomerDetailsPageState extends State<CustomerDetailsPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text("Summary",
+        const Text('Summary',
             style: TextStyle(
               fontFamily: 'Poppins',
               color: Color(0xff000000),
               fontSize: 14,
               fontWeight: FontWeight.w600,
               fontStyle: FontStyle.normal,
-            )
+            ),
         ),
         Container(
           margin: const EdgeInsets.only(right: 8),
           padding: const EdgeInsets.symmetric(
-              horizontal: 12, vertical: 6),
+              horizontal: 12, vertical: 6,),
           decoration: BoxDecoration(
             color: Colors.grey[100],
             borderRadius: BorderRadius.circular(8),
@@ -239,7 +237,7 @@ class _CustomerDetailsPageState extends State<CustomerDetailsPage> {
               Row(
                 children: [
                   const Expanded(
-                    child: Text("Created by",
+                    child: Text('Created by',
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           color: textSecondary,
@@ -248,11 +246,11 @@ class _CustomerDetailsPageState extends State<CustomerDetailsPage> {
                           fontStyle: FontStyle.normal,
                           letterSpacing: 0.12,
 
-                        )
-                    )
+                        ),
+                    ),
                   ),
                   Expanded(
-                    child: new Text("${_cusomerData?.createdByName ?? 'N/A'}",
+                    child: Text(_cusomerData?.createdByName ?? 'N/A',
                         textAlign: TextAlign.end,
                         style: const TextStyle(
                           fontFamily: 'Poppins',
@@ -262,15 +260,15 @@ class _CustomerDetailsPageState extends State<CustomerDetailsPage> {
                           fontStyle: FontStyle.normal,
                           letterSpacing: 0.12,
 
-                        )
-                    )
+                        ),
+                    ),
                   ),
                 ],
               ).paddingSymmetric(vertical: 10),
                Row(
                 children: [
                   const Expanded(
-                    child: Text("Created on",
+                    child: Text('Created on',
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           color: textSecondary,
@@ -279,11 +277,11 @@ class _CustomerDetailsPageState extends State<CustomerDetailsPage> {
                           fontStyle: FontStyle.normal,
                           letterSpacing: 0.12,
 
-                        )
-                    )
+                        ),
+                    ),
                   ),
                   Expanded(
-                    child: Text("${_cusomerData?.createdAt?.toFormattedDate()}",
+                    child: Text('${_cusomerData?.createdAt?.toFormattedDate()}',
                         textAlign: TextAlign.end,
                         style: const TextStyle(
                           fontFamily: 'Poppins',
@@ -293,8 +291,8 @@ class _CustomerDetailsPageState extends State<CustomerDetailsPage> {
                           fontStyle: FontStyle.normal,
                           letterSpacing: 0.12,
 
-                        )
-                    )
+                        ),
+                    ),
                   ),
                 ],
               ).paddingSymmetric(vertical: 10),
@@ -308,7 +306,7 @@ class _CustomerDetailsPageState extends State<CustomerDetailsPage> {
     return Container(
       margin: const EdgeInsets.only(right: 8),
       padding: const EdgeInsets.symmetric(
-          horizontal: 12, vertical: 6),
+          horizontal: 12, vertical: 6,),
       decoration: BoxDecoration(
         color: Colors.grey[100],
         borderRadius: BorderRadius.circular(8),
@@ -324,14 +322,14 @@ class _CustomerDetailsPageState extends State<CustomerDetailsPage> {
             child: Row(
               children: [
                 const Expanded(
-                  child: Text("Contact Details",
+                  child: Text('Contact Details',
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         color: textPrimaryColor,
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
                         fontStyle: FontStyle.normal,
-                      )
+                      ),
                   ),
                 ),
                 rfCommonCachedNetworkImage(
@@ -339,7 +337,7 @@ class _CustomerDetailsPageState extends State<CustomerDetailsPage> {
                     fit: BoxFit.cover,
                     height: 15,
                     width: 15,
-                    radius: 8
+                    radius: 8,
                 ),
               ],
             ).paddingSymmetric(vertical: 10),
@@ -352,11 +350,11 @@ class _CustomerDetailsPageState extends State<CustomerDetailsPage> {
                     fit: BoxFit.cover,
                     height: 15,
                     width: 15,
-                    radius: 8
+                    radius: 8,
                 ),
                 6.width,
-                Text("${_cusomerData?.phone ?? 'N/A'}",
-                    style: TextStyle(
+                Text(_cusomerData?.phone ?? 'N/A',
+                    style: const TextStyle(
                       fontFamily: 'Poppins',
                       color: textSecondary,
                       fontSize: 12,
@@ -364,9 +362,9 @@ class _CustomerDetailsPageState extends State<CustomerDetailsPage> {
                       fontStyle: FontStyle.normal,
                       letterSpacing: 0.12,
 
-                    )
-                )
-              ]
+                    ),
+                ),
+              ],
             ).paddingSymmetric(vertical: 5),
             Row(
               children: [
@@ -375,11 +373,11 @@ class _CustomerDetailsPageState extends State<CustomerDetailsPage> {
                     fit: BoxFit.cover,
                     height: 15,
                     width: 15,
-                    radius: 0
+                    radius: 0,
                 ),
                 6.width,
-                 Text("${_cusomerData?.email ?? 'N/A'}",
-                    style: TextStyle(
+                 Text(_cusomerData?.email ?? 'N/A',
+                    style: const TextStyle(
                       fontFamily: 'Poppins',
                       color: textSecondary,
                       fontSize: 12,
@@ -387,9 +385,9 @@ class _CustomerDetailsPageState extends State<CustomerDetailsPage> {
                       fontStyle: FontStyle.normal,
                       letterSpacing: 0.12,
 
-                    )
-                )
-              ]
+                    ),
+                ),
+              ],
             ).paddingSymmetric(vertical: 5),
             Row(
                 children: [
@@ -398,11 +396,11 @@ class _CustomerDetailsPageState extends State<CustomerDetailsPage> {
                       fit: BoxFit.cover,
                       height: 15,
                       width: 15,
-                      radius: 0
+                      radius: 0,
                   ),
                   6.width,
                   Expanded(
-                    child: Text("${_cusomerData?.customerAddress ?? 'N/A'}",
+                    child: Text(_cusomerData?.customerAddress ?? 'N/A',
                         style: const TextStyle(
                           fontFamily: 'Poppins',
                           color: textSecondary,
@@ -410,10 +408,10 @@ class _CustomerDetailsPageState extends State<CustomerDetailsPage> {
                           fontWeight: FontWeight.w400,
                           fontStyle: FontStyle.normal,
                           letterSpacing: 0.12,
-                        )
+                        ),
                     ),
-                  )
-                ]
+                  ),
+                ],
             ).paddingSymmetric(vertical: 5),
           ],
         ],
@@ -437,7 +435,7 @@ class _CustomerDetailsPageState extends State<CustomerDetailsPage> {
                         fontSize: 28,
                         fontWeight: FontWeight.w400,
                         fontStyle: FontStyle.normal,
-                      )
+                      ),
                   ),
                   Row(
                     children: [
@@ -446,7 +444,7 @@ class _CustomerDetailsPageState extends State<CustomerDetailsPage> {
                           fit: BoxFit.fitHeight,
                           height: 20,
                           width: 20,
-                          radius: 0
+                          radius: 0,
                       ),
 
                       10.width,
@@ -459,11 +457,11 @@ class _CustomerDetailsPageState extends State<CustomerDetailsPage> {
                             fontStyle: FontStyle.normal,
                             letterSpacing: 0.12,
 
-                          )
-                      )
-                    ]
-                  )
-                ]
+                          ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
             Container(
@@ -478,7 +476,7 @@ class _CustomerDetailsPageState extends State<CustomerDetailsPage> {
                   fit: BoxFit.cover,
                   height: 40,
                   width: 40,
-                  radius: 8
+                  radius: 8,
               ),
             ),
             // rfCommonCachedNetworkImage(
@@ -498,49 +496,49 @@ class _CustomerDetailsPageState extends State<CustomerDetailsPage> {
             Container(
               margin: const EdgeInsets.only(right: 8),
               padding: const EdgeInsets.symmetric(
-                  horizontal: 12, vertical: 6),
+                  horizontal: 12, vertical: 6,),
               decoration: BoxDecoration(
-                color: _cusomerData?.status == "Active"
+                color: _cusomerData?.status == 'Active'
                 ?lightGreenColor
-                : _cusomerData?.status == "Pending"
+                : _cusomerData?.status == 'Pending'
                 ?lightOrange
                 :primaryYellowTextColor,
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: Text(_cusomerData?.status ?? "",
+              child: Text(_cusomerData?.status ?? '',
                   style: TextStyle(
                     fontFamily: 'Poppins',
-                    color: _cusomerData?.status == "Active"
+                    color: _cusomerData?.status == 'Active'
                         ? successTextColor
-                        : _cusomerData?.status == "Pending"
+                        : _cusomerData?.status == 'Pending'
                         ? primaryOrangeTextColor
                         : googleRed,
                     fontSize: 10,
                     fontWeight: FontWeight.w600,
                     fontStyle: FontStyle.normal,
-                  )
+                  ),
               ),
             ),
             Container(
               margin: const EdgeInsets.only(right: 8),
               padding: const EdgeInsets.symmetric(
-                  horizontal: 12, vertical: 6),
+                  horizontal: 12, vertical: 6,),
               decoration: BoxDecoration(
                 color: Colors.grey[100],
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: Text(_cusomerData?.customerType ?? "",
+              child: Text(_cusomerData?.customerType ?? '',
                   style: const TextStyle(
                     fontFamily: 'Poppins',
                     color: textPrimaryColor,
                     fontSize: 10,
                     fontWeight: FontWeight.w600,
                     fontStyle: FontStyle.normal,
-                  )
+                  ),
               ),
             ),
-          ]
-        )
+          ],
+        ),
 
       ],
     );

@@ -1,9 +1,4 @@
 class StockBatchDetail {
-  final String? status;
-  final String? message;
-  final List<StockItem>? data;
-  final int? count;
-  final BatchHeader? batchHeader;
 
   StockBatchDetail({
     this.status,
@@ -26,23 +21,15 @@ class StockBatchDetail {
           : null,
     );
   }
+  final String? status;
+  final String? message;
+  final List<StockItem>? data;
+  final int? count;
+  final BatchHeader? batchHeader;
 }
 
 
 class StockItem {
-  final String? productId;
-  final String? productName;
-  final String? imagePath;
-  final String? category;
-  final int? inStockQuantity;
-  final int? newQuantity;
-  final int? expectedQuantity;
-  final int? soldQuantity;
-  final int? buyingPrice;
-  final int? variance;
-  final int? newStock;
-  final int? addedStock;
-  final String? currency;
 
   StockItem({
     this.productId,
@@ -77,17 +64,23 @@ class StockItem {
       currency: json['currency'] as String?,
     );
   }
+  final String? productId;
+  final String? productName;
+  final String? imagePath;
+  final String? category;
+  final int? inStockQuantity;
+  final int? newQuantity;
+  final int? expectedQuantity;
+  final int? soldQuantity;
+  final int? buyingPrice;
+  final int? variance;
+  final int? newStock;
+  final int? addedStock;
+  final String? currency;
 }
 
 // batch_header.dart
 class BatchHeader {
-  final String? to;
-  final String? stockStatus;
-  final String? dateCreated;
-  final String? createdByName;
-  final String? approvedBy;
-  final String? dateApproved;
-  final String? batchNumber;
 
   BatchHeader({
     required this.to,
@@ -110,4 +103,11 @@ class BatchHeader {
       batchNumber: json['batchNumber'] as String?,
     );
   }
+  final String? to;
+  final String? stockStatus;
+  final String? dateCreated;
+  final String? createdByName;
+  final String? approvedBy;
+  final String? dateApproved;
+  final String? batchNumber;
 }

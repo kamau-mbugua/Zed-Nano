@@ -5,6 +5,31 @@ import 'package:flutter/material.dart';
 /// This widget allows you to create a text pattern where some words are highlighted
 /// in a different color (typically used for emphasis in headings or important text).
 class HighlightedRichText extends StatelessWidget {
+  
+  /// Creates a [HighlightedRichText] widget.
+  ///
+  /// The [textSegments] list should contain the text segments to display,
+  /// where even-indexed items (0, 2, 4, ...) will be displayed in [normalColor]
+  /// and odd-indexed items (1, 3, 5, ...) will be displayed in [highlightColor].
+  const HighlightedRichText({
+    required this.textSegments, super.key,
+    this.normalColor = Colors.black,
+    this.highlightColor = const Color(0xffdc3545),
+    this.fontSize = 28,
+    this.fontFamily = 'Poppins',
+    this.fontWeight = FontWeight.w600,
+  });
+
+  factory HighlightedRichText.connectingBusinesses() {
+    return const HighlightedRichText(
+      textSegments: [
+        'Connecting \n',
+        'Businesses',
+        ' to\n',
+        'Payments',
+      ],
+    );
+  }
   /// List of text segments to be displayed.
   /// Each segment alternates between normal and highlighted text.
   final List<String> textSegments;
@@ -23,21 +48,6 @@ class HighlightedRichText extends StatelessWidget {
   
   /// The font weight for the text.
   final FontWeight fontWeight;
-  
-  /// Creates a [HighlightedRichText] widget.
-  ///
-  /// The [textSegments] list should contain the text segments to display,
-  /// where even-indexed items (0, 2, 4, ...) will be displayed in [normalColor]
-  /// and odd-indexed items (1, 3, 5, ...) will be displayed in [highlightColor].
-  const HighlightedRichText({
-    Key? key,
-    required this.textSegments,
-    this.normalColor = Colors.black,
-    this.highlightColor = const Color(0xffdc3545),
-    this.fontSize = 28,
-    this.fontFamily = 'Poppins',
-    this.fontWeight = FontWeight.w600,
-  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -55,10 +65,10 @@ class HighlightedRichText extends StatelessWidget {
   }
 
   List<TextSpan> _buildTextSpans() {
-    final List<TextSpan> spans = [];
+    final spans = <TextSpan>[];
     
-    for (int i = 0; i < textSegments.length; i++) {
-      final bool isHighlighted = i % 2 == 1; // Odd indices are highlighted
+    for (var i = 0; i < textSegments.length; i++) {
+      final isHighlighted = i % 2 == 1; // Odd indices are highlighted
       
       spans.add(
         TextSpan(
@@ -74,16 +84,5 @@ class HighlightedRichText extends StatelessWidget {
     }
     
     return spans;
-  }
-
-  factory HighlightedRichText.connectingBusinesses() {
-    return const HighlightedRichText(
-      textSegments: [
-        'Connecting \n',
-        'Businesses',
-        ' to\n',
-        'Payments',
-      ],
-    );
   }
 }

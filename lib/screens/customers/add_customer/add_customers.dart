@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/app/app_initializer.dart';
-import 'package:zed_nano/providers/business/BusinessProviders.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/auth/input_fields.dart';
@@ -12,7 +11,7 @@ import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/extensions.dart';
 
 class AddCustomers extends StatefulWidget {
-  const AddCustomers({Key? key}) : super(key: key);
+  const AddCustomers({super.key});
 
   @override
   _AddCustomersState createState() => _AddCustomersState();
@@ -36,7 +35,7 @@ class _AddCustomersState extends State<AddCustomers> {
 
   //create a list of customer types, Individual and Company
   List<String> customerTypes = ['Individual', 'Company'];
-  var selectedCustomerType = 'Individual';
+  String selectedCustomerType = 'Individual';
 
   @override
   void dispose() {
@@ -59,11 +58,11 @@ class _AddCustomersState extends State<AddCustomers> {
   Future<void> _createCustomer(Map<String, dynamic> requestData) async {
     await getBusinessProvider(context).createCustomer(
         requestData: requestData,
-        context: context)
+        context: context,)
         .then((value) {
       if (value.isSuccess) {
         showCustomToast(value.message ?? 'Customer created successfully',
-            isError: false);
+            isError: false,);
         Navigator.pop(context);
       } else {
         showCustomToast(value.message ?? 'Something went wrong');
@@ -75,7 +74,7 @@ class _AddCustomersState extends State<AddCustomers> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar:  AuthAppBar(title: 'Add Customers'),
+      appBar:  const AuthAppBar(title: 'Add Customers'),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -114,12 +113,12 @@ class _AddCustomersState extends State<AddCustomers> {
       child: appButton(
         text: 'Add Customer',
         onTap: () {
-          var selectedCustomer = customerTypes.firstWhere((element) => element == selectedCustomerType);
-          var firstName = firstNameController.text;
+          final selectedCustomer = customerTypes.firstWhere((element) => element == selectedCustomerType);
+          final firstName = firstNameController.text;
           var lastName = lastNameController.text;
-          var email = emailController.text;
+          final email = emailController.text;
           var phone = phoneController.text;
-          var location = locationController.text;
+          final location = locationController.text;
 
           if(selectedCustomerType == 'Company'){
             lastName = '.';
@@ -141,19 +140,19 @@ class _AddCustomersState extends State<AddCustomers> {
             return showCustomToast('Please enter location');
           }
 
-          var phoneNumber = phoneController.text;
-          var countryCode = codeController.text;
-          phone = "$countryCode$phoneNumber";
+          final phoneNumber = phoneController.text;
+          final countryCode = codeController.text;
+          phone = '$countryCode$phoneNumber';
 
-          var requestData = {
+          final requestData = {
             'firstName': firstName,
             'lastName': lastName,
             'email': email,
             'phone': phone,
             'customerAddress': location,
             'customerType': selectedCustomer,
-            'paymentType': "Normal",
-            'serialVersionUID':"2576532132122260222L"
+            'paymentType': 'Normal',
+            'serialVersionUID':'2576532132122260222L',
           };
 
           logger.d(requestData);
@@ -217,7 +216,6 @@ class _AddCustomersState extends State<AddCustomers> {
         LocationPickerField(
           controller: locationController,
           focusNode: locationFocusNode,
-          label: 'Location',
           height: 50,
           onLocationSelected: (location) {
             setState(() {
@@ -225,7 +223,7 @@ class _AddCustomersState extends State<AddCustomers> {
             });
           },
         ),
-      ]
+      ],
     );
   }
 
@@ -316,16 +314,16 @@ class _AddCustomersState extends State<AddCustomers> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
+        const Text(
           'Customer Type',
           style: TextStyle(
             color: Color(0xff2f3036),
             fontWeight: FontWeight.w500,
-            fontFamily: "Poppins",
-            fontSize: 14.0,
+            fontFamily: 'Poppins',
+            fontSize: 14,
           ),
         ),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         Row(
           children: customerTypes.map((type) {
             final isSelected = selectedCustomerType == type;
@@ -337,23 +335,22 @@ class _AddCustomersState extends State<AddCustomers> {
               },
               child: Container(
                 margin: EdgeInsets.only(right: type == customerTypes.first ? 8 : 0),
-                padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                 decoration: BoxDecoration(
-                  color: isSelected ? Color(0xfff2f4f5) : Color(0xfffcfcfc),
+                  color: isSelected ? const Color(0xfff2f4f5) : const Color(0xfffcfcfc),
                   border: Border.all(
-                    color: isSelected ? Color(0xff032541) : Color(0xffc5c6cc),
-                    width: 1,
+                    color: isSelected ? const Color(0xff032541) : const Color(0xffc5c6cc),
                   ),
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Text(
                   type,
                   style: TextStyle(
-                    color: isSelected ? Color(0xff032541) : Color(0xff8f9098),
+                    color: isSelected ? const Color(0xff032541) : const Color(0xff8f9098),
                     fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                    fontFamily: "Poppins",
+                    fontFamily: 'Poppins',
                     fontStyle: FontStyle.normal,
-                    fontSize: 12.0,
+                    fontSize: 12,
                   ),
                   textAlign: TextAlign.center,
                 ),

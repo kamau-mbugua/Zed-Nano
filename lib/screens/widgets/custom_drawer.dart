@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 import 'package:zed_nano/providers/auth/authenticated_app_providers.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
@@ -18,13 +19,12 @@ import 'package:zed_nano/screens/users/users_main_list.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/Images.dart';
-import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/viewmodels/WorkflowViewModel.dart';
 
 class CustomDrawer extends StatefulWidget {
-  final Function()? onClose;
 
-  const CustomDrawer({Key? key, this.onClose}) : super(key: key);
+  const CustomDrawer({super.key, this.onClose});
+  final Function()? onClose;
 
   @override
   State<CustomDrawer> createState() => _CustomDrawerState();
@@ -42,7 +42,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
   @override
   Widget build(BuildContext context) {
     final authProvider = getAuthProvider(context);
-    final user = authProvider?.userDetails;
+    final user = authProvider.userDetails;
     final userName = user?.name ?? 'User';
     final phoneNumber = user?.phoneNumber ?? '';
 
@@ -71,7 +71,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text("Menu",
+                  const Text('Menu',
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         color: darkGreyColor,
@@ -79,7 +79,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         fontWeight: FontWeight.w600,
                         fontStyle: FontStyle.normal,
                         letterSpacing: 0.08,
-                      )),
+                      ),),
                   IconButton(
                     icon: SvgPicture.asset(closeIcon, width: 20, height: 20),
                     onPressed: widget.onClose,
@@ -90,7 +90,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
             // User profile section
             Padding(
-              padding: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(10),
               child: Row(
                 children: [
                   // Profile image
@@ -99,7 +99,6 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     width: 40,
                     height: 40,
                     fit: BoxFit.cover,
-                    usePlaceholderIfUrlEmpty: true,
                     radius: 16,
                   ),
                   16.width,
@@ -115,7 +114,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                               fontSize: 14,
                               fontWeight: FontWeight.w600,
                               fontStyle: FontStyle.normal,
-                            )),
+                            ),),
                         Text(phoneNumber,
                             style: const TextStyle(
                               fontFamily: 'Poppins',
@@ -124,7 +123,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                               fontWeight: FontWeight.w400,
                               fontStyle: FontStyle.normal,
                               letterSpacing: 0.12,
-                            )),
+                            ),),
                       ],
                     ),
                   ),
@@ -143,7 +142,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                           fontSize: 10,
                           fontWeight: FontWeight.w600,
                           fontStyle: FontStyle.normal,
-                        )),
+                        ),),
                   ).onTap(() => const ProfilePage().launch(context)),
                 ],
               ),
@@ -174,8 +173,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
                   // Progressive menu based on workflow state
                   final workflowState = viewModel.workflowState?.toLowerCase();
-                  final userRole = authProvider?.businessDetails?.group?.toLowerCase();
-                  List<Widget> menuItems = [];
+                  final userRole = authProvider.businessDetails?.group?.toLowerCase();
+                  final menuItems = <Widget>[];
 
                   // Role-based menu restrictions
                   final isCashierOrSupervisor = userRole == 'cashier' || userRole == 'supervisor';
@@ -212,7 +211,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                             _buildSubMenuItem(
                               title: 'My Businesses',
                               onTap: () => _navigateTo(context,
-                                  AppRoutes.getBusinessProfileScreenRoute()),
+                                  AppRoutes.getBusinessProfileScreenRoute(),),
                             ),
                           ],
                         ),
@@ -229,7 +228,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                             _buildSubMenuItem(
                               title: 'My Businesses',
                               onTap: () => _navigateTo(context,
-                                  AppRoutes.getBusinessProfileScreenRoute()),
+                                  AppRoutes.getBusinessProfileScreenRoute(),),
                             ),
                           ],
                         ),
@@ -240,12 +239,12 @@ class _CustomDrawerState extends State<CustomDrawer> {
                             _buildSubMenuItem(
                               title: 'Categories',
                               onTap: () => _navigateTo(
-                                  context, AppRoutes.getListCategoriesRoute()),
+                                  context, AppRoutes.getListCategoriesRoute(),),
                             ),
                             _buildSubMenuItem(
                               title: 'Products and Services',
                               onTap: () => _navigateTo(context,
-                                  AppRoutes.getListProductsAndServicesRoute()),
+                                  AppRoutes.getListProductsAndServicesRoute(),),
                             ),
                           ],
                         ),
@@ -262,7 +261,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                             _buildSubMenuItem(
                               title: 'My Businesses',
                               onTap: () => _navigateTo(context,
-                                  AppRoutes.getBusinessProfileScreenRoute()),
+                                  AppRoutes.getBusinessProfileScreenRoute(),),
                             ),
                           ],
                         ),
@@ -273,12 +272,12 @@ class _CustomDrawerState extends State<CustomDrawer> {
                             _buildSubMenuItem(
                               title: 'Categories',
                               onTap: () => _navigateTo(
-                                  context, AppRoutes.getListCategoriesRoute()),
+                                  context, AppRoutes.getListCategoriesRoute(),),
                             ),
                             _buildSubMenuItem(
                               title: 'Products and Services',
                               onTap: () => _navigateTo(context,
-                                  AppRoutes.getListProductsAndServicesRoute()),
+                                  AppRoutes.getListProductsAndServicesRoute(),),
                             ),
                           ],
                         ),
@@ -293,16 +292,16 @@ class _CustomDrawerState extends State<CustomDrawer> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            const ViewStockPage()),
+                                            const ViewStockPage(),),
                                   );
-                                }),
+                                },),
                             _buildSubMenuItem(
                               title: 'Add Stock',
                               onTap: () {
                                 Navigator.pushNamed(
                                     context,
                                     AppRoutes
-                                        .getAddStockBatchTabsPageScreenRoute());
+                                        .getAddStockBatchTabsPageScreenRoute(),);
                               },
                             ),
                             _buildSubMenuItem(
@@ -311,7 +310,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                                 Navigator.pushNamed(
                                     context,
                                     AppRoutes
-                                        .getAddStockTakeBatchTabsPageScreenRoute());
+                                        .getAddStockTakeBatchTabsPageScreenRoute(),);
                               },
                             ),
                           ],
@@ -336,14 +335,14 @@ class _CustomDrawerState extends State<CustomDrawer> {
                             ),
                             _buildSubMenuItem(
                               title: 'Receipts',
-                              onTap: () => AllTRanasctionsPage().launch(context),
+                              onTap: () => const AllTRanasctionsPage().launch(context),
                             ),
                           ],
                         ),
                         _buildMenuItem(
                           title: 'Payment',
                           iconPath: usersIcon,
-                          onTap: () => AddPaymentMethodScreen(isWorkFlow: false)
+                          onTap: () => const AddPaymentMethodScreen(isWorkFlow: false)
                               .launch(context),
                         ),
                         _buildMenuItem(
@@ -380,14 +379,14 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
             ListTile(
               leading: SvgPicture.asset(logoutIcon, color: Colors.red),
-              title: const Text("Logout",
+              title: const Text('Logout',
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     color: accentRed,
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
                     fontStyle: FontStyle.normal,
-                  )),
+                  ),),
               onTap: () {
                 Provider.of<AuthenticatedAppProviders>(context, listen: false)
                     .logout(context);
@@ -417,12 +416,12 @@ class _CustomDrawerState extends State<CustomDrawer> {
           leading: SvgPicture.asset(iconPath, color: Colors.black54),
           title: Text(title,
               style: const TextStyle(
-                  color: const Color(0xff000000),
+                  color: Color(0xff000000),
                   fontWeight: FontWeight.w400,
                   fontFamily: 'Poppins',
                   fontStyle: FontStyle.normal,
-                  fontSize: 12.0),
-              textAlign: TextAlign.left),
+                  fontSize: 12,),
+              textAlign: TextAlign.left,),
           trailing: Icon(
             _isExpanded[title] == true
                 ? Icons.keyboard_arrow_up
@@ -461,7 +460,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
               fontWeight: FontWeight.w400,
               fontStyle: FontStyle.normal,
               letterSpacing: 0.12,
-            )),
+            ),),
         onTap: () {
           Navigator.pop(context); // Close drawer
           onTap();
@@ -486,7 +485,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
             fontWeight: FontWeight.w400,
             fontStyle: FontStyle.normal,
             letterSpacing: 0.12,
-          )),
+          ),),
       onTap: () {
         Navigator.pop(context); // Close drawer
         onTap();

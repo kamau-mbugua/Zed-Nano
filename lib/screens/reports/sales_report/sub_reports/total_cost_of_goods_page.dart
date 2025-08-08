@@ -3,21 +3,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:provider/provider.dart';
-import 'package:zed_nano/contants/AppConstants.dart';
-import 'package:zed_nano/models/get_total_sales/GetTotalSalesResponse.dart';
 import 'package:zed_nano/models/product_total_cost/ProductTotalCostResponse.dart';
-import 'package:zed_nano/models/quantities_sold/QuantitiesSoldResponse.dart';
-import 'package:zed_nano/models/sales_report/SalesReportResponse.dart';
-import 'package:zed_nano/providers/business/BusinessProviders.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
-import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/screens/widget/common/date_range_filter_bottom_sheet.dart';
 import 'package:zed_nano/screens/widget/common/searchview.dart';
 import 'package:zed_nano/utils/Colors.dart';
-import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
 import 'package:zed_nano/utils/Images.dart';
 import 'package:zed_nano/utils/date_range_util.dart';
@@ -25,20 +17,20 @@ import 'package:zed_nano/utils/extensions.dart';
 import 'package:zed_nano/utils/pagination_controller.dart';
 
 class TotalCostOfGoodsPage extends StatefulWidget {
-  const TotalCostOfGoodsPage({Key? key}) : super(key: key);
+  const TotalCostOfGoodsPage({super.key});
 
   @override
   State<TotalCostOfGoodsPage> createState() => _TotalCostOfGoodsPageState();
 }
 
 class _TotalCostOfGoodsPageState extends State<TotalCostOfGoodsPage> {
-  bool _isLoading = false;
+  final bool _isLoading = false;
   String _selectedRangeLabel = 'this_month';
   ProductTotalCostResponse? _summaryData;
 
   late PaginationController<ProductTotalCostData> _paginationController;
 
-  String _searchTerm = "";
+  String _searchTerm = '';
 
   Timer? _debounceTimer;
 
@@ -63,7 +55,7 @@ class _TotalCostOfGoodsPageState extends State<TotalCostOfGoodsPage> {
     final startDate = dateRange.values.first.removeTimezoneOffset;
     final endDate = dateRange.values.last.removeTimezoneOffset;
 
-    Map<String, dynamic> params = {
+    final params = <String, dynamic>{
       'startDate': startDate,
       'endDate': endDate,
       'page': page,
@@ -73,7 +65,7 @@ class _TotalCostOfGoodsPageState extends State<TotalCostOfGoodsPage> {
 
     final response = await getBusinessProvider(context).getProductTotalCost(
         params: params,
-        context: context
+        context: context,
     );
     setState(() {
       _summaryData = response.data;
@@ -120,7 +112,7 @@ class _TotalCostOfGoodsPageState extends State<TotalCostOfGoodsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: colorBackground,
-      appBar: AuthAppBar(title: 'Reports'),
+      appBar: const AuthAppBar(title: 'Reports'),
       body: RefreshIndicator(
         onRefresh: _refreshData,
         child: Column(
@@ -178,8 +170,8 @@ class _TotalCostOfGoodsPageState extends State<TotalCostOfGoodsPage> {
         buildSearchBar(
             controller: _searchController,
             onChanged: _debounceSearch,
-            horizontalPadding:5
-        )
+            horizontalPadding:5,
+        ),
       ],
     );
   }
@@ -266,7 +258,7 @@ class _TotalCostOfGoodsPageState extends State<TotalCostOfGoodsPage> {
             Expanded(
               child: _buildSummaryCard(
                 title: 'Total Sales',
-                value: '${(_summaryData?.totalSales?.formatCurrency() ?? 0)}',
+                value: '${_summaryData?.totalSales?.formatCurrency() ?? 0}',
                 icon: outOfStockIcon,
                 iconColor: successTextColor,
                 backgroundColor: lightGreenColor,
@@ -305,7 +297,7 @@ class _TotalCostOfGoodsPageState extends State<TotalCostOfGoodsPage> {
               icon,
               width: 25,
               height: 25,
-              color: iconColor,radius: 0
+              color: iconColor,radius: 0,
           ),
           const SizedBox(height: 16),
           Text(
@@ -364,7 +356,7 @@ class _TotalCostOfGoodsPageState extends State<TotalCostOfGoodsPage> {
                 child: CompactGifDisplayWidget(
                   gifPath: emptyListGif,
                   title: "It's empty, over here.",
-                  subtitle: "No recent sales in your business, yet! Add to view them here.",
+                  subtitle: 'No recent sales in your business, yet! Add to view them here.',
                 ),
               ),
             ),
@@ -388,7 +380,7 @@ class _TotalCostOfGoodsPageState extends State<TotalCostOfGoodsPage> {
               sale.imageUrl ?? '',
               width: 25,
               height: 25
-              ,radius: 0
+              ,radius: 0,
           ),
         ),
         const SizedBox(width: 16),
@@ -411,8 +403,8 @@ class _TotalCostOfGoodsPageState extends State<TotalCostOfGoodsPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   _buildProductDetail('Qty:', sale.quantitySold?.toStringAsFixed(0) ?? '0'),
-                  _buildProductDetail('Selling Price::', 'KES ${(sale.sellingPrice?.formatCurrency() ?? 0)}'),
-                  _buildProductDetail('Total Cost:', 'KES ${(sale.totalCost?.formatCurrency() ?? 0)}'),
+                  _buildProductDetail('Selling Price::', 'KES ${sale.sellingPrice?.formatCurrency() ?? 0}'),
+                  _buildProductDetail('Total Cost:', 'KES ${sale.totalCost?.formatCurrency() ?? 0}'),
                 ],
               ),
             ],

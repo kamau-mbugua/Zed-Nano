@@ -1,9 +1,5 @@
 
 class GetCustomerByNumberResponse {
-  final String status;
-  final String message;
-  final List<CustomerData> data;
-  final int count;
 
   GetCustomerByNumberResponse({
     required this.status,
@@ -22,6 +18,10 @@ class GetCustomerByNumberResponse {
       count: json['count'] as int,
     );
   }
+  final String status;
+  final String message;
+  final List<CustomerData> data;
+  final int count;
 
   Map<String, dynamic> toJson() => {
     'Status': status,
@@ -33,58 +33,6 @@ class GetCustomerByNumberResponse {
 
 
 class CustomerData {
-  final String? id;
-  final String? businessId;
-  final String? customerNumber;
-  final String? firstName;
-  final String? lastName;
-  final String? email;
-  final String? phone;
-  final bool? studentAsParent;
-  final String? customerType;
-  final String? customerAddress;
-  final String? paymentType;
-  final bool? isParentPrimary;
-  final String? parentType;
-  final String? localCurrency;
-  final String? country;
-  final int? limit;
-  final String? limitType;
-  final List<dynamic>? beneficiaries;
-  final List<dynamic>? vehicles;
-  final int? amountReceived;
-  final String? limitInstrument;
-  final String? branchId;
-  final String? status;
-  final String? createdBy;
-  final String? createdNameBy;
-  final String? userId;
-  final List<dynamic>? billableItems;
-  final List<dynamic>? servicesAttached;
-  final List<dynamic>? extraServices;
-  final List<dynamic>? operatorProducts;
-  final String? fromBusinessNumber;
-  final String? sponsorStatus;
-  final List<dynamic>? courseUnits;
-  final List<dynamic>? emergencyContacts;
-  final String? createdAt;
-  final String? createdByName;
-  final String? updatedAt;
-  final int? v;
-  final String? activatedBy;
-  final String? activatedNameBy;
-  final int? totalCredits;
-  final int? totalExpense;
-  final int? totalBalance;
-  final String? businessName;
-  final int? itemsCount;
-  final int? pendingAmount;
-  final int? pendingInvoicesCount;
-  final int? totalPaymentAmount;
-  final int? courseCount;
-  final List<dynamic>? courses;
-  final int? unitsCount;
-  final bool? hasSecondaryParent;
 
   CustomerData({
     this.id,
@@ -197,6 +145,58 @@ class CustomerData {
       hasSecondaryParent: json['hasSecondaryParent'] as bool?,
     );
   }
+  final String? id;
+  final String? businessId;
+  final String? customerNumber;
+  final String? firstName;
+  final String? lastName;
+  final String? email;
+  final String? phone;
+  final bool? studentAsParent;
+  final String? customerType;
+  final String? customerAddress;
+  final String? paymentType;
+  final bool? isParentPrimary;
+  final String? parentType;
+  final String? localCurrency;
+  final String? country;
+  final int? limit;
+  final String? limitType;
+  final List<dynamic>? beneficiaries;
+  final List<dynamic>? vehicles;
+  final int? amountReceived;
+  final String? limitInstrument;
+  final String? branchId;
+  final String? status;
+  final String? createdBy;
+  final String? createdNameBy;
+  final String? userId;
+  final List<dynamic>? billableItems;
+  final List<dynamic>? servicesAttached;
+  final List<dynamic>? extraServices;
+  final List<dynamic>? operatorProducts;
+  final String? fromBusinessNumber;
+  final String? sponsorStatus;
+  final List<dynamic>? courseUnits;
+  final List<dynamic>? emergencyContacts;
+  final String? createdAt;
+  final String? createdByName;
+  final String? updatedAt;
+  final int? v;
+  final String? activatedBy;
+  final String? activatedNameBy;
+  final int? totalCredits;
+  final int? totalExpense;
+  final int? totalBalance;
+  final String? businessName;
+  final int? itemsCount;
+  final int? pendingAmount;
+  final int? pendingInvoicesCount;
+  final int? totalPaymentAmount;
+  final int? courseCount;
+  final List<dynamic>? courses;
+  final int? unitsCount;
+  final bool? hasSecondaryParent;
 
   Map<String, dynamic> toJson() => {
     '_id': id,

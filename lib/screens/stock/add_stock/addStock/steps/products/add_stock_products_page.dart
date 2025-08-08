@@ -6,29 +6,24 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 import 'package:zed_nano/models/get_all_activeStock/GetAllActiveStockResponse.dart';
 import 'package:zed_nano/models/listCategories/ListCategoriesResponse.dart';
-import 'package:zed_nano/models/listProducts/ListProductsResponse.dart';
 import 'package:zed_nano/models/product_model.dart';
-import 'package:zed_nano/providers/cart/CartViewModel.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
-import 'package:zed_nano/screens/sell/cart_preview_page.dart';
 import 'package:zed_nano/screens/sell/select_category_page.dart';
 import 'package:zed_nano/screens/stock/itemBuilder/add_stock_build_product_item.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/bottom_sheet_helper.dart';
-import 'package:zed_nano/screens/widget/common/common_widgets.dart';
+import 'package:zed_nano/screens/widget/common/filter_row_widget.dart';
 import 'package:zed_nano/screens/widget/common/heading.dart';
 import 'package:zed_nano/screens/widget/common/searchview.dart';
-import 'package:zed_nano/screens/widget/common/filter_row_widget.dart';
-import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
 import 'package:zed_nano/utils/pagination_controller.dart';
 import 'package:zed_nano/viewmodels/add_stock_viewmodel.dart';
 
 class AddStockProductsPage extends StatefulWidget {
+  const AddStockProductsPage({required this.onNext, required this.onPrevious, super.key});
   final VoidCallback onNext;
   final VoidCallback onPrevious;
-  const AddStockProductsPage({Key? key, required this.onNext, required this.onPrevious}) : super(key: key);
 
   @override
   State<AddStockProductsPage> createState() => _AddStockProductsPageState();
@@ -41,7 +36,7 @@ class _AddStockProductsPageState extends State<AddStockProductsPage> {
   TextEditingController searchController = TextEditingController();
 
   late PaginationController<ActiveStockProduct> _paginationController;
-  String _searchTerm = "";
+  String _searchTerm = '';
   ProductCategoryData? categoryData;
   Timer? _debounceTimer;
   String? selectedCategoryId = '';
@@ -68,7 +63,7 @@ class _AddStockProductsPageState extends State<AddStockProductsPage> {
   }
 
   Future<List<ActiveStockProduct>> getAllActiveStock(
-      {required int page, required int limit}) async {
+      {required int page, required int limit,}) async {
     try {
       final response = await getBusinessProvider(context).getAllActiveStock(
           page: page,
@@ -76,7 +71,7 @@ class _AddStockProductsPageState extends State<AddStockProductsPage> {
           searchValue: _searchTerm,
           context: context,
           categoryId: selectedCategoryId ?? '',
-          showStockDashboard:false
+          showStockDashboard:false,
       );
 
       return response.data?.data ?? [];
@@ -176,8 +171,8 @@ class _AddStockProductsPageState extends State<AddStockProductsPage> {
                       },
                     );
                   },
-                  firstPageProgressIndicatorBuilder: (_) => SizedBox(),
-                  newPageProgressIndicatorBuilder: (_) => SizedBox(),
+                  firstPageProgressIndicatorBuilder: (_) => const SizedBox(),
+                  newPageProgressIndicatorBuilder: (_) => const SizedBox(),
                   noItemsFoundIndicatorBuilder: (context) => const Center(
                     child: CompactGifDisplayWidget(
                       gifPath: emptyListGif,

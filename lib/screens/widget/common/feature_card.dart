@@ -3,18 +3,14 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 class FeatureCard extends StatelessWidget {
+
+  const FeatureCard({
+    required this.iconColor, required this.assetPath, required this.title, required this.subtitle, super.key,
+  });
   final Color iconColor;
   final String assetPath;
   final String title;
   final String subtitle;
-
-  const FeatureCard({
-    super.key,
-    required this.iconColor,
-    required this.assetPath,
-    required this.title,
-    required this.subtitle,
-  });
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +46,7 @@ class FeatureCard extends StatelessWidget {
                 style: const TextStyle(
                   fontSize: 12,
                   color: Color(0xff71727a),
-                  fontFamily: "Poppins",
+                  fontFamily: 'Poppins',
                 ),
                 textAlign: TextAlign.center,
               ).paddingSymmetric(horizontal: 10),
@@ -60,7 +56,7 @@ class FeatureCard extends StatelessWidget {
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
                   color: Color(0xff333333),
-                  fontFamily: "Poppins",
+                  fontFamily: 'Poppins',
                 ),
                 textAlign: TextAlign.center,
               ),

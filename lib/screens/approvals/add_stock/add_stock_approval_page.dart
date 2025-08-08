@@ -6,19 +6,16 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/models/get_approved_add_stock_batches_by_branch/GetBatchesListResponse.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/approvals/itemBuilders/add_stock_approval_item_builders.dart';
-import 'package:zed_nano/screens/stock/add_stock/addStock/add_stock_parent_page.dart';
 import 'package:zed_nano/screens/stock/add_stock/view_stock_batch_detail.dart';
-import 'package:zed_nano/screens/stock/itemBuilder/build_batch_item.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/screens/widget/common/searchview.dart';
-import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
 import 'package:zed_nano/utils/pagination_controller.dart';
 
 class AddStockApprovalPage extends StatefulWidget {
-  const AddStockApprovalPage({Key? key}) : super(key: key);
+  const AddStockApprovalPage({super.key});
 
   @override
   _AddStockApprovalPageState createState() =>
@@ -26,11 +23,11 @@ class AddStockApprovalPage extends StatefulWidget {
 }
 
 class _AddStockApprovalPageState extends State<AddStockApprovalPage> {
-  TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
   Timer? _debounceTimer;
   String _searchTerm = '';
   late PaginationController<BatchData> _paginationController;
-  List<String> _selectedItems = []; // Add this to track selected items
+  final List<String> _selectedItems = []; // Add this to track selected items
 
 
   @override
@@ -52,7 +49,7 @@ class _AddStockApprovalPageState extends State<AddStockApprovalPage> {
 
 
   Future<List<BatchData>> getPendingAddStockBatchesByBranch(
-      {required int page, required int limit}) async {
+      {required int page, required int limit,}) async {
     try {
       final response = await getBusinessProvider(context).getPendingAddStockBatchesByBranch(
         page: page,
@@ -72,7 +69,7 @@ class _AddStockApprovalPageState extends State<AddStockApprovalPage> {
 
 
   Future<void> _approveSelectedStockTake(
-      {required Map<String, dynamic> requestData}) async {
+      {required Map<String, dynamic> requestData,}) async {
     try {
       await getBusinessProvider(context).approveMultipleAddStockBatches(
         requestData: requestData,
@@ -115,7 +112,7 @@ class _AddStockApprovalPageState extends State<AddStockApprovalPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AuthAppBar(title: 'Add Stock Requests'),
+      appBar: const AuthAppBar(title: 'Add Stock Requests'),
       body: Column(
         children: [
           _buildSearchBar(),
@@ -159,7 +156,7 @@ class _AddStockApprovalPageState extends State<AddStockApprovalPage> {
                   onTap: () {
                     final requestData = <String, dynamic>{
                       'listBatchIds': _selectedItems,
-                      'status': 'APPROVED'
+                      'status': 'APPROVED',
                     };
                     _approveSelectedStockTake(requestData:requestData);
                   },
@@ -199,7 +196,7 @@ class _AddStockApprovalPageState extends State<AddStockApprovalPage> {
                 }
                 final requestData = <String, dynamic>{
                   'listBatchIds': _selectedItems,
-                  'status': 'APPROVED'
+                  'status': 'APPROVED',
                 };
                 _approveSelectedStockTake(requestData:requestData);
               },
@@ -209,17 +206,17 @@ class _AddStockApprovalPageState extends State<AddStockApprovalPage> {
                 }
                 final requestData = <String, dynamic>{
                   'listBatchIds': _selectedItems,
-                  'status': 'DECLINED'
+                  'status': 'DECLINED',
                 };
                 _approveSelectedStockTake(requestData:requestData);
               },
               onTap: () {
                 ViewStockBatchDetail(
-                  batchId: item?.batchId ?? '',
+                  batchId: item.batchId ?? '',
                 ).launch(context);
               },
               context: context,
-              isSelected: _selectedItems.contains(item.id));
+              isSelected: _selectedItems.contains(item.id),);
         },
         firstPageProgressIndicatorBuilder: (_) => const SizedBox(),
         newPageProgressIndicatorBuilder: (_) => const SizedBox(),

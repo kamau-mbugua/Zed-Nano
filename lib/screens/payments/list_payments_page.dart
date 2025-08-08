@@ -4,24 +4,17 @@ import 'package:provider/provider.dart';
 import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/models/get_payment_methods_with_status/PaymentMethodsResponse.dart';
 import 'package:zed_nano/providers/business/BusinessProviders.dart';
-import 'package:zed_nano/providers/helpers/providers_helpers.dart';
-import 'package:zed_nano/routes/routes.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
+import 'package:zed_nano/screens/widget/common/bottom_sheet_helper.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/screens/widget/common/heading.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/Images.dart';
-import 'package:zed_nano/screens/widget/common/bottom_sheet_helper.dart';
 import 'package:zed_nano/viewmodels/WorkflowViewModel.dart';
 import 'package:zed_nano/viewmodels/payment_view_model.dart';
 
 // Class to hold filtered payment method data
 class FilteredPaymentMethod {
-  final String iconPath;
-  final String title;
-  final String subtitle;
-  final bool status;
-  final String key;
 
   FilteredPaymentMethod({
     required this.iconPath,
@@ -30,14 +23,19 @@ class FilteredPaymentMethod {
     required this.status,
     required this.key,
   });
+  final String iconPath;
+  final String title;
+  final String subtitle;
+  final bool status;
+  final String key;
 }
 
 class AddPaymentMethodScreen extends StatefulWidget {
 
+  const AddPaymentMethodScreen({super.key, this.isWorkFlow = true});
+
   //add a defult isworkFlow to true
   final bool isWorkFlow;
-
-  AddPaymentMethodScreen({super.key, this.isWorkFlow = true});
 
   @override
   State<AddPaymentMethodScreen> createState() => _AddPaymentMethodScreenState();
@@ -157,7 +155,7 @@ class _AddPaymentMethodScreenState extends State<AddPaymentMethodScreen> {
     if (paymentMethod == null) {
       getPaymentMethods();
       return;
-    };
+    }
     
     // Find Mpesa
     final mpesaMethod = paymentMethod!.firstWhere(
@@ -205,7 +203,7 @@ class _AddPaymentMethodScreenState extends State<AddPaymentMethodScreen> {
     // );
     
     // Find KCB Mobile Money
-    bool kcbMobileMoneyStatus = false;
+    var kcbMobileMoneyStatus = false;
     final banksMethod = paymentMethod!.firstWhere(
       (method) => method.name?.toLowerCase() == 'banks',
       orElse: () => PaymentMethod(name: 'Banks', status: false),
@@ -241,7 +239,7 @@ class _AddPaymentMethodScreenState extends State<AddPaymentMethodScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AuthAppBar(title: 'Add Payment Method'),
+      appBar: const AuthAppBar(title: 'Add Payment Method'),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(16, 24, 16, 0),
         child: Column(
@@ -269,12 +267,12 @@ class _AddPaymentMethodScreenState extends State<AddPaymentMethodScreen> {
             ),
             const SizedBox(height: 10),
             if(widget.isWorkFlow)
-            appButton(text: "Complete", onTap: () {
-              Map<String, dynamic> requestData = {
-                "workflowState": "COMPLETE",
+            appButton(text: 'Complete', onTap: () {
+              final requestData = <String, dynamic>{
+                'workflowState': 'COMPLETE',
               };
               _updateBusinessSetupStatus(requestData);
-            }, context: context),
+            }, context: context,),
             const SizedBox(height: 16),
 
           ],
@@ -302,7 +300,6 @@ class _AddPaymentMethodScreenState extends State<AddPaymentMethodScreen> {
         ),
         child: SvgPicture.asset(
           iconPath,
-          fit: BoxFit.contain,
         ),
       ),
       title: Text(
@@ -362,7 +359,7 @@ class _AddPaymentMethodScreenState extends State<AddPaymentMethodScreen> {
         final status = filteredPaymentMethods.firstWhere((method) => method.key == 'settleInvoiceStatus').status;
         final requestData = <String, dynamic>{};
         requestData['status'] = !status;
-        requestData['name'] = "settleInvoiceStatus";
+        requestData['name'] = 'settleInvoiceStatus';
         _enableSettleInvoiceStatus(requestData);
       default:
         // Handle any other payment methods

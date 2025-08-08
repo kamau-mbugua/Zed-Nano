@@ -4,23 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/models/customers_list/CustomerListResponse.dart';
-import 'package:zed_nano/models/listCategories/ListCategoriesResponse.dart';
-import 'package:zed_nano/models/listUsers/ListUsersResponse.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/approvals/itemBuilders/add_customers_approval_item_builders.dart';
-import 'package:zed_nano/screens/approvals/itemBuilders/add_user_approval_item_builders.dart';
 import 'package:zed_nano/screens/customers/details/customer_details_page.dart';
-import 'package:zed_nano/screens/customers/itemBuilder/list_customers_item_builder.dart';
-import 'package:zed_nano/screens/users/detail/user_details_page.dart';
-import 'package:zed_nano/screens/users/itemBuilders/users_itme_builders.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
-import 'package:zed_nano/screens/widget/common/categories_widget.dart';
 import 'package:zed_nano/screens/widget/common/searchview.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
 import 'package:zed_nano/utils/pagination_controller.dart';
 
 class CustomersDeclinedApprovalPageState extends StatefulWidget {
-  const CustomersDeclinedApprovalPageState({Key? key}) : super(key: key);
+  const CustomersDeclinedApprovalPageState({super.key});
 
   @override
   State<CustomersDeclinedApprovalPageState> createState() => _CustomersDeclinedApprovalPageStateState();
@@ -30,7 +23,7 @@ class _CustomersDeclinedApprovalPageStateState extends State<CustomersDeclinedAp
 
   late PaginationController<Customer> _paginationController;
   final TextEditingController _searchController = TextEditingController();
-  String _searchTerm = "";
+  String _searchTerm = '';
   bool _isInitialized = false;
   Timer? _debounceTimer;
 
@@ -90,7 +83,7 @@ class _CustomersDeclinedApprovalPageStateState extends State<CustomersDeclinedAp
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
-        appBar: AuthAppBar(title: 'Users Requests'),
+        appBar: const AuthAppBar(title: 'Users Requests'),
         body: RefreshIndicator(
           onRefresh: () async {
             await _paginationController.refresh();
@@ -122,15 +115,15 @@ class _CustomersDeclinedApprovalPageStateState extends State<CustomersDeclinedAp
                         child: CompactGifDisplayWidget(
                           gifPath: emptyListGif,
                           title: "It's empty, over here.",
-                          subtitle: "No Users in your business, yet! Add to view them here.",
+                          subtitle: 'No Users in your business, yet! Add to view them here.',
                         ),
                       ),
                     ),
                   ),
                 ),
-              ]
+              ],
           ),
-        )
+        ),
     );
   }
 }

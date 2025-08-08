@@ -10,9 +10,9 @@ import 'package:zed_nano/screens/widget/common/custom_tab_switcher.dart';
 import 'package:zed_nano/utils/Colors.dart';
 
 class OrdersListMainPage extends StatefulWidget {
+  OrdersListMainPage({super.key, this.showAppBar = true, this.initialTabIndex = 0});
   bool? showAppBar;
   int? initialTabIndex;
-  OrdersListMainPage({Key? key, this.showAppBar = true, this.initialTabIndex = 0}) : super(key: key);
 
   @override
   _OrdersListMainPageState createState() => _OrdersListMainPageState();
@@ -23,8 +23,8 @@ class _OrdersListMainPageState extends State<OrdersListMainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar:widget?.showAppBar == true ? AuthAppBar(
-          title: 'Orders '
+      appBar:widget.showAppBar == true ? const AuthAppBar(
+          title: 'Orders ',
       ) : null,
       body: Column(
         children: [
@@ -33,12 +33,6 @@ class _OrdersListMainPageState extends State<OrdersListMainPage> {
           Expanded(
             child: SwipeableTabSwitcher(
               tabs: const ['Unpaid', 'Partial', 'Paid', 'Cancelled'],
-              children: const [
-                OrdersListUnpaidPage(),
-                OrdersListPartialPage(),
-                OrdersListPaidPage(),
-                OrdersListCancelledPage(),
-              ],
               selectedTabColors: const [
                 googleRed,      // Unpaid tab color
                 primaryOrangeTextColor,     // Partial tab color
@@ -58,14 +52,20 @@ class _OrdersListMainPageState extends State<OrdersListMainPage> {
                 colorBackground,        // Cancelled border color
               ],
               initialIndex: widget.initialTabIndex ?? 0,
+              children: const [
+                OrdersListUnpaidPage(),
+                OrdersListPartialPage(),
+                OrdersListPaidPage(),
+                OrdersListCancelledPage(),
+              ],
             ),
           ),
         ],
       ),
       floatingActionButton: Visibility(
-        visible: (widget.showAppBar ==true),
+        visible: widget.showAppBar ==true,
         child: FloatingActionButton.extended(
-          heroTag: "orders_list_fab",
+          heroTag: 'orders_list_fab',
           onPressed: () {
             const SellStepperPage().launch(context);
           },

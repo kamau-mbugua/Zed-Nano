@@ -2,14 +2,14 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:nb_utils/nb_utils.dart' hide lightGrey;
+import 'package:path/path.dart' as p;
 import 'package:provider/provider.dart';
-import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/models/business/BusinessDetails.dart';
 import 'package:zed_nano/models/listCategories/ListCategoriesResponse.dart';
 import 'package:zed_nano/providers/business/BusinessProviders.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
-import 'package:zed_nano/routes/routes.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/auth/input_fields.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
@@ -19,14 +19,11 @@ import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/extensions.dart';
 import 'package:zed_nano/utils/image_picker_util.dart';
-import 'package:zed_nano/viewmodels/WorkflowViewModel.dart';
-import 'package:path/path.dart' as p;
-import 'package:http_parser/http_parser.dart';
 
 class EditCategoryPage extends StatefulWidget {
-  String? categoryId;
 
-  EditCategoryPage({Key? key, this.categoryId}) : super(key: key);
+  EditCategoryPage({super.key, this.categoryId});
+  String? categoryId;
   @override
   State<EditCategoryPage> createState() => _EditCategoryPageState();
 }
@@ -62,7 +59,7 @@ class _EditCategoryPageState extends State<EditCategoryPage> {
   }
 
   Future<void> _fetchCategoryDetails() async {
-    final Map<String, dynamic> requestData = {
+    final requestData = <String, dynamic>{
       'categoryId': widget.categoryId,
     };
 
@@ -98,7 +95,7 @@ class _EditCategoryPageState extends State<EditCategoryPage> {
         .then((value) {
       if (value.isSuccess) {
         showCustomToast(value.message ?? 'Category created successfully',
-            isError: false);
+            isError: false,);
         if (_logoImage != null) {
           _uploadBusinessLogo(widget.categoryId);
         } else {
@@ -117,18 +114,18 @@ class _EditCategoryPageState extends State<EditCategoryPage> {
         filename: p.basename(_logoImage!.path),
         contentType: MediaType('image', 'jpeg'), // or png
       ),
-      'businessNumber': businessDetails?.businessNumber
+      'businessNumber': businessDetails?.businessNumber,
     });
 
     final urlPart = '?categoryId=$categoryId';
 
     await context
         .read<BusinessProviders>()
-        .uploadProductCategoryImage(context: context, formData: formData!, urlPart:urlPart)
+        .uploadProductCategoryImage(context: context, formData: formData, urlPart:urlPart)
         .then((value) async {
       if (value.isSuccess) {
         showCustomToast(value.message ?? 'Business logo uploaded successfully',
-            isError: false);
+            isError: false,);
         Navigator.pop(context, true);
       } else {
         showCustomToast(value.message ?? 'Something went wrong');
@@ -155,7 +152,7 @@ class _EditCategoryPageState extends State<EditCategoryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AuthAppBar(title: 'Edit a Category'),
+      appBar: const AuthAppBar(title: 'Edit a Category'),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -199,7 +196,6 @@ class _EditCategoryPageState extends State<EditCategoryPage> {
               ),
               const SizedBox(height: 8),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   GestureDetector(
                     onTap: () => setState(() => isProduct = true),
@@ -299,7 +295,6 @@ class _EditCategoryPageState extends State<EditCategoryPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
-                    flex: 1,
                     child: InkWell(
                       onTap: _pickImage,
                       borderRadius: BorderRadius.circular(12),
@@ -323,7 +318,7 @@ class _EditCategoryPageState extends State<EditCategoryPage> {
                                 ),
                               )
                                   : rfCommonCachedNetworkImage(
-                                '${categoryData?.imagePath ?? ''}',
+                                categoryData?.imagePath ?? '',
                                 fit: BoxFit.cover,
                                 height: 80,
                                 width: double.infinity,
@@ -388,7 +383,7 @@ class _EditCategoryPageState extends State<EditCategoryPage> {
                         ),
                       ],
                     ),
-                  )
+                  ),
                 ],
               ),
               const SizedBox(height: 32),
@@ -409,7 +404,7 @@ class _EditCategoryPageState extends State<EditCategoryPage> {
               }
               await _createCategory();
             },
-            context: context),
+            context: context,),
       ),
     );
   }

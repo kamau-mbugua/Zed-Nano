@@ -1,9 +1,4 @@
 class GetBusinessInvoicesByStatusResponse {
-  final String? status;
-  final String? message;
-  final List<BusinessInvoice>? data;
-  final int? count;
-  InvoiceSummary? invoiceSummary;
 
   GetBusinessInvoicesByStatusResponse({
     this.status,
@@ -26,6 +21,11 @@ class GetBusinessInvoicesByStatusResponse {
           : null,
     );
   }
+  final String? status;
+  final String? message;
+  final List<BusinessInvoice>? data;
+  final int? count;
+  InvoiceSummary? invoiceSummary;
 
   Map<String, dynamic> toJson() {
     return {
@@ -38,9 +38,6 @@ class GetBusinessInvoicesByStatusResponse {
 }
 
 class InvoiceSummary {
-  double? orderTotal;
-  int? orderCount;
-  String? currency;
 
   InvoiceSummary({
     this.orderTotal,
@@ -55,77 +52,12 @@ class InvoiceSummary {
       currency: json['currency'] as String?,
     );
   }
+  double? orderTotal;
+  int? orderCount;
+  String? currency;
 }
 
 class BusinessInvoice {
-  final String? id;
-  final String? businessId;
-  final String? businessNumber;
-  final String? branchId;
-  final int? invoiceNumberSequence;
-  final String? invoiceNumber;
-  final String? customerId;
-  final String? createdBy;
-  final String? updatedBy;
-  final String? storeId;
-  final String? invoiceType;
-  final String? invoiceFrequency;
-  final String? invoiceStatus;
-  final String? batchStatus;
-  final double? invoiceBalance;
-  final double? invoiceAmount;
-  final double? invoiceOverPayment;
-  final String? sentTo;
-  final List<InvoiceItem>? items;
-  final String? dueDate;
-  final bool? isOriginal;
-  final bool? retailerInvoice;
-  final bool? distributorInvoice;
-  final bool? invoiceForSupplier;
-  final bool? zedPayItWallet;
-  final String? processStatus;
-  final String? discountName;
-  final String? discountType;
-  final double? discountAmount;
-  final double? discountPercent;
-  final bool? checkInStatus;
-  final String? userId;
-  final String? terminalId;
-  final String? salesOrPurchaseInvoice;
-  final String? accountOwner;
-  final bool? transferMoneyFromZed;
-  final bool? settledByZed;
-  final String? invoiceClassification;
-  final String? regNo;
-  final String? partnerRegion;
-  final String? partnerBranch;
-  final String? tripId;
-  final List<String>? seatNumbers;
-  final String? routeId;
-  final double? cardPresentCharge;
-  final String? isSponsorInvoice;
-  final String? isStudentSponsoredInvoice;
-  final String? sendToSponsor;
-  final bool? isKraInvoice;
-  final String? creditNoteStatus;
-  final bool? isZedCreditNote;
-  final String? purchaseOrderNumber;
-  final bool? isBillingInvoice;
-  final bool? isChangePlan;
-  final bool? isWithdrawal;
-  final List<dynamic>? deletedItems;
-  final List<dynamic>? deletions;
-  final List<dynamic>? payments;
-  final List<dynamic>? sponsoredBillableItems;
-  final List<dynamic>? sponsoredBillableItemsInvoice;
-  final String? createdAt;
-  final String? updatedAt;
-  final int? v;
-  final String? paymentId;
-  final String? sendToFirstName;
-  final double? invoiceDiscountAmount;
-  final double? paidAmount;
-  final String? currency;
 
   BusinessInvoice({
     this.id,
@@ -272,6 +204,74 @@ class BusinessInvoice {
       currency: json['currency'] as String?,
     );
   }
+  final String? id;
+  final String? businessId;
+  final String? businessNumber;
+  final String? branchId;
+  final int? invoiceNumberSequence;
+  final String? invoiceNumber;
+  final String? customerId;
+  final String? createdBy;
+  final String? updatedBy;
+  final String? storeId;
+  final String? invoiceType;
+  final String? invoiceFrequency;
+  final String? invoiceStatus;
+  final String? batchStatus;
+  final double? invoiceBalance;
+  final double? invoiceAmount;
+  final double? invoiceOverPayment;
+  final String? sentTo;
+  final List<InvoiceItem>? items;
+  final String? dueDate;
+  final bool? isOriginal;
+  final bool? retailerInvoice;
+  final bool? distributorInvoice;
+  final bool? invoiceForSupplier;
+  final bool? zedPayItWallet;
+  final String? processStatus;
+  final String? discountName;
+  final String? discountType;
+  final double? discountAmount;
+  final double? discountPercent;
+  final bool? checkInStatus;
+  final String? userId;
+  final String? terminalId;
+  final String? salesOrPurchaseInvoice;
+  final String? accountOwner;
+  final bool? transferMoneyFromZed;
+  final bool? settledByZed;
+  final String? invoiceClassification;
+  final String? regNo;
+  final String? partnerRegion;
+  final String? partnerBranch;
+  final String? tripId;
+  final List<String>? seatNumbers;
+  final String? routeId;
+  final double? cardPresentCharge;
+  final String? isSponsorInvoice;
+  final String? isStudentSponsoredInvoice;
+  final String? sendToSponsor;
+  final bool? isKraInvoice;
+  final String? creditNoteStatus;
+  final bool? isZedCreditNote;
+  final String? purchaseOrderNumber;
+  final bool? isBillingInvoice;
+  final bool? isChangePlan;
+  final bool? isWithdrawal;
+  final List<dynamic>? deletedItems;
+  final List<dynamic>? deletions;
+  final List<dynamic>? payments;
+  final List<dynamic>? sponsoredBillableItems;
+  final List<dynamic>? sponsoredBillableItemsInvoice;
+  final String? createdAt;
+  final String? updatedAt;
+  final int? v;
+  final String? paymentId;
+  final String? sendToFirstName;
+  final double? invoiceDiscountAmount;
+  final double? paidAmount;
+  final String? currency;
 
   Map<String, dynamic> toJson() {
     return {
@@ -348,23 +348,6 @@ class BusinessInvoice {
 }
 
 class InvoiceItem {
-  final String? productId;
-  final String? productName;
-  final double? productPrice;
-  final String? productCode;
-  final int? quantity;
-  final String? variationId;
-  final String? pricingId;
-  final String? variationKey;
-  final double? discountPercent;
-  final double? discount;
-  final String? priceStatus;
-  final String? taxType;
-  final String? taxTyCd;
-  final String? id;
-  final List<dynamic>? deletedDiscount;
-  final String? createdAt;
-  final String? updatedAt;
 
   InvoiceItem({
     this.productId,
@@ -407,6 +390,23 @@ class InvoiceItem {
       updatedAt: json['updatedAt'] as String?,
     );
   }
+  final String? productId;
+  final String? productName;
+  final double? productPrice;
+  final String? productCode;
+  final int? quantity;
+  final String? variationId;
+  final String? pricingId;
+  final String? variationKey;
+  final double? discountPercent;
+  final double? discount;
+  final String? priceStatus;
+  final String? taxType;
+  final String? taxTyCd;
+  final String? id;
+  final List<dynamic>? deletedDiscount;
+  final String? createdAt;
+  final String? updatedAt;
 
   Map<String, dynamic> toJson() {
     return {

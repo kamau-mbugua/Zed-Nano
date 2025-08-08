@@ -1,7 +1,4 @@
 class OrderCheckoutPaymentResponse {
-  final String? status;
-  final String? message;
-  final CashPaymentData? data;
 
   OrderCheckoutPaymentResponse({
     this.status,
@@ -16,6 +13,9 @@ class OrderCheckoutPaymentResponse {
       data: json['data'] != null ? CashPaymentData.fromJson(json['data'] as Map<String, dynamic>) : null,
     );
   }
+  final String? status;
+  final String? message;
+  final CashPaymentData? data;
 
   Map<String, dynamic> toJson() {
     return {
@@ -32,7 +32,6 @@ class OrderCheckoutPaymentResponse {
 }
 
 class CashPaymentData {
-  final CashPaymentResults? results;
 
   CashPaymentData({
     this.results,
@@ -43,6 +42,7 @@ class CashPaymentData {
       results: json['results'] != null ? CashPaymentResults.fromJson(json['results'] as Map<String, dynamic>) : null,
     );
   }
+  final CashPaymentResults? results;
 
   Map<String, dynamic> toJson() {
     return {
@@ -57,75 +57,6 @@ class CashPaymentData {
 }
 
 class CashPaymentResults {
-  final String? transactionID;
-  final String? receiptNumber;
-  final String? businessName;
-  final double? transamount;
-  final String? status;
-  final String? zedSequenceNumber;
-  final String? zedReceiptNumber;
-  final String? businessSequenceNumber;
-  final String? businessReceiptNumber;
-  final String? businessNo;
-  final String? serialNo;
-  final String? transactionType;
-  final String? transtime;
-  final String? businessShortCode;
-  final String? billRefNo;
-  final String? customerPhone;
-  final String? customerFirstName;
-  final String? customerMiddleName;
-  final String? customerSecondName;
-  final String? paybillBalance;
-  final String? requestType;
-  final String? uploadTime;
-  final String? versionCode;
-  final String? versionName;
-  final String? appBuildTime;
-  final String? cashier;
-  final String? paymentChanel;
-  final String? productName;
-  final String? productCategory;
-  final List<String>? pushyTransactionId;
-  final String? userId;
-  final List<dynamic>? items;
-  final bool? settled;
-  final bool? multiOrder;
-  final String? branchId;
-  final String? businessIdString;
-  final String? paidOrderId;
-  final String? customerId;
-  final String? orderType;
-  final double? discountAmount;
-  final double? discountPercent;
-  final String? sequenceNumber;
-  final String? termId;
-  final String? documentType;
-  final List<dynamic>? invoicesIds;
-  final double? refundAmount;
-  final bool? transferredToSchool;
-  final bool? approvedTransaction;
-  final List<dynamic>? seatNumbers;
-  final bool? duplicatePrint;
-  final String? terminalSerialNumber;
-  final String? tellerId;
-  final bool? isPreOrder;
-  final String? businessType;
-  final String? cardNumber;
-  final String? cardPresentSettlementStatus;
-  final double? cardPresentCharge;
-  final String? isSponsorpayment;
-  final String? zeddebitaccountNumber;
-  final bool? isBillingPayment;
-  final String? insuranceCompanyName;
-  final String? id;
-  final String? transactionCreated;
-  final List<dynamic>? orders;
-  final List<dynamic>? paidOrders;
-  final List<dynamic>? invoices;
-  final String? createdAt;
-  final String? updatedAt;
-  final int? v;
 
   CashPaymentResults({
     this.transactionID,
@@ -272,6 +203,75 @@ class CashPaymentResults {
       v: json['__v'] as int?,
     );
   }
+  final String? transactionID;
+  final String? receiptNumber;
+  final String? businessName;
+  final double? transamount;
+  final String? status;
+  final String? zedSequenceNumber;
+  final String? zedReceiptNumber;
+  final String? businessSequenceNumber;
+  final String? businessReceiptNumber;
+  final String? businessNo;
+  final String? serialNo;
+  final String? transactionType;
+  final String? transtime;
+  final String? businessShortCode;
+  final String? billRefNo;
+  final String? customerPhone;
+  final String? customerFirstName;
+  final String? customerMiddleName;
+  final String? customerSecondName;
+  final String? paybillBalance;
+  final String? requestType;
+  final String? uploadTime;
+  final String? versionCode;
+  final String? versionName;
+  final String? appBuildTime;
+  final String? cashier;
+  final String? paymentChanel;
+  final String? productName;
+  final String? productCategory;
+  final List<String>? pushyTransactionId;
+  final String? userId;
+  final List<dynamic>? items;
+  final bool? settled;
+  final bool? multiOrder;
+  final String? branchId;
+  final String? businessIdString;
+  final String? paidOrderId;
+  final String? customerId;
+  final String? orderType;
+  final double? discountAmount;
+  final double? discountPercent;
+  final String? sequenceNumber;
+  final String? termId;
+  final String? documentType;
+  final List<dynamic>? invoicesIds;
+  final double? refundAmount;
+  final bool? transferredToSchool;
+  final bool? approvedTransaction;
+  final List<dynamic>? seatNumbers;
+  final bool? duplicatePrint;
+  final String? terminalSerialNumber;
+  final String? tellerId;
+  final bool? isPreOrder;
+  final String? businessType;
+  final String? cardNumber;
+  final String? cardPresentSettlementStatus;
+  final double? cardPresentCharge;
+  final String? isSponsorpayment;
+  final String? zeddebitaccountNumber;
+  final bool? isBillingPayment;
+  final String? insuranceCompanyName;
+  final String? id;
+  final String? transactionCreated;
+  final List<dynamic>? orders;
+  final List<dynamic>? paidOrders;
+  final List<dynamic>? invoices;
+  final String? createdAt;
+  final String? updatedAt;
+  final int? v;
 
   Map<String, dynamic> toJson() {
     return {

@@ -4,7 +4,6 @@ import 'package:zed_nano/models/order_payment_status/OrderDetailResponse.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/orders/itemBuilder/order_item_builders.dart';
 import 'package:zed_nano/screens/orders/void_transaction/void_order_transaction_page.dart';
-import 'package:zed_nano/screens/payments/checkout_payment/check_out_payments_page.dart';
 import 'package:zed_nano/screens/sell/sell_stepper_page.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/bottom_sheet_helper.dart';
@@ -17,9 +16,9 @@ import 'package:zed_nano/utils/Images.dart';
 import 'package:zed_nano/utils/extensions.dart';
 
 class OrderDetailPage extends StatefulWidget {
-  String? orderId;
 
-  OrderDetailPage({Key? key, this.orderId}) : super(key: key);
+  OrderDetailPage({super.key, this.orderId});
+  String? orderId;
 
   @override
   _OrderDetailPageState createState() => _OrderDetailPageState();
@@ -40,7 +39,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
   }
 
   Future<void> getOrderPaymentStatus() async {
-    Map<String, dynamic> requestData = {'pushyTransactionId': widget.orderId};
+    final requestData = <String, dynamic>{'pushyTransactionId': widget.orderId};
 
     try {
       final response = await getBusinessProvider(context)
@@ -109,9 +108,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
               _buildSummary(),
               _buildOrderItems(),
               _buildNaration(),
-              orderDetail?.status == 'paid' || orderDetail?.status == 'partial'
-                  ? _buildPaymentMethod()
-                  : Container(),
+              if (orderDetail?.status == 'paid' || orderDetail?.status == 'partial') _buildPaymentMethod() else Container(),
               _buildOrderSummary(),
               _buildServedBy(),
             ],
@@ -126,7 +123,6 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
     final cartItems = orderTransactionTotals ?? [];
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           const Text('Payment Summary',
               style: TextStyle(
@@ -135,7 +131,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
                 fontStyle: FontStyle.normal,
-              )),
+              ),),
           8.height,
           if (cartItems.isEmpty)
             const Center(
@@ -150,7 +146,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
             ListView.separated(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              padding: const EdgeInsets.symmetric(horizontal: 0),
+              padding: const EdgeInsets.symmetric(),
               itemCount: cartItems.length,
               separatorBuilder: (context, index) => const Divider(
                 height: 0.5,
@@ -161,7 +157,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                 return buildOrderPaymentSummary(item: item, context: context);
               },
             ),
-        ]).paddingSymmetric(vertical: 16);
+        ],).paddingSymmetric(vertical: 16);
   }
 
   Widget _buildSubmitButton() {
@@ -223,7 +219,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                 context: context,
                 onTap: () {
                   BottomSheetHelper.showPrintingOptionsBottomSheet(context,
-                          printOrderInvoiceId: orderDetail?.id)
+                          printOrderInvoiceId: orderDetail?.id,)
                       .then((value) {});
                 },
               ),
@@ -237,7 +233,6 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
   Widget _buildServedBy() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         const Text('Served By',
             style: TextStyle(
@@ -246,7 +241,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
               fontSize: 14,
               fontWeight: FontWeight.w600,
               fontStyle: FontStyle.normal,
-            )),
+            ),),
         Container(
             width: context.width(),
             decoration: BoxDecoration(
@@ -258,7 +253,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("${orderDetail?.cashier ?? 'N/A'}",
+                Text(orderDetail?.cashier ?? 'N/A',
                     style: const TextStyle(
                       fontFamily: 'Poppins',
                       color: textSecondary,
@@ -266,9 +261,9 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                       fontWeight: FontWeight.w400,
                       fontStyle: FontStyle.normal,
                       letterSpacing: 0.12,
-                    ))
+                    ),),
               ],
-            )),
+            ),),
       ],
     );
   }
@@ -276,7 +271,6 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
   Widget _buildOrderSummary() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         const Text('Summary',
             style: TextStyle(
@@ -285,7 +279,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
               fontSize: 14,
               fontWeight: FontWeight.w600,
               fontStyle: FontStyle.normal,
-            )),
+            ),),
         Container(
             width: context.width(),
             decoration: BoxDecoration(
@@ -308,9 +302,9 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                           fontWeight: FontWeight.w400,
                           fontStyle: FontStyle.normal,
                           letterSpacing: 0.12,
-                        )),
+                        ),),
                     Text(
-                        "${orderDetail?.createdAt?.toFormattedDateTime() ?? 'N/A'}",
+                        orderDetail?.createdAt?.toFormattedDateTime() ?? 'N/A',
                         style: const TextStyle(
                           fontFamily: 'Poppins',
                           color: textSecondary,
@@ -318,7 +312,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                           fontWeight: FontWeight.w400,
                           fontStyle: FontStyle.normal,
                           letterSpacing: 0.12,
-                        ))
+                        ),),
                   ],
                 ).paddingSymmetric(vertical: 8),
                 Row(
@@ -332,7 +326,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                           fontWeight: FontWeight.w400,
                           fontStyle: FontStyle.normal,
                           letterSpacing: 0.12,
-                        )),
+                        ),),
                     Text(
                         "${orderDetail?.currency ?? 'KES'} ${orderDetail?.subTotal?.formatCurrency() ?? 'N/A'}",
                         style: const TextStyle(
@@ -342,7 +336,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                           fontWeight: FontWeight.w400,
                           fontStyle: FontStyle.normal,
                           letterSpacing: 0.12,
-                        ))
+                        ),),
                   ],
                 ).paddingSymmetric(vertical: 8),
                 Row(
@@ -356,7 +350,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                           fontWeight: FontWeight.w400,
                           fontStyle: FontStyle.normal,
                           letterSpacing: 0.12,
-                        )),
+                        ),),
                     Text(
                         "${orderDetail?.currency ?? 'KES'} ${orderDetail?.discountAmount?.formatCurrency() ?? 'N/A'}",
                         style: const TextStyle(
@@ -366,33 +360,33 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                           fontWeight: FontWeight.w400,
                           fontStyle: FontStyle.normal,
                           letterSpacing: 0.12,
-                        ))
+                        ),),
                   ],
                 ).paddingSymmetric(vertical: 8),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Total',
+                    const Text('Total',
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           color: textPrimary,
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
                           fontStyle: FontStyle.normal,
-                        )),
+                        ),),
                     Text(
                         "${orderDetail?.currency ?? 'KES'} ${orderDetail?.transamount?.formatCurrency() ?? 'N/A'}",
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontFamily: 'Poppins',
                           color: textPrimary,
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
                           fontStyle: FontStyle.normal,
-                        )),
+                        ),),
                   ],
                 ).paddingSymmetric(vertical: 10),
               ],
-            )),
+            ),),
       ],
     );
   }
@@ -400,7 +394,6 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
   Widget _buildNaration() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         const Text('Narration',
             style: TextStyle(
@@ -409,7 +402,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
               fontSize: 14,
               fontWeight: FontWeight.w600,
               fontStyle: FontStyle.normal,
-            )),
+            ),),
         Container(
             width: context.width(),
             decoration: BoxDecoration(
@@ -421,7 +414,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("${orderDetail?.orderTable ?? 'N/A'}",
+                Text(orderDetail?.orderTable ?? 'N/A',
                     style: const TextStyle(
                       fontFamily: 'Poppins',
                       color: textSecondary,
@@ -429,9 +422,9 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                       fontWeight: FontWeight.w400,
                       fontStyle: FontStyle.normal,
                       letterSpacing: 0.12,
-                    ))
+                    ),),
               ],
-            )),
+            ),),
       ],
     );
   }
@@ -440,7 +433,6 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
     final cartItems = orderDetail?.items ?? [];
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           const Text('Order Items',
               style: TextStyle(
@@ -449,7 +441,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
                 fontStyle: FontStyle.normal,
-              )),
+              ),),
           8.height,
           if (cartItems.isEmpty)
             const Center(
@@ -464,7 +456,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
             ListView.separated(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              padding: const EdgeInsets.symmetric(horizontal: 0),
+              padding: const EdgeInsets.symmetric(),
               itemCount: cartItems.length,
               separatorBuilder: (context, index) => const Divider(
                 height: 0.5,
@@ -475,7 +467,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                 return buildOrderItem(item: item);
               },
             ),
-        ]).paddingSymmetric(vertical: 16);
+        ],).paddingSymmetric(vertical: 16);
   }
 
   Widget _buildSummary() {
@@ -502,22 +494,21 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                         fontWeight: FontWeight.w400,
                         fontStyle: FontStyle.normal,
                         letterSpacing: 0.15,
-                      )),
+                      ),),
                   6.height,
-                  Text("${orderDetail?.orderNumber ?? 'N/A'}",
+                  Text(orderDetail?.orderNumber ?? 'N/A',
                       style: const TextStyle(
                         fontFamily: 'Poppins',
                         color: textPrimary,
                         fontSize: 15,
                         fontWeight: FontWeight.w400,
                         fontStyle: FontStyle.normal,
-                      ))
+                      ),),
                 ],
-              )),
+              ),),
         ),
         8.width,
         Expanded(
-          flex: 1,
           child: Container(
               height: 85,
               decoration: BoxDecoration(
@@ -537,7 +528,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                         fontWeight: FontWeight.w400,
                         fontStyle: FontStyle.normal,
                         letterSpacing: 0.15,
-                      )),
+                      ),),
                   6.height,
                   Text('${orderDetail?.items?.length ?? 0}',
                       style: const TextStyle(
@@ -546,9 +537,9 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                         fontSize: 18,
                         fontWeight: FontWeight.w400,
                         fontStyle: FontStyle.normal,
-                      ))
+                      ),),
                 ],
-              )),
+              ),),
         ),
         8.width,
         Expanded(
@@ -576,7 +567,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                         fontWeight: FontWeight.w400,
                         fontStyle: FontStyle.normal,
                         letterSpacing: 0.12,
-                      )),
+                      ),),
                   6.height,
                   Text(
                       "${orderDetail?.currency ?? 'KES'} ${orderDetail?.status == 'partial' ? orderDetailData?.deficit?.formatCurrency() : orderDetail?.transamount?.formatCurrency() ?? 'N/A'}",
@@ -590,9 +581,9 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                         fontStyle: FontStyle.normal,
-                      ))
+                      ),),
                 ],
-              )),
+              ),),
         ),
       ],
     ).paddingSymmetric(vertical: 16);
@@ -612,9 +603,9 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                   fontWeight: FontWeight.w600,
                   fontStyle: FontStyle.normal,
                   letterSpacing: 0.09,
-                )),
+                ),),
             Container(
-              margin: const EdgeInsets.only(right: 0),
+              margin: const EdgeInsets.only(),
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
                 color: orderDetail?.status == 'paid'
@@ -635,10 +626,10 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                     fontSize: 10,
                     fontWeight: FontWeight.w600,
                     fontStyle: FontStyle.normal,
-                  )),
+                  ),),
             ),
           ],
-        )
+        ),
       ],
     );
   }
@@ -649,9 +640,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
       actions: [
         if (orderDetail?.status == 'unpaid')
           TextButton(
-            onPressed: () {
-              _showCancelOrderBottomSheet();
-            },
+            onPressed: _showCancelOrderBottomSheet,
             child: const Text(
               'Cancel Order',
               style: TextStyle(
@@ -663,7 +652,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
             ),
           )
         else
-          Container()
+          Container(),
       ],
     );
   }

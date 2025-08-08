@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:zed_nano/app/app_initializer.dart';
-import 'package:zed_nano/models/createbillingInvoice/CreateBillingInvoiceResponse.dart';
 import 'package:zed_nano/contants/AppConstants.dart';
+import 'package:zed_nano/models/createbillingInvoice/CreateBillingInvoiceResponse.dart';
 
 class WebViewPaymentPage extends StatefulWidget {
+
+  const WebViewPaymentPage({
+    required this.invoiceData, required this.userEmail, required this.firstName, required this.lastName, required this.businessNumber, required this.onPaymentComplete, required this.onPaymentCancelled, super.key,
+  });
   final CreateBillingInvoiceResponse invoiceData;
   final String userEmail;
   final String firstName;
@@ -12,17 +16,6 @@ class WebViewPaymentPage extends StatefulWidget {
   final String businessNumber;
   final VoidCallback onPaymentComplete;
   final VoidCallback onPaymentCancelled;
-
-  const WebViewPaymentPage({
-    super.key,
-    required this.invoiceData,
-    required this.userEmail,
-    required this.firstName,
-    required this.lastName,
-    required this.businessNumber,
-    required this.onPaymentComplete,
-    required this.onPaymentCancelled,
-  });
 
   @override
   State<WebViewPaymentPage> createState() => _WebViewPaymentPageState();
@@ -134,7 +127,7 @@ class _WebViewPaymentPageState extends State<WebViewPaymentPage> {
     // Build the URL similar to your Kotlin pattern
     // Include invoiceId only if it's not empty
     // final invoiceIdSegment = invoiceId.isNotEmpty ? '/$invoiceId' : '';
-    final paymentUrl = '$baseUrl/cardpay/${widget.firstName}/${widget.lastName}/$amount/invoice/$encodedEmail/$invoiceNumber/${businessNumber}';
+    final paymentUrl = '$baseUrl/cardpay/${widget.firstName}/${widget.lastName}/$amount/invoice/$encodedEmail/$invoiceNumber/$businessNumber';
     
     logger.d('Payment URL: $paymentUrl'); // For debugging
     return paymentUrl;
@@ -172,7 +165,7 @@ class _WebViewPaymentPageState extends State<WebViewPaymentPage> {
             color: Color(0xff1f2024),
             fontWeight: FontWeight.w500,
             fontFamily: 'Poppins',
-            fontSize: 16.0,
+            fontSize: 16,
           ),
         ),
       ),
@@ -181,7 +174,7 @@ class _WebViewPaymentPageState extends State<WebViewPaymentPage> {
           if (errorMessage != null)
             Center(
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -228,7 +221,7 @@ class _WebViewPaymentPageState extends State<WebViewPaymentPage> {
           
           // Loading indicator
           if (isLoading)
-            Container(
+            ColoredBox(
               color: Colors.white.withOpacity(0.8),
               child: const Center(
                 child: Column(

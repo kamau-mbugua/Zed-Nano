@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'dimensions.dart';
+import 'package:zed_nano/utils/dimensions.dart';
 
 const rubikRegular = TextStyle(
   fontFamily: 'Rubik',

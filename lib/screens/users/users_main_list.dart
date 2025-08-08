@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
-import 'package:zed_nano/screens/customers/add_customer/add_customers.dart';
 import 'package:zed_nano/screens/users/add_user_page.dart';
 import 'package:zed_nano/screens/users/tabs/activ_user_list_page.dart';
 import 'package:zed_nano/screens/users/tabs/pending_user_list_page.dart';
@@ -10,7 +9,7 @@ import 'package:zed_nano/screens/widget/common/custom_tab_switcher.dart';
 import 'package:zed_nano/utils/Colors.dart';
 
 class UsersMainList extends StatefulWidget {
-  const UsersMainList({Key? key}) : super(key: key);
+  const UsersMainList({super.key});
 
   @override
   _UsersMainListState createState() => _UsersMainListState();
@@ -21,8 +20,8 @@ class _UsersMainListState extends State<UsersMainList> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AuthAppBar(
-          title: 'Users'
+      appBar: const AuthAppBar(
+          title: 'Users',
       ),
       body: Column(
         children: [
@@ -30,11 +29,6 @@ class _UsersMainListState extends State<UsersMainList> {
           Expanded(
             child: SwipeableTabSwitcher(
               tabs: const ['Active', 'Pending', 'Suspended'],
-              children: const [
-                ActiveUserListPage(),
-                PendingUserListPage(),
-                SuspendedUsersPage(),
-              ],
               selectedTabColors: const [
                 successTextColor,      // Active tab color
                 primaryOrangeTextColor,     // Pending tab color
@@ -50,13 +44,18 @@ class _UsersMainListState extends State<UsersMainList> {
                 primaryOrangeTextColor,     // Pending border color
                 colorBackground,        // Suspended border color
               ],
+              children: const [
+                ActiveUserListPage(),
+                PendingUserListPage(),
+                SuspendedUsersPage(),
+              ],
             ),
           ),
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
-          AddUserPage().launch(context);
+          const AddUserPage().launch(context);
         },
         backgroundColor: const Color(0xFF032541),
         icon: const Icon(Icons.add, size: 20, color: Colors.white),

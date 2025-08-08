@@ -1,7 +1,4 @@
 class SetupStatusResponse {
-  final String? status;
-  final String? message;
-  final SetupStatusData? data;
 
   SetupStatusResponse({this.status, this.message, this.data});
 
@@ -14,6 +11,9 @@ class SetupStatusResponse {
           : null,
     );
   }
+  final String? status;
+  final String? message;
+  final SetupStatusData? data;
 
   Map<String, dynamic> toJson() {
     return {
@@ -25,7 +25,6 @@ class SetupStatusResponse {
 }
 
 class SetupStatusData {
-  final String? workflowState;
 
   SetupStatusData({this.workflowState});
 
@@ -34,6 +33,7 @@ class SetupStatusData {
       workflowState: json['workflowState'] as String?,
     );
   }
+  final String? workflowState;
 
   Map<String, dynamic> toJson() {
     return {
