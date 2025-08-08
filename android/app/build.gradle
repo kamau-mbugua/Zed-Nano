@@ -138,23 +138,6 @@ android {
             shrinkResources false
         }
     }
-
-    // Custom output file naming
-    applicationVariants.all { variant ->
-        variant.outputs.all { output ->
-            def flavor = variant.flavorName
-            def buildType = variant.buildType.name
-            def versionName = variant.versionName
-            def versionCode = variant.versionCode
-            if (output.outputFile.name.endsWith(".apk")) {
-                def fileName = "ZN_${flavor}_${buildType}_v${versionName}_${versionCode}.apk"
-                outputFileName = fileName
-            } else if (output.outputFile.name.endsWith(".aab")) {
-                def fileName = "ZN_${flavor}_${buildType}_v${versionName}_${versionCode}.aab"
-                outputFileName = fileName
-            }
-        }
-    }
 }
 
 flutter {
