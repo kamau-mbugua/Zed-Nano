@@ -142,8 +142,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
             right: 0,
             child: InkWell(
               onTap: () {
-                // Handle image selection
-                showCustomToast('Image selection coming soon');
+                // Handle image selection from gallery only (Google Play compliance)
+                showCustomToast('Image selection from gallery coming soon');
               },
               child: Container(
                 width: 32,

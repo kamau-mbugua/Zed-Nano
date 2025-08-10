@@ -68,14 +68,14 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
 
   Future<void> _pickImage() async {
-    final pickedImage = await ImagePickerUtil.pickImage(
+    final pickedImage = await ImagePickerUtil.pickImageSafely(
       context: context,
       maxWidth: 800,
       maxHeight: 800,
       imageQuality: 80,
     );
 
-    if (pickedImage != null) {
+    if (pickedImage != null && mounted) {
       setState(() {
         _logoImage = pickedImage;
       });

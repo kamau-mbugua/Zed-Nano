@@ -21,6 +21,7 @@ import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/Images.dart';
 import 'package:zed_nano/utils/extensions.dart';
 import 'package:zed_nano/utils/image_picker_util.dart';
+import 'package:zed_nano/utils/image_picker_state_manager.dart';
 import 'package:zed_nano/viewmodels/WorkflowViewModel.dart';
 
 class NewCategoryPage extends StatefulWidget {
@@ -46,6 +47,18 @@ class _NewCategoryPageState extends State<NewCategoryPage> {
   void initState() {
     businessDetails = getBusinessDetails(context);
     super.initState();
+    // Check for pending image after potential app restart
+    _checkForPendingImage();
+  }
+
+  /// Check if there's a pending image from before app restart
+  Future<void> _checkForPendingImage() async {
+    final pendingImage = await ImagePickerStateManager.checkForPendingImage();
+    if (pendingImage != null && mounted) {
+      setState(() {
+        _logoImage = pendingImage;
+      });
+    }
   }
 
   @override
@@ -124,14 +137,14 @@ class _NewCategoryPageState extends State<NewCategoryPage> {
   }
 
   Future<void> _pickImage() async {
-    final pickedImage = await ImagePickerUtil.pickImage(
+    final pickedImage = await ImagePickerStateManager.pickImageWithStateManagement(
       context: context,
-      maxWidth: 800,
-      maxHeight: 800,
-      imageQuality: 80,
+      maxWidth: 600,
+      maxHeight: 600,
+      imageQuality: 70,
     );
 
-    if (pickedImage != null) {
+    if (pickedImage != null && mounted) {
       setState(() {
         _logoImage = pickedImage;
       });

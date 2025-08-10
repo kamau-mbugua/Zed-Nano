@@ -231,11 +231,8 @@ Widget outlineButton(
   );
 }
 
-Future<File> getImageSource() async {
-  final picker = ImagePicker();
-  final pickedImage = await picker.pickImage(source: ImageSource.camera);
-  return File(pickedImage!.path);
-}
+// Camera functionality removed for Google Play compliance
+// Use ImagePickerUtil.pickImage() for gallery-only image selection
 
 // void svShowShareBottomSheet(BuildContext context) {
 //   showModalBottomSheet(

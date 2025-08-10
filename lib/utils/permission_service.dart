@@ -1,15 +1,14 @@
 import 'package:permission_handler/permission_handler.dart';
 
 /// A service to handle permission requests in the app
+/// Camera permission removed for Google Play compliance
 class PermissionService {
   /// Request all necessary permissions for the app to function
   Future<void> requestPermissions() async {
     // List of permissions needed by the app
+    // Camera permission removed for Google Play compliance
     final permissions = [
-      Permission.camera,
-      Permission.storage,
       Permission.notification,
-      Permission.manageExternalStorage,
     ];
 
     // Request each permission

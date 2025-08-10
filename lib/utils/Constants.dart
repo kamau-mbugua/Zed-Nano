@@ -17,7 +17,7 @@ class NotificationType {
 
 class PostType {
   static String video = 'video';
-  static String camera = 'camera';
+  // Camera constant removed for Google Play compliance
   static String voice = 'voice';
   static String location = 'location';
   static String text = 'text';
