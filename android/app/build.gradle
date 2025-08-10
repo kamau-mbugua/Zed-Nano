@@ -65,19 +65,19 @@ android {
         // Vector drawable support
         vectorDrawables.useSupportLibrary = true
         
-        // ABI Filters - only include the most common architectures
+        // ABI Filters - include common architectures including x86_64 for emulator
         ndk {
-            abiFilters 'arm64-v8a', 'armeabi-v7a'
+            abiFilters 'arm64-v8a', 'armeabi-v7a', 'x86_64'
         }
     }
 
     // Enable ABI splitting for smaller APKs
     splits {
         abi {
-            enable false  // Disable to only generate universal APK
+            enable false  // Keep disabled to generate universal APK
             reset()
             include 'arm64-v8a', 'armeabi-v7a', 'x86_64'
-            universalApk true // Generate universal APK only
+            universalApk true // Generate universal APK with all architectures
         }
     }
 
@@ -161,7 +161,7 @@ flutter {
 // Security scanner configuration
 configurations.all {
     // Exclude known safe third-party components from security scans
-    exclude group: 'com.google.android.gms', module: 'play-services-auth'
+    // Note: Removed play-services-auth exclusion to fix Google Sign-In
     exclude group: 'androidx.profileinstaller', module: 'profileinstaller'
 }
 
@@ -177,4 +177,8 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.1.0"
     implementation 'androidx.multidex:multidex:2.0.1'
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
+    
+    // Google Play Services for Google Sign-In
+    implementation 'com.google.android.gms:play-services-auth:21.2.0'
+    implementation 'com.google.android.gms:play-services-identity:18.1.0'
 }

@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zed_nano/contants/AppConstants.dart';
+import 'package:zed_nano/networking/datasource/remote/dio/auth_interceptor.dart';
 import 'package:zed_nano/networking/datasource/remote/dio/logging_interceptor.dart';
 import 'package:zed_nano/utils/logger.dart';
 
@@ -47,6 +48,7 @@ class DioClient {
     // tokenRefreshInterceptor = TokenRefreshInterceptor(this);
 
     dio?.interceptors.add(loggingInterceptor);
+    dio?.interceptors.add(AuthInterceptor());
 
   }
 

@@ -187,20 +187,20 @@ class _AddPaymentMethodScreenState extends State<AddPaymentMethodScreen> {
       ),
     );
     
-    // // Find Settle Invoice
-    // final settleInvoiceMethod = paymentMethod!.firstWhere(
-    //   (method) => method.name?.toLowerCase() == 'settleinvoicestatus',
-    //   orElse: () => PaymentMethod(name: 'settleInvoiceStatus', status: false),
-    // );
-    // filteredPaymentMethods.add(
-    //   FilteredPaymentMethod(
-    //     iconPath: settleInvoiceIcon,
-    //     title: 'Settle Invoice',
-    //     subtitle: 'Reconcile payments from bank transfers, RTGS, PesaLink, EFT and Cheque',
-    //     status: settleInvoiceMethod.status ?? false,
-    //     key: 'settleInvoiceStatus',
-    //   ),
-    // );
+    // Find Settle Invoice
+    final settleInvoiceMethod = paymentMethod!.firstWhere(
+      (method) => method.name?.toLowerCase() == 'settleinvoicestatus',
+      orElse: () => PaymentMethod(name: 'settleInvoiceStatus', status: false),
+    );
+    filteredPaymentMethods.add(
+      FilteredPaymentMethod(
+        iconPath: settleInvoiceIcon,
+        title: 'Settle Invoice',
+        subtitle: 'Reconcile payments from bank transfers, RTGS, PesaLink, EFT and Cheque',
+        status: settleInvoiceMethod.status ?? false,
+        key: 'settleInvoiceStatus',
+      ),
+    );
     
     // Find KCB Mobile Money
     var kcbMobileMoneyStatus = false;
