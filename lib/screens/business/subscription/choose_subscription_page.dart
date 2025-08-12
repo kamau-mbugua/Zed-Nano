@@ -259,6 +259,14 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
           ...plans!.asMap().entries.map((entry) {
             final index = entry.key;
             final plan = entry.value;
+            final isCurrentPlan = plan.plans?[0].isCurrentPlan ?? false;
+            
+            // Auto-select current plan if no selection has been made
+            if (isCurrentPlan && selectedIndex == -1) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                setState(() => selectedIndex = index);
+              });
+            }
 
             return GestureDetector(
               onTap: () => setState(() => selectedIndex = index),
@@ -268,7 +276,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                     margin: const EdgeInsets.only(bottom: 16),
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(8),
                       border: Border.all(
                         color: selectedIndex == index
                             ? const Color(0xff032541)
@@ -295,21 +303,39 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                               Text(
                                 plan.id ?? '',
                                 style: const TextStyle(
-                                  fontSize: 14,
+                                  fontSize: 13,
                                   fontWeight: FontWeight.w600,
                                   fontFamily: 'Poppins',
                                   color: Color(0xff1f2024),
                                 ),
                               ),
-                              const Visibility(
-                                visible: false,
+                              if (isCurrentPlan)
+                                Container(
+                                  margin: const EdgeInsets.only(top: 4),
+                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xff032541),
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: const Text(
+                                    'Current Plan',
+                                    style: TextStyle(
+                                      fontSize: 8,
+                                      fontWeight: FontWeight.w500,
+                                      fontFamily: 'Poppins',
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              Visibility(
+                                visible: true,
                                 child: Text(
-                                  '0',
-                                  style: TextStyle(
+                                  "Amount:${businessDetails?.localCurrency ?? 'KSH'} ${plan.plans?[0].billingPeriodAmount ?? ''}",
+                                  style: const TextStyle(
                                     fontSize: 10,
                                     fontWeight: FontWeight.w400,
                                     fontFamily: 'Poppins',
-                                    color: Color(0xff032541),
+                                    color: Color(0xff1f2024),
                                   ),
                                 ),
                               ),
@@ -320,16 +346,16 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Text(
-                              "${businessDetails?.localCurrency ?? 'KSH'} ${plan.plans?[0].billingPeriodAmount ?? ''}",
+                              "Total:${businessDetails?.localCurrency ?? 'KSH'} ${plan.plans?[0].totalAmount ?? ''}",
                               style: const TextStyle(
-                                fontSize: 16,
+                                fontSize: 14,
                                 fontWeight: FontWeight.w600,
                                 fontFamily: 'Poppins',
                                 color: Color(0xff1f2024),
                               ),
                             ),
                             Text(
-                              "every ${plan.id ?? ''}",
+                              "Tax:${businessDetails?.localCurrency ?? 'KSH'} ${plan.plans?[0].billingTaxAmount ?? ''}",
                               style: const TextStyle(
                                 fontSize: 10,
                                 fontWeight: FontWeight.w400,

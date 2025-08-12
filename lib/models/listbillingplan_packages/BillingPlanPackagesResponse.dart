@@ -81,13 +81,16 @@ class BillingPlan {
     this.packageId,
     this.billingPlanPaymentPlanId,
     this.billingPeriodAmount,
+    this.billingTaxAmount,
+    this.totalAmount,
+    this.isCurrentPlan,
   });
 
   factory BillingPlan.fromJson(Map<String, dynamic> json) {
     return BillingPlan(
       billingPlanName: json['billingPlanName'] as String?,
       businessCategory: json['businessCategory'] as String?,
-      planSetUpFee: json['planSetUpFee'] as int?,
+      planSetUpFee: (json['planSetUpFee'] as num?)?.toDouble(),
       noOfBranches: json['noOfBranches'] as int?,
       extraBranchFee: json['extraBranchFee'] as int?,
       createdBy: json['createdBy'] as String?,
@@ -96,12 +99,15 @@ class BillingPlan {
       billableFeatures: json['billableFeatures'] as List<dynamic>?,
       packageId: json['packageId'] as String?,
       billingPlanPaymentPlanId: json['billingPlanPaymentPlanId'] as String?,
-      billingPeriodAmount: json['billingPeriodAmount'] as int?,
+      billingPeriodAmount: (json['billingPeriodAmount'] as num?)?.toDouble(),
+      billingTaxAmount: (json['billingTaxAmount'] as num?)?.toDouble(),
+      totalAmount: (json['totalAmount'] as num?)?.toDouble(),
+        isCurrentPlan: json['isCurrentPlan'] as bool?,
     );
   }
   final String? billingPlanName;
   final String? businessCategory;
-  final int? planSetUpFee;
+  final double? planSetUpFee;
   final int? noOfBranches;
   final int? extraBranchFee;
   final String? createdBy;
@@ -110,7 +116,10 @@ class BillingPlan {
   final List<dynamic>? billableFeatures;
   final String? packageId;
   final String? billingPlanPaymentPlanId;
-  final int? billingPeriodAmount;
+  final double? billingPeriodAmount;
+  final double? billingTaxAmount;
+  final double? totalAmount;
+  final bool? isCurrentPlan;
 
   Map<String, dynamic> toJson() {
     return {
@@ -126,6 +135,9 @@ class BillingPlan {
       'packageId': packageId,
       'billingPlanPaymentPlanId': billingPlanPaymentPlanId,
       'billingPeriodAmount': billingPeriodAmount,
+      'billingTaxAmount': billingTaxAmount,
+      'totalAmount': totalAmount,
+      'isCurrentPlan': isCurrentPlan,
     };
   }
 }
