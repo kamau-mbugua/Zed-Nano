@@ -52,9 +52,9 @@ class _GetStartedPageState extends State<GetStartedPage> {
 
   Future<void> goSkip() async {
     try {
-     _initializeBusinessSetupAfterCreation(context);
+     await _initializeBusinessSetupAfterCreation(context);
     } catch (e) {
-      logger.e('Error in goSkip: $e');
+      logger.e('GetStartedPage Error in goSkip: $e');
     }
   }
 
@@ -64,10 +64,10 @@ class _GetStartedPageState extends State<GetStartedPage> {
 
       await Provider.of<WorkflowViewModel>(context, listen: false).skipSetup(context);
 
-      Navigator.of(context).pushReplacementNamed(AppRoutes.getHomeMainPageRoute());
+      await Navigator.of(context).pushReplacementNamed(AppRoutes.getHomeMainPageRoute());
 
     } catch (e) {
-      logger.e('Failed to initialize business setup after business creation: $e');
+      logger.e('GetStartedPage Failed to initialize business setup after business creation: $e');
     }
   }
 

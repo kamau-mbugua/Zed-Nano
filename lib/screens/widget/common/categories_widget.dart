@@ -148,7 +148,7 @@ Widget buildProductCard(ProductData category) {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      category.productDescription ?? 'No description',
+                      category.productCategory ?? 'No Category',
                       style: const TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w400,

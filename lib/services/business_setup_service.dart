@@ -41,7 +41,7 @@ class BusinessSetupService extends ChangeNotifier {
 
   /// Initialize the service by loading business details from SharedPreferences
   Future<void> initialize() async {
-    if (_isInitialized) return;
+    // if (_isInitialized) return;
     
     _isLoading = true;
     _safeNotifyListeners();
