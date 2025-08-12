@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:nb_utils/nb_utils.dart';
+import 'package:nb_utils/nb_utils.dart' hide getPackageInfo;
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:zed_nano/app/app_initializer.dart';
@@ -12,6 +12,7 @@ import 'package:zed_nano/routes/routes.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/services/business_setup_extensions.dart';
 import 'package:zed_nano/utils/Colors.dart';
+import 'package:zed_nano/utils/Constants.dart';
 import 'package:zed_nano/utils/Images.dart';
 import 'package:zed_nano/viewmodels/WorkflowViewModel.dart';
 
@@ -24,23 +25,15 @@ class SplashPage extends StatefulWidget {
 
 class _SplashPageState extends State<SplashPage> {
 
-  
-  String _appVersion = '';
-
-  Future<void> _fetchAppVersion() async {
-    final packageInfo = await PackageInfo.fromPlatform();
-    setState(() {
-      _appVersion = packageInfo.version; // Fetches version from pubspec.yaml
-    });
-  }
+  String appVersion = '';
+  String appVersionWithBuild = '';
 
   @override
   void initState() {
     super.initState();
+    _loadAppVersion();
     _initiState();
-    _fetchAppVersion();
   }
-
 
   void _initiState() {
     Connectivity().onConnectivityChanged.listen((List<ConnectivityResult> result) {
@@ -105,6 +98,27 @@ class _SplashPageState extends State<SplashPage> {
     );
   }
 
+  Future<void> _loadAppVersion() async {
+    // Method 1: Get just the version
+    final version = await getAppVersion();
+
+    // Method 2: Get version with build number
+    final versionWithBuild = await getAppVersionWithBuild();
+
+    // Method 3: Get full package info (if you need more details)
+    final packageInfo = await getPackageInfo();
+
+    setState(() {
+      appVersion = version;
+      appVersionWithBuild = versionWithBuild;
+    });
+
+    // You can also use it without setState for logging or other purposes
+    logger.d('AboutZedNano App Name: ${packageInfo.appName}');
+    logger.d('AboutZedNano Package Name: ${packageInfo.packageName}');
+    logger.d('AboutZedNano Version: ${packageInfo.version}');
+    logger.d('AboutZedNano Build Number: ${packageInfo.buildNumber}');
+  }
 
 
   @override
@@ -118,6 +132,19 @@ class _SplashPageState extends State<SplashPage> {
             child: SvgPicture.asset(splashLogo, fit: BoxFit.cover),
           ),
         ],
+      ),
+      bottomNavigationBar: Container(
+        height: 70,
+        color: appThemePrimary,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Version ${appVersionWithBuild}',
+              style: boldTextStyle(color: Colors.white, fontFamily: 'Poppins', size: 12),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -13,6 +13,7 @@ import 'package:zed_nano/providers/base/base_provider.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/repositories/auth/AuthenticatedRepo.dart';
 import 'package:zed_nano/services/business_setup_service.dart';
+import 'package:zed_nano/models/firebase_signup/firebase_signup.dart';
 
 class AuthenticatedAppProviders extends BaseProvider {
 
@@ -190,21 +191,21 @@ class AuthenticatedAppProviders extends BaseProvider {
 
     return finalResponseModel;
   }
-  Future<ResponseModel<CommonResponse>> registerByFirebase(
+  Future<ResponseModel<FirebaseSignupResponse>> registerByFirebase(
       {required Map<String, dynamic> requestData,
       required BuildContext context,}) async {
     final responseModel = await performApiCallWithHandling(
         () => authenticatedRepo.registerByFirebase(requestData: requestData), context,);
 
-    ResponseModel<CommonResponse> finalResponseModel;
+    ResponseModel<FirebaseSignupResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
-      finalResponseModel = ResponseModel<CommonResponse>(
-          true, responseModel.message!, CommonResponse.fromJson(map),);
+      finalResponseModel = ResponseModel<FirebaseSignupResponse>(
+          true, responseModel.message!, FirebaseSignupResponse.fromJson(map),);
     } else {
       finalResponseModel =
-          ResponseModel<CommonResponse>(false, responseModel.message!);
+          ResponseModel<FirebaseSignupResponse>(false, responseModel.message!);
     }
 
     return finalResponseModel;

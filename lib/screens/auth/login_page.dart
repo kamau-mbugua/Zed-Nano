@@ -268,7 +268,7 @@ class _LoginPageState extends State<LoginPage> {
                 //   "Remember me",
                 //   style: TextStyle(color: Colors.black54, fontSize: 14),
                 // ),
-                const Expanded(child: Spacer()),
+                const Spacer(),
                 TextButton(
                   onPressed: () {
                     Navigator.pushNamed(
@@ -332,7 +332,7 @@ class _LoginPageState extends State<LoginPage> {
               //   "Remember me",
               //   style: TextStyle(color: Colors.black54, fontSize: 14),
               // ),
-              const Expanded(child: Spacer()),
+              const Spacer(),
               TextButton(
                 onPressed: () {
                   Navigator.pushNamed(

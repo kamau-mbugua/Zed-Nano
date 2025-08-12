@@ -1,10 +1,53 @@
 import 'package:flutter/material.dart';
-import 'package:nb_utils/nb_utils.dart';
+import 'package:nb_utils/nb_utils.dart' hide getPackageInfo;
 import 'package:url_launcher/url_launcher.dart';
+import 'package:zed_nano/app/app_initializer.dart';
+import 'package:zed_nano/app/app_initializer.dart';
+import 'package:zed_nano/app/app_initializer.dart';
+import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
+import 'package:zed_nano/utils/Constants.dart';
 
-class AboutZedPage extends StatelessWidget {
+class AboutZedPage extends StatefulWidget {
   const AboutZedPage({Key? key}) : super(key: key);
+
+  @override
+  State<AboutZedPage> createState() => _AboutZedPageState();
+}
+
+class _AboutZedPageState extends State<AboutZedPage> {
+
+  String appVersion = '';
+  String appVersionWithBuild = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadAppVersion();
+  }
+
+  Future<void> _loadAppVersion() async {
+    // Method 1: Get just the version
+    final version = await getAppVersion();
+
+    // Method 2: Get version with build number
+    final versionWithBuild = await getAppVersionWithBuild();
+
+    // Method 3: Get full package info (if you need more details)
+    final packageInfo = await getPackageInfo();
+
+    setState(() {
+      appVersion = version;
+      appVersionWithBuild = versionWithBuild;
+    });
+
+    // You can also use it without setState for logging or other purposes
+    logger.d('AboutZedNano App Name: ${packageInfo.appName}');
+    logger.d('AboutZedNano Package Name: ${packageInfo.packageName}');
+    logger.d('AboutZedNano Version: ${packageInfo.version}');
+    logger.d('AboutZedNano Build Number: ${packageInfo.buildNumber}');
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -24,18 +67,18 @@ class AboutZedPage extends StatelessWidget {
                 content: 'It is system that allows schools to easily accepts payment from multiple payment methods, generate invoices and automate reconciliation with dashboards and reports.',
               ),
             ),
-            
+
             16.height,
-            
+
             // Contact Us Card
             _buildSectionCard(
               title: 'Contact Us',
               titleColor: const Color(0xFFDC3545),
               child: _buildContactInfo(),
             ),
-            
+
             16.height,
-            
+
             // Privacy & Security Card
             _buildSectionCard(
               title: 'Privacy & Security',
@@ -58,9 +101,9 @@ class AboutZedPage extends StatelessWidget {
                 ],
               ),
             ),
-            
+
             16.height,
-            
+
             // Socials Card
             _buildSectionCard(
               title: 'Socials',
@@ -125,20 +168,20 @@ class AboutZedPage extends StatelessWidget {
                 ],
               ),
             ),
-            
+
             24.height,
-            
+
             // Version Info
-            const Text(
-              'Version 1.9.7',
-              style: TextStyle(
+            Text(
+              'Version ${appVersionWithBuild ?? 'N/A'}',
+              style: const TextStyle(
                 color: Color(0xFF687C8D),
                 fontSize: 13,
                 fontWeight: FontWeight.w500,
                 fontFamily: 'Poppins',
               ),
             ),
-            
+
             24.height,
           ],
         ),
@@ -181,7 +224,7 @@ class AboutZedPage extends StatelessWidget {
               ),
             ),
           ),
-          
+
           // Section Content
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),

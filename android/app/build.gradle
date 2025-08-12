@@ -65,9 +65,9 @@ android {
         // Vector drawable support
         vectorDrawables.useSupportLibrary = true
         
-        // ABI Filters - include common architectures including x86_64 for emulator
+        // Default ABI Filters - will be overridden by build types
         ndk {
-            abiFilters 'arm64-v8a', 'armeabi-v7a', 'x86_64'
+            abiFilters 'arm64-v8a', 'armeabi-v7a'
         }
     }
 
@@ -76,8 +76,8 @@ android {
         abi {
             enable false  // Keep disabled to generate universal APK
             reset()
-            include 'arm64-v8a', 'armeabi-v7a', 'x86_64'
-            universalApk true // Generate universal APK with all architectures
+            include 'arm64-v8a', 'armeabi-v7a'  // Exclude x86_64 from splits by default
+            universalApk true // Generate universal APK with specified architectures
         }
     }
 
@@ -144,14 +144,25 @@ android {
             jniDebuggable false
             renderscriptDebuggable false
             zipAlignEnabled true
+            
+            // Exclude x86_64 from release builds to reduce APK size
+            ndk {
+                abiFilters 'arm64-v8a', 'armeabi-v7a'
+            }
         }
         debug {
             signingConfig signingConfigs.debug
             // Keep debug builds fast
             minifyEnabled false
             shrinkResources false
+            
+            // Include x86_64 for debug builds (emulator support)
+            ndk {
+                abiFilters 'arm64-v8a', 'armeabi-v7a', 'x86_64'
+            }
         }
     }
+
 }
 
 flutter {

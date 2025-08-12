@@ -45,8 +45,14 @@ class SocialAuthService {
       // Check if email is null and handle it
       if (user.email == null || user.email!.isEmpty) {
         logger.e('Critical: User email is null or empty after Google sign-in');
-        showCustomToast('Unable to get email from Google account. Please try again or use a different sign-in method.');
-        return null;
+        return {
+          'firebaseIdToken': firebaseIdToken,
+          'signinOption': 'google',
+          'email': null,
+          'firstName': null,
+          'otherName': null,
+          'user': null, // Include the Firebase user object if needed
+        };
       }
 
       return {

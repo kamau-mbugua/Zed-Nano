@@ -85,14 +85,18 @@ class _POSPagesScreenState extends State<POSPagesScreen> {
   }
 
   void _loadDashboardData() {
-    setState(() {
-      _isLoading = true;
-    });
+    if (mounted) {
+      setState(() {
+        _isLoading = true;
+      });
+    }
 
     branchStoreSummary().then((_) {
-      setState(() {
-        _isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     });
   }
 

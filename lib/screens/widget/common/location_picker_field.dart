@@ -4,13 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/utils/Colors.dart';
+import 'package:zed_nano/utils/Constants.dart';
 import 'package:zed_nano/utils/logger.dart';
 
 class LocationPickerField extends StatefulWidget {
 
   const LocationPickerField({
     required this.controller, super.key,
-    this.apiKey = 'AIzaSyA1i-fE9PcTl1dvC06vhpy7AR_C6c90lTU',
+    this.apiKey = googlePlacesKey,
     this.focusNode,
     this.nextFocus,
     this.label = 'Location',

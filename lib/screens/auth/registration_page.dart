@@ -44,6 +44,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
   final FocusNode emailFocus = FocusNode();
   final FocusNode phoneNumberFocus = FocusNode();
   Map<String, dynamic> signUpUserData = {};
+  String? firebaseIdToken;
 
   Future<void> _doUserSignup(
       Map<String, dynamic> loginData, BuildContext context,) async {
@@ -59,70 +60,30 @@ class _RegistrationPageState extends State<RegistrationPage> {
     }
   }
 
-  void _showPhoneNumberDialog(BuildContext context, Map<String, dynamic> userData) {
-    final phoneController = TextEditingController();
-    
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Enter Phone Number'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text('Welcome ${userData['firstName'] ?? 'User'}!'),
-              const SizedBox(height: 16),
-              const Text('Please enter your phone number to complete registration:'),
-              const SizedBox(height: 16),
-              TextField(
-                controller: phoneController,
-                keyboardType: TextInputType.phone,
-                decoration: const InputDecoration(
-                  labelText: 'Phone Number',
-                  hintText: '+254XXXXXXXXX',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('Cancel'),
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                final phoneNumber = phoneController.text.trim();
-                if (phoneNumber.isNotEmpty) {
-                  Navigator.of(context).pop();
-                  
-                  // Set the signUpUserData and populate form fields
-                  setState(() {
-                    signUpUserData = userData;
-                    signUpUserData['phoneNumber'] = phoneNumber;
-                  });
-                  
-                  // Populate the form controllers
-                  _populateControllersFromSignUpData();
-                  phoneNumberController.text = phoneNumber;
-                  
-                } else {
-                  // Show error for empty phone number
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Please enter a phone number')),
-                  );
-                }
-              },
-              child: const Text('Continue'),
-            ),
-          ],
-        );
-      },
-    );
+  Future<void> registerByFirebase(
+      Map<String, dynamic> loginData) async {
+    final authProvider = getAuthProvider(context);
+    final response =
+        await authProvider.registerByFirebase(requestData: loginData, context: context);
+    if (response.isSuccess) {
+      showCustomToast(response.message, isError: false);
+
+      var userResponse = response.data?.user;
+
+      setState(() {
+        signUpUserData = {
+          'firstName': userResponse?.firstName,
+          'otherName': userResponse?.otherName,
+          'email': userResponse?.email,
+        };
+      });
+      _populateControllersFromSignUpData();
+    } else {
+      logger.d(response.message);
+      showCustomToast('${response.message}!');
+    }
   }
+
 
   @override
   void initState() {
@@ -308,19 +269,32 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     if (userData != null) {
 
                       setState(() {
-                        signUpUserData = userData;
+                        firebaseIdToken = userData['firebaseIdToken'].toString();
                       });
 
-                      // Add small delay to ensure Google dialog closes completely
-                      await Future.delayed(const Duration(milliseconds: 300));
-                      
-                      // Call populate after setState completes and dialog closes
-                      _populateControllersFromSignUpData();
-                      
-                      // Show success message
-                      showCustomToast('Google account linked! Please complete your details.', isError: false);
 
-                      // _showPhoneNumberDialog(context, userData);
+                      if (userData['email'] == null) {
+
+                        var payload = {
+                          'firebaseIdToken': userData['firebaseIdToken'].toString(),
+                        };
+
+                        await registerByFirebase(payload);
+
+                      }else{
+                        setState(() {
+                          signUpUserData = userData;
+                        });
+                        _populateControllersFromSignUpData();
+
+                        // Show success message
+                        showCustomToast('Google account linked! Please complete your details.', isError: false);
+
+                        // _showPhoneNumberDialog(context, userData);
+                      }
+
+
+
                     }
                   },
                 ),
