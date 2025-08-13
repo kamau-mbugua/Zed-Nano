@@ -64,7 +64,7 @@ class _AboutZedPageState extends State<AboutZedPage> {
                 icon: Icons.info_outline,
                 iconColor: const Color(0xFF144166),
                 title: 'What is Zed Nano?',
-                content: 'It is system that allows schools to easily accepts payment from multiple payment methods, generate invoices and automate reconciliation with dashboards and reports.',
+                content: 'Zed Nano is an app designed to help small businesses take full control of their operations — anytime, anywhere.\n\nWith Zed Nano, you can easily sign up, create your account, and start running your business in minutes. Whether you\'re selling products or offering services, Zed Nano gives you the tools you need to manage sales, payments, inventory, customers, and reports — all from your smartphone.\n\nKey Features:\n✅ Simple Signup & Account Creation – Get started in just a few taps.\n✅ Categories, Products & Services – Add and manage items effortlessly.\n✅ Sell & Receive Payments – Track transactions in real-time.\n✅ Manage Customers – Create customer profiles for quick sales and invoicing.\n✅ Stock & Inventory Control – Monitor stock levels of your products.\n✅ Invoices – Generate and send professional invoices instantly.\n✅ Detailed Reports – View sales reports, stock reports, and transaction histories to make smarter decisions.',
               ),
             ),
 
