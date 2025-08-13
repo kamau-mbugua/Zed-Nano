@@ -135,9 +135,9 @@ android {
         release {
             signingConfig signingConfigs.release
             // Temporarily disable R8 for compatibility
-            minifyEnabled false
-            shrinkResources false
-            // proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             
             // Additional optimizations
             debuggable false
@@ -174,6 +174,7 @@ configurations.all {
     // Exclude known safe third-party components from security scans
     // Note: Removed play-services-auth exclusion to fix Google Sign-In
     exclude group: 'androidx.profileinstaller', module: 'profileinstaller'
+    exclude group: 'com.google.android.play', module: 'core'
 }
 
 // Security scan suppressions for CI/CD

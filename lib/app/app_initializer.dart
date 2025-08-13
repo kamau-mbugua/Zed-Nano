@@ -103,9 +103,9 @@ Future<void> initializeApp(Flavor flavor) async {
   runApp(ClarityWidget(
     app: MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (context) => di.sl<SplashProvider>()),
         ChangeNotifierProvider(create: (context) => di.sl<AuthenticatedAppProviders>()),
         ChangeNotifierProvider(create: (context) => di.sl<BusinessProviders>()),
-        ChangeNotifierProvider(create: (context) => di.sl<SplashProvider>()),
         ChangeNotifierProvider(create: (context) => di.sl<ThemeProvider>()),
         ChangeNotifierProvider(create: (_) => WorkflowViewModel()),
         ChangeNotifierProvider(create: (_) => RefreshViewModel()),

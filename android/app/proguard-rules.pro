@@ -57,6 +57,40 @@
     public static int e(...);
 }
 
+# Keep Play Core classes for Flutter deferred components
+-keep class com.google.android.play.core.install.** { *; }
+-keep class com.google.android.play.core.review.** { *; }
+-keep class com.google.android.play.core.splitcompat.** { *; }
+-keep class com.google.android.play.core.splitinstall.** { *; }
+-keep class com.google.android.play.core.tasks.** { *; }
+-dontwarn com.google.android.play.core.**
+
+# Keep Flutter Play Store split application classes
+-keep class io.flutter.embedding.android.FlutterPlayStoreSplitApplication { *; }
+-keep class io.flutter.embedding.engine.deferredcomponents.** { *; }
+
+# Handle Kotlin version compatibility issues
+-dontwarn kotlin.**
+-keep class kotlin.** { *; }
+-keep class kotlin.Metadata { *; }
+-dontwarn kotlin.Unit
+-dontwarn kotlin.jvm.internal.**
+-keep class kotlin.jvm.internal.** { *; }
+
+# Keep Kotlin stdlib classes
+-keep class kotlin.stdlib.** { *; }
+-dontwarn kotlin.stdlib.**
+
+# Keep protobuf classes (used by Firebase/Play Services)
+-keep class com.google.protobuf.** { *; }
+-dontwarn com.google.protobuf.**
+
+# Additional Firebase/GMS keep rules
+-keep class com.google.android.gms.** { *; }
+-keep class com.google.firebase.** { *; }
+-dontwarn com.google.android.gms.**
+-dontwarn com.google.firebase.**
+
 # Optimize and obfuscate
 -optimizations !code/simplification/arithmetic,!code/simplification/cast,!field/*,!class/merging/*
 -optimizationpasses 5

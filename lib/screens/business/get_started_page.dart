@@ -64,7 +64,10 @@ class _GetStartedPageState extends State<GetStartedPage> {
 
       await Provider.of<WorkflowViewModel>(context, listen: false).skipSetup(context);
 
-      await Navigator.of(context).pushReplacementNamed(AppRoutes.getHomeMainPageRoute());
+      await Navigator.of(context).pushNamedAndRemoveUntil(
+        AppRoutes.getHomeMainPageRoute(),
+        (route) => false, // This removes all previous routes
+      );
 
     } catch (e) {
       logger.e('GetStartedPage Failed to initialize business setup after business creation: $e');

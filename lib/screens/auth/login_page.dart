@@ -421,7 +421,10 @@ class _LoginPageState extends State<LoginPage> {
         // Initialize business setup after successful login
         await _initializeBusinessSetupAfterLogin(context);
 
-        Navigator.of(context).pushReplacementNamed(AppRoutes.getHomeMainPageRoute());
+        await Navigator.of(context).pushNamedAndRemoveUntil(
+          AppRoutes.getHomeMainPageRoute(),
+          (route) => false, // This removes all previous routes
+        );
       }else{
         showCustomToast('${response.message}');
 
