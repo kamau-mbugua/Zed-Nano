@@ -8,9 +8,11 @@ import 'package:zed_nano/routes/routes_helper.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/auth/input_fields.dart';
 import 'package:zed_nano/screens/widget/auth/social_buttons.dart';
+import 'package:zed_nano/screens/widget/auth/saved_credentials_bottom_sheet.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/services/business_setup_extensions.dart';
 import 'package:zed_nano/services/firebase_service.dart';
+import 'package:zed_nano/services/saved_credentials_service.dart';
 import 'package:zed_nano/services/social_auth_service.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
@@ -29,10 +31,10 @@ class _LoginPageState extends State<LoginPage> {
   bool isEmailLoginActive = false;
 
   // Colors for social buttons
-  final Color googleRed = Color(0xFFED3241);
-  final Color emailBlue = Color(0xFF032541);
-  final Color facebookBlue = Color(0xFF4676ED);
-  final Color twitterBlue = Color(0xFF009CDC);
+  static const Color googleRed = Color(0xFFED3241);
+  static const Color emailBlue = Color(0xFF032541);
+  static const Color facebookBlue = Color(0xFF4676ED);
+  static const Color twitterBlue = Color(0xFF009CDC);
 
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -48,7 +50,7 @@ class _LoginPageState extends State<LoginPage> {
 
   final FocusNode phoneFocus = FocusNode();
 
-  final bool _rememberMe = false;
+  bool _rememberMe = false;
 
   @override
   void initState() {
@@ -65,6 +67,11 @@ class _LoginPageState extends State<LoginPage> {
       setState(() {});
     });
     super.initState();
+    
+    // Check for saved phone credentials on page load (default is phone login)
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _checkAndShowSavedCredentials('phone');
+    });
   }
 
   @override
@@ -124,6 +131,7 @@ class _LoginPageState extends State<LoginPage> {
                       onTap: () {
                         setState(() {
                           isEmailLoginActive = false;
+                          _checkAndShowSavedCredentials('phone');
                         });
                       },
                     )
@@ -135,6 +143,7 @@ class _LoginPageState extends State<LoginPage> {
                       onTap: () {
                         setState(() {
                           isEmailLoginActive = true;
+                          _checkAndShowSavedCredentials('email');
                         });
                       },
                     ),
@@ -227,15 +236,21 @@ class _LoginPageState extends State<LoginPage> {
   Widget _buildEmailLoginForm() {
     return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: StyledTextField(
-            controller: emailController,
-            focusNode: emailFocus,
-            nextFocus: passwordFocus,
-            textFieldType: TextFieldType.EMAIL,
-            hintText: 'Email Address',
-          ),
+        Row(
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: StyledTextField(
+                  controller: emailController,
+                  focusNode: emailFocus,
+                  nextFocus: passwordFocus,
+                  textFieldType: TextFieldType.EMAIL,
+                  hintText: 'Email Address',
+                ),
+              ),
+            ),
+          ],
         ),
         16.height,
         Container(
@@ -256,18 +271,18 @@ class _LoginPageState extends State<LoginPage> {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(
               children: [
-                // Checkbox(
-                //   value: _rememberMe,
-                //   onChanged: (value) {
-                //     setState(() {
-                //       _rememberMe = value ?? false;
-                //     });
-                //   },
-                // ),
-                // Text(
-                //   "Remember me",
-                //   style: TextStyle(color: Colors.black54, fontSize: 14),
-                // ),
+                Checkbox(
+                  value: _rememberMe,
+                  onChanged: (value) {
+                    setState(() {
+                      _rememberMe = value ?? false;
+                    });
+                  },
+                ),
+                const Text(
+                  "Remember me",
+                  style: TextStyle(color: Colors.black54, fontSize: 14),
+                ),
                 const Spacer(),
                 TextButton(
                   onPressed: () {
@@ -291,15 +306,21 @@ class _LoginPageState extends State<LoginPage> {
   Widget _buildPhoneLoginForm() {
     return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: PhoneInputField(
-            controller: phoneController,
-            codeController:codeController,
-            focusNode: phoneFocus,
-            nextFocus: phonePasswordFocus,
-            maxLength: 10,
-          ),
+        Row(
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: PhoneInputField(
+                  controller: phoneController,
+                  codeController: codeController,
+                  focusNode: phoneFocus,
+                  nextFocus: phonePasswordFocus,
+                  maxLength: 10,
+                ),
+              ),
+            ),
+          ],
         ),
         16.height,
         Container(
@@ -320,18 +341,18 @@ class _LoginPageState extends State<LoginPage> {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Row(
             children: [
-              // Checkbox(
-              //   value: _rememberMe,
-              //   onChanged: (value) {
-              //     setState(() {
-              //       _rememberMe = value ?? false;
-              //     });
-              //   },
-              // ),
-              // Text(
-              //   "Remember me",
-              //   style: TextStyle(color: Colors.black54, fontSize: 14),
-              // ),
+              Checkbox(
+                value: _rememberMe,
+                onChanged: (value) {
+                  setState(() {
+                    _rememberMe = value ?? false;
+                  });
+                },
+              ),
+              Text(
+                "Remember me",
+                style: TextStyle(color: Colors.black54, fontSize: 14),
+              ),
               const Spacer(),
               TextButton(
                 onPressed: () {
@@ -418,6 +439,11 @@ class _LoginPageState extends State<LoginPage> {
             'User';
         showCustomToast('Welcome back $userName!', isError: false);
 
+        // Save credentials if remember me is checked
+        if (_rememberMe) {
+          await _saveLoginCredentials(loginData, userName);
+        }
+
         // Initialize business setup after successful login
         await _initializeBusinessSetupAfterLogin(context);
 
@@ -471,5 +497,88 @@ class _LoginPageState extends State<LoginPage> {
       logger.e('Failed to initialize business setup after login: $e');
       // Don't rethrow - let the app continue to home page even if setup fails
     }
+  }
+
+  Future<void> _saveLoginCredentials(Map<String, dynamic> loginData, String userName) async {
+    try {
+      if (loginData.containsKey('email')) {
+        await SavedCredentialsService.saveCredential(
+          identifier: loginData['email'] as String,
+          type: 'email',
+          displayName: userName,
+        );
+      } else if (loginData.containsKey('userPhone')) {
+        await SavedCredentialsService.saveCredential(
+          identifier: loginData['userPhone'] as String,
+          type: 'phone',
+          displayName: userName,
+        );
+      }
+    } catch (e) {
+      logger.e('Failed to save login credentials: $e');
+    }
+  }
+
+  Future<void> _checkAndShowSavedCredentials(String type) async {
+    try {
+      // Check if saved credentials exist for this type
+      final credentials = await SavedCredentialsService.getSavedCredentialsByType(type);
+      
+      // Only show bottom sheet if credentials exist
+      if (credentials.isNotEmpty) {
+        if (mounted) {
+          _showSavedCredentials(type);
+        }
+      }
+    } catch (e) {
+      logger.e('Error checking saved credentials: $e');
+    }
+  }
+
+  void _showSavedCredentials(String type) {
+    showSavedCredentialsBottomSheet(
+      context: context,
+      type: type,
+      onCredentialSelected: (credential) {
+        if (type == 'email') {
+          emailController.text = credential.identifier;
+        } else if (type == 'phone') {
+          // Parse phone number to separate country code and number
+          final phoneNumber = credential.identifier;
+          if (phoneNumber.startsWith('+')) {
+            // Try to extract country code and number
+            // This is a simple implementation - you might want to use a phone number parsing library
+            final parts = _parsePhoneNumber(phoneNumber);
+            codeController.text = parts['code'] ?? '';
+            phoneController.text = parts['number'] ?? phoneNumber;
+          } else {
+            phoneController.text = phoneNumber;
+          }
+        }
+        // Update last used time
+        SavedCredentialsService.updateLastUsed(credential.identifier);
+      },
+    );
+  }
+
+  Map<String, String> _parsePhoneNumber(String phoneNumber) {
+    // Simple phone number parsing - you might want to use a proper library
+    // This assumes format like +254712345678
+    if (phoneNumber.startsWith('+254')) {
+      return {
+        'code': '+254',
+        'number': phoneNumber.substring(4),
+      };
+    } else if (phoneNumber.startsWith('+')) {
+      // Try to extract first 3-4 digits as country code
+      final match = RegExp(r'^\+(\d{1,4})(.*)').firstMatch(phoneNumber);
+      if (match != null) {
+        return {
+          'code': '+${match.group(1)}',
+          'number': match.group(2) ?? '',
+        };
+      }
+    }
+    return {'code': '', 'number': phoneNumber};
   }
 }

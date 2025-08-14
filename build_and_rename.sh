@@ -33,7 +33,7 @@ build_apk() {
     
     # Define paths for universal APK only
     local original_path="build/app/outputs/flutter-apk/app-$flavor-$build_type.apk"
-    local new_name="ZN_${flavor}_${build_type}_universal_v${VERSION_NAME}_${VERSION_CODE}.apk"
+    local new_name="ZN_${flavor}_${build_type}_v${VERSION_NAME}_${VERSION_CODE}.apk"
     local new_path="build/app/outputs/flutter-apk/$new_name"
     
     # Rename the file
