@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/models/order_payment_status/OrderDetailResponse.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/orders/itemBuilder/order_item_builders.dart';
@@ -14,6 +15,7 @@ import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
 import 'package:zed_nano/utils/Images.dart';
 import 'package:zed_nano/utils/extensions.dart';
+import 'package:zed_nano/viewmodels/data_refresh_extensions.dart';
 
 class OrderDetailPage extends StatefulWidget {
 
@@ -67,6 +69,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
       if (response.isSuccess) {
         showCustomToast(response.message, isError: false);
         await getOrderPaymentStatus();
+        triggerRefreshEvent();
       } else {
         showCustomToast(response.message ?? 'Failed to load product details');
       }
@@ -196,6 +199,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                         date: orderDetail?.createdAt?.toFormattedDateTime() ?? 'N/A',)
                           .launch(context).then((value) {
                             getOrderPaymentStatus();
+                            triggerRefreshEvent();
                       });
                     } else {
                       SellStepperPage(
@@ -203,6 +207,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                         initialStepData: {'orderId': widget.orderId},
                       ).launch(context).then((value) {
                         getOrderPaymentStatus();
+                        triggerRefreshEvent();
                       });
                     }
                   },
@@ -655,5 +660,16 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
           Container(),
       ],
     );
+  }
+
+  /// Trigger refresh events for other pages listening to order changes
+  void triggerRefreshEvent() {
+    try {
+      // Trigger refresh for order-related data across the app
+      context.dataRefresh.refreshAfterOrderOperation(operation: 'order_updated');
+      logger.d('OrderDetailPage: Triggered refresh event for order operation');
+    } catch (e) {
+      logger.e('OrderDetailPage: Failed to trigger refresh event: $e');
+    }
   }
 }

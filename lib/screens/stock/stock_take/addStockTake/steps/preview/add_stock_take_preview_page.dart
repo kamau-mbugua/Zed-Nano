@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
-import 'package:zed_nano/app/app_initializer.dart';
+import 'package:zed_nano/app/app_initializer.dart' hide navigatorKey;
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
+import 'package:zed_nano/screens/approvals/stock_take/stock_take_approval.dart';
 import 'package:zed_nano/screens/stock/itemBuilder/preview_add_stock_item.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
@@ -201,8 +202,13 @@ class _AddStockTakePreviewPageState extends State<AddStockTakePreviewPage> {
                         if(value.isSuccess){
                           cartViewModel.clear();
                           widget.onNext();
-                          showCustomToast(value.message, isError: false);
-                        }else{
+                          showCustomToast(value.message, isError: false, actionText: 'Approve', onPressed: (){
+                            Future.delayed(const Duration(milliseconds: 500), () {
+                              navigatorKey.currentState?.push(
+                                MaterialPageRoute(builder: (context) => const StockTakeApproval()),
+                              );
+                            });
+                          }, context: context);                        }else{
                           showCustomToast(value.message);
                         }
                       });

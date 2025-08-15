@@ -15,6 +15,7 @@ import 'package:zed_nano/screens/widget/common/heading.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/extensions.dart';
+import 'package:zed_nano/viewmodels/data_refresh_extensions.dart';
 
 enum CheckOutType{
   Invoice,
@@ -170,9 +171,12 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
 
   Future<void> doCashPayment() async {
 
+    final currentDateTime = DateFormatter.getCurrentShortDateTime();
+    final receiptNumber = DateTime.now().millisecondsSinceEpoch.toString().substring(0, 13);
+
 
     final requestData = <String, dynamic>{
-      'billRefNo': orderDetail?.pushTransactionId,
+      'billRefNo': receiptNumber,
       'paymentChanel': 'Mobile',
       'transamount': textToDouble(amountToPayController.text) ?? orderDetailData?.deficit,
       'pushyTransactionId': orderId,
@@ -186,7 +190,10 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
       if (response.isSuccess) {
         showCustomToast(response.message, isError: false);
         widget.onNext!();
-        await OrderPaymentSummary(orderId: orderDetail?.id).launch(context);
+        await OrderPaymentSummary(orderId: orderDetail?.id).launch(context).then((value) async {
+          await triggerRefreshEvent();
+          widget.onNext!();
+        });
       } else {
         showCustomToast(response.message);
       }
@@ -214,7 +221,8 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
 
       if (response.isSuccess) {
         showCustomToast(response.message, isError: false);
-        await OrderPaymentSummary(orderId: getInvoiceByInvoiceNumberResponse?.invoiceNumber, checkOutType: widget.checkOutType).launch(context).then((value) {
+        await OrderPaymentSummary(orderId: getInvoiceByInvoiceNumberResponse?.invoiceNumber, checkOutType: widget.checkOutType).launch(context).then((value) async {
+          await triggerRefreshEvent();
           finish(context);
         });
       } else {
@@ -342,12 +350,14 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
 
 
             if (widget.checkOutType == CheckOutType.Order) {
-              await OrderPaymentSummary(orderId: orderDetail?.id, checkOutType: widget.checkOutType).launch(context).then((value) {
+              await OrderPaymentSummary(orderId: orderDetail?.id, checkOutType: widget.checkOutType).launch(context).then((value) async {
+                await triggerRefreshEvent();
                 widget.onNext!();
               });
             }else{
               // finish(context);
-              await OrderPaymentSummary(orderId: getInvoiceByInvoiceNumberResponse?.invoiceNumber, checkOutType: widget.checkOutType).launch(context).then((value) {
+              await OrderPaymentSummary(orderId: getInvoiceByInvoiceNumberResponse?.invoiceNumber, checkOutType: widget.checkOutType).launch(context).then((value) async {
+                await triggerRefreshEvent();
                 finish(context);
               });
             }
@@ -360,6 +370,16 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
         ),
       ),
     );
+  }
+
+  Future<void> triggerRefreshEvent() async {
+    try {
+      // Trigger refresh for order-related data across the app
+      context.dataRefresh.refreshAfterOrderOperation(operation: 'order_updated');
+      logger.d('OrderDetailPage: Triggered refresh event for order operation');
+    } catch (e) {
+      logger.e('OrderDetailPage: Failed to trigger refresh event: $e');
+    }
   }
 
   @override

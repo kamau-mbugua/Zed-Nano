@@ -95,127 +95,122 @@ Widget listCustomersTransactionsItemBuilder(CustomerTransaction customerTransact
 }
 Widget listCustomersOrdersItemBuilder(OrderData customerTransaction) {
   return Builder(
-    builder: (context) => GestureDetector(
-      onTap: () {
-        OrderDetailPage(orderId: customerTransaction.id).launch(context);
-      },
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 10),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-        ),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    rfCommonCachedNetworkImage(
-                      customerOrdersIcon,
-                        fit: BoxFit.fitHeight,
-                        height: 20,
-                        width: 15,
-                    ),
-                    8.width,
-                    Text("#${customerTransaction.orderNumber ?? ""}",
-                        style: const TextStyle(
-                          fontFamily: 'Poppins',
-                          color: textPrimaryColor,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          fontStyle: FontStyle.normal,
-                        ),
-                    ),
-                  ],
-                ),
-                Container(
-                  margin: const EdgeInsets.only(),
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 12, vertical: 6,),
-                  decoration: BoxDecoration(
-                    color: customerTransaction.status == 'paid'
-                        ?lightGreenColor
-                        : customerTransaction.status == 'partial'
-                        ?lightOrange
-                        :primaryYellowTextColor,
-                    borderRadius: BorderRadius.circular(8),
+    builder: (context) => Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      decoration: const BoxDecoration(
+        color: Colors.white,
+      ),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  rfCommonCachedNetworkImage(
+                    customerOrdersIcon,
+                      fit: BoxFit.fitHeight,
+                      height: 20,
+                      width: 15,
                   ),
-                  child: Text(customerTransaction.status?.toUpperCase() ?? '',
-                      style: TextStyle(
+                  8.width,
+                  Text("#${customerTransaction.orderNumber ?? ""}",
+                      style: const TextStyle(
                         fontFamily: 'Poppins',
-                        color: customerTransaction.status == 'paid'
-                            ? successTextColor
-                            : customerTransaction.status == 'partial'
-                            ? primaryOrangeTextColor
-                            : googleRed,
-                        fontSize: 10,
+                        color: textPrimaryColor,
+                        fontSize: 14,
                         fontWeight: FontWeight.w600,
                         fontStyle: FontStyle.normal,
                       ),
                   ),
+                ],
+              ),
+              Container(
+                margin: const EdgeInsets.only(),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 12, vertical: 6,),
+                decoration: BoxDecoration(
+                  color: customerTransaction.status == 'paid'
+                      ?lightGreenColor
+                      : customerTransaction.status == 'partial'
+                      ?lightOrange
+                      :primaryYellowTextColor,
+                  borderRadius: BorderRadius.circular(8),
                 ),
-              ],
-            ),
-            8.height,
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text("Created: ${customerTransaction.createdAt?.toShortDateTime ?? ""}",
-                    style: const TextStyle(
-                      fontFamily: 'Poppins',
-                      color: textSecondary,
-                      fontSize: 10,
-                      fontWeight: FontWeight.w400,
-                      fontStyle: FontStyle.normal,
-                      letterSpacing: 0.15,
-
-                    ),
-                ),
-                  Text(customerTransaction.status == 'partial' ? 'Balance' : 'Amount',
-                    style: const TextStyle(
-                      fontFamily: 'Poppins',
-                      color: textSecondary,
-                      fontSize: 10,
-                      fontWeight: FontWeight.w400,
-                      fontStyle: FontStyle.normal,
-                      letterSpacing: 0.15,
-                    ),
-                ),
-              ],
-            ),
-            8.height,
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text("Served by: ${customerTransaction.servedBy ?? customerTransaction.cashier ?? "N/A"}",
-                    style: const TextStyle(
-                      fontFamily: 'Poppins',
-                      color: textPrimaryColor,
-                      fontSize: 10,
-                      fontWeight: FontWeight.w400,
-                      fontStyle: FontStyle.normal,
-                      letterSpacing: 0.15,
-                    ),
-                ),
-                Text("${customerTransaction.currency ?? "KES"} ${customerTransaction.status == 'partial' ? customerTransaction.deficit?.formatCurrency() : customerTransaction.total?.formatCurrency()}",
+                child: Text(customerTransaction.status?.toUpperCase() ?? '',
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       color: customerTransaction.status == 'paid'
                           ? successTextColor
                           : customerTransaction.status == 'partial'
                           ? primaryOrangeTextColor
-                          : googleRed,                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
+                          : googleRed,
+                      fontSize: 10,
+                      fontWeight: FontWeight.w600,
                       fontStyle: FontStyle.normal,
-
                     ),
                 ),
-              ],
-            ),
-            const Divider(height: 1, thickness: 0.9),
-          ],
-        ),
+              ),
+            ],
+          ),
+          8.height,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text("Created: ${customerTransaction.createdAt?.toShortDateTime ?? ""}",
+                  style: const TextStyle(
+                    fontFamily: 'Poppins',
+                    color: textSecondary,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w400,
+                    fontStyle: FontStyle.normal,
+                    letterSpacing: 0.15,
+
+                  ),
+              ),
+                Text(customerTransaction.status == 'partial' ? 'Balance' : 'Amount',
+                  style: const TextStyle(
+                    fontFamily: 'Poppins',
+                    color: textSecondary,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w400,
+                    fontStyle: FontStyle.normal,
+                    letterSpacing: 0.15,
+                  ),
+              ),
+            ],
+          ),
+          8.height,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text("Served by: ${customerTransaction.servedBy ?? customerTransaction.cashier ?? "N/A"}",
+                  style: const TextStyle(
+                    fontFamily: 'Poppins',
+                    color: textPrimaryColor,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w400,
+                    fontStyle: FontStyle.normal,
+                    letterSpacing: 0.15,
+                  ),
+              ),
+              Text("${customerTransaction.currency ?? "KES"} ${customerTransaction.status == 'partial' ? customerTransaction.deficit?.formatCurrency() : customerTransaction.total?.formatCurrency()}",
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    color: customerTransaction.status == 'paid'
+                        ? successTextColor
+                        : customerTransaction.status == 'partial'
+                        ? primaryOrangeTextColor
+                        : googleRed,                      fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                    fontStyle: FontStyle.normal,
+
+                  ),
+              ),
+            ],
+          ),
+          const Divider(height: 1, thickness: 0.9),
+        ],
       ),
     ),
   );

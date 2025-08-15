@@ -3,6 +3,7 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/models/posLoginVersion2/login_response.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/business/get_started_page.dart';
+import 'package:zed_nano/screens/widget/common/common_widgets.dart';
 import 'package:zed_nano/screens/widget/common/custom_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/feature_card.dart';
 import 'package:zed_nano/screens/widgets/custom_drawer.dart';
@@ -24,6 +25,122 @@ class _WelcomeSetupScreenState extends State<WelcomeSetupScreen> {
   void initState() {
     loginResponse = getAuthProvider(context).loginResponse;
     super.initState();
+  }
+
+  Widget _buildFeatureGrid() {
+    return Column(
+      children: [
+        // First row
+        Row(
+          children: [
+            Expanded(
+              child: _buildFeatureCard(
+                iconColor: const Color(0xff1573fe),
+                assetPath: addProduct,
+                title: 'All in one place',
+                subtitle: 'Add Products',
+              ),
+            ),
+            12.width,
+            Expanded(
+              child: _buildFeatureCard(
+                iconColor: const Color(0xffff8503),
+                assetPath: acceptPayment,
+                title: 'Multiple methods',
+                subtitle: 'Accept Payments',
+              ),
+            ),
+          ],
+        ),
+        16.height,
+        // Second row
+        Row(
+          children: [
+            Expanded(
+              child: _buildFeatureCard(
+                iconColor: const Color(0xff17ae7b),
+                assetPath: sellQuicker,
+                title: 'Easy Steps',
+                subtitle: 'Sell Bigtime!',
+              ),
+            ),
+            12.width,
+            Expanded(
+              child: _buildFeatureCard(
+                iconColor: const Color(0xff1573fe),
+                assetPath: trackStockIcon,
+                title: 'Get notified',
+                subtitle: 'Track Your Stock',
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildFeatureCard({
+    required Color iconColor,
+    required String assetPath,
+    required String title,
+    required String subtitle,
+  }) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.08),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+            spreadRadius: 0,
+          ),
+          BoxShadow(
+            color: Colors.black.withOpacity(0.04),
+            blurRadius: 4,
+            offset: const Offset(0, 1),
+            spreadRadius: 0,
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          rfCommonCachedNetworkImage(
+            assetPath,
+            height: 24,
+            width: 24,
+            color: iconColor,
+            fit: BoxFit.contain,
+            radius: 0,
+          ),
+          16.height,
+          // Title
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w400,
+              color: Color(0xff828282),
+              fontFamily: 'Poppins',
+            ),
+          ),
+          4.height,
+          // Subtitle
+          Text(
+            subtitle,
+            style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              color: Color(0xff333333),
+              fontFamily: 'Poppins',
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -61,12 +178,15 @@ class _WelcomeSetupScreenState extends State<WelcomeSetupScreen> {
                 ),
               ),
               24.height,
+              // Feature cards in 2x2 grid
+              _buildFeatureGrid(),
+              40.height,
               // Empowerment Text
               RichText(
                 text: const TextSpan(
                   children: [
                     TextSpan(
-                      text: 'Zed Nano empowers you ',
+                      text: 'Effortlessly ',
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
@@ -75,7 +195,7 @@ class _WelcomeSetupScreenState extends State<WelcomeSetupScreen> {
                       ),
                     ),
                     TextSpan(
-                      text: '\nwith the necessary tools to',
+                      text: 'collect and\nmanage your revenue\n',
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
@@ -84,50 +204,13 @@ class _WelcomeSetupScreenState extends State<WelcomeSetupScreen> {
                       ),
                     ),
                     TextSpan(
-                      text: '\nmanage your business',
+                      text: 'with Zed Nano.',
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
                         color: Color(0xffdc3545),
                         fontFamily: 'Poppins',
                       ),
-                    ),
-                  ],
-                ),
-              ),
-              32.height,
-              // Feature cards – horizontally scrollable
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                physics: const BouncingScrollPhysics(),
-                child: Row(
-                  children: [
-                    const FeatureCard(
-                      iconColor: Color(0xff1573fe),
-                      assetPath: addProduct,
-                      title: 'All in one place',
-                      subtitle: 'Add Products',
-                    ),
-                    12.width,
-                    const FeatureCard(
-                      iconColor: Color(0xffff8503),
-                      assetPath: acceptPayment,
-                      title: 'Multiple methods',
-                      subtitle: 'Accept Payments',
-                    ),
-                    12.width,
-                    const FeatureCard(
-                      iconColor: Color(0xff17ae7b),
-                      assetPath: sellQuicker,
-                      title: 'Easy steps',
-                      subtitle: 'Sell Quicker!',
-                    ),
-                    12.width,
-                    const FeatureCard(
-                      iconColor: Color(0xff1573fe),
-                      assetPath: trackStockIcon,
-                      title: 'Get Notified',
-                      subtitle: 'Track your Stock',
                     ),
                   ],
                 ),

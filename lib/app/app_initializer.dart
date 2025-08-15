@@ -19,6 +19,7 @@ import 'package:zed_nano/services/push_notification_service.dart';
 import 'package:zed_nano/utils/app_loading.dart';
 import 'package:zed_nano/utils/permission_service.dart';
 import 'package:zed_nano/viewmodels/CustomerInvoicingViewModel.dart';
+import 'package:zed_nano/viewmodels/DataRefreshViewModel.dart';
 import 'package:zed_nano/viewmodels/RefreshViewModel.dart';
 import 'package:zed_nano/viewmodels/WorkflowViewModel.dart';
 import 'package:zed_nano/viewmodels/add_stock_take_viewmodel.dart';
@@ -109,6 +110,7 @@ Future<void> initializeApp(Flavor flavor) async {
         ChangeNotifierProvider(create: (context) => di.sl<ThemeProvider>()),
         ChangeNotifierProvider(create: (_) => WorkflowViewModel()),
         ChangeNotifierProvider(create: (_) => RefreshViewModel()),
+        ChangeNotifierProvider(create: (_) => DataRefreshViewModel()),
         ChangeNotifierProvider(create: (_) => CartViewModel()),
         ChangeNotifierProvider(create: (_) => AddStockViewModel()),
         ChangeNotifierProvider(create: (_) => AddStockTakeViewModel()),
