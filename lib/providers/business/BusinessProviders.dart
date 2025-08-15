@@ -58,6 +58,7 @@ import 'package:zed_nano/models/savePushy/CreateOrderResponse.dart';
 import 'package:zed_nano/models/unitofmeasure/UnitOfMeasureResponse.dart';
 import 'package:zed_nano/models/viewAllTransactions/TransactionListResponse.dart';
 import 'package:zed_nano/models/void-approved/VoidApprovedResponse.dart';
+import 'package:zed_nano/models/void-pending-approval/VoidPendingApprovalResponse.dart';
 import 'package:zed_nano/networking/base/api_helpers.dart';
 import 'package:zed_nano/networking/models/response_model.dart';
 import 'package:zed_nano/providers/base/base_provider.dart';
@@ -953,6 +954,87 @@ class BusinessProviders extends BaseProvider {
     } else {
       finalResponseModel =
           ResponseModel<CustomerListResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+  Future<ResponseModel<VoidPendingApprovalResponse>> getVoidedTransactionsPending({
+    required int page,
+    required int limit,
+    required String searchValue,
+    required BuildContext context,
+  }) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.getVoidedTransactionsPending(
+              page: page,
+              limit: limit,
+              searchValue: searchValue
+            ),
+        context,);
+
+    ResponseModel<VoidPendingApprovalResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<VoidPendingApprovalResponse>(
+          true, responseModel.message!, VoidPendingApprovalResponse.fromJson(map),);
+    } else {
+      finalResponseModel =
+          ResponseModel<VoidPendingApprovalResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+  Future<ResponseModel<VoidPendingApprovalResponse>> getVoidedApprovedTransactionsPending({
+    required int page,
+    required int limit,
+    required String searchValue,
+    required BuildContext context,
+  }) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.getVoidedApprovedTransactionsPending(
+              page: page,
+              limit: limit,
+              searchValue: searchValue
+            ),
+        context,);
+
+    ResponseModel<VoidPendingApprovalResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<VoidPendingApprovalResponse>(
+          true, responseModel.message!, VoidPendingApprovalResponse.fromJson(map),);
+    } else {
+      finalResponseModel =
+          ResponseModel<VoidPendingApprovalResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+  Future<ResponseModel<VoidPendingApprovalResponse>> getVoidedApprovedTransactionsDeclined({
+    required int page,
+    required int limit,
+    required String searchValue,
+    required BuildContext context,
+  }) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.getVoidedApprovedTransactionsDeclined(
+              page: page,
+              limit: limit,
+              searchValue: searchValue
+            ),
+        context,);
+
+    ResponseModel<VoidPendingApprovalResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<VoidPendingApprovalResponse>(
+          true, responseModel.message!, VoidPendingApprovalResponse.fromJson(map),);
+    } else {
+      finalResponseModel =
+          ResponseModel<VoidPendingApprovalResponse>(false, responseModel.message!);
     }
 
     return finalResponseModel;

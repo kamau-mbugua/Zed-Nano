@@ -101,19 +101,29 @@ class _PendingApprovalsPageState extends State<PendingApprovalsPage> {
 
   void _handleApprovalItemTap(ApprovalData item) {
     if (item.name == 'Stock Take') {
-      const StockTakeApproval().launch(context);
+      const StockTakeApproval().launch(context).then((value) {
+        getApprovalByStatus();
+      });
     }
     if (item.name == 'Add Stock') {
-      const AddStockApprovalPage().launch(context);
+      const AddStockApprovalPage().launch(context).then((value) {
+        getApprovalByStatus();
+      });
     }
     if (item.name == 'Users') {
-      const AddUsersPendingApprovalPage().launch(context);
+      const AddUsersPendingApprovalPage().launch(context).then((value) {
+        getApprovalByStatus();
+      });
     }
     if (item.name == 'Customers') {
-      const CustomersPendingApprovalPage().launch(context);
+      const CustomersPendingApprovalPage().launch(context).then((value) {
+        getApprovalByStatus();
+      });
     }
     if (item.name == 'Voided Transactions') {
-      const PendingVoidedTransactionsPage().launch(context);
+      const PendingVoidedTransactionsPage().launch(context).then((value) {
+        getApprovalByStatus();
+      });
     }
   }
 }

@@ -82,8 +82,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
   Widget _buildSubmitButton() {
     return Visibility(
       visible: (byTransactionIdDetailResponse?.data?.voidStatus.isEmptyOrNull ==
-              true) ||
-          (byTransactionIdDetailResponse?.data?.voidStatus == 'VOIDED'),
+              true),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(

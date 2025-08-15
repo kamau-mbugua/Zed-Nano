@@ -67,6 +67,7 @@ class ApprovalListData {
       stockTransferCount: json['stockTransferCount'] as int?,
       customersCount: json['customersCount'] as int?,
       usersCount: json['usersCount'] as int?,
+      voidedTransactions: json['voidCount'] as int?,
     );
   }
   final int? addStockCount;
