@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:nb_utils/nb_utils.dart';
+import 'package:nb_utils/nb_utils.dart' hide navigatorKey;
 import 'package:provider/provider.dart';
 import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
+import 'package:zed_nano/screens/approvals/add_stock/add_stock_approval_page.dart';
 import 'package:zed_nano/screens/stock/itemBuilder/preview_add_stock_item.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
@@ -176,7 +177,6 @@ class _AddStockPreviewPageState extends State<AddStockPreviewPage> {
                     width: double.infinity,
                     height: 56,
                     child: appButton(text: 'Submit Batch', onTap: (){
-
                       final payload = {
                         'supplierId': '',
                         'warehouseId':'',
@@ -192,7 +192,13 @@ class _AddStockPreviewPageState extends State<AddStockPreviewPage> {
                         if(value.isSuccess){
                           cartViewModel.clear();
                           widget.onNext();
-                          showCustomToast(value.message, isError: false);
+                          showCustomToast(value.message, isError: false, actionText: 'Approve', onPressed: (){
+                            Future.delayed(const Duration(milliseconds: 500), () {
+                              navigatorKey.currentState?.push(
+                                MaterialPageRoute(builder: (context) => const AddStockApprovalPage()),
+                              );
+                            });
+                          });
                         }else{
                           showCustomToast(value.message);
                         }

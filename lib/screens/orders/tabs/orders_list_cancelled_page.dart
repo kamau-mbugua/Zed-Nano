@@ -6,6 +6,7 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/models/fetchByStatus/OrderResponse.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/customers/itemBuilder/list_customers_transactions_item_builder.dart';
+import 'package:zed_nano/screens/orders/detail/order_detail_page.dart';
 import 'package:zed_nano/screens/widget/common/date_range_filter_bottom_sheet.dart';
 import 'package:zed_nano/screens/widget/common/filter_row_widget.dart';
 import 'package:zed_nano/screens/widget/common/searchview.dart';
@@ -207,8 +208,12 @@ class _OrdersListCancelledPageState extends State<OrdersListCancelledPage> {
           pagingController: _paginationController.pagingController,
           builderDelegate: PagedChildBuilderDelegate<OrderData>(
             itemBuilder: (context, item, index) {
-              return listCustomersOrdersItemBuilder(item);
-            },
+              return listCustomersOrdersItemBuilder(item).onTap((){
+                OrderDetailPage(orderId: item.id).launch(context).then((value) {
+                  _paginationController.refresh();
+                });
+              });
+              },
             firstPageProgressIndicatorBuilder: (_) => const SizedBox.shrink(),
             newPageProgressIndicatorBuilder: (_) => const SizedBox.shrink(),
             noItemsFoundIndicatorBuilder: (context) =>  const Center(

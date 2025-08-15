@@ -37,6 +37,7 @@ import 'package:zed_nano/models/get_setup_status/SetupStatusResponse.dart';
 import 'package:zed_nano/models/get_total_sales/GetTotalSalesResponse.dart';
 import 'package:zed_nano/models/get_user_invoices/InvoiceListResponse.dart';
 import 'package:zed_nano/models/get_whatsapp_message_for_invoice/GetWhatsappMessageForInvoiceResponse.dart';
+import 'package:zed_nano/models/getpaymentmethod/GetPaymentMethodResponse.dart';
 import 'package:zed_nano/models/listBusinessCategory/ListBusinessCategoryResponse.dart';
 import 'package:zed_nano/models/listByProducts/ListByProductsResponse.dart';
 import 'package:zed_nano/models/listCategories/ListCategoriesResponse.dart';
@@ -58,6 +59,7 @@ import 'package:zed_nano/models/savePushy/CreateOrderResponse.dart';
 import 'package:zed_nano/models/unitofmeasure/UnitOfMeasureResponse.dart';
 import 'package:zed_nano/models/viewAllTransactions/TransactionListResponse.dart';
 import 'package:zed_nano/models/void-approved/VoidApprovedResponse.dart';
+import 'package:zed_nano/models/void-pending-approval/VoidPendingApprovalResponse.dart';
 import 'package:zed_nano/networking/base/api_helpers.dart';
 import 'package:zed_nano/networking/models/response_model.dart';
 import 'package:zed_nano/providers/base/base_provider.dart';
@@ -957,6 +959,87 @@ class BusinessProviders extends BaseProvider {
 
     return finalResponseModel;
   }
+  Future<ResponseModel<VoidPendingApprovalResponse>> getVoidedTransactionsPending({
+    required int page,
+    required int limit,
+    required String searchValue,
+    required BuildContext context,
+  }) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.getVoidedTransactionsPending(
+              page: page,
+              limit: limit,
+              searchValue: searchValue
+            ),
+        context,);
+
+    ResponseModel<VoidPendingApprovalResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<VoidPendingApprovalResponse>(
+          true, responseModel.message!, VoidPendingApprovalResponse.fromJson(map),);
+    } else {
+      finalResponseModel =
+          ResponseModel<VoidPendingApprovalResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+  Future<ResponseModel<VoidPendingApprovalResponse>> getVoidedApprovedTransactionsPending({
+    required int page,
+    required int limit,
+    required String searchValue,
+    required BuildContext context,
+  }) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.getVoidedApprovedTransactionsPending(
+              page: page,
+              limit: limit,
+              searchValue: searchValue
+            ),
+        context,);
+
+    ResponseModel<VoidPendingApprovalResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<VoidPendingApprovalResponse>(
+          true, responseModel.message!, VoidPendingApprovalResponse.fromJson(map),);
+    } else {
+      finalResponseModel =
+          ResponseModel<VoidPendingApprovalResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+  Future<ResponseModel<VoidPendingApprovalResponse>> getVoidedApprovedTransactionsDeclined({
+    required int page,
+    required int limit,
+    required String searchValue,
+    required BuildContext context,
+  }) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.getVoidedApprovedTransactionsDeclined(
+              page: page,
+              limit: limit,
+              searchValue: searchValue
+            ),
+        context,);
+
+    ResponseModel<VoidPendingApprovalResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<VoidPendingApprovalResponse>(
+          true, responseModel.message!, VoidPendingApprovalResponse.fromJson(map),);
+    } else {
+      finalResponseModel =
+          ResponseModel<VoidPendingApprovalResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
 
   Future<ResponseModel<ListUsersResponse>> getListListUsers({
     required int page,
@@ -1641,6 +1724,26 @@ class BusinessProviders extends BaseProvider {
     } else {
       finalResponseModel =
           ResponseModel<GetInvoiceByInvoiceNumberResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
+  Future<ResponseModel<GetPaymentMethodResponse>> getPaymentMethodSettleInvoice({
+    required BuildContext context,
+  }) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.getPaymentMethodSettleInvoice(), context,);
+
+    ResponseModel<GetPaymentMethodResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<GetPaymentMethodResponse>(
+          true, responseModel.message!, GetPaymentMethodResponse.fromJson(map),);
+    } else {
+      finalResponseModel =
+          ResponseModel<GetPaymentMethodResponse>(false, responseModel.message!);
     }
 
     return finalResponseModel;

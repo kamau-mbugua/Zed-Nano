@@ -22,6 +22,7 @@ import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/Images.dart';
 import 'package:zed_nano/utils/date_range_util.dart';
 import 'package:zed_nano/utils/extensions.dart';
+import 'package:zed_nano/viewmodels/DataRefreshViewModel.dart';
 import 'package:zed_nano/viewmodels/RefreshViewModel.dart';
 import 'package:zed_nano/viewmodels/WorkflowViewModel.dart';
 
@@ -107,44 +108,6 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
 
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    // Don't proceed if we're already fetching data
-    if (_isFetching) return;
-
-    // Get refresh view model - LISTEN to changes
-    final refreshViewModel = Provider.of<RefreshViewModel>(context);
-
-    var shouldRefresh = false;
-
-    // Check if there's been a refresh since we last checked
-    if (_lastRefreshTime != refreshViewModel.lastRefreshed &&
-        refreshViewModel.lastRefreshed != null) {
-      _lastRefreshTime = refreshViewModel.lastRefreshed;
-      logger.w('AdminDashboardPage detected global timestamp change');
-      shouldRefresh = true;
-    }
-
-    // Check if this specific page was refreshed
-    if (refreshViewModel.isPageRefreshed('admin_dashboard')) {
-      logger.w('AdminDashboardPage detected specific page refresh');
-      shouldRefresh = true;
-
-      // Schedule the reset for after build completes to avoid setState during build
-      Future.microtask(() {
-        refreshViewModel.resetPageRefreshStatus('admin_dashboard');
-      });
-    }
-
-    // Only fetch data once if either condition is true
-    if (shouldRefresh) {
-      _fetchDataWithDebounce();
-    }
-  }
-
-  // New method to fetch data with debouncing
   void _fetchDataWithDebounce() {
     if (_isFetching) return;
 
@@ -293,8 +256,49 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer2<WorkflowViewModel, RefreshViewModel>(
-      builder: (context, viewModel, refreshViewModel, _) {
+    return Consumer3<WorkflowViewModel, RefreshViewModel, DataRefreshViewModel>(
+      builder: (context, viewModel, refreshViewModel, dataRefreshViewModel, _) {
+        var shouldRefresh = false;
+
+        // Check if there's been a refresh since we last checked
+        if (_lastRefreshTime != refreshViewModel.lastRefreshed &&
+            refreshViewModel.lastRefreshed != null) {
+          _lastRefreshTime = refreshViewModel.lastRefreshed;
+          logger.w('AdminDashboardPage detected global timestamp change');
+          shouldRefresh = true;
+        }
+
+        // Check if this specific page was refreshed
+        if (refreshViewModel.isPageRefreshed('admin_dashboard')) {
+          logger.w('AdminDashboardPage detected specific page refresh');
+          shouldRefresh = true;
+
+          // Schedule the reset for after build completes to avoid setState during build
+          Future.microtask(() {
+            refreshViewModel.resetPageRefreshStatus('admin_dashboard');
+          });
+        }
+
+        // Check if data refresh is needed
+        if (dataRefreshViewModel.isRefreshing(DataRefreshType.dashboard) ||
+            dataRefreshViewModel.isRefreshing(DataRefreshType.orders) ||
+            dataRefreshViewModel.isRefreshing(DataRefreshType.transactions) ||
+            dataRefreshViewModel.isRefreshing(DataRefreshType.payments)) {
+          logger.w('AdminDashboardPage detected data refresh needed');
+          shouldRefresh = true;
+          Future.microtask(() {
+            dataRefreshViewModel.completeRefresh(DataRefreshType.dashboard);
+            dataRefreshViewModel.completeRefresh(DataRefreshType.orders);
+            dataRefreshViewModel.completeRefresh(DataRefreshType.transactions);
+            dataRefreshViewModel.completeRefresh(DataRefreshType.payments);
+          });
+        }
+
+        // Only fetch data once if either condition is true
+        if (shouldRefresh) {
+          _fetchDataWithDebounce();
+        }
+
         return ColoredBox(
           color: Colors.white, // Add white background
           child: SafeArea(

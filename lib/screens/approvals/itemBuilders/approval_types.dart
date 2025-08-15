@@ -39,12 +39,16 @@ Widget createListItem(
                             ? approvalStockTake
                             : pendingApproval?.name == 'Add Stock'
                                 ? approvalAddStock
-                                : pendingApproval?.name == 'Users'
+                                : pendingApproval?.name == 'Customers'
                                     ? approvalUsers
-                                    : approvalCustomers,
+                                : pendingApproval?.name == 'Users'
+                                    ? approvalCustomers
+                                    : voidedTransactionsIcon,
                         fit: BoxFit.fitHeight,
+                        color: highlightMainDark,
                         height: 20,
                         width: 20,
+                        radius: 0,
                       ),
                       const SizedBox(height: 8),
                       Text(pendingApproval?.name ?? 'N/A',

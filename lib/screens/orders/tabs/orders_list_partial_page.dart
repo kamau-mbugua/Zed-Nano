@@ -3,9 +3,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:provider/provider.dart';
 import 'package:zed_nano/models/fetchByStatus/OrderResponse.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/customers/itemBuilder/list_customers_transactions_item_builder.dart';
+import 'package:zed_nano/screens/orders/detail/order_detail_page.dart';
 import 'package:zed_nano/screens/widget/common/date_range_filter_bottom_sheet.dart';
 import 'package:zed_nano/screens/widget/common/filter_row_widget.dart';
 import 'package:zed_nano/screens/widget/common/searchview.dart';
@@ -14,6 +16,7 @@ import 'package:zed_nano/utils/GifsImages.dart';
 import 'package:zed_nano/utils/date_range_util.dart';
 import 'package:zed_nano/utils/extensions.dart';
 import 'package:zed_nano/utils/pagination_controller.dart';
+import 'package:zed_nano/viewmodels/DataRefreshViewModel.dart';
 
 class OrdersListPartialPage extends StatefulWidget {
   const OrdersListPartialPage({super.key});
@@ -109,13 +112,46 @@ class _OrdersListPartialPageState extends State<OrdersListPartialPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        _buildSearchAndFilter(),
-        _buildSummary(),
-        _buildList(),
-      ],
-    ).paddingSymmetric(horizontal: 16);
+    return Consumer<DataRefreshViewModel>(
+      builder: (context, dataRefreshViewModel, child){
+
+        var shouldRefresh = false;
+        // Check if data refresh is needed
+        if (dataRefreshViewModel.isRefreshing(DataRefreshType.dashboard) ||
+            dataRefreshViewModel.isRefreshing(DataRefreshType.orders) ||
+            dataRefreshViewModel.isRefreshing(DataRefreshType.transactions) ||
+            dataRefreshViewModel.isRefreshing(DataRefreshType.payments)) {
+          shouldRefresh = true;
+          Future.microtask(() {
+            dataRefreshViewModel.completeRefresh(DataRefreshType.dashboard);
+            dataRefreshViewModel.completeRefresh(DataRefreshType.orders);
+            dataRefreshViewModel.completeRefresh(DataRefreshType.transactions);
+            dataRefreshViewModel.completeRefresh(DataRefreshType.payments);
+          });
+        }
+
+        // Only fetch data once if either condition is true
+        if (shouldRefresh) {
+          _paginationController.refresh();
+        }
+
+
+        return Column(
+          children: [
+            _buildSearchAndFilter(),
+            _buildSummary(),
+            _buildList(),
+          ],
+        ).paddingSymmetric(horizontal: 16);
+      },
+    );
+    // return Column(
+    //   children: [
+    //     _buildSearchAndFilter(),
+    //     _buildSummary(),
+    //     _buildList(),
+    //   ],
+    // ).paddingSymmetric(horizontal: 16);
   }
 
   Widget _buildSummary() {
@@ -206,8 +242,11 @@ class _OrdersListPartialPageState extends State<OrdersListPartialPage> {
           pagingController: _paginationController.pagingController,
           builderDelegate: PagedChildBuilderDelegate<OrderData>(
             itemBuilder: (context, item, index) {
-              return listCustomersOrdersItemBuilder(item);
-            },
+              return listCustomersOrdersItemBuilder(item).onTap((){
+                OrderDetailPage(orderId: item.id).launch(context).then((value) {
+                  _paginationController.refresh();
+                });
+              });            },
             firstPageProgressIndicatorBuilder: (_) => const SizedBox.shrink(),
             newPageProgressIndicatorBuilder: (_) => const SizedBox.shrink(),
             noItemsFoundIndicatorBuilder: (context) =>  const Center(

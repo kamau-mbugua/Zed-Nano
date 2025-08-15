@@ -364,6 +364,48 @@ class BusinessRepo{
       return ApiResponse.withError(ApiErrorHandler.handleError(e));
     }
   }
+  Future<ApiResponse> getVoidedTransactionsPending({
+    required int page ,
+    required int limit ,
+    required String searchValue ,
+  }) async {
+    try {
+      final response =
+      await dioClient!.get('${AppConstants.getVoidedTransactionsPending}?page=$page&limit=$limit&search=$searchValue');
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
+  Future<ApiResponse> getVoidedApprovedTransactionsPending({
+    required int page ,
+    required int limit ,
+    required String searchValue ,
+  }) async {
+    try {
+      final response =
+      await dioClient!.get('${AppConstants.getVoidedApprovedTransactionsPending}?page=$page&limit=$limit&search=$searchValue');
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
+  Future<ApiResponse> getVoidedApprovedTransactionsDeclined({
+    required int page ,
+    required int limit ,
+    required String searchValue ,
+  }) async {
+    try {
+      final response =
+      await dioClient!.get('${AppConstants.getVoidedApprovedTransactionsDeclined}?page=$page&limit=$limit&search=$searchValue');
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
   Future<ApiResponse> getListListUsers({
     required int page ,
     required int limit ,
@@ -923,6 +965,17 @@ class BusinessRepo{
     try {
       final response =
       await dioClient!.get(AppConstants.getInvoiceByInvoiceNumber,queryParameters: requestData);
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
+
+  Future<ApiResponse> getPaymentMethodSettleInvoice() async {
+    try {
+      final response =
+      await dioClient!.get(AppConstants.getPaymentMethodSettleInvoice);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {

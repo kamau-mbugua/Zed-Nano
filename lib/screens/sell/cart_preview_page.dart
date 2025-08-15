@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
-import 'package:zed_nano/app/app_initializer.dart';
+import 'package:zed_nano/app/app_initializer.dart' hide navigatorKey;
 import 'package:zed_nano/providers/cart/CartViewModel.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/invoices/detail/invoice_detail_page.dart';
+import 'package:zed_nano/screens/stock/add_stock/addStock/add_stock_parent_page.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/auth/input_fields.dart';
 import 'package:zed_nano/screens/widget/common/bottom_sheet_helper.dart';
@@ -17,6 +18,7 @@ import 'package:zed_nano/utils/GifsImages.dart';
 import 'package:zed_nano/utils/Images.dart';
 import 'package:zed_nano/utils/extensions.dart';
 import 'package:zed_nano/viewmodels/CustomerInvoicingViewModel.dart';
+import 'package:zed_nano/viewmodels/data_refresh_extensions.dart';
 
 //create an enum class for
 // - SaveOrder
@@ -86,11 +88,12 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
     await getBusinessProvider(context).createOrder(
         requestData: requestData,
         context: context,)
-        .then((value) {
+        .then((value) async {
       if (value.isSuccess) {
         showCustomToast(value.message ?? 'Customer created successfully',
             isError: false,);
         if (createOrderOption == CreateOrderOption.saveOrder) {
+          await triggerRefreshEvent();
           widget.skipAndClose();
         }
         if (createOrderOption == CreateOrderOption.requestPayment) {
@@ -104,13 +107,25 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
           widget.onNext();
         }
         if (createOrderOption == CreateOrderOption.moreOptions) {
-          BottomSheetHelper.showPrintingOptionsBottomSheet(context, printOrderInvoiceId: value.data?.data?.id).then((value) {
+          BottomSheetHelper.showPrintingOptionsBottomSheet(context, printOrderInvoiceId: value.data?.data?.id).then((value) async {
+            await triggerRefreshEvent();
             widget.skipAndClose();
           });
         }
         cartViewModel.clear();
       } else {
-        showCustomToast(value.message ?? 'Something went wrong');
+
+        if (value.message?.contains('stock') == true) {
+          showCustomToast(value.message, isError: true, actionText: 'Ad Stock?', onPressed: (){
+            Future.delayed(const Duration(milliseconds: 500), () {
+              navigatorKey.currentState?.push(
+                MaterialPageRoute(builder: (context) => const AddStockParentPage()),
+              );
+            });
+          });
+        }else{
+          showCustomToast(value.message ?? 'Something went wrong');
+        }
       }
     });
 
@@ -160,6 +175,17 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
     });
 
   }
+
+  Future<void> triggerRefreshEvent() async {
+    try {
+      // Trigger refresh for order-related data across the app
+      context.dataRefresh.refreshAfterOrderOperation(operation: 'order_updated');
+      logger.d('OrderDetailPage: Triggered refresh event for order operation');
+    } catch (e) {
+      logger.e('OrderDetailPage: Failed to trigger refresh event: $e');
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {

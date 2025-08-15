@@ -69,6 +69,9 @@ class AppConstants{
   static const String getPaymentMethodsWithStatus = 'api/get_payment_methods_with_status';
   static const String getListCategories = 'api/listCategories/Active';
   static const String getListCustomers = 'api/customers_list';
+  static const String getVoidedTransactionsPending = 'api/v1/payments/void-penging-approval';
+  static const String getVoidedApprovedTransactionsPending = 'api/v1/payments/void-approved';
+  static const String getVoidedApprovedTransactionsDeclined = 'api/v1/payments/void-declined';
   static const String getListListUsers = 'api/listUsers';
   static const String getCustomerTransactions = 'api/customerTransactions';
   static const String getCustomerInvoices = 'api/get_user_invoices';
@@ -83,6 +86,7 @@ class AppConstants{
   static const String getTransactionByTransactionId = 'api/v1/payments/by-transaction-id';
   static const String getApprovalByStatus = 'api/stock/stocksummary';
   static const String getInvoiceByInvoiceNumber = 'api/get_invoice_by_invoice_number';
+  static const String getPaymentMethodSettleInvoice = 'api/v1/getpaymentmethod';
   static const String getInvoiceReceiptPaymentMethodsNoLogin = 'api/get_invoice_receipt_payment_methods_no_login';
   static const String doSendToPos = '/api/sendPushy';
   static const String getBranchTerminals = 'api/v1/branchTerminals/Active';

@@ -8,6 +8,7 @@ import 'package:zed_nano/models/pushstk/PushStkResponse.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/business/subscription/mpesa_payment_waiting_screen.dart';
 import 'package:zed_nano/screens/orders/order_payment_summary/order_payment_summary.dart';
+import 'package:zed_nano/screens/payments/settle_invoice/settle_invoice_page.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/auth/input_fields.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
@@ -15,6 +16,7 @@ import 'package:zed_nano/screens/widget/common/heading.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/extensions.dart';
+import 'package:zed_nano/viewmodels/data_refresh_extensions.dart';
 
 enum CheckOutType{
   Invoice,
@@ -170,9 +172,12 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
 
   Future<void> doCashPayment() async {
 
+    final currentDateTime = DateFormatter.getCurrentShortDateTime();
+    final receiptNumber = DateTime.now().millisecondsSinceEpoch.toString().substring(0, 13);
+
 
     final requestData = <String, dynamic>{
-      'billRefNo': orderDetail?.pushTransactionId,
+      'billRefNo': receiptNumber,
       'paymentChanel': 'Mobile',
       'transamount': textToDouble(amountToPayController.text) ?? orderDetailData?.deficit,
       'pushyTransactionId': orderId,
@@ -185,8 +190,10 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
 
       if (response.isSuccess) {
         showCustomToast(response.message, isError: false);
-        widget.onNext!();
-        await OrderPaymentSummary(orderId: orderDetail?.id).launch(context);
+        await OrderPaymentSummary(orderId: orderDetail?.id).launch(context).then((value) async {
+          await triggerRefreshEvent();
+          widget.onNext!();
+        });
       } else {
         showCustomToast(response.message);
       }
@@ -214,7 +221,8 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
 
       if (response.isSuccess) {
         showCustomToast(response.message, isError: false);
-        await OrderPaymentSummary(orderId: getInvoiceByInvoiceNumberResponse?.invoiceNumber, checkOutType: widget.checkOutType).launch(context).then((value) {
+        await OrderPaymentSummary(orderId: getInvoiceByInvoiceNumberResponse?.invoiceNumber, checkOutType: widget.checkOutType).launch(context).then((value) async {
+          await triggerRefreshEvent();
           finish(context);
         });
       } else {
@@ -342,12 +350,14 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
 
 
             if (widget.checkOutType == CheckOutType.Order) {
-              await OrderPaymentSummary(orderId: orderDetail?.id, checkOutType: widget.checkOutType).launch(context).then((value) {
+              await OrderPaymentSummary(orderId: orderDetail?.id, checkOutType: widget.checkOutType).launch(context).then((value) async {
+                await triggerRefreshEvent();
                 widget.onNext!();
               });
             }else{
               // finish(context);
-              await OrderPaymentSummary(orderId: getInvoiceByInvoiceNumberResponse?.invoiceNumber, checkOutType: widget.checkOutType).launch(context).then((value) {
+              await OrderPaymentSummary(orderId: getInvoiceByInvoiceNumberResponse?.invoiceNumber, checkOutType: widget.checkOutType).launch(context).then((value) async {
+                await triggerRefreshEvent();
                 finish(context);
               });
             }
@@ -360,6 +370,16 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
         ),
       ),
     );
+  }
+
+  Future<void> triggerRefreshEvent() async {
+    try {
+      // Trigger refresh for order-related data across the app
+      context.dataRefresh.refreshAfterOrderOperation(operation: 'order_updated');
+      logger.d('OrderDetailPage: Triggered refresh event for order operation');
+    } catch (e) {
+      logger.e('OrderDetailPage: Failed to trigger refresh event: $e');
+    }
   }
 
   @override
@@ -408,7 +428,7 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
           onTap: () async {
             if (selectedPayment == 'cash') {
               if (widget.checkOutType == CheckOutType.Invoice) {
-                doCashPaymentInvoice();
+               await doCashPaymentInvoice();
               }else {
                 await doCashPayment();
               }
@@ -432,6 +452,23 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
               await doKcbMpesaPayment(phoneNumber);
             }else if (selectedPayment == 'card') {
               await doCardPayment();
+            }else if (selectedPayment == 'settleInvoiceStatus') {
+              await SettleInvoicePage(
+                orderId: widget.orderId,
+                checkOutType: widget.checkOutType,
+              ).launch(context).then((value) async {
+                if(widget.checkOutType == CheckOutType.Order) {
+                  await OrderPaymentSummary(orderId: orderDetail?.id).launch(context).then((value) async {
+                    await triggerRefreshEvent();
+                    widget.onNext!();
+                  });
+                }else{
+                  await OrderPaymentSummary(orderId: getInvoiceByInvoiceNumberResponse?.invoiceNumber, checkOutType: widget.checkOutType).launch(context).then((value) async {
+                    await triggerRefreshEvent();
+                    finish(context);
+                  });
+                }
+              });
             }
 
           },
@@ -443,7 +480,7 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
 
   Widget _buildPaymentMethodList() {
     // Filter to only include specific payment methods
-    final allowedMethods = ['cash', 'mpesa', 'kcbBankPaybill', 'card'];
+    final allowedMethods = ['cash', 'mpesa', 'kcbBankPaybill', 'card', 'settleInvoiceStatus'];
     final filteredMethods = paymentMethods.where(allowedMethods.contains).toList();
     
     return Column(
@@ -509,6 +546,8 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
                       ? 'Credit Card'
                       : method == 'kcbBankPaybill'
                       ? 'Mobile to Bank'
+                      : method == 'settleInvoiceStatus'
+                      ? widget.checkOutType == CheckOutType.Invoice ? 'Settle Invoice' : 'Settle Order'
                       : method == 'mpesa'
                       ? 'Mpesa'
                       : method,
@@ -761,7 +800,7 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
   }
   PreferredSizeWidget _buildAppBar() {
     return AuthAppBar(
-      title: 'Void Transaction',
+      title: 'Complete Transaction',
       onBackPressed: widget.checkOutType == CheckOutType.Order ? widget.onNext : () => finish(context),
     );
   }

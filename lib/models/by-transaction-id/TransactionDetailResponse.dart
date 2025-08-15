@@ -90,6 +90,10 @@ class ByTransactionIdDetailData {
     this.subTotal,
     this.vat,
     this.voidStatus,
+    this.dateVoidDeclined,
+    this.dateVoidRequested,
+    this.voidComments,
+    this.dateVoided,
   });
 
   factory ByTransactionIdDetailData.fromJson(Map<String, dynamic> json) {
@@ -160,6 +164,10 @@ class ByTransactionIdDetailData {
       orderNo: json['orderNo'] as String?,
       type: json['type'] as String?,
       voidStatus: json['voidStatus'] as String?,
+      dateVoided: json['dateVoided'] as String?,
+      voidComments: json['voidComments'] as String?,
+      dateVoidDeclined: json['dateVoidDeclined'] as String?,
+      dateVoidRequested: json['dateVoidRequested'] as String?,
       subTotal: (json['subTotal'] as num?)?.toDouble(),
       vat: (json['vat'] as num?)?.toDouble(),
     );
@@ -226,6 +234,10 @@ class ByTransactionIdDetailData {
   final String? orderNo;
   final String? type;
   final String? voidStatus;
+  final String? dateVoided;
+  final String? dateVoidDeclined;
+  final String? dateVoidRequested;
+  final String? voidComments;
   final double? subTotal;
   final double? vat;
 }

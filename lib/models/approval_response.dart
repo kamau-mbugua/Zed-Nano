@@ -57,6 +57,7 @@ class ApprovalListData {
     this.stockTransferCount,
     this.customersCount,
     this.usersCount,
+    this.voidedTransactions,
   });
 
   factory ApprovalListData.fromJson(Map<String, dynamic> json) {
@@ -66,12 +67,14 @@ class ApprovalListData {
       stockTransferCount: json['stockTransferCount'] as int?,
       customersCount: json['customersCount'] as int?,
       usersCount: json['usersCount'] as int?,
+      voidedTransactions: json['voidCount'] as int?,
     );
   }
   final int? addStockCount;
   final int? stockTakeCount;
   final int? stockTransferCount;
   final int? customersCount;
+  final int? voidedTransactions;
   final int? usersCount;
 
   Map<String, dynamic> toJson() {
@@ -81,6 +84,7 @@ class ApprovalListData {
       'stockTransferCount': stockTransferCount,
       'customersCount': customersCount,
       'usersCount': usersCount,
+      'voidedTransactions': voidedTransactions,
     };
   }
 
@@ -97,6 +101,7 @@ class ApprovalListData {
         other.stockTakeCount == stockTakeCount &&
         other.stockTransferCount == stockTransferCount &&
         other.customersCount == customersCount &&
+        other.voidedTransactions == voidedTransactions &&
         other.usersCount == usersCount;
   }
 
@@ -105,6 +110,7 @@ class ApprovalListData {
       addStockCount,
       stockTakeCount,
       stockTransferCount,
+    voidedTransactions,
       customersCount,
       usersCount,
   );
