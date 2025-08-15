@@ -45,6 +45,7 @@ Widget createListItem(
                         fit: BoxFit.fitHeight,
                         height: 20,
                         width: 20,
+                        radius: 0,
                       ),
                       const SizedBox(height: 8),
                       Text(pendingApproval?.name ?? 'N/A',
