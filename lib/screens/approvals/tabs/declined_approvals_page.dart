@@ -4,9 +4,10 @@ import 'package:zed_nano/models/approval_data.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/approvals/add_stock/add_stock_approval_declined.dart';
 import 'package:zed_nano/screens/approvals/customers/customers_declined_approval_page.dart';
-import 'package:zed_nano/screens/approvals/itemBuilders/approval_types.dart';
+import 'package:zed_nano/screens/approvals/itemBuilders/approval_grid_view.dart';
 import 'package:zed_nano/screens/approvals/stock_take/stock_take_approval_declined.dart';
 import 'package:zed_nano/screens/approvals/users/add_users_declined_approval_page.dart';
+import 'package:zed_nano/screens/approvals/voided_transactions/declined_voided_transactions_page.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/screens/widget/common/heading.dart';
 
@@ -53,6 +54,9 @@ class _DeclinedApprovalsPageState extends State<DeclinedApprovalsPage> {
             ApprovalData(
                 name: 'Customers',
                 count: approvalListData?.customersCount.toString(),),
+            ApprovalData(
+              name: 'Voided Transactions',
+              count: approvalListData?.voidedTransactions.toString(),),
           ];
         });
       } else {
@@ -80,45 +84,32 @@ class _DeclinedApprovalsPageState extends State<DeclinedApprovalsPage> {
               textSizeTitle: 16,
               textSizeSubTitle: 14,
             ),
-            _createListView(),
+            ApprovalGridView(
+              approvalData: approvalData,
+              status: widget.getStatus ?? '',
+              onItemTap: _handleApprovalItemTap,
+            ),
           ],
         ).paddingSymmetric(horizontal: 16),
       ),
     );
   }
 
-  Widget _createListView() {
-    return Expanded(
-      child: GridView.builder(
-        padding: const EdgeInsets.all(8),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2, // 2 items per row
-          crossAxisSpacing: 12, // Horizontal spacing between items
-          mainAxisSpacing: 12, // Vertical spacing between rows
-          childAspectRatio: 1.6, // Width to height ratio for each item
-        ),
-        itemCount: approvalData?.length ?? 0,
-        itemBuilder: (context, index) {
-          return createListItem(
-            approvalData?[index],
-            widget.getStatus ?? '',
-            onTap: () {
-              if (approvalData?[index].name == 'Stock Take') {
-                const StockTakeApprovalDeclined().launch(context);
-              }
-              if (approvalData?[index].name == 'Add Stock') {
-                const AddStockApprovalDeclined().launch(context);
-              }
-              if (approvalData?[index].name == 'Users') {
-                const AddUsersDeclinedApprovalPageState().launch(context);
-              }
-              if (approvalData?[index].name == 'Customers') {
-                const CustomersDeclinedApprovalPageState().launch(context);
-              }
-            },
-          );
-        },
-      ),
-    );
+  void _handleApprovalItemTap(ApprovalData item) {
+    if (item.name == 'Stock Take') {
+      const StockTakeApprovalDeclined().launch(context);
+    }
+    if (item.name == 'Add Stock') {
+      const AddStockApprovalDeclined().launch(context);
+    }
+    if (item.name == 'Users') {
+      const AddUsersDeclinedApprovalPageState().launch(context);
+    }
+    if (item.name == 'Customers') {
+      const CustomersDeclinedApprovalPageState().launch(context);
+    }
+    if (item.name == 'Voided Transactions') {
+      const DeclinedVoidedTransactionsPage().launch(context);
+    }
   }
 }

@@ -348,7 +348,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         ),
                         _buildMenuItem(
                           title: 'Payment',
-                          iconPath: salesIcon,
+                          iconPath: paymentSetupIcon,
                           onTap: () => const AddPaymentMethodScreen(isWorkFlow: false)
                               .launch(context),
                         ),

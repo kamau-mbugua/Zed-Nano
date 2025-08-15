@@ -5,9 +5,10 @@ import 'package:zed_nano/models/approval_response.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/approvals/add_stock/add_stock_approval_page.dart';
 import 'package:zed_nano/screens/approvals/customers/customers_pending_approval_page.dart';
-import 'package:zed_nano/screens/approvals/itemBuilders/approval_types.dart';
+import 'package:zed_nano/screens/approvals/itemBuilders/approval_grid_view.dart';
 import 'package:zed_nano/screens/approvals/stock_take/stock_take_approval.dart';
 import 'package:zed_nano/screens/approvals/users/add_users_pending_approval_page.dart';
+import 'package:zed_nano/screens/approvals/voided_transactions/pending_voided_transactions_page.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/screens/widget/common/heading.dart';
 
@@ -57,6 +58,9 @@ class _PendingApprovalsPageState extends State<PendingApprovalsPage> {
             ApprovalData(
                 name: 'Customers',
                 count: approvalListData?.customersCount.toString(),),
+            ApprovalData(
+                name: 'Voided Transactions',
+                count: '${approvalListData?.voidedTransactions.toString()}',),
           ];
         });
       } else {
@@ -84,45 +88,32 @@ class _PendingApprovalsPageState extends State<PendingApprovalsPage> {
               textSizeTitle: 16,
               textSizeSubTitle: 14,
             ),
-            _createListView(),
+            ApprovalGridView(
+              approvalData: approvalData,
+              status: widget.getStatus ?? '',
+              onItemTap: _handleApprovalItemTap,
+            ),
           ],
         ).paddingSymmetric(horizontal: 16),
       ),
     );
   }
 
-  Widget _createListView() {
-    return Expanded(
-      child: GridView.builder(
-        padding: const EdgeInsets.all(8),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2, // 2 items per row
-          crossAxisSpacing: 12, // Horizontal spacing between items
-          mainAxisSpacing: 12, // Vertical spacing between rows
-          childAspectRatio: 1.6, // Width to height ratio for each item
-        ),
-        itemCount: approvalData?.length ?? 0,
-        itemBuilder: (context, index) {
-          return createListItem(
-            approvalData?[index],
-            widget.getStatus ?? '',
-            onTap: () {
-              if (approvalData?[index].name == 'Stock Take') {
-                const StockTakeApproval().launch(context);
-              }
-              if (approvalData?[index].name == 'Add Stock') {
-                const AddStockApprovalPage().launch(context);
-              }
-              if (approvalData?[index].name == 'Users') {
-                const AddUsersPendingApprovalPage().launch(context);
-              }
-              if (approvalData?[index].name == 'Customers') {
-                const CustomersPendingApprovalPage().launch(context);
-              }
-            },
-          );
-        },
-      ),
-    );
+  void _handleApprovalItemTap(ApprovalData item) {
+    if (item.name == 'Stock Take') {
+      const StockTakeApproval().launch(context);
+    }
+    if (item.name == 'Add Stock') {
+      const AddStockApprovalPage().launch(context);
+    }
+    if (item.name == 'Users') {
+      const AddUsersPendingApprovalPage().launch(context);
+    }
+    if (item.name == 'Customers') {
+      const CustomersPendingApprovalPage().launch(context);
+    }
+    if (item.name == 'Voided Transactions') {
+      const PendingVoidedTransactionsPage().launch(context);
+    }
   }
 }
