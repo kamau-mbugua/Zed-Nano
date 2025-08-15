@@ -86,6 +86,7 @@ class AppConstants{
   static const String getTransactionByTransactionId = 'api/v1/payments/by-transaction-id';
   static const String getApprovalByStatus = 'api/stock/stocksummary';
   static const String getInvoiceByInvoiceNumber = 'api/get_invoice_by_invoice_number';
+  static const String getPaymentMethodSettleInvoice = 'api/v1/getpaymentmethod';
   static const String getInvoiceReceiptPaymentMethodsNoLogin = 'api/get_invoice_receipt_payment_methods_no_login';
   static const String doSendToPos = '/api/sendPushy';
   static const String getBranchTerminals = 'api/v1/branchTerminals/Active';

@@ -8,6 +8,7 @@ import 'package:zed_nano/models/pushstk/PushStkResponse.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/business/subscription/mpesa_payment_waiting_screen.dart';
 import 'package:zed_nano/screens/orders/order_payment_summary/order_payment_summary.dart';
+import 'package:zed_nano/screens/payments/settle_invoice/settle_invoice_page.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/auth/input_fields.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
@@ -189,7 +190,6 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
 
       if (response.isSuccess) {
         showCustomToast(response.message, isError: false);
-        widget.onNext!();
         await OrderPaymentSummary(orderId: orderDetail?.id).launch(context).then((value) async {
           await triggerRefreshEvent();
           widget.onNext!();
@@ -428,7 +428,7 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
           onTap: () async {
             if (selectedPayment == 'cash') {
               if (widget.checkOutType == CheckOutType.Invoice) {
-                doCashPaymentInvoice();
+               await doCashPaymentInvoice();
               }else {
                 await doCashPayment();
               }
@@ -452,6 +452,23 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
               await doKcbMpesaPayment(phoneNumber);
             }else if (selectedPayment == 'card') {
               await doCardPayment();
+            }else if (selectedPayment == 'settleInvoiceStatus') {
+              await SettleInvoicePage(
+                orderId: widget.orderId,
+                checkOutType: widget.checkOutType,
+              ).launch(context).then((value) async {
+                if(widget.checkOutType == CheckOutType.Order) {
+                  await OrderPaymentSummary(orderId: orderDetail?.id).launch(context).then((value) async {
+                    await triggerRefreshEvent();
+                    widget.onNext!();
+                  });
+                }else{
+                  await OrderPaymentSummary(orderId: getInvoiceByInvoiceNumberResponse?.invoiceNumber, checkOutType: widget.checkOutType).launch(context).then((value) async {
+                    await triggerRefreshEvent();
+                    finish(context);
+                  });
+                }
+              });
             }
 
           },
@@ -783,7 +800,7 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
   }
   PreferredSizeWidget _buildAppBar() {
     return AuthAppBar(
-      title: 'Void Transaction',
+      title: 'Complete Transaction',
       onBackPressed: widget.checkOutType == CheckOutType.Order ? widget.onNext : () => finish(context),
     );
   }

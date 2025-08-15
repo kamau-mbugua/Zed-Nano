@@ -37,6 +37,7 @@ import 'package:zed_nano/models/get_setup_status/SetupStatusResponse.dart';
 import 'package:zed_nano/models/get_total_sales/GetTotalSalesResponse.dart';
 import 'package:zed_nano/models/get_user_invoices/InvoiceListResponse.dart';
 import 'package:zed_nano/models/get_whatsapp_message_for_invoice/GetWhatsappMessageForInvoiceResponse.dart';
+import 'package:zed_nano/models/getpaymentmethod/GetPaymentMethodResponse.dart';
 import 'package:zed_nano/models/listBusinessCategory/ListBusinessCategoryResponse.dart';
 import 'package:zed_nano/models/listByProducts/ListByProductsResponse.dart';
 import 'package:zed_nano/models/listCategories/ListCategoriesResponse.dart';
@@ -1723,6 +1724,26 @@ class BusinessProviders extends BaseProvider {
     } else {
       finalResponseModel =
           ResponseModel<GetInvoiceByInvoiceNumberResponse>(false, responseModel.message!);
+    }
+
+    return finalResponseModel;
+  }
+
+  Future<ResponseModel<GetPaymentMethodResponse>> getPaymentMethodSettleInvoice({
+    required BuildContext context,
+  }) async {
+    final responseModel = await performApiCallWithHandling(
+        () => businessRepo.getPaymentMethodSettleInvoice(), context,);
+
+    ResponseModel<GetPaymentMethodResponse> finalResponseModel;
+
+    if (responseModel.isSuccess) {
+      final map = castMap(responseModel.data);
+      finalResponseModel = ResponseModel<GetPaymentMethodResponse>(
+          true, responseModel.message!, GetPaymentMethodResponse.fromJson(map),);
+    } else {
+      finalResponseModel =
+          ResponseModel<GetPaymentMethodResponse>(false, responseModel.message!);
     }
 
     return finalResponseModel;
