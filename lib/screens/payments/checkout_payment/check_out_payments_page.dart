@@ -463,7 +463,7 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
 
   Widget _buildPaymentMethodList() {
     // Filter to only include specific payment methods
-    final allowedMethods = ['cash', 'mpesa', 'kcbBankPaybill', 'card'];
+    final allowedMethods = ['cash', 'mpesa', 'kcbBankPaybill', 'card', 'settleInvoiceStatus'];
     final filteredMethods = paymentMethods.where(allowedMethods.contains).toList();
     
     return Column(
@@ -529,6 +529,8 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
                       ? 'Credit Card'
                       : method == 'kcbBankPaybill'
                       ? 'Mobile to Bank'
+                      : method == 'settleInvoiceStatus'
+                      ? widget.checkOutType == CheckOutType.Invoice ? 'Settle Invoice' : 'Settle Order'
                       : method == 'mpesa'
                       ? 'Mpesa'
                       : method,
