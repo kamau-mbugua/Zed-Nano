@@ -13,7 +13,7 @@ class GetPaymentMethodResponse {
     return GetPaymentMethodResponse(
       data: json['data'] != null
           ? (json['data'] as List)
-              .map((item) => PaymentMethodData.fromJson(item))
+              .map((item) => PaymentMethodData.fromJson(item as Map<String, dynamic>))
               .toList()
           : null,
       status: json['status'] as String?,

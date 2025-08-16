@@ -360,7 +360,7 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
             Expanded(
               flex: 2,
               child: Visibility(
-                visible: getInvoiceByInvoiceNumberResponse?.invoiceStatus?.toLowerCase() == 'unpaid' || getInvoiceByInvoiceNumberResponse?.invoiceStatus?.toLowerCase() == 'partially paid',
+                // visible: getInvoiceByInvoiceNumberResponse?.invoiceStatus?.toLowerCase() == 'unpaid' || getInvoiceByInvoiceNumberResponse?.invoiceStatus?.toLowerCase() == 'partially paid',
                 child: appButtonWithIcon(
                   text: '',
                   iconPath: fabMenuIcon,
