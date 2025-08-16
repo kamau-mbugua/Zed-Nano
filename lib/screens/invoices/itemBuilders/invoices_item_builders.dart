@@ -285,7 +285,7 @@ Widget buildInvoiceItem({
             const SizedBox(width: 16),
             // Product details
             Expanded(
-              flex: 5,
+              flex: 4,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -331,7 +331,7 @@ Widget buildInvoiceItem({
               ),
             ),
             Expanded(
-              flex: 2,
+              flex: 3,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

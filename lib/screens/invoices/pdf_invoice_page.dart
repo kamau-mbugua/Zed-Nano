@@ -2,53 +2,35 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:printing/printing.dart';
+import 'package:pdf/pdf.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/services/pdf_invoice_service.dart';
-import 'package:zed_nano/models/get_invoice_by_invoice_number/GetInvoiceByInvoiceNumberResponse.dart';
 
 
-class PdfInvoicePage extends StatefulWidget {
-  final InvoiceDetail? invoiceData;
+class PdfPage extends StatefulWidget {
+  final Uint8List pdfBytes;
+  final String title;
+  final String? fileName;
 
-  const PdfInvoicePage({
+  const PdfPage({
     Key? key,
-    required this.invoiceData,
+    required this.pdfBytes,
+    required this.title,
+    this.fileName,
   }) : super(key: key);
 
   @override
-  State<PdfInvoicePage> createState() => _PdfInvoicePageState();
+  State<PdfPage> createState() => _PdfPageState();
 }
 
-class _PdfInvoicePageState extends State<PdfInvoicePage> {
-  bool _isGeneratingPdf = false;
-  Uint8List? _pdfBytes;
+class _PdfPageState extends State<PdfPage> {
+  late Uint8List _pdfBytes;
 
   @override
   void initState() {
     super.initState();
-    _generatePdf();
-  }
-
-  Future<void> _generatePdf() async {
-    setState(() {
-      _isGeneratingPdf = true;
-    });
-
-    try {
-      final pdfBytes = await PdfInvoiceService.generateInvoicePdf(widget.invoiceData!);
-      setState(() {
-        _pdfBytes = pdfBytes;
-        _isGeneratingPdf = false;
-      });
-    } catch (e) {
-      setState(() {
-        _isGeneratingPdf = false;
-      });
-      if (mounted) {
-        showCustomToast('Error generating PDF: $e');
-      }
-    }
+    _pdfBytes = widget.pdfBytes;
   }
 
   @override
@@ -56,88 +38,141 @@ class _PdfInvoicePageState extends State<PdfInvoicePage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AuthAppBar(
-        title: 'Invoice ${widget.invoiceData?.invoiceNumber}',
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.share),
-            onPressed: () => _shareInvoice(),
-          ),
-          IconButton(
-            icon: const Icon(Icons.download),
-            onPressed: () => _downloadPdf(),
-          ),
-        ],
+        title: widget.title,
       ),
-      body: _isGeneratingPdf
-          ? const Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+      body: Column(
+        children: [
+          // PDF Preview without custom actions
+          Expanded(
+            child: PdfPreview(
+              build: (format) => _pdfBytes,
+              allowPrinting: false,
+              allowSharing: false,
+              canChangePageFormat: false,
+              canDebug: false,
+              useActions: false, // This completely disables the bottom bar
+              maxPageWidth: MediaQuery.of(context).size.width,
+            ),
+          ),
+          // Custom bottom navigation bar
+          SafeArea(
+            child: Container(
+              constraints: const BoxConstraints(
+                minHeight: 60,
+                maxHeight: 80,
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              decoration: const BoxDecoration(
+                color: Color(0xFF144166),
+                border: Border(
+                  top: BorderSide(color: Color(0xFFE5E7EB), width: 1),
+                ),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  CircularProgressIndicator(),
-                  SizedBox(height: 16),
-                  Text(
-                    'Generating PDF...',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontFamily: 'Poppins',
-                      color: Color(0xFF6B7280),
+                  Flexible(
+                    child: _buildActionButton(
+                      icon: Icons.print,
+                      label: 'Print',
+                      onPressed: _printPdf,
+                    ),
+                  ),
+                  Flexible(
+                    child: _buildActionButton(
+                      icon: Icons.share,
+                      label: 'Share',
+                      onPressed: _sharePdf,
+                    ),
+                  ),
+                  Flexible(
+                    child: _buildActionButton(
+                      icon: Icons.download,
+                      label: 'Download',
+                      onPressed: _downloadPdf,
                     ),
                   ),
                 ],
               ),
-            )
-          : _pdfBytes != null
-              ? PdfPreview(
-                  build: (format) => _pdfBytes!,
-                  allowPrinting: true,
-                  allowSharing: true,
-                  canChangePageFormat: false,
-                  canDebug: false,
-                  maxPageWidth: MediaQuery.of(context).size.width,
-                )
-              : const Center(
-                  child: Text(
-                    'Failed to generate PDF',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontFamily: 'Poppins',
-                      color: Color(0xFFDC3545),
-                    ),
-                  ),
-                ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
-  Future<void> _shareInvoice() async {
-    if (_pdfBytes != null) {
-      try {
-        await PdfInvoiceService.sharePdf(
-          _pdfBytes!,
-          'Invoice_${widget.invoiceData?.invoiceNumber}.pdf',
-        );
-      } catch (e) {
-        if (mounted) {
-          showCustomToast('Error sharing PDF: $e');
-        }
+  Future<void> _sharePdf() async {
+    try {
+      await PdfInvoiceService.sharePdf(
+        _pdfBytes,
+        widget.fileName ?? 'document.pdf',
+      );
+    } catch (e) {
+      if (mounted) {
+        showCustomToast('Error sharing PDF: $e');
       }
     }
   }
 
   Future<void> _downloadPdf() async {
-    if (_pdfBytes != null) {
-      try {
-        final fileName = 'Invoice_${widget.invoiceData?.invoiceNumber}.pdf';
-        final file = await PdfInvoiceService.savePdfToFile(_pdfBytes!, fileName);
-        
-        if (mounted) {
-          showCustomToast('PDF downloaded successfully: ${file.path}', isError: false);
-        }
-      } catch (e) {
-        if (mounted) {
-          showCustomToast('Error downloading PDF: $e');
-        }
+    try {
+      final fileName = widget.fileName ?? 'document.pdf';
+      final file = await PdfInvoiceService.savePdfToFile(_pdfBytes, fileName);
+      
+      if (mounted) {
+        showCustomToast('PDF downloaded successfully: ${file.path}', isError: false);
+      }
+    } catch (e) {
+      if (mounted) {
+        showCustomToast('Error downloading PDF: $e');
       }
     }
+  }
+
+  Future<void> _printPdf() async {
+    try {
+      await Printing.layoutPdf(
+        onLayout: (PdfPageFormat format) async => _pdfBytes,
+      );
+    } catch (e) {
+      if (mounted) {
+        showCustomToast('Error printing PDF: $e');
+      }
+    }
+  }
+
+  Widget _buildActionButton({
+    required IconData icon,
+    required String label,
+    required VoidCallback onPressed,
+  }) {
+    return InkWell(
+      onTap: onPressed,
+      borderRadius: BorderRadius.circular(8),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              icon,
+              color: Colors.white,
+              size: 24,
+            ),
+            const SizedBox(height: 4),
+            Text(
+              label,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 12,
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 

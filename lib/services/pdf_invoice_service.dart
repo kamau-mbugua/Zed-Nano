@@ -7,8 +7,26 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:zed_nano/models/get_invoice_by_invoice_number/GetInvoiceByInvoiceNumberResponse.dart';
 import 'package:zed_nano/utils/extensions.dart';
+import 'package:http/http.dart' as http;
 
 class PdfInvoiceService {
+  // Helper method to download network image for PDF
+  static Future<Uint8List?> _downloadNetworkImage(String? url) async {
+    if (url == null || url.isEmpty || !url.startsWith('http')) {
+      return null;
+    }
+    
+    try {
+      final response = await http.get(Uri.parse(url));
+      if (response.statusCode == 200) {
+        return response.bodyBytes;
+      }
+    } catch (e) {
+      print('Error downloading image: $e');
+    }
+    return null;
+  }
+
   static Future<Uint8List> generateInvoicePdf(InvoiceDetail invoiceData) async {
     final pdf = pw.Document();
 
@@ -16,6 +34,12 @@ class PdfInvoiceService {
     final font = await PdfGoogleFonts.poppinsRegular();
     final fontBold = await PdfGoogleFonts.poppinsBold();
     final fontSemiBold = await PdfGoogleFonts.poppinsSemiBold();
+
+    // Download business logo if available
+    Uint8List? logoBytes;
+    if (invoiceData.businessLogo != null && invoiceData.businessLogo!.isNotEmpty) {
+      logoBytes = await _downloadNetworkImage(invoiceData.businessLogo);
+    }
 
     pdf.addPage(
       pw.MultiPage(
@@ -44,7 +68,7 @@ class PdfInvoiceService {
         build: (pw.Context context) {
           return [
             // Header Section (only on first page)
-            _buildHeader(invoiceData, font, fontBold, fontSemiBold),
+            _buildHeader(invoiceData, font, fontBold, fontSemiBold, logoBytes),
 
             pw.SizedBox(height: 32),
 
@@ -73,7 +97,7 @@ class PdfInvoiceService {
     return pdf.save();
   }
 
-  static pw.Widget _buildHeader(InvoiceDetail invoiceData, pw.Font font, pw.Font fontBold, pw.Font fontSemiBold) {
+  static pw.Widget _buildHeader(InvoiceDetail invoiceData, pw.Font font, pw.Font fontBold, pw.Font fontSemiBold, Uint8List? logoBytes) {
     return pw.Row(
       crossAxisAlignment: pw.CrossAxisAlignment.start,
       mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
@@ -84,24 +108,34 @@ class PdfInvoiceService {
           child: pw.Column(
             crossAxisAlignment: pw.CrossAxisAlignment.start,
             children: [
-              // Business Logo Placeholder
+              // Business Logo
               pw.Container(
                 width: 102,
                 height: 50,
                 decoration: pw.BoxDecoration(
-                  color: const PdfColor.fromInt(0xFF144166),
+                  color: logoBytes == null ? const PdfColor.fromInt(0xFF144166) : null,
                   borderRadius: pw.BorderRadius.circular(8),
                 ),
-                child: pw.Center(
-                  child: pw.Text(
-                    'LOGO',
-                    style: pw.TextStyle(
-                      color: PdfColors.white,
-                      fontSize: 16,
-                      font: fontBold,
-                    ),
-                  ),
-                ),
+                child: logoBytes != null
+                    ? pw.ClipRRect(
+                        // borderRadius: pw.BorderRadius.circular(8),
+                        child: pw.Image(
+                          pw.MemoryImage(logoBytes),
+                          width: 102,
+                          height: 50,
+                          fit: pw.BoxFit.cover,
+                        ),
+                      )
+                    : pw.Center(
+                        child: pw.Text(
+                          'LOGO',
+                          style: pw.TextStyle(
+                            color: PdfColors.black,
+                            fontSize: 16,
+                            font: fontBold,
+                          ),
+                        ),
+                      ),
               ),
 
               pw.SizedBox(height: 16),
