@@ -38,6 +38,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
     'Inventory': false,
     'Stock Management': false,
     'Sales': false,
+    'Users': false,
   };
 
   @override
@@ -326,11 +327,11 @@ class _CustomDrawerState extends State<CustomDrawer> {
                           title: 'Sales',
                           iconPath: salesSideMenuIcon,
                           children: [
-                            _buildSubMenuItem(
-                              title: 'Customers',
-                              onTap: () =>
-                                  const CustomersListPage().launch(context),
-                            ),
+                            // _buildSubMenuItem(
+                            //   title: 'Customers',
+                            //   onTap: () =>
+                            //       const CustomersListPage().launch(context),
+                            // ),
                             _buildSubMenuItem(
                               title: 'Invoices',
                               onTap: () =>
@@ -346,16 +347,27 @@ class _CustomDrawerState extends State<CustomDrawer> {
                             ),
                           ],
                         ),
+
+                        _buildExpandableMenuItem(
+                          title: 'Users',
+                          iconPath: usersIcon,
+                          children: [
+                            _buildSubMenuItem(
+                              title: 'Business Users',
+                              onTap: () => const UsersMainList().launch(context),
+                            ),
+                            _buildSubMenuItem(
+                              title: 'Business Customers',
+                              onTap: () =>
+                                  const CustomersListPage().launch(context),
+                            ),
+                          ],
+                        ),
                         _buildMenuItem(
                           title: 'Payment',
                           iconPath: paymentSetupIcon,
                           onTap: () => const AddPaymentMethodScreen(isWorkFlow: false)
                               .launch(context),
-                        ),
-                        _buildMenuItem(
-                          title: 'Users',
-                          iconPath: usersIcon,
-                          onTap: () => const UsersMainList().launch(context),
                         ),
                         _buildMenuItem(
                           title: 'Approvals',

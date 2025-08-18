@@ -182,11 +182,21 @@ class _OrderPaymentSummaryState extends State<OrderPaymentSummary> {
                 iconPath: fabMenuIcon,
                 context: context,
                 onTap: () {
-                  BottomSheetHelper.showPrintingOptionsBottomSheet(context,
+
+                  if(widget.checkOutType == CheckOutType.Order) {
+                    BottomSheetHelper.showPrintingOptionsBottomSheet(context,
                       printOrderInvoiceId: orderDetail?.id,)
-                      .then((value) {
-                    finish(context);
-                  });
+                        .then((value) {
+                      finish(context);
+                    });
+
+                  }else{
+                    BottomSheetHelper.showInvoiceOptionsBottomSheet(context, invoiceNumber: getInvoiceByInvoiceNumberResponse?.invoiceNumber).then((value) {
+                      finish(context);
+                    });
+                  }
+
+
                 },
               ),
             ),

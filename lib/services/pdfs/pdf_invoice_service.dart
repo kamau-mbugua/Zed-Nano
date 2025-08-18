@@ -622,7 +622,7 @@ class PdfInvoiceService {
     switch (status.toLowerCase()) {
       case 'paid':
         return const PdfColor.fromInt(0xFF17AE7B);
-      case 'partial':
+      case 'partially paid':
         return const PdfColor.fromInt(0xFFFF8503);
       case 'unpaid':
         return const PdfColor.fromInt(0xFFDC3545);

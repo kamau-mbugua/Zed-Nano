@@ -47,6 +47,7 @@ void showCustomToast(String? message,
       },
     );
   } else {
+    logger.d('showCustomToast message: $message');
     Fluttertoast.showToast(
       msg: message!,
       toastLength: Toast.LENGTH_LONG,

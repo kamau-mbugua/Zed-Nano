@@ -17,6 +17,7 @@ import 'package:zed_nano/screens/reports/sales_report/sub_reports/total_sales_pa
 import 'package:zed_nano/screens/widget/common/bottom_sheet_helper.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/screens/widget/common/date_range_filter_bottom_sheet.dart';
+import 'package:zed_nano/services/business_setup_extensions.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/Images.dart';
@@ -92,16 +93,35 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
     }
   }
 
+
+  Future<void> _initializeBusinessSetupAfterLogin() async {
+    try {
+      // Double-check authentication before initialization
+      final authProvider = getAuthProvider(context);
+      if (!authProvider.isLoggedIn) {
+        logger.w('Attempted to initialize business setup for non-authenticated user');
+        return;
+      }
+
+      // Initialize business setup service using extension
+      await context.businessSetup.initialize();
+
+      // Run workflow setup after initialization
+      if (mounted) {
+        await Provider.of<WorkflowViewModel>(context, listen: false).skipSetup(context);
+      }
+    } catch (e) {
+      logger.e('Failed to initialize business setup after login: $e');
+      // Don't rethrow - let the app continue to home page even if setup fails
+    }
+  }
   @override
   void initState() {
     super.initState();
+    _dateRange = DateRangeUtil.getDateRange(_selectedRangeLabel);
+    _initializeBusinessSetupAfterLogin();
     loginResponse = getAuthProvider(context).loginResponse;
     businessName = getBusinessDetails(context)?.businessName;
-    final viewModel =
-        Provider.of<WorkflowViewModel>(context, listen: false);
-
-    _dateRange = DateRangeUtil.getDateRange(_selectedRangeLabel);
-
     if (getAuthProvider(context).isLoggedIn) {
       fetchBranchStoreSummary();
       final viewModel = Provider.of<WorkflowViewModel>(context, listen: false);
