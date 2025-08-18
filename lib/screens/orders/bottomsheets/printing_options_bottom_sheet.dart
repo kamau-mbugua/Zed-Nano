@@ -112,10 +112,10 @@ class _PrintingOptionsBottomSheetState extends State<PrintingOptionsBottomSheet>
 
 
   Future<void> _openPdfPreview() async {
-    if (orderDetailData == null) {
-      showCustomToast('Invoice data not loaded yet');
-      return;
-    }
+    // if (orderDetailData == null) {
+    //   // showCustomToast('Invoice data not loaded yet');
+    //   return;
+    // }
 
     setState(() {
       _isGeneratingPdf = true;
@@ -139,7 +139,9 @@ class _PrintingOptionsBottomSheetState extends State<PrintingOptionsBottomSheet>
           pdfBytes: pdfBytes,
           title: 'Order #${orderDetailData?.orderNumber}',
           fileName: 'Order_${orderDetailData?.orderNumber}.pdf',
-        ).launch(context);
+        ).launch(context).then((value) {
+          Navigator.pop(context);
+        });
       }
     } catch (e) {
       setState(() {
@@ -207,7 +209,7 @@ class _PrintingOptionsBottomSheetState extends State<PrintingOptionsBottomSheet>
                   await doSendToPos();
                   case 'Generate PDF':
                     await _openPdfPreview();
-                    finish(context);
+                    // finish(context) is already called in _openPdfPreview()
                   default:
                     break;
                 }
