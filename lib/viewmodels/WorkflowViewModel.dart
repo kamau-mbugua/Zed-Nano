@@ -67,6 +67,10 @@ class WorkflowViewModel with ChangeNotifier {
             setWorkflowState(response.data?.workflowState);
             _billingPlan =
                 response.data?.businessBillingDetails?.nanoSubscription;
+
+            if (_businessInfoData == null) {
+              fetchBusinessProfile(context);
+            }
             logger.i('WorkflowViewModelShowBusinessSetup: ${_billingPlan?.toJson()}');
             notifyListeners();
           } else {

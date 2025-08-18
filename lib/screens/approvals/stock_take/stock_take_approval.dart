@@ -73,7 +73,9 @@ class _StockTakeApprovalState extends State<StockTakeApproval> {
         context: context,
       ).then((response) {
         if (response.isSuccess) {
-          _selectedItems.clear();
+          setState(() {
+            _selectedItems.clear();
+          });
           showCustomToast(response.message ?? 'Stock Take Approved Successfully', isError: false);
           _paginationController.refresh();
         } else {

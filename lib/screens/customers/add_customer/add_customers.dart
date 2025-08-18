@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:nb_utils/nb_utils.dart';
+import 'package:nb_utils/nb_utils.dart' hide navigatorKey;
 import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
+import 'package:zed_nano/screens/approvals/customers/customers_pending_approval_page.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/auth/input_fields.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
@@ -61,9 +62,14 @@ class _AddCustomersState extends State<AddCustomers> {
         context: context,)
         .then((value) {
       if (value.isSuccess) {
-        showCustomToast(value.message ?? 'Customer created successfully',
-            isError: false,);
         Navigator.pop(context);
+        showCustomToast(value.message ?? 'Customer created successfully', isError: false, actionText: 'Approve', onPressed: (){
+          Future.delayed(const Duration(milliseconds: 500), () {
+            navigatorKey.currentState?.push(
+              MaterialPageRoute(builder: (context) => const CustomersPendingApprovalPage()),
+            );
+          });
+        }, context: context);
       } else {
         showCustomToast(value.message ?? 'Something went wrong');
       }

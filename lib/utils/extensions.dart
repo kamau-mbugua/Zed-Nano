@@ -273,4 +273,29 @@ extension DateRangeLabelExtension on String {
             : word,)
         .join(' ');
   }
+
+  /// Extracts words between "Product" and "available" from error messages
+  /// Example: "Product Test available stock is -3303 you requested 1" -> "Test"
+  String get extractProductName {
+    if (isEmpty) return this;
+    
+    try {
+      // Find the indices of "Product" and "available"
+      final productIndex = indexOf('Product');
+      final availableIndex = indexOf('available');
+      
+      // Check if both keywords exist and are in the correct order
+      if (productIndex == -1 || availableIndex == -1 || productIndex >= availableIndex) {
+        return this; // Return original string if pattern not found
+      }
+      
+      // Extract the substring between "Product" and "available"
+      final startIndex = productIndex + 'Product'.length;
+      final productName = substring(startIndex, availableIndex).trim();
+      
+      return productName.isNotEmpty ? productName : this;
+    } catch (e) {
+      return this; // Return original string if any error occurs
+    }
+  }
 }

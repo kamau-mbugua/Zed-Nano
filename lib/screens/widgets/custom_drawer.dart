@@ -216,7 +216,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                           iconPath: businessesIcon,
                           children: [
                             _buildSubMenuItem(
-                              title: 'My Businesses',
+                              title: 'My Business',
                               onTap: () => _navigateTo(context,
                                   AppRoutes.getBusinessProfileScreenRoute(),),
                             ),
@@ -233,7 +233,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                           iconPath: businessesIcon,
                           children: [
                             _buildSubMenuItem(
-                              title: 'My Businesses',
+                              title: 'My Business',
                               onTap: () => _navigateTo(context,
                                   AppRoutes.getBusinessProfileScreenRoute(),),
                             ),
@@ -266,7 +266,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                           iconPath: businessesIcon,
                           children: [
                             _buildSubMenuItem(
-                              title: 'My Businesses',
+                              title: 'My Business',
                               onTap: () => _navigateTo(context,
                                   AppRoutes.getBusinessProfileScreenRoute(),),
                             ),

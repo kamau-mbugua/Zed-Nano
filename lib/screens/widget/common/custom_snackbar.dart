@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/app/app_initializer.dart' hide navigatorKey;
+import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/styles.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
@@ -38,6 +39,7 @@ void showCustomToast(String? message,
     showTappableToast(
       context!,
       message!,
+      actionText!,
       isError: isError,
       onTap: () {
         onPressed();
@@ -55,7 +57,7 @@ void showCustomToast(String? message,
   }
 }
 
-void showTappableToast(BuildContext context, String message, {bool isError = false, VoidCallback? onTap}) {
+void showTappableToast(BuildContext context, String message,String actionText, {bool isError = false, VoidCallback? onTap}) {
   final overlay = Overlay.of(context);
   late OverlayEntry overlayEntry;
   bool isRemoved = false;
@@ -89,9 +91,31 @@ void showTappableToast(BuildContext context, String message, {bool isError = fal
               color: isError ? Colors.red : Colors.green,
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Text(
-              message,
-              style: const TextStyle(color: Colors.white),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  message,
+                  style: const TextStyle(color: Colors.white),
+                ),
+
+                Container(
+                  margin: const EdgeInsets.only(),
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: appThemePrimary.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(actionText.toUpperCase() ?? 'N/A',
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      color: Colors.white,
+                      fontSize: 10,
+                      fontWeight: FontWeight.w600,
+                      fontStyle: FontStyle.normal,
+                    ),),
+                ),
+              ],
             ),
           ),
         ),
@@ -102,7 +126,7 @@ void showTappableToast(BuildContext context, String message, {bool isError = fal
   overlay.insert(overlayEntry);
 
   // Auto-remove after 3 seconds
-  Timer(const Duration(seconds: 3), () {
+  Timer(const Duration(seconds: 10), () {
     safeRemove();
   });
 }
