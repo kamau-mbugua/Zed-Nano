@@ -112,7 +112,7 @@ class _BusinessCreatedPreviewPageState extends State<BusinessCreatedPreviewPage>
               top: 88,
               left: 16,
               child: rfCommonCachedNetworkImage(
-                '${AppConstants.baseUrl}staticimages/logos/${businessInfoData?.businessLogo}',
+                '${businessInfoData?.businessLogo}',
                 fit: BoxFit.fitHeight,
                 height: 90,
                 width: 150,

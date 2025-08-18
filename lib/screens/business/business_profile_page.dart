@@ -12,9 +12,12 @@ import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/extensions.dart';
 
 class BusinessProfilePage extends StatefulWidget {
+  const BusinessProfilePage({
+    required this.businessData,
+    super.key,
+    this.onRefreshRequest,
+  });
 
-  const BusinessProfilePage(
-      {required this.businessData, super.key, this.onRefreshRequest,});
   final BusinessInfoData businessData;
   final Future<void> Function()? onRefreshRequest;
 
@@ -77,7 +80,10 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
             children: [
               _buildBusinessHeader(),
               const Divider(height: 32, thickness: 0.5),
-              if (subscribedBillingPlansResponse?.data?.isNotEmpty == true) _buildSubscriptionSection() else const SizedBox(height: 32),
+              if (subscribedBillingPlansResponse?.data?.isNotEmpty == true)
+                _buildSubscriptionSection()
+              else
+                const SizedBox(height: 32),
               const Divider(height: 32, thickness: 0.5),
               _buildBusinessDetailsSection(),
               const SizedBox(height: 32), // for scrollable area
@@ -166,14 +172,14 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
             ),
           ),
           child: Padding(
-            padding: const EdgeInsets.all(8),
-            child: ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: rfCommonCachedNetworkImage(
-                  '${AppConstants.baseUrl}staticimages/logos/${widget.businessData.businessLogo}',
-                  fit: BoxFit.fill,
-                ),),
-          ),
+              padding: const EdgeInsets.all(8),
+              child: rfCommonCachedNetworkImage(
+                '${widget.businessData.businessLogo}',
+                fit: BoxFit.fill,
+                height: 80,
+                width: 80,
+                radius: 8,
+              )),
         ),
       ],
     );
@@ -218,26 +224,86 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
         ),
         const SizedBox(height: 8),
         if ((widget.businessData.businessBillingDetails?.nanoSubscription
-                        ?.freeTrialStatus ==
-                    'Active') ==
-                true) Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    ?.freeTrialStatus ==
+                'Active') ==
+            true)
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  const Text(
+                    'Free Trial Subscription',
+                    style: TextStyle(
+                      color: darkGreyColor, // neutralDarkDarkest
+                      fontWeight: FontWeight.w400,
+                      fontFamily: 'Poppins',
+                      fontSize: 14,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    'Due in:  ${widget.businessData.businessBillingDetails?.nanoSubscription?.freeTrialPeriodRemainingdays}',
+                    style: const TextStyle(
+                      color: textSecondary, // neutralDarkLight
+                      fontWeight: FontWeight.w400,
+                      fontFamily: 'Poppins',
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
+              Text(
+                widget.businessData.businessBillingDetails?.nanoSubscription
+                            ?.isActiveBillingPackage ==
+                        true
+                    ? 'Active'
+                    : 'Inactive',
+                style: TextStyle(
+                  color: widget.businessData.businessBillingDetails
+                              ?.nanoSubscription?.isActiveBillingPackage ==
+                          true
+                      ? successTextColor
+                      : Colors.orange[700],
+                  fontWeight: FontWeight.w400,
+                  fontFamily: 'Poppins',
+                  fontSize: 18,
+                ),
+              ),
+            ],
+          )
+        else
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '${widget.businessData.businessBillingDetails?.nanoSubscription?.data?[0].billingPeriodName ?? ''} Subscription',
+                    style: const TextStyle(
+                      color: darkGreyColor, // neutralDarkDarkest
+                      fontWeight: FontWeight.w400,
+                      fontFamily: 'Poppins',
+                      fontSize: 14,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
                     children: [
-                      const Text(
-                        'Free Trial Subscription',
-                        style: TextStyle(
-                          color: darkGreyColor, // neutralDarkDarkest
+                      Text(
+                        '${widget.businessData.localCurrency ?? 'KES'} ${widget.businessData.businessBillingDetails?.nanoSubscription?.data?[0].totalBillingPlanAmount?.formatCurrency() ?? '0'}',
+                        style: const TextStyle(
+                          color: textSecondary, // neutralDarkLight
                           fontWeight: FontWeight.w400,
                           fontFamily: 'Poppins',
-                          fontSize: 14,
+                          fontSize: 12,
                         ),
                       ),
-                      const SizedBox(height: 4),
+                      const SizedBox(width: 8),
                       Text(
-                        'Due in:  ${widget.businessData.businessBillingDetails?.nanoSubscription?.freeTrialPeriodRemainingdays}',
+                        '. Due: ${widget.businessData.businessBillingDetails?.nanoSubscription?.data?[0].dueDate?.toFormattedDate()}',
                         style: const TextStyle(
                           color: textSecondary, // neutralDarkLight
                           fontWeight: FontWeight.w400,
@@ -247,80 +313,27 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
                       ),
                     ],
                   ),
-                  Text(
-                    widget.businessData.businessBillingDetails?.nanoSubscription?.isActiveBillingPackage ==
-                            true
-                        ? 'Active'
-                        : 'Inactive',
-                    style: TextStyle(
-                      color: widget.businessData.businessBillingDetails?.nanoSubscription?.isActiveBillingPackage ==
-                              true
-                          ? successTextColor
-                          : Colors.orange[700],
-                      fontWeight: FontWeight.w400,
-                      fontFamily: 'Poppins',
-                      fontSize: 18,
-                    ),
-                  ),
-                ],
-              ) else Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '${widget.businessData.businessBillingDetails?.nanoSubscription?.data?[0].billingPeriodName ?? ''} Subscription',
-                        style: const TextStyle(
-                          color: darkGreyColor, // neutralDarkDarkest
-                          fontWeight: FontWeight.w400,
-                          fontFamily: 'Poppins',
-                          fontSize: 14,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Row(
-                        children: [
-                          Text(
-                            '${widget.businessData.localCurrency ?? 'KES'} ${widget.businessData.businessBillingDetails?.nanoSubscription?.data?[0].totalBillingPlanAmount?.formatCurrency() ?? '0'}',
-                            style: const TextStyle(
-                              color: textSecondary, // neutralDarkLight
-                              fontWeight: FontWeight.w400,
-                              fontFamily: 'Poppins',
-                              fontSize: 12,
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            '. Due: ${widget.businessData.businessBillingDetails?.nanoSubscription?.data?[0].dueDate?.toFormattedDate()}',
-                            style: const TextStyle(
-                              color: textSecondary, // neutralDarkLight
-                              fontWeight: FontWeight.w400,
-                              fontFamily: 'Poppins',
-                              fontSize: 12,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  Text(
-                    widget.businessData.businessBillingDetails?.nanoSubscription?.isActiveBillingPackage ==
-                            true
-                        ? 'Active'
-                        : 'Inactive',
-                    style: TextStyle(
-                      color: widget.businessData.businessBillingDetails?.nanoSubscription?.isActiveBillingPackage ==
-                              true
-                          ? successTextColor
-                          : Colors.orange[700],
-                      fontWeight: FontWeight.w400,
-                      fontFamily: 'Poppins',
-                      fontSize: 18,
-                    ),
-                  ),
                 ],
               ),
+              Text(
+                widget.businessData.businessBillingDetails?.nanoSubscription
+                            ?.isActiveBillingPackage ==
+                        true
+                    ? 'Active'
+                    : 'Inactive',
+                style: TextStyle(
+                  color: widget.businessData.businessBillingDetails
+                              ?.nanoSubscription?.isActiveBillingPackage ==
+                          true
+                      ? successTextColor
+                      : Colors.orange[700],
+                  fontWeight: FontWeight.w400,
+                  fontFamily: 'Poppins',
+                  fontSize: 18,
+                ),
+              ),
+            ],
+          ),
         const SizedBox(height: 8),
       ],
     );
@@ -383,8 +396,9 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
             GestureDetector(
               onTap: () {
                 Navigator.pushNamed(
-                        context, AppRoutes.getEditBusinessScreenRoute(),)
-                    .then((_) {
+                  context,
+                  AppRoutes.getEditBusinessScreenRoute(),
+                ).then((_) {
                   if (widget.onRefreshRequest != null) {
                     widget.onRefreshRequest!();
                   }
@@ -405,39 +419,41 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
         const SizedBox(height: 8),
 
         // List of business details
-        ...details
-            .map((item) => Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 12, horizontal: 8,),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        item['title']!,
-                        style: const TextStyle(
-                          color: Colors.black45, // neutralDarkLightest
-                          fontWeight: FontWeight.w400,
-                          fontFamily: 'Poppins',
-                          fontSize: 14,
-                        ),
-                      ),
-                      Flexible(
-                        child: Text(
-                          item['value']!,
-                          textAlign: TextAlign.right,
-                          style: const TextStyle(
-                            color: darkGreyColor, // neutralDarkMedium
-                            fontWeight: FontWeight.w400,
-                            fontFamily: 'Poppins',
-                            fontSize: 14,
-                          ),
-                        ),
-                      ),
-                    ],
+        ...details.map(
+          (item) => Padding(
+            padding: const EdgeInsets.symmetric(
+              vertical: 12,
+              horizontal: 8,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  item['title']!,
+                  style: const TextStyle(
+                    color: Colors.black45, // neutralDarkLightest
+                    fontWeight: FontWeight.w400,
+                    fontFamily: 'Poppins',
+                    fontSize: 14,
                   ),
-                ),)
-            ,
+                ),
+                Flexible(
+                  child: Text(
+                    item['value']!,
+                    textAlign: TextAlign.right,
+                    style: const TextStyle(
+                      color: darkGreyColor, // neutralDarkMedium
+                      fontWeight: FontWeight.w400,
+                      fontFamily: 'Poppins',
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
       ],
     );
   }

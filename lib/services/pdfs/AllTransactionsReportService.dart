@@ -353,14 +353,16 @@ class AllTransactionsReportService {
                 ),
                 child: logoBytes != null
                     ? pw.ClipRRect(
-                        // borderRadius: pw.BorderRadius.circular(8),
+                  horizontalRadius: 8,
+                  verticalRadius: 8,
                         child: pw.Image(
                           pw.MemoryImage(logoBytes),
-                          width: 102,
-                          height: 50,
-                          fit: pw.BoxFit.cover,
+                          width: 180,
+                          height: 100,
+                          fit: pw.BoxFit.fill,
                         ),
                       )
+
                     : pw.Center(
                         child: pw.Text(
                           businessName.substring(0, 1).toUpperCase(),

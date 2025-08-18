@@ -136,14 +136,15 @@ class PdfInvoiceService {
                 ),
                 child: logoBytes != null
                     ? pw.ClipRRect(
-                        // borderRadius: pw.BorderRadius.circular(8),
-                        child: pw.Image(
-                          pw.MemoryImage(logoBytes),
-                          width: 102,
-                          height: 50,
-                          fit: pw.BoxFit.cover,
-                        ),
-                      )
+                  horizontalRadius: 8,
+                  verticalRadius: 8,
+                  child: pw.Image(
+                    pw.MemoryImage(logoBytes),
+                    width: 180,
+                    height: 100,
+                    fit: pw.BoxFit.fill,
+                  ),
+                )
                     : pw.Center(
                         child: pw.Text(
                           'LOGO',

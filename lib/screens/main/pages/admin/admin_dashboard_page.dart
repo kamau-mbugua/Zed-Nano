@@ -243,6 +243,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
 
   Future<void> _refreshDashboardData() async {
     await fetchBranchStoreSummary();
+    await Provider.of<WorkflowViewModel>(context, listen: false).fetchBusinessProfile(context);
   }
 
   void _showPeriodSelector() {

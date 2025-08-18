@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Constants.dart';

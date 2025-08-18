@@ -442,7 +442,7 @@ class _EditBusinessPageState extends State<EditBusinessPage> {
                               ),
                             )
                                 : rfCommonCachedNetworkImage(
-                              '${AppConstants.baseUrl}staticimages/logos/${businessInfoData?.businessLogo}',
+                              '${businessInfoData?.businessLogo}',
                               fit: BoxFit.fitHeight,
                               height: 90,
                               width: 150,
