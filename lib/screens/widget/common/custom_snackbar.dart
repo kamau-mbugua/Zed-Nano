@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -34,13 +35,15 @@ void showCustomToast(String? message,
     BuildContext? context,
     VoidCallback? onDismissed}) {
   if (onPressed != null) {
-    showTopSnackBar(
-        Overlay.of(context!),
-        isError
-            ? MyCustomSnackBar.error(message: message!)
-            : MyCustomSnackBar.success(message: message!),
-        onTap: onPressed,
-        onDismissed: onDismissed);
+    showTappableToast(
+      context!,
+      message!,
+      isError: isError,
+      onTap: () {
+        onPressed();
+        onDismissed?.call();
+      },
+    );
   } else {
     Fluttertoast.showToast(
       msg: message!,
@@ -50,6 +53,58 @@ void showCustomToast(String? message,
       textColor: Colors.white,
     );
   }
+}
+
+void showTappableToast(BuildContext context, String message, {bool isError = false, VoidCallback? onTap}) {
+  final overlay = Overlay.of(context);
+  late OverlayEntry overlayEntry;
+  bool isRemoved = false;
+
+  void safeRemove() {
+    if (!isRemoved && overlayEntry.mounted) {
+      try {
+        overlayEntry.remove();
+        isRemoved = true;
+      } catch (e) {
+        // Overlay already removed or disposed
+      }
+    }
+  }
+
+  overlayEntry = OverlayEntry(
+    builder: (context) => Positioned(
+      top: 60,
+      left: 20,
+      right: 20,
+      child: Material(
+        color: Colors.transparent,
+        child: GestureDetector(
+          onTap: () {
+            onTap?.call();
+            safeRemove();
+          },
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: isError ? Colors.red : Colors.green,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Text(
+              message,
+              style: const TextStyle(color: Colors.white),
+            ),
+          ),
+        ),
+      ),
+    ),
+  );
+
+  overlay.insert(overlayEntry);
+
+  // Auto-remove after 3 seconds
+  Timer(const Duration(seconds: 3), () {
+    safeRemove();
+  });
 }
 
 Widget showCustomSnackBarWidget(String? message,
