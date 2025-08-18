@@ -65,115 +65,118 @@ class _AddStockTakeProductBottomSheetState
     return BaseBottomSheet(
       title: 'Update Stock',
       initialChildSize: 0.75,
-      bodyContent: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 16),
-                    Text(product.productName ?? '',
-                        style: const TextStyle(
-                          fontFamily: 'Poppins',
-                          color: textPrimary,
-                          fontSize: 28,
-                          fontWeight: FontWeight.w600,
-                          fontStyle: FontStyle.normal,
-                        ),
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          '${product.productCategory}',
-                          style: TextStyle(
-                            fontSize: 12,
+      bodyContent: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 16),
+                      Text(product.productName ?? '',
+                          style: const TextStyle(
                             fontFamily: 'Poppins',
-                            color: Colors.grey.shade500,
+                            color: textPrimary,
+                            fontSize: 28,
+                            fontWeight: FontWeight.w600,
+                            fontStyle: FontStyle.normal,
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            '${product.productCategory}',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontFamily: 'Poppins',
+                              color: Colors.grey.shade500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              rfCommonCachedNetworkImage(
-                product.imagePath ?? '',
-                fit: BoxFit.cover,
-                height: 42,
-                width: 42,
-              ),
-            ],
-          ),
-          16.height,
-          const Text(
-            'Expected Value',
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
-              fontFamily: 'Poppins',
-              color: Color(0xFF484848),
+                rfCommonCachedNetworkImage(
+                  product.imagePath ?? '',
+                  fit: BoxFit.cover,
+                  height: 42,
+                  width: 42,
+                ),
+              ],
             ),
-          ),
-          const SizedBox(height: 8),
-          StyledTextField(
-            textFieldType: TextFieldType.NUMBER,
-            hintText: '0',
-            focusNode: expectedValueFocusNode,
-            nextFocus: newActualValueFocusNode,
-            controller: expectedValueController,
-            isActive: false, // Set to false to make the field read-only/disabled
-          ),
-          10.height,
-          const Text(
-            'New Actual Value',
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
-              fontFamily: 'Poppins',
-              color: Color(0xFF484848),
+            16.height,
+            const Text(
+              'Expected Value',
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                fontFamily: 'Poppins',
+                color: Color(0xFF484848),
+              ),
             ),
-          ),
-          const SizedBox(height: 8),
-          StyledTextField(
-            textFieldType: TextFieldType.NUMBER,
-            hintText: '0',
-            focusNode: newActualValueFocusNode,
-            controller: newActualValueController,
-          ),
-          16.height,
-          Row(
-            children: [
-              Expanded(
-                child: outlineButton(
-                  text: 'Cancel', 
-                  onTap: () => Navigator.pop(context), 
-                  context: context, 
-                  borderColor: googleRed, 
-                  textColor: googleRed,
-                ),
+            const SizedBox(height: 8),
+            StyledTextField(
+              textFieldType: TextFieldType.NUMBER,
+              hintText: '0',
+              focusNode: expectedValueFocusNode,
+              nextFocus: newActualValueFocusNode,
+              controller: expectedValueController,
+              isActive: false, // Set to false to make the field read-only/disabled
+            ),
+            10.height,
+            const Text(
+              'New Actual Value',
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                fontFamily: 'Poppins',
+                color: Color(0xFF484848),
               ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: appButton(
-                  text: 'Save',
-                  onTap: () {
-                    final newActualValue = newActualValueController.text;
-                    if (!newActualValue.isValidInput) {
-                      showCustomToast(
-                        'Please enter valid New Actual Value',);
-                      return;
-                    }
-                    onAddStockTap(product, newActualValue);
-                  }, 
-                  context: context,
+            ),
+            const SizedBox(height: 8),
+            StyledTextField(
+              textFieldType: TextFieldType.NUMBER,
+              hintText: '0',
+              focusNode: newActualValueFocusNode,
+              controller: newActualValueController,
+            ),
+            16.height,
+            Row(
+              children: [
+                Expanded(
+                  child: outlineButton(
+                    text: 'Cancel',
+                    onTap: () => Navigator.pop(context),
+                    context: context,
+                    borderColor: googleRed,
+                    textColor: googleRed,
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ],
+                const SizedBox(width: 16),
+                Expanded(
+                  child: appButton(
+                    text: 'Save',
+                    onTap: () {
+                      final newActualValue = newActualValueController.text;
+                      if (!newActualValue.isValidInput) {
+                        showCustomToast(
+                          'Please enter valid New Actual Value',);
+                        return;
+                      }
+                      onAddStockTap(product, newActualValue);
+                    },
+                    context: context,
+                  ),
+                ),
+              ],
+            ),
+            16.height
+          ],
+        ),
       ),
     );
   }
