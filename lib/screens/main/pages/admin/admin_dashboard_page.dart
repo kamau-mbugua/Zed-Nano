@@ -104,6 +104,11 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
 
     if (getAuthProvider(context).isLoggedIn) {
       fetchBranchStoreSummary();
+      final viewModel = Provider.of<WorkflowViewModel>(context, listen: false);
+      if (viewModel.businessInfoData == null) {
+        logger.w('AdminDashboardPageInfoData Fetching business profile');
+        viewModel.fetchBusinessProfile(context);
+      }
     }
 
   }
