@@ -453,15 +453,11 @@ class BusinessRepo{
   }
 
   Future<ApiResponse> viewAllTransactions({
-    required int page ,
-    required int limit ,
-    required String searchValue ,
-    required String startDate ,
-    required String endDate ,
+    required Map<String, dynamic> params,
   }) async {
     try {
       final response =
-      await dioClient!.get('${AppConstants.viewAllTransactions}?page=$page&limit=$limit&search=$searchValue&startDate=$startDate&endDate=$endDate');
+      await dioClient!.get('${AppConstants.viewAllTransactions}', queryParameters: params);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {

@@ -14,6 +14,7 @@ import 'package:zed_nano/screens/reports/sales_report/sub_reports/total_cost_of_
 import 'package:zed_nano/screens/reports/sales_report/sub_reports/total_sales_page.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
+import 'package:zed_nano/screens/widget/common/custom_extended_fab.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/screens/widget/common/date_range_filter_bottom_sheet.dart';
 import 'package:zed_nano/screens/widget/common/searchview.dart';
@@ -200,9 +201,8 @@ class _SalesReportPageState extends State<SalesReportPage> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: GeneratePdfFAB(
         onPressed: _showGenerateReport,
-        child: const Icon(Icons.report),
       ),
     );
   }

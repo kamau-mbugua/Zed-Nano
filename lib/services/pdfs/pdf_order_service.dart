@@ -1,15 +1,19 @@
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:zed_nano/models/get_invoice_by_invoice_number/GetInvoiceByInvoiceNumberResponse.dart';
+import 'package:zed_nano/models/order_payment_status/OrderDetailResponse.dart';
+import 'package:zed_nano/services/BusinessDetailsContextExtension.dart';
+import 'package:zed_nano/services/business_setup_extensions.dart';
 import 'package:zed_nano/utils/extensions.dart';
 import 'package:http/http.dart' as http;
 
-class PdfInvoiceService {
+class PdfOrderService {
   // Helper method to download network image for PDF
   static Future<Uint8List?> _downloadNetworkImage(String? url) async {
     if (url == null || url.isEmpty || !url.startsWith('http')) {
@@ -27,7 +31,7 @@ class PdfInvoiceService {
     return null;
   }
 
-  static Future<Uint8List> generateInvoicePdf(InvoiceDetail invoiceData) async {
+  static Future<Uint8List> generateOrderPdf(OrderDetail invoiceData, BuildContext buildContext) async {
     final pdf = pw.Document();
 
     // Load font for better text rendering
@@ -37,8 +41,8 @@ class PdfInvoiceService {
 
     // Download business logo if available
     Uint8List? logoBytes;
-    if (invoiceData.businessLogo != null && invoiceData.businessLogo!.isNotEmpty) {
-      logoBytes = await _downloadNetworkImage(invoiceData.businessLogo);
+    if (buildContext.businessLogo != null && buildContext.businessLogo!.isNotEmpty) {
+      logoBytes = await _downloadNetworkImage(buildContext.businessLogo);
     }
 
     pdf.addPage(
@@ -51,7 +55,7 @@ class PdfInvoiceService {
               alignment: pw.Alignment.centerRight,
               margin: const pw.EdgeInsets.only(bottom: 20),
               child: pw.Text(
-                'Invoice #${invoiceData.invoiceNumber ?? 'N/A'} - Page ${context.pageNumber}',
+                'Order #${invoiceData.orderNumber ?? 'N/A'} - Page ${context.pageNumber}',
                 style: pw.TextStyle(
                   color: const PdfColor.fromInt(0xFF000000),
                   fontSize: 10,
@@ -68,7 +72,7 @@ class PdfInvoiceService {
         build: (pw.Context context) {
           return [
             // Header Section (only on first page)
-            _buildHeader(invoiceData, font, fontBold, fontSemiBold, logoBytes),
+            _buildHeader(invoiceData, font, fontBold, fontSemiBold, logoBytes, buildContext),
 
             pw.SizedBox(height: 32),
 
@@ -88,9 +92,9 @@ class PdfInvoiceService {
                 crossAxisAlignment: pw.CrossAxisAlignment.start,
                 children: [
                   // Billing Section
-                  _buildBillingSection(invoiceData, font, fontBold),
+                  // _buildBillingSection(invoiceData, font, fontBold),
 
-                  pw.SizedBox(height: 32),
+                  // pw.SizedBox(height: 32),
 
                   // Items Table
                   _buildItemsTable(invoiceData, font, fontBold),
@@ -115,7 +119,7 @@ class PdfInvoiceService {
     return pdf.save();
   }
 
-  static pw.Widget _buildHeader(InvoiceDetail invoiceData, pw.Font font, pw.Font fontBold, pw.Font fontSemiBold, Uint8List? logoBytes) {
+  static pw.Widget _buildHeader(OrderDetail invoiceData, pw.Font font, pw.Font fontBold, pw.Font fontSemiBold, Uint8List? logoBytes, BuildContext context) {
     return pw.Row(
       crossAxisAlignment: pw.CrossAxisAlignment.start,
       mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
@@ -146,7 +150,7 @@ class PdfInvoiceService {
                       )
                     : pw.Center(
                         child: pw.Text(
-                          'LOGO',
+                          invoiceData.orderNumber.toString().toUpperCase().substring(0, 3),
                           style: pw.TextStyle(
                             color: PdfColors.black,
                             fontSize: 16,
@@ -160,7 +164,7 @@ class PdfInvoiceService {
 
               // Business Name
               pw.Text(
-                invoiceData.businessName ?? 'N/A',
+                context.businessName ?? 'N/A',
                 style: pw.TextStyle(
                   color: const PdfColor.fromInt(0xFF144166),
                   fontSize: 12,
@@ -172,7 +176,7 @@ class PdfInvoiceService {
 
               // Business Details
               pw.Text(
-                invoiceData.businessLocation ?? 'N/A',
+                context.businessAddress ?? 'N/A',
                 style: pw.TextStyle(
                   color: const PdfColor.fromInt(0xFF000000),
                   fontSize: 10,
@@ -183,7 +187,7 @@ class PdfInvoiceService {
               pw.SizedBox(height: 4),
 
               pw.Text(
-                invoiceData.businessPhone  ?? 'N/A',
+                context.businessPhone  ?? 'N/A',
                 style: pw.TextStyle(
                   color: const PdfColor.fromInt(0xFF000000),
                   fontSize: 10,
@@ -194,7 +198,7 @@ class PdfInvoiceService {
               pw.SizedBox(height: 4),
 
               pw.Text(
-                invoiceData.businessEmail ?? 'N/A',
+                context.businessEmail ?? 'N/A',
                 style: pw.TextStyle(
                   color: const PdfColor.fromInt(0xFF000000),
                   fontSize: 10,
@@ -215,11 +219,11 @@ class PdfInvoiceService {
               pw.Container(
                 padding: const pw.EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: pw.BoxDecoration(
-                  color: _getStatusColor(invoiceData.invoiceStatus ?? 'N/A'),
+                  color: _getStatusColor(invoiceData.status ?? 'N/A'),
                   borderRadius: pw.BorderRadius.circular(4),
                 ),
                 child: pw.Text(
-                  invoiceData.invoiceStatus ?? 'N/A',
+                  invoiceData.status ?? 'N/A',
                   style: pw.TextStyle(
                     color: PdfColors.white,
                     fontSize: 12,
@@ -232,7 +236,7 @@ class PdfInvoiceService {
 
               // Invoice Title
               pw.Text(
-                'Invoice',
+                'Order',
                 style: pw.TextStyle(
                   color: const PdfColor.fromInt(0xFF333333),
                   fontSize: 28,
@@ -244,7 +248,7 @@ class PdfInvoiceService {
 
               // Invoice Number
               pw.Text(
-                "#${invoiceData.invoiceNumber ?? 'N/A'}",
+                "#${invoiceData.orderNumber ?? 'N/A'}",
                 style: pw.TextStyle(
                   color: const PdfColor.fromInt(0xFF000000),
                   fontSize: 12,
@@ -259,8 +263,8 @@ class PdfInvoiceService {
                   mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                   children: [
                   // _buildInvoiceDetail('Purchase order', invoiceData.purchaseOrder, font, fontSemiBold),
-                  _buildInvoiceDetail('Due date', invoiceData.dueDate?.toFormattedDateTime() ?? 'N/A', font, fontSemiBold),
-                  _buildInvoiceDetail('Invoice date', invoiceData.createdAt?.toFormattedDateTime() ?? 'N/A' , font, fontSemiBold),
+                  _buildInvoiceDetail('Cashier', invoiceData.cashier ?? 'N/A', font, fontSemiBold),
+                  _buildInvoiceDetail('Order date', invoiceData.createdAt?.toFormattedDateTime() ?? 'N/A' , font, fontSemiBold),
                 ]
               )
             ],
@@ -373,7 +377,7 @@ class PdfInvoiceService {
     );
   }
 
-  static pw.Widget _buildItemsTable(InvoiceDetail invoiceData, pw.Font font, pw.Font fontSemiBold) {
+  static pw.Widget _buildItemsTable(OrderDetail invoiceData, pw.Font font, pw.Font fontSemiBold) {
     return pw.Column(
       children: [
         // Table Header
@@ -400,14 +404,14 @@ class PdfInvoiceService {
         // Table Items
         ...?invoiceData.items?.asMap().entries.map((entry) {
           int index = entry.key;
-          InvoiceDetailItem item = entry.value;
+          OrderItem item = entry.value;
           return _buildItemRow(index + 1, item, font);
         }).toList(),
       ],
     );
   }
 
-  static pw.Widget _buildItemRow(int index, InvoiceDetailItem item, pw.Font font) {
+  static pw.Widget _buildItemRow(int index, OrderItem item, pw.Font font) {
     return pw.Container(
       padding: const pw.EdgeInsets.symmetric(vertical: 12, horizontal: 8),
       decoration: const pw.BoxDecoration(
@@ -436,7 +440,7 @@ class PdfInvoiceService {
               crossAxisAlignment: pw.CrossAxisAlignment.start,
               children: [
                 pw.Text(
-                  item.productName ?? 'N/A',
+                  item.itemName ?? 'N/A',
                   style: pw.TextStyle(
                     color: const PdfColor.fromInt(0xFF333333),
                     fontSize: 10,
@@ -444,14 +448,14 @@ class PdfInvoiceService {
                   ),
                 ),
                 pw.SizedBox(height: 4),
-                // pw.Text(
-                //   item.description ?? 'N/A',
-                //   style: pw.TextStyle(
-                //     color: const PdfColor.fromInt(0xFF000000),
-                //     fontSize: 10,
-                //     font: font,
-                //   ),
-                // ),
+                pw.Text(
+                  item.itemCategory ?? 'N/A',
+                  style: pw.TextStyle(
+                    color: const PdfColor.fromInt(0xFF000000),
+                    fontSize: 10,
+                    font: font,
+                  ),
+                ),
               ],
             ),
           ),
@@ -459,7 +463,7 @@ class PdfInvoiceService {
           pw.SizedBox(
             width: 40,
             child: pw.Text(
-              item.quantity.toString(),
+              item.itemCount.toString(),
               style: pw.TextStyle(
                 color: const PdfColor.fromInt(0xFF333333),
                 fontSize: 10,
@@ -472,7 +476,7 @@ class PdfInvoiceService {
           pw.SizedBox(
             width: 80,
             child: pw.Text(
-              item.productPrice?.formatCurrency() ?? 'N/A',
+              item.itemAmount?.formatCurrency() ?? 'N/A',
               style: pw.TextStyle(
                 color: const PdfColor.fromInt(0xFF333333),
                 fontSize: 10,
@@ -496,7 +500,7 @@ class PdfInvoiceService {
           pw.SizedBox(
             width: 100,
             child: pw.Text(
-              'KES ${(item.quantity?.toDouble() ?? 0) * (item.productPrice?.toDouble() ?? 0)}',
+              'KES ${(item.totalAmount?.toDouble() ?? 0).formatCurrency()}',
               style: pw.TextStyle(
                 color: const PdfColor.fromInt(0xFF333333),
                 fontSize: 10,
@@ -510,7 +514,7 @@ class PdfInvoiceService {
     );
   }
 
-  static pw.Widget _buildTotalsSection(InvoiceDetail invoiceData, pw.Font font, pw.Font fontSemiBold) {
+  static pw.Widget _buildTotalsSection(OrderDetail invoiceData, pw.Font font, pw.Font fontSemiBold) {
     return pw.Row(
       children: [
         pw.Spacer(),
@@ -518,7 +522,7 @@ class PdfInvoiceService {
           width: 240,
           child: pw.Column(
             children: [
-              _buildTotalRow('Subtotal', invoiceData.invoiceAmount ?? 0, false, font, fontSemiBold),
+              _buildTotalRow('Subtotal', invoiceData.transamount ?? 0, false, font, fontSemiBold),
               pw.SizedBox(height: 8),
               _buildTotalRow('Discount', invoiceData.discountAmount ?? 0, false, font, fontSemiBold),
               pw.SizedBox(height: 8),
@@ -527,7 +531,7 @@ class PdfInvoiceService {
                 color: const PdfColor.fromInt(0xFFE5E7EB),
               ),
               pw.SizedBox(height: 8),
-              _buildTotalRow('Total', invoiceData.total ?? 0, true, font, fontSemiBold),
+              _buildTotalRow('Total', invoiceData.transamount ?? 0, true, font, fontSemiBold),
             ],
           ),
         ),

@@ -87,3 +87,4 @@ const playstoreIcon = 'assets/icons/playstoreIcon.svg';
 const facebookSVGIcon = 'assets/icons/facebookSVGIcon.svg';
 const zedNanoIcon = 'assets/icons/zedNanoIcon.svg';
 const paymentSetupIcon = 'assets/icons/paymentSetupIcon.svg';
+const pdfIcon = 'assets/icons/pdfIcon.svg';

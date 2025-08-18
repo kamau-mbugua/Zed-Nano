@@ -7,20 +7,21 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:zed_nano/models/get_invoice_by_invoice_number/GetInvoiceByInvoiceNumberResponse.dart';
+import 'package:zed_nano/models/get_total_sales/GetTotalSalesResponse.dart';
 import 'package:zed_nano/models/sales_report/SalesReportResponse.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/utils/extensions.dart';
 import 'package:http/http.dart' as http;
 
-class PdfSalesReportService {
+class SalesReportService {
   /// Fetches ALL sales data for PDF generation (handles pagination internally)
-  static Future<List<SalesReportTotalSalesData>> fetchAllSalesDataForPdf(
+  static Future<List<GetTotalSalesData>> fetchAllSalesDataForPdf(
     BuildContext context, {
     required String startDate,
     required String endDate,
     String searchValue = '',
   }) async {
-    List<SalesReportTotalSalesData> allSalesData = [];
+    List<GetTotalSalesData> allSalesData = [];
     int currentPage = 1;
     const int pageSize = 100; // Use larger page size for efficiency
     bool hasMoreData = true;
@@ -35,7 +36,7 @@ class PdfSalesReportService {
           'searchValue': searchValue,
         };
 
-        final response = await getBusinessProvider(context).getTotalSales(
+        final response = await getBusinessProvider(context).getTotalSalesReport(
           params: params,
           context: context,
         );
@@ -76,7 +77,6 @@ class PdfSalesReportService {
     required String businessLogo,
     required String startDate,
     required String endDate,
-    required SalesReportSummaryData? summaryData,
     String searchValue = '',
   }) async {
     // Fetch all sales data for the PDF
@@ -97,7 +97,6 @@ class PdfSalesReportService {
       startDate,
       endDate,
       allSalesData,
-      summaryData,
     );
   }
 
@@ -127,8 +126,7 @@ class PdfSalesReportService {
       String businessLogo,
       String startDate,
       String endDate,
-      List<SalesReportTotalSalesData> salesReportTotalSalesData,
-      SalesReportSummaryData? summaryData) async {
+      List<GetTotalSalesData> salesReportTotalSalesData,) async {
     final pdf = pw.Document();
 
 
@@ -178,7 +176,6 @@ class PdfSalesReportService {
               businessLogo,
               startDate,
               endDate,
-              salesReportTotalSalesData,
               font,
               fontBold,
               fontSemiBold,
@@ -328,7 +325,6 @@ class PdfSalesReportService {
     String businessLogo,
     String startDate,
     String endDate,
-    List<SalesReportTotalSalesData> salesReportTotalSalesData,
     pw.Font font,
     pw.Font fontBold,
     pw.Font fontSemiBold,
@@ -522,7 +518,7 @@ class PdfSalesReportService {
   }
 
   static pw.Widget _buildItemsTable(
-      List<SalesReportTotalSalesData> salesReportTotalSalesData, pw.Font font, pw.Font fontSemiBold) {
+      List<GetTotalSalesData> salesReportTotalSalesData, pw.Font font, pw.Font fontSemiBold) {
     return pw.Column(
       children: [
         // Table Header
@@ -616,7 +612,7 @@ class PdfSalesReportService {
         if (salesReportTotalSalesData.isNotEmpty)
           ...salesReportTotalSalesData.asMap().entries.map((entry) {
             int index = entry.key;
-            SalesReportTotalSalesData item = entry.value;
+            GetTotalSalesData item = entry.value;
             return _buildItemRow(index + 1, item, font);
           }).toList()
         else
@@ -638,7 +634,7 @@ class PdfSalesReportService {
   }
 
   static pw.Widget _buildItemRow(
-      int index, SalesReportTotalSalesData item, pw.Font font) {
+      int index, GetTotalSalesData item, pw.Font font) {
     return pw.Container(
       padding: const pw.EdgeInsets.symmetric(vertical: 12, horizontal: 8),
       decoration: const pw.BoxDecoration(

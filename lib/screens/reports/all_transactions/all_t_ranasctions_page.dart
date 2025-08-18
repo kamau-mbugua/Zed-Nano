@@ -5,13 +5,18 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/models/viewAllTransactions/TransactionListResponse.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
+import 'package:zed_nano/screens/invoices/pdf_invoice_page.dart';
 import 'package:zed_nano/screens/reports/itemBuilders/all_transactions_item_builder.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
+import 'package:zed_nano/screens/widget/common/custom_extended_fab.dart';
 import 'package:zed_nano/screens/widget/common/date_range_filter_bottom_sheet.dart';
 import 'package:zed_nano/screens/widget/common/filter_row_widget.dart';
 import 'package:zed_nano/screens/widget/common/heading.dart';
 import 'package:zed_nano/screens/widget/common/searchview.dart';
+import 'package:zed_nano/services/BusinessDetailsContextExtension.dart';
+import 'package:zed_nano/services/business_setup_extensions.dart';
+import 'package:zed_nano/services/pdfs/AllTransactionsReportService.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
 import 'package:zed_nano/utils/Images.dart';
@@ -60,13 +65,18 @@ class _AllTRanasctionsPageState extends State<AllTRanasctionsPage> {
     final dateRange = DateRangeUtil.getDateRange(_selectedRangeLabel);
     final startDate = dateRange.values.first.removeTimezoneOffset;
     final endDate = dateRange.values.last.removeTimezoneOffset;
+
+    final params = <String, dynamic>{
+      'startDate': startDate,
+      'endDate': endDate,
+      'page': page,
+      'limit': limit,
+      'search': _searchTerm,
+    };
+
     final response = await getBusinessProvider(context).viewAllTransactions(
-      page: page,
-      limit: limit,
-      searchValue: _searchTerm,
+      params: params,
       context: context,
-      startDate: startDate,
-      endDate: endDate,
     );
     setState(() {
       transactionListResponse = response.data;
@@ -123,8 +133,36 @@ class _AllTRanasctionsPageState extends State<AllTRanasctionsPage> {
           _buildList(),
         ],
       ).paddingAll(16),
+      floatingActionButton: GeneratePdfFAB(
+        onPressed: _showGenerateReport,
+      ),
     );
   }
+
+  Future<void> _showGenerateReport() async {
+    final dateRange = DateRangeUtil.getDateRange(_selectedRangeLabel);
+    final startDate = dateRange.values.first.removeTimezoneOffset;
+    final endDate = dateRange.values.last.removeTimezoneOffset;
+    await AllTransactionsReportService.generateSalesReportPdf(
+      context,
+      businessAddress: context.businessAddress,
+      businessEmail: context.businessEmail,
+      businessLogo: context.businessLogo,
+      businessName: context.businessName,
+      businessPhone: context.businessPhone,
+      endDate: startDate,
+      startDate: endDate,
+    ).then((value) async {
+      if (value != null) {
+        await PdfPage(
+          pdfBytes: value,
+          title: 'All Transactions Report - ${startDate.toDateOnly} to ${endDate.toDateOnly}',
+          fileName: 'All Transactions Report - ${startDate.toDateOnly} to ${endDate.toDateOnly}.pdf',
+        ).launch(context);
+      }
+    });
+  }
+
 
   Widget _buildSummary() {
 

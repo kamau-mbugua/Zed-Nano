@@ -185,15 +185,19 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
   }
 
   Future<void> viewAllTransactions() async {
+    final params = <String, dynamic>{
+      'startDate': _dateRange.values.first.removeTimezoneOffset,
+      'endDate': _dateRange.values.last.removeTimezoneOffset,
+      'page': 1,
+      'limit': 5,
+      'search': '',
+    };
+
     await context
         .read<BusinessProviders>()
         .viewAllTransactions(
             context: context,
-            page: 1,
-            limit: 5,
-            searchValue: '',
-            startDate: _dateRange.values.first.removeTimezoneOffset,
-            endDate: _dateRange.values.last.removeTimezoneOffset,)
+            params: params)
         .then((value) async {
       if (value.isSuccess) {
         if (mounted) {

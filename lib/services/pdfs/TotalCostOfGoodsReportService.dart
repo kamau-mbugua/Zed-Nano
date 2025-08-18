@@ -7,20 +7,22 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:zed_nano/models/get_invoice_by_invoice_number/GetInvoiceByInvoiceNumberResponse.dart';
+import 'package:zed_nano/models/product_total_cost/ProductTotalCostResponse.dart';
+import 'package:zed_nano/models/quantities_sold/QuantitiesSoldResponse.dart';
 import 'package:zed_nano/models/sales_report/SalesReportResponse.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/utils/extensions.dart';
 import 'package:http/http.dart' as http;
 
-class PdfSalesReportService {
+class TotalCostOfGoodsReportService {
   /// Fetches ALL sales data for PDF generation (handles pagination internally)
-  static Future<List<SalesReportTotalSalesData>> fetchAllSalesDataForPdf(
+  static Future<List<ProductTotalCostData>> fetchAllSalesDataForPdf(
     BuildContext context, {
     required String startDate,
     required String endDate,
     String searchValue = '',
   }) async {
-    List<SalesReportTotalSalesData> allSalesData = [];
+    List<ProductTotalCostData> allSalesData = [];
     int currentPage = 1;
     const int pageSize = 100; // Use larger page size for efficiency
     bool hasMoreData = true;
@@ -35,7 +37,7 @@ class PdfSalesReportService {
           'searchValue': searchValue,
         };
 
-        final response = await getBusinessProvider(context).getTotalSales(
+        final response = await getBusinessProvider(context).getProductTotalCost(
           params: params,
           context: context,
         );
@@ -76,7 +78,6 @@ class PdfSalesReportService {
     required String businessLogo,
     required String startDate,
     required String endDate,
-    required SalesReportSummaryData? summaryData,
     String searchValue = '',
   }) async {
     // Fetch all sales data for the PDF
@@ -97,7 +98,6 @@ class PdfSalesReportService {
       startDate,
       endDate,
       allSalesData,
-      summaryData,
     );
   }
 
@@ -127,8 +127,7 @@ class PdfSalesReportService {
       String businessLogo,
       String startDate,
       String endDate,
-      List<SalesReportTotalSalesData> salesReportTotalSalesData,
-      SalesReportSummaryData? summaryData) async {
+      List<ProductTotalCostData> salesReportTotalSalesData,) async {
     final pdf = pw.Document();
 
 
@@ -178,7 +177,6 @@ class PdfSalesReportService {
               businessLogo,
               startDate,
               endDate,
-              salesReportTotalSalesData,
               font,
               fontBold,
               fontSemiBold,
@@ -328,7 +326,6 @@ class PdfSalesReportService {
     String businessLogo,
     String startDate,
     String endDate,
-    List<SalesReportTotalSalesData> salesReportTotalSalesData,
     pw.Font font,
     pw.Font fontBold,
     pw.Font fontSemiBold,
@@ -462,7 +459,7 @@ class PdfSalesReportService {
               ),
               pw.SizedBox(height: 8),
               pw.Text(
-                'Total Sales',
+                'Quantities Sold',
                 style: pw.TextStyle(
                   color: const PdfColor.fromInt(0xFF333333),
                   fontSize: 18,
@@ -522,7 +519,7 @@ class PdfSalesReportService {
   }
 
   static pw.Widget _buildItemsTable(
-      List<SalesReportTotalSalesData> salesReportTotalSalesData, pw.Font font, pw.Font fontSemiBold) {
+      List<ProductTotalCostData> salesReportTotalSalesData, pw.Font font, pw.Font fontSemiBold) {
     return pw.Column(
       children: [
         // Table Header
@@ -544,7 +541,7 @@ class PdfSalesReportService {
                   )
               ),
 
-              pw.Text('Total Sales: KES ${salesReportTotalSalesData.map((e) => e.totalSales).reduce((a, b) => a! + b!)}',
+              pw.Text('Total Cost of Goods:: KES ${salesReportTotalSalesData.where((e) => e.totalSales != null).map((e) => e.totalSales!).fold(0.0, (a, b) => a + b).toStringAsFixed(2)}',
                   style: pw.TextStyle(
                     font: fontSemiBold,
                     color: const PdfColor.fromInt(0xFF1A1C21),
@@ -564,8 +561,8 @@ class PdfSalesReportService {
           decoration: const pw.BoxDecoration(
             color: PdfColor.fromInt(0xFFF8F9FA),
             // border: pw.Border(
-            //   bottom: pw.BorderSide(
-            //       color: PdfColor.fromInt(0xFFE5E7EB), width: 0.5),
+            //   bottom:
+            //       pw.BorderSide(color: PdfColor.fromInt(0xFFE5E7EB), width: 0.5),
             // ),
             borderRadius: pw.BorderRadius.all(pw.Radius.circular(8)),
           ),
@@ -579,14 +576,14 @@ class PdfSalesReportService {
                           fontSize: 10,
                           font: fontSemiBold))),
               pw.Expanded(
-                  flex: 3,
+                  flex: 2,
                   child: pw.Text('Item Name',
                       style: pw.TextStyle(
                           color: const PdfColor.fromInt(0xFF000000),
                           fontSize: 10,
                           font: fontSemiBold))),
               pw.SizedBox(
-                  width: 40,
+                  width: 100,
                   child: pw.Text('Qty Sold',
                       style: pw.TextStyle(
                           color: const PdfColor.fromInt(0xFF000000),
@@ -594,15 +591,16 @@ class PdfSalesReportService {
                           font: fontSemiBold),
                       textAlign: pw.TextAlign.center)),
               pw.SizedBox(
-                  width: 80,
-                  child: pw.Text('Selling Price',
+                  width: 100,
+                  child: pw.Text('Buying Price',
                       style: pw.TextStyle(
                           color: const PdfColor.fromInt(0xFF000000),
                           fontSize: 10,
-                          font: fontSemiBold))),
+                          font: fontSemiBold),
+                      textAlign: pw.TextAlign.center)),
               pw.SizedBox(
-                  width: 80,
-                  child: pw.Text('Total Sales',
+                  width: 100,
+                  child: pw.Text('Total Cost',
                       textAlign: pw.TextAlign.end,
                       style: pw.TextStyle(
                           color: const PdfColor.fromInt(0xFF000000),
@@ -616,7 +614,7 @@ class PdfSalesReportService {
         if (salesReportTotalSalesData.isNotEmpty)
           ...salesReportTotalSalesData.asMap().entries.map((entry) {
             int index = entry.key;
-            SalesReportTotalSalesData item = entry.value;
+            ProductTotalCostData item = entry.value;
             return _buildItemRow(index + 1, item, font);
           }).toList()
         else
@@ -638,7 +636,7 @@ class PdfSalesReportService {
   }
 
   static pw.Widget _buildItemRow(
-      int index, SalesReportTotalSalesData item, pw.Font font) {
+      int index, ProductTotalCostData item, pw.Font font) {
     return pw.Container(
       padding: const pw.EdgeInsets.symmetric(vertical: 12, horizontal: 8),
       decoration: const pw.BoxDecoration(
@@ -657,30 +655,31 @@ class PdfSalesReportService {
                       fontSize: 10,
                       font: font))),
           pw.Expanded(
-              flex: 3,
+              flex: 2,
               child: pw.Text(item.productName ?? 'N/A',
                   style: pw.TextStyle(
                       color: const PdfColor.fromInt(0xFF333333),
                       fontSize: 10,
                       font: font))),
           pw.SizedBox(
-              width: 40,
-              child: pw.Text(item.quantitySold.toString(),
+              width: 100,
+              child: pw.Text(item.quantitySold?.toString() ?? 'N/A',
                   style: pw.TextStyle(
                       color: const PdfColor.fromInt(0xFF333333),
                       fontSize: 10,
                       font: font),
                   textAlign: pw.TextAlign.center)),
           pw.SizedBox(
-              width: 80,
-              child: pw.Text(item.sellingPrice?.formatCurrency() ?? 'N/A',
+              width: 100,
+              child: pw.Text(item.buyingPrice?.formatCurrency() ?? '0.0',
                   style: pw.TextStyle(
                       color: const PdfColor.fromInt(0xFF333333),
                       fontSize: 10,
-                      font: font))),
+                      font: font),
+                  textAlign: pw.TextAlign.center)),
           pw.SizedBox(
-              width: 80,
-              child: pw.Text(item.totalSales?.formatCurrency() ?? 'N/A',
+              width: 100,
+              child: pw.Text(item.totalCost?.toString() ?? '0.0',
                   textAlign: pw.TextAlign.end,
                   style: pw.TextStyle(
                       color: const PdfColor.fromInt(0xFF333333),
