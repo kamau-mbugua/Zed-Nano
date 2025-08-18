@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart'; // Import Widgets to use WidgetsBinding
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/models/business/BusinessDetails.dart';
+import 'package:zed_nano/models/get_business_info/BusinessInfoResponse.dart';
 
 /// Service to manage business setup state and validation
 /// 
@@ -25,6 +26,11 @@ class BusinessSetupService extends ChangeNotifier {
   BusinessDetails? get businessDetails => _businessDetails;
   bool get isInitialized => _isInitialized;
   bool get isLoading => _isLoading;
+
+
+
+  BusinessInfoData? _businessInfoData;
+  BusinessInfoData? get businessInfoData => _businessInfoData;
   
   /// Returns true if business setup is required
   bool get requiresBusinessSetup {
@@ -48,6 +54,7 @@ class BusinessSetupService extends ChangeNotifier {
 
     try {
       _businessDetails = await BusinessDetails.loadFromSharedPreferences();
+      // _businessInfoData = await BusinessInfoData.loadFromSharedPreferences();
       logger.i('BusinessSetupService: Loaded business details - ${_businessDetails?.toJson()}');
     } catch (e) {
       logger.e('BusinessSetupService: Failed to load business details - $e');
@@ -64,6 +71,18 @@ class BusinessSetupService extends ChangeNotifier {
     try {
       await BusinessDetails.saveToSharedPreferences(details);
       _businessDetails = details;
+      logger.i('BusinessSetupService: Updated business details - ${details.toJson()}');
+      _safeNotifyListeners();
+    } catch (e) {
+      logger.e('BusinessSetupService: Failed to update business details - $e');
+      rethrow;
+    }
+  }
+
+  Future<void> updateBusinessInfoDetails(BusinessInfoData? details) async {
+    try {
+      await BusinessInfoData.saveToSharedPreferences(details!);
+      _businessInfoData = details;
       logger.i('BusinessSetupService: Updated business details - ${details.toJson()}');
       _safeNotifyListeners();
     } catch (e) {
@@ -121,7 +140,8 @@ class BusinessSetupService extends ChangeNotifier {
       
       // Clear all business-related SharedPreferences keys
       await prefs.remove('businessDetails');
-      
+      await prefs.remove('businessInfoData');
+
       // Reset all internal state
       _businessDetails = null;
       _isInitialized = false;
@@ -252,10 +272,27 @@ class BusinessSetupService extends ChangeNotifier {
     return _businessDetails?.localCurrency ?? 'USD';
   }
 
+  String getBusinessName() {
+    return _businessDetails?.businessName ?? 'N/A';
+  }
+
   /// Get business category or default
   String getBusinessCategory() {
     return _businessDetails?.businessCategory ?? 'General';
   }
+
+  // String getBusinessAddress() {
+  //   return _businessInfoData?.businessOwnerAddress ?? '';
+  // }
+  // String getBusinessEmail() {
+  //   return _businessInfoData?.businessOwnerEmail ?? '';
+  // }
+  // String getBusinessLogo() {
+  //   return _businessInfoData?.businessLogo ?? '';
+  // }
+  // String getBusinessPhone() {
+  //   return _businessInfoData?.businessOwnerPhone ?? '';
+  // }
 
   /// Check if business has all required fields for specific features
   bool hasCompleteBusinessProfile() {

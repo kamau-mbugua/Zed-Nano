@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import 'package:shared_preferences/shared_preferences.dart';
+
 class BusinessInfoResponse {
 
   BusinessInfoResponse({
@@ -924,5 +928,28 @@ class BusinessInfoData {
       'sessionTimeout': sessionTimeout,
       'businessBillingDetails': businessBillingDetails?.toJson(),
     };
+  }
+
+  String get json => jsonEncode(toJson());
+
+
+  static Future<void> saveToSharedPreferences(BusinessInfoData details) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('businessInfoData', details.json);
+  }
+
+  static Future<BusinessInfoData?> loadFromSharedPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    final jsonString = prefs.getString('businessInfoData');
+    return jsonString != null ? BusinessInfoData.fromJsonString(jsonString) : null;
+  }
+
+  static BusinessInfoData? fromJsonString(String jsonString) {
+    try {
+      final json = jsonDecode(jsonString) as Map<String, dynamic>;
+      return BusinessInfoData.fromJson(json);
+    } catch (e) {
+      return null;
+    }
   }
 }

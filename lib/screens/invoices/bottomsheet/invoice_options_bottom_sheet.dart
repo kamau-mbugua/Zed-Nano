@@ -10,7 +10,7 @@ import 'package:zed_nano/screens/invoices/pdf_invoice_page.dart';
 import 'package:zed_nano/screens/widget/common/base_bottom_sheet.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
-import 'package:zed_nano/services/pdf_invoice_service.dart';
+import 'package:zed_nano/services/pdfs/pdf_invoice_service.dart';
 
 class InvoiceOptionsBottomSheet extends StatefulWidget {
   InvoiceOptionsBottomSheet({super.key, this.invoiceNumber});

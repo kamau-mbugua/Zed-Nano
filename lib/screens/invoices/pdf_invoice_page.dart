@@ -5,7 +5,7 @@ import 'package:printing/printing.dart';
 import 'package:pdf/pdf.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
-import 'package:zed_nano/services/pdf_invoice_service.dart';
+import 'package:zed_nano/services/pdfs/pdf_invoice_service.dart';
 
 
 class PdfPage extends StatefulWidget {
@@ -54,49 +54,47 @@ class _PdfPageState extends State<PdfPage> {
               maxPageWidth: MediaQuery.of(context).size.width,
             ),
           ),
-          // Custom bottom navigation bar
-          SafeArea(
-            child: Container(
-              constraints: const BoxConstraints(
-                minHeight: 60,
-                maxHeight: 80,
-              ),
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              decoration: const BoxDecoration(
-                color: Color(0xFF144166),
-                border: Border(
-                  top: BorderSide(color: Color(0xFFE5E7EB), width: 1),
-                ),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Flexible(
-                    child: _buildActionButton(
-                      icon: Icons.print,
-                      label: 'Print',
-                      onPressed: _printPdf,
-                    ),
-                  ),
-                  Flexible(
-                    child: _buildActionButton(
-                      icon: Icons.share,
-                      label: 'Share',
-                      onPressed: _sharePdf,
-                    ),
-                  ),
-                  Flexible(
-                    child: _buildActionButton(
-                      icon: Icons.download,
-                      label: 'Download',
-                      onPressed: _downloadPdf,
-                    ),
-                  ),
-                ],
+        ],
+      ),
+      bottomNavigationBar: _buildBottomNavigationBar(),
+    );
+  }
+
+  Widget _buildBottomNavigationBar() {
+    return SafeArea(
+      child: Container(
+        decoration: const BoxDecoration(
+          color: Color(0xFF144166),
+          border: Border(
+            top: BorderSide(color: Color(0xFFE5E7EB), width: 1),
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Flexible(
+              child: _buildActionButton(
+                icon: Icons.print,
+                label: 'Print',
+                onPressed: _printPdf,
               ),
             ),
-          ),
-        ],
+            Flexible(
+              child: _buildActionButton(
+                icon: Icons.share,
+                label: 'Share',
+                onPressed: _sharePdf,
+              ),
+            ),
+            Flexible(
+              child: _buildActionButton(
+                icon: Icons.download,
+                label: 'Download',
+                onPressed: _downloadPdf,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

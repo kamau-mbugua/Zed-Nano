@@ -75,6 +75,13 @@ extension StringValidationExtensions on String {
       return this;
     }
   }
+
+  String get toDateOnly {
+    if (contains('T')) {
+      return split('T').first;
+    }
+    return this; // return as-is if no 'T' found
+  }
   
   /// Removes timezone offset from ISO 8601 date string
   /// Example: 2025-07-12T15:14:50+03:00 -> 2025-07-12T15:14:50
