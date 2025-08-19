@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/app/app_initializer.dart';
+import 'package:zed_nano/screens/widget/common/custom_dialog.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/services/saved_credentials_service.dart';
 import 'package:zed_nano/utils/Colors.dart';
@@ -108,7 +109,7 @@ class _SavedCredentialsBottomSheetState extends State<SavedCredentialsBottomShee
           else if (credentials.isEmpty)
             _buildEmptyState()
           else
-            _buildCredentialsList(),
+            SafeArea(child: _buildCredentialsList()),
           
           24.height,
         ],
@@ -230,27 +231,20 @@ class _SavedCredentialsBottomSheetState extends State<SavedCredentialsBottomShee
   }
 
   void _showDeleteConfirmation(SavedCredential credential) {
-    showDialog(
+
+    showCustomDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Remove Saved Credential'),
-        content: Text('Are you sure you want to remove "${credential.identifier}" from saved credentials?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () async {
-              Navigator.pop(context);
-              await SavedCredentialsService.removeCredential(credential.identifier);
-              _loadCredentials(); // Refresh the list
-              showCustomToast('Credential removed', isError: false);
-            },
-            child: const Text('Remove', style: TextStyle(color: Colors.red,  fontFamily: 'Poppins',)),
-          ),
-        ],
-      ),
+      title: 'Remove Saved Credential?',
+      subtitle: "Are you sure you want to remove ${credential.identifier} from saved credentials?",
+      negativeButtonText: 'Cancel',
+      positiveButtonText: 'Remove',
+      onNegativePressed: () => Navigator.pop(context),
+      onPositivePressed: () async {
+        Navigator.pop(context);
+        await SavedCredentialsService.removeCredential(credential.identifier);
+        _loadCredentials(); // Refresh the list
+        showCustomToast('Credential removed', isError: false);
+      },
     );
   }
 }
