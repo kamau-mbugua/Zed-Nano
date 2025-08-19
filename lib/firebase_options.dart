@@ -53,14 +53,14 @@ class DefaultFirebaseOptions {
     storageBucket: 'zed-app-444bf.firebasestorage.app',
   );
 
-  // iOS configuration - placeholder until GoogleService-Info.plist values are available
+  // iOS configuration
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBJNKCAeWTN-h7hJq9ohuGzkEudPiP3CkA', // Using same API key as Android
-    appId: '1:251853629051:ios:placeholder', // Will need to be updated
+    apiKey: 'AIzaSyBazqOQ5wyJoay32KgvOBE6VSLPJu-5Jw8',
+    appId: '1:251853629051:ios:66e03d5c9b91ae42a364de',
     messagingSenderId: '251853629051',
     projectId: 'zed-app-444bf',
     storageBucket: 'zed-app-444bf.firebasestorage.app',
-    iosClientId: 'ios-client-id-needs-to-be-updated', // Will need to be updated
-    iosBundleId: 'com.rbs.zednano',
+    iosClientId: '251853629051-5e6vtsbtsfcl6dddoi0iskkdcfuohjm4.apps.googleusercontent.com',
+    iosBundleId: 'com.rbs.zed-nano.dev',
   );
 }

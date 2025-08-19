@@ -3,21 +3,23 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>YOUR_IOS_CLIENT_ID</string>
+	<string>251853629051-5e6vtsbtsfcl6dddoi0iskkdcfuohjm4.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>YOUR_REVERSED_CLIENT_ID</string>
+	<string>com.googleusercontent.apps.251853629051-5e6vtsbtsfcl6dddoi0iskkdcfuohjm4</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>251853629051-17hmera4nma3ns38clc10tgfhbjumtd5.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
-	<string>YOUR_IOS_API_KEY</string>
+	<string>AIzaSyBazqOQ5wyJoay32KgvOBE6VSLPJu-5Jw8</string>
 	<key>GCM_SENDER_ID</key>
-	<string>YOUR_GCM_SENDER_ID</string>
+	<string>251853629051</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.rbs.zednano</string>
+	<string>com.rbs.zed-nano.dev</string>
 	<key>PROJECT_ID</key>
 	<string>zed-app-444bf</string>
 	<key>STORAGE_BUCKET</key>
-	<string>zed-app-444bf.appspot.com</string>
+	<string>zed-app-444bf.firebasestorage.app</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>YOUR_IOS_APP_ID</string>
+	<string>1:251853629051:ios:66e03d5c9b91ae42a364de</string>
 </dict>
 </plist>
