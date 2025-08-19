@@ -144,7 +144,7 @@ class _BusinessCreatedPreviewPageState extends State<BusinessCreatedPreviewPage>
                   _buildDivider(),
 
                   // Directors/Owners
-                  _buildInfoItem('Directors/Owners', businessInfoData?.businessOwnerName ?? ''),
+                  _buildInfoItem('Owners', businessInfoData?.businessOwnerName ?? ''),
                   _buildDivider(),
 
                   // Country and Currency (2-column layout)

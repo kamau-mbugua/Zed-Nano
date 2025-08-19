@@ -146,57 +146,59 @@ class _AddUserPageState extends State<AddUserPage> {
           ),
         ],
       ),
-      child: appButton(
-        text: 'Add User',
-        onTap: () {
-          final firstName = firstNameController.text;
-          final lastName = lastNameController.text;
-          final userName = userNameController.text;
-          final email = emailController.text;
-          var phone = phoneController.text;
-          final location = locationController.text;
-
-          if (!firstName.isValidInput) {
-            return showCustomToast('Please enter first name');
-          }
-          if (!lastName.isValidInput) {
-            return showCustomToast('Please enter last name');
-          }
-
-          if (!userName.isValidInput) {
-            return showCustomToast('Please enter user name');
-          }
-
-          if (!email.isValidEmail) {
-            return showCustomToast('Please enter valid email');
-          }
-          if (!phone.isValidPhoneNumber) {
-            return showCustomToast('Please enter valid phone number');
-          }
-
-          final phoneNumber = phoneController.text;
-          final countryCode = codeController.text;
-          phone = '$countryCode$phoneNumber';
-
-          final requestData = {
-            'firstName': firstName,
-            'secondName': lastName,
-            'userEmail': email,
-            'userPhone': phone,
-            'userGroup': selectedBusinessRole,
-            'userName': userName,
-            'userState': 'Active',
-          };
-
-          if(!(selectedBusinessRole == 'Merchant')){
-            requestData['branchId'] = getBusinessDetails(context)?.branchId;
-          }
-
-          logger.d(requestData);
-
-          _addNewUser(requestData);
-        },
-        context: context,
+      child: SafeArea(
+        child: appButton(
+          text: 'Add User',
+          onTap: () {
+            final firstName = firstNameController.text;
+            final lastName = lastNameController.text;
+            final userName = userNameController.text;
+            final email = emailController.text;
+            var phone = phoneController.text;
+            final location = locationController.text;
+        
+            if (!firstName.isValidInput) {
+              return showCustomToast('Please enter first name');
+            }
+            if (!lastName.isValidInput) {
+              return showCustomToast('Please enter last name');
+            }
+        
+            if (!userName.isValidInput) {
+              return showCustomToast('Please enter user name');
+            }
+        
+            if (!email.isValidEmail) {
+              return showCustomToast('Please enter valid email');
+            }
+            if (!phone.isValidPhoneNumber) {
+              return showCustomToast('Please enter valid phone number');
+            }
+        
+            final phoneNumber = phoneController.text;
+            final countryCode = codeController.text;
+            phone = '$countryCode$phoneNumber';
+        
+            final requestData = {
+              'firstName': firstName,
+              'secondName': lastName,
+              'userEmail': email,
+              'userPhone': phone,
+              'userGroup': selectedBusinessRole,
+              'userName': userName,
+              'userState': 'Active',
+            };
+        
+            if(!(selectedBusinessRole == 'Merchant')){
+              requestData['branchId'] = getBusinessDetails(context)?.branchId;
+            }
+        
+            logger.d(requestData);
+        
+            _addNewUser(requestData);
+          },
+          context: context,
+        ),
       ),
     ).paddingSymmetric(horizontal: 16, vertical: 12);
   }

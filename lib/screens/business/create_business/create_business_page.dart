@@ -275,6 +275,9 @@ class _CreateBusinessPageState extends State<CreateBusinessPage> {
                         'Transport',
                         'School/University/College',
                         'Events',
+                        'Hotel',
+                        'e-Commerce',
+                        'Hospital, Dispensary, Healthcare Services',
                         'Service station (Gas station)',
                       ].contains(category.categoryName),)
                   .map((e) => e.categoryName ?? '')

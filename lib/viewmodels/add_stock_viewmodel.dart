@@ -35,7 +35,7 @@ class AddStockViewModel with ChangeNotifier {
           category: existingItem.category,
           buyingPrice: existingItem.buyingPrice,
           sellingPrice: existingItem.sellingPrice,
-          quantity: existingItem.quantity + quantity,
+          quantity: /*existingItem.quantity + */quantity,
           productId: existingItem.productId,
           productName: existingItem.productName,
           imagePath: existingItem.imagePath,

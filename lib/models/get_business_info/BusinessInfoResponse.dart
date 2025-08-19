@@ -120,7 +120,7 @@ class NanoBusinessSubscription {
       isFreeTrialTried: json['isFreeTrialTried'] as bool?,
       isFreeTrialEnded: json['isFreeTrialEnded'] as bool?,
       isActiveBillingPackage: json['isActiveBillingPackage'] as bool?,
-      freeTrialPeriodRemainingdays: json['freeTrialPeriodRemainingdays'] as int?,
+      freeTrialPeriodRemainingdays: json['freeTrialPeriodRemainingdays'] as String?,
     );
   }
   final List<NanoSubscriptionData>? data;
@@ -130,7 +130,7 @@ class NanoBusinessSubscription {
   final bool? isFreeTrialTried;
   final bool? isFreeTrialEnded;
   final bool? isActiveBillingPackage;
-  final int? freeTrialPeriodRemainingdays;
+  final String? freeTrialPeriodRemainingdays;
 
   Map<String, dynamic> toJson() {
     return {

@@ -295,10 +295,12 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
           ),
         ],
       ),
-      child: outlineButton(
-          text: 'Edit ${_productData?.productService?.toLowerCase() != 'service' ? 'Product' : 'Service'}',
-          onTap: _navigateToEditProduct,
-          context: context,),
+      child: SafeArea(
+        child: outlineButton(
+            text: 'Edit ${_productData?.productService?.toLowerCase() != 'service' ? 'Product' : 'Service'}',
+            onTap: _navigateToEditProduct,
+            context: context,),
+      ),
     );
   }
 }

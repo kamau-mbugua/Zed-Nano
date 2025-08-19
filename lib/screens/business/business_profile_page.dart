@@ -363,7 +363,7 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
         'color': 'dark',
       },
       {
-        'title': 'Directors/Owners',
+        'title': 'Owners',
         'value': widget.businessData.businessOwnerName ?? 'N/A',
         'color': 'medium',
       },

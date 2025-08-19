@@ -136,14 +136,16 @@ class _SplashPageState extends State<SplashPage> {
       bottomNavigationBar: Container(
         height: 70,
         color: appThemePrimary,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Version ${appVersionWithBuild}',
-              style: boldTextStyle(color: Colors.white, fontFamily: 'Poppins', size: 12),
-            ),
-          ],
+        child: SafeArea(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Version ${appVersionWithBuild}',
+                style: boldTextStyle(color: Colors.white, fontFamily: 'Poppins', size: 12),
+              ),
+            ],
+          ),
         ),
       ),
     );
