@@ -5,7 +5,6 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:zed_nano/models/get_invoice_by_invoice_number/GetInvoiceByInvoiceNumberResponse.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
-import 'package:zed_nano/screens/invoices/pdf_invoice_example.dart';
 import 'package:zed_nano/screens/invoices/pdf_invoice_page.dart';
 import 'package:zed_nano/screens/widget/common/base_bottom_sheet.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
