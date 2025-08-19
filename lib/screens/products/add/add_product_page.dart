@@ -266,14 +266,14 @@ class _AddProductScreenState extends State<AddProductScreen> {
           children: [
             // Category Name
             headings(
-              label: selectedProductService?.toLowerCase() != 'service' ? 'New Product' : 'New Service',
+              label: selectedProductService?.toLowerCase() != 'service' ? 'Add Product' : 'Add Service',
               subLabel: selectedProductService?.toLowerCase() != 'service' ? 'Enter product details.' : 'Enter service details.',
             ),
             _formFields(),
             _uploadImage(),
             const SizedBox(height: 32),
             appButton(
-              text:  selectedProductService?.toLowerCase() != 'service' ? 'New Product' : 'New Service',
+              text:  selectedProductService?.toLowerCase() != 'service' ? 'Add Product' : 'Add Service',
               context: context,
               onTap: () {
                 final categoryId = selectedCategory;
