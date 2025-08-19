@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:provider/provider.dart';
 import 'package:zed_nano/models/get_approved_add_stock_batches_by_branch/GetBatchesListResponse.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/stock/add_stock/addStock/add_stock_parent_page.dart';
@@ -13,6 +14,7 @@ import 'package:zed_nano/screens/widget/common/searchview.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
 import 'package:zed_nano/utils/pagination_controller.dart';
+import 'package:zed_nano/viewmodels/DataRefreshViewModel.dart';
 
 class AddStockApprovedBatchPage extends StatefulWidget {
   const AddStockApprovedBatchPage({super.key});
@@ -82,31 +84,53 @@ class _AddStockApprovedBatchPageState extends State<AddStockApprovedBatchPage> {
   }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Column(
-        children: [
-          _buildSearchBar(),
-          Expanded(
-            child: RefreshIndicator(
-              onRefresh: () async {
-                _paginationController.refresh();
-                // await _fetchStockSummary();
-              },
-              child: _buildApprovedStockList(),
-            ),
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          const AddStockParentPage().launch(context);
+    return Consumer<DataRefreshViewModel>(
+        builder: (context, dataRefreshViewModel, child){
 
-        },
-        label: const Text('Add Stock', style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white)),
-        icon: const Icon(Icons.add, color: Colors.white),
-        backgroundColor: appThemePrimary,
-      ),
+          var shouldRefresh = false;
+          // Check if data refresh is needed
+          if (dataRefreshViewModel.isRefreshing(DataRefreshType.addStock) ||
+              dataRefreshViewModel.isRefreshing(DataRefreshType.stockTake)) {
+            shouldRefresh = true;
+            Future.microtask(() {
+              dataRefreshViewModel.completeRefresh(DataRefreshType.addStock);
+              dataRefreshViewModel.completeRefresh(DataRefreshType.stockTake);
+            });
+          }
+
+          // Only fetch data once if either condition is true
+          if (shouldRefresh) {
+            _paginationController.refresh();
+          }
+
+          return  Scaffold(
+            backgroundColor: Colors.white,
+            body: Column(
+              children: [
+                _buildSearchBar(),
+                Expanded(
+                  child: RefreshIndicator(
+                    onRefresh: () async {
+                      _paginationController.refresh();
+                      // await _fetchStockSummary();
+                    },
+                    child: _buildApprovedStockList(),
+                  ),
+                ),
+              ],
+            ),
+            floatingActionButton: FloatingActionButton.extended(
+              onPressed: () {
+                const AddStockParentPage().launch(context);
+
+              },
+              label: const Text('Add Stock', style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white)),
+              icon: const Icon(Icons.add, color: Colors.white),
+              backgroundColor: appThemePrimary,
+            ),
+          );
+        }
+
     );  }
 
 

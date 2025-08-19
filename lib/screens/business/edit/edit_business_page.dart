@@ -369,6 +369,7 @@ class _EditBusinessPageState extends State<EditBusinessPage> {
                 Expanded(
                   flex: selectedCurrency != null ? 3 : 1,
                   child: CountryCurrencyPicker(
+                      initialCountry: selectedCountry,
                     onSelect: (countryName, currencyCode) {
                       setState(() {
                         selectedCountry = countryName;
@@ -442,7 +443,7 @@ class _EditBusinessPageState extends State<EditBusinessPage> {
                               ),
                             )
                                 : rfCommonCachedNetworkImage(
-                              '${AppConstants.baseUrl}staticimages/logos/${businessInfoData?.businessLogo}',
+                              '${businessInfoData?.businessLogo}',
                               fit: BoxFit.fitHeight,
                               height: 90,
                               width: 150,

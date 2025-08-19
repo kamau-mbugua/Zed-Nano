@@ -36,23 +36,25 @@ class _SelectInvoiceTypePageState extends State<SelectInvoiceTypePage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AuthAppBar(title: 'Create Invoice', onBackPressed: widget.onPrevious),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          headings(
-            label: 'Invoice Details',
-            subLabel: 'Fill in the details to create your invoice.',
-          ),
-          16.height,
-          _selectCustomer(),
-          16.height,
-          _selectInvoiceType(),
-          16.height,
-          _buildReccurency(),
-          _buildPurchaseOrder(),
-
-        ],
-      ).paddingSymmetric(horizontal: 18),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            headings(
+              label: 'Invoice Details',
+              subLabel: 'Fill in the details to create your invoice.',
+            ),
+            16.height,
+            _selectCustomer(),
+            16.height,
+            _selectInvoiceType(),
+            16.height,
+            _buildReccurency(),
+            _buildPurchaseOrder(),
+        
+          ],
+        ).paddingSymmetric(horizontal: 18),
+      ),
       bottomNavigationBar: _buildSubmitButton(),
     );
   }
@@ -111,7 +113,7 @@ class _SelectInvoiceTypePageState extends State<SelectInvoiceTypePage> {
     final customerInvoicingViewModel = Provider.of<CustomerInvoicingViewModel>(context);
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
       decoration: BoxDecoration(
         color: Colors.white,
         boxShadow: [
@@ -122,26 +124,28 @@ class _SelectInvoiceTypePageState extends State<SelectInvoiceTypePage> {
           ),
         ],
       ),
-      child: appButton(
-        text: 'Next',
-        onTap: () {
-          if(selectedIinvoiceTypes == 'Recurring' && selectedRecurrencyType == null){
-            showCustomToast('Please select Recurrency Type');
-            return;
-          }
-          if(selectedIinvoiceTypes == 'Recurring' && selectedRecurrencyType == null){
-            showCustomToast('Please select Recurrency Type');
-            return;
-          }
-          customerInvoicingViewModel.addInvoiceDetailItem(
-              type: selectedIinvoiceTypes.toLowerCase(),
-              frequency: selectedIinvoiceTypes == 'Recurring' ? selectedRecurrencyType : 'once',
-              purchaseOrderNumber: purchaseController.text,
-              customerId: customerInvoicingViewModel.customerData?.id ?? '',
-          );
-          widget.onNext();
-        },
-        context: context,
+      child: SafeArea(
+        child: appButton(
+          text: 'Next',
+          onTap: () {
+            if(selectedIinvoiceTypes == 'Recurring' && selectedRecurrencyType == null){
+              showCustomToast('Please select Recurrency Type');
+              return;
+            }
+            if(selectedIinvoiceTypes == 'Recurring' && selectedRecurrencyType == null){
+              showCustomToast('Please select Recurrency Type');
+              return;
+            }
+            customerInvoicingViewModel.addInvoiceDetailItem(
+                type: selectedIinvoiceTypes.toLowerCase(),
+                frequency: selectedIinvoiceTypes == 'Recurring' ? selectedRecurrencyType : 'once',
+                purchaseOrderNumber: purchaseController.text,
+                customerId: customerInvoicingViewModel.customerData?.id ?? '',
+            );
+            widget.onNext();
+          },
+          context: context,
+        ),
       ),
     ).paddingSymmetric(horizontal: 16, vertical: 12);
   }

@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:zed_nano/app/app_initializer.dart';
+import 'package:zed_nano/models/get_business_info/BusinessInfoResponse.dart';
 import 'package:zed_nano/models/get_token_after_invite/GetTokenAfterInviteResponse.dart';
+import 'package:zed_nano/providers/business/BusinessProviders.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/services/business_setup_service.dart';
@@ -10,6 +12,9 @@ class WorkflowViewModel with ChangeNotifier {
   bool _showBusinessSetup = false;
 
   NanoSubscription? _billingPlan;
+
+  BusinessInfoData? _businessInfoData;
+  BusinessInfoData? get businessInfoData => _businessInfoData;
 
   bool get showBusinessSetup => _showBusinessSetup;
 
@@ -62,6 +67,10 @@ class WorkflowViewModel with ChangeNotifier {
             setWorkflowState(response.data?.workflowState);
             _billingPlan =
                 response.data?.businessBillingDetails?.nanoSubscription;
+
+            if (_businessInfoData == null) {
+              fetchBusinessProfile(context);
+            }
             logger.i('WorkflowViewModelShowBusinessSetup: ${_billingPlan?.toJson()}');
             notifyListeners();
           } else {
@@ -75,5 +84,40 @@ class WorkflowViewModel with ChangeNotifier {
     } catch (e) {
       logger.e('Error in skipSetup: $e');
     }
+  }
+
+
+  Future<void> fetchBusinessProfile(BuildContext context) async {
+    final businessId = getBusinessDetails(context)?.businessId;
+
+    final businessData = <String, dynamic>{
+      'businessId':businessId,
+    };
+    await context
+        .read<BusinessProviders>()
+        .getBusinessInfo(requestData:businessData,context: context)
+        .then((value) async {
+      if (value.isSuccess) {
+        _businessInfoData = value.data?.data;
+        await BusinessSetupService().updateBusinessInfoDetails(value?.data?.data);
+      } else {
+        showCustomToast(
+          value.message ?? 'Something went wrong',);
+      }
+    });
+  }
+
+
+  String getBusinessAddress() {
+    return _businessInfoData?.businessOwnerAddress ?? '';
+  }
+  String getBusinessEmail() {
+    return _businessInfoData?.businessOwnerEmail ?? '';
+  }
+  String getBusinessLogo() {
+    return _businessInfoData?.businessLogo ?? '';
+  }
+  String getBusinessPhone() {
+    return _businessInfoData?.businessOwnerPhone ?? '';
   }
 }

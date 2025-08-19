@@ -453,15 +453,11 @@ class BusinessRepo{
   }
 
   Future<ApiResponse> viewAllTransactions({
-    required int page ,
-    required int limit ,
-    required String searchValue ,
-    required String startDate ,
-    required String endDate ,
+    required Map<String, dynamic> params,
   }) async {
     try {
       final response =
-      await dioClient!.get('${AppConstants.viewAllTransactions}?page=$page&limit=$limit&search=$searchValue&startDate=$startDate&endDate=$endDate');
+      await dioClient!.get('${AppConstants.viewAllTransactions}', queryParameters: params);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -1134,7 +1130,7 @@ class BusinessRepo{
 
   Future<ApiResponse> deleteUserAccount({required Map<String, dynamic> requestData}) async {
     try {
-      final response = await dioClient!.delete(AppConstants.deleteUserAccount, data: requestData);
+      final response = await dioClient!.post(AppConstants.deleteUserAccount, data: requestData);
       return ApiResponse.withSuccess(response);
     } catch (e) {
       return ApiResponse.withError(ApiErrorHandler.handleError(e));

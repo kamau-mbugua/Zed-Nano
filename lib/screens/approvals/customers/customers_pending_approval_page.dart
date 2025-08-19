@@ -8,9 +8,11 @@ import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/approvals/itemBuilders/add_customers_approval_item_builders.dart';
 import 'package:zed_nano/screens/customers/details/customer_details_page.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
+import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/screens/widget/common/searchview.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
 import 'package:zed_nano/utils/pagination_controller.dart';
+import 'package:zed_nano/viewmodels/data_refresh_extensions.dart';
 
 class CustomersPendingApprovalPage extends StatefulWidget {
   const CustomersPendingApprovalPage({super.key});
@@ -72,6 +74,39 @@ class _CustomersPendingApprovalPageState extends State<CustomersPendingApprovalP
     });
   }
 
+  Future<void> activateCustomer(String customerNumber) async {
+    try {
+      final response =
+      await getBusinessProvider(context).activateCustomer(customerNumber: customerNumber!, context: context);
+
+      if (response.isSuccess) {
+        showCustomToast(response.message, isError: false);
+        context.dataRefresh.refreshCustomersAfterMajorOperation(operation: 'customers_updated');
+        _paginationController.refresh();
+      } else {
+        showCustomToast(response.message ?? 'Failed to load product details');
+      }
+    } catch (e) {
+      showCustomToast('Failed to load product details');
+    }
+  }
+  Future<void> suspendCustomer(String customerNumber) async {
+    try {
+      final response =
+      await getBusinessProvider(context).suspendCustomer(customerNumber: customerNumber!, context: context);
+
+      if (response.isSuccess) {
+        showCustomToast(response.message, isError: false);
+        _paginationController.refresh();
+
+      } else {
+        showCustomToast(response.message ?? 'Failed to load product details');
+      }
+    } catch (e) {
+      showCustomToast('Failed to load product details');
+    }
+  }
+
   @override
   void dispose() {
     _paginationController.dispose();
@@ -102,8 +137,12 @@ class _CustomersPendingApprovalPageState extends State<CustomersPendingApprovalP
                       itemBuilder: (context, item, index) {
                         return addCustomersApprovalItemBuilder(
                             item,
-                            onApprove:(){},
-                          onDecline:(){},
+                            onApprove:() async {
+                              await activateCustomer(item.id);
+                            },
+                          onDecline:() async {
+                            await suspendCustomer(item.id);
+                          },
                           onTap:(){
                             CustomerDetailsPage(customerID: item.id,).launch(context);
                           },

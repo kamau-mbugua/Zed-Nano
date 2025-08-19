@@ -35,6 +35,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
   // Track expanded sections
   final Map<String, bool> _isExpanded = {
     'Businesses': false,
+    'Users': false,
     'Inventory': false,
     'Stock Management': false,
     'Sales': false,
@@ -216,7 +217,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                           iconPath: businessesIcon,
                           children: [
                             _buildSubMenuItem(
-                              title: 'My Businesses',
+                              title: 'My Business',
                               onTap: () => _navigateTo(context,
                                   AppRoutes.getBusinessProfileScreenRoute(),),
                             ),
@@ -233,7 +234,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                           iconPath: businessesIcon,
                           children: [
                             _buildSubMenuItem(
-                              title: 'My Businesses',
+                              title: 'My Business',
                               onTap: () => _navigateTo(context,
                                   AppRoutes.getBusinessProfileScreenRoute(),),
                             ),
@@ -266,12 +267,29 @@ class _CustomDrawerState extends State<CustomDrawer> {
                           iconPath: businessesIcon,
                           children: [
                             _buildSubMenuItem(
-                              title: 'My Businesses',
+                              title: 'My Business',
                               onTap: () => _navigateTo(context,
                                   AppRoutes.getBusinessProfileScreenRoute(),),
                             ),
                           ],
                         ),
+
+                        _buildExpandableMenuItem(
+                          title: 'Users',
+                          iconPath: usersIcon,
+                          children: [
+                            _buildSubMenuItem(
+                              title: 'Users',
+                              onTap: () => const UsersMainList().launch(context),
+                            ),
+                            _buildSubMenuItem(
+                              title: 'Customers',
+                              onTap: () =>
+                                  const CustomersListPage().launch(context),
+                            ),
+                          ],
+                        ),
+
                         _buildExpandableMenuItem(
                           title: 'Inventory',
                           iconPath: inventoryIcon,
@@ -326,11 +344,11 @@ class _CustomDrawerState extends State<CustomDrawer> {
                           title: 'Sales',
                           iconPath: salesSideMenuIcon,
                           children: [
-                            _buildSubMenuItem(
-                              title: 'Customers',
-                              onTap: () =>
-                                  const CustomersListPage().launch(context),
-                            ),
+                            // _buildSubMenuItem(
+                            //   title: 'Customers',
+                            //   onTap: () =>
+                            //       const CustomersListPage().launch(context),
+                            // ),
                             _buildSubMenuItem(
                               title: 'Invoices',
                               onTap: () =>
@@ -346,16 +364,13 @@ class _CustomDrawerState extends State<CustomDrawer> {
                             ),
                           ],
                         ),
+
+
                         _buildMenuItem(
                           title: 'Payment',
                           iconPath: paymentSetupIcon,
                           onTap: () => const AddPaymentMethodScreen(isWorkFlow: false)
                               .launch(context),
-                        ),
-                        _buildMenuItem(
-                          title: 'Users',
-                          iconPath: usersIcon,
-                          onTap: () => const UsersMainList().launch(context),
                         ),
                         _buildMenuItem(
                           title: 'Approvals',
@@ -440,6 +455,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
           ),
           onTap: () {
             setState(() {
+              // Close all other expanded items first
+              _isExpanded.updateAll((key, value) => false);
+              // Then toggle the current item
               _isExpanded[title] = !(_isExpanded[title] ?? false);
             });
           },

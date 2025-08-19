@@ -136,6 +136,15 @@ Widget addStockBuildProductItem({
 
                   ),
               ),
+              Text('+$quantity',
+                  style: const TextStyle(
+                    fontFamily: 'Poppins',
+                    color: successTextColor,
+                    fontSize: 11,
+                    fontWeight: FontWeight.w600,
+                    fontStyle: FontStyle.normal,
+                  )
+              )
             ],
           ),
         ],

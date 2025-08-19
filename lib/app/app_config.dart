@@ -12,8 +12,7 @@ class AppConfig {
   static String get baseUrl {
     switch (_flavor) {
       case Flavor.production:
-        // return 'https://api.portal.zed.business/';
-        return 'https://api.dev.zed.business/';
+        return 'https://api.portal.zed.business/';
       case Flavor.staging:
         return 'https://zed.api.swerri.io/';
       case Flavor.development:
@@ -35,8 +34,7 @@ class AppConfig {
   static String get domainName {
     switch (_flavor) {
       case Flavor.production:
-        // return 'api.portal.zed.business';
-        return 'api.dev.zed.business';
+        return 'api.portal.zed.business';
       case Flavor.staging:
         return 'zed.api.swerri.io';
       case Flavor.development:

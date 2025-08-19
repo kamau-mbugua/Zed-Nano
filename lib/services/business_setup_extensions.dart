@@ -22,10 +22,15 @@ extension BusinessSetupContext on BuildContext {
 
   /// Get business currency
   String get businessCurrency => businessSetup.getBusinessCurrency();
-  
+  String get businessName => businessSetup.getBusinessName();
+
   /// Get business category
   String get businessCategory => businessSetup.getBusinessCategory();
-  
+  // String get businessAddress => businessSetup.getBusinessAddress();
+  // String get businessEmail => businessSetup.getBusinessEmail();
+  // String get businessLogo => businessSetup.getBusinessLogo();
+  // String get businessPhone => businessSetup.getBusinessPhone();
+
   /// Get setup completion percentage
   double get setupCompletionPercentage => businessSetup.getSetupCompletionPercentage();
   

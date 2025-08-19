@@ -185,16 +185,16 @@ class _SellPageState extends State<SellPage> {
   Widget _createBottomNavBar(CartViewModel cartViewModel) {
     final selectedItems = cartViewModel.itemCount;
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 12),
       decoration: BoxDecoration(
         color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, -5),
-          ),
-        ],
+        // boxShadow: [
+        //   BoxShadow(
+        //     color: Colors.black.withOpacity(0.05),
+        //     blurRadius: 10,
+        //     offset: const Offset(0, -5),
+        //   ),
+        // ],
       ),
       child: SafeArea(
         child: Row(

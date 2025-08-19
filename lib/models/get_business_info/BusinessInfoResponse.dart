@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import 'package:shared_preferences/shared_preferences.dart';
+
 class BusinessInfoResponse {
 
   BusinessInfoResponse({
@@ -116,7 +120,7 @@ class NanoBusinessSubscription {
       isFreeTrialTried: json['isFreeTrialTried'] as bool?,
       isFreeTrialEnded: json['isFreeTrialEnded'] as bool?,
       isActiveBillingPackage: json['isActiveBillingPackage'] as bool?,
-      freeTrialPeriodRemainingdays: json['freeTrialPeriodRemainingdays'] as int?,
+      freeTrialPeriodRemainingdays: json['freeTrialPeriodRemainingdays'] as String?,
     );
   }
   final List<NanoSubscriptionData>? data;
@@ -126,7 +130,7 @@ class NanoBusinessSubscription {
   final bool? isFreeTrialTried;
   final bool? isFreeTrialEnded;
   final bool? isActiveBillingPackage;
-  final int? freeTrialPeriodRemainingdays;
+  final String? freeTrialPeriodRemainingdays;
 
   Map<String, dynamic> toJson() {
     return {
@@ -924,5 +928,28 @@ class BusinessInfoData {
       'sessionTimeout': sessionTimeout,
       'businessBillingDetails': businessBillingDetails?.toJson(),
     };
+  }
+
+  String get json => jsonEncode(toJson());
+
+
+  static Future<void> saveToSharedPreferences(BusinessInfoData details) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('businessInfoData', details.json);
+  }
+
+  static Future<BusinessInfoData?> loadFromSharedPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    final jsonString = prefs.getString('businessInfoData');
+    return jsonString != null ? BusinessInfoData.fromJsonString(jsonString) : null;
+  }
+
+  static BusinessInfoData? fromJsonString(String jsonString) {
+    try {
+      final json = jsonDecode(jsonString) as Map<String, dynamic>;
+      return BusinessInfoData.fromJson(json);
+    } catch (e) {
+      return null;
+    }
   }
 }

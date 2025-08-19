@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:provider/provider.dart';
 import 'package:zed_nano/screens/reports/all_transactions/all_t_ranasctions_page.dart';
 import 'package:zed_nano/screens/reports/opening_closing_report/opening_closing_report_page.dart';
 import 'package:zed_nano/screens/reports/sales_by_day/sales_report_by_day_page.dart';
@@ -9,6 +10,7 @@ import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Images.dart';
+import 'package:zed_nano/viewmodels/WorkflowViewModel.dart';
 
 class ReportPage extends StatefulWidget {
   ReportPage({super.key, this.isShowAppBar = false});
@@ -22,7 +24,7 @@ class _ReportPageState extends State<ReportPage> {
   // Define report types with their properties
   final List<ReportType> reportTypes = const [
     ReportType(
-      icon: salesReportIcon,
+      icon: totalSalesIcon,
       iconColor: successTextColor,
       title: 'Sales Report',
       description: 'Comprehensive overview of sales performance, products sold and margins.',
@@ -46,12 +48,22 @@ class _ReportPageState extends State<ReportPage> {
       description: 'Complete payment history with payment methods, customers and amount.',
     ),
     ReportType(
-      icon: salesReportIcon,
+      icon: voidedTransactionsIcon,
       iconColor: googleRed,
       title: 'Void Transactions Report',
       description: 'Track cancelled transactions with reasons and authorization.',
     ),
   ];
+  @override
+  void initState() {
+    final viewModel = Provider.of<WorkflowViewModel>(context, listen: false);
+    if (viewModel.businessInfoData == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        viewModel.fetchBusinessProfile(context);
+      });
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -152,7 +164,7 @@ class _ReportPageState extends State<ReportPage> {
                 height: 48,
                 decoration: BoxDecoration(
                   color: reportType.iconColor.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(12),
+                  shape: BoxShape.circle,
                 ),
                 child: Center(
                   child: rfCommonCachedNetworkImage(

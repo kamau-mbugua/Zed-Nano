@@ -198,7 +198,7 @@ class _AddStockPreviewPageState extends State<AddStockPreviewPage> {
                                 MaterialPageRoute(builder: (context) => const AddStockApprovalPage()),
                               );
                             });
-                          });
+                          }, context: context);
                         }else{
                           showCustomToast(value.message);
                         }

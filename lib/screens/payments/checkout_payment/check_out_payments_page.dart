@@ -469,6 +469,8 @@ class _CheckOutPaymentsPageState extends State<CheckOutPaymentsPage> {
                   });
                 }
               });
+            }else{
+              showCustomToast('Please select a payment method');
             }
 
           },

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:nb_utils/nb_utils.dart';
+import 'package:nb_utils/nb_utils.dart' hide navigatorKey;
 import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
+import 'package:zed_nano/screens/approvals/customers/customers_pending_approval_page.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/auth/input_fields.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
@@ -61,9 +62,14 @@ class _AddCustomersState extends State<AddCustomers> {
         context: context,)
         .then((value) {
       if (value.isSuccess) {
-        showCustomToast(value.message ?? 'Customer created successfully',
-            isError: false,);
         Navigator.pop(context);
+        showCustomToast(value.message ?? 'Customer created successfully', isError: false, actionText: 'Approve', onPressed: (){
+          Future.delayed(const Duration(milliseconds: 500), () {
+            navigatorKey.currentState?.push(
+              MaterialPageRoute(builder: (context) => const CustomersPendingApprovalPage()),
+            );
+          });
+        }, context: context);
       } else {
         showCustomToast(value.message ?? 'Something went wrong');
       }
@@ -110,59 +116,61 @@ class _AddCustomersState extends State<AddCustomers> {
           ),
         ],
       ),
-      child: appButton(
-        text: 'Add Customer',
-        onTap: () {
-          final selectedCustomer = customerTypes.firstWhere((element) => element == selectedCustomerType);
-          final firstName = firstNameController.text;
-          var lastName = lastNameController.text;
-          final email = emailController.text;
-          var phone = phoneController.text;
-          final location = locationController.text;
-
-          if(selectedCustomerType == 'Company'){
-            lastName = '.';
-          }
-
-          if(!firstName.isValidInput){
-            return showCustomToast('Please enter first name');
-          }
-          if(!lastName.isValidInput){
-            return showCustomToast('Please enter last name');
-          }
-          if(!email.isValidEmail){
-            return showCustomToast('Please enter valid email');
-          }
-          if(!phone.isValidPhoneNumber){
-            return showCustomToast('Please enter valid phone number');
-          }
-          if(!location.isValidInput){
-            return showCustomToast('Please enter location');
-          }
-
-          final phoneNumber = phoneController.text;
-          final countryCode = codeController.text;
-          phone = '$countryCode$phoneNumber';
-
-          final requestData = {
-            'firstName': firstName,
-            'lastName': lastName,
-            'email': email,
-            'phone': phone,
-            'customerAddress': location,
-            'customerType': selectedCustomer,
-            'paymentType': 'Normal',
-            'serialVersionUID':'2576532132122260222L',
-          };
-
-          logger.d(requestData);
-
-          _createCustomer(requestData);
-
-
-
-        },
-        context: context,
+      child: SafeArea(
+        child: appButton(
+          text: 'Add Customer',
+          onTap: () {
+            final selectedCustomer = customerTypes.firstWhere((element) => element == selectedCustomerType);
+            final firstName = firstNameController.text;
+            var lastName = lastNameController.text;
+            final email = emailController.text;
+            var phone = phoneController.text;
+            final location = locationController.text;
+        
+            if(selectedCustomerType == 'Company'){
+              lastName = '.';
+            }
+        
+            if(!firstName.isValidInput){
+              return showCustomToast('Please enter first name');
+            }
+            if(!lastName.isValidInput){
+              return showCustomToast('Please enter last name');
+            }
+            if(!email.isValidEmail){
+              return showCustomToast('Please enter valid email');
+            }
+            if(!phone.isValidPhoneNumber){
+              return showCustomToast('Please enter valid phone number');
+            }
+            if(!location.isValidInput){
+              return showCustomToast('Please enter location');
+            }
+        
+            final phoneNumber = phoneController.text;
+            final countryCode = codeController.text;
+            phone = '$countryCode$phoneNumber';
+        
+            final requestData = {
+              'firstName': firstName,
+              'lastName': lastName,
+              'email': email,
+              'phone': phone,
+              'customerAddress': location,
+              'customerType': selectedCustomer,
+              'paymentType': 'Normal',
+              'serialVersionUID':'2576532132122260222L',
+            };
+        
+            logger.d(requestData);
+        
+            _createCustomer(requestData);
+        
+        
+        
+          },
+          context: context,
+        ),
       ),
     ).paddingSymmetric(horizontal: 16, vertical: 12);
   }

@@ -123,189 +123,192 @@ class _AddStockProductBottomSheetState
         ),
       )
           : null,
-      bodyContent: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 16),
-                    Text(product.productName ?? '',
-                        style: const TextStyle(
-                          fontFamily: 'Poppins',
-                          color: textPrimary,
-                          fontSize: 28,
-                          fontWeight: FontWeight.w600,
-                          fontStyle: FontStyle.normal,
-                        ),
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          '${product.productCategory}',
-                          style: TextStyle(
-                            fontSize: 12,
+      bodyContent: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 16),
+                      Text(product.productName ?? '',
+                          style: const TextStyle(
                             fontFamily: 'Poppins',
-                            color: Colors.grey.shade500,
+                            color: textPrimary,
+                            fontSize: 28,
+                            fontWeight: FontWeight.w600,
+                            fontStyle: FontStyle.normal,
                           ),
-                        ),
-                        Text(
-                          ' · ',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontFamily: 'Poppins',
-                            color: Colors.grey.shade500,
-                          ),
-                        ),
-                        Text(statusText,
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            '${product.productCategory}',
                             style: TextStyle(
+                              fontSize: 12,
                               fontFamily: 'Poppins',
-                              color: statusColor,
-                              fontSize: 10,
-                              fontWeight: FontWeight.w600,
-                              fontStyle: FontStyle.normal,
+                              color: Colors.grey.shade500,
                             ),
-                        ),
-                      ],
-                    ),
-                  ],
+                          ),
+                          Text(
+                            ' · ',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontFamily: 'Poppins',
+                              color: Colors.grey.shade500,
+                            ),
+                          ),
+                          Text(statusText,
+                              style: TextStyle(
+                                fontFamily: 'Poppins',
+                                color: statusColor,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w600,
+                                fontStyle: FontStyle.normal,
+                              ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                rfCommonCachedNetworkImage(
+                  product.imagePath ?? '',
+                  fit: BoxFit.cover,
+                  height: 42,
+                  width: 42,
+                ),
+              ],
+            ),
+            16.height,
+            const Text(
+              'Stock Received',
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                fontFamily: 'Poppins',
+                color: Color(0xFF484848),
+              ),
+            ),
+            const SizedBox(height: 8),
+            StyledTextField(
+              textFieldType: TextFieldType.NUMBER,
+              hintText: '0',
+              focusNode: stockReceivedFocusNode,
+              nextFocus: buyingPriceFocusNode,
+              controller: stockReceivedController,
+              onChanged: onStockReceivedChanged,
+            ),
+            10.height,
+            const Text(
+              'Buying Price',
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                fontFamily: 'Poppins',
+                color: Color(0xFF484848),
+              ),
+            ),
+            const SizedBox(height: 8),
+            StyledTextField(
+              textFieldType: TextFieldType.NUMBER,
+              hintText: '',
+              prefixText: product.currency ?? 'KES',
+              focusNode: buyingPriceFocusNode,
+              nextFocus: sellingPriceFocusNode,
+              controller: buyingPriceController,
+            ),
+            10.height,
+            const Text(
+              'Selling Price',
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                fontFamily: 'Poppins',
+                color: Color(0xFF484848),
+              ),
+            ),
+            const SizedBox(height: 8),
+            StyledTextField(
+              textFieldType: TextFieldType.NUMBER,
+              hintText: '',
+              prefixText: product.currency ?? 'KES',
+              focusNode: sellingPriceFocusNode,
+              controller: sellingPriceController,
+            ),
+            16.height,
+            Container(
+              margin: const EdgeInsets.only(bottom: 8),
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: lightGreenColor,
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(
+                  color:successTextColor,
                 ),
               ),
-              rfCommonCachedNetworkImage(
-                product.imagePath ?? '',
-                fit: BoxFit.cover,
-                height: 42,
-                width: 42,
-              ),
-            ],
-          ),
-          16.height,
-          const Text(
-            'Stock Received',
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
-              fontFamily: 'Poppins',
-              color: Color(0xFF484848),
-            ),
-          ),
-          const SizedBox(height: 8),
-          StyledTextField(
-            textFieldType: TextFieldType.NUMBER,
-            hintText: '0',
-            focusNode: stockReceivedFocusNode,
-            nextFocus: buyingPriceFocusNode,
-            controller: stockReceivedController,
-            onChanged: onStockReceivedChanged,
-          ),
-          10.height,
-          const Text(
-            'Buying Price',
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
-              fontFamily: 'Poppins',
-              color: Color(0xFF484848),
-            ),
-          ),
-          const SizedBox(height: 8),
-          StyledTextField(
-            textFieldType: TextFieldType.NUMBER,
-            hintText: '',
-            prefixText: product.currency ?? 'KES',
-            focusNode: buyingPriceFocusNode,
-            nextFocus: sellingPriceFocusNode,
-            controller: buyingPriceController,
-          ),
-          10.height,
-          const Text(
-            'Selling Price',
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
-              fontFamily: 'Poppins',
-              color: Color(0xFF484848),
-            ),
-          ),
-          const SizedBox(height: 8),
-          StyledTextField(
-            textFieldType: TextFieldType.NUMBER,
-            hintText: '',
-            prefixText: product.currency ?? 'KES',
-            focusNode: sellingPriceFocusNode,
-            controller: sellingPriceController,
-          ),
-          16.height,
-          Container(
-            margin: const EdgeInsets.only(bottom: 8),
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: lightGreenColor,
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                color:successTextColor,
+              child: Text('New Stock: $totalStock',
+                  style: const TextStyle(
+                    fontFamily: 'Poppins',
+                    color: successTextColor,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    fontStyle: FontStyle.normal,
+                  ),
               ),
             ),
-            child: Text('New Stock: $totalStock',
-                style: const TextStyle(
-                  fontFamily: 'Poppins',
-                  color: successTextColor,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  fontStyle: FontStyle.normal,
+            16.height,
+            Row(
+              children: [
+                Expanded(
+                  child: outlineButton(
+                    text: 'Cancel',
+                    onTap: () => Navigator.pop(context),
+                    context: context,
+                    borderColor: googleRed,
+                    textColor: googleRed,
+                  ),
                 ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: appButton(
+                    text: 'Add',
+                    onTap: () {
+                      final receivedStock = stockReceivedController.text;
+                      if (!receivedStock.isValidInput) {
+                        showCustomToast(
+                          'Please enter valid Stock Received',);
+                        return;
+                      }
+
+
+                      final buyingPrice = buyingPriceController.text;
+                      if (!buyingPrice.isValidInput) {
+                        showCustomToast(
+                          'Please enter valid Buying Price',);
+                        return;
+                      }
+
+                      final sellingPrice = sellingPriceController.text;
+                      if (!sellingPrice.isValidInput) {
+                        showCustomToast(
+                          'Please enter valid Selling Price',);
+                        return;
+                      }
+
+                      onAddStockTap(product, receivedStock, buyingPrice, sellingPrice);
+                    },
+                    context: context,
+                  ),
+                ),
+              ],
             ),
-          ),
-          16.height,
-          Row(
-            children: [
-              Expanded(
-                child: outlineButton(
-                  text: 'Cancel', 
-                  onTap: () => Navigator.pop(context), 
-                  context: context, 
-                  borderColor: googleRed, 
-                  textColor: googleRed,
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: appButton(
-                  text: 'Add', 
-                  onTap: () {
-                    final receivedStock = stockReceivedController.text;
-                    if (!receivedStock.isValidInput) {
-                      showCustomToast(
-                        'Please enter valid Stock Received',);
-                      return;
-                    }
-
-
-                    final buyingPrice = buyingPriceController.text;
-                    if (!buyingPrice.isValidInput) {
-                      showCustomToast(
-                        'Please enter valid Buying Price',);
-                      return;
-                    }
-
-                    final sellingPrice = sellingPriceController.text;
-                    if (!sellingPrice.isValidInput) {
-                      showCustomToast(
-                        'Please enter valid Selling Price',);
-                      return;
-                    }
-
-                    onAddStockTap(product, receivedStock, buyingPrice, sellingPrice);
-                  }, 
-                  context: context,
-                ),
-              ),
-            ],
-          ),
-        ],
+            20.height
+          ],
+        ),
       ),
     );
   }

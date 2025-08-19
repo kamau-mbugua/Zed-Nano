@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:nb_utils/nb_utils.dart';
+import 'package:nb_utils/nb_utils.dart'hide navigatorKey;
 import 'package:provider/provider.dart';
-import 'package:zed_nano/app/app_initializer.dart' hide navigatorKey;
+import 'package:zed_nano/app/app_initializer.dart' ;
 import 'package:zed_nano/providers/cart/CartViewModel.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/invoices/detail/invoice_detail_page.dart';
@@ -107,6 +107,9 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
           widget.onNext();
         }
         if (createOrderOption == CreateOrderOption.moreOptions) {
+
+
+
           BottomSheetHelper.showPrintingOptionsBottomSheet(context, printOrderInvoiceId: value.data?.data?.id).then((value) async {
             await triggerRefreshEvent();
             widget.skipAndClose();
@@ -116,13 +119,13 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
       } else {
 
         if (value.message?.contains('stock') == true) {
-          showCustomToast(value.message, isError: true, actionText: 'Ad Stock?', onPressed: (){
+          showCustomToast("${value.message?.extractProductName} Out of stock", isError: true, actionText: 'Add Stock', onPressed: (){
             Future.delayed(const Duration(milliseconds: 500), () {
               navigatorKey.currentState?.push(
                 MaterialPageRoute(builder: (context) => const AddStockParentPage()),
               );
             });
-          });
+          }, context: context);
         }else{
           showCustomToast(value.message ?? 'Something went wrong');
         }
@@ -196,17 +199,33 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar:_buildAppBar(customerInvoicingViewModel),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _cartHeader(cartViewModel, customerInvoicingViewModel),
-          16.height,
-          Expanded(
-            child: _cartListing(cartViewModel),
-          ),
-          _createNarationView(cartViewModel, customerInvoicingViewModel),
-          _createSummaryView(cartViewModel),
-        ],
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Fixed header section
+              _cartHeader(cartViewModel, customerInvoicingViewModel),
+              // const SizedBox(height: 12),
+              
+              // Flexible content section
+              Expanded(
+                child: Column(
+                  children: [
+                    // Scrollable cart items
+                    Expanded(
+                      child: _cartListing(cartViewModel),
+                    ),
+                    
+                    // Fixed bottom sections
+                    _createNarationView(cartViewModel, customerInvoicingViewModel),
+                    _createSummaryView(cartViewModel),
+                  ],
+                ),
+              ),
+            ],
+          );
+        },
       ),
       bottomNavigationBar: _buildSubmitButton(cartViewModel, customerInvoicingViewModel),
     );
@@ -330,15 +349,12 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
         child: Row(
           children: [
             Expanded(
-              flex: 3,
-              child: Visibility(
-                child: appButton(
-                  text:'Send Invoice',
-                  onTap: () async {
-                    await _sendInvoice();
-                  },
-                  context: context,
-                ),
+              child: appButton(
+                text:'Send Invoice',
+                onTap: () async {
+                  await _sendInvoice();
+                },
+                context: context,
               ),
             ),
           ],
@@ -346,46 +362,39 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
       ),
     )
      : Container(
-      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 7),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
       decoration: BoxDecoration(
         color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, -5),
-          ),
-        ],
+        // boxShadow: [
+        //   BoxShadow(
+        //     color: Colors.black.withOpacity(0.05),
+        //     blurRadius: 10,
+        //     offset: const Offset(0, -5),
+        //   ),
+        // ],
       ),
       child: SafeArea(
         child: Row(
           children: [
             Expanded(
               flex: 3,
-              child: Visibility(
-                child: outlineButton(
-                  text:'Save Order',
-                  onTap: () async {
-                    await saveOrder(CreateOrderOption.saveOrder);
-
-                  },
-                  context: context,
-                ),
+              child: outlineButton(
+                text:'Save Order',
+                onTap: () async {
+                  await saveOrder(CreateOrderOption.saveOrder);
+                },
+                context: context,
               ),
             ),
             const SizedBox(width: 4),
             Expanded(
-              flex: 5,
-              child: Visibility(
-                child: appButton(
-                  text:'Request Payment',
-                  onTap: () async {
-                    await saveOrder(CreateOrderOption.requestPayment);
-
-
-                  },
-                  context: context,
-                ),
+              flex: 4,
+              child: appButton(
+                text:'Request Payment',
+                onTap: () async {
+                  await saveOrder(CreateOrderOption.requestPayment);
+                },
+                context: context,
               ),
             ),
             const SizedBox(width: 4),
@@ -397,7 +406,6 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
                 context: context,
                 onTap: () async {
                   await saveOrder(CreateOrderOption.moreOptions);
-                  // BottomSheetHelper.showPrintingOptionsBottomSheet(context, printOrderInvoiceId: orderDetail?.id);
                 },
               ),
             ),
@@ -476,7 +484,7 @@ class _CartPreviewPageState extends State<CartPreviewPage> {
     return  Visibility(
       visible: customerInvoicingViewModel.customerData == null,
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

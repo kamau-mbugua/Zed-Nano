@@ -267,12 +267,14 @@ class _AddPaymentMethodScreenState extends State<AddPaymentMethodScreen> {
             ),
             const SizedBox(height: 10),
             if(widget.isWorkFlow)
-            appButton(text: 'Complete', onTap: () {
-              final requestData = <String, dynamic>{
-                'workflowState': 'COMPLETE',
-              };
-              _updateBusinessSetupStatus(requestData);
-            }, context: context,),
+            SafeArea(
+              child: appButton(text: 'Complete', onTap: () {
+                final requestData = <String, dynamic>{
+                  'workflowState': 'COMPLETE',
+                };
+                _updateBusinessSetupStatus(requestData);
+              }, context: context,),
+            ),
             const SizedBox(height: 16),
 
           ],

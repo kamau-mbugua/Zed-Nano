@@ -50,7 +50,8 @@ class _HomeMainPageState extends State<HomeMainPage> {
     try {
       // Add any refresh logic here in the future
       await Future.delayed(
-          const Duration(seconds: 1),); // Simulate a network call
+        const Duration(seconds: 1),
+      ); // Simulate a network call
     } catch (e) {
       // Handle any errors
     }
@@ -145,12 +146,32 @@ class _HomeMainPageState extends State<HomeMainPage> {
       builder: (context, workflowViewModel, _) {
         // Debug logging
         logger.i(
-            'HomeMainPage - WorkflowViewModel.showBusinessSetup: ${workflowViewModel.showBusinessSetup}',);
+          'HomeMainPage - WorkflowViewModel.showBusinessSetup: ${workflowViewModel.showBusinessSetup}',
+        );
 
         // Show business setup screen if required
         if (workflowViewModel.showBusinessSetup) {
           logger.i('HomeMainPage - Showing WelcomeSetupScreen');
           return const WelcomeSetupScreen();
+        }
+
+        var sgowFloatingAction = false;
+
+        if ((selectedIndex == 0 || selectedIndex == 2) &&
+            workflowViewModel.workflowState == 'COMPLETE') {
+          // setState(() {
+            sgowFloatingAction = true;
+          // });
+        } else if ((context.businessUserRole?.toLowerCase() == 'cashier' ||
+                context.businessUserRole?.toLowerCase() == 'supervisor') &&
+            workflowViewModel.workflowState == 'COMPLETE') {
+          // setState(() {
+            sgowFloatingAction = true;
+          // });
+        } else {
+          // setState(() {
+            sgowFloatingAction = false;
+          // });
         }
 
         // Show main app interface
@@ -175,10 +196,25 @@ class _HomeMainPageState extends State<HomeMainPage> {
             ),
           ),
           bottomNavigationBar: workflowViewModel.workflowState == 'COMPLETE'
-              ? _buildBottomNavigationBar()
+              ? Container(
+                  decoration: BoxDecoration(
+                    color: colorBackground,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 8,
+                        offset: const Offset(0, -2),
+                      ),
+                    ],
+                  ),
+                  child: SafeArea(
+                    child: _buildBottomNavigationBar(),
+                  ),
+                )
               : null,
-          floatingActionButton: (selectedIndex == 0 || selectedIndex == 2) &&
-                  workflowViewModel.workflowState == 'COMPLETE'
+          floatingActionButton: /*(selectedIndex == 0 || selectedIndex == 2) &&
+                  workflowViewModel.workflowState == 'COMPLETE'*/
+          sgowFloatingAction
               ? FloatingActionButton.extended(
                   heroTag: 'home_main_fab',
                   onPressed: () async {
