@@ -45,4 +45,8 @@ extension DataRefreshHelpers on DataRefreshViewModel {
   void refreshInventoryAfterMajorOperation({String? operation}) {
     refreshInventory(customEvent: operation != null ? 'major_$operation' : 'major_operation');
   }
+
+  void refreshCustomersAfterMajorOperation({String? operation}) {
+    refreshCustomers(customEvent: operation != null ? 'major_$operation' : 'major_operation');
+  }
 }

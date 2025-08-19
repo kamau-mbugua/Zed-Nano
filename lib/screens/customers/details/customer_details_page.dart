@@ -12,6 +12,7 @@ import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Images.dart';
 import 'package:zed_nano/utils/extensions.dart';
+import 'package:zed_nano/viewmodels/data_refresh_extensions.dart';
 
 class CustomerDetailsPage extends StatefulWidget {
   CustomerDetailsPage({super.key, this.customerID});
@@ -58,6 +59,7 @@ class _CustomerDetailsPageState extends State<CustomerDetailsPage> {
 
       if (response.isSuccess) {
         showCustomToast(response.message, isError: false);
+        context.dataRefresh.refreshCustomersAfterMajorOperation(operation: 'customers_updated');
         await getCustomerByNumber();
 
       } else {

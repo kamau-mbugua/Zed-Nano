@@ -35,10 +35,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
   // Track expanded sections
   final Map<String, bool> _isExpanded = {
     'Businesses': false,
+    'Users': false,
     'Inventory': false,
     'Stock Management': false,
     'Sales': false,
-    'Users': false,
   };
 
   @override
@@ -273,6 +273,23 @@ class _CustomDrawerState extends State<CustomDrawer> {
                             ),
                           ],
                         ),
+
+                        _buildExpandableMenuItem(
+                          title: 'Users',
+                          iconPath: usersIcon,
+                          children: [
+                            _buildSubMenuItem(
+                              title: 'Users',
+                              onTap: () => const UsersMainList().launch(context),
+                            ),
+                            _buildSubMenuItem(
+                              title: 'Customers',
+                              onTap: () =>
+                                  const CustomersListPage().launch(context),
+                            ),
+                          ],
+                        ),
+
                         _buildExpandableMenuItem(
                           title: 'Inventory',
                           iconPath: inventoryIcon,
@@ -348,21 +365,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                           ],
                         ),
 
-                        _buildExpandableMenuItem(
-                          title: 'Users',
-                          iconPath: usersIcon,
-                          children: [
-                            _buildSubMenuItem(
-                              title: 'Business Users',
-                              onTap: () => const UsersMainList().launch(context),
-                            ),
-                            _buildSubMenuItem(
-                              title: 'Business Customers',
-                              onTap: () =>
-                                  const CustomersListPage().launch(context),
-                            ),
-                          ],
-                        ),
+
                         _buildMenuItem(
                           title: 'Payment',
                           iconPath: paymentSetupIcon,
@@ -452,6 +455,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
           ),
           onTap: () {
             setState(() {
+              // Close all other expanded items first
+              _isExpanded.updateAll((key, value) => false);
+              // Then toggle the current item
               _isExpanded[title] = !(_isExpanded[title] ?? false);
             });
           },

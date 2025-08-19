@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:zed_nano/app/app_config.dart';
 import 'package:zed_nano/routes/routes.dart';
 import 'package:zed_nano/routes/routes_helper.dart';
@@ -37,6 +38,7 @@ class _AppState extends State<App> {
             seedColor: appThemePrimary,
             surfaceTint: Colors.transparent,   // disables tint everywhere
           ),
+          fontFamily: GoogleFonts.poppins().fontFamily,
         ),
         // localizationsDelegates: AppLocalizations.localizationsDelegates,
         // supportedLocales: AppLocalizations.supportedLocales,

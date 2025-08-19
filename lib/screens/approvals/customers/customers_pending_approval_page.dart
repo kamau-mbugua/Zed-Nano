@@ -12,6 +12,7 @@ import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/screens/widget/common/searchview.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
 import 'package:zed_nano/utils/pagination_controller.dart';
+import 'package:zed_nano/viewmodels/data_refresh_extensions.dart';
 
 class CustomersPendingApprovalPage extends StatefulWidget {
   const CustomersPendingApprovalPage({super.key});
@@ -80,6 +81,7 @@ class _CustomersPendingApprovalPageState extends State<CustomersPendingApprovalP
 
       if (response.isSuccess) {
         showCustomToast(response.message, isError: false);
+        context.dataRefresh.refreshCustomersAfterMajorOperation(operation: 'customers_updated');
         _paginationController.refresh();
       } else {
         showCustomToast(response.message ?? 'Failed to load product details');

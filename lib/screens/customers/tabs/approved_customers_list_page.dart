@@ -2,12 +2,14 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:provider/provider.dart';
 import 'package:zed_nano/models/customers_list/CustomerListResponse.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/customers/itemBuilder/list_customers_item_builder.dart';
 import 'package:zed_nano/screens/widget/common/searchview.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
 import 'package:zed_nano/utils/pagination_controller.dart';
+import 'package:zed_nano/viewmodels/DataRefreshViewModel.dart';
 
 class ApprovedCustomersListPage extends StatefulWidget {
   const ApprovedCustomersListPage({super.key});
@@ -78,41 +80,60 @@ class _ApprovedCustomersListPageState extends State<ApprovedCustomersListPage> {
   }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: RefreshIndicator(
-        onRefresh: () async {
-          await _paginationController.refresh();
-        },
-        child: Column(
-          children: [
-            buildSearchBar(
-              controller: _searchController,
-              onChanged: _debounceSearch,
-            ),
-            Expanded(
-              child: PagedListView<int, Customer>(
-                pagingController: _paginationController.pagingController,
-                padding: const EdgeInsets.all(16),
-                builderDelegate: PagedChildBuilderDelegate<Customer>(
-                  itemBuilder: (context, item, index) {
-                    return listCustomersItemBuilder(item);
-                  },
-                  firstPageProgressIndicatorBuilder: (_) => const SizedBox.shrink(),
-                  newPageProgressIndicatorBuilder: (_) => const SizedBox.shrink(),
-                  noItemsFoundIndicatorBuilder: (context) => const Center(
-                    child: CompactGifDisplayWidget(
-                      gifPath: emptyListGif,
-                      title: "It's empty, over here.",
-                      subtitle: 'No Customers in your business, yet! Add to view them here.',
+    return Consumer<DataRefreshViewModel>(
+        builder: (context, dataRefreshViewModel, child) {
+          var shouldRefresh = false;
+          // Check if data refresh is needed
+          if (dataRefreshViewModel.isRefreshing(DataRefreshType.customers) ) {
+            shouldRefresh = true;
+            Future.microtask(() {
+              dataRefreshViewModel.completeRefresh(DataRefreshType.customers);
+            });
+          }
+
+          // Only fetch data once if either condition is true
+          if (shouldRefresh) {
+            _paginationController.refresh();
+          }
+
+          return Scaffold(
+            backgroundColor: Colors.white,
+            body: RefreshIndicator(
+              onRefresh: () async {
+                await _paginationController.refresh();
+              },
+              child: Column(
+                children: [
+                  buildSearchBar(
+                    controller: _searchController,
+                    onChanged: _debounceSearch,
+                  ),
+                  Expanded(
+                    child: PagedListView<int, Customer>(
+                      pagingController: _paginationController.pagingController,
+                      padding: const EdgeInsets.all(16),
+                      builderDelegate: PagedChildBuilderDelegate<Customer>(
+                        itemBuilder: (context, item, index) {
+                          return listCustomersItemBuilder(item);
+                        },
+                        firstPageProgressIndicatorBuilder: (_) => const SizedBox.shrink(),
+                        newPageProgressIndicatorBuilder: (_) => const SizedBox.shrink(),
+                        noItemsFoundIndicatorBuilder: (context) => const Center(
+                          child: CompactGifDisplayWidget(
+                            gifPath: emptyListGif,
+                            title: "It's empty, over here.",
+                            subtitle: 'No Customers in your business, yet! Add to view them here.',
+                          ),
+                        ),
+                      ),
                     ),
                   ),
-                ),
+                ],
               ),
             ),
-          ],
-        ),
-      ),
+          );
+
+        }
     );
   }
 }

@@ -202,4 +202,9 @@ class DataRefreshViewModel with ChangeNotifier {
       DataRefreshType.categoryList,
     ], customEvent: customEvent);
   }
+  void refreshCustomers({String? customEvent}) {
+    triggerMultipleRefresh([
+      DataRefreshType.customers,
+    ], customEvent: customEvent);
+  }
 }
