@@ -369,6 +369,7 @@ class _EditBusinessPageState extends State<EditBusinessPage> {
                 Expanded(
                   flex: selectedCurrency != null ? 3 : 1,
                   child: CountryCurrencyPicker(
+                      initialCountry: selectedCountry,
                     onSelect: (countryName, currencyCode) {
                       setState(() {
                         selectedCountry = countryName;

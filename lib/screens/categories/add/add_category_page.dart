@@ -390,26 +390,40 @@ class _NewCategoryPageState extends State<NewCategoryPage> {
           ),
         ),
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(16),
-        child: appButton(
-            text: 'Add Category',
-            onTap: () async {
-              final categoryName = nameController.text.trim();
-              final categoryDescription = descriptionController.text.trim();
-              if (!categoryName.isValidInput) {
-                showCustomToast('Please enter category name');
-                return;
-              }
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: colorBackground,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 8,
+              offset: const Offset(0, -2),
+            ),
+          ],
+        ),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: appButton(
+                text: 'Add Category',
+                onTap: () async {
+                  final categoryName = nameController.text.trim();
+                  final categoryDescription = descriptionController.text.trim();
+                  if (!categoryName.isValidInput) {
+                    showCustomToast('Please enter category name');
+                    return;
+                  }
 
-              if (!categoryDescription.isValidInput) {
-                setState(() {
-                  descriptionController.text = 'No Category Description';
-                });
-              }
-              await _createCategory();
-            },
-            context: context,),
+                  if (!categoryDescription.isValidInput) {
+                    setState(() {
+                      descriptionController.text = 'No Category Description';
+                    });
+                  }
+                  await _createCategory();
+                },
+                context: context,),
+          ),
+        ),
       ),
     );
   }

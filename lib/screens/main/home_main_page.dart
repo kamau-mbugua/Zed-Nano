@@ -196,7 +196,21 @@ class _HomeMainPageState extends State<HomeMainPage> {
             ),
           ),
           bottomNavigationBar: workflowViewModel.workflowState == 'COMPLETE'
-              ? _buildBottomNavigationBar()
+              ? Container(
+                  decoration: BoxDecoration(
+                    color: colorBackground,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 8,
+                        offset: const Offset(0, -2),
+                      ),
+                    ],
+                  ),
+                  child: SafeArea(
+                    child: _buildBottomNavigationBar(),
+                  ),
+                )
               : null,
           floatingActionButton: /*(selectedIndex == 0 || selectedIndex == 2) &&
                   workflowViewModel.workflowState == 'COMPLETE'*/

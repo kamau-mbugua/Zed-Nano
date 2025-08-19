@@ -116,59 +116,61 @@ class _AddCustomersState extends State<AddCustomers> {
           ),
         ],
       ),
-      child: appButton(
-        text: 'Add Customer',
-        onTap: () {
-          final selectedCustomer = customerTypes.firstWhere((element) => element == selectedCustomerType);
-          final firstName = firstNameController.text;
-          var lastName = lastNameController.text;
-          final email = emailController.text;
-          var phone = phoneController.text;
-          final location = locationController.text;
-
-          if(selectedCustomerType == 'Company'){
-            lastName = '.';
-          }
-
-          if(!firstName.isValidInput){
-            return showCustomToast('Please enter first name');
-          }
-          if(!lastName.isValidInput){
-            return showCustomToast('Please enter last name');
-          }
-          if(!email.isValidEmail){
-            return showCustomToast('Please enter valid email');
-          }
-          if(!phone.isValidPhoneNumber){
-            return showCustomToast('Please enter valid phone number');
-          }
-          if(!location.isValidInput){
-            return showCustomToast('Please enter location');
-          }
-
-          final phoneNumber = phoneController.text;
-          final countryCode = codeController.text;
-          phone = '$countryCode$phoneNumber';
-
-          final requestData = {
-            'firstName': firstName,
-            'lastName': lastName,
-            'email': email,
-            'phone': phone,
-            'customerAddress': location,
-            'customerType': selectedCustomer,
-            'paymentType': 'Normal',
-            'serialVersionUID':'2576532132122260222L',
-          };
-
-          logger.d(requestData);
-
-          _createCustomer(requestData);
-
-
-
-        },
-        context: context,
+      child: SafeArea(
+        child: appButton(
+          text: 'Add Customer',
+          onTap: () {
+            final selectedCustomer = customerTypes.firstWhere((element) => element == selectedCustomerType);
+            final firstName = firstNameController.text;
+            var lastName = lastNameController.text;
+            final email = emailController.text;
+            var phone = phoneController.text;
+            final location = locationController.text;
+        
+            if(selectedCustomerType == 'Company'){
+              lastName = '.';
+            }
+        
+            if(!firstName.isValidInput){
+              return showCustomToast('Please enter first name');
+            }
+            if(!lastName.isValidInput){
+              return showCustomToast('Please enter last name');
+            }
+            if(!email.isValidEmail){
+              return showCustomToast('Please enter valid email');
+            }
+            if(!phone.isValidPhoneNumber){
+              return showCustomToast('Please enter valid phone number');
+            }
+            if(!location.isValidInput){
+              return showCustomToast('Please enter location');
+            }
+        
+            final phoneNumber = phoneController.text;
+            final countryCode = codeController.text;
+            phone = '$countryCode$phoneNumber';
+        
+            final requestData = {
+              'firstName': firstName,
+              'lastName': lastName,
+              'email': email,
+              'phone': phone,
+              'customerAddress': location,
+              'customerType': selectedCustomer,
+              'paymentType': 'Normal',
+              'serialVersionUID':'2576532132122260222L',
+            };
+        
+            logger.d(requestData);
+        
+            _createCustomer(requestData);
+        
+        
+        
+          },
+          context: context,
+        ),
       ),
     ).paddingSymmetric(horizontal: 16, vertical: 12);
   }

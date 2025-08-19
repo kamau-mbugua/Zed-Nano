@@ -1130,7 +1130,7 @@ class BusinessRepo{
 
   Future<ApiResponse> deleteUserAccount({required Map<String, dynamic> requestData}) async {
     try {
-      final response = await dioClient!.delete(AppConstants.deleteUserAccount, data: requestData);
+      final response = await dioClient!.post(AppConstants.deleteUserAccount, data: requestData);
       return ApiResponse.withSuccess(response);
     } catch (e) {
       return ApiResponse.withError(ApiErrorHandler.handleError(e));
