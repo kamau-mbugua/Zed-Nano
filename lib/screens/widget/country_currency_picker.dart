@@ -25,6 +25,7 @@ class _CountryCurrencyPickerState extends State<CountryCurrencyPicker> {
   @override
   void initState() {
     super.initState();
+    // Initialize with the provided initial country
     selectedCountry = widget.initialCountry;
   }
 
@@ -79,29 +80,17 @@ class _CountryCurrencyPickerState extends State<CountryCurrencyPicker> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                selectedCountry != null ? '$selectedCountry' : widget.hintText,
+                (selectedCountry != null && selectedCountry!.isNotEmpty) 
+                    ? selectedCountry! 
+                    : widget.hintText,
                 style: TextStyle(
                   fontFamily: 'Poppins', // Poppins font as per user preference
                   fontSize: 14,
-                  color: selectedCountry != null ? Colors.black : Colors.grey,
+                  color: (selectedCountry != null && selectedCountry!.isNotEmpty) 
+                      ? Colors.black 
+                      : Colors.grey,
                 ),
               ),
-              // if (selectedCurrency != null)
-              //   Container(
-              //     padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              //     decoration: BoxDecoration(
-              //       color: Colors.grey.shade200,
-              //       borderRadius: BorderRadius.circular(8),
-              //     ),
-              //     child: Text(
-              //       "",
-              //       style: TextStyle(
-              //         fontFamily: 'Poppins', // Poppins font as per user preference
-              //         fontSize: 12,
-              //         fontWeight: FontWeight.w600,
-              //       ),
-              //     ),
-              //   ),
               const Icon(Icons.arrow_drop_down, color: Colors.grey),
             ],
           ),

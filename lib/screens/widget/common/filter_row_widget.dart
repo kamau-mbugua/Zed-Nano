@@ -89,7 +89,7 @@ Widget buildFilterButton({
     onTap: onTap,
     borderRadius: BorderRadius.circular(16),
     child: Container(
-      height: 40,
+      height: 45,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
         color: Colors.white,

@@ -1,8 +1,10 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/app/app_initializer.dart' hide navigatorKey;
+import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/styles.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
@@ -34,14 +36,18 @@ void showCustomToast(String? message,
     BuildContext? context,
     VoidCallback? onDismissed}) {
   if (onPressed != null) {
-    showTopSnackBar(
-        Overlay.of(context!),
-        isError
-            ? MyCustomSnackBar.error(message: message!)
-            : MyCustomSnackBar.success(message: message!),
-        onTap: onPressed,
-        onDismissed: onDismissed);
+    showTappableToast(
+      context!,
+      message!,
+      actionText!,
+      isError: isError,
+      onTap: () {
+        onPressed();
+        onDismissed?.call();
+      },
+    );
   } else {
+    logger.d('showCustomToast message: $message');
     Fluttertoast.showToast(
       msg: message!,
       toastLength: Toast.LENGTH_LONG,
@@ -50,6 +56,80 @@ void showCustomToast(String? message,
       textColor: Colors.white,
     );
   }
+}
+
+void showTappableToast(BuildContext context, String message,String actionText, {bool isError = false, VoidCallback? onTap}) {
+  final overlay = Overlay.of(context);
+  late OverlayEntry overlayEntry;
+  bool isRemoved = false;
+
+  void safeRemove() {
+    if (!isRemoved && overlayEntry.mounted) {
+      try {
+        overlayEntry.remove();
+        isRemoved = true;
+      } catch (e) {
+        // Overlay already removed or disposed
+      }
+    }
+  }
+
+  overlayEntry = OverlayEntry(
+    builder: (context) => Positioned(
+      top: 60,
+      left: 20,
+      right: 20,
+      child: Material(
+        color: Colors.transparent,
+        child: GestureDetector(
+          onTap: () {
+            onTap?.call();
+            safeRemove();
+          },
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: isError ? Colors.red : Colors.green,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  message,
+                  style: const TextStyle(color: Colors.white),
+                ),
+
+                Container(
+                  margin: const EdgeInsets.only(),
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: appThemePrimary.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(actionText.toUpperCase() ?? 'N/A',
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      color: Colors.white,
+                      fontSize: 10,
+                      fontWeight: FontWeight.w600,
+                      fontStyle: FontStyle.normal,
+                    ),),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    ),
+  );
+
+  overlay.insert(overlayEntry);
+
+  // Auto-remove after 3 seconds
+  Timer(const Duration(seconds: 10), () {
+    safeRemove();
+  });
 }
 
 Widget showCustomSnackBarWidget(String? message,

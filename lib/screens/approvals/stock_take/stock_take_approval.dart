@@ -14,6 +14,7 @@ import 'package:zed_nano/screens/widget/common/searchview.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
 import 'package:zed_nano/utils/pagination_controller.dart';
+import 'package:zed_nano/viewmodels/data_refresh_extensions.dart';
 
 class StockTakeApproval extends StatefulWidget {
   const StockTakeApproval({super.key});
@@ -73,9 +74,12 @@ class _StockTakeApprovalState extends State<StockTakeApproval> {
         context: context,
       ).then((response) {
         if (response.isSuccess) {
-          _selectedItems.clear();
+          setState(() {
+            _selectedItems.clear();
+          });
           showCustomToast(response.message ?? 'Stock Take Approved Successfully', isError: false);
           _paginationController.refresh();
+          context.dataRefresh.refreshStockAfterMajorOperation(operation: 'stock_updated');
         } else {
           showCustomToast(response.message ?? 'Failed to approve stock take');
         }

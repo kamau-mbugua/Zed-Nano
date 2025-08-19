@@ -391,20 +391,31 @@ class _EditCategoryPageState extends State<EditCategoryPage> {
           ),
         ),
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(16),
-        child: appButton(
-            text: 'Edit Category',
-            onTap: () async {
-              final categoryName = nameController.text.trim();
-              final categoryDescription = descriptionController.text.trim();
-              if (!categoryName.isValidInput) {
-                showCustomToast('Please enter category name');
-                return;
-              }
-              await _createCategory();
-            },
-            context: context,),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: colorBackground,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 8,
+              offset: const Offset(0, -2),
+            ),
+          ],
+        ),
+        child: SafeArea(
+          child: appButton(
+              text: 'Edit Category',
+              onTap: () async {
+                final categoryName = nameController.text.trim();
+                final categoryDescription = descriptionController.text.trim();
+                if (!categoryName.isValidInput) {
+                  showCustomToast('Please enter category name');
+                  return;
+                }
+                await _createCategory();
+              },
+              context: context,),
+        ),
       ),
     );
   }

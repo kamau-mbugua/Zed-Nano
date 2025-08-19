@@ -5,10 +5,15 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/models/product_total_cost/ProductTotalCostResponse.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
+import 'package:zed_nano/screens/invoices/pdf_invoice_page.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
+import 'package:zed_nano/screens/widget/common/custom_extended_fab.dart';
 import 'package:zed_nano/screens/widget/common/date_range_filter_bottom_sheet.dart';
 import 'package:zed_nano/screens/widget/common/searchview.dart';
+import 'package:zed_nano/services/BusinessDetailsContextExtension.dart';
+import 'package:zed_nano/services/business_setup_extensions.dart';
+import 'package:zed_nano/services/pdfs/TotalCostOfGoodsReportService.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
 import 'package:zed_nano/utils/Images.dart';
@@ -140,9 +145,37 @@ class _TotalCostOfGoodsPageState extends State<TotalCostOfGoodsPage> {
           ],
         ),
       ),
+      floatingActionButton: GeneratePdfFAB(
+        onPressed: _showGenerateReport,
+      ),
     );
   }
 
+
+
+  Future<void> _showGenerateReport() async {
+    final dateRange = DateRangeUtil.getDateRange(_selectedRangeLabel);
+    final startDate = dateRange.values.first.removeTimezoneOffset;
+    final endDate = dateRange.values.last.removeTimezoneOffset;
+    await TotalCostOfGoodsReportService.generateSalesReportPdf(
+      context,
+      businessAddress: context.businessAddress,
+      businessEmail: context.businessEmail,
+      businessLogo: context.businessLogo,
+      businessName: context.businessName,
+      businessPhone: context.businessPhone,
+      endDate: startDate,
+      startDate: endDate,
+    ).then((value) async {
+      if (value != null) {
+        await PdfPage(
+          pdfBytes: value,
+          title: 'Total Cost of Goods Report - ${startDate.toDateOnly} to ${endDate.toDateOnly}',
+          fileName: 'Total Cost of Goods Report - ${startDate.toDateOnly} to ${endDate.toDateOnly}.pdf',
+        ).launch(context);
+      }
+    });
+  }
   Widget _buildHeader() {
     return  Column(
       crossAxisAlignment: CrossAxisAlignment.start,

@@ -89,10 +89,10 @@ Future<void> initializeApp(Flavor flavor) async {
   }
   
   // Configure Clarity for analytics
-  final config = ClarityConfig(
+/*  final config = ClarityConfig(
     projectId: 's2fy2n25wz',
     logLevel: LogLevel.None, // Use LogLevel.Verbose for debugging
-  );
+  );*/
 
   // Request necessary permissions
   await PermissionService().requestPermissions();
@@ -101,8 +101,8 @@ Future<void> initializeApp(Flavor flavor) async {
   await di.init();
   
   // Run the app with all providers
-  runApp(ClarityWidget(
-    app: MultiProvider(
+  runApp(/*ClarityWidget(
+    app: */MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => di.sl<SplashProvider>()),
         ChangeNotifierProvider(create: (context) => di.sl<AuthenticatedAppProviders>()),
@@ -119,8 +119,8 @@ Future<void> initializeApp(Flavor flavor) async {
       ],
       child: App(navigatorKey: navigatorKey),
     ),
-    clarityConfig: config,
-  ),);
+   /* clarityConfig: config,
+  ),*/);
 
   // Initialize loading AFTER MaterialApp is running
   WidgetsBinding.instance.addPostFrameCallback((_) {

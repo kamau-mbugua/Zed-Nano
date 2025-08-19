@@ -1206,20 +1206,12 @@ class BusinessProviders extends BaseProvider {
   }
 
   Future<ResponseModel<TransactionListResponse>> viewAllTransactions({
-    required int page,
-    required int limit,
-    required String startDate,
-    required String searchValue,
-    required String endDate,
+    required Map<String, dynamic> params,
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
         () => businessRepo.viewAllTransactions(
-            page: page,
-            limit: limit,
-            searchValue: searchValue,
-            startDate: startDate,
-            endDate: endDate,),
+              params: params,),
         context,);
 
     ResponseModel<TransactionListResponse> finalResponseModel;

@@ -268,8 +268,9 @@ class _OrdersListPartialPageState extends State<OrdersListPartialPage> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Expanded(
-          child: buildSearchBar(controller: _searchController, onChanged: _debounceSearch),
+          child: buildSearchBar(controller: _searchController, onChanged: _debounceSearch, horizontalPadding: 1),
         ),
+        6.width,
         buildFilterButton(
           text:(_selectedRangeLabel ?? 'Filter').toDisplayLabel,
           isActive: false,

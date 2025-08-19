@@ -112,7 +112,7 @@ class _BusinessCreatedPreviewPageState extends State<BusinessCreatedPreviewPage>
               top: 88,
               left: 16,
               child: rfCommonCachedNetworkImage(
-                '${AppConstants.baseUrl}staticimages/logos/${businessInfoData?.businessLogo}',
+                '${businessInfoData?.businessLogo}',
                 fit: BoxFit.fitHeight,
                 height: 90,
                 width: 150,
@@ -144,7 +144,7 @@ class _BusinessCreatedPreviewPageState extends State<BusinessCreatedPreviewPage>
                   _buildDivider(),
 
                   // Directors/Owners
-                  _buildInfoItem('Directors/Owners', businessInfoData?.businessOwnerName ?? ''),
+                  _buildInfoItem('Owners', businessInfoData?.businessOwnerName ?? ''),
                   _buildDivider(),
 
                   // Country and Currency (2-column layout)

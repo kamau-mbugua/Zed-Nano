@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:provider/provider.dart';
 import 'package:zed_nano/screens/orders/tabs/orders_list_cancelled_page.dart';
 import 'package:zed_nano/screens/orders/tabs/orders_list_paid_page.dart';
 import 'package:zed_nano/screens/orders/tabs/orders_list_partial_page.dart';
@@ -8,6 +9,7 @@ import 'package:zed_nano/screens/sell/sell_stepper_page.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/custom_tab_switcher.dart';
 import 'package:zed_nano/utils/Colors.dart';
+import 'package:zed_nano/viewmodels/WorkflowViewModel.dart';
 
 class OrdersListMainPage extends StatefulWidget {
   OrdersListMainPage({super.key, this.showAppBar = true, this.initialTabIndex = 0});
@@ -19,6 +21,18 @@ class OrdersListMainPage extends StatefulWidget {
 }
 
 class _OrdersListMainPageState extends State<OrdersListMainPage> {
+
+  @override
+  void initState() {
+    final viewModel = Provider.of<WorkflowViewModel>(context, listen: false);
+    if (viewModel.businessInfoData == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        viewModel.fetchBusinessProfile(context);
+      });
+    }
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -393,7 +393,7 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
           ),
         ],
       ),
-      child: outlineButton(text: 'Edit Category', onTap: _navigateToEditCategory, context: context),
+      child: SafeArea(child: outlineButton(text: 'Edit Category', onTap: _navigateToEditCategory, context: context)),
     );
   }
 }

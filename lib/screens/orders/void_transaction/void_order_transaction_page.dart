@@ -42,6 +42,14 @@ class _VoidOrderTransactionPageState extends State<VoidOrderTransactionPage> {
 
       if (response.isSuccess) {
         finish(context);
+
+        // showCustomToast(response.message ?? '', isError: false, actionText: 'Approve', onPressed: (){
+        //   Future.delayed(const Duration(milliseconds: 500), () {
+        //     navigatorKey.currentState?.push(
+        //       MaterialPageRoute(builder: (context) => const CustomersPendingApprovalPage()),
+        //     );
+        //   });
+        // }, context: context);
       } else {
         showCustomToast(response.message ?? 'Failed to load product details');
       }

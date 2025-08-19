@@ -149,7 +149,8 @@ class _AddStockProductsPageState extends State<AddStockProductsPage> {
               });
             },
             showRightButtonArrow: false,
-          ),
+            showRightButton: false,
+          ).paddingSymmetric(horizontal: 16),
           16.height,
           // Product list
           Expanded(

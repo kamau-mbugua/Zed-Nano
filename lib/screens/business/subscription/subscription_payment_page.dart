@@ -147,11 +147,10 @@ class _CompleteSubscriptionScreenState extends State<CompleteSubscriptionScreen>
         ),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.symmetric(vertical: 1, horizontal: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 16),
             headings(
               label: 'Complete Your Subscription',
               subLabel: 'Enjoy a free ${widget.invoiceData?.freeTrialDays ?? "0"} Day trial period.',
@@ -255,12 +254,12 @@ class _CompleteSubscriptionScreenState extends State<CompleteSubscriptionScreen>
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 300),
         margin: const EdgeInsets.symmetric(vertical: 8),
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           border: Border.all(
             color: selected ? const Color(0xffdcdcdc) : const Color(0xffdcdcdc),
           ),
-          borderRadius: BorderRadius.circular(5),
+          borderRadius: BorderRadius.circular(16),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

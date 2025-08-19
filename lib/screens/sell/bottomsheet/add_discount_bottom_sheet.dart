@@ -298,7 +298,7 @@ class _AddDiscountBottomSheetState extends State<AddDiscountBottomSheet> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
-          'Selling Price',
+          'Discount Type',
           style: TextStyle(
             color: Color(0xff2f3036),
             fontWeight: FontWeight.w500,

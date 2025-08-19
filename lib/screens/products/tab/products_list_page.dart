@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:provider/provider.dart';
 import 'package:zed_nano/models/listProducts/ListProductsResponse.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/screens/products/add/add_product_page.dart';
@@ -10,6 +11,7 @@ import 'package:zed_nano/screens/widget/common/categories_widget.dart';
 import 'package:zed_nano/screens/widget/common/searchview.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
 import 'package:zed_nano/utils/pagination_controller.dart';
+import 'package:zed_nano/viewmodels/DataRefreshViewModel.dart';
 class ProductsListPage extends StatefulWidget {
   const ProductsListPage({super.key});
 
@@ -78,72 +80,92 @@ class _ProductsListPageState extends State<ProductsListPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () async {
-          // await Navigator.pushNamed(context, AppRoutes.getNewProductWithParamRoutes('true')).then((value) {
-          //   _paginationController.refresh();
-          // });
+    return Consumer<DataRefreshViewModel>(
+        builder: (context, dataRefreshViewModel, child) {
+          var shouldRefresh = false;
+          // Check if data refresh is needed
+          if (dataRefreshViewModel.isRefreshing(DataRefreshType.addStock) ||
+              dataRefreshViewModel.isRefreshing(DataRefreshType.stockTake)) {
+            shouldRefresh = true;
+            Future.microtask(() {
+              dataRefreshViewModel.completeRefresh(DataRefreshType.addStock);
+              dataRefreshViewModel.completeRefresh(DataRefreshType.stockTake);
+            });
+          }
 
-          await const AddProductScreen(
-            doNotUpdate: true,
-            selectedCategory: '',
-            productService: 'Product',
-          ).launch(context).then((value) {
+          // Only fetch data once if either condition is true
+          if (shouldRefresh) {
             _paginationController.refresh();
-          });
+          }
+          return Scaffold(
+            backgroundColor: Colors.white,
+            floatingActionButton: FloatingActionButton.extended(
+              onPressed: () async {
+                // await Navigator.pushNamed(context, AppRoutes.getNewProductWithParamRoutes('true')).then((value) {
+                //   _paginationController.refresh();
+                // });
 
-        },
-        backgroundColor: const Color(0xFF032541),
-        icon: const Icon(Icons.add, size: 20, color: Colors.white),
-        label: const Text(
-          'Add',
-          style: TextStyle(
-            fontFamily: 'Poppins',
-            fontWeight: FontWeight.w600,
-            fontSize: 12,
-            color: Colors.white,
-          ),
-        ),
-      ),
-      body: !_isInitialized
-          ? const Center(child: CircularProgressIndicator())
-          : RefreshIndicator(
-        onRefresh: () async {
-          await _paginationController.refresh();
-        },
-        child:
-        Column(
-          children: [
-            buildSearchBar(
-              controller: _searchController,
-              onChanged: _debounceSearch,
-              hint: 'Search Products',
-            ),
-            Expanded(
-              child: PagedListView<int, ProductData>(
-                pagingController: _paginationController.pagingController,
-                padding: const EdgeInsets.all(16),
-                builderDelegate: PagedChildBuilderDelegate<ProductData>(
-                  itemBuilder: (context, item, index) {
-                    return buildProductCard(item);
-                  },
-                  firstPageProgressIndicatorBuilder: (_) => const SizedBox.shrink(),
-                  newPageProgressIndicatorBuilder: (_) => const SizedBox.shrink(),
-                  noItemsFoundIndicatorBuilder: (context) => const Center(
-                    child: CompactGifDisplayWidget(
-                      gifPath: emptyListGif,
-                      title: "It's empty, over here.",
-                      subtitle: 'No product Products in your business, yet! Add to view them here.',
-                    ),
-                  ),
+                await const AddProductScreen(
+                  doNotUpdate: true,
+                  selectedCategory: '',
+                  productService: 'Product',
+                ).launch(context).then((value) {
+                  _paginationController.refresh();
+                });
+
+              },
+              backgroundColor: const Color(0xFF032541),
+              icon: const Icon(Icons.add, size: 20, color: Colors.white),
+              label: const Text(
+                'Add',
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w600,
+                  fontSize: 12,
+                  color: Colors.white,
                 ),
               ),
             ),
-          ],
-        ),
-      ),
+            body: !_isInitialized
+                ? const Center(child: CircularProgressIndicator())
+                : RefreshIndicator(
+              onRefresh: () async {
+                await _paginationController.refresh();
+              },
+              child:
+              Column(
+                children: [
+                  buildSearchBar(
+                    controller: _searchController,
+                    onChanged: _debounceSearch,
+                    hint: 'Search Products',
+                  ),
+                  Expanded(
+                    child: PagedListView<int, ProductData>(
+                      pagingController: _paginationController.pagingController,
+                      padding: const EdgeInsets.all(16),
+                      builderDelegate: PagedChildBuilderDelegate<ProductData>(
+                        itemBuilder: (context, item, index) {
+                          return buildProductCard(item);
+                        },
+                        firstPageProgressIndicatorBuilder: (_) => const SizedBox.shrink(),
+                        newPageProgressIndicatorBuilder: (_) => const SizedBox.shrink(),
+                        noItemsFoundIndicatorBuilder: (context) => const Center(
+                          child: CompactGifDisplayWidget(
+                            gifPath: emptyListGif,
+                            title: "It's empty, over here.",
+                            subtitle: 'No product Products in your business, yet! Add to view them here.',
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
     );
+
   }
 }

@@ -7,16 +7,20 @@ import 'package:provider/provider.dart';
 import 'package:zed_nano/models/sales_report/SalesReportResponse.dart';
 import 'package:zed_nano/providers/business/BusinessProviders.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
+import 'package:zed_nano/screens/invoices/pdf_invoice_page.dart';
 import 'package:zed_nano/screens/reports/sales_report/sub_reports/gross_margin_page.dart';
 import 'package:zed_nano/screens/reports/sales_report/sub_reports/quantities_sold_page.dart';
 import 'package:zed_nano/screens/reports/sales_report/sub_reports/total_cost_of_goods_page.dart';
 import 'package:zed_nano/screens/reports/sales_report/sub_reports/total_sales_page.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
+import 'package:zed_nano/screens/widget/common/custom_extended_fab.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/screens/widget/common/date_range_filter_bottom_sheet.dart';
 import 'package:zed_nano/screens/widget/common/searchview.dart';
+import 'package:zed_nano/services/BusinessDetailsContextExtension.dart';
 import 'package:zed_nano/services/business_setup_extensions.dart';
+import 'package:zed_nano/services/pdfs/PdfSalesReportService.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
 import 'package:zed_nano/utils/Images.dart';
@@ -140,6 +144,31 @@ class _SalesReportPageState extends State<SalesReportPage> {
     super.dispose();
   }
 
+  Future<void> _showGenerateReport() async {
+    final dateRange = DateRangeUtil.getDateRange(_selectedRangeLabel);
+    final startDate = dateRange.values.first.removeTimezoneOffset;
+    final endDate = dateRange.values.last.removeTimezoneOffset;
+    await PdfSalesReportService.generateSalesReportPdf(
+      context,
+      businessAddress: context.businessAddress,
+      businessEmail: context.businessEmail,
+      businessLogo: context.businessLogo,
+      businessName: context.businessName,
+      businessPhone: context.businessPhone,
+      endDate: startDate,
+      startDate: endDate,
+      summaryData: _summaryData,
+    ).then((value) async {
+      if (value != null) {
+        await PdfPage(
+        pdfBytes: value,
+        title: 'Sales Report - ${startDate.toDateOnly} to ${endDate.toDateOnly}',
+        fileName: 'Sales Report - ${startDate.toDateOnly} to ${endDate.toDateOnly}.pdf',
+        ).launch(context);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -171,6 +200,9 @@ class _SalesReportPageState extends State<SalesReportPage> {
             ),
           ],
         ),
+      ),
+      floatingActionButton: GeneratePdfFAB(
+        onPressed: _showGenerateReport,
       ),
     );
   }
