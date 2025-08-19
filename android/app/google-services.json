@@ -55,10 +55,10 @@
               "client_type": 3
             },
             {
-              "client_id": "251853629051-diii87arv8vr5t0ec0n5enatg28cbcbd.apps.googleusercontent.com",
+              "client_id": "251853629051-5e6vtsbtsfcl6dddoi0iskkdcfuohjm4.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.riverbank.zed-payments"
+                "bundle_id": "com.rbs.zed-nano.dev"
               }
             }
           ]
@@ -99,10 +99,46 @@
               "client_type": 3
             },
             {
-              "client_id": "251853629051-diii87arv8vr5t0ec0n5enatg28cbcbd.apps.googleusercontent.com",
+              "client_id": "251853629051-5e6vtsbtsfcl6dddoi0iskkdcfuohjm4.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.riverbank.zed-payments"
+                "bundle_id": "com.rbs.zed-nano.dev"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:251853629051:android:53035639141f081da364de",
+        "android_client_info": {
+          "package_name": "com.rbs.zednano.uat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "251853629051-4v7vu75n1dgl5ki71q3im59mgtj034ta.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJNKCAeWTN-h7hJq9ohuGzkEudPiP3CkA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "251853629051-4v7vu75n1dgl5ki71q3im59mgtj034ta.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "251853629051-5e6vtsbtsfcl6dddoi0iskkdcfuohjm4.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.rbs.zed-nano.dev"
               }
             }
           ]
@@ -151,10 +187,10 @@
               "client_type": 3
             },
             {
-              "client_id": "251853629051-diii87arv8vr5t0ec0n5enatg28cbcbd.apps.googleusercontent.com",
+              "client_id": "251853629051-5e6vtsbtsfcl6dddoi0iskkdcfuohjm4.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.riverbank.zed-payments"
+                "bundle_id": "com.rbs.zed-nano.dev"
               }
             }
           ]
@@ -195,10 +231,10 @@
               "client_type": 3
             },
             {
-              "client_id": "251853629051-diii87arv8vr5t0ec0n5enatg28cbcbd.apps.googleusercontent.com",
+              "client_id": "251853629051-5e6vtsbtsfcl6dddoi0iskkdcfuohjm4.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.riverbank.zed-payments"
+                "bundle_id": "com.rbs.zed-nano.dev"
               }
             }
           ]
@@ -239,10 +275,10 @@
               "client_type": 3
             },
             {
-              "client_id": "251853629051-diii87arv8vr5t0ec0n5enatg28cbcbd.apps.googleusercontent.com",
+              "client_id": "251853629051-5e6vtsbtsfcl6dddoi0iskkdcfuohjm4.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.riverbank.zed-payments"
+                "bundle_id": "com.rbs.zed-nano.dev"
               }
             }
           ]
@@ -283,10 +319,10 @@
               "client_type": 3
             },
             {
-              "client_id": "251853629051-diii87arv8vr5t0ec0n5enatg28cbcbd.apps.googleusercontent.com",
+              "client_id": "251853629051-5e6vtsbtsfcl6dddoi0iskkdcfuohjm4.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.riverbank.zed-payments"
+                "bundle_id": "com.rbs.zed-nano.dev"
               }
             }
           ]
@@ -319,10 +355,10 @@
               "client_type": 3
             },
             {
-              "client_id": "251853629051-diii87arv8vr5t0ec0n5enatg28cbcbd.apps.googleusercontent.com",
+              "client_id": "251853629051-5e6vtsbtsfcl6dddoi0iskkdcfuohjm4.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.riverbank.zed-payments"
+                "bundle_id": "com.rbs.zed-nano.dev"
               }
             }
           ]
@@ -355,10 +391,10 @@
               "client_type": 3
             },
             {
-              "client_id": "251853629051-diii87arv8vr5t0ec0n5enatg28cbcbd.apps.googleusercontent.com",
+              "client_id": "251853629051-5e6vtsbtsfcl6dddoi0iskkdcfuohjm4.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.riverbank.zed-payments"
+                "bundle_id": "com.rbs.zed-nano.dev"
               }
             }
           ]
@@ -391,10 +427,10 @@
               "client_type": 3
             },
             {
-              "client_id": "251853629051-diii87arv8vr5t0ec0n5enatg28cbcbd.apps.googleusercontent.com",
+              "client_id": "251853629051-5e6vtsbtsfcl6dddoi0iskkdcfuohjm4.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.riverbank.zed-payments"
+                "bundle_id": "com.rbs.zed-nano.dev"
               }
             }
           ]
@@ -427,10 +463,10 @@
               "client_type": 3
             },
             {
-              "client_id": "251853629051-diii87arv8vr5t0ec0n5enatg28cbcbd.apps.googleusercontent.com",
+              "client_id": "251853629051-5e6vtsbtsfcl6dddoi0iskkdcfuohjm4.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.riverbank.zed-payments"
+                "bundle_id": "com.rbs.zed-nano.dev"
               }
             }
           ]
