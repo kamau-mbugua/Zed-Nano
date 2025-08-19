@@ -22,6 +22,7 @@ import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/extensions.dart';
 import 'package:zed_nano/utils/image_picker_util.dart';
 import 'package:zed_nano/viewmodels/WorkflowViewModel.dart';
+import 'package:zed_nano/viewmodels/data_refresh_extensions.dart';
 
 
 class AddProductScreen extends StatefulWidget {
@@ -112,6 +113,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
         } else {
           // Check if we were called from CategoryDetailPage (if selectedCategory is set)
           if (widget.selectedCategory != null) {
+            context.dataRefresh.refreshInventoryAfterMajorOperation(operation: 'inventory_updated');
             // Just pop back to the category detail page
             Navigator.pop(context, true); // Pass true to indicate successful creation
           } else {

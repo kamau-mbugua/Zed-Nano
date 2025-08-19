@@ -16,6 +16,7 @@ import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/GifsImages.dart';
 import 'package:zed_nano/utils/Images.dart';
 import 'package:zed_nano/utils/extensions.dart';
+import 'package:zed_nano/viewmodels/data_refresh_extensions.dart';
 
 class InvoiceDetailPage extends StatefulWidget {
 
@@ -33,6 +34,10 @@ class _InvoiceDetailPageState extends State<InvoiceDetailPage> {
   bool _isContactDetailsExpanded = false;
 
 
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   void initState() {

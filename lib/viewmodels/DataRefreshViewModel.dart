@@ -12,6 +12,10 @@ enum DataRefreshType {
   payments,
   inventory,
   reports,
+  addStock,
+  stockTake,
+  productsList,
+  categoryList,
   all,
 }
 
@@ -184,6 +188,18 @@ class DataRefreshViewModel with ChangeNotifier {
       DataRefreshType.customers,
       DataRefreshType.products,
       DataRefreshType.transactions,
+    ], customEvent: customEvent);
+  }
+  void refreshStock({String? customEvent}) {
+    triggerMultipleRefresh([
+      DataRefreshType.addStock,
+      DataRefreshType.stockTake,
+    ], customEvent: customEvent);
+  }
+  void refreshInventory({String? customEvent}) {
+    triggerMultipleRefresh([
+      DataRefreshType.productsList,
+      DataRefreshType.categoryList,
     ], customEvent: customEvent);
   }
 }

@@ -23,6 +23,7 @@ import 'package:zed_nano/utils/extensions.dart';
 import 'package:zed_nano/utils/image_picker_util.dart';
 import 'package:zed_nano/utils/image_picker_state_manager.dart';
 import 'package:zed_nano/viewmodels/WorkflowViewModel.dart';
+import 'package:zed_nano/viewmodels/data_refresh_extensions.dart';
 
 class NewCategoryPage extends StatefulWidget {
   const NewCategoryPage({required this.doNotUpdate, super.key});
@@ -102,6 +103,7 @@ class _NewCategoryPageState extends State<NewCategoryPage> {
         if (_logoImage != null) {
           _uploadBusinessLogo(value.data?.data?.id);
         } else {
+          context.dataRefresh.refreshInventoryAfterMajorOperation(operation: 'inventory_updated');
           refresh();
         }
       } else {
@@ -129,6 +131,7 @@ class _NewCategoryPageState extends State<NewCategoryPage> {
       if (value.isSuccess) {
         showCustomToast(value.message ?? 'Business logo uploaded successfully',
             isError: false,);
+        context.dataRefresh.refreshInventoryAfterMajorOperation(operation: 'inventory_updated');
         refresh();
       } else {
         showCustomToast(value.message ?? 'Something went wrong');

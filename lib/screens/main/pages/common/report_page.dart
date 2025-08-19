@@ -24,7 +24,7 @@ class _ReportPageState extends State<ReportPage> {
   // Define report types with their properties
   final List<ReportType> reportTypes = const [
     ReportType(
-      icon: salesReportIcon,
+      icon: totalSalesIcon,
       iconColor: successTextColor,
       title: 'Sales Report',
       description: 'Comprehensive overview of sales performance, products sold and margins.',
@@ -48,7 +48,7 @@ class _ReportPageState extends State<ReportPage> {
       description: 'Complete payment history with payment methods, customers and amount.',
     ),
     ReportType(
-      icon: salesReportIcon,
+      icon: voidedTransactionsIcon,
       iconColor: googleRed,
       title: 'Void Transactions Report',
       description: 'Track cancelled transactions with reasons and authorization.',
@@ -164,7 +164,7 @@ class _ReportPageState extends State<ReportPage> {
                 height: 48,
                 decoration: BoxDecoration(
                   color: reportType.iconColor.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(12),
+                  shape: BoxShape.circle,
                 ),
                 child: Center(
                   child: rfCommonCachedNetworkImage(
