@@ -219,7 +219,7 @@ class _ReusableStepperWidgetState extends State<ReusableStepperWidget> {
           children: [
             const SizedBox(height: 20),
             Padding(
-              padding: widget.indicatorPadding ?? const EdgeInsets.symmetric(horizontal: 16),
+              padding: widget.indicatorPadding ?? const EdgeInsets.symmetric(horizontal: 1),
               child: widget.showStepNumbers 
                 ? _buildNumberedIndicator()
                 : _buildProgressIndicator(),
@@ -227,7 +227,7 @@ class _ReusableStepperWidgetState extends State<ReusableStepperWidget> {
             const SizedBox(height: 16),
             Expanded(
               child: Padding(
-                padding: widget.contentPadding ?? const EdgeInsets.symmetric(horizontal: 16),
+                padding: widget.contentPadding ?? const EdgeInsets.symmetric(horizontal: 1),
                 child: _StepperContent(
                   onNext: goToNextStep,
                   onPrevious: goToPreviousStep,
