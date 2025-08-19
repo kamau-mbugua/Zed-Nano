@@ -101,7 +101,7 @@ class _StockTakePendingBatchPageState extends State<StockTakePendingBatchPage> {
         onPressed: () {
           const AddStockTakeParentPage().launch(context);
         },
-        label: const Text('Stock Take', style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white)),
+        label: const Text('Stock Take', style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white, fontFamily: 'Poppins',)),
         icon: const Icon(Icons.add, color: Colors.white),
         backgroundColor: appThemePrimary,
       ),

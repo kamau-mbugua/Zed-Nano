@@ -426,11 +426,11 @@ class ImagePickerUtil {
                   leading: const Icon(Icons.camera_alt, color: Colors.grey),
                   title: const Text(
                     'Camera',
-                    style: TextStyle(color: Colors.grey),
+                    style: TextStyle(color: Colors.grey, fontFamily: 'Poppins',),
                   ),
                   subtitle: const Text(
                     'Not available (compliance)',
-                    style: TextStyle(color: Colors.grey, fontSize: 12),
+                    style: TextStyle(color: Colors.grey, fontSize: 12, fontFamily: 'Poppins',),
                   ),
                   onTap: () {
                     Navigator.pop(context);

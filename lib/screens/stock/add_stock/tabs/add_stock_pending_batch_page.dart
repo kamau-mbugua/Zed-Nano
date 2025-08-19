@@ -102,7 +102,7 @@ class _AddStockPendingBatchPageState extends State<AddStockPendingBatchPage> {
         onPressed: () {
           const AddStockParentPage().launch(context);
         },
-        label: const Text('Add Stock', style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white)),
+        label: const Text('Add Stock', style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white, fontFamily: 'Poppins',)),
         icon: const Icon(Icons.add, color: Colors.white),
         backgroundColor: appThemePrimary,
       ),

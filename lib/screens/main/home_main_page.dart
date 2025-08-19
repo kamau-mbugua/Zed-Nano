@@ -228,7 +228,7 @@ class _HomeMainPageState extends State<HomeMainPage> {
                     const SellStepperPage().launch(context);
                   },
                   label: const Text('Sell',
-                      style: TextStyle(
+                      style: TextStyle( fontFamily: 'Poppins',
                           fontWeight: FontWeight.w600, color: Colors.white,),),
                   icon: const Icon(Icons.shopping_cart, color: Colors.white),
                   backgroundColor: appThemePrimary,
@@ -242,7 +242,7 @@ class _HomeMainPageState extends State<HomeMainPage> {
                         ).launch(context);
                       },
                       label: const Text('Create',
-                          style: TextStyle(
+                          style: TextStyle( fontFamily: 'Poppins',
                               fontWeight: FontWeight.w600,
                               color: Colors.white,),),
                       icon:

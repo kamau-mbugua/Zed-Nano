@@ -663,6 +663,7 @@ class _CustomSDRPState extends State<CustomSDRP> {
                               child: Text('Cancel',
                                   style: TextStyle(
                                       color: widget.primaryColor,
+                                    fontFamily: 'Poppins',
                                       fontWeight: FontWeight.w700,),),),
                           Padding(
                               padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
@@ -693,6 +694,7 @@ class _CustomSDRPState extends State<CustomSDRP> {
                                 child: Text('OK',
                                     style: TextStyle(
                                         color: widget.primaryColor,
+                                      fontFamily: 'Poppins',
                                         fontWeight: FontWeight.bold,),),
                               ),),
                         ],
@@ -719,7 +721,7 @@ class _CustomSDRPState extends State<CustomSDRP> {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
           title: const Text('Custom Date Range',
-              style: TextStyle(fontWeight: FontWeight.bold),),
+              style: TextStyle(fontWeight: FontWeight.bold, fontFamily: 'Poppins',),),
           actions: [
             //EDITOR
             Padding(
@@ -833,6 +835,7 @@ class _CustomSDRPState extends State<CustomSDRP> {
                     onPressed: () => Navigator.pop(context),
                     child: Text('Cancel',
                         style: TextStyle(
+                          fontFamily: 'Poppins',
                             color: widget.primaryColor,
                             fontWeight: FontWeight.w700,),),), //OK
                 Padding(
@@ -853,6 +856,7 @@ class _CustomSDRPState extends State<CustomSDRP> {
                       },
                       child: Text('OK',
                           style: TextStyle(
+                            fontFamily: 'Poppins',
                               color: widget.primaryColor,
                               fontWeight: FontWeight.bold,),),
                     ),),

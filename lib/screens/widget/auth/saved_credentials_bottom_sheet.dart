@@ -247,7 +247,7 @@ class _SavedCredentialsBottomSheetState extends State<SavedCredentialsBottomShee
               _loadCredentials(); // Refresh the list
               showCustomToast('Credential removed', isError: false);
             },
-            child: const Text('Remove', style: TextStyle(color: Colors.red)),
+            child: const Text('Remove', style: TextStyle(color: Colors.red,  fontFamily: 'Poppins',)),
           ),
         ],
       ),

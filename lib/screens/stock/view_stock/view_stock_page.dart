@@ -164,7 +164,7 @@ class _ViewStockPageState extends State<ViewStockPage> {
           onPressed: () {
             Navigator.pushNamed(context, AppRoutes.getAddStockBatchTabsPageScreenRoute());
           },
-          label: const Text('Add', style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white)),
+          label: const Text('Add', style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white, fontFamily: 'Poppins',)),
           icon: const Icon(Icons.add, color: Colors.white),
           backgroundColor: appThemePrimary,
         ),

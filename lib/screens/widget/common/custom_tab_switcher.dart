@@ -99,7 +99,7 @@ class CustomTabSwitcher extends StatelessWidget {
             style: TextStyle(
               fontSize: fontSize,
               fontWeight: fontWeight,
-              fontFamily: fontFamily,
+              fontFamily: 'Poppins',
               color: textColor,
             ),
             textAlign: TextAlign.center,

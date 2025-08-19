@@ -93,13 +93,13 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
     }
   }
 
-
   Future<void> _initializeBusinessSetupAfterLogin() async {
     try {
       // Double-check authentication before initialization
       final authProvider = getAuthProvider(context);
       if (!authProvider.isLoggedIn) {
-        logger.w('Attempted to initialize business setup for non-authenticated user');
+        logger.w(
+            'Attempted to initialize business setup for non-authenticated user');
         return;
       }
 
@@ -108,13 +108,15 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
 
       // Run workflow setup after initialization
       if (mounted) {
-        await Provider.of<WorkflowViewModel>(context, listen: false).skipSetup(context);
+        await Provider.of<WorkflowViewModel>(context, listen: false)
+            .skipSetup(context);
       }
     } catch (e) {
       logger.e('Failed to initialize business setup after login: $e');
       // Don't rethrow - let the app continue to home page even if setup fails
     }
   }
+
   @override
   void initState() {
     super.initState();
@@ -130,7 +132,6 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
         viewModel.fetchBusinessProfile(context);
       }
     }
-
   }
 
   void _fetchDataWithDebounce() {
@@ -220,9 +221,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
 
     await context
         .read<BusinessProviders>()
-        .viewAllTransactions(
-            context: context,
-            params: params)
+        .viewAllTransactions(context: context, params: params)
         .then((value) async {
       if (value.isSuccess) {
         if (mounted) {
@@ -263,7 +262,8 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
 
   Future<void> _refreshDashboardData() async {
     await fetchBranchStoreSummary();
-    await Provider.of<WorkflowViewModel>(context, listen: false).fetchBusinessProfile(context);
+    await Provider.of<WorkflowViewModel>(context, listen: false)
+        .fetchBusinessProfile(context);
   }
 
   void _showPeriodSelector() {
@@ -347,18 +347,28 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                     10.height,
                     _buildTransactionSummaryView(),
                     10.height,
-                    const Text('Sales Summary',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600, fontSize: 16,),),
+                    const Text(
+                      'Sales Summary',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                        fontFamily: 'Poppins',
+                      ),
+                    ),
                     10.height,
                     buildSalesSummaryList(),
                     16.height,
                     const Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Recent Sales',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 16,),),
+                        Text(
+                          'Recent Sales',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Poppins',
+                            fontSize: 16,
+                          ),
+                        ),
                       ],
                     ),
                     10.height,
@@ -392,29 +402,33 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
           // Maintain the height of 120
           children: [
             buildOverviewCard(
-                'Total Sales',
-                'KES ${branchStoreSummaryResponse?.data?.totalSales?.amount?.formatCurrency() ?? '0.00'}',
-                totalSalesIcon,
-                lightGreenColor,
-                width: cardWidth,).onTap(()=> const TotalSalesPage().launch(context)),
+              'Total Sales',
+              'KES ${branchStoreSummaryResponse?.data?.totalSales?.amount?.formatCurrency() ?? '0.00'}',
+              totalSalesIcon,
+              lightGreenColor,
+              width: cardWidth,
+            ).onTap(() => const TotalSalesPage().launch(context)),
             buildOverviewCard(
-                'Products Sold',
-                '${branchStoreSummaryResponse?.data?.soldStock?.businessSoldStockQuantity ?? '0.00'}',
-                productIcon,
-                lightGrey,
-                width: cardWidth,).onTap(()=> const QuantitiesSoldPage().launch(context)),
+              'Products Sold',
+              '${branchStoreSummaryResponse?.data?.soldStock?.businessSoldStockQuantity ?? '0.00'}',
+              productIcon,
+              lightGrey,
+              width: cardWidth,
+            ).onTap(() => const QuantitiesSoldPage().launch(context)),
             buildOverviewCard(
-                'Pending Payment',
-                'KES ${branchStoreSummaryResponse?.data?.unpaidTotals?.totalUnpaid?.formatCurrency() ?? '0.00'}',
-                pendingPaymentsIcon,
-                lightOrange,
-                width: cardWidth,).onTap((){}),
+              'Pending Payment',
+              'KES ${branchStoreSummaryResponse?.data?.unpaidTotals?.totalUnpaid?.formatCurrency() ?? '0.00'}',
+              pendingPaymentsIcon,
+              lightOrange,
+              width: cardWidth,
+            ).onTap(() {}),
             buildOverviewCard(
-                'Customers',
-                '${branchStoreSummaryResponse?.data?.customerCount?.totalCustomers ?? '0.00'}',
-                customerCreatedIcon,
-                lightBlue,
-                width: cardWidth,).onTap(()=> const CustomersListPage().launch(context)),
+              'Customers',
+              '${branchStoreSummaryResponse?.data?.customerCount?.totalCustomers ?? '0.00'}',
+              customerCreatedIcon,
+              lightBlue,
+              width: cardWidth,
+            ).onTap(() => const CustomersListPage().launch(context)),
           ],
         );
       },
@@ -425,14 +439,16 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const Text('Overview',
-            style: TextStyle(
-              fontFamily: 'Poppins',
-              color: textPrimary,
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              fontStyle: FontStyle.normal,
-            ),),
+        const Text(
+          'Overview',
+          style: TextStyle(
+            fontFamily: 'Poppins',
+            color: textPrimary,
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+            fontStyle: FontStyle.normal,
+          ),
+        ),
         GestureDetector(
           onTap: _showPeriodSelector,
           child: Container(
@@ -498,13 +514,17 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
         child: Container(
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
-              border: Border.all(color: const Color(0xffffb37c)),
-              borderRadius: BorderRadius.circular(10),),
+            border: Border.all(color: const Color(0xffffb37c)),
+            borderRadius: BorderRadius.circular(10),
+          ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text('Complete setting up your business',
-                  style: TextStyle(fontSize: 14, color: darkGreyColor),),
+              const Text(
+                'Complete setting up your business',
+                style: TextStyle(
+                    fontSize: 14, fontFamily: 'Poppins', color: darkGreyColor),
+              ),
               CircularProgressIndicator(
                 value: getValue(viewModel),
                 strokeWidth: 5,
@@ -522,36 +542,54 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text("Hello ${loginResponse?.username ?? ''}",
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Hello ${loginResponse?.username ?? ''}",
               style: const TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.w600,
-                  color: darkGreyColor,),),
-          const SizedBox(height: 4),
-          const Text('We are glad to have you with us.',
-              style: TextStyle(fontSize: 12, color: textSecondary),),
-        ],),
+                fontSize: 28,
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w600,
+                color: darkGreyColor,
+              ),
+            ),
+            const SizedBox(height: 4),
+            const Text(
+              'We are glad to have you with us.',
+              style: TextStyle(
+                fontSize: 12,
+                color: textSecondary,
+                fontFamily: 'Poppins',
+              ),
+            ),
+          ],
+        ),
         Visibility(
           visible: viewModel.billingPlan?.freeTrialStatus != 'InActive',
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
             decoration: BoxDecoration(
-                border: Border.all(color: accentRed),
-                borderRadius: BorderRadius.circular(6),),
+              border: Border.all(color: accentRed),
+              borderRadius: BorderRadius.circular(6),
+            ),
             child: RichText(
               text: TextSpan(
                 children: [
                   TextSpan(
-                      text:
-                          '${viewModel.billingPlan?.freeTrialPeriodRemainingdays ?? 0} ',
-                      style: const TextStyle(
-                          color: accentRed,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16,),),
+                    text:
+                        '${viewModel.billingPlan?.freeTrialPeriodRemainingdays ?? 0} ',
+                    style: const TextStyle(
+                      color: accentRed,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                    ),
+                  ),
                   const TextSpan(
-                      text: 'Trial Left',
-                      style: TextStyle(color: accentRed, fontSize: 10),),
+                    text: 'Trial Left',
+                    style: TextStyle(color: accentRed, fontSize: 10,  fontFamily: 'Poppins',),
+                  ),
                 ],
               ),
             ),
@@ -565,7 +603,9 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
     final transactions = transactionListResponse?.data ?? [];
     if (transactions.isEmpty) {
       return buildEmptyCard(
-          'Nothing here. For Now!', 'Recent sales will be displayed here.',);
+        'Nothing here. For Now!',
+        'Recent sales will be displayed here.',
+      );
     }
 
     return Column(
@@ -628,9 +668,13 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
         //       ],
         //     )),
         const Divider(),
-        ...transactions.map<Widget>((tx) => Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4),
-              child: allTransactionsItemBuilder(tx, context).paddingSymmetric(vertical: 3, horizontal: 3)/*Column(
+        ...transactions.map<Widget>(
+          (tx) => Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4),
+            child: allTransactionsItemBuilder(tx, context).paddingSymmetric(
+                vertical: 3,
+                horizontal:
+                    3) /*Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
@@ -681,8 +725,10 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                     ],
                   )
                 ],
-              ).onTap(() =>TransactionDetailPage(transactionId: tx.transactionID,).launch(context))*/,
-            ),),
+              ).onTap(() =>TransactionDetailPage(transactionId: tx.transactionID,).launch(context))*/
+            ,
+          ),
+        ),
       ],
     );
   }
@@ -691,8 +737,10 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
     final summaryList = branchTransactionByDateResponse?.data ?? [];
 
     if (summaryList.isEmpty) {
-      return buildEmptyCard('Nothing here. For Now!',
-          'Total sales for each payment method will be displayed here.',);
+      return buildEmptyCard(
+        'Nothing here. For Now!',
+        'Total sales for each payment method will be displayed here.',
+      );
     }
 
     return Column(

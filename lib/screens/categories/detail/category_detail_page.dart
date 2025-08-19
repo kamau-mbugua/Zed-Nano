@@ -184,7 +184,7 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
         actions: [
           TextButton(
             onPressed: _deleteCategory,
-            child: const Text('Delete', style: TextStyle(color:accentRed)),
+            child: const Text('Delete', style: TextStyle(color:accentRed, fontFamily: 'Poppins',)),
           ),
         ],
       ),

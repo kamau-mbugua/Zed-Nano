@@ -185,6 +185,7 @@ class _ReusableStepperWidgetState extends State<ReusableStepperWidget> {
                   style: TextStyle(
                     color: isActive ? Colors.white : Colors.grey[600],
                     fontWeight: FontWeight.bold,
+                    fontFamily: 'Poppins',
                     fontSize: 14,
                   ),
                 ),
@@ -200,6 +201,7 @@ class _ReusableStepperWidgetState extends State<ReusableStepperWidget> {
                     ? (widget.activeStepColor ?? const Color(0xff00c382))
                     : Colors.grey[600],
                   fontWeight: isCurrent ? FontWeight.w600 : FontWeight.normal,
+                  fontFamily: 'Poppins',
                 ),
                 textAlign: TextAlign.center,
               ),

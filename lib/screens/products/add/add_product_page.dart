@@ -482,7 +482,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                     Text('This is weighted product.'),
                     Text(
                       'Product price will adjust based on weight when sold.',
-                      style: TextStyle(fontSize: 10, color: Colors.grey),
+                      style: TextStyle(fontSize: 10, color: Colors.grey,  fontFamily: 'Poppins',),
                     ),
                   ],
                 ),

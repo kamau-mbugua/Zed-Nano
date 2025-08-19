@@ -281,7 +281,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 const Text(
                   "Remember me",
-                  style: TextStyle(color: Colors.black54, fontSize: 14),
+                  style: TextStyle(color: Colors.black54, fontSize: 14, fontFamily: 'Poppins',),
                 ),
                 const Spacer(),
                 TextButton(
@@ -351,7 +351,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               Text(
                 "Remember me",
-                style: TextStyle(color: Colors.black54, fontSize: 14),
+                style: TextStyle(color: Colors.black54, fontSize: 14, fontFamily: 'Poppins',),
               ),
               const Spacer(),
               TextButton(

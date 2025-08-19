@@ -84,7 +84,7 @@ class FlexibleRichText extends StatelessWidget {
           style: TextStyle(
             color: segment.color,
             fontSize: fontSize,
-            fontFamily: fontFamily,
+            fontFamily: 'Poppins',
             fontWeight: fontWeight,
           ),
         ),).toList(),

@@ -85,6 +85,7 @@ class _TermsCheckboxState extends State<TermsCheckbox> {
                       style: TextStyle(
                         color: linkColor,
                         fontWeight: FontWeight.bold,
+                        fontFamily: 'Poppins',
                       ),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
@@ -100,6 +101,7 @@ class _TermsCheckboxState extends State<TermsCheckbox> {
                       style: TextStyle(
                         color: linkColor,
                         fontWeight: FontWeight.bold,
+                        fontFamily: 'Poppins'
                       ),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {

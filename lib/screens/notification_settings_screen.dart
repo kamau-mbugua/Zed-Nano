@@ -139,13 +139,14 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
                             'Notification Topics',
                             style: TextStyle(
                               fontSize: 18,
+                              fontFamily: 'Poppins',
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                           const SizedBox(height: 8),
                           const Text(
                             'Choose which types of notifications you want to receive:',
-                            style: TextStyle(color: Colors.grey),
+                            style: TextStyle(color: Colors.grey, fontFamily: 'Poppins',),
                           ),
                           const SizedBox(height: 16),
                           
@@ -236,6 +237,7 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
                             'Actions',
                             style: TextStyle(
                               fontSize: 18,
+                              fontFamily: 'Poppins',
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -287,6 +289,7 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
                                 'How it works',
                                 style: TextStyle(
                                   fontSize: 16,
+                                  fontFamily: 'Poppins',
                                   fontWeight: FontWeight.bold,
                                   color: Colors.blue.shade700,
                                 ),
@@ -299,7 +302,7 @@ class _NotificationSettingsScreenState extends State<NotificationSettingsScreen>
                             '• Topics allow you to receive relevant notifications\n'
                             '• Your notification token is automatically synced with our servers\n'
                             '• You can change these settings anytime',
-                            style: TextStyle(fontSize: 14),
+                            style: TextStyle(fontSize: 14, fontFamily: 'Poppins',),
                           ),
                         ],
                       ),

@@ -58,7 +58,7 @@ class HighlightedRichText extends StatelessWidget {
       style: TextStyle(
         color: normalColor,
         fontSize: fontSize,
-        fontFamily: fontFamily,
+        fontFamily: 'Poppins',
         fontWeight: fontWeight,
       ),
     );
@@ -76,7 +76,7 @@ class HighlightedRichText extends StatelessWidget {
           style: TextStyle(
             color: isHighlighted ? highlightColor : normalColor,
             fontSize: fontSize,
-            fontFamily: fontFamily,
+            fontFamily: 'Poppins',
             fontWeight: fontWeight,
           ),
         ),
