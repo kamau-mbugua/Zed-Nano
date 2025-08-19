@@ -146,7 +146,7 @@ class _ReusableStepperWidgetState extends State<ReusableStepperWidget> {
             height: widget.indicatorHeight ?? 5,
             decoration: BoxDecoration(
               color: isActive 
-                ? (widget.activeStepColor ?? const Color(0xff00c382))
+                ? (widget.activeStepColor ?? successTextColor)
                 : (widget.inactiveStepColor ?? const Color(0xffe4e4ed)),
               borderRadius: BorderRadius.circular(10),
             ),
@@ -171,11 +171,11 @@ class _ReusableStepperWidgetState extends State<ReusableStepperWidget> {
               height: 32,
               decoration: BoxDecoration(
                 color: isActive 
-                  ? (widget.activeStepColor ?? const Color(0xff00c382))
+                  ? (widget.activeStepColor ?? successTextColor)
                   : (widget.inactiveStepColor ?? const Color(0xffe4e4ed)),
                 shape: BoxShape.circle,
                 border: isCurrent ? Border.all(
-                  color: widget.activeStepColor ?? const Color(0xff00c382),
+                  color: widget.activeStepColor ?? successTextColor,
                   width: 2,
                 ) : null,
               ),
@@ -198,7 +198,7 @@ class _ReusableStepperWidgetState extends State<ReusableStepperWidget> {
                 style: TextStyle(
                   fontSize: 12,
                   color: isActive 
-                    ? (widget.activeStepColor ?? const Color(0xff00c382))
+                    ? (widget.activeStepColor ?? successTextColor)
                     : Colors.grey[600],
                   fontWeight: isCurrent ? FontWeight.w600 : FontWeight.normal,
                   fontFamily: 'Poppins',

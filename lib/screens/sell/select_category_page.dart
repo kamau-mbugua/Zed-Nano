@@ -147,38 +147,40 @@ class _SelectCategoryPageState extends State<SelectCategoryPage> {
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(16),
-            child: ElevatedButton(
-              onPressed: () {
-                if (selectedCategoryId != null) {
-                  // Find the selected category from pagination controller
-                  final selectedCategory = _paginationController.pagingController.itemList?.firstWhere(
-                    (category) => category.id == selectedCategoryId,
-                    orElse: () => ProductCategoryData(
-                      id: '',
-                      categoryName: 'All Categories',
-                      imagePath: '',
-                    ),
-                  );
-                  
-                  if (selectedCategory != null) {
-                    Navigator.pop(context, selectedCategory);
+            child: SafeArea(
+              child: ElevatedButton(
+                onPressed: () {
+                  if (selectedCategoryId != null) {
+                    // Find the selected category from pagination controller
+                    final selectedCategory = _paginationController.pagingController.itemList?.firstWhere(
+                      (category) => category.id == selectedCategoryId,
+                      orElse: () => ProductCategoryData(
+                        id: '',
+                        categoryName: 'All Categories',
+                        imagePath: '',
+                      ),
+                    );
+                    
+                    if (selectedCategory != null) {
+                      Navigator.pop(context, selectedCategory);
+                    }
                   }
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: darkBlueColor,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: darkBlueColor,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
                 ),
-              ),
-              child: const Text(
-                'Select',
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
+                child: const Text(
+                  'Select',
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
             ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zed_nano/utils/Colors.dart';
 
 class StepperIndicator extends StatelessWidget {
 
@@ -19,7 +20,7 @@ class StepperIndicator extends StatelessWidget {
             margin: const EdgeInsets.symmetric(horizontal: 4),
             height: 5,
             decoration: BoxDecoration(
-              color: isActive ? const Color(0xff00c382) : const Color(0xffe4e4ed),
+              color: isActive ? successTextColor : const Color(0xffe4e4ed),
               borderRadius: BorderRadius.circular(10),
             ),
           ),
