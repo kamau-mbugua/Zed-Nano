@@ -286,9 +286,24 @@ class _EditBusinessPageState extends State<EditBusinessPage> {
                 .paddingSymmetric(horizontal: 16),
             5.height,
             SubCategoryPicker(
-              label: 'Select BusinessCategory',
-              options:
-              businessCategory?.map((e) => e.categoryName ?? '').toList() ??
+              label: 'Select Business Category',
+              options: businessCategory
+                  ?.where((category) => ![
+                'SACCO(MICRO FINANCE)',
+                'FMCG',
+                'Rental',
+                'Transport',
+                'School/University/College',
+                'School',
+                'Events',
+                'Hotel',
+                'e-Commerce',
+                'ZED_ECOMMERCE',
+                'Hospital, Dispensary, Healthcare Services',
+                'Service station (Gas station)',
+              ].contains(category.categoryName),)
+                  .map((e) => e.categoryName ?? '')
+                  .toList() ??
                   [],
               selectedValue: selectedCategory,
               onChanged: (value) {

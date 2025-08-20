@@ -275,9 +275,11 @@ class _CreateBusinessPageState extends State<CreateBusinessPage> {
                         'Rental',
                         'Transport',
                         'School/University/College',
+                        'School',
                         'Events',
                         'Hotel',
                         'e-Commerce',
+                        'ZED_ECOMMERCE',
                         'Hospital, Dispensary, Healthcare Services',
                         'Service station (Gas station)',
                       ].contains(category.categoryName),)
