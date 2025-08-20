@@ -167,7 +167,7 @@ class _TotalSalesPageState extends State<TotalSalesPage> {
       startDate: endDate,
     ).then((value) async {
       if (value != null) {
-        await PdfPage(
+        PdfPage(
           pdfBytes: value,
           title: 'Total Sales Report - ${startDate.toDateOnly} to ${endDate.toDateOnly}',
           fileName: 'Total Sales Report - ${startDate.toDateOnly} to ${endDate.toDateOnly}.pdf',

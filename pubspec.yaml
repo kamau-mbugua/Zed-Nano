@@ -1,6 +1,6 @@
 name: zed_nano
 description: A Very Good Project created by Very Good CLI.
-version: 1.0.4+4
+version: 1.0.5+5
 publish_to: none
 
 environment:

@@ -163,7 +163,7 @@ class _OpeningClosingReportPageState extends State<OpeningClosingReportPage> {
       startDate: endDate,
     ).then((value) async {
       if (value != null) {
-        await PdfPage(
+        PdfPage(
           pdfBytes: value,
           title: 'Opening & Closing Report - ${startDate.toDateOnly} to ${endDate.toDateOnly}',
           fileName: 'Opening & Closing Report - ${startDate.toDateOnly} to ${endDate.toDateOnly}.pdf',

@@ -160,7 +160,7 @@ class _SalesReportPageState extends State<SalesReportPage> {
       summaryData: _summaryData,
     ).then((value) async {
       if (value != null) {
-        await PdfPage(
+        PdfPage(
         pdfBytes: value,
         title: 'Sales Report - ${startDate.toDateOnly} to ${endDate.toDateOnly}',
         fileName: 'Sales Report - ${startDate.toDateOnly} to ${endDate.toDateOnly}.pdf',

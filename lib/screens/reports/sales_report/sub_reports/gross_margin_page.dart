@@ -164,7 +164,7 @@ class _GrossMarginPageState extends State<GrossMarginPage> {
       startDate: endDate,
     ).then((value) async {
       if (value != null) {
-        await PdfPage(
+        PdfPage(
           pdfBytes: value,
           title: 'Gross Margin Report - ${startDate.toDateOnly} to ${endDate.toDateOnly}',
           fileName: 'Gross Margin Report - ${startDate.toDateOnly} to ${endDate.toDateOnly}.pdf',

@@ -154,7 +154,7 @@ class _AllTRanasctionsPageState extends State<AllTRanasctionsPage> {
       startDate: endDate,
     ).then((value) async {
       if (value != null) {
-        await PdfPage(
+        PdfPage(
           pdfBytes: value,
           title: 'All Transactions Report - ${startDate.toDateOnly} to ${endDate.toDateOnly}',
           fileName: 'All Transactions Report - ${startDate.toDateOnly} to ${endDate.toDateOnly}.pdf',

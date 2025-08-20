@@ -168,7 +168,7 @@ class _QuantitiesSoldPageState extends State<QuantitiesSoldPage> {
       startDate: endDate,
     ).then((value) async {
       if (value != null) {
-        await PdfPage(
+        PdfPage(
           pdfBytes: value,
           title: 'Quantities Sold Report - ${startDate.toDateOnly} to ${endDate.toDateOnly}',
           fileName: 'Quantities Sold Report - ${startDate.toDateOnly} to ${endDate.toDateOnly}.pdf',

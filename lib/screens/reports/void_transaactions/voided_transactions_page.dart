@@ -171,7 +171,7 @@ class _VoidedTransactionsPageState extends State<VoidedTransactionsPage> {
       startDate: endDate,
     ).then((value) async {
       if (value != null) {
-        await PdfPage(
+        PdfPage(
           pdfBytes: value,
           title: 'Voided Transactions Report - ${startDate.toDateOnly} to ${endDate.toDateOnly}',
           fileName: 'Voided Transactions Report - ${startDate.toDateOnly} to ${endDate.toDateOnly}.pdf',
