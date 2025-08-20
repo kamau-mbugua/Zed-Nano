@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
@@ -6,7 +7,6 @@ import 'package:pdf/pdf.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/services/pdfs/pdf_invoice_service.dart';
-
 
 class PdfPage extends StatefulWidget {
   final Uint8List pdfBytes;
@@ -61,42 +61,77 @@ class _PdfPageState extends State<PdfPage> {
   }
 
   Widget _buildBottomNavigationBar() {
-    return SafeArea(
-      child: Container(
-        decoration: const BoxDecoration(
-          color: Color(0xFF144166),
-          border: Border(
-            top: BorderSide(color: Color(0xFFE5E7EB), width: 1),
-          ),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Flexible(
-              child: _buildActionButton(
-                icon: Icons.print,
-                label: 'Print',
-                onPressed: _printPdf,
+    return Platform.isAndroid
+        ? SafeArea(
+            child: Container(
+              decoration: const BoxDecoration(
+                color: Color(0xFF144166),
+                border: Border(
+                  top: BorderSide(color: Color(0xFFE5E7EB), width: 1),
+                ),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Flexible(
+                    child: _buildActionButton(
+                      icon: Icons.print,
+                      label: 'Print',
+                      onPressed: _printPdf,
+                    ),
+                  ),
+                  Flexible(
+                    child: _buildActionButton(
+                      icon: Icons.share,
+                      label: 'Share',
+                      onPressed: _sharePdf,
+                    ),
+                  ),
+                  Flexible(
+                    child: _buildActionButton(
+                      icon: Icons.download,
+                      label: 'Download',
+                      onPressed: _downloadPdf,
+                    ),
+                  ),
+                ],
               ),
             ),
-            Flexible(
-              child: _buildActionButton(
-                icon: Icons.share,
-                label: 'Share',
-                onPressed: _sharePdf,
+          )
+        : Container(
+            decoration: const BoxDecoration(
+              color: Color(0xFF144166),
+              border: Border(
+                top: BorderSide(color: Color(0xFFE5E7EB), width: 1),
               ),
             ),
-            Flexible(
-              child: _buildActionButton(
-                icon: Icons.download,
-                label: 'Download',
-                onPressed: _downloadPdf,
-              ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Flexible(
+                  child: _buildActionButton(
+                    icon: Icons.print,
+                    label: 'Print',
+                    onPressed: _printPdf,
+                  ),
+                ),
+                Flexible(
+                  child: _buildActionButton(
+                    icon: Icons.share,
+                    label: 'Share',
+                    onPressed: _sharePdf,
+                  ),
+                ),
+                Flexible(
+                  child: _buildActionButton(
+                    icon: Icons.download,
+                    label: 'Download',
+                    onPressed: _downloadPdf,
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
-    );
+          );
   }
 
   Future<void> _sharePdf() async {
