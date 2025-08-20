@@ -54,9 +54,19 @@ class _NotificationHandlerState extends State<NotificationHandler> {
     final data = message.data;
     final notification = message.notification;
     
-    // Show a snackbar for foreground notifications (optional)
-    if (mounted && notification != null) {
-      _showNotificationSnackBar(notification);
+    // For data-only notifications, create a synthetic notification for display
+    RemoteNotification? displayNotification = notification;
+    if (notification == null && data.isNotEmpty) {
+      // Create notification from data for snackbar display
+      final title = data['title'] as String? ?? 'New Notification';
+      final body = data['message'] as String? ?? data['body'] as String?;
+      
+      if (title.isNotEmpty || (body != null && body.isNotEmpty)) {
+        // We can't create RemoteNotification directly, so we'll handle this in the snackbar method
+        // _showDataNotificationSnackBar(title, body);
+      }
+    } else if (mounted && notification != null) {
+      // _showNotificationSnackBar(notification);
     }
     
     // Handle navigation based on notification data
@@ -76,29 +86,61 @@ class _NotificationHandlerState extends State<NotificationHandler> {
   }
 
   void _showNotificationSnackBar(RemoteNotification notification) {
+    _showDataNotificationSnackBar(notification.title, notification.body);
+  }
+  
+  void _showDataNotificationSnackBar(String? title, String? body) {
     final context = Get.context;
-    if (context != null) {
+    if (context != null && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
+          backgroundColor: const Color(0xFF1F2024),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (notification.title != null)
+              if (title != null && title.isNotEmpty)
                 Text(
-                  notification.title!,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
+                  title,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    fontSize: 14,
+                  ),
                 ),
-              if (notification.body != null)
-                Text(notification.body!),
+              if (body != null && body.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.only(top: 4),
+                  child: Text(
+                    body,
+                    style: const TextStyle(
+                      color: Colors.white70,
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
             ],
           ),
-          duration: const Duration(seconds: 4),
+          duration: const Duration(seconds: 5),
           action: SnackBarAction(
             label: 'View',
+            textColor: const Color(0xFF4CAF50),
             onPressed: () {
-              // Handle notification tap
+              // Check for pending navigation from notification service
+              final pendingNav = _notificationService.getPendingNavigation();
+              if (pendingNav != null) {
+                final screen = pendingNav['screen'] as String?;
+                final id = pendingNav['id'] as String?;
+                final data = pendingNav['data'] as Map<String, dynamic>? ?? {};
+                if (screen != null) {
+                  // _navigateToScreen(context, screen, id, data);
+                }
+              }
             },
+          ),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
           ),
         ),
       );
@@ -122,26 +164,53 @@ class _NotificationHandlerState extends State<NotificationHandler> {
       Navigator.pushNamed(context, route, arguments: data);
     } else if (screen != null) {
       // Screen-based navigation
-      _navigateToScreen(context, screen, id, data);
+      // _navigateToScreen(context, screen, id, data);
     }
   }
 
   void _navigateToScreen(BuildContext context, String screen, String? id, Map<String, dynamic> data) {
+    logger.i('Navigating to screen: $screen with id: $id');
+    
     switch (screen.toLowerCase()) {
       case 'home':
         Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
         break;
+      case 'invoice':
+        // Navigate to invoices list or specific invoice
+        if (id != null) {
+          Navigator.pushNamed(context, '/invoices', arguments: {'invoiceId': id});
+        } else {
+          Navigator.pushNamed(context, '/invoices');
+        }
+        break;
+      case 'order':
+        // Navigate to orders list or specific order
+        if (id != null) {
+          Navigator.pushNamed(context, '/orders', arguments: {'orderId': id});
+        } else {
+          Navigator.pushNamed(context, '/orders');
+        }
+        break;
+      case 'inventory':
+        Navigator.pushNamed(context, '/inventory');
+        break;
+      case 'payments':
+        Navigator.pushNamed(context, '/payments');
+        break;
+      case 'dashboard':
+        Navigator.pushNamed(context, '/dashboard');
+        break;
       case 'profile':
         Navigator.pushNamed(context, '/profile', arguments: {'userId': id});
         break;
-      case 'chat':
-        Navigator.pushNamed(context, '/chat', arguments: {'chatId': id});
-        break;
-      case 'order':
-        Navigator.pushNamed(context, '/order', arguments: {'orderId': id});
-        break;
       case 'business':
         Navigator.pushNamed(context, '/business', arguments: {'businessId': id});
+        break;
+      case 'approvals':
+        Navigator.pushNamed(context, '/approvals');
+        break;
+      case 'reports':
+        Navigator.pushNamed(context, '/reports');
         break;
       default:
         logger.w('Unknown notification screen: $screen');

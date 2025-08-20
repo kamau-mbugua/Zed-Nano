@@ -197,9 +197,44 @@ class PushNotificationService {
   /// Show local notification
   Future<void> _showLocalNotification(RemoteMessage message) async {
     final notification = message.notification;
-    final android = message.notification?.android;
+    final data = message.data;
+    
+    // Extract title and body from notification or data
+    String? title;
+    String? body;
     
     if (notification != null) {
+      // Use notification field if available
+      title = notification.title;
+      body = notification.body;
+    } else {
+      // Extract from data field for data-only notifications
+      title = data['title'] as String? ?? 'New Notification';
+      body = data['message'] as String? ?? data['body'] as String?;
+      
+      // Handle business-specific notification formatting
+      if (data.containsKey('documentName') && data.containsKey('businessName')) {
+        final docName = data['documentName'] as String?;
+        final businessName = data['businessName'] as String?;
+        
+        if (docName == 'INVOICEPAID') {
+          title = 'Invoice Payment Received';
+          // body is already set from data['message']
+        } else if (docName == 'ORDERPLACED') {
+          title = 'New Order Placed';
+        } else if (docName == 'STOCKLOW') {
+          title = 'Low Stock Alert';
+        }
+        
+        // Add business name to title if available
+        if (businessName != null && businessName.isNotEmpty) {
+          title = '$title - $businessName';
+        }
+      }
+    }
+    
+    // Only show notification if we have at least a title or body
+    if (title != null || body != null) {
       const androidDetails = AndroidNotificationDetails(
         'high_importance_channel',
         'High Importance Notifications',
@@ -208,12 +243,18 @@ class PushNotificationService {
         priority: Priority.high,
         showWhen: true,
         icon: '@mipmap/ic_launcher',
+        color: Color(0xFF1F2024), // App primary color
+        enableVibration: true,
+        playSound: true,
+        autoCancel: true,
       );
       
       const iosDetails = DarwinNotificationDetails(
         presentAlert: true,
         presentBadge: true,
         presentSound: true,
+        badgeNumber: 1,
+        subtitle: 'Zed Nano',
       );
       
       const notificationDetails = NotificationDetails(
@@ -221,13 +262,20 @@ class PushNotificationService {
         iOS: iosDetails,
       );
       
+      // Generate unique notification ID
+      final notificationId = DateTime.now().millisecondsSinceEpoch.remainder(100000);
+      
       await _localNotifications.show(
-        notification.hashCode,
-        notification.title,
-        notification.body,
+        notificationId,
+        title ?? 'Notification',
+        body ?? 'You have a new notification',
         notificationDetails,
         payload: jsonEncode(message.data),
       );
+      
+      logger.i('Local notification displayed: $title - $body');
+    } else {
+      logger.w('No title or body found for notification, skipping display');
     }
   }
 
@@ -258,32 +306,67 @@ class PushNotificationService {
     // Extract navigation data
     final screen = data['screen'] as String?;
     final id = data['id'] as String?;
+    final documentName = data['documentName'] as String?;
+    final documentId = data['documentId'] as String?;
+    final businessId = data['businessId'] as String?;
+    
+    // Determine navigation based on document type or screen
+    String? targetScreen = screen;
+    String? targetId = id;
+    
+    // Map document types to screens
+    if (documentName != null && targetScreen == null) {
+      switch (documentName.toUpperCase()) {
+        case 'INVOICEPAID':
+        case 'INVOICEDUE':
+          targetScreen = 'invoice';
+          targetId = documentId;
+          break;
+        case 'ORDERPLACED':
+        case 'ORDERCANCELLED':
+          targetScreen = 'order';
+          targetId = documentId;
+          break;
+        case 'STOCKLOW':
+          targetScreen = 'inventory';
+          break;
+        case 'PAYMENTRECEIVED':
+          targetScreen = 'payments';
+          break;
+        default:
+          targetScreen = 'home';
+      }
+    }
     
     // Navigate based on notification data
-    if (screen != null) {
-      _navigateToScreen(screen, id);
+    if (targetScreen != null) {
+      _navigateToScreen(targetScreen, targetId, data);
     }
   }
 
   /// Navigate to specific screen based on notification data
-  void _navigateToScreen(String screen, String? id) {
-    // You'll need to implement navigation logic based on your app's routing
+  void _navigateToScreen(String screen, String? id, [Map<String, dynamic>? data]) {
     logger.i('Navigating to screen: $screen with id: $id');
     
-    // Example navigation logic (adjust based on your routing setup)
-    // final context = navigatorKey.currentContext;
-    // if (context != null) {
-    //   switch (screen) {
-    //     case 'profile':
-    //       Navigator.pushNamed(context, '/profile', arguments: id);
-    //       break;
-    //     case 'chat':
-    //       Navigator.pushNamed(context, '/chat', arguments: id);
-    //       break;
-    //     default:
-    //       Navigator.pushNamed(context, '/home');
-    //   }
-    // }
+    // Store navigation data for the notification handler
+    _pendingNavigation = {
+      'screen': screen,
+      'id': id,
+      'data': data ?? {},
+    };
+    
+    // The actual navigation will be handled by NotificationHandler
+    // which has access to the proper BuildContext
+  }
+  
+  // Store pending navigation data
+  Map<String, dynamic>? _pendingNavigation;
+  
+  /// Get and clear pending navigation data
+  Map<String, dynamic>? getPendingNavigation() {
+    final navigation = _pendingNavigation;
+    _pendingNavigation = null;
+    return navigation;
   }
 
   /// Subscribe to a topic
