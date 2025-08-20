@@ -181,6 +181,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
       if (widget.selectedCategory != null && mounted) {
         setState(() {
           selectedCategory = widget.selectedCategory;
+          selectedProductService = widget.productService;
         });
       }
     });
