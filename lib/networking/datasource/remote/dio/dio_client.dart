@@ -79,26 +79,6 @@ class DioClient {
     }
   }
 
-  Future<void> _logRequest(String uri, {Map<String, dynamic>? queryParameters}) async {
-    logger.i('REQUEST baseUrlGet=> $baseUrl');
-    logger.i('REQUEST uri=> $uri');
-    logger.i('REQUEST complete uri=> ${baseUrl + uri}');
-    logger.i('REQUEST params---> $queryParameters');
-    final authHeader = dio!.options.headers['X-Authorization'];
-    logLong('REQUEST X-Authorization: $authHeader',);
-  }
-
-  Future<void> _logResponse(String uri, {Map<String, dynamic>? queryParameters, data, response}) async {
-    logger.i('REQUEST baseUrlGet=> $baseUrl');
-    logger.i('REQUEST uri=> $uri');
-    logger.i('REQUEST complete uri=> ${baseUrl + uri}');
-    logger.i('REQUEST params---> $queryParameters');
-    final authHeader = dio!.options.headers['X-Authorization'];
-    logLong('REQUEST X-Authorization: $authHeader',);
-    logLong('REQUEST DATA: $jsonDecode($data)');
-    logLong('RESPONSE RESPONSE: $jsonDecode($response)');
-  }
-
   void logLong(String message, {String tag = '💡'}) {
     const chunkSize = 1000;
     final len = message.length;
@@ -116,8 +96,6 @@ class DioClient {
     ProgressCallback? onReceiveProgress,
   }) async {
     try {
-      //await _logRequest(uri, queryParameters: queryParameters);
-
       final response = await dio!.post(
         uri,
         data: data,
@@ -126,8 +104,6 @@ class DioClient {
         onSendProgress: onSendProgress,
         onReceiveProgress: onReceiveProgress,
       );
-
-      //await _logResponse(uri, queryParameters: queryParameters, data: data, response: response.data);
       return response;
     } on FormatException catch (_) {
       throw const FormatException('Unable to process the data');

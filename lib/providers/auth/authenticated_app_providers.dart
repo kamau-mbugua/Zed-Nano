@@ -93,6 +93,7 @@ class AuthenticatedAppProviders extends BaseProvider {
   }
 
 
+
   Future<ResponseModel<LoginResponse>> login(
       {required Map<String, dynamic> requestData,
       required BuildContext context,}) async {

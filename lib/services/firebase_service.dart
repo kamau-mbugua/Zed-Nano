@@ -139,24 +139,62 @@ class FirebaseService {
     }
   }
 
-  /// Get device ID
+  /// Get device ID using multiple fallback methods
   Future<String?> getDeviceId() async {
     final deviceInfoPlugin = DeviceInfoPlugin();
     String? deviceId;
+    
     try {
       if (Platform.isAndroid) {
         final androidInfo = await deviceInfoPlugin.androidInfo;
-        deviceId = androidInfo.id; // OR use androidInfo.androidId (deprecated on newer Androids)
+        
+        // Try multiple methods in order of preference
+        deviceId = androidInfo.id; // Primary method
+        
+        // Fallback methods if id is null or empty
+        if (deviceId == null || deviceId.isEmpty) {
+          // Use a combination of device properties to create a unique ID
+          final model = androidInfo.model;
+          final manufacturer = androidInfo.manufacturer;
+          final product = androidInfo.product;
+          final hardware = androidInfo.hardware;
+          final fingerprint = androidInfo.fingerprint;
+          
+          // Create a hash-based unique identifier
+          final deviceString = '$manufacturer-$model-$product-$hardware-${fingerprint.substring(0, 10)}';
+          deviceId = deviceString.hashCode.abs().toString();
+        }
+        
       } else if (Platform.isIOS) {
         final iosInfo = await deviceInfoPlugin.iosInfo;
         deviceId = iosInfo.identifierForVendor;
+        
+        // Fallback for iOS if identifierForVendor is null
+        if (deviceId == null || deviceId.isEmpty) {
+          final model = iosInfo.model;
+          final name = iosInfo.name;
+          final systemVersion = iosInfo.systemVersion;
+          
+          final deviceString = '$model-$name-$systemVersion-${DateTime.now().millisecondsSinceEpoch}';
+          deviceId = deviceString.hashCode.abs().toString();
+        }
+        
       } else {
-        deviceId = 'Unsupported Platform';
+        // Generate a unique ID for unsupported platforms
+        final timestamp = DateTime.now().millisecondsSinceEpoch;
+        deviceId = 'UNSUPPORTED-$timestamp';
       }
+      
+      print('getDeviceId Device ID: $deviceId');
       return deviceId;
+      
     } catch (e) {
-      logger.e('Failed to get device ID: $e');
-      return null;
+      print('getDeviceId Failed to get device ID: $e');
+      
+      // Last resort: generate a timestamp-based ID
+      final fallbackId = 'FALLBACK-${DateTime.now().millisecondsSinceEpoch}';
+      print('getDeviceId Using fallback ID: $fallbackId');
+      return fallbackId;
     }
   }
 

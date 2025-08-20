@@ -15,7 +15,7 @@ class LoggingInterceptor extends InterceptorsWrapper {
     }
   }
 
-  Future<void> _logRequest({required RequestOptions options, required RequestInterceptorHandler handler}) async {
+  void _logRequest({required RequestOptions options, required RequestInterceptorHandler handler}) {
     logLong('💡 <----- START HTTP REQUEST -----> 💡\n'
         '💡 REQUEST Method: ${options.method} 💡 \n'
         '💡 REQUEST PATH: ${options.path} 💡\n'
@@ -31,7 +31,7 @@ class LoggingInterceptor extends InterceptorsWrapper {
         '💡<----- END HTTP REQUEST ----->💡');
   }
 
-  Future<void> _logResponse({required Response response, required ResponseInterceptorHandler handler}) async {
+  void _logResponse({required Response response, required ResponseInterceptorHandler handler}) {
 
     logLong('💡 <----- START HTTP RESPONSE -----> 💡\n'
         '💡 RESPONSE Status Code: ${response.statusCode} 💡\n'
@@ -73,15 +73,15 @@ class LoggingInterceptor extends InterceptorsWrapper {
   }
 
   @override
-  Future onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
-    await _logRequest(options: options, handler: handler);
-    return super.onRequest(options, handler);
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+    _logRequest(options: options, handler: handler);
+    handler.next(options);
   }
 
   @override
-  Future onResponse(Response response, ResponseInterceptorHandler handler) async {
-    await _logResponse(response: response, handler: handler);
-    return super.onResponse(response, handler);
+  void onResponse(Response response, ResponseInterceptorHandler handler) {
+    _logResponse(response: response, handler: handler);
+    handler.next(response);
   }
 
   @override

@@ -429,6 +429,9 @@ class _LoginPageState extends State<LoginPage> {
     loginData['fcmToken'] = fcmToken;
     loginData['deviceId'] = deviceId;
 
+    logger.d(loginData);
+
+
     final authProvider = getAuthProvider(context);
     final response = await authProvider.login(requestData: loginData, context: context);
     if (response.isSuccess) {
@@ -525,7 +528,7 @@ class _LoginPageState extends State<LoginPage> {
       final credentials = await SavedCredentialsService.getSavedCredentialsByType(type);
       
       // Only show bottom sheet if credentials exist
-      if (credentials.isNotEmpty) {
+      if ((credentials.isNotEmpty) || (credentials != null)) {
         if (mounted) {
           _showSavedCredentials(type);
         }

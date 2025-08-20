@@ -113,7 +113,7 @@ class _BusinessCreatedPreviewPageState extends State<BusinessCreatedPreviewPage>
               top: 88,
               left: 16,
               child: rfCommonCachedNetworkImage(
-                businessInfoData!.businessLogo!.isValidUrl ? '${businessInfoData?.businessLogo}' : '',
+                businessInfoData?.businessLogo != null && businessInfoData!.businessLogo!.isValidUrl ? '${businessInfoData?.businessLogo}' : '',
                 fit: BoxFit.fitHeight,
                 height: 90,
                 width: 150,

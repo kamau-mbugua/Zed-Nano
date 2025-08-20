@@ -114,3 +114,5 @@ app.*.map.json
 !.idea/runConfigurations/
 /macos/Runner/Assets.xcassets/AppIcon.appiconset/16.png
 /android/app/.cxx/
+android/local.properties
+.idea
