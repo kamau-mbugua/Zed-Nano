@@ -13,7 +13,7 @@ import 'package:zed_nano/utils/extensions.dart';
 
 class BusinessCreatedPreviewPage extends StatefulWidget {
   const BusinessCreatedPreviewPage({required this.onNext, super.key});
-  final VoidCallback onNext;
+  final VoidCallback? onNext;
 
   @override
   State<BusinessCreatedPreviewPage> createState() => _BusinessCreatedPreviewPageState();
@@ -182,13 +182,18 @@ class _BusinessCreatedPreviewPageState extends State<BusinessCreatedPreviewPage>
                       context: context,
                   ).paddingSymmetric(horizontal: 12),
                   10.height,
-                  appButton(
-                      text: 'Next',
-                      onTap: () {
-                        widget.onNext();
-                      },
-                      context: context,
-                  ).paddingSymmetric(horizontal: 12),
+                  Visibility(
+                    visible: widget.onNext != null,
+                    child: appButton(
+                        text: 'Next',
+                        onTap: () {
+                          if(widget.onNext!= null){
+                            widget.onNext!();
+                          }
+                        },
+                        context: context,
+                    ).paddingSymmetric(horizontal: 12),
+                  ),
                 ],
               ),
             ),

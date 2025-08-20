@@ -3,6 +3,8 @@ import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
 import 'package:zed_nano/app/app_initializer.dart';
 import 'package:zed_nano/routes/routes.dart';
+import 'package:zed_nano/screens/business/business_profile_screen.dart';
+import 'package:zed_nano/screens/business/create_business/business_created_preview_page.dart';
 import 'package:zed_nano/screens/business/get_started_page.dart';
 import 'package:zed_nano/screens/widget/common/base_bottom_sheet.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
@@ -125,7 +127,8 @@ class _SetupStepBottomSheetState extends State<SetupStepBottomSheet> {
                     final stepName = steps[index as int];
                     switch (stepName) {
                       case 'Create a Business':
-                        const GetStartedPage(initialStep:1).launch(context);
+                        const BusinessCreatedPreviewPage(onNext: null).launch(context);
+                        // const BusinessProfileScreen().launch(context);
                         logger.d('Create a Business' );
                       case 'Setup Billing':
                         const GetStartedPage(initialStep:2).launch(context);
