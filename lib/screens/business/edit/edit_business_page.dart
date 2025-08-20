@@ -444,7 +444,7 @@ class _EditBusinessPageState extends State<EditBusinessPage> {
                               ),
                             )
                                 : rfCommonCachedNetworkImage(
-                              '${businessInfoData?.businessLogo}',
+                              businessInfoData!.businessLogo!.isValidUrl ?  '${businessInfoData?.businessLogo}' : '',
                               fit: BoxFit.fitHeight,
                               height: 90,
                               width: 150,

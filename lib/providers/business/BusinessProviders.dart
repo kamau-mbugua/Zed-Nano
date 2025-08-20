@@ -67,22 +67,28 @@ import 'package:zed_nano/providers/helpers/providers_helpers.dart';
 import 'package:zed_nano/repositories/business/BusinessRepo.dart';
 
 class BusinessProviders extends BaseProvider {
-
   BusinessProviders({required this.businessRepo});
+
   final BusinessRepo businessRepo;
 
-  Future<ResponseModel<BusinessInfoResponse>> getBusinessInfo(
-      {required Map<String, dynamic> requestData,
-      required BuildContext context,}) async {
+  Future<ResponseModel<BusinessInfoResponse>> getBusinessInfo({
+    required Map<String, dynamic> requestData,
+    required BuildContext context,
+  }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.getBusinessInfo(requestData: requestData), context,);
+      () => businessRepo.getBusinessInfo(requestData: requestData),
+      context,
+    );
 
     ResponseModel<BusinessInfoResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<BusinessInfoResponse>(
-          true, responseModel.message!, BusinessInfoResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        BusinessInfoResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<BusinessInfoResponse>(false, responseModel.message!);
@@ -91,18 +97,24 @@ class BusinessProviders extends BaseProvider {
     return finalResponseModel;
   }
 
-  Future<ResponseModel<PushStkResponse>> doPushStk(
-      {required Map<String, dynamic> requestData,
-      required BuildContext context,}) async {
+  Future<ResponseModel<PushStkResponse>> doPushStk({
+    required Map<String, dynamic> requestData,
+    required BuildContext context,
+  }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.doPushStk(requestData: requestData), context,);
+      () => businessRepo.doPushStk(requestData: requestData),
+      context,
+    );
 
     ResponseModel<PushStkResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<PushStkResponse>(
-          true, responseModel.message!, PushStkResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        PushStkResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<PushStkResponse>(false, responseModel.message!);
@@ -111,19 +123,24 @@ class BusinessProviders extends BaseProvider {
     return finalResponseModel;
   }
 
-  Future<ResponseModel<PushStkResponse>> doInitiateKcbStkPush(
-      {required Map<String, dynamic> requestData,
-      required BuildContext context,}) async {
+  Future<ResponseModel<PushStkResponse>> doInitiateKcbStkPush({
+    required Map<String, dynamic> requestData,
+    required BuildContext context,
+  }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.doInitiateKcbStkPush(requestData: requestData),
-        context,);
+      () => businessRepo.doInitiateKcbStkPush(requestData: requestData),
+      context,
+    );
 
     ResponseModel<PushStkResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<PushStkResponse>(
-          true, responseModel.message!, PushStkResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        PushStkResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<PushStkResponse>(false, responseModel.message!);
@@ -132,19 +149,24 @@ class BusinessProviders extends BaseProvider {
     return finalResponseModel;
   }
 
-  Future<ResponseModel<CommonResponse>> resendInvoice(
-      {required Map<String, dynamic> requestData,
-      required BuildContext context,}) async {
+  Future<ResponseModel<CommonResponse>> resendInvoice({
+    required Map<String, dynamic> requestData,
+    required BuildContext context,
+  }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.resendInvoice(requestData: requestData),
-        context,);
+      () => businessRepo.resendInvoice(requestData: requestData),
+      context,
+    );
 
     ResponseModel<CommonResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<CommonResponse>(
-          true, responseModel.message!, CommonResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        CommonResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<CommonResponse>(false, responseModel.message!);
@@ -153,40 +175,50 @@ class BusinessProviders extends BaseProvider {
     return finalResponseModel;
   }
 
-  Future<ResponseModel<GetWhatsappMessageForInvoiceResponse>> shareInvoice(
-      {required Map<String, dynamic> requestData,
-      required BuildContext context,}) async {
+  Future<ResponseModel<GetWhatsappMessageForInvoiceResponse>> shareInvoice({
+    required Map<String, dynamic> requestData,
+    required BuildContext context,
+  }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.shareInvoice(requestData: requestData),
-        context,);
+      () => businessRepo.shareInvoice(requestData: requestData),
+      context,
+    );
 
     ResponseModel<GetWhatsappMessageForInvoiceResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<GetWhatsappMessageForInvoiceResponse>(
-          true, responseModel.message!, GetWhatsappMessageForInvoiceResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        GetWhatsappMessageForInvoiceResponse.fromJson(map),
+      );
     } else {
-      finalResponseModel =
-          ResponseModel<GetWhatsappMessageForInvoiceResponse>(false, responseModel.message!);
+      finalResponseModel = ResponseModel<GetWhatsappMessageForInvoiceResponse>(
+          false, responseModel.message!);
     }
 
     return finalResponseModel;
   }
 
-  Future<ResponseModel<CommonResponse>> activateFreeTrialPlan(
-      {required Map<String, dynamic> requestData,
-      required BuildContext context,}) async {
+  Future<ResponseModel<CommonResponse>> activateFreeTrialPlan({
+    required Map<String, dynamic> requestData,
+    required BuildContext context,
+  }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.activateFreeTrialPlan(requestData: requestData),
-        context,);
+      () => businessRepo.activateFreeTrialPlan(requestData: requestData),
+      context,
+    );
 
     ResponseModel<CommonResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<CommonResponse>(
-          true, responseModel.message!, CommonResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        CommonResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<CommonResponse>(false, responseModel.message!);
@@ -195,18 +227,24 @@ class BusinessProviders extends BaseProvider {
     return finalResponseModel;
   }
 
-  Future<ResponseModel<CreateCategoryResponse>> createCategory(
-      {required Map<String, dynamic> requestData,
-      required BuildContext context,}) async {
+  Future<ResponseModel<CreateCategoryResponse>> createCategory({
+    required Map<String, dynamic> requestData,
+    required BuildContext context,
+  }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.createCategory(requestData: requestData), context,);
+      () => businessRepo.createCategory(requestData: requestData),
+      context,
+    );
 
     ResponseModel<CreateCategoryResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<CreateCategoryResponse>(
-          true, responseModel.message!, CreateCategoryResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        CreateCategoryResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<CreateCategoryResponse>(false, responseModel.message!);
@@ -215,18 +253,24 @@ class BusinessProviders extends BaseProvider {
     return finalResponseModel;
   }
 
-  Future<ResponseModel<CreateCategoryResponse>> getCategoryById(
-      {required Map<String, dynamic> requestData,
-      required BuildContext context,}) async {
+  Future<ResponseModel<CreateCategoryResponse>> getCategoryById({
+    required Map<String, dynamic> requestData,
+    required BuildContext context,
+  }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.getCategoryById(requestData: requestData), context,);
+      () => businessRepo.getCategoryById(requestData: requestData),
+      context,
+    );
 
     ResponseModel<CreateCategoryResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<CreateCategoryResponse>(
-          true, responseModel.message!, CreateCategoryResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        CreateCategoryResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<CreateCategoryResponse>(false, responseModel.message!);
@@ -235,18 +279,24 @@ class BusinessProviders extends BaseProvider {
     return finalResponseModel;
   }
 
-  Future<ResponseModel<CommonResponse>> updateCategory(
-      {required Map<String, dynamic> requestData,
-      required BuildContext context,}) async {
+  Future<ResponseModel<CommonResponse>> updateCategory({
+    required Map<String, dynamic> requestData,
+    required BuildContext context,
+  }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.updateCategory(requestData: requestData), context,);
+      () => businessRepo.updateCategory(requestData: requestData),
+      context,
+    );
 
     ResponseModel<CommonResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<CommonResponse>(
-          true, responseModel.message!, CommonResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        CommonResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<CommonResponse>(false, responseModel.message!);
@@ -255,18 +305,24 @@ class BusinessProviders extends BaseProvider {
     return finalResponseModel;
   }
 
-  Future<ResponseModel<CommonResponse>> updateProduct(
-      {required Map<String, dynamic> requestData,
-      required BuildContext context,}) async {
+  Future<ResponseModel<CommonResponse>> updateProduct({
+    required Map<String, dynamic> requestData,
+    required BuildContext context,
+  }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.updateProduct(requestData: requestData), context,);
+      () => businessRepo.updateProduct(requestData: requestData),
+      context,
+    );
 
     ResponseModel<CommonResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<CommonResponse>(
-          true, responseModel.message!, CommonResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        CommonResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<CommonResponse>(false, responseModel.message!);
@@ -275,21 +331,28 @@ class BusinessProviders extends BaseProvider {
     return finalResponseModel;
   }
 
-  Future<ResponseModel<CommonResponse>> updateBusinessInfo(
-      {required Map<String, dynamic> requestData,
-      required String businessNumber,
-      required BuildContext context,}) async {
+  Future<ResponseModel<CommonResponse>> updateBusinessInfo({
+    required Map<String, dynamic> requestData,
+    required String businessNumber,
+    required BuildContext context,
+  }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.updateBusinessInfo(
-            requestData: requestData, businessNumber: businessNumber,),
-        context,);
+      () => businessRepo.updateBusinessInfo(
+        requestData: requestData,
+        businessNumber: businessNumber,
+      ),
+      context,
+    );
 
     ResponseModel<CommonResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<CommonResponse>(
-          true, responseModel.message!, CommonResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        CommonResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<CommonResponse>(false, responseModel.message!);
@@ -298,18 +361,24 @@ class BusinessProviders extends BaseProvider {
     return finalResponseModel;
   }
 
-  Future<ResponseModel<CreateProductResponse>> createProduct(
-      {required Map<String, dynamic> requestData,
-      required BuildContext context,}) async {
+  Future<ResponseModel<CreateProductResponse>> createProduct({
+    required Map<String, dynamic> requestData,
+    required BuildContext context,
+  }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.createProduct(requestData: requestData), context,);
+      () => businessRepo.createProduct(requestData: requestData),
+      context,
+    );
 
     ResponseModel<CreateProductResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<CreateProductResponse>(
-          true, responseModel.message!, CreateProductResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        CreateProductResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<CreateProductResponse>(false, responseModel.message!);
@@ -318,18 +387,24 @@ class BusinessProviders extends BaseProvider {
     return finalResponseModel;
   }
 
-  Future<ResponseModel<CreateProductResponse>> createCustomer(
-      {required Map<String, dynamic> requestData,
-      required BuildContext context,}) async {
+  Future<ResponseModel<CreateProductResponse>> createCustomer({
+    required Map<String, dynamic> requestData,
+    required BuildContext context,
+  }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.createCustomer(requestData: requestData), context,);
+      () => businessRepo.createCustomer(requestData: requestData),
+      context,
+    );
 
     ResponseModel<CreateProductResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<CreateProductResponse>(
-          true, responseModel.message!, CreateProductResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        CreateProductResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<CreateProductResponse>(false, responseModel.message!);
@@ -338,18 +413,24 @@ class BusinessProviders extends BaseProvider {
     return finalResponseModel;
   }
 
-  Future<ResponseModel<CommonResponse>> addNewUser(
-      {required Map<String, dynamic> requestData,
-      required BuildContext context,}) async {
+  Future<ResponseModel<CommonResponse>> addNewUser({
+    required Map<String, dynamic> requestData,
+    required BuildContext context,
+  }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.addNewUser(requestData: requestData), context,);
+      () => businessRepo.addNewUser(requestData: requestData),
+      context,
+    );
 
     ResponseModel<CommonResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<CommonResponse>(
-          true, responseModel.message!, CommonResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        CommonResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<CommonResponse>(false, responseModel.message!);
@@ -358,38 +439,50 @@ class BusinessProviders extends BaseProvider {
     return finalResponseModel;
   }
 
-  Future<ResponseModel<GetBusinessRolesResponse>> getBusinessRoles(
-      {required Map<String, dynamic> requestData,
-      required BuildContext context,}) async {
+  Future<ResponseModel<GetBusinessRolesResponse>> getBusinessRoles({
+    required Map<String, dynamic> requestData,
+    required BuildContext context,
+  }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.getBusinessRoles(requestData: requestData), context,);
+      () => businessRepo.getBusinessRoles(requestData: requestData),
+      context,
+    );
 
     ResponseModel<GetBusinessRolesResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<GetBusinessRolesResponse>(
-          true, responseModel.message!, GetBusinessRolesResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        GetBusinessRolesResponse.fromJson(map),
+      );
     } else {
-      finalResponseModel =
-          ResponseModel<GetBusinessRolesResponse>(false, responseModel.message!);
+      finalResponseModel = ResponseModel<GetBusinessRolesResponse>(
+          false, responseModel.message!);
     }
 
     return finalResponseModel;
   }
 
-  Future<ResponseModel<CreateOrderResponse>> createOrder(
-      {required Map<String, dynamic> requestData,
-      required BuildContext context,}) async {
+  Future<ResponseModel<CreateOrderResponse>> createOrder({
+    required Map<String, dynamic> requestData,
+    required BuildContext context,
+  }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.createOrder(requestData: requestData), context,);
+      () => businessRepo.createOrder(requestData: requestData),
+      context,
+    );
 
     ResponseModel<CreateOrderResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<CreateOrderResponse>(
-          true, responseModel.message!, CreateOrderResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        CreateOrderResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<CreateOrderResponse>(false, responseModel.message!);
@@ -398,18 +491,24 @@ class BusinessProviders extends BaseProvider {
     return finalResponseModel;
   }
 
-  Future<ResponseModel<GenerateInvoiceResponse>> sendInvoice(
-      {required Map<String, dynamic> requestData,
-      required BuildContext context,}) async {
+  Future<ResponseModel<GenerateInvoiceResponse>> sendInvoice({
+    required Map<String, dynamic> requestData,
+    required BuildContext context,
+  }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.sendInvoice(requestData: requestData), context,);
+      () => businessRepo.sendInvoice(requestData: requestData),
+      context,
+    );
 
     ResponseModel<GenerateInvoiceResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<GenerateInvoiceResponse>(
-          true, responseModel.message!, GenerateInvoiceResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        GenerateInvoiceResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<GenerateInvoiceResponse>(false, responseModel.message!);
@@ -418,42 +517,56 @@ class BusinessProviders extends BaseProvider {
     return finalResponseModel;
   }
 
-  Future<ResponseModel<CreateBillingInvoiceResponse>> createBillingInvoice(
-      {required Map<String, dynamic> requestData,
-      required BuildContext context,}) async {
+  Future<ResponseModel<CreateBillingInvoiceResponse>> createBillingInvoice({
+    required Map<String, dynamic> requestData,
+    required BuildContext context,
+  }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.createBillingInvoice(requestData: requestData),
-        context,);
+      () => businessRepo.createBillingInvoice(requestData: requestData),
+      context,
+    );
 
     ResponseModel<CreateBillingInvoiceResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
-      finalResponseModel = ResponseModel<CreateBillingInvoiceResponse>(true,
-          responseModel.message!, CreateBillingInvoiceResponse.fromJson(map),);
+      finalResponseModel = ResponseModel<CreateBillingInvoiceResponse>(
+        true,
+        responseModel.message!,
+        CreateBillingInvoiceResponse.fromJson(map),
+      );
     } else {
       finalResponseModel = ResponseModel<CreateBillingInvoiceResponse>(
-          false, responseModel.message!,);
+        false,
+        responseModel.message!,
+      );
     }
 
     return finalResponseModel;
   }
 
-  Future<ResponseModel<CommonResponse>> enableCashPayment(
-      {required Map<String, dynamic> requestData,
-      required String status,
-      required BuildContext context,}) async {
+  Future<ResponseModel<CommonResponse>> enableCashPayment({
+    required Map<String, dynamic> requestData,
+    required String status,
+    required BuildContext context,
+  }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.enableCashPayment(
-            requestData: requestData, status: status,),
-        context,);
+      () => businessRepo.enableCashPayment(
+        requestData: requestData,
+        status: status,
+      ),
+      context,
+    );
 
     ResponseModel<CommonResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<CommonResponse>(
-          true, responseModel.message!, CommonResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        CommonResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<CommonResponse>(false, responseModel.message!);
@@ -462,18 +575,24 @@ class BusinessProviders extends BaseProvider {
     return finalResponseModel;
   }
 
-  Future<ResponseModel<CommonResponse>> addStockRequest(
-      {required Map<String, dynamic> requestData,
-      required BuildContext context,}) async {
+  Future<ResponseModel<CommonResponse>> addStockRequest({
+    required Map<String, dynamic> requestData,
+    required BuildContext context,
+  }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.addStockRequest(requestData: requestData), context,);
+      () => businessRepo.addStockRequest(requestData: requestData),
+      context,
+    );
 
     ResponseModel<CommonResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<CommonResponse>(
-          true, responseModel.message!, CommonResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        CommonResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<CommonResponse>(false, responseModel.message!);
@@ -482,18 +601,24 @@ class BusinessProviders extends BaseProvider {
     return finalResponseModel;
   }
 
-  Future<ResponseModel<CommonResponse>> updateStockItem(
-      {required List<Map<String, dynamic>> requestData,
-      required BuildContext context,}) async {
+  Future<ResponseModel<CommonResponse>> updateStockItem({
+    required List<Map<String, dynamic>> requestData,
+    required BuildContext context,
+  }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.updateStockItem(requestData: requestData), context,);
+      () => businessRepo.updateStockItem(requestData: requestData),
+      context,
+    );
 
     ResponseModel<CommonResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<CommonResponse>(
-          true, responseModel.message!, CommonResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        CommonResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<CommonResponse>(false, responseModel.message!);
@@ -502,19 +627,24 @@ class BusinessProviders extends BaseProvider {
     return finalResponseModel;
   }
 
-  Future<ResponseModel<CommonResponse>> enableSettleInvoiceStatus(
-      {required Map<String, dynamic> requestData,
-      required BuildContext context,}) async {
+  Future<ResponseModel<CommonResponse>> enableSettleInvoiceStatus({
+    required Map<String, dynamic> requestData,
+    required BuildContext context,
+  }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.enableSettleInvoiceStatus(requestData: requestData),
-        context,);
+      () => businessRepo.enableSettleInvoiceStatus(requestData: requestData),
+      context,
+    );
 
     ResponseModel<CommonResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<CommonResponse>(
-          true, responseModel.message!, CommonResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        CommonResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<CommonResponse>(false, responseModel.message!);
@@ -523,18 +653,24 @@ class BusinessProviders extends BaseProvider {
     return finalResponseModel;
   }
 
-  Future<ResponseModel<CommonResponse>> addKCBPayment(
-      {required Map<String, dynamic> requestData,
-      required BuildContext context,}) async {
+  Future<ResponseModel<CommonResponse>> addKCBPayment({
+    required Map<String, dynamic> requestData,
+    required BuildContext context,
+  }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.addKCBPayment(requestData: requestData), context,);
+      () => businessRepo.addKCBPayment(requestData: requestData),
+      context,
+    );
 
     ResponseModel<CommonResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<CommonResponse>(
-          true, responseModel.message!, CommonResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        CommonResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<CommonResponse>(false, responseModel.message!);
@@ -543,18 +679,24 @@ class BusinessProviders extends BaseProvider {
     return finalResponseModel;
   }
 
-  Future<ResponseModel<CommonResponse>> addMPESAPayment(
-      {required Map<String, dynamic> requestData,
-      required BuildContext context,}) async {
+  Future<ResponseModel<CommonResponse>> addMPESAPayment({
+    required Map<String, dynamic> requestData,
+    required BuildContext context,
+  }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.addMPESAPayment(requestData: requestData), context,);
+      () => businessRepo.addMPESAPayment(requestData: requestData),
+      context,
+    );
 
     ResponseModel<CommonResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<CommonResponse>(
-          true, responseModel.message!, CommonResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        CommonResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<CommonResponse>(false, responseModel.message!);
@@ -563,19 +705,24 @@ class BusinessProviders extends BaseProvider {
     return finalResponseModel;
   }
 
-  Future<ResponseModel<CommonResponse>> updateBusinessSetupStatus(
-      {required Map<String, dynamic> requestData,
-      required BuildContext context,}) async {
+  Future<ResponseModel<CommonResponse>> updateBusinessSetupStatus({
+    required Map<String, dynamic> requestData,
+    required BuildContext context,
+  }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.updateBusinessSetupStatus(requestData: requestData),
-        context,);
+      () => businessRepo.updateBusinessSetupStatus(requestData: requestData),
+      context,
+    );
 
     ResponseModel<CommonResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<CommonResponse>(
-          true, responseModel.message!, CommonResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        CommonResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<CommonResponse>(false, responseModel.message!);
@@ -584,19 +731,24 @@ class BusinessProviders extends BaseProvider {
     return finalResponseModel;
   }
 
-  Future<ResponseModel<CommonResponse>> approveSelectedStockTake(
-      {required Map<String, dynamic> requestData,
-      required BuildContext context,}) async {
+  Future<ResponseModel<CommonResponse>> approveSelectedStockTake({
+    required Map<String, dynamic> requestData,
+    required BuildContext context,
+  }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.approveSelectedStockTake(requestData: requestData),
-        context,);
+      () => businessRepo.approveSelectedStockTake(requestData: requestData),
+      context,
+    );
 
     ResponseModel<CommonResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<CommonResponse>(
-          true, responseModel.message!, CommonResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        CommonResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<CommonResponse>(false, responseModel.message!);
@@ -605,19 +757,25 @@ class BusinessProviders extends BaseProvider {
     return finalResponseModel;
   }
 
-  Future<ResponseModel<CommonResponse>> approveMultipleAddStockBatches(
-      {required Map<String, dynamic> requestData,
-      required BuildContext context,}) async {
+  Future<ResponseModel<CommonResponse>> approveMultipleAddStockBatches({
+    required Map<String, dynamic> requestData,
+    required BuildContext context,
+  }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.approveMultipleAddStockBatches(requestData: requestData),
-        context,);
+      () =>
+          businessRepo.approveMultipleAddStockBatches(requestData: requestData),
+      context,
+    );
 
     ResponseModel<CommonResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<CommonResponse>(
-          true, responseModel.message!, CommonResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        CommonResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<CommonResponse>(false, responseModel.message!);
@@ -626,104 +784,136 @@ class BusinessProviders extends BaseProvider {
     return finalResponseModel;
   }
 
-  Future<ResponseModel<BranchStoreSummaryResponse>> branchStoreSummary(
-      {required Map<String, dynamic> requestData,
-      required BuildContext context,}) async {
+  Future<ResponseModel<BranchStoreSummaryResponse>> branchStoreSummary({
+    required Map<String, dynamic> requestData,
+    required BuildContext context,
+  }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.branchStoreSummary(requestData: requestData),
-        context,);
+      () => businessRepo.branchStoreSummary(requestData: requestData),
+      context,
+    );
 
     ResponseModel<BranchStoreSummaryResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
-      finalResponseModel = ResponseModel<BranchStoreSummaryResponse>(true,
-          responseModel.message!, BranchStoreSummaryResponse.fromJson(map),);
+      finalResponseModel = ResponseModel<BranchStoreSummaryResponse>(
+        true,
+        responseModel.message!,
+        BranchStoreSummaryResponse.fromJson(map),
+      );
     } else {
       finalResponseModel = ResponseModel<BranchStoreSummaryResponse>(
-          false, responseModel.message!,);
+        false,
+        responseModel.message!,
+      );
     }
 
     return finalResponseModel;
   }
 
-  Future<ResponseModel<SalesDashboardResponse>> getbusinessMetrics(
-      {required Map<String, dynamic> requestData,
-      required BuildContext context,}) async {
+  Future<ResponseModel<SalesDashboardResponse>> getbusinessMetrics({
+    required Map<String, dynamic> requestData,
+    required BuildContext context,
+  }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.getbusinessMetrics(requestData: requestData),
-        context,);
+      () => businessRepo.getbusinessMetrics(requestData: requestData),
+      context,
+    );
 
     ResponseModel<SalesDashboardResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
-      finalResponseModel = ResponseModel<SalesDashboardResponse>(true,
-          responseModel.message!, SalesDashboardResponse.fromJson(map),);
+      finalResponseModel = ResponseModel<SalesDashboardResponse>(
+        true,
+        responseModel.message!,
+        SalesDashboardResponse.fromJson(map),
+      );
     } else {
       finalResponseModel = ResponseModel<SalesDashboardResponse>(
-          false, responseModel.message!,);
+        false,
+        responseModel.message!,
+      );
     }
 
     return finalResponseModel;
   }
 
-  Future<ResponseModel<CommonResponse>> getSalesByDay(
-      {required Map<String, dynamic> requestData,
-      required BuildContext context,}) async {
+  Future<ResponseModel<CommonResponse>> getSalesByDay({
+    required Map<String, dynamic> requestData,
+    required BuildContext context,
+  }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.getSalesByDay(requestData: requestData),
-        context,);
+      () => businessRepo.getSalesByDay(requestData: requestData),
+      context,
+    );
 
     ResponseModel<CommonResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
-      finalResponseModel = ResponseModel<CommonResponse>(true,
-          responseModel.message!, CommonResponse.fromJson(map),);
+      finalResponseModel = ResponseModel<CommonResponse>(
+        true,
+        responseModel.message!,
+        CommonResponse.fromJson(map),
+      );
     } else {
       finalResponseModel = ResponseModel<CommonResponse>(
-          false, responseModel.message!,);
+        false,
+        responseModel.message!,
+      );
     }
 
     return finalResponseModel;
   }
 
   Future<ResponseModel<BranchTransactionByDateResponse>>
-      getBranchTransactionByDate(
-          {required Map<String, dynamic> requestData,
-          required BuildContext context,}) async {
+      getBranchTransactionByDate({
+    required Map<String, dynamic> requestData,
+    required BuildContext context,
+  }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.getBranchTransactionByDate(requestData: requestData),
-        context,);
+      () => businessRepo.getBranchTransactionByDate(requestData: requestData),
+      context,
+    );
 
     ResponseModel<BranchTransactionByDateResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<BranchTransactionByDateResponse>(
-          true,
-          responseModel.message!,
-          BranchTransactionByDateResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        BranchTransactionByDateResponse.fromJson(map),
+      );
     } else {
       finalResponseModel = ResponseModel<BranchTransactionByDateResponse>(
-          false, responseModel.message!,);
+        false,
+        responseModel.message!,
+      );
     }
 
     return finalResponseModel;
   }
 
-  Future<ResponseModel<SetupStatusResponse>> getSetupStatus(
-      {required BuildContext context,}) async {
+  Future<ResponseModel<SetupStatusResponse>> getSetupStatus({
+    required BuildContext context,
+  }) async {
     final responseModel = await performApiCallWithHandling(
-        businessRepo.getSetupStatus, context,);
+      businessRepo.getSetupStatus,
+      context,
+    );
 
     ResponseModel<SetupStatusResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<SetupStatusResponse>(
-          true, responseModel.message!, SetupStatusResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        SetupStatusResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<SetupStatusResponse>(false, responseModel.message!);
@@ -735,71 +925,100 @@ class BusinessProviders extends BaseProvider {
   Future<ResponseModel<SubscribedBillingPlansResponse>>
       listSubscribedBillingPlans({required BuildContext context}) async {
     final responseModel = await performApiCallWithHandling(
-        businessRepo.listSubscribedBillingPlans, context,);
+      businessRepo.listSubscribedBillingPlans,
+      context,
+    );
 
     ResponseModel<SubscribedBillingPlansResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
-      finalResponseModel = ResponseModel<SubscribedBillingPlansResponse>(true,
-          responseModel.message!, SubscribedBillingPlansResponse.fromJson(map),);
+      finalResponseModel = ResponseModel<SubscribedBillingPlansResponse>(
+        true,
+        responseModel.message!,
+        SubscribedBillingPlansResponse.fromJson(map),
+      );
     } else {
       finalResponseModel = ResponseModel<SubscribedBillingPlansResponse>(
-          false, responseModel.message!,);
+        false,
+        responseModel.message!,
+      );
     }
 
     return finalResponseModel;
   }
 
-  Future<ResponseModel<ListBusinessCategoryResponse>> listBusinessCategory(
-      {required BuildContext context,}) async {
+  Future<ResponseModel<ListBusinessCategoryResponse>> listBusinessCategory({
+    required BuildContext context,
+  }) async {
     final responseModel = await performApiCallWithHandling(
-        businessRepo.listBusinessCategory, context,);
+      businessRepo.listBusinessCategory,
+      context,
+    );
 
     ResponseModel<ListBusinessCategoryResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
-      finalResponseModel = ResponseModel<ListBusinessCategoryResponse>(true,
-          responseModel.message!, ListBusinessCategoryResponse.fromJson(map),);
+      finalResponseModel = ResponseModel<ListBusinessCategoryResponse>(
+        true,
+        responseModel.message!,
+        ListBusinessCategoryResponse.fromJson(map),
+      );
     } else {
       finalResponseModel = ResponseModel<ListBusinessCategoryResponse>(
-          false, responseModel.message!,);
+        false,
+        responseModel.message!,
+      );
     }
 
     return finalResponseModel;
   }
 
-  Future<ResponseModel<BillingPlanPackagesResponse>> getBusinessPlanPackages(
-      {required BuildContext context,}) async {
+  Future<ResponseModel<BillingPlanPackagesResponse>> getBusinessPlanPackages({
+    required BuildContext context,
+  }) async {
     final responseModel = await performApiCallWithHandling(
-        businessRepo.getBusinessPlanPackages, context,);
+      businessRepo.getBusinessPlanPackages,
+      context,
+    );
 
     ResponseModel<BillingPlanPackagesResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
-      finalResponseModel = ResponseModel<BillingPlanPackagesResponse>(true,
-          responseModel.message!, BillingPlanPackagesResponse.fromJson(map),);
+      finalResponseModel = ResponseModel<BillingPlanPackagesResponse>(
+        true,
+        responseModel.message!,
+        BillingPlanPackagesResponse.fromJson(map),
+      );
     } else {
       finalResponseModel = ResponseModel<BillingPlanPackagesResponse>(
-          false, responseModel.message!,);
+        false,
+        responseModel.message!,
+      );
     }
 
     return finalResponseModel;
   }
 
-  Future<ResponseModel<UnitOfMeasureResponse>> getUnitOfMeasure(
-      {required BuildContext context,}) async {
+  Future<ResponseModel<UnitOfMeasureResponse>> getUnitOfMeasure({
+    required BuildContext context,
+  }) async {
     final responseModel = await performApiCallWithHandling(
-        businessRepo.getUnitOfMeasure, context,);
+      businessRepo.getUnitOfMeasure,
+      context,
+    );
 
     ResponseModel<UnitOfMeasureResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<UnitOfMeasureResponse>(
-          true, responseModel.message!, UnitOfMeasureResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        UnitOfMeasureResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<UnitOfMeasureResponse>(false, responseModel.message!);
@@ -808,27 +1027,37 @@ class BusinessProviders extends BaseProvider {
     return finalResponseModel;
   }
 
-  Future<ResponseModel<GetVariablePriceStatusResponse>> getVariablePriceStatus(
-      {required BuildContext context,}) async {
+  Future<ResponseModel<GetVariablePriceStatusResponse>> getVariablePriceStatus({
+    required BuildContext context,
+  }) async {
     final responseModel = await performApiCallWithHandling(
-        businessRepo.getVariablePriceStatus, context,);
+      businessRepo.getVariablePriceStatus,
+      context,
+    );
 
     ResponseModel<GetVariablePriceStatusResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
-      finalResponseModel = ResponseModel<GetVariablePriceStatusResponse>(true,
-          responseModel.message!, GetVariablePriceStatusResponse.fromJson(map),);
+      finalResponseModel = ResponseModel<GetVariablePriceStatusResponse>(
+        true,
+        responseModel.message!,
+        GetVariablePriceStatusResponse.fromJson(map),
+      );
     } else {
       finalResponseModel = ResponseModel<GetVariablePriceStatusResponse>(
-          false, responseModel.message!,);
+        false,
+        responseModel.message!,
+      );
     }
 
     return finalResponseModel;
   }
 
-  Future<ResponseModel<CommonResponse>> uploadBusinessLogo(
-      {required File logo, required BuildContext context,}) async {
+  Future<ResponseModel<CommonResponse>> uploadBusinessLogo({
+    required File logo,
+    required BuildContext context,
+  }) async {
     final formData = FormData.fromMap({
       'businessLogo': await MultipartFile.fromFile(
         logo.path,
@@ -838,14 +1067,19 @@ class BusinessProviders extends BaseProvider {
     });
 
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.uploadBusinessLogo(requestData: formData), context,);
+      () => businessRepo.uploadBusinessLogo(requestData: formData),
+      context,
+    );
 
     ResponseModel<CommonResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<CommonResponse>(
-          true, responseModel.message!, CommonResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        CommonResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<CommonResponse>(false, responseModel.message!);
@@ -860,15 +1094,19 @@ class BusinessProviders extends BaseProvider {
     required String urlPart,
   }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.uploadImage(requestData: formData, urlPart: urlPart),
-        context,);
+      () => businessRepo.uploadImage(requestData: formData, urlPart: urlPart),
+      context,
+    );
 
     ResponseModel<CommonResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<CommonResponse>(
-          true, responseModel.message!, CommonResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        CommonResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<CommonResponse>(false, responseModel.message!);
@@ -881,14 +1119,19 @@ class BusinessProviders extends BaseProvider {
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
-        businessRepo.getPaymentMethodsWithStatus, context,);
+      businessRepo.getPaymentMethodsWithStatus,
+      context,
+    );
 
     ResponseModel<PaymentMethodsResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<PaymentMethodsResponse>(
-          true, responseModel.message!, PaymentMethodsResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        PaymentMethodsResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<PaymentMethodsResponse>(false, responseModel.message!);
@@ -905,19 +1148,24 @@ class BusinessProviders extends BaseProvider {
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.getListCategories(
-            page: page,
-            limit: limit,
-            searchValue: searchValue,
-            productService: productService,),
-        context,);
+      () => businessRepo.getListCategories(
+        page: page,
+        limit: limit,
+        searchValue: searchValue,
+        productService: productService,
+      ),
+      context,
+    );
 
     ResponseModel<ListCategoriesResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<ListCategoriesResponse>(
-          true, responseModel.message!, ListCategoriesResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        ListCategoriesResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<ListCategoriesResponse>(false, responseModel.message!);
@@ -936,22 +1184,26 @@ class BusinessProviders extends BaseProvider {
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.getListCustomers(
-              page: page,
-              limit: limit,
-              searchValue: searchValue,
-              status: status,
-              paymentType: paymentType,
-              customerType: customerType,
-            ),
-        context,);
+      () => businessRepo.getListCustomers(
+        page: page,
+        limit: limit,
+        searchValue: searchValue,
+        status: status,
+        paymentType: paymentType,
+        customerType: customerType,
+      ),
+      context,
+    );
 
     ResponseModel<CustomerListResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<CustomerListResponse>(
-          true, responseModel.message!, CustomerListResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        CustomerListResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<CustomerListResponse>(false, responseModel.message!);
@@ -959,83 +1211,92 @@ class BusinessProviders extends BaseProvider {
 
     return finalResponseModel;
   }
-  Future<ResponseModel<VoidPendingApprovalResponse>> getVoidedTransactionsPending({
+
+  Future<ResponseModel<VoidPendingApprovalResponse>>
+      getVoidedTransactionsPending({
     required int page,
     required int limit,
     required String searchValue,
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.getVoidedTransactionsPending(
-              page: page,
-              limit: limit,
-              searchValue: searchValue
-            ),
-        context,);
+      () => businessRepo.getVoidedTransactionsPending(
+          page: page, limit: limit, searchValue: searchValue),
+      context,
+    );
 
     ResponseModel<VoidPendingApprovalResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<VoidPendingApprovalResponse>(
-          true, responseModel.message!, VoidPendingApprovalResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        VoidPendingApprovalResponse.fromJson(map),
+      );
     } else {
-      finalResponseModel =
-          ResponseModel<VoidPendingApprovalResponse>(false, responseModel.message!);
+      finalResponseModel = ResponseModel<VoidPendingApprovalResponse>(
+          false, responseModel.message!);
     }
 
     return finalResponseModel;
   }
-  Future<ResponseModel<VoidPendingApprovalResponse>> getVoidedApprovedTransactionsPending({
+
+  Future<ResponseModel<VoidPendingApprovalResponse>>
+      getVoidedApprovedTransactionsPending({
     required int page,
     required int limit,
     required String searchValue,
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.getVoidedApprovedTransactionsPending(
-              page: page,
-              limit: limit,
-              searchValue: searchValue
-            ),
-        context,);
+      () => businessRepo.getVoidedApprovedTransactionsPending(
+          page: page, limit: limit, searchValue: searchValue),
+      context,
+    );
 
     ResponseModel<VoidPendingApprovalResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<VoidPendingApprovalResponse>(
-          true, responseModel.message!, VoidPendingApprovalResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        VoidPendingApprovalResponse.fromJson(map),
+      );
     } else {
-      finalResponseModel =
-          ResponseModel<VoidPendingApprovalResponse>(false, responseModel.message!);
+      finalResponseModel = ResponseModel<VoidPendingApprovalResponse>(
+          false, responseModel.message!);
     }
 
     return finalResponseModel;
   }
-  Future<ResponseModel<VoidPendingApprovalResponse>> getVoidedApprovedTransactionsDeclined({
+
+  Future<ResponseModel<VoidPendingApprovalResponse>>
+      getVoidedApprovedTransactionsDeclined({
     required int page,
     required int limit,
     required String searchValue,
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.getVoidedApprovedTransactionsDeclined(
-              page: page,
-              limit: limit,
-              searchValue: searchValue
-            ),
-        context,);
+      () => businessRepo.getVoidedApprovedTransactionsDeclined(
+          page: page, limit: limit, searchValue: searchValue),
+      context,
+    );
 
     ResponseModel<VoidPendingApprovalResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<VoidPendingApprovalResponse>(
-          true, responseModel.message!, VoidPendingApprovalResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        VoidPendingApprovalResponse.fromJson(map),
+      );
     } else {
-      finalResponseModel =
-          ResponseModel<VoidPendingApprovalResponse>(false, responseModel.message!);
+      finalResponseModel = ResponseModel<VoidPendingApprovalResponse>(
+          false, responseModel.message!);
     }
 
     return finalResponseModel;
@@ -1049,20 +1310,24 @@ class BusinessProviders extends BaseProvider {
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.getListListUsers(
-              page: page,
-              limit: limit,
-              searchValue: searchValue,
-              status: status,
-            ),
-        context,);
+      () => businessRepo.getListListUsers(
+        page: page,
+        limit: limit,
+        searchValue: searchValue,
+        status: status,
+      ),
+      context,
+    );
 
     ResponseModel<ListUsersResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<ListUsersResponse>(
-          true, responseModel.message!, ListUsersResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        ListUsersResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<ListUsersResponse>(false, responseModel.message!);
@@ -1079,23 +1344,27 @@ class BusinessProviders extends BaseProvider {
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.getCustomerTransactions(
-              page: page,
-              limit: limit,
-              searchValue: searchValue,
-          customerId: customerId,
-            ),
-        context,);
+      () => businessRepo.getCustomerTransactions(
+        page: page,
+        limit: limit,
+        searchValue: searchValue,
+        customerId: customerId,
+      ),
+      context,
+    );
 
     ResponseModel<CustomerTransactionsResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<CustomerTransactionsResponse>(
-          true, responseModel.message!, CustomerTransactionsResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        CustomerTransactionsResponse.fromJson(map),
+      );
     } else {
-      finalResponseModel =
-          ResponseModel<CustomerTransactionsResponse>(false, responseModel.message!);
+      finalResponseModel = ResponseModel<CustomerTransactionsResponse>(
+          false, responseModel.message!);
     }
 
     return finalResponseModel;
@@ -1109,32 +1378,37 @@ class BusinessProviders extends BaseProvider {
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.getCustomerInvoices(
-              page: page,
-              limit: limit,
-              searchValue: searchValue,
-          customerId: customerId,
-            ),
-        context,);
+      () => businessRepo.getCustomerInvoices(
+        page: page,
+        limit: limit,
+        searchValue: searchValue,
+        customerId: customerId,
+      ),
+      context,
+    );
 
     ResponseModel<CustomerInvoiceListResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<CustomerInvoiceListResponse>(
-          true, responseModel.message!, CustomerInvoiceListResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        CustomerInvoiceListResponse.fromJson(map),
+      );
     } else {
-      finalResponseModel =
-          ResponseModel<CustomerInvoiceListResponse>(false, responseModel.message!);
+      finalResponseModel = ResponseModel<CustomerInvoiceListResponse>(
+          false, responseModel.message!);
     }
 
     return finalResponseModel;
   }
+
   Future<ResponseModel<OrderResponse>> fetchByStatus({
     required int page,
     required int limit,
     required String searchValue,
-    required String status ,
+    required String status,
     required String startDate,
     required String endDate,
     required String customerId,
@@ -1142,24 +1416,28 @@ class BusinessProviders extends BaseProvider {
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.fetchByStatus(
-              page: page,
-              limit: limit,
-              searchValue: searchValue,
-              status: status,
-              startDate: startDate,
-              endDate: endDate,
-              cashier: cashier,
-          customerId: customerId,
-            ),
-        context,);
+      () => businessRepo.fetchByStatus(
+        page: page,
+        limit: limit,
+        searchValue: searchValue,
+        status: status,
+        startDate: startDate,
+        endDate: endDate,
+        cashier: cashier,
+        customerId: customerId,
+      ),
+      context,
+    );
 
     ResponseModel<OrderResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<OrderResponse>(
-          true, responseModel.message!, OrderResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        OrderResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<OrderResponse>(false, responseModel.message!);
@@ -1167,11 +1445,13 @@ class BusinessProviders extends BaseProvider {
 
     return finalResponseModel;
   }
-  Future<ResponseModel<GetBusinessInvoicesByStatusResponse>> getBusinessInvoicesByStatus({
+
+  Future<ResponseModel<GetBusinessInvoicesByStatusResponse>>
+      getBusinessInvoicesByStatus({
     required int page,
     required int limit,
     required String searchValue,
-    required String status ,
+    required String status,
     required String startDate,
     required String endDate,
     required String customerId,
@@ -1179,27 +1459,31 @@ class BusinessProviders extends BaseProvider {
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.getBusinessInvoicesByStatus(
-              page: page,
-              limit: limit,
-              searchValue: searchValue,
-              status: status,
-              startDate: startDate,
-              endDate: endDate,
-              cashier: cashier,
-          customerId: customerId,
-            ),
-        context,);
+      () => businessRepo.getBusinessInvoicesByStatus(
+        page: page,
+        limit: limit,
+        searchValue: searchValue,
+        status: status,
+        startDate: startDate,
+        endDate: endDate,
+        cashier: cashier,
+        customerId: customerId,
+      ),
+      context,
+    );
 
     ResponseModel<GetBusinessInvoicesByStatusResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<GetBusinessInvoicesByStatusResponse>(
-          true, responseModel.message!, GetBusinessInvoicesByStatusResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        GetBusinessInvoicesByStatusResponse.fromJson(map),
+      );
     } else {
-      finalResponseModel =
-          ResponseModel<GetBusinessInvoicesByStatusResponse>(false, responseModel.message!);
+      finalResponseModel = ResponseModel<GetBusinessInvoicesByStatusResponse>(
+          false, responseModel.message!);
     }
 
     return finalResponseModel;
@@ -1210,16 +1494,21 @@ class BusinessProviders extends BaseProvider {
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.viewAllTransactions(
-              params: params,),
-        context,);
+      () => businessRepo.viewAllTransactions(
+        params: params,
+      ),
+      context,
+    );
 
     ResponseModel<TransactionListResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<TransactionListResponse>(
-          true, responseModel.message!, TransactionListResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        TransactionListResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<TransactionListResponse>(false, responseModel.message!);
@@ -1236,19 +1525,24 @@ class BusinessProviders extends BaseProvider {
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.getListProducts(
-            page: page,
-            limit: limit,
-            searchValue: searchValue,
-            productService: productService,),
-        context,);
+      () => businessRepo.getListProducts(
+        page: page,
+        limit: limit,
+        searchValue: searchValue,
+        productService: productService,
+      ),
+      context,
+    );
 
     ResponseModel<ListProductsResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<ListProductsResponse>(
-          true, responseModel.message!, ListProductsResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        ListProductsResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<ListProductsResponse>(false, responseModel.message!);
@@ -1265,19 +1559,24 @@ class BusinessProviders extends BaseProvider {
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.getListByProducts(
-            page: page,
-            limit: limit,
-            searchValue: searchValue,
-            categoryId: categoryId,),
-        context,);
+      () => businessRepo.getListByProducts(
+        page: page,
+        limit: limit,
+        searchValue: searchValue,
+        categoryId: categoryId,
+      ),
+      context,
+    );
 
     ResponseModel<ListByProductsResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<ListByProductsResponse>(
-          true, responseModel.message!, ListByProductsResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        ListByProductsResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<ListByProductsResponse>(false, responseModel.message!);
@@ -1294,19 +1593,23 @@ class BusinessProviders extends BaseProvider {
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.getApprovedAddStockBatchesByBranch(
-              page: page,
-              limit: limit,
-              searchValue: searchValue,
-            ),
-        context,);
+      () => businessRepo.getApprovedAddStockBatchesByBranch(
+        page: page,
+        limit: limit,
+        searchValue: searchValue,
+      ),
+      context,
+    );
 
     ResponseModel<GetBatchesListResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<GetBatchesListResponse>(
-          true, responseModel.message!, GetBatchesListResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        GetBatchesListResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<GetBatchesListResponse>(false, responseModel.message!);
@@ -1316,26 +1619,30 @@ class BusinessProviders extends BaseProvider {
   }
 
   Future<ResponseModel<GetBatchesListResponse>>
-  getAddStockCancelledBatchesByBranch({
+      getAddStockCancelledBatchesByBranch({
     required int page,
     required int limit,
     required String searchValue,
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.getAddStockCancelledBatchesByBranch(
-              page: page,
-              limit: limit,
-              searchValue: searchValue,
-            ),
-        context,);
+      () => businessRepo.getAddStockCancelledBatchesByBranch(
+        page: page,
+        limit: limit,
+        searchValue: searchValue,
+      ),
+      context,
+    );
 
     ResponseModel<GetBatchesListResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<GetBatchesListResponse>(
-          true, responseModel.message!, GetBatchesListResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        GetBatchesListResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<GetBatchesListResponse>(false, responseModel.message!);
@@ -1351,19 +1658,23 @@ class BusinessProviders extends BaseProvider {
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.getApprovedBatchesByBranch(
-              page: page,
-              limit: limit,
-              searchValue: searchValue,
-            ),
-        context,);
+      () => businessRepo.getApprovedBatchesByBranch(
+        page: page,
+        limit: limit,
+        searchValue: searchValue,
+      ),
+      context,
+    );
 
     ResponseModel<GetBatchesListResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<GetBatchesListResponse>(
-          true, responseModel.message!, GetBatchesListResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        GetBatchesListResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<GetBatchesListResponse>(false, responseModel.message!);
@@ -1372,26 +1683,31 @@ class BusinessProviders extends BaseProvider {
     return finalResponseModel;
   }
 
-  Future<ResponseModel<GetBatchesListResponse>> getStockTakeCancelledBatchesByBranch({
+  Future<ResponseModel<GetBatchesListResponse>>
+      getStockTakeCancelledBatchesByBranch({
     required int page,
     required int limit,
     required String searchValue,
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.getStockTakeCancelledBatchesByBranch(
-              page: page,
-              limit: limit,
-              searchValue: searchValue,
-            ),
-        context,);
+      () => businessRepo.getStockTakeCancelledBatchesByBranch(
+        page: page,
+        limit: limit,
+        searchValue: searchValue,
+      ),
+      context,
+    );
 
     ResponseModel<GetBatchesListResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<GetBatchesListResponse>(
-          true, responseModel.message!, GetBatchesListResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        GetBatchesListResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<GetBatchesListResponse>(false, responseModel.message!);
@@ -1408,19 +1724,23 @@ class BusinessProviders extends BaseProvider {
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.getPendingAddStockBatchesByBranch(
-              page: page,
-              limit: limit,
-              searchValue: searchValue,
-            ),
-        context,);
+      () => businessRepo.getPendingAddStockBatchesByBranch(
+        page: page,
+        limit: limit,
+        searchValue: searchValue,
+      ),
+      context,
+    );
 
     ResponseModel<GetBatchesListResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<GetBatchesListResponse>(
-          true, responseModel.message!, GetBatchesListResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        GetBatchesListResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<GetBatchesListResponse>(false, responseModel.message!);
@@ -1436,19 +1756,23 @@ class BusinessProviders extends BaseProvider {
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.getPendingBatchesByBranch(
-              page: page,
-              limit: limit,
-              searchValue: searchValue,
-            ),
-        context,);
+      () => businessRepo.getPendingBatchesByBranch(
+        page: page,
+        limit: limit,
+        searchValue: searchValue,
+      ),
+      context,
+    );
 
     ResponseModel<GetBatchesListResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<GetBatchesListResponse>(
-          true, responseModel.message!, GetBatchesListResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        GetBatchesListResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<GetBatchesListResponse>(false, responseModel.message!);
@@ -1466,23 +1790,30 @@ class BusinessProviders extends BaseProvider {
     required bool showStockDashboard,
   }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.getAllActiveStock(
-            page: page,
-            limit: limit,
-            searchValue: searchValue,
-            categoryId: categoryId,
-            showStockDashboard: showStockDashboard,),
-        context,);
+      () => businessRepo.getAllActiveStock(
+        page: page,
+        limit: limit,
+        searchValue: searchValue,
+        categoryId: categoryId,
+        showStockDashboard: showStockDashboard,
+      ),
+      context,
+    );
 
     ResponseModel<GetAllActiveStockResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
-      finalResponseModel = ResponseModel<GetAllActiveStockResponse>(true,
-          responseModel.message!, GetAllActiveStockResponse.fromJson(map),);
+      finalResponseModel = ResponseModel<GetAllActiveStockResponse>(
+        true,
+        responseModel.message!,
+        GetAllActiveStockResponse.fromJson(map),
+      );
     } else {
       finalResponseModel = ResponseModel<GetAllActiveStockResponse>(
-          false, responseModel.message!,);
+        false,
+        responseModel.message!,
+      );
     }
 
     return finalResponseModel;
@@ -1496,23 +1827,29 @@ class BusinessProviders extends BaseProvider {
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.getListStockTake(
-              page: page,
-              limit: limit,
-              searchValue: searchValue,
-              categoryId: categoryId,
-            ),
-        context,);
+      () => businessRepo.getListStockTake(
+        page: page,
+        limit: limit,
+        searchValue: searchValue,
+        categoryId: categoryId,
+      ),
+      context,
+    );
 
     ResponseModel<GetActiveStockTakeResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
-      finalResponseModel = ResponseModel<GetActiveStockTakeResponse>(true,
-          responseModel.message!, GetActiveStockTakeResponse.fromJson(map),);
+      finalResponseModel = ResponseModel<GetActiveStockTakeResponse>(
+        true,
+        responseModel.message!,
+        GetActiveStockTakeResponse.fromJson(map),
+      );
     } else {
       finalResponseModel = ResponseModel<GetActiveStockTakeResponse>(
-          false, responseModel.message!,);
+        false,
+        responseModel.message!,
+      );
     }
 
     return finalResponseModel;
@@ -1525,19 +1862,23 @@ class BusinessProviders extends BaseProvider {
     required Map<String, dynamic> requestData,
   }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.getAddStockProductsBatch(
-              page: page,
-              limit: limit,
-              requestData: requestData,
-            ),
-        context,);
+      () => businessRepo.getAddStockProductsBatch(
+        page: page,
+        limit: limit,
+        requestData: requestData,
+      ),
+      context,
+    );
 
     ResponseModel<StockBatchDetail> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<StockBatchDetail>(
-          true, responseModel.message!, StockBatchDetail.fromJson(map),);
+        true,
+        responseModel.message!,
+        StockBatchDetail.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<StockBatchDetail>(false, responseModel.message!);
@@ -1553,19 +1894,23 @@ class BusinessProviders extends BaseProvider {
     required Map<String, dynamic> requestData,
   }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.getAddStockPendingProductsBatch(
-              page: page,
-              limit: limit,
-              requestData: requestData,
-            ),
-        context,);
+      () => businessRepo.getAddStockPendingProductsBatch(
+        page: page,
+        limit: limit,
+        requestData: requestData,
+      ),
+      context,
+    );
 
     ResponseModel<StockBatchDetail> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<StockBatchDetail>(
-          true, responseModel.message!, StockBatchDetail.fromJson(map),);
+        true,
+        responseModel.message!,
+        StockBatchDetail.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<StockBatchDetail>(false, responseModel.message!);
@@ -1579,14 +1924,19 @@ class BusinessProviders extends BaseProvider {
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.getProductById(requestData: requestData), context,);
+      () => businessRepo.getProductById(requestData: requestData),
+      context,
+    );
 
     ResponseModel<FindProductsResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<FindProductsResponse>(
-          true, responseModel.message!, FindProductsResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        FindProductsResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<FindProductsResponse>(false, responseModel.message!);
@@ -1600,17 +1950,22 @@ class BusinessProviders extends BaseProvider {
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.getCustomerByNumber(customerNumber: customerNumber), context,);
+      () => businessRepo.getCustomerByNumber(customerNumber: customerNumber),
+      context,
+    );
 
     ResponseModel<GetCustomerByNumberResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<GetCustomerByNumberResponse>(
-          true, responseModel.message!, GetCustomerByNumberResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        GetCustomerByNumberResponse.fromJson(map),
+      );
     } else {
-      finalResponseModel =
-          ResponseModel<GetCustomerByNumberResponse>(false, responseModel.message!);
+      finalResponseModel = ResponseModel<GetCustomerByNumberResponse>(
+          false, responseModel.message!);
     }
 
     return finalResponseModel;
@@ -1621,14 +1976,19 @@ class BusinessProviders extends BaseProvider {
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.getOrderPaymentStatus(requestData: requestData), context,);
+      () => businessRepo.getOrderPaymentStatus(requestData: requestData),
+      context,
+    );
 
     ResponseModel<OrderDetailResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<OrderDetailResponse>(
-          true, responseModel.message!, OrderDetailResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        OrderDetailResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<OrderDetailResponse>(false, responseModel.message!);
@@ -1642,14 +2002,19 @@ class BusinessProviders extends BaseProvider {
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.voidTransaction(requestData: requestData), context,);
+      () => businessRepo.voidTransaction(requestData: requestData),
+      context,
+    );
 
     ResponseModel<CommonResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<CommonResponse>(
-          true, responseModel.message!, CommonResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        CommonResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<CommonResponse>(false, responseModel.message!);
@@ -1658,22 +2023,29 @@ class BusinessProviders extends BaseProvider {
     return finalResponseModel;
   }
 
-  Future<ResponseModel<ByTransactionIdDetailResponse>> getTransactionByTransactionId({
+  Future<ResponseModel<ByTransactionIdDetailResponse>>
+      getTransactionByTransactionId({
     required Map<String, dynamic> requestData,
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.getTransactionByTransactionId(requestData: requestData), context,);
+      () =>
+          businessRepo.getTransactionByTransactionId(requestData: requestData),
+      context,
+    );
 
     ResponseModel<ByTransactionIdDetailResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<ByTransactionIdDetailResponse>(
-          true, responseModel.message!, ByTransactionIdDetailResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        ByTransactionIdDetailResponse.fromJson(map),
+      );
     } else {
-      finalResponseModel =
-          ResponseModel<ByTransactionIdDetailResponse>(false, responseModel.message!);
+      finalResponseModel = ResponseModel<ByTransactionIdDetailResponse>(
+          false, responseModel.message!);
     }
 
     return finalResponseModel;
@@ -1684,14 +2056,19 @@ class BusinessProviders extends BaseProvider {
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.getApprovalByStatus(requestData: requestData), context,);
+      () => businessRepo.getApprovalByStatus(requestData: requestData),
+      context,
+    );
 
     ResponseModel<ApprovalResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<ApprovalResponse>(
-          true, responseModel.message!, ApprovalResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        ApprovalResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<ApprovalResponse>(false, responseModel.message!);
@@ -1700,64 +2077,85 @@ class BusinessProviders extends BaseProvider {
     return finalResponseModel;
   }
 
-  Future<ResponseModel<GetInvoiceByInvoiceNumberResponse>> getInvoiceByInvoiceNumber({
+  Future<ResponseModel<GetInvoiceByInvoiceNumberResponse>>
+      getInvoiceByInvoiceNumber({
     required Map<String, dynamic> requestData,
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.getInvoiceByInvoiceNumber(requestData: requestData), context,);
+      () => businessRepo.getInvoiceByInvoiceNumber(requestData: requestData),
+      context,
+    );
 
     ResponseModel<GetInvoiceByInvoiceNumberResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<GetInvoiceByInvoiceNumberResponse>(
-          true, responseModel.message!, GetInvoiceByInvoiceNumberResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        GetInvoiceByInvoiceNumberResponse.fromJson(map),
+      );
     } else {
-      finalResponseModel =
-          ResponseModel<GetInvoiceByInvoiceNumberResponse>(false, responseModel.message!);
+      finalResponseModel = ResponseModel<GetInvoiceByInvoiceNumberResponse>(
+          false, responseModel.message!);
     }
 
     return finalResponseModel;
   }
 
-  Future<ResponseModel<GetPaymentMethodResponse>> getPaymentMethodSettleInvoice({
+  Future<ResponseModel<GetPaymentMethodResponse>>
+      getPaymentMethodSettleInvoice({
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.getPaymentMethodSettleInvoice(), context,);
+      () => businessRepo.getPaymentMethodSettleInvoice(),
+      context,
+    );
 
     ResponseModel<GetPaymentMethodResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<GetPaymentMethodResponse>(
-          true, responseModel.message!, GetPaymentMethodResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        GetPaymentMethodResponse.fromJson(map),
+      );
     } else {
-      finalResponseModel =
-          ResponseModel<GetPaymentMethodResponse>(false, responseModel.message!);
+      finalResponseModel = ResponseModel<GetPaymentMethodResponse>(
+          false, responseModel.message!);
     }
 
     return finalResponseModel;
   }
 
-
-  Future<ResponseModel<GetInvoiceReceiptPaymentMethodsNoLoginResponse>> getInvoiceReceiptPaymentMethodsNoLogin({
+  Future<ResponseModel<GetInvoiceReceiptPaymentMethodsNoLoginResponse>>
+      getInvoiceReceiptPaymentMethodsNoLogin({
     required Map<String, dynamic> requestData,
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.getInvoiceReceiptPaymentMethodsNoLogin(requestData: requestData), context,);
+      () => businessRepo.getInvoiceReceiptPaymentMethodsNoLogin(
+          requestData: requestData),
+      context,
+    );
 
-    ResponseModel<GetInvoiceReceiptPaymentMethodsNoLoginResponse> finalResponseModel;
+    ResponseModel<GetInvoiceReceiptPaymentMethodsNoLoginResponse>
+        finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
-      finalResponseModel = ResponseModel<GetInvoiceReceiptPaymentMethodsNoLoginResponse>(
-          true, responseModel.message!, GetInvoiceReceiptPaymentMethodsNoLoginResponse.fromJson(map),);
+      finalResponseModel =
+          ResponseModel<GetInvoiceReceiptPaymentMethodsNoLoginResponse>(
+        true,
+        responseModel.message!,
+        GetInvoiceReceiptPaymentMethodsNoLoginResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
-          ResponseModel<GetInvoiceReceiptPaymentMethodsNoLoginResponse>(false, responseModel.message!);
+          ResponseModel<GetInvoiceReceiptPaymentMethodsNoLoginResponse>(
+              false, responseModel.message!);
     }
 
     return finalResponseModel;
@@ -1768,14 +2166,19 @@ class BusinessProviders extends BaseProvider {
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.doSendToPos(requestData: requestData), context,);
+      () => businessRepo.doSendToPos(requestData: requestData),
+      context,
+    );
 
     ResponseModel<CommonResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<CommonResponse>(
-          true, responseModel.message!, CommonResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        CommonResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<CommonResponse>(false, responseModel.message!);
@@ -1788,14 +2191,19 @@ class BusinessProviders extends BaseProvider {
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
-        businessRepo.getBranchTerminals, context,);
+      businessRepo.getBranchTerminals,
+      context,
+    );
 
     ResponseModel<BranchTerminalsResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<BranchTerminalsResponse>(
-          true, responseModel.message!, BranchTerminalsResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        BranchTerminalsResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<BranchTerminalsResponse>(false, responseModel.message!);
@@ -1809,14 +2217,20 @@ class BusinessProviders extends BaseProvider {
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.getPaymentMethodsStatusNoAuth(requestData: requestData), context,);
+      () =>
+          businessRepo.getPaymentMethodsStatusNoAuth(requestData: requestData),
+      context,
+    );
 
     ResponseModel<CheckoutPaymentResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<CheckoutPaymentResponse>(
-          true, responseModel.message!, CheckoutPaymentResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        CheckoutPaymentResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<CheckoutPaymentResponse>(false, responseModel.message!);
@@ -1830,17 +2244,22 @@ class BusinessProviders extends BaseProvider {
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.doCashPayment(requestData: requestData), context,);
+      () => businessRepo.doCashPayment(requestData: requestData),
+      context,
+    );
 
     ResponseModel<OrderCheckoutPaymentResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<OrderCheckoutPaymentResponse>(
-          true, responseModel.message!, OrderCheckoutPaymentResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        OrderCheckoutPaymentResponse.fromJson(map),
+      );
     } else {
-      finalResponseModel =
-          ResponseModel<OrderCheckoutPaymentResponse>(false, responseModel.message!);
+      finalResponseModel = ResponseModel<OrderCheckoutPaymentResponse>(
+          false, responseModel.message!);
     }
 
     return finalResponseModel;
@@ -1851,17 +2270,22 @@ class BusinessProviders extends BaseProvider {
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.doCashPaymentInvoice(requestData: requestData), context,);
+      () => businessRepo.doCashPaymentInvoice(requestData: requestData),
+      context,
+    );
 
     ResponseModel<OrderCheckoutPaymentResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<OrderCheckoutPaymentResponse>(
-          true, responseModel.message!, OrderCheckoutPaymentResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        OrderCheckoutPaymentResponse.fromJson(map),
+      );
     } else {
-      finalResponseModel =
-          ResponseModel<OrderCheckoutPaymentResponse>(false, responseModel.message!);
+      finalResponseModel = ResponseModel<OrderCheckoutPaymentResponse>(
+          false, responseModel.message!);
     }
 
     return finalResponseModel;
@@ -1872,14 +2296,19 @@ class BusinessProviders extends BaseProvider {
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.cancelPushyTransaction(orderId: orderId), context,);
+      () => businessRepo.cancelPushyTransaction(orderId: orderId),
+      context,
+    );
 
     ResponseModel<CommonResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<CommonResponse>(
-          true, responseModel.message!, CommonResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        CommonResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<CommonResponse>(false, responseModel.message!);
@@ -1893,14 +2322,19 @@ class BusinessProviders extends BaseProvider {
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.activateCustomer(customerNumber: customerNumber), context,);
+      () => businessRepo.activateCustomer(customerNumber: customerNumber),
+      context,
+    );
 
     ResponseModel<CommonResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<CommonResponse>(
-          true, responseModel.message!, CommonResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        CommonResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<CommonResponse>(false, responseModel.message!);
@@ -1914,17 +2348,22 @@ class BusinessProviders extends BaseProvider {
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.getUserByNumber(customerNumber: customerNumber), context,);
+      () => businessRepo.getUserByNumber(customerNumber: customerNumber),
+      context,
+    );
 
     ResponseModel<GetZedPayItUserByIdResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<GetZedPayItUserByIdResponse>(
-          true, responseModel.message!, GetZedPayItUserByIdResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        GetZedPayItUserByIdResponse.fromJson(map),
+      );
     } else {
-      finalResponseModel =
-          ResponseModel<GetZedPayItUserByIdResponse>(false, responseModel.message!);
+      finalResponseModel = ResponseModel<GetZedPayItUserByIdResponse>(
+          false, responseModel.message!);
     }
 
     return finalResponseModel;
@@ -1935,14 +2374,19 @@ class BusinessProviders extends BaseProvider {
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.suspendCustomer(customerNumber: customerNumber), context,);
+      () => businessRepo.suspendCustomer(customerNumber: customerNumber),
+      context,
+    );
 
     ResponseModel<CommonResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<CommonResponse>(
-          true, responseModel.message!, CommonResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        CommonResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<CommonResponse>(false, responseModel.message!);
@@ -1957,14 +2401,20 @@ class BusinessProviders extends BaseProvider {
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.changeStatus(customerNumber: customerNumber, status: status), context,);
+      () => businessRepo.changeStatus(
+          customerNumber: customerNumber, status: status),
+      context,
+    );
 
     ResponseModel<CommonResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<CommonResponse>(
-          true, responseModel.message!, CommonResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        CommonResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<CommonResponse>(false, responseModel.message!);
@@ -1980,17 +2430,23 @@ class BusinessProviders extends BaseProvider {
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.getSalesSummary(startDate: startDate, endDate: endDate), context,);
+      () =>
+          businessRepo.getSalesSummary(startDate: startDate, endDate: endDate),
+      context,
+    );
 
     ResponseModel<SalesReportSummaryResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<SalesReportSummaryResponse>(
-          true, responseModel.message!, SalesReportSummaryResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        SalesReportSummaryResponse.fromJson(map),
+      );
     } else {
-      finalResponseModel =
-          ResponseModel<SalesReportSummaryResponse>(false, responseModel.message!);
+      finalResponseModel = ResponseModel<SalesReportSummaryResponse>(
+          false, responseModel.message!);
     }
 
     return finalResponseModel;
@@ -2001,19 +2457,24 @@ class BusinessProviders extends BaseProvider {
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.getTotalSales(
-          params: params,
-        ), context,);
+      () => businessRepo.getTotalSales(
+        params: params,
+      ),
+      context,
+    );
 
     ResponseModel<SalesReportTotalSalesResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<SalesReportTotalSalesResponse>(
-          true, responseModel.message!, SalesReportTotalSalesResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        SalesReportTotalSalesResponse.fromJson(map),
+      );
     } else {
-      finalResponseModel =
-          ResponseModel<SalesReportTotalSalesResponse>(false, responseModel.message!);
+      finalResponseModel = ResponseModel<SalesReportTotalSalesResponse>(
+          false, responseModel.message!);
     }
 
     return finalResponseModel;
@@ -2024,19 +2485,24 @@ class BusinessProviders extends BaseProvider {
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.getProductGrossMargin(
-            params:params,
-        ), context,);
+      () => businessRepo.getProductGrossMargin(
+        params: params,
+      ),
+      context,
+    );
 
     ResponseModel<GetProductGrossMarginResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<GetProductGrossMarginResponse>(
-          true, responseModel.message!, GetProductGrossMarginResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        GetProductGrossMarginResponse.fromJson(map),
+      );
     } else {
-      finalResponseModel =
-          ResponseModel<GetProductGrossMarginResponse>(false, responseModel.message!);
+      finalResponseModel = ResponseModel<GetProductGrossMarginResponse>(
+          false, responseModel.message!);
     }
 
     return finalResponseModel;
@@ -2047,16 +2513,21 @@ class BusinessProviders extends BaseProvider {
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.getClosingOpeningReport(
-            params:params,
-        ), context,);
+      () => businessRepo.getClosingOpeningReport(
+        params: params,
+      ),
+      context,
+    );
 
     ResponseModel<OpeningClosingResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<OpeningClosingResponse>(
-          true, responseModel.message!, OpeningClosingResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        OpeningClosingResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<OpeningClosingResponse>(false, responseModel.message!);
@@ -2070,16 +2541,21 @@ class BusinessProviders extends BaseProvider {
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.getVoidedTRansactionReports(
-            params:params,
-        ), context,);
+      () => businessRepo.getVoidedTRansactionReports(
+        params: params,
+      ),
+      context,
+    );
 
     ResponseModel<VoidApprovedResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<VoidApprovedResponse>(
-          true, responseModel.message!, VoidApprovedResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        VoidApprovedResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<VoidApprovedResponse>(false, responseModel.message!);
@@ -2093,16 +2569,21 @@ class BusinessProviders extends BaseProvider {
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.getTotalQuantitiesSold(
-          params: params,
-        ), context,);
+      () => businessRepo.getTotalQuantitiesSold(
+        params: params,
+      ),
+      context,
+    );
 
     ResponseModel<QuantitiesSoldResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<QuantitiesSoldResponse>(
-          true, responseModel.message!, QuantitiesSoldResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        QuantitiesSoldResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<QuantitiesSoldResponse>(false, responseModel.message!);
@@ -2116,16 +2597,21 @@ class BusinessProviders extends BaseProvider {
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.getTotalSalesReport(
-            params:params,
-        ), context,);
+      () => businessRepo.getTotalSalesReport(
+        params: params,
+      ),
+      context,
+    );
 
     ResponseModel<GetTotalSalesResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<GetTotalSalesResponse>(
-          true, responseModel.message!, GetTotalSalesResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        GetTotalSalesResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<GetTotalSalesResponse>(false, responseModel.message!);
@@ -2139,19 +2625,24 @@ class BusinessProviders extends BaseProvider {
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.getProductTotalCost(
-            params:params,
-        ), context,);
+      () => businessRepo.getProductTotalCost(
+        params: params,
+      ),
+      context,
+    );
 
     ResponseModel<ProductTotalCostResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<ProductTotalCostResponse>(
-          true, responseModel.message!, ProductTotalCostResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        ProductTotalCostResponse.fromJson(map),
+      );
     } else {
-      finalResponseModel =
-          ResponseModel<ProductTotalCostResponse>(false, responseModel.message!);
+      finalResponseModel = ResponseModel<ProductTotalCostResponse>(
+          false, responseModel.message!);
     }
 
     return finalResponseModel;
@@ -2162,14 +2653,19 @@ class BusinessProviders extends BaseProvider {
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
-        businessRepo.getUserProfile, context,);
+      businessRepo.getUserProfile,
+      context,
+    );
 
     ResponseModel<ProfileResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<ProfileResponse>(
-          true, responseModel.message!, ProfileResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        ProfileResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<ProfileResponse>(false, responseModel.message!);
@@ -2183,14 +2679,19 @@ class BusinessProviders extends BaseProvider {
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.updateUserProfile(requestData: requestData), context,);
+      () => businessRepo.updateUserProfile(requestData: requestData),
+      context,
+    );
 
     ResponseModel<CommonResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<CommonResponse>(
-          true, responseModel.message!, CommonResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        CommonResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<CommonResponse>(false, responseModel.message!);
@@ -2204,14 +2705,19 @@ class BusinessProviders extends BaseProvider {
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.deleteUserAccount(requestData: requestData), context,);
+      () => businessRepo.deleteUserAccount(requestData: requestData),
+      context,
+    );
 
     ResponseModel<CommonResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<CommonResponse>(
-          true, responseModel.message!, CommonResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        CommonResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<CommonResponse>(false, responseModel.message!);
@@ -2225,14 +2731,19 @@ class BusinessProviders extends BaseProvider {
     required BuildContext context,
   }) async {
     final responseModel = await performApiCallWithHandling(
-        () => businessRepo.resetUserPin(requestData: requestData), context,);
+      () => businessRepo.resetUserPin(requestData: requestData),
+      context,
+    );
 
     ResponseModel<CommonResponse> finalResponseModel;
 
     if (responseModel.isSuccess) {
       final map = castMap(responseModel.data);
       finalResponseModel = ResponseModel<CommonResponse>(
-          true, responseModel.message!, CommonResponse.fromJson(map),);
+        true,
+        responseModel.message!,
+        CommonResponse.fromJson(map),
+      );
     } else {
       finalResponseModel =
           ResponseModel<CommonResponse>(false, responseModel.message!);

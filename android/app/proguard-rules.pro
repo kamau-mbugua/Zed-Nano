@@ -91,12 +91,45 @@
 -dontwarn com.google.android.gms.**
 -dontwarn com.google.firebase.**
 
-# Optimize and obfuscate
+# Extreme APK size reduction rules
+-dontwarn **
+-ignorewarnings
+
+# Aggressive obfuscation
+-overloadaggressively
+-allowaccessmodification
+-repackageclasses ''
+
+# Remove unused code aggressively
+-assumenosideeffects class android.util.Log {
+    public static *** d(...);
+    public static *** v(...);
+    public static *** i(...);
+    public static *** w(...);
+    public static *** e(...);
+}
+
+# Remove debug information
+-renamesourcefileattribute SourceFile
+-keepattributes SourceFile,LineNumberTable
+
+# Optimize for size over speed
 -optimizations !code/simplification/arithmetic,!code/simplification/cast,!field/*,!class/merging/*
 -optimizationpasses 5
--allowaccessmodification
--dontpreverify
 
-# Keep line numbers for crash reports
--keepattributes SourceFile,LineNumberTable
--renamesourcefileattribute SourceFile
+# Remove unused resources
+-keepclassmembers class **.R$* {
+    public static <fields>;
+}
+
+# Firebase optimizations
+-keep class com.google.firebase.** { *; }
+-keep class com.google.android.gms.** { *; }
+
+# Flutter specific optimizations
+-keep class io.flutter.app.** { *; }
+-keep class io.flutter.plugin.** { *; }
+-keep class io.flutter.util.** { *; }
+-keep class io.flutter.view.** { *; }
+-keep class io.flutter.** { *; }
+-keep class io.flutter.plugins.** { *; }

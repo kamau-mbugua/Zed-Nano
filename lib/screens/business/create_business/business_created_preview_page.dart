@@ -9,6 +9,7 @@ import 'package:zed_nano/routes/routes.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
 import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/utils/Common.dart';
+import 'package:zed_nano/utils/extensions.dart';
 
 class BusinessCreatedPreviewPage extends StatefulWidget {
   const BusinessCreatedPreviewPage({required this.onNext, super.key});
@@ -112,7 +113,7 @@ class _BusinessCreatedPreviewPageState extends State<BusinessCreatedPreviewPage>
               top: 88,
               left: 16,
               child: rfCommonCachedNetworkImage(
-                '${businessInfoData?.businessLogo}',
+                businessInfoData!.businessLogo!.isValidUrl ? '${businessInfoData?.businessLogo}' : '',
                 fit: BoxFit.fitHeight,
                 height: 90,
                 width: 150,

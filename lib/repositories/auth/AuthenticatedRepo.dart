@@ -11,13 +11,13 @@ import 'package:zed_nano/networking/datasource/remote/dio/dio_client.dart';
 import 'package:zed_nano/networking/datasource/remote/exception/api_error_handler.dart';
 
 class AuthenticatedRepo {
-  
   AuthenticatedRepo({required this.dioClient, required this.sharedPreferences});
+
   final DioClient? dioClient;
   final SharedPreferences? sharedPreferences;
 
   /// Save user authentication token
-  /// 
+  ///
   /// Updates the DioClient header and saves to SharedPreferences
   Future<void> saveUserToken(String token) async {
     try {
@@ -53,8 +53,6 @@ class AuthenticatedRepo {
     }
   }
 
-
-
   /// Save full login response for later use
   Future<void> saveLoginResponse(LoginResponse loginResponse) async {
     try {
@@ -74,7 +72,7 @@ class AuthenticatedRepo {
     if (userData == null) {
       throw ArgumentError('User data cannot be null');
     }
-    
+
     try {
       final userDataJson = jsonEncode(userData.toJson());
       await sharedPreferences!
@@ -150,14 +148,14 @@ class AuthenticatedRepo {
   }
 
   /// Clear all user data and logout
-  /// 
+  ///
   /// Returns true if successful, false otherwise
   Future<bool> clearSharedData() async {
     try {
       await sharedPreferences!.remove(AppConstants.token);
       await sharedPreferences!.remove(AppConstants.loginResponse);
       await sharedPreferences!.remove(AppConstants.userDataResponse);
-      
+
       // After removing the token, update the header to clear out the token value.
       dioClient!.updateHeader(getToken: '');
       return true;
@@ -170,23 +168,25 @@ class AuthenticatedRepo {
   }
 
   /// Authenticate user with credentials
-  /// 
+  ///
   /// Returns an ApiResponse with the result
   Future<ApiResponse> login({required Map<String, dynamic> requestData}) async {
     try {
       final response =
           await dioClient!.post(AppConstants.login, data: requestData);
-      
+
       return ApiResponse.withSuccess(response);
     } catch (e) {
       // Use the improved ApiErrorHandler that now returns ErrorResponse objects
       return ApiResponse.withError(ApiErrorHandler.handleError(e));
     }
   }
-  Future<ApiResponse> loginByFirebase({required Map<String, dynamic> requestData}) async {
+
+  Future<ApiResponse> loginByFirebase(
+      {required Map<String, dynamic> requestData}) async {
     try {
-      final response =
-          await dioClient!.post(AppConstants.loginByFirebase, data: requestData);
+      final response = await dioClient!
+          .post(AppConstants.loginByFirebase, data: requestData);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -196,29 +196,34 @@ class AuthenticatedRepo {
   }
 
   /// Register a new user
-  /// 
+  ///
   /// Returns an ApiResponse with the result
-  Future<ApiResponse> register({required Map<String, dynamic> requestData}) async {
+  Future<ApiResponse> register(
+      {required Map<String, dynamic> requestData}) async {
     try {
       final response =
           await dioClient!.post(AppConstants.register, data: requestData);
-      
-      return ApiResponse.withSuccess(response);
-    } catch (e) {
-      return ApiResponse.withError(ApiErrorHandler.handleError(e));
-    }
-  }
-  Future<ApiResponse> registerByFirebase({required Map<String, dynamic> requestData}) async {
-    try {
-      final response =
-          await dioClient!.post(AppConstants.registerByFirebase, data: requestData);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
       return ApiResponse.withError(ApiErrorHandler.handleError(e));
     }
   }
-  Future<ApiResponse> resetPinVersion({required Map<String, dynamic> requestData}) async {
+
+  Future<ApiResponse> registerByFirebase(
+      {required Map<String, dynamic> requestData}) async {
+    try {
+      final response = await dioClient!
+          .post(AppConstants.registerByFirebase, data: requestData);
+
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(ApiErrorHandler.handleError(e));
+    }
+  }
+
+  Future<ApiResponse> resetPinVersion(
+      {required Map<String, dynamic> requestData}) async {
     try {
       final response =
           await dioClient!.put(AppConstants.resetPinVersion, data: requestData);
@@ -228,7 +233,9 @@ class AuthenticatedRepo {
       return ApiResponse.withError(ApiErrorHandler.handleError(e));
     }
   }
-  Future<ApiResponse> forgotPin({required Map<String, dynamic> requestData}) async {
+
+  Future<ApiResponse> forgotPin(
+      {required Map<String, dynamic> requestData}) async {
     try {
       final response =
           await dioClient!.post(AppConstants.forgotPin, data: requestData);
@@ -238,10 +245,12 @@ class AuthenticatedRepo {
       return ApiResponse.withError(ApiErrorHandler.handleError(e));
     }
   }
-  Future<ApiResponse> getTokenAfterInvite({required Map<String, dynamic> requestData}) async {
+
+  Future<ApiResponse> getTokenAfterInvite(
+      {required Map<String, dynamic> requestData}) async {
     try {
-      final response =
-          await dioClient!.post(AppConstants.getTokenAfterInvite, data: requestData);
+      final response = await dioClient!
+          .post(AppConstants.getTokenAfterInvite, data: requestData);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -249,10 +258,11 @@ class AuthenticatedRepo {
     }
   }
 
-  Future<ApiResponse> createBusiness({required Map<String, dynamic> requestData}) async {
+  Future<ApiResponse> createBusiness(
+      {required Map<String, dynamic> requestData}) async {
     try {
       final response =
-      await dioClient!.post(AppConstants.createBusiness, data: requestData);
+          await dioClient!.post(AppConstants.createBusiness, data: requestData);
 
       return ApiResponse.withSuccess(response);
     } catch (e) {

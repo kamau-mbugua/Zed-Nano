@@ -92,6 +92,9 @@ android {
         abi {
             enableSplit = true
         }
+        texture {
+            enableSplit = true
+        }
     }
 
     signingConfigs {
@@ -134,7 +137,7 @@ android {
     buildTypes {
         release {
             signingConfig signingConfigs.release
-            // Temporarily disable R8 for compatibility
+            // Maximum code shrinking and obfuscation
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
@@ -144,7 +147,7 @@ android {
             jniDebuggable false
             renderscriptDebuggable false
             zipAlignEnabled true
-            
+
             // Exclude x86_64 from release builds to reduce APK size
             ndk {
                 abiFilters 'arm64-v8a', 'armeabi-v7a'

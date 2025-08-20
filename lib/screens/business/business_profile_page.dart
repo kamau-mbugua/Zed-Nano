@@ -174,7 +174,7 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
           child: Padding(
               padding: const EdgeInsets.all(8),
               child: rfCommonCachedNetworkImage(
-                '${widget.businessData.businessLogo}',
+                widget.businessData.businessLogo!.isValidUrl ? '${widget.businessData.businessLogo}' : null,
                 fit: BoxFit.fill,
                 height: 80,
                 width: 80,

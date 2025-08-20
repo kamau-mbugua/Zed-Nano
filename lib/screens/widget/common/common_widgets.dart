@@ -116,6 +116,7 @@ Widget rfCommonCachedNetworkImage(
       double horizontalMargin = 0,
       double verticalMargin = 0,
     }) {
+
       if(url.isEmptyOrNull){
         return placeHolderWidget(height: height, width: width, fit: fit, alignment: alignment, radius: radius);
       }else if (url!.validate().isEmpty) {

@@ -23,6 +23,11 @@ extension StringValidationExtensions on String {
     return trim().isNotEmpty;
   }
 
+  bool get isValidUrl{
+    final urlRegex = RegExp(r'^https?:\/\/[^\s/$.?#].[^\s]*$');
+    return urlRegex.hasMatch(this);
+  }
+
   String get firstName {
     if (trim().isEmpty) return '';
     return trim().split(' ').first;
