@@ -5,10 +5,11 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/models/get_product_gross_margin/GetProductGrossMarginResponse.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
-import 'package:zed_nano/screens/invoices/pdf_invoice_page.dart';
+import 'package:zed_nano/screens/pdf/pdf_preview_page.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
 import 'package:zed_nano/screens/widget/common/custom_extended_fab.dart';
+import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/screens/widget/common/date_range_filter_bottom_sheet.dart';
 import 'package:zed_nano/screens/widget/common/searchview.dart';
 import 'package:zed_nano/services/BusinessDetailsContextExtension.dart';
@@ -164,7 +165,7 @@ class _GrossMarginPageState extends State<GrossMarginPage> {
       startDate: endDate,
     ).then((value) async {
       if (value != null) {
-        PdfPage(
+        showCustomToast('Report generated successfully, Opening PDF...', isError: false);        PdfPage(
           pdfBytes: value,
           title: 'Gross Margin Report - ${startDate.toDateOnly} to ${endDate.toDateOnly}',
           fileName: 'Gross Margin Report - ${startDate.toDateOnly} to ${endDate.toDateOnly}.pdf',

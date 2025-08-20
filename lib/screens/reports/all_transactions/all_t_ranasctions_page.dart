@@ -5,11 +5,12 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:zed_nano/models/viewAllTransactions/TransactionListResponse.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
-import 'package:zed_nano/screens/invoices/pdf_invoice_page.dart';
+import 'package:zed_nano/screens/pdf/pdf_preview_page.dart';
 import 'package:zed_nano/screens/reports/itemBuilders/all_transactions_item_builder.dart';
 import 'package:zed_nano/screens/widget/auth/auth_app_bar.dart';
 import 'package:zed_nano/screens/widget/common/common_widgets.dart';
 import 'package:zed_nano/screens/widget/common/custom_extended_fab.dart';
+import 'package:zed_nano/screens/widget/common/custom_snackbar.dart';
 import 'package:zed_nano/screens/widget/common/date_range_filter_bottom_sheet.dart';
 import 'package:zed_nano/screens/widget/common/filter_row_widget.dart';
 import 'package:zed_nano/screens/widget/common/heading.dart';
@@ -154,7 +155,7 @@ class _AllTRanasctionsPageState extends State<AllTRanasctionsPage> {
       startDate: endDate,
     ).then((value) async {
       if (value != null) {
-        PdfPage(
+        showCustomToast('Report generated successfully, Opening PDF...', isError: false);        PdfPage(
           pdfBytes: value,
           title: 'All Transactions Report - ${startDate.toDateOnly} to ${endDate.toDateOnly}',
           fileName: 'All Transactions Report - ${startDate.toDateOnly} to ${endDate.toDateOnly}.pdf',

@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:zed_nano/models/sales_report/SalesReportResponse.dart';
 import 'package:zed_nano/providers/business/BusinessProviders.dart';
 import 'package:zed_nano/providers/helpers/providers_helpers.dart';
-import 'package:zed_nano/screens/invoices/pdf_invoice_page.dart';
+import 'package:zed_nano/screens/pdf/pdf_preview_page.dart';
 import 'package:zed_nano/screens/reports/sales_report/sub_reports/gross_margin_page.dart';
 import 'package:zed_nano/screens/reports/sales_report/sub_reports/quantities_sold_page.dart';
 import 'package:zed_nano/screens/reports/sales_report/sub_reports/total_cost_of_goods_page.dart';
@@ -160,7 +160,7 @@ class _SalesReportPageState extends State<SalesReportPage> {
       summaryData: _summaryData,
     ).then((value) async {
       if (value != null) {
-        PdfPage(
+        showCustomToast('Report generated successfully, Opening PDF...', isError: false);        PdfPage(
         pdfBytes: value,
         title: 'Sales Report - ${startDate.toDateOnly} to ${endDate.toDateOnly}',
         fileName: 'Sales Report - ${startDate.toDateOnly} to ${endDate.toDateOnly}.pdf',
