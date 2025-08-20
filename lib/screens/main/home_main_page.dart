@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 import 'package:provider/provider.dart';
@@ -207,9 +208,11 @@ class _HomeMainPageState extends State<HomeMainPage> {
                       ),
                     ],
                   ),
-                  child: SafeArea(
+                  child: Platform.isAndroid
+                      ? SafeArea(
                     child: _buildBottomNavigationBar(),
-                  ),
+                  )
+                      : _buildBottomNavigationBar(),
                 )
               : null,
           floatingActionButton: /*(selectedIndex == 0 || selectedIndex == 2) &&

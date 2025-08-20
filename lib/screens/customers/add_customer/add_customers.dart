@@ -63,7 +63,7 @@ class _AddCustomersState extends State<AddCustomers> {
         .then((value) {
       if (value.isSuccess) {
         Navigator.pop(context);
-        showCustomToast(value.message ?? 'Customer created successfully', isError: false, actionText: 'Approve', onPressed: (){
+        showCustomToast('Customer created successfully', isError: false, actionText: 'Approve', onPressed: (){
           Future.delayed(const Duration(milliseconds: 500), () {
             navigatorKey.currentState?.push(
               MaterialPageRoute(builder: (context) => const CustomersPendingApprovalPage()),
