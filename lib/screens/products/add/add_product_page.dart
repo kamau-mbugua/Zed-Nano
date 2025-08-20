@@ -157,6 +157,13 @@ class _AddProductScreenState extends State<AddProductScreen> {
         }
       } else {
         showCustomToast(value.message ?? 'Something went wrong');
+        if (widget.selectedCategory != null) {
+          // Just pop back to the category detail page
+          Navigator.pop(context, true); // Pass true to indicate successful creation
+        } else {
+          // Otherwise do full refresh
+          refresh();
+        }
       }
     });
   }

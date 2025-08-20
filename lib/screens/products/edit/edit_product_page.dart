@@ -159,6 +159,7 @@ class _EditProductPageState extends State<EditProductPage> {
 
       } else {
         showCustomToast(value.message ?? 'Something went wrong');
+        Navigator.pop(context, true); // Pass true to indicate successful creation
       }
     });
   }

@@ -14,7 +14,7 @@ class AppConfig {
       case Flavor.production:
         return 'https://api.portal.zed.business/';
       case Flavor.staging:
-        return 'https://zed.api.swerri.io/';
+        return 'https://api.uat.zed.business/';
       case Flavor.development:
         return 'https://api.dev.zed.business/';
     }
@@ -25,7 +25,7 @@ class AppConfig {
       case Flavor.production:
         return 'https://portal.zed.business';
       case Flavor.staging:
-        return 'https://zed.swerri.io';
+        return 'https://uat.zed.business';
       case Flavor.development:
         return 'https://dev.zed.business';
     }
@@ -36,7 +36,7 @@ class AppConfig {
       case Flavor.production:
         return 'api.portal.zed.business';
       case Flavor.staging:
-        return 'zed.api.swerri.io';
+        return 'api.uat.zed.business';
       case Flavor.development:
         return 'api.dev.zed.business';
     }

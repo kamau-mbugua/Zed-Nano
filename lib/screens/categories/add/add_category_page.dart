@@ -134,6 +134,7 @@ class _NewCategoryPageState extends State<NewCategoryPage> {
         context.dataRefresh.refreshInventoryAfterMajorOperation(operation: 'inventory_updated');
         refresh();
       } else {
+        refresh();
         showCustomToast(value.message ?? 'Something went wrong');
       }
     });

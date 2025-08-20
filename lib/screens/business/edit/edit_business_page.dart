@@ -212,6 +212,7 @@ class _EditBusinessPageState extends State<EditBusinessPage> {
         Navigator.pop(context);
       } else {
         showCustomToast(value.message ?? 'Something went wrong');
+        Navigator.pop(context);
       }
     });
   }

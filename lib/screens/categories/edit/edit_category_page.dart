@@ -128,6 +128,7 @@ class _EditCategoryPageState extends State<EditCategoryPage> {
             isError: false,);
         Navigator.pop(context, true);
       } else {
+        Navigator.pop(context, true);
         showCustomToast(value.message ?? 'Something went wrong');
       }
     });

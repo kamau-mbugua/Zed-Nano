@@ -175,6 +175,7 @@ class _CreateBusinessPageState extends State<CreateBusinessPage> {
         // await _fetchGetTokenAfterInvite();
       } else {
         showCustomToast(value.message ?? 'Something went wrong');
+        widget.onNext();
       }
     });
   }
