@@ -210,7 +210,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   // For Merchant and Owner - full menu based on workflow state
                   else if (isMerchantOrOwner) {
                     // Show Businesses section for basic and billing states
-                    if (workflowState == 'basic' || workflowState == 'billing') {
+                    if (/*workflowState == 'basic' || */workflowState == 'billing') {
                       menuItems.add(
                         _buildExpandableMenuItem(
                           title: 'Businesses',
