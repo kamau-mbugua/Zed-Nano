@@ -528,7 +528,7 @@ class _LoginPageState extends State<LoginPage> {
       final credentials = await SavedCredentialsService.getSavedCredentialsByType(type);
       
       // Only show bottom sheet if credentials exist
-      if ((credentials.isNotEmpty) || (credentials != null)) {
+      if (credentials != null && credentials.isNotEmpty) {
         if (mounted) {
           _showSavedCredentials(type);
         }
