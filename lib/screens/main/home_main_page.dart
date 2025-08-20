@@ -15,6 +15,8 @@ import 'package:zed_nano/screens/widget/common/custom_app_bar.dart';
 import 'package:zed_nano/screens/widgets/custom_drawer.dart';
 import 'package:zed_nano/screens/widgets/nav_bar_item.dart';
 import 'package:zed_nano/services/business_setup_extensions.dart';
+import 'package:zed_nano/services/app_update_extensions.dart';
+import 'package:zed_nano/screens/test/update_test_page.dart';
 import 'package:zed_nano/utils/Colors.dart';
 import 'package:zed_nano/utils/Common.dart';
 import 'package:zed_nano/utils/Images.dart';
@@ -33,6 +35,21 @@ class _HomeMainPageState extends State<HomeMainPage> {
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
       GlobalKey<RefreshIndicatorState>();
   final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize app update checking after the widget is built
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _initializeAppUpdates();
+    });
+  }
+
+  /// Initialize app update checking
+  void _initializeAppUpdates() {
+    // Check for app updates using the extension method
+    context.checkForAppUpdates();
+  }
 
   @override
   void dispose() {
@@ -185,6 +202,14 @@ class _HomeMainPageState extends State<HomeMainPage> {
             title: context.businessDisplayName,
             userRole: context.businessUserRole,
             onProfileTap: () => const ProfilePage().launch(context),
+            // Temporary test button - remove after testing
+            // actions: [
+            //   IconButton(
+            //     icon: Icon(Icons.bug_report, color: Colors.orange),
+            //     onPressed: () => const UpdateTestPage().launch(context),
+            //     tooltip: 'Test App Updates',
+            //   ),
+            // ],
           ),
           body: RefreshIndicator(
             key: _refreshIndicatorKey,
