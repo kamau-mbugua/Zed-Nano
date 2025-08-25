@@ -131,8 +131,8 @@ class _LoginPageState extends State<LoginPage> {
                       onTap: () {
                         setState(() {
                           isEmailLoginActive = false;
-                          _checkAndShowSavedCredentials('phone');
                         });
+                        _checkAndShowSavedCredentials('phone');
                       },
                     )
                   else
@@ -143,8 +143,8 @@ class _LoginPageState extends State<LoginPage> {
                       onTap: () {
                         setState(() {
                           isEmailLoginActive = true;
-                          _checkAndShowSavedCredentials('email');
                         });
+                        _checkAndShowSavedCredentials('email');
                       },
                     ),
                   Visibility(
@@ -527,8 +527,10 @@ class _LoginPageState extends State<LoginPage> {
       // Check if saved credentials exist for this type
       final credentials = await SavedCredentialsService.getSavedCredentialsByType(type);
       
+      logger.d('Checking saved credentials for $type: found ${credentials.length} items');
+      
       // Only show bottom sheet if credentials exist
-      if (credentials != null && credentials.isNotEmpty) {
+      if (credentials.isNotEmpty) {
         if (mounted) {
           _showSavedCredentials(type);
         }
