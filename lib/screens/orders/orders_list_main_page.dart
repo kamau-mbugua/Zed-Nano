@@ -24,13 +24,13 @@ class _OrdersListMainPageState extends State<OrdersListMainPage> {
 
   @override
   void initState() {
-    final viewModel = Provider.of<WorkflowViewModel>(context, listen: false);
-    if (viewModel.businessInfoData == null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        viewModel.fetchBusinessProfile(context);
-      });
-    }
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final viewModel = Provider.of<WorkflowViewModel>(context, listen: false);
+      if (viewModel.businessInfoData == null) {
+        viewModel.fetchBusinessProfile(context);
+      }
+    });
   }
 
   @override
