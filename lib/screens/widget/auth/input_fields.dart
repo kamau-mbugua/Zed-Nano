@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -66,6 +67,71 @@ class StyledTextField extends StatelessWidget {
       }
     }
 
+    // Check if we need to show Done button for iOS numeric keyboard
+    final bool showDoneButton = Platform.isIOS && 
+        (inputType == TextInputType.number || 
+         inputType == TextInputType.phone ||
+         inputType == const TextInputType.numberWithOptions(decimal: true));
+
+    final textField = AppTextField(
+      key: prefixText.isNotEmpty ? ValueKey('textfield_$prefixText') : null,
+      controller: controller,
+      focus: focusNode,
+      textFieldType: textFieldType,
+      keyboardType: inputType, // Set the keyboard type
+      onChanged: isActive ? onChanged : null,
+      enabled: isActive,
+      maxLines: textFieldType == TextFieldType.MULTILINE ? null : 1, // Use null for multiline to allow unlimited lines
+      onFieldSubmitted: (value) {
+        if (nextFocus != null) {
+          FocusScope.of(context).requestFocus(nextFocus);
+        }
+        if (onSubmitted != null) {
+          onSubmitted!(value);
+        }
+      },
+      suffixIconColor: getBodyColor(),
+      textInputAction: textFieldType == TextFieldType.MULTILINE 
+          ? TextInputAction.newline 
+          : (showDoneButton ? TextInputAction.done : (nextFocus != null ? TextInputAction.next : textInputAction)),
+      suffixPasswordInvisibleWidget: isPassword
+          ? Image.asset(hideIcon, height: 16, width: 16, fit: BoxFit.fill)
+          .paddingSymmetric(vertical: 16, horizontal: 14)
+          : null,
+      suffixPasswordVisibleWidget: isPassword
+          ? Image.asset(showIcon, height: 16, width: 16, fit: BoxFit.fill)
+          .paddingSymmetric(vertical: 16, horizontal: 14)
+          : null,
+      inputFormatters: maxLength != null 
+          ? [LengthLimitingTextInputFormatter(maxLength)]
+          : null,
+      decoration: InputDecoration(
+        border: InputBorder.none,
+        hintText: hintText,
+        hintStyle: TextStyle(
+          color: isActive ? const Color(0xff8f9098) : Colors.grey.shade400,
+          fontWeight: FontWeight.w400,
+          fontFamily: 'Poppins', // Poppins font as per user preference
+          fontSize: 12,
+
+        ),
+        contentPadding: EdgeInsets.symmetric(vertical: isPassword ? 15 :0, horizontal: 16),
+        counterText: showCounter ? null : '',
+        prefix: prefixText.isEmpty ? null : Padding(
+          padding: const EdgeInsets.only(left: 8),
+          child: Container(
+            key: ValueKey('prefix_$prefixText'),
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: lightGreyColor,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child:Text('$prefixText ', style: boldTextStyle(size: 11)),
+          ),
+        ),
+      ),
+    );
+
     return Container(
       // Only apply fixed height for single-line text fields
       height: textFieldType == TextFieldType.MULTILINE ? null : 50, // Fixed height as per user preference (56px)
@@ -74,64 +140,12 @@ class StyledTextField extends StatelessWidget {
         borderRadius: BorderRadius.circular(13), // Border radius as per user preference (16px)
         color: isActive ? Colors.white : Colors.grey.shade100,
       ),
-      child: AppTextField(
-        key: prefixText.isNotEmpty ? ValueKey('textfield_$prefixText') : null,
-        controller: controller,
-        focus: focusNode,
-        textFieldType: textFieldType,
-        keyboardType: inputType, // Set the keyboard type
-        onChanged: isActive ? onChanged : null,
-        enabled: isActive,
-        maxLines: textFieldType == TextFieldType.MULTILINE ? null : 1, // Use null for multiline to allow unlimited lines
-        onFieldSubmitted: (value) {
-          if (nextFocus != null) {
-            FocusScope.of(context).requestFocus(nextFocus);
-          }
-          if (onSubmitted != null) {
-            onSubmitted!(value);
-          }
-        },
-        suffixIconColor: getBodyColor(),
-        textInputAction: textFieldType == TextFieldType.MULTILINE 
-            ? TextInputAction.newline 
-            : (nextFocus != null ? TextInputAction.next : textInputAction),
-        suffixPasswordInvisibleWidget: isPassword
-            ? Image.asset(hideIcon, height: 16, width: 16, fit: BoxFit.fill)
-            .paddingSymmetric(vertical: 16, horizontal: 14)
-            : null,
-        suffixPasswordVisibleWidget: isPassword
-            ? Image.asset(showIcon, height: 16, width: 16, fit: BoxFit.fill)
-            .paddingSymmetric(vertical: 16, horizontal: 14)
-            : null,
-        inputFormatters: maxLength != null 
-            ? [LengthLimitingTextInputFormatter(maxLength)]
-            : null,
-        decoration: InputDecoration(
-          border: InputBorder.none,
-          hintText: hintText,
-          hintStyle: TextStyle(
-            color: isActive ? const Color(0xff8f9098) : Colors.grey.shade400,
-            fontWeight: FontWeight.w400,
-            fontFamily: 'Poppins', // Poppins font as per user preference
-            fontSize: 12,
-
-          ),
-          contentPadding: EdgeInsets.symmetric(vertical: isPassword ? 15 :0, horizontal: 16),
-          counterText: showCounter ? null : '',
-          prefix: prefixText.isEmpty ? null : Padding(
-            padding: const EdgeInsets.only(left: 8),
-            child: Container(
-              key: ValueKey('prefix_$prefixText'),
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: lightGreyColor,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child:Text('$prefixText ', style: boldTextStyle(size: 11)),
-            ),
-          ),
-        ),
-      ),
+      child: showDoneButton 
+          ? _KeyboardDoneButton(
+              focusNode: focusNode,
+              child: textField,
+            )
+          : textField,
     );
   }
 }
@@ -348,5 +362,101 @@ class NameFieldsRow extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+/// Widget to add a Done button toolbar above iOS numeric keyboard
+class _KeyboardDoneButton extends StatefulWidget {
+  const _KeyboardDoneButton({
+    required this.child,
+    this.focusNode,
+  });
+
+  final Widget child;
+  final FocusNode? focusNode;
+
+  @override
+  State<_KeyboardDoneButton> createState() => _KeyboardDoneButtonState();
+}
+
+class _KeyboardDoneButtonState extends State<_KeyboardDoneButton> {
+  OverlayEntry? _overlayEntry;
+  
+  @override
+  void initState() {
+    super.initState();
+    
+    // Listen to focus changes
+    widget.focusNode?.addListener(_handleFocusChange);
+  }
+  
+  @override
+  void dispose() {
+    widget.focusNode?.removeListener(_handleFocusChange);
+    _removeOverlay();
+    super.dispose();
+  }
+  
+  void _handleFocusChange() {
+    if (widget.focusNode?.hasFocus ?? false) {
+      _showOverlay();
+    } else {
+      _removeOverlay();
+    }
+  }
+  
+  void _showOverlay() {
+    _removeOverlay();
+    
+    _overlayEntry = OverlayEntry(
+      builder: (context) => Positioned(
+        bottom: MediaQuery.of(context).viewInsets.bottom,
+        left: 0,
+        right: 0,
+        child: Container(
+          height: 44,
+          decoration: BoxDecoration(
+            color: Colors.grey.shade200,
+            border: Border(
+              top: BorderSide(
+                color: Colors.grey.shade400,
+                width: 0.5,
+              ),
+            ),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              TextButton(
+                onPressed: () {
+                  widget.focusNode?.unfocus();
+                },
+                child: const Text(
+                  'Done',
+                  style: TextStyle(
+                    color: Color(0xff007AFF),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 16),
+            ],
+          ),
+        ),
+      ),
+    );
+    
+    Overlay.of(context).insert(_overlayEntry!);
+  }
+  
+  void _removeOverlay() {
+    _overlayEntry?.remove();
+    _overlayEntry = null;
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    return widget.child;
   }
 }
