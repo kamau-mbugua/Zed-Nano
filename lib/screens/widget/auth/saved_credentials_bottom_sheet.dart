@@ -109,7 +109,7 @@ class _SavedCredentialsBottomSheetState extends State<SavedCredentialsBottomShee
           else if (credentials.isEmpty)
             _buildEmptyState()
           else
-            SafeArea(child: _buildCredentialsList()),
+            _buildCredentialsList(),
           
           24.height,
         ],
@@ -152,7 +152,10 @@ class _SavedCredentialsBottomSheetState extends State<SavedCredentialsBottomShee
   }
 
   Widget _buildCredentialsList() {
-    return Flexible(
+    return ConstrainedBox(
+      constraints: BoxConstraints(
+        maxHeight: MediaQuery.of(context).size.height * 0.4, // Limit to 40% of screen height
+      ),
       child: ListView.separated(
         shrinkWrap: true,
         padding: const EdgeInsets.symmetric(horizontal: 20),
